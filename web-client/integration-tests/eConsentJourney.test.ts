@@ -251,7 +251,8 @@ describe('E-Consent journey', () => {
       );
 
       expect(
-        partiesInformationHelper.formattedPetitioners[0].showContactEmailAddress,
+        partiesInformationHelper.formattedPetitioners[0]
+          .showContactEmailAddress,
       ).toBe(false);
     });
 
@@ -283,12 +284,13 @@ describe('E-Consent journey', () => {
         partiesInformationHelper.formattedPetitioners[0].sealedAndUnavailable,
       ).toBe(false);
       expect(
-        partiesInformationHelper.formattedPetitioners[0].showContactEmailAddress,
+        partiesInformationHelper.formattedPetitioners[0]
+          .showContactEmailAddress,
       ).toBe(true);
     });
 
     loginAs(cerebralTest, 'petitionsclerk@example.com');
-    it('should not display the paper petition email field for internal users other than docket clerk when the petitioner address is sealed', async () => {
+    it('should display the paper petition email field for internal users when the petitioner address is sealed', async () => {
       await cerebralTest.runSequence('gotoCaseDetailSequence', {
         docketNumber: cerebralTest.docketNumber,
       });
@@ -299,16 +301,16 @@ describe('E-Consent journey', () => {
           state: cerebralTest.getState(),
         },
       );
-
       expect(
         partiesInformationHelper.formattedPetitioners[0].isAddressSealed,
       ).toBe(true);
       expect(
         partiesInformationHelper.formattedPetitioners[0].sealedAndUnavailable,
-      ).toBe(true);
-      expect(
-        partiesInformationHelper.formattedPetitioners[0].showContactEmailAddress,
       ).toBe(false);
+      expect(
+        partiesInformationHelper.formattedPetitioners[0]
+          .showContactEmailAddress,
+      ).toBe(true);
     });
   });
 

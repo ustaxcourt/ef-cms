@@ -38,8 +38,8 @@ import { getDescriptionDisplay } from '@shared/business/utilities/getDescription
 import { getDocketEntriesByFilter } from '@shared/business/utilities/getDocketEntriesByFilter';
 import { getDocumentTitleWithAdditionalInfo } from '@shared/business/utilities/getDocumentTitleWithAdditionalInfo';
 import { getFormattedCaseDetail } from '@shared/business/utilities/getFormattedCaseDetail';
+import { getRotationAdjustedBoxCoordinates } from '@shared/business/utilities/getRotationAdjustedBoxCoordinates';
 import { getSealedDocketEntryTooltip } from '@shared/business/utilities/getSealedDocketEntryTooltip';
-import { getStampBoxCoordinates } from '@shared/business/utilities/getStampBoxCoordinates';
 import { isLeadCase, isSealedCase } from '@shared/business/entities/cases/Case';
 import { scrapePdfContents } from '@web-api/business/utilities/scrapePdfContents';
 import { serveCaseDocument } from '@shared/business/utilities/serveCaseDocument';
@@ -77,8 +77,8 @@ const utilities = {
   getDocumentTypeForAddressChange,
   getFormattedCaseDetail,
   getFormattedTrialSessionDetails,
+  getRotationAdjustedBoxCoordinates,
   getSealedDocketEntryTooltip,
-  getStampBoxCoordinates,
   isLeadCase,
   isPending: DocketEntry.isPending,
   isSealedCase,

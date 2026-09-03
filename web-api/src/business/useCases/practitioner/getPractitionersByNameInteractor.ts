@@ -2,6 +2,10 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
+import {
+  PublicContact,
+  RawPublicContact,
+} from '@shared/business/entities/cases/PublicContact';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
@@ -18,16 +22,7 @@ export type PractitionerByNameParams = {
 export type PractitionersByName = {
   searchResults: {
     lastKey: (string | number)[];
-    practitioners: {
-      admissionsDate: string;
-      admissionsStatus: string;
-      barNumber: string;
-      name: string;
-      originalBarState: string;
-      practiceType: string;
-      practitionerType: string;
-      state?: string;
-    }[];
+    practitioners: RawPublicContact[];
     total: number;
   };
 };
@@ -68,16 +63,12 @@ export const getPractitionersByNameInteractor = async (
       practitionerType,
     });
 
-  const practitioners = results.map(foundUser => ({
-    admissionsDate: foundUser.admissionsDate,
-    admissionsStatus: foundUser.admissionsStatus,
-    barNumber: foundUser.barNumber,
-    originalBarState: foundUser.originalBarState,
-    state: isLoggedInUser ? foundUser.contact?.state : undefined,
-    name: foundUser.name,
-    practiceType: foundUser.practiceType,
-    practitionerType: foundUser.practitionerType,
-  }));
+  const practitioners = results.map(foundUser =>
+    new PublicContact({
+      ...foundUser,
+      state: isLoggedInUser ? foundUser.contact?.state : undefined,
+    }).toRawObject(),
+  );
 
   return {
     searchResults: {

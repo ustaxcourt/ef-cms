@@ -32,7 +32,7 @@ export class CaseWorksheet extends JoiValidationEntity {
 
   static VALIDATION_RULES = {
     docketNumber: JoiValidationConstants.DOCKET_NUMBER.required(),
-    finalBriefDueDate: JoiValidationConstants.DATE.allow('')
+    finalBriefDueDate: JoiValidationConstants.ISO_DATE.allow('')
       .optional()
       .messages({
         '*': 'Enter a valid due date',

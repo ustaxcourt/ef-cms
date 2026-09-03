@@ -1,24 +1,199 @@
+@page notice-of-trial {
+  margin: 1.2cm 1cm 1.2cm 1cm;
+  size: 8.5in 11in;
+}
+
+@page notice-of-trial:first {
+  margin-top: 0;
+  margin-bottom: 1.2cm;
+}
+
+body:has(#notice-of-trial-pdf) {
+  margin-bottom: 20px;
+}
+
 #notice-of-trial-pdf {
-  .notice-of-trial-title {
-    margin-bottom: 0;
+  page: notice-of-trial;
+
+  .order-court-header {
+    margin-bottom: 20pt;
+    line-height: 120%;
+
+    .us-tax-court-seal {
+      width: 32pt;
+      height: 32pt;
+      margin-right: -32pt;
+    }
+
+    h1 {
+      margin-bottom: 0;
+      font-size: 14pt;
+      font-weight: normal;
+      line-height: 1;
+    }
+
+    .court-address {
+      margin-top: calc(10pt - 10px);
+      font-size: 11pt;
+      line-height: 12pt;
+    }
+  }
+
+  .order-docket-header {
+    #caption {
+      font-size: 10pt;
+      line-height: 12pt;
+
+      #caption-title {
+        margin-top: 0;
+        margin-bottom: 0;
+        line-height: 10pt;
+      }
+
+      #caption-extension,
+      #caption-v,
+      #caption-respondent {
+        padding-left: 56px;
+      }
+
+      #caption-extension {
+        margin-top: 17px;
+        margin-bottom: 0;
+        line-height: 10pt;
+      }
+
+      #caption-v,
+      #caption-respondent {
+        margin-top: 6pt;
+        margin-bottom: 0;
+      }
+
+      #caption-commissioner {
+        margin-top: 6pt;
+        margin-bottom: 0;
+      }
+    }
+
+    #docket-number {
+      margin-top: 36pt;
+      font-size: 10pt;
+      line-height: 12pt;
+    }
+
+    .document-title {
+      padding: 0;
+      margin: 23pt 0 0 0;
+      font-size: 16pt;
+      line-height: 1;
+    }
+  }
+
+  .notice-info-boxes {
+    display: flex;
+    align-items: stretch;
+    padding-top: 0;
+    margin-top: 14pt;
+
+    .info-box {
+      margin: 0 0 12pt 0;
+    }
+
+    .info-box-trial,
+    .info-box-judge {
+      display: flex;
+      width: 49%;
+      height: auto;
+      flex-direction: column;
+      float: none;
+    }
+
+    .info-box-trial {
+      margin-right: 2%;
+    }
+
+    .info-box-content {
+      flex: 1;
+    }
+  }
+
+  .info-box-header {
+    padding: 6pt;
+    font-size: 12pt;
   }
 
   .info-box-content {
-    padding: 10px;
+    padding: 8pt;
+    font-size: 10pt;
+    line-height: 12pt;
   }
 
-  p {
-    font-size: 14px;
-    line-height: 15px;
+  .info-box-chambers-phone {
+    white-space: nowrap;
   }
 
-  #notice-body > p {
-    margin-top: 0;
+  #notice-body {
+    p {
+      margin-top: 0;
+      font-size: 12pt;
+      line-height: 14pt;
+    }
+
+    a {
+      color: #0050d8;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+      text-decoration: underline;
+    }
+
+    .notice-body-indent {
+      margin-bottom: 17pt;
+      text-indent: 56px;
+    }
+
+    #notice-clerk-signature {
+      margin-top: 14pt;
+
+      p {
+        width: auto;
+        margin-top: 0;
+        margin-right: 10pt;
+      }
+    }
   }
 
-  #docket-header {
-    .document-title {
-      margin-bottom: 0;
+  &.notice-of-trial-remote {
+    #notice-body {
+      p {
+        line-height: 13pt;
+      }
+
+      .notice-body-indent {
+        margin-bottom: 14pt;
+      }
+
+      .notice-access-remote-section {
+        .notice-body-indent {
+          margin-bottom: 10pt;
+        }
+
+        .notice-meeting-info {
+          margin-bottom: calc(10pt + 6px);
+
+          .notice-passcode {
+            margin-left: 24pt;
+          }
+        }
+      }
+
+      .notice-remote-closing {
+        .notice-body-indent {
+          margin-bottom: 0;
+        }
+
+        #notice-clerk-signature {
+          margin-top: calc(8pt + 13px);
+        }
+      }
     }
   }
 }

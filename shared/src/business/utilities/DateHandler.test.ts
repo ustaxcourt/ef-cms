@@ -42,7 +42,6 @@ import {
   getJsTimeframeForYear,
   getTimeframeForYear,
 } from './DateHandler';
-
 describe('DateHandler', () => {
   const timeZones = [
     'utc',

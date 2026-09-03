@@ -60,7 +60,6 @@ import { fileExternalDocumentToCaseLambda } from './lambdas/documents/fileExtern
 import { forgotPasswordLambda } from '@web-api/lambdas/auth/forgotPasswordLambda';
 import { forwardMessageLambda } from './lambdas/messages/forwardMessageLambda';
 import { generateDocketRecordPdfLambda } from './lambdas/cases/generateDocketRecordPdfLambda';
-import { generateDraftStampOrderLambda } from './lambdas/documents/generateDraftStampOrderLambda';
 import { generateEntryOfAppearancePdfLambda } from '@web-api/lambdas/caseAssociations/generateEntryOfAppearancePdfLambda';
 import { generatePetitionPdfLambda } from '@web-api/lambdas/cases/generatePetitionPdfLambda';
 import { generatePractitionerCaseListPdfLambda } from './lambdas/cases/generatePractitionerCaseListPdfLambda';
@@ -222,6 +221,9 @@ import { removeUserPendingEmailLambda } from '@web-api/lambdas/automations/remov
 import { saveMinuteSheetToDraftsLambda } from './lambdas/trialSessionMinutes/saveMinuteSheetToDraftsLambda';
 import { generateNoticeOfWithdrawalPdfLambda } from './lambdas/cases/generateNoticeOfWithdrawalPdfLambda';
 import { validateCaseForNewMinuteSheetLambda } from './lambdas/trialSessionMinutes/validateCaseForNewMinuteSheetLambda';
+import { initPaymentLambda } from '@web-api/lambdas/paymentPortal/initPaymentLambda';
+import { processPaymentLambda } from '@web-api/lambdas/paymentPortal/processPaymentLambda';
+import { getTransactionDetailsLambda } from '@web-api/lambdas/paymentPortal/getTransactionDetailsLambda';
 import { unsealCaseContactAddressLambda } from '@web-api/lambdas/cases/unsealCaseContactAddressLambda';
 
 export const app = express();
@@ -447,10 +449,6 @@ app.use(expressLogger);
   app.get(
     '/case-documents/:docketNumber/:docketEntryId/processing-status',
     lambdaWrapper(getDocketEntryProcessingStatusLambda),
-  );
-  app.post(
-    '/case-documents/:docketNumber/:motionDocketEntryId/stamp',
-    lambdaWrapper(generateDraftStampOrderLambda),
   );
   app.post(
     '/case-documents/:docketNumber/:docketEntryId/remove-signature',
@@ -774,6 +772,18 @@ app.delete(
   app.post(
     '/documents/filing-receipt-pdf',
     lambdaWrapper(generatePrintableFilingReceiptLambda),
+  );
+}
+
+/**
+ * filing-fee
+ */
+{
+  app.put('/filing-fee/init-payment', lambdaWrapper(initPaymentLambda));
+  app.put('/filing-fee/process-payment', lambdaWrapper(processPaymentLambda));
+  app.get(
+    '/filing-fee/get-transaction-details/:docketNumber',
+    lambdaWrapper(getTransactionDetailsLambda),
   );
 }
 

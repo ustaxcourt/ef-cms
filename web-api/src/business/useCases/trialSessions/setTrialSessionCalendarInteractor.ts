@@ -22,6 +22,7 @@ import { getCalendaredCasesForTrialSession } from '@web-api/persistence/postgres
 import { updateTrialSession } from '@web-api/persistence/postgres/trialSessions/updateTrialSession';
 import { createOrUpdateTrialSessionCases } from '@web-api/persistence/postgres/trialSessions/createOrUpdateTrialSessionCases';
 import { deleteCasesFromTrialSession } from '@web-api/persistence/postgres/trialSessions/deleteCasesFromTrialSession';
+import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 
 export const setTrialSessionCalendarInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -160,39 +161,41 @@ export const setTrialSessionCalendarInteractor = async (
       ...manuallyAddedQcIncompleteCaseEntities,
     ];
 
-    const updatesToPersist: Promise<any>[] = [
-      upsertCases([...caseEntitiesToCalendar, ...caseEntitiesToNotCalendar]),
-      createOrUpdateTrialSessionCases({
-        trialSessionCases: caseOrdersToAdd.map(TCO => ({
-          caseOrder: TCO,
-          trialSessionId,
-          docketNumber: TCO.docketNumber,
-          isHearing: false,
-        })),
-      }),
-      deleteCasesFromTrialSession({
-        trialSessionId,
-        docketNumbers: caseOrdersToDelete.map(CO => CO.docketNumber),
-      }),
-    ];
-
-    if (!isEmpty(caseEntitiesToCalendar)) {
-      updatesToPersist.push(
-        // We may need to update related deadlines for newly calendared cases depending on the trial session judge.
-        // TODO: These updates should NOT be done here. Instead, we should remove associatedJudge and associatedJudgeId from dwCaseDeadline and dwWorkItem and reference these columns on dwCase.
-        updateDeadlinesForCasesToCalendar({
-          casesToCalendar: caseEntitiesToCalendar,
-          trialSessionEntity,
+    await withTransaction(async () => {
+      const updatesToPersist: Promise<void>[] = [
+        upsertCases([...caseEntitiesToCalendar, ...caseEntitiesToNotCalendar]),
+        createOrUpdateTrialSessionCases({
+          trialSessionCases: caseOrdersToAdd.map(TCO => ({
+            caseOrder: TCO,
+            trialSessionId,
+            docketNumber: TCO.docketNumber,
+            isHearing: false,
+          })),
         }),
-      );
-    }
+        deleteCasesFromTrialSession({
+          trialSessionId,
+          docketNumbers: caseOrdersToDelete.map(CO => CO.docketNumber),
+        }),
+      ];
 
-    // Persist all case updates
-    await settlePromises(updatesToPersist);
+      if (!isEmpty(caseEntitiesToCalendar)) {
+        updatesToPersist.push(
+          // We may need to update related deadlines for newly calendared cases depending on the trial session judge.
+          // TODO: These updates should NOT be done here. Instead, we should remove associatedJudge and associatedJudgeId from dwCaseDeadline and dwWorkItem and reference these columns on dwCase.
+          updateDeadlinesForCasesToCalendar({
+            casesToCalendar: caseEntitiesToCalendar,
+            trialSessionEntity,
+          }),
+        );
+      }
 
-    // Persist the update to the trial session itself
-    await updateTrialSession({
-      trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
+      // Persist all case updates
+      await settlePromises(updatesToPersist);
+
+      // Persist the update to the trial session itself
+      await updateTrialSession({
+        trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
+      });
     });
 
     await applicationContext.getNotificationGateway().sendNotificationToUser({

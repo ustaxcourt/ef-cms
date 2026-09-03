@@ -27,6 +27,115 @@ import { WorkItem } from '@shared/business/entities/WorkItem';
 import { getWorkQueueFilters } from '@shared/business/utilities/getWorkQueueFilters';
 import { RawWorkItemWithCaseAndDocketEntryInfo } from '@web-api/persistence/postgres/workitems/schema';
 
+export type WorkItemWithGroupedMemberCases =
+  RawWorkItemWithCaseAndDocketEntryInfo & {
+    groupedMemberCases?: {
+      workItemId: string;
+      docketNumber: string;
+      inLeadCase: boolean;
+    }[];
+  };
+
+/**
+ * Collapses work items that share a docketEntryId across a consolidated group
+ * into a single item representing the lead (or lowest numbered) case, with the
+ * remaining cases attached as groupedMemberCases.
+ */
+export const groupConsolidatedWorkItems = (
+  filtered: RawWorkItemWithCaseAndDocketEntryInfo[],
+): WorkItemWithGroupedMemberCases[] => {
+  const docketEntryIdGroups = new Map<
+    string,
+    RawWorkItemWithCaseAndDocketEntryInfo[]
+  >();
+  const solo: RawWorkItemWithCaseAndDocketEntryInfo[] = [];
+  const consolidatedGroups = new Map<
+    string,
+    RawWorkItemWithCaseAndDocketEntryInfo[]
+  >();
+
+  for (const wi of filtered) {
+    const key = wi.docketEntryId;
+    if (!docketEntryIdGroups.has(key)) docketEntryIdGroups.set(key, []);
+    docketEntryIdGroups.get(key)!.push(wi);
+  }
+
+  for (const group of docketEntryIdGroups.values()) {
+    if (group.length === 1) {
+      solo.push(group[0]);
+    } else {
+      group.forEach(item => {
+        // docket entries that were filed on a case that was later removed from a consolidated group
+        if (item.docketEntry.multiDocketedOn?.length < 2) {
+          solo.push(item);
+        } else if (item.leadDocketNumber) {
+          const key = item.docketEntryId;
+          if (!consolidatedGroups.has(key)) consolidatedGroups.set(key, []);
+          consolidatedGroups.get(key)!.push(item);
+        } else {
+          solo.push(item);
+        }
+      });
+    }
+  }
+
+  const consolidatedResult: WorkItemWithGroupedMemberCases[] = [];
+
+  for (const group of consolidatedGroups.values()) {
+    const leadOrLowestNumber = Case.sortByDocketNumber(group)[0].docketNumber;
+
+    const groupedMemberCases = Case.sortByDocketNumber(
+      group
+        .filter(item => item.docketNumber !== leadOrLowestNumber)
+        .map(item => {
+          return {
+            workItemId: item.workItemId,
+            docketNumber: item.docketNumber,
+            inLeadCase: isLeadCase(item),
+          };
+        }),
+    );
+
+    const leadOrLowestNumberedItem = group.find(item => {
+      return item.docketNumber === leadOrLowestNumber;
+    })!;
+
+    consolidatedResult.push({
+      ...leadOrLowestNumberedItem,
+      groupedMemberCases,
+    });
+  }
+
+  return [...solo, ...consolidatedResult];
+};
+
+/**
+ * Sort fields and directions that float high priority work items to the top of
+ * an inbox, ranking them by case status.
+ */
+export const getHighPriorityOrderFields = (
+  STATUS_TYPES: Record<string, string>,
+): {
+  fields: (string | ((workItemToSort: any) => any))[];
+  directions: ('asc' | 'desc')[];
+} => {
+  const caseStatusSortRank = {
+    [STATUS_TYPES.submitted]: 1,
+    [STATUS_TYPES.assignedCase]: 2,
+    [STATUS_TYPES.assignedMotion]: 3,
+    [STATUS_TYPES.jurisdictionRetained]: 4,
+  };
+
+  return {
+    directions: ['desc', 'asc', 'asc'],
+    fields: [
+      'highPriority',
+      'trialDate',
+      workItemToSort => caseStatusSortRank[workItemToSort.caseStatus],
+    ],
+  };
+};
+
 export const formattedWorkQueue = (
   get: Get,
   applicationContext: ClientApplicationContext,
@@ -67,77 +176,7 @@ export const formattedWorkQueue = (
       workQueueToDisplay.queue === 'my') &&
     (workQueueToDisplay.box === 'inbox' || workQueueToDisplay.box === 'outbox')
   ) {
-    const docketEntryIdGroups = new Map<
-      string,
-      RawWorkItemWithCaseAndDocketEntryInfo[]
-    >();
-    const solo: RawWorkItemWithCaseAndDocketEntryInfo[] = [];
-    const consolidatedGroups = new Map<
-      string,
-      RawWorkItemWithCaseAndDocketEntryInfo[]
-    >();
-
-    for (const wi of filtered) {
-      const key = wi.docketEntryId;
-      if (!docketEntryIdGroups.has(key)) docketEntryIdGroups.set(key, []);
-      docketEntryIdGroups.get(key)!.push(wi);
-    }
-
-    for (const group of docketEntryIdGroups.values()) {
-      if (group.length === 1) {
-        solo.push(group[0]);
-      } else {
-        group.forEach(item => {
-          // docket entries that were filed on a case that was later removed from a consolidated group
-          if (item.docketEntry.multiDocketedOn?.length < 2) {
-            solo.push(item);
-          } else if (item.leadDocketNumber) {
-            const key = item.docketEntryId;
-            if (!consolidatedGroups.has(key)) consolidatedGroups.set(key, []);
-            consolidatedGroups.get(key)!.push(item);
-          } else {
-            solo.push(item);
-          }
-        });
-      }
-    }
-
-    const consolidatedResult: Array<
-      RawWorkItemWithCaseAndDocketEntryInfo & {
-        groupedMemberCases?: {
-          workItemId: string;
-          docketNumber: string;
-          inLeadCase: boolean;
-        }[];
-      }
-    > = [];
-
-    for (const group of consolidatedGroups.values()) {
-      const leadOrLowestNumber = Case.sortByDocketNumber(group)[0].docketNumber;
-
-      const groupedMemberCases = Case.sortByDocketNumber(
-        group
-          .filter(item => item.docketNumber !== leadOrLowestNumber)
-          .map(item => {
-            return {
-              workItemId: item.workItemId,
-              docketNumber: item.docketNumber,
-              inLeadCase: isLeadCase(item),
-            };
-          }),
-      );
-
-      const leadOrLowestNumberedItem = group.find(item => {
-        return item.docketNumber === leadOrLowestNumber;
-      })!;
-
-      consolidatedResult.push({
-        ...leadOrLowestNumberedItem,
-        groupedMemberCases,
-      });
-    }
-
-    filtered = [...solo, ...consolidatedResult];
+    filtered = groupConsolidatedWorkItems(filtered);
   }
 
   let workQueue: FormattedWorkItemWithCaseInfo[] = filtered
@@ -198,19 +237,10 @@ export const formattedWorkQueue = (
   let highPriorityField = [] as (string | ((workItemToSort: any) => any))[];
   let highPriorityDirection = [] as string[];
   if (workQueueToDisplay.box == 'inbox') {
-    const caseStatusSortRank = {
-      [STATUS_TYPES.submitted]: 1,
-      [STATUS_TYPES.assignedCase]: 2,
-      [STATUS_TYPES.assignedMotion]: 3,
-      [STATUS_TYPES.jurisdictionRetained]: 4,
-    };
+    const highPriorityOrder = getHighPriorityOrderFields(STATUS_TYPES);
 
-    highPriorityField = [
-      'highPriority',
-      'trialDate',
-      workItemToSort => caseStatusSortRank[workItemToSort.caseStatus],
-    ];
-    highPriorityDirection = ['desc', 'asc', 'asc'];
+    highPriorityField = highPriorityOrder.fields;
+    highPriorityDirection = highPriorityOrder.directions;
   }
 
   workQueue = orderBy(

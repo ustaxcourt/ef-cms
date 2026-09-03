@@ -282,6 +282,253 @@ describe('prepareMotionOrderResponseAction', () => {
     );
   });
 
+  it('should address the parties on both sides when the motion was filed jointly', async () => {
+    const jointDocketEntry = {
+      ...mockDocketEntry,
+      filedBy: 'Resp. & Petr. Test Petitioner',
+      filers: ['petitioner-1'],
+      partyIrsPractitioner: true,
+    };
+
+    const result = await runAction(prepareMotionOrderResponseAction, {
+      state: {
+        caseDetail: {
+          ...mockCaseDetail,
+          docketEntries: [jointDocketEntry],
+          petitioners: [{ contactId: 'petitioner-1', name: 'Test Petitioner' }],
+        },
+        docketEntryId: 'mock-motion-id',
+        form: mockForm,
+      },
+    });
+
+    expect(result.state.form.richText).toContain(
+      'the parties filed a Motion to Dismiss',
+    );
+    expect(result.state.form.richText).toContain(
+      'the parties shall file a Response',
+    );
+    expect(result.state.form.richText).toContain(
+      'the parties may file a Reply',
+    );
+  });
+
+  it('should name a non-party movant and leave the response to the parties', async () => {
+    const otherPartyDocketEntry = {
+      ...mockDocketEntry,
+      filedBy: 'A Friend',
+      filers: [],
+      otherFilingParty: 'A Friend',
+    };
+
+    const result = await runAction(prepareMotionOrderResponseAction, {
+      state: {
+        caseDetail: {
+          ...mockCaseDetail,
+          docketEntries: [otherPartyDocketEntry],
+          petitioners: [{ contactId: 'petitioner-1', name: 'Test Petitioner' }],
+        },
+        docketEntryId: 'mock-motion-id',
+        form: mockForm,
+      },
+    });
+
+    expect(result.state.form.richText).toContain(
+      'A Friend filed a Motion to Dismiss',
+    );
+    expect(result.state.form.richText).toContain(
+      'the parties shall file a Response',
+    );
+    expect(result.state.form.richText).toContain('A Friend may file a Reply');
+    expect(result.state.form.richText).not.toContain('respondent');
+  });
+
+  describe('precedence when the "Other" filing party is combined with parties', () => {
+    const otherPartyName = 'A Friend';
+    const singlePetitioner = [
+      { contactId: 'petitioner-1', name: 'Test Petitioner' },
+    ];
+    const twoPetitioners = [
+      { contactId: 'petitioner-1', name: 'Test Petitioner' },
+      { contactId: 'petitioner-2', name: 'Test Petitioner 2' },
+    ];
+
+    const runWithFilers = ({
+      motionOverrides,
+      petitioners,
+    }: {
+      motionOverrides: Record<string, unknown>;
+      petitioners: { contactId: string; name: string }[];
+    }): ReturnType<typeof runAction<void>> =>
+      runAction(prepareMotionOrderResponseAction, {
+        state: {
+          caseDetail: {
+            ...mockCaseDetail,
+            docketEntries: [
+              {
+                ...mockDocketEntry,
+                otherFilingParty: otherPartyName,
+                ...motionOverrides,
+              },
+            ],
+            petitioners,
+          },
+          docketEntryId: 'mock-motion-id',
+          form: mockForm,
+        },
+      });
+
+    it.each([
+      {
+        expectedMovant: 'petitioner',
+        expectedNonMovant: 'respondent',
+        motionOverrides: {
+          filedBy: 'Petr. Test Petitioner, A Friend',
+          filers: ['petitioner-1'],
+        },
+        petitioners: singlePetitioner,
+        scenario: 'a single petitioner also filed',
+      },
+      {
+        expectedMovant: 'petitioners',
+        expectedNonMovant: 'respondent',
+        motionOverrides: {
+          filedBy: 'Petrs. Test Petitioner & Test Petitioner 2, A Friend',
+          filers: ['petitioner-1', 'petitioner-2'],
+        },
+        petitioners: twoPetitioners,
+        scenario: 'multiple petitioners also filed',
+      },
+      {
+        expectedMovant: 'respondent',
+        expectedNonMovant: 'petitioner',
+        motionOverrides: {
+          filedBy: 'Resp., A Friend',
+          filers: [],
+          partyIrsPractitioner: true,
+        },
+        petitioners: singlePetitioner,
+        scenario: 'respondent also filed',
+      },
+      {
+        expectedMovant: 'respondent',
+        expectedNonMovant: 'petitioners',
+        motionOverrides: {
+          filedBy: 'Resp., A Friend',
+          filers: [],
+          partyIrsPractitioner: true,
+        },
+        petitioners: twoPetitioners,
+        scenario: 'respondent also filed on a case with multiple petitioners',
+      },
+      {
+        expectedMovant: 'the parties',
+        expectedNonMovant: 'the parties',
+        motionOverrides: {
+          filedBy: 'Resp. & Petr. Test Petitioner, A Friend',
+          filers: ['petitioner-1'],
+          partyIrsPractitioner: true,
+        },
+        petitioners: singlePetitioner,
+        scenario: 'a petitioner and respondent also filed',
+      },
+      {
+        expectedMovant: 'the parties',
+        expectedNonMovant: 'the parties',
+        motionOverrides: {
+          filedBy:
+            'Resp. & Petrs. Test Petitioner & Test Petitioner 2, A Friend',
+          filers: ['petitioner-1', 'petitioner-2'],
+          partyIrsPractitioner: true,
+        },
+        petitioners: twoPetitioners,
+        scenario: 'multiple petitioners and respondent also filed',
+      },
+    ])(
+      'names $expectedMovant as movant and $expectedNonMovant as non-movant when $scenario',
+      async ({
+        expectedMovant,
+        expectedNonMovant,
+        motionOverrides,
+        petitioners,
+      }) => {
+        const result = await runWithFilers({ motionOverrides, petitioners });
+
+        const { richText } = result.state.form;
+
+        expect(richText).toContain(
+          `${expectedMovant} filed a Motion to Dismiss`,
+        );
+        expect(richText).toContain(
+          `${expectedNonMovant} shall file a Response`,
+        );
+        expect(richText).toContain(`${expectedMovant} may file a Reply`);
+        expect(richText).not.toContain(otherPartyName);
+      },
+    );
+  });
+
+  it('should address the parties on both sides when multiple petitioners and respondent filed jointly', async () => {
+    const jointDocketEntry = {
+      ...mockDocketEntry,
+      filedBy: 'Resp. & Petrs. Test Petitioner & Test Petitioner 2',
+      filers: ['petitioner-1', 'petitioner-2'],
+      partyIrsPractitioner: true,
+    };
+
+    const result = await runAction(prepareMotionOrderResponseAction, {
+      state: {
+        caseDetail: {
+          ...mockCaseDetail,
+          docketEntries: [jointDocketEntry],
+          petitioners: [
+            { contactId: 'petitioner-1', name: 'Test Petitioner' },
+            { contactId: 'petitioner-2', name: 'Test Petitioner 2' },
+          ],
+        },
+        docketEntryId: 'mock-motion-id',
+        form: mockForm,
+      },
+    });
+
+    const { richText } = result.state.form;
+
+    expect(richText).toContain('the parties filed a Motion to Dismiss');
+    expect(richText).toContain('the parties shall file a Response');
+    expect(richText).toContain('the parties may file a Reply');
+    expect(richText).not.toContain('petitioners shall');
+  });
+
+  it('should name the other filing party when their name contains the petitioner name', async () => {
+    const otherPartyDocketEntry = {
+      ...mockDocketEntry,
+      filedBy: 'Test Petitioner Foundation',
+      filers: [],
+      otherFilingParty: 'Test Petitioner Foundation',
+    };
+
+    const result = await runAction(prepareMotionOrderResponseAction, {
+      state: {
+        caseDetail: {
+          ...mockCaseDetail,
+          docketEntries: [otherPartyDocketEntry],
+          petitioners: [{ contactId: 'petitioner-1', name: 'Test Petitioner' }],
+        },
+        docketEntryId: 'mock-motion-id',
+        form: mockForm,
+      },
+    });
+
+    const { richText } = result.state.form;
+
+    expect(richText).toContain(
+      'Test Petitioner Foundation filed a Motion to Dismiss',
+    );
+    expect(richText).toContain('the parties shall file a Response');
+    expect(richText).toContain('Test Petitioner Foundation may file a Reply');
+    expect(richText).not.toContain('respondent');
+  });
+
   it('should handle consolidated cases', async () => {
     const result = await runAction(prepareMotionOrderResponseAction, {
       state: {

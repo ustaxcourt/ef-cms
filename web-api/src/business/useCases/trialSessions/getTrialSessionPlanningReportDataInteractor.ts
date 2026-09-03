@@ -8,6 +8,8 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import {
+  ALLOWLIST_FEATURE_FLAGS,
+  NEW_TRIAL_CITY_STRINGS,
   PROCEDURE_TYPES_MAP,
   SESSION_TYPES,
   TRIAL_CITIES,
@@ -19,6 +21,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { capitalize, invert } from 'lodash';
 import { getEligibleCasesCount } from '@web-api/persistence/postgres/cases/getEligibleCasesCount';
 import { getBlockedCasesCount } from '@web-api/persistence/postgres/cases/reports/getBlockedCasesCount';
+import { getFeatureFlagValue } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValue';
 import { getTrialSessions } from '@web-api/persistence/postgres/trialSessions/getTrialSessions';
 
 export const getTrialSessionPlanningReportDataInteractor = async (
@@ -68,13 +71,23 @@ const getTrialSessionPlanningReportData = async ({
     currentYear = previous.year;
   }
 
-  const trialCities = TRIAL_CITIES.ALL.sort((a, b) => {
+  const newTrialCitiesEnabled =
+    (await getFeatureFlagValue<boolean>(
+      ALLOWLIST_FEATURE_FLAGS.NEW_TRIAL_CITIES.key,
+    )) ?? false;
+  const trialCities = TRIAL_CITIES.ALL.filter(trialCity => {
+    const trialCityName = `${trialCity.city}, ${trialCity.state}`;
+
+    return (
+      newTrialCitiesEnabled || !NEW_TRIAL_CITY_STRINGS.includes(trialCityName)
+    );
+  }).sort((a, b) => {
     return applicationContext.getUtilities().compareStrings(a.city, b.city);
   });
 
-  const allTrialSessions = (
-    await getTrialSessions()
-  ).filter(ts => ts.isCalendared);
+  const allTrialSessions = (await getTrialSessions()).filter(
+    ts => ts.isCalendared,
+  );
 
   const filteredTrialSessions = allTrialSessions.filter(session =>
     ['Regular', 'Small', 'Hybrid', 'Hybrid-S'].includes(session.sessionType),

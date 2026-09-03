@@ -67,13 +67,6 @@ jobs:
           comment_on_pr: false
       - name: NPM Install in Current Branch
         uses: ./.github/actions/dawson-node-bootstrap
-      - name: Configure sysctl limits
-        if: ${{ inputs.configure_sysctl }}
-        run: |
-          sudo swapoff -a
-          sudo sysctl -w vm.swappiness=1
-          sudo sysctl -w fs.file-max=262144
-          sudo sysctl -w vm.max_map_count=262144
       - name: Create Cypress Output Directory
         if: ${{ inputs.is_cypress }}
         run: |
@@ -82,6 +75,7 @@ jobs:
       - name: Setup and Start DAWSON
         uses: ./.github/actions/dawson-app-setup
         with:
+          configure_sysctl: ${{ inputs.configure_sysctl }}
           log_file: /tmp/${{ inputs.workflow_filename }}-dawson-output.txt
       - name: Run tests
         shell: bash

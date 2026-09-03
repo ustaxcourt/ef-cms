@@ -88,4 +88,24 @@ describe('generateCsv', () => {
 
     expect(append).toHaveBeenCalledWith(MOCK_FILENAME, MOCK_CONTENTS);
   });
+
+  it('escapes quotes and newlines in CSV values', () => {
+    generateCsv({
+      columns: MOCK_COLUMNS,
+      filename: MOCK_FILENAME,
+      rows: [
+        {
+          alliance: 'Rebellion',
+          name: 'C-3PO "Protocol"',
+          type: 'Protocol\nDroid',
+        },
+      ],
+    });
+
+    expect(append).toHaveBeenCalledWith(
+      MOCK_FILENAME,
+      '"Droid name","Droid type","Alliance"' +
+        '\n"C-3PO ""Protocol""","Protocol\nDroid","Rebellion"',
+    );
+  });
 });

@@ -5,7 +5,7 @@ describe('validateDocketEntryWorksheetInteractor', () => {
   const TEST_DOCKET_ENTRY_ID = '06f60736-5f37-4590-b62a-5c7edf84ffc6';
   const VALID_WORKSHEET: RawDocketEntryWorksheet = {
     docketEntryId: TEST_DOCKET_ENTRY_ID,
-    finalBriefDueDate: '2023-07-29',
+    finalBriefDueDate: '2023-07-29T00:00:00.000-04:00',
     primaryIssue: 'tests primaryIssue',
     statusOfMatter: 'AwaitingConsideration',
   };
