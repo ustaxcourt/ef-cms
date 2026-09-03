@@ -217,6 +217,26 @@ This script will prompt for an environment to pull the image from; choose `exp3`
 npm run ecr:check-version
 ```
 </details>
+<details><summary>Install gitleaks</summary>
+
+## Local
+
+#### Install gitleaks (secrets scanning) for the pre-commit hook
+```bash
+brew update && brew install gitleaks
+```
+</details>
+<details><summary>Updating batch job roles/permissions</summary>
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Run an `account-specific` terraform deployment
+```bash
+npm run deploy:account-specific
+```
+</details>
 <details><summary>Dependency Updates - Week of 2026-07-13</summary>
 
 ## Manual Deployment Steps

@@ -1,0 +1,29 @@
+name: DAWSON SARIF Upload
+description: Upload a SARIF report, including only same-repository pull request reports.
+
+inputs:
+  category:
+    description: Code scanning category for the SARIF report.
+    required: true
+  sarif_file:
+    description: Path to the SARIF report.
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Upload SARIF
+      if: >-
+        always() &&
+        hashFiles(inputs.sarif_file) != '' &&
+        (
+          (
+            github.event_name != 'pull_request' &&
+            github.event_name != 'pull_request_target'
+          ) ||
+          github.event.pull_request.head.repo.full_name == github.event.pull_request.base.repo.full_name
+        )
+      uses: github/codeql-action/upload-sarif@v4
+      with:
+        sarif_file: ${{ inputs.sarif_file }}
+        category: ${{ inputs.category }}
