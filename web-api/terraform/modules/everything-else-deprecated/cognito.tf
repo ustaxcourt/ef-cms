@@ -8,7 +8,7 @@ resource "aws_cognito_user_pool" "pool" {
     email_message        = <<EMAILMESSAGE
     <div>
     <div>
-      Hello DAWSON user, 
+      Hello DAWSON user,
     </div>
     <div style="margin-top: 20px;">
     You have requested a password reset. Use the code below to reset your password. <span style="font-weight: bold;">This will expire in one hour.</span>
@@ -44,7 +44,7 @@ resource "aws_cognito_user_pool" "pool" {
       email_message = <<EMAILMESSAGE
       <div>
         <div>
-          Hello DAWSON user, 
+          Hello DAWSON user,
         </div>
         <div style="margin-top: 20px;">
           Welcome to DAWSON, the U.S. Tax Court case management system. An account has been created for you to access your cases online.
@@ -52,10 +52,10 @@ resource "aws_cognito_user_pool" "pool" {
         <div style="margin-top: 20px;">
           Please verify that your contact information is correct in the system, and make any required changes.
         </div>
-        <div style="margin-top: 20px;"> 
+        <div style="margin-top: 20px;">
           <span style="font-weight: bold;">Your username: </span>{username}
         </div>
-        <div> 
+        <div>
           <span style="font-weight: bold;">Temporary password: </span> <span style="font-family: 'Courier New', Courier, monospace;">{####}</span>
         </div>
         <div style="margin-top: 20px;">
@@ -157,6 +157,10 @@ resource "aws_cognito_user_pool" "pool" {
   lifecycle {
     prevent_destroy = true
   }
+
+  lambda_config {
+    pre_sign_up = module.cognito_pre_signup_lambda.arn
+  }
 }
 
 resource "aws_cognito_user_pool_client" "client" {
@@ -165,7 +169,7 @@ resource "aws_cognito_user_pool_client" "client" {
   explicit_auth_flows = ["ADMIN_NO_SRP_AUTH", "USER_PASSWORD_AUTH"]
 
   generate_secret                      = false
-  allowed_oauth_flows_user_pool_client = false
+  allowed_oauth_flows_user_pool_client = var.idp_name != "" ? true : false
 
   token_validity_units {
     access_token  = "hours"
@@ -180,7 +184,7 @@ resource "aws_cognito_user_pool_client" "client" {
   user_pool_id = aws_cognito_user_pool.pool.id
 
   # WARNING: Do NOT add custom:userId or custom:role to this list. Adding those
-  # attributes to this list will allow anyone with a valid access/id token to 
+  # attributes to this list will allow anyone with a valid access/id token to
   # update their role or userId directly in Cognito.
   write_attributes = [
     "address",
@@ -201,6 +205,185 @@ resource "aws_cognito_user_pool_client" "client" {
     "website",
     "zoneinfo",
   ]
+
+  callback_urls                = var.idp_name != "" ? ["https://app.${var.environment}.ef-cms.ustaxcourt.gov/auth-code"] : null
+  allowed_oauth_flows          = var.idp_name != "" ? ["code"] : null
+  allowed_oauth_scopes         = var.idp_name != "" ? ["openid", "email", "profile"] : null
+  supported_identity_providers = var.idp_name != "" ? [aws_cognito_identity_provider.idp[0].provider_name] : null
+}
+
+resource "aws_cognito_user_pool_domain" "domain" {
+  count                 = var.idp_name != "" ? 1 : 0
+  domain                = "ef-cms-${var.environment}"
+  user_pool_id          = aws_cognito_user_pool.pool.id
+  managed_login_version = 2
+}
+
+resource "aws_cognito_managed_login_branding" "login_branding" {
+  count                       = var.idp_name != "" ? 1 : 0
+  client_id                   = aws_cognito_user_pool_client.client.id
+  user_pool_id                = aws_cognito_user_pool.pool.id
+  use_cognito_provided_values = true
+}
+
+resource "aws_cognito_identity_provider" "idp" {
+  count         = var.idp_name != "" ? 1 : 0
+  user_pool_id  = aws_cognito_user_pool.pool.id
+  provider_name = var.idp_name
+  provider_type = "OIDC"
+  provider_details = {
+    authorize_scopes          = "openid"
+    client_id                 = var.oidc_client_id
+    client_secret             = var.oidc_client_secret
+    oidc_issuer               = var.oidc_issuer_url
+    attributes_request_method = "POST"
+  }
+  attribute_mapping = {
+    name     = "name"
+    email    = "email"
+    username = "sub"
+  }
+}
+module "cognito_pre_signup_lambda" {
+  source         = "../lambda"
+  handler_file   = "./web-api/src/lambdas/cognitoPreSignup/cognitoPreSignupLambda.ts"
+  handler_method = "cognitoPreSignupLambdaHandler"
+  lambda_name    = "cognito_pre_signup_lambda_${var.environment}"
+  role           = aws_iam_role.pre_signup_lambda.arn
+  environment = {
+    IDP_NAME = var.idp_name
+  }
+  timeout     = "29"
+  memory_size = "128"
+}
+
+module "cognito_inbound_federation_lambda" {
+  source         = "../lambda"
+  handler_file   = "./web-api/src/lambdas/cognitoInboundFederation/cognitoInboundFederationLambda.ts"
+  handler_method = "cognitoInboundFederationLambdaHandler"
+  lambda_name    = "cognito_inbound_federation_lambda_${var.environment}"
+  role           = aws_iam_role.inbound_federation_lambda.arn
+  environment = {
+    IDP_NAME = var.idp_name
+  }
+  timeout     = "29"
+  memory_size = "128"
+}
+
+resource "aws_lambda_permission" "cognito_pre_signup_lambda_invoke" {
+  statement_id  = "AllowCognitoInvoke"
+  action        = "lambda:InvokeFunction"
+  function_name = module.cognito_pre_signup_lambda.function_name
+  principal     = "cognito-idp.amazonaws.com"
+  source_arn    = aws_cognito_user_pool.pool.arn
+}
+
+resource "aws_lambda_permission" "cognito_inbound_federation_lambda_invoke" {
+  statement_id  = "AllowCognitoInvoke"
+  action        = "lambda:InvokeFunction"
+  function_name = module.cognito_inbound_federation_lambda.function_name
+  principal     = "cognito-idp.amazonaws.com"
+  source_arn    = aws_cognito_user_pool.pool.arn
+}
+
+resource "aws_iam_role" "pre_signup_lambda" {
+  name = "pre_signup_lambda_role_${var.environment}"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": [
+          "lambda.amazonaws.com",
+          "apigateway.amazonaws.com"
+        ]
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role" "inbound_federation_lambda" {
+  name = "inbound_federation_lambda_role_${var.environment}"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": [
+          "lambda.amazonaws.com",
+          "apigateway.amazonaws.com"
+        ]
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy" "presignup_policy" {
+  name = "pre_signup_policy_${var.environment}"
+  role = aws_iam_role.pre_signup_lambda.id
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "cognito-idp:AdminGetUser",
+        "cognito-idp:AdminLinkProviderForUser"
+      ],
+      "Resource": [
+        "arn:aws:cognito-idp:us-east-1:${data.aws_caller_identity.current.account_id}:userpool/*"
+      ]
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy" "inbound_federation_policy" {
+  name = "inbound_federation_policy_${var.environment}"
+  role = aws_iam_role.inbound_federation_lambda.id
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+EOF
 }
 
 resource "aws_cognito_user_pool" "irs_pool" {
@@ -230,7 +413,7 @@ resource "aws_cognito_user_pool" "irs_pool" {
       email_message = <<EMAILMESSAGE
       <div>
         <div>
-          Hello DAWSON user, 
+          Hello DAWSON user,
         </div>
         <div style="margin-top: 20px;">
           Welcome to DAWSON, the U.S. Tax Court case management system. An account has been created for you to access your cases online.
@@ -238,10 +421,10 @@ resource "aws_cognito_user_pool" "irs_pool" {
         <div style="margin-top: 20px;">
           Please verify that your contact information is correct in the system, and make any required changes.
         </div>
-        <div style="margin-top: 20px;"> 
+        <div style="margin-top: 20px;">
           <span style="font-weight: bold;">Your username: </span>{username}
         </div>
-        <div> 
+        <div>
           <span style="font-weight: bold;">Temporary password: </span> <span style="font-family: 'Courier New', Courier, monospace;">{####}</span>
         </div>
         <div style="margin-top: 20px;">
@@ -272,7 +455,7 @@ resource "aws_cognito_user_pool" "irs_pool" {
           <span>This is an automated email. We are unable to respond to any messages sent to this email address.</span>
         </div>
       </div>
-    EMAILMESSAGE      
+    EMAILMESSAGE
     }
   }
 

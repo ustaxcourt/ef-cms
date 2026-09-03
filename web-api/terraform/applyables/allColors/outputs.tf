@@ -50,3 +50,7 @@ output "rum_app_monitor_id" {
 output "rum_identity_pool_id" {
   value = module.rum.identity_pool_id
 }
+
+output aws_ses_email_identity_arn {
+  value = module.ef-cms_apis.aws_ses_email_identity_arn
+}
