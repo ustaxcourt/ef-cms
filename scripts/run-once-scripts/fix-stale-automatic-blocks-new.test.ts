@@ -164,7 +164,7 @@ jest.mock('@shared/business/entities/cases/Case', () => ({
 
 const runScript = async (): Promise<void> => {
   jest.resetModules();
-  await import('./fix-stale-automatic-blocks-new');
+  await import('./fix-stale-automatic-blocks');
   await new Promise(resolve => setImmediate(resolve));
 };
 

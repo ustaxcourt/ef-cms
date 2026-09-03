@@ -8,6 +8,7 @@ on:
       - '**/.gitignore'
       - '.nvmrc'
       - 'docs/**'
+  workflow_dispatch:
   push:
     branches: [staging]
 
@@ -25,7 +26,9 @@ env:
 jobs:
   trivy-config:
     name: Trivy Dockerfile Config
-    if: github.event_name == 'pull_request' && !github.event.pull_request.draft
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'pull_request' && !github.event.pull_request.draft)
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -48,20 +51,17 @@ jobs:
           exit-code: '0'
 
       - name: Upload SARIF
-        # Fork PRs get a read-only token, so the code-scanning upload 403s. Restrict
-        # upload to same-repo PRs; fork PRs still scan, with findings in the Actions log.
-        if: >-
-          always() &&
-          hashFiles('trivy-config.sarif') != '' &&
-          github.event.pull_request.head.repo.full_name == github.event.pull_request.base.repo.full_name
-        uses: github/codeql-action/upload-sarif@v4
+        if: always()
+        uses: ./.github/actions/dawson-upload-sarif
         with:
           sarif_file: trivy-config.sarif
           category: trivy-config
 
   trivy-image:
     name: Trivy Image Scan (core)
-    if: github.event_name == 'pull_request' && !github.event.pull_request.draft
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'pull_request' && !github.event.pull_request.draft)
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -71,68 +71,28 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: NPM Install
-        uses: ./.github/actions/dawson-node-bootstrap
-        with:
-          install-dependencies: 'false'
-          restore-cache: 'false'
-          save-cache: 'false'
-
-      - name: Build images
-        run: |
-          # Mirror pdfs.yml: the base image must build before efcms-local (FROM it).
-          docker build --platform=linux/amd64 -t ef-cms-us-east-1 -f Dockerfile .
-          docker build --platform=linux/amd64 -t efcms-local -f Dockerfile-local .
+      - name: Build DAWSON container images
+        uses: ./.github/actions/dawson-container-images
 
       - name: Trivy scan — ef-cms-us-east-1 (base)
-        uses: aquasecurity/trivy-action@v0.36.0
+        uses: ./.github/actions/dawson-trivy-image-scan
         with:
-          scan-type: image
-          image-ref: ef-cms-us-east-1:latest
-          vuln-type: 'os,library'
-          severity: 'HIGH,CRITICAL'
-          # No ignore-unfixed yet: surface EVERYTHING until we establish a baseline of
-          # known CVEs and record accepted ones in .trivyignore.
-          format: sarif
-          output: trivy-base.sarif
-          # ROLLOUT GUARD: warn-only. >>> CONFIRM WITH JIM BEFORE FLIPPING THIS TO BLOCKING <<<
-          exit-code: '0'
-
-      - name: Upload SARIF — base
-        if: >-
-          always() &&
-          hashFiles('trivy-base.sarif') != '' &&
-          github.event.pull_request.head.repo.full_name == github.event.pull_request.base.repo.full_name
-        uses: github/codeql-action/upload-sarif@v4
-        with:
-          sarif_file: trivy-base.sarif
+          image_ref: ef-cms-us-east-1:latest
+          report_path: trivy-base.sarif
           category: trivy-image-base
 
       - name: Trivy scan — efcms-local
-        uses: aquasecurity/trivy-action@v0.36.0
+        uses: ./.github/actions/dawson-trivy-image-scan
         with:
-          scan-type: image
-          image-ref: efcms-local:latest
-          vuln-type: 'os,library'
-          severity: 'HIGH,CRITICAL'
-          format: sarif
-          output: trivy-local.sarif
-          # ROLLOUT GUARD: warn-only. >>> CONFIRM WITH JIM BEFORE FLIPPING THIS TO BLOCKING <<<
-          exit-code: '0'
-
-      - name: Upload SARIF — local
-        if: >-
-          always() &&
-          hashFiles('trivy-local.sarif') != '' &&
-          github.event.pull_request.head.repo.full_name == github.event.pull_request.base.repo.full_name
-        uses: github/codeql-action/upload-sarif@v4
-        with:
-          sarif_file: trivy-local.sarif
+          image_ref: efcms-local:latest
+          report_path: trivy-local.sarif
           category: trivy-image-local
 
   trivy-runtime-base:
     name: Trivy Base Scan (${{ matrix.name }})
-    if: github.event_name == 'pull_request' && !github.event.pull_request.draft
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'pull_request' && !github.event.pull_request.draft)
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -147,26 +107,14 @@ jobs:
           - name: batch
             image: node:24
     steps:
-      - name: Trivy scan — ${{ matrix.image }}
-        uses: aquasecurity/trivy-action@v0.36.0
-        with:
-          scan-type: image
-          image-ref: ${{ matrix.image }}
-          vuln-type: 'os,library'
-          severity: 'HIGH,CRITICAL'
-          format: sarif
-          output: trivy-${{ matrix.name }}.sarif
-          # ROLLOUT GUARD: warn-only. >>> CONFIRM WITH JIM BEFORE FLIPPING THIS TO BLOCKING <<<
-          exit-code: '0'
+      - name: Checkout
+        uses: actions/checkout@v6
 
-      - name: Upload SARIF — ${{ matrix.name }}
-        if: >-
-          always() &&
-          hashFiles(format('trivy-{0}.sarif', matrix.name)) != '' &&
-          github.event.pull_request.head.repo.full_name == github.event.pull_request.base.repo.full_name
-        uses: github/codeql-action/upload-sarif@v4
+      - name: Trivy scan — ${{ matrix.image }}
+        uses: ./.github/actions/dawson-trivy-image-scan
         with:
-          sarif_file: trivy-${{ matrix.name }}.sarif
+          image_ref: ${{ matrix.image }}
+          report_path: trivy-${{ matrix.name }}.sarif
           category: trivy-image-${{ matrix.name }}
 
   # ─────────────────────────────────────────────────────────────────────────────
@@ -187,88 +135,35 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: NPM Install
-        uses: ./.github/actions/dawson-node-bootstrap
-        with:
-          install-dependencies: 'false'
-          restore-cache: 'false'
-          save-cache: 'false'
-
-      - name: Build images
-        run: |
-          docker build --platform=linux/amd64 -t ef-cms-us-east-1 -f Dockerfile .
-          docker build --platform=linux/amd64 -t efcms-local -f Dockerfile-local .
+      - name: Build DAWSON container images
+        uses: ./.github/actions/dawson-container-images
 
       - name: Trivy scan — ef-cms-us-east-1 (baseline)
-        uses: aquasecurity/trivy-action@v0.36.0
+        uses: ./.github/actions/dawson-trivy-image-scan
         with:
-          scan-type: image
-          image-ref: ef-cms-us-east-1:latest
-          vuln-type: 'os,library'
-          severity: 'HIGH,CRITICAL'
-          format: sarif
-          output: trivy-baseline-base.sarif
-          exit-code: '0'
-
-      - name: Upload SARIF — base (baseline)
-        if: always() && hashFiles('trivy-baseline-base.sarif') != ''
-        uses: github/codeql-action/upload-sarif@v4
-        with:
-          sarif_file: trivy-baseline-base.sarif
+          image_ref: ef-cms-us-east-1:latest
+          report_path: trivy-baseline-base.sarif
           category: trivy-baseline-base
 
       - name: Trivy scan — efcms-local (baseline)
-        uses: aquasecurity/trivy-action@v0.36.0
+        uses: ./.github/actions/dawson-trivy-image-scan
         with:
-          scan-type: image
-          image-ref: efcms-local:latest
-          vuln-type: 'os,library'
-          severity: 'HIGH,CRITICAL'
-          format: sarif
-          output: trivy-baseline-local.sarif
-          exit-code: '0'
-
-      - name: Upload SARIF — local (baseline)
-        if: always() && hashFiles('trivy-baseline-local.sarif') != ''
-        uses: github/codeql-action/upload-sarif@v4
-        with:
-          sarif_file: trivy-baseline-local.sarif
+          image_ref: efcms-local:latest
+          report_path: trivy-baseline-local.sarif
           category: trivy-baseline-local
 
       - name: Trivy scan — node:24.16.0-slim (baseline)
-        uses: aquasecurity/trivy-action@v0.36.0
+        uses: ./.github/actions/dawson-trivy-image-scan
         with:
-          scan-type: image
-          image-ref: node:24.16.0-slim
-          vuln-type: 'os,library'
-          severity: 'HIGH,CRITICAL'
-          format: sarif
-          output: trivy-baseline-puppeteer.sarif
-          exit-code: '0'
-
-      - name: Upload SARIF — puppeteer (baseline)
-        if: always() && hashFiles('trivy-baseline-puppeteer.sarif') != ''
-        uses: github/codeql-action/upload-sarif@v4
-        with:
-          sarif_file: trivy-baseline-puppeteer.sarif
+          image_ref: node:24.16.0-slim
+          report_path: trivy-baseline-puppeteer.sarif
           category: trivy-baseline-puppeteer
 
       - name: Trivy scan — node:24 (baseline)
-        uses: aquasecurity/trivy-action@v0.36.0
+        uses: ./.github/actions/dawson-trivy-image-scan
         with:
-          scan-type: image
-          image-ref: node:24
-          vuln-type: 'os,library'
-          severity: 'HIGH,CRITICAL'
-          format: sarif
-          output: trivy-baseline-batch.sarif
-          exit-code: '0'
-
-      - name: Upload SARIF — batch (baseline)
-        if: always() && hashFiles('trivy-baseline-batch.sarif') != ''
-        uses: github/codeql-action/upload-sarif@v4
-        with:
-          sarif_file: trivy-baseline-batch.sarif
+          image_ref: node:24
+          report_path: trivy-baseline-batch.sarif
           category: trivy-baseline-batch
 
   # ─────────────────────────────────────────────────────────────────────────────
@@ -278,7 +173,10 @@ jobs:
   # ─────────────────────────────────────────────────────────────────────────────
   containers-gate:
     name: Security Gate (Containers)
-    if: always() && github.event_name == 'pull_request' && !github.event.pull_request.draft
+    if: >-
+      always() &&
+      (github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'pull_request' && !github.event.pull_request.draft))
     needs: [trivy-config, trivy-image, trivy-runtime-base]
     runs-on: ubuntu-latest
     permissions: {}

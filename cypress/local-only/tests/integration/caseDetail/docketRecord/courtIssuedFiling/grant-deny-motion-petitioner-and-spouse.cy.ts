@@ -1,4 +1,5 @@
 import {
+  ElectronicMotionCaseFixture,
   GRANT_DENY_MOTION_TYPE,
   GRANT_DENY_OTHER_FILING_PARTY,
   MotionFilingParties,
@@ -15,7 +16,9 @@ describe('Judge grants a motion on an electronically filed case with a petitione
   const expectedOrderDescription = grantedOrderDescription();
   const otherFilingPartyName = GRANT_DENY_OTHER_FILING_PARTY;
 
-  const createMotionCase = (filingParties: MotionFilingParties) =>
+  const createMotionCase = (
+    filingParties: MotionFilingParties,
+  ): Cypress.Chainable<ElectronicMotionCaseFixture> =>
     createElectronicMotionCase({ ...filingParties, withSpouse: true });
 
   it('should identify the filing party as the parties when granting a motion filed jointly by the petitioners and respondent', () => {
