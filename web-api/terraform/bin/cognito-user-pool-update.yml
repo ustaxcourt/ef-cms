@@ -12,7 +12,7 @@ LambdaConfig:
   PreSignUp: arn:aws:lambda:us-east-1:REPLACE_ACCOUNT_ID:function:cognito_pre_signup_lambda_REPLACE_ENVIRONMENT
   InboundFederation:
     LambdaVersion: V1_0
-    LambdaArn: arn:aws:lambda:us-east-1:REPLACE_ACCOUNT_ID:function:cognito_pre_signup_lambda_REPLACE_ENVIRONMENT
+    LambdaArn: arn:aws:lambda:us-east-1:REPLACE_ACCOUNT_ID:function:cognito_inbound_federation_lambda_REPLACE_ENVIRONMENT
 VerificationMessageTemplate:
   DefaultEmailOption: CONFIRM_WITH_CODE
   EmailMessage: |
