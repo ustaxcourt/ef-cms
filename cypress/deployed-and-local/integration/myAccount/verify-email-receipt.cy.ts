@@ -10,16 +10,16 @@ import { getCypressEnv } from '../../../helpers/env/cypressEnvironment';
 import { loginAsPetitioner } from 'cypress/helpers/authentication/login-as-helpers';
 
 describe('Verify verification email', () => {
-  const bucketName = Cypress.env('SMOKETEST_BUCKET');
-  const emailDomain = Cypress.env('EFCMS_DOMAIN');
+  const bucketName = Cypress.expose('SMOKETEST_BUCKET');
+  const emailDomain = Cypress.expose('EFCMS_DOMAIN');
   const uniqueTimestamp = getCurrentDateTimeInMillis();
   const testEmailAddress = `smoketest+${uniqueTimestamp}@${emailDomain}`;
 
   before(function () {
     if (
       getCypressEnv().isLocal ||
-      Cypress.env('MIGRATE') ||
-      Cypress.env('DISABLE_EMAILS')
+      Cypress.expose('MIGRATE') ||
+      Cypress.expose('DISABLE_EMAILS')
     ) {
       this.skip();
     }
@@ -29,8 +29,8 @@ describe('Verify verification email', () => {
   after(function () {
     if (
       getCypressEnv().isLocal ||
-      Cypress.env('MIGRATE') ||
-      Cypress.env('DISABLE_EMAILS')
+      Cypress.expose('MIGRATE') ||
+      Cypress.expose('DISABLE_EMAILS')
     ) {
       return;
     }
