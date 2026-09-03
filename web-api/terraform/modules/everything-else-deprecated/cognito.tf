@@ -245,29 +245,29 @@ resource "aws_cognito_identity_provider" "idp" {
   }
 }
 module "cognito_pre_signup_lambda" {
-  source = "../lambda"
+  source         = "../lambda"
   handler_file   = "./web-api/src/lambdas/cognitoPreSignup/cognitoPreSignupLambda.ts"
   handler_method = "cognitoPreSignupLambdaHandler"
   lambda_name    = "cognito_pre_signup_lambda_${var.environment}"
   role           = aws_iam_role.pre_signup_lambda.arn
-  environment    = {
+  environment = {
     IDP_NAME = var.idp_name
   }
-  timeout        = "29"
-  memory_size    = "128"
+  timeout     = "29"
+  memory_size = "128"
 }
 
 module "cognito_inbound_federation_lambda" {
-  source = "../lambda"
+  source         = "../lambda"
   handler_file   = "./web-api/src/lambdas/cognitoInboundFederation/cognitoInboundFederationLambda.ts"
   handler_method = "cognitoInboundFederationLambdaHandler"
   lambda_name    = "cognito_inbound_federation_lambda_${var.environment}"
   role           = aws_iam_role.inbound_federation_lambda.arn
-  environment    = {
+  environment = {
     IDP_NAME = var.idp_name
   }
-  timeout        = "29"
-  memory_size    = "128"
+  timeout     = "29"
+  memory_size = "128"
 }
 
 resource "aws_lambda_permission" "cognito_pre_signup_lambda_invoke" {
