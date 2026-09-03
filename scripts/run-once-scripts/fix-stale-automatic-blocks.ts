@@ -1,19 +1,20 @@
 #!/usr/bin/env -S npx ts-node --transpile-only
 
-import {
-  ScriptConfig,
-  parseArgsAndEnvVars,
-} from 'scripts/helpers/parseArgsAndEnvVars';
 import { Case } from '@shared/business/entities/cases/Case';
+import { calculateDate } from '@shared/business/utilities/DateHandler';
 import { createApplicationContext } from '@web-api/applicationContext';
+import { updateCaseAutomaticBlock } from '@web-api/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { getDbReader } from '@web-api/persistence/postgres/database';
 import { pgUpdateTable } from '@web-api/persistence/postgres/utils/operation/pgUpdateTable';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
-import pLimit from 'p-limit';
-import { updateCaseAutomaticBlock } from '@web-api/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock';
 import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
+import pLimit from 'p-limit';
+import {
+  parseArgsAndEnvVars,
+  ScriptConfig,
+} from 'scripts/helpers/parseArgsAndEnvVars';
 
 const scriptConfig: ScriptConfig = {
   description:
@@ -34,171 +35,86 @@ const scriptConfig: ScriptConfig = {
 
 const { dryRun } = parseArgsAndEnvVars(scriptConfig) as { dryRun: boolean };
 
-const CASE_LOAD_BATCH_SIZE = 200;
-// withLocking does not forward retries to acquireLock, so keep batches small to limit collisions.
-const UPDATE_BATCH_SIZE = 25;
 const CONCURRENCY_LIMIT = 10;
 
-const chunk = <T>(items: T[], size: number): T[][] => {
-  const chunks: T[][] = [];
-  for (let i = 0; i < items.length; i += size) {
-    chunks.push(items.slice(i, i + size));
-  }
-  return chunks;
-};
-
-const logProgress = (label: string, completed: number, total: number): void => {
+const logProgress = (completed: number, total: number): void => {
+  const percent = total ? Math.floor((completed / total) * 100) : 100;
   if (process.stdout.isTTY) {
-    process.stdout.write(`\r${label}: ${completed}/${total}`);
+    process.stdout.write(`\rProcessed: ${completed}/${total} (${percent}%)`);
     if (completed === total) process.stdout.write('\n');
   } else {
-    console.log(`${label}: ${completed}/${total}`);
+    console.log(`Processed: ${completed}/${total} (${percent}%)`);
   }
 };
 
-const findStaleDocketNumbers = async ({
-  docketNumbers,
-  verbose = false,
-}: {
-  docketNumbers?: string[];
-  verbose?: boolean;
-}): Promise<{ stale: string[]; failed: string[]; total: number }> => {
-  // A deadline alone is sufficient for an automatic block, so cases with one are still
-  // blocked without loading them. The persisted `pending` flag is NOT usable as negative
-  // proof: it is nullable, and DocketEntry treats a null (read back as undefined) flag as
-  // pending when the event code is tracked. Every other candidate is therefore loaded.
+const findCasesWithAutomaticBlockedTrue = async () => {
   const candidates = await getDbReader(reader => {
     const blocked = reader
       .selectFrom('dwCase as c')
       .where('c.automaticBlocked', '=', true);
 
-    const scoped = docketNumbers
-      ? blocked.where('c.docketNumber', 'in', docketNumbers)
-      : blocked;
-
-    return scoped
-      .select(eb => [
-        'c.docketNumber',
-        'c.trialDate',
-        eb
-          .exists(
-            eb
-              .selectFrom('dwCaseDeadline as d')
-              .select('d.caseDeadlineId')
-              .whereRef('d.docketNumber', '=', 'c.docketNumber'),
-          )
-          .as('hasDeadline'),
-      ])
-      .execute();
+    return blocked.select(['c.docketNumber']).execute();
   });
-
-  const definitelyUnblocked = candidates.filter(c => c.trialDate);
-  const needsEvaluation = candidates.filter(
-    c => !c.trialDate && !c.hasDeadline,
+  return candidates.filter(candidate =>
+    ['964-20', '134-20', '107-20', '466-20'].includes(candidate.docketNumber),
   );
-
-  if (verbose) {
-    console.log(`Found ${candidates.length} automatically blocked cases.`);
-    console.log(
-      `${definitelyUnblocked.length} resolved by query, ${needsEvaluation.length} require loading, ${candidates.length - definitelyUnblocked.length - needsEvaluation.length} still blocked.`,
-    );
-  }
-
-  const limit = pLimit(CONCURRENCY_LIMIT);
-  const failed: string[] = [];
-  let evaluated = 0;
-
-  const batches = chunk(
-    needsEvaluation.map(c => c.docketNumber),
-    CASE_LOAD_BATCH_SIZE,
-  );
-
-  const batchResults = await settlePromises(
-    batches.map(batch =>
-      limit(async (): Promise<string[]> => {
-        try {
-          const rawCases = await getCasesByDocketNumbers({
-            docketNumbers: batch,
-            excludeFields: ['correspondence', 'hearings', 'irsPractitioners'],
-          });
-
-          // The classifying query already established these cases have no deadlines.
-          const evaluations = await Promise.all(
-            rawCases.map(async rawCase => {
-              const { automaticBlocked } = await updateCaseAutomaticBlock({
-                caseEntity: new Case(rawCase, { authorizedUser: undefined }),
-                hasCaseDeadline: false,
-              });
-
-              return { automaticBlocked, docketNumber: rawCase.docketNumber };
-            }),
-          );
-
-          return evaluations
-            .filter(evaluation => !evaluation.automaticBlocked)
-            .map(evaluation => evaluation.docketNumber);
-        } catch (e) {
-          console.error('Failed to evaluate batch', {
-            docketNumbers: batch,
-            error: e,
-          });
-          failed.push(...batch);
-          return [];
-        } finally {
-          evaluated += batch.length;
-          if (verbose) {
-            logProgress('Evaluated', evaluated, needsEvaluation.length);
-          }
-        }
-      }),
-    ),
-  );
-
-  return {
-    failed,
-    stale: [
-      ...definitelyUnblocked.map(c => c.docketNumber),
-      ...batchResults.flat(),
-    ],
-    total: candidates.length,
-  };
 };
 
-const updateStaleCases = withLocking(
+const updateCase = async (
+  rawCase: Omit<
+    RawCase,
+    'consolidatedCases' | 'correspondence' | 'hearings' | 'irsPractitioners'
+  >,
+): Promise<Case> => {
+  const updatedCase = await updateCaseAutomaticBlock({
+    caseEntity: new Case(rawCase, { authorizedUser: undefined }),
+  });
+  return updatedCase;
+};
+
+// Re-evaluates a single case under an advisory lock and persists the change if it is no longer blocked.
+const updateCaseWithLocking = withLocking(
   async (
     _applicationContext,
-    { docketNumbers }: { docketNumbers: string[] },
-  ): Promise<number> => {
-    // A case may have been re-blocked between the scan and now, so re-decide under lock.
-    const { stale: stillStale, failed: rescanFailed } =
-      await findStaleDocketNumbers({
-        docketNumbers,
-      });
+    { docketNumber }: { docketNumber: string },
+  ): Promise<boolean> => {
+    const [oldCase] = await getCasesByDocketNumbers({
+      docketNumbers: [docketNumber],
+      excludeFields: ['correspondence', 'hearings', 'irsPractitioners'],
+    });
+    const updatedCase = await updateCase(oldCase);
 
-    if (rescanFailed.length) {
-      throw new Error(
-        `Failed to re-evaluate cases under lock: ${rescanFailed.join(', ')}`,
-      );
+    if (dryRun) {
+      return !updatedCase.automaticBlocked;
     }
 
-    if (!stillStale.length) return 0;
+    if (
+      oldCase.automaticBlocked === updatedCase.automaticBlocked &&
+      oldCase.automaticBlockedReason === updatedCase.automaticBlockedReason &&
+      oldCase.hasPendingItems === updatedCase.hasPendingItems
+    ) {
+      return false;
+    }
 
     await withTransaction(async () => {
       await pgUpdateTable({
         table: 'dwCase',
         values: {
-          automaticBlocked: false,
-          automaticBlockedDate: null,
-          automaticBlockedReason: null,
+          automaticBlocked: updatedCase.automaticBlocked,
+          automaticBlockedDate: updatedCase.automaticBlockedDate
+            ? calculateDate({ dateString: updatedCase.automaticBlockedDate })
+            : null,
+          automaticBlockedReason: updatedCase.automaticBlockedReason ?? null,
+          hasPendingItems: updatedCase.hasPendingItems,
         },
-        where: qb => qb.where('docketNumber', 'in', stillStale),
+        where: qb => qb.where('docketNumber', '=', docketNumber),
       });
     });
-    return stillStale.length;
+
+    return true;
   },
-  (_applicationContext, { docketNumbers }: { docketNumbers: string[] }) => ({
-    // Sorted so concurrent runs acquire overlapping identifiers in the same order.
-    identifiers: [...docketNumbers].sort().map(d => `case|${d}`),
+  (_applicationContext, { docketNumber }: { docketNumber: string }) => ({
+    identifiers: [`case|${docketNumber}`],
   }),
 );
 
@@ -206,50 +122,46 @@ const updateStaleCases = withLocking(
 (async () => {
   const applicationContext = createApplicationContext({});
 
-  const { failed, stale, total } = await findStaleDocketNumbers({
-    verbose: true,
-  });
+  const casesWithAutomaticBlockedTrue =
+    await findCasesWithAutomaticBlockedTrue();
 
   console.log(
-    `${stale.length} cases are no longer automatically blocked; ${total - stale.length} remain blocked.`,
+    'Number of cases with automatically blocked true: ',
+    casesWithAutomaticBlockedTrue.length,
+  );
+
+  const limit = pLimit(CONCURRENCY_LIMIT);
+  const failed: string[] = [];
+  const total = casesWithAutomaticBlockedTrue.length;
+  let updated = 0;
+  let completed = 0;
+
+  await settlePromises(
+    casesWithAutomaticBlockedTrue.map(({ docketNumber }) =>
+      limit(async () => {
+        try {
+          const wasUpdated = await updateCaseWithLocking(
+            applicationContext,
+            { docketNumber },
+            undefined,
+          );
+          if (wasUpdated) updated++;
+        } catch (e) {
+          console.error(`Failed to update case ${docketNumber}`, e);
+          failed.push(docketNumber);
+        } finally {
+          completed++;
+          logProgress(completed, total);
+        }
+      }),
+    ),
+  );
+
+  console.log(
+    `${updated} cases were updated; ${failed.length} failed to update.`,
   );
 
   if (failed.length) {
-    console.log('Failed to evaluate these cases:', failed);
-  }
-
-  if (dryRun) {
-    console.log('Dry run: no cases were updated.');
-    return;
-  }
-
-  const updateBatches = chunk(stale, UPDATE_BATCH_SIZE);
-  const skipped: string[] = [];
-  let processed = 0;
-  let updated = 0;
-
-  for (const batch of updateBatches) {
-    try {
-      updated += await updateStaleCases(
-        applicationContext,
-        { docketNumbers: batch },
-        undefined,
-      );
-    } catch (e) {
-      console.error('Skipped batch; could not lock or update', {
-        docketNumbers: batch,
-        error: e,
-      });
-      skipped.push(...batch);
-    }
-
-    processed += batch.length;
-    logProgress('Processed', processed, stale.length);
-  }
-
-  console.log(`Finished! Updated ${updated} cases.`);
-
-  if (skipped.length) {
-    console.log(`Skipped ${skipped.length} cases:`, skipped);
+    console.log('Failed to update these cases:', failed);
   }
 })();
