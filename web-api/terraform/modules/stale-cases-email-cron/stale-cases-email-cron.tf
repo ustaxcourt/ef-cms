@@ -22,6 +22,8 @@ EOF
 
 
 resource "aws_iam_role_policy" "stale_cases_email_lambda_policy" {
+  #checkov:skip=CKV_AWS_290: xray:PutTraceSegments/PutTelemetryRecords require Resource: * — AWS does not support resource-level ARNs for X-Ray; ses:SendEmail scoped to identity ARN is possible but not yet implemented
+  #checkov:skip=CKV_AWS_355: same reason as CKV_AWS_290 — xray service APIs do not support resource-level ARN scoping
   name = "stale_cases_email_lambda_policy_${var.environment}"
   role = aws_iam_role.stale_cases_email_lambda_role.id
 
