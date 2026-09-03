@@ -205,7 +205,7 @@ const mockMockRawCase = (
   ...overrides,
 });
 
-describe('fix-stale-automatic-blocks-new.ts', () => {
+describe('fix-stale-automatic-blocks.ts', () => {
   beforeEach(() => {
     caseTable = [];
     mockLockIdentifiers.length = 0;
