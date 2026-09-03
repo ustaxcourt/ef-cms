@@ -86,7 +86,7 @@ describe('Grant/Deny Motion orders', () => {
           movant: 'petitioners',
         })}
 
-        <p ${INDENT_CLASS}>ORDERED that petitioner's Motion for Continuance is granted. It is further</p>
+        <p ${INDENT_CLASS}>ORDERED that petitioners' Motion for Continuance is granted. It is further</p>
 
         <p ${INDENT_CLASS}>ORDERED that this case is restored to the general docket. It is further</p>
 
@@ -142,6 +142,48 @@ describe('Grant/Deny Motion orders', () => {
       }),
     testDescription:
       'generates a Grant/Deny Motion order with parties as the filing party',
+  });
+
+  generateAndVerifyPdfDiff({
+    fileName: 'Grant_Deny_Motion_Granted_Joint_Filing.pdf',
+    pageNumber: 1,
+    pdfGenerateFunction: () =>
+      generateGrantDenyMotionOrder({
+        caseTitle: 'Jane Doe',
+        docketNumberWithSuffix: '128-26',
+        orderContent: `${buildPreamble({
+          date: 'March 15, 2026',
+          documentNumberText: '(doc. no. 12)',
+          motionTitle: 'Joint Motion for Continuance',
+          movant: 'the parties',
+        })}
+
+        <p ${INDENT_CLASS}>ORDERED that the parties' Joint Motion for Continuance is granted. It is further</p>
+
+        <p ${INDENT_CLASS}>ORDERED that the parties shall file a joint status report by December 31, 2026.</p>`,
+      }),
+    testDescription:
+      'generates a Grant/Deny Motion order granting a motion filed jointly by the petitioner and respondent',
+  });
+
+  generateAndVerifyPdfDiff({
+    fileName: 'Grant_Deny_Motion_Granted_Other_Filing_Party.pdf',
+    pageNumber: 1,
+    pdfGenerateFunction: () =>
+      generateGrantDenyMotionOrder({
+        caseTitle: 'Jane Doe',
+        docketNumberWithSuffix: '129-26',
+        orderContent: `${buildPreamble({
+          date: 'March 15, 2026',
+          documentNumberText: '(doc. no. 15)',
+          motionTitle: 'Motion for Leave to File Amicus Brief',
+          movant: 'Chamber of Commerce of the United States of America',
+        })}
+
+        <p ${INDENT_CLASS}>ORDERED that Chamber of Commerce of the United States of America's Motion for Leave to File Amicus Brief is granted.</p>`,
+      }),
+    testDescription:
+      'generates a Grant/Deny Motion order granting a motion filed by a non-party other filing party',
   });
 
   generateAndVerifyPdfDiff({
