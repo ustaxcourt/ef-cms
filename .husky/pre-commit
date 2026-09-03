@@ -3,5 +3,13 @@
 HAS_CIRCLECI=0
 (command -v circleci > /dev/null) && HAS_CIRCLECI=1
 
+# Secrets scan on staged changes — CI is the real gate; local hook is shift-left convenience.
+# Install: brew install gitleaks
+if command -v gitleaks >/dev/null 2>&1; then
+  gitleaks protect --staged --redact --config .gitleaks.toml
+else
+  echo "⚠ gitleaks not installed — skipping local secret scan (CI will still gate). See docs/security/secrets-scanning.md"
+fi
+
 npx lint-staged
 [ "$HAS_CIRCLECI" -eq 1 ] && circleci config validate
