@@ -8,6 +8,7 @@ on:
       - '**/.gitignore'
       - '.nvmrc'
       - 'docs/**'
+  workflow_dispatch:
   push:
     branches: [staging]
 
@@ -25,7 +26,9 @@ env:
 jobs:
   trivy-config:
     name: Trivy Dockerfile Config
-    if: github.event_name == 'pull_request' && !github.event.pull_request.draft
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'pull_request' && !github.event.pull_request.draft)
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -56,7 +59,9 @@ jobs:
 
   trivy-image:
     name: Trivy Image Scan (core)
-    if: github.event_name == 'pull_request' && !github.event.pull_request.draft
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'pull_request' && !github.event.pull_request.draft)
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -85,7 +90,9 @@ jobs:
 
   trivy-runtime-base:
     name: Trivy Base Scan (${{ matrix.name }})
-    if: github.event_name == 'pull_request' && !github.event.pull_request.draft
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'pull_request' && !github.event.pull_request.draft)
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -166,7 +173,10 @@ jobs:
   # ─────────────────────────────────────────────────────────────────────────────
   containers-gate:
     name: Security Gate (Containers)
-    if: always() && github.event_name == 'pull_request' && !github.event.pull_request.draft
+    if: >-
+      always() &&
+      (github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'pull_request' && !github.event.pull_request.draft))
     needs: [trivy-config, trivy-image, trivy-runtime-base]
     runs-on: ubuntu-latest
     permissions: {}

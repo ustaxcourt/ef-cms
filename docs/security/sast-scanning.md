@@ -8,17 +8,18 @@ DAWSON uses four static analysis tools, all wired through `.github/workflows/sec
 |-----|------|----------------|-----------|
 | `semgrep` | [Semgrep](https://semgrep.dev/) 1.167.0 | TypeScript/JS taint analysis (SSRF, command injection, path traversal, XSS, SQLi) | Yes (PR gate) |
 | `checkov` | [Checkov](https://www.checkov.io/) 3.3.2 | Terraform IaC misconfigurations | Yes (hard-fail on critical checks) |
-| `codeql` | [CodeQL](https://codeql.github.com/) | Deep semantic analysis (staging pushes only) | No (informational) |
+| `codeql` | [CodeQL](https://codeql.github.com/) | Deep semantic analysis | Analysis must complete; findings are blocked by GitHub code-scanning rules |
 | `shellcheck` | [ShellCheck](https://www.shellcheck.net/) 0.10.0 | Shell script bugs and security issues | Yes (PR gate) |
 
 ## Trigger
 
-- **PRs** (non-draft, targeting staging): runs `semgrep`, `checkov`, `shellcheck`, and the `security-gate` job
-- **Push to staging**: runs `codeql` only (deep analysis is too slow for PR feedback)
+- **PRs** (non-draft, targeting staging): runs `semgrep`, `checkov`, `codeql`, `shellcheck`, and the `security-gate` job
+- **Push to staging**: runs `semgrep`, `checkov`, and `codeql`; Semgrep and Checkov populate the default-branch baseline
 
 ## Semgrep
 
 Runs diff-scoped analysis (`--baseline-commit`) so only **new** findings in the PR are flagged.
+On pushes to `staging`, it scans the full tree to establish the default-branch baseline.
 
 ### Rule packs
 
@@ -74,9 +75,11 @@ web-api/terraform/applyables/wait-for-workflow
 
 ## CodeQL
 
-Runs on staging pushes only (not PRs). Uses `security-extended` + `security-and-quality` query suites with a custom config (`.github/codeql/codeql-config.yml`) that excludes test files, node_modules, and non-production scripts.
+Runs on non-draft PRs and staging pushes. Uses `security-extended` + `security-and-quality` query suites with a custom config (`.github/codeql/codeql-config.yml`) that excludes test files, node_modules, and non-production scripts.
 
 Findings appear in the **Security tab** under category `/language:javascript-typescript`.
+
+The CodeQL action uploads findings but does not fail solely because it found an alert. To block merges based on CodeQL findings, configure a GitHub ruleset for `staging` with **Require code scanning results**, select CodeQL, and set the minimum alert severity that must be resolved before merging.
 
 ## ShellCheck
 
@@ -84,4 +87,4 @@ Runs `./run-shellcheck.sh` which finds all project `.sh` files (excluding genera
 
 ## Security Gate
 
-The `security-gate` job aggregates results from `semgrep`, `checkov`, and `shellcheck`. If any fails, the gate fails. This is the single check to require in branch protection rules.
+The `security-gate` job aggregates results from `semgrep`, `checkov`, `codeql`, and `shellcheck`. If any scan fails or CodeQL does not complete successfully, the gate fails. This is the single workflow check to require in branch protection rules; use the GitHub code-scanning ruleset separately to block CodeQL alerts.

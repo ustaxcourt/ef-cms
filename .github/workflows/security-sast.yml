@@ -25,7 +25,9 @@ permissions:
 jobs:
   semgrep:
     name: Semgrep Scan
-    if: github.event_name == 'pull_request' && !github.event.pull_request.draft
+    if: >-
+      github.event_name == 'push' ||
+      (github.event_name == 'pull_request' && !github.event.pull_request.draft)
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -42,8 +44,10 @@ jobs:
       - name: Run Semgrep
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          EVENT_NAME: ${{ github.event_name }}
         run: |
-          semgrep scan \
+          set -- \
+            scan \
             --config p/typescript \
             --config p/nodejs \
             --config p/react \
@@ -66,8 +70,11 @@ jobs:
             --exclude='aws/lambdas' \
             --exclude='.terraform' \
             --exclude='docs' \
-            --metrics=off \
-            --baseline-commit "$BASE_SHA"
+            --metrics=off
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            set -- "$@" --baseline-commit "$BASE_SHA"
+          fi
+          semgrep "$@"
 
       - name: Upload SARIF
         if: always()
@@ -78,7 +85,9 @@ jobs:
 
   checkov:
     name: Checkov IaC Scan
-    if: github.event_name == 'pull_request' && !github.event.pull_request.draft
+    if: >-
+      github.event_name == 'push' ||
+      (github.event_name == 'pull_request' && !github.event.pull_request.draft)
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -166,7 +175,9 @@ jobs:
 
   codeql:
     name: CodeQL Deep Analysis
-    if: github.event_name == 'push'
+    if: >-
+      github.event_name == 'push' ||
+      (github.event_name == 'pull_request' && !github.event.pull_request.draft)
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -217,7 +228,7 @@ jobs:
   security-gate:
     name: Security Gate (SAST)
     if: always() && github.event_name == 'pull_request' && !github.event.pull_request.draft
-    needs: [semgrep, checkov, shellcheck]
+    needs: [semgrep, checkov, codeql, shellcheck]
     runs-on: ubuntu-latest
     permissions: {}
     steps:
@@ -225,6 +236,7 @@ jobs:
         env:
           SEMGREP_RESULT: ${{ needs.semgrep.result }}
           CHECKOV_RESULT: ${{ needs.checkov.result }}
+          CODEQL_RESULT: ${{ needs.codeql.result }}
           SHELLCHECK_RESULT: ${{ needs.shellcheck.result }}
         run: |
           if [[ "$SEMGREP_RESULT" == "failure" ]]; then
@@ -233,6 +245,10 @@ jobs:
           fi
           if [[ "$CHECKOV_RESULT" == "failure" ]]; then
             echo "Checkov scan failed"
+            exit 1
+          fi
+          if [[ "$CODEQL_RESULT" != "success" ]]; then
+            echo "CodeQL analysis did not complete successfully"
             exit 1
           fi
           if [[ "$SHELLCHECK_RESULT" == "failure" ]]; then
