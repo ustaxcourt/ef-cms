@@ -1,7 +1,7 @@
 import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 import { put } from '../requests';
-import { PublicCaseDTO } from '@shared/business/dto/cases/PublicCaseDTO';
-import { RestrictedCaseDTO } from '@shared/business/dto/cases/RestrictedCaseDTO';
+import { PublicCaseResponse } from '@shared/business/dto/cases/PublicCaseResponse';
+import { RestrictedCaseResponse } from '@shared/business/dto/cases/RestrictedCaseResponse';
 import { ClientApplicationContext } from '@web-client/applicationContext';
 
 export const submitCaseAssociationRequestInteractor = (
@@ -15,7 +15,9 @@ export const submitCaseAssociationRequestInteractor = (
     userId: string;
     filers?: string[];
   },
-): Promise<CaseDTO | PublicCaseDTO | RestrictedCaseDTO | undefined> => {
+): Promise<
+  CaseDTO | PublicCaseResponse | RestrictedCaseResponse | undefined
+> => {
   return put({
     applicationContext,
     body: {

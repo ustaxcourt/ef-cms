@@ -15,10 +15,12 @@ describe('getPublicCaseInteractor', () => {
   const mockCaseContactPrimary = getContactPrimary(MOCK_CASE);
 
   const mockCase = {
+    caseCaption: 'Test Petitioner, Petitioner',
     docketNumber: '123-45',
     irsPractitioners: [],
     partyType: PARTY_TYPES.petitioner,
     petitioners: [mockCaseContactPrimary],
+    receivedAt: '2018-03-01T21:40:46.415Z',
   };
 
   const legacySealedDocketEntries = cloneDeep(MOCK_CASE.docketEntries);
@@ -51,10 +53,12 @@ describe('getPublicCaseInteractor', () => {
     },
     '123-45': cloneDeep(mockCase),
     '188-88': {
+      caseCaption: 'Test Petitioner, Petitioner',
       docketNumber: '188-88',
       irsPractitioners: [],
       partyType: PARTY_TYPES.petitioner,
       petitioners: [sealedContactPrimary],
+      receivedAt: '2018-03-01T21:40:46.415Z',
     },
     '190-92': {
       ...cloneDeep(mockCase),
