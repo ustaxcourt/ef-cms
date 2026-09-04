@@ -88,7 +88,7 @@ resource "aws_iam_policy" "ci_cd_policy" {
         "cognito-idp:UpdateIdentityProvider",
         "cognito-idp:CreateManagedLoginBranding",
         "cognito-idp:DeleteManagedLoginBranding",
-        "cognito-idp:DescribeManagedLoginBranding",
+        "cognito-idp:DescribeManagedLoginBrandingByClient",
         "cognito-idp:UpdateManagedLoginBranding"
       ],
       "Resource": "*"
