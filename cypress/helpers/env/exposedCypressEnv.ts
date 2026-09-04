@@ -1,15 +1,4 @@
-/**
- * Cypress 16 removed `Cypress.env()`. Values in the `env` config are now treated
- * as sensitive: they stay in the Node process and are only readable
- * asynchronously via `cy.env()`. Values our specs read synchronously in the
- * browser must be published through the `expose` config instead, which is built
- * here in Node when a cypress config file is loaded.
- *
- * Anything genuinely sensitive (AWS credentials, the postgres password) is
- * deliberately absent from this list. Those are only ever read in Node by the
- * task helpers under `cypress/helpers/cypressTasks`, which read
- * `process.env.CYPRESS_*` directly.
- */
+// Cypress 16 requires public env vars to be published via `expose` for sync browser access; credentials stay out and are read via process.env.CYPRESS_* in Node task helpers instead.
 const PUBLIC_ENV_KEYS = [
   'DEFAULT_ACCOUNT_PASS',
   'DEPLOYING_COLOR',
@@ -21,11 +10,21 @@ const PUBLIC_ENV_KEYS = [
   'TARGET_ENV',
 ];
 
-export const getExposedCypressEnv = (): Record<string, string> =>
-  PUBLIC_ENV_KEYS.reduce((exposed: Record<string, string>, key: string) => {
-    const value = process.env[`CYPRESS_${key}`];
-    if (value !== undefined) {
-      exposed[key] = value;
-    }
-    return exposed;
-  }, {});
+// Cypress 15 auto-coerced 'true'/'false' to booleans; `expose` gives raw strings, so normalize here.
+const normalizeValue = (value: string): string | boolean => {
+  if (value === 'true') return true;
+  if (value === 'false') return false;
+  return value;
+};
+
+export const getExposedCypressEnv = (): Record<string, string | boolean> =>
+  PUBLIC_ENV_KEYS.reduce(
+    (exposed: Record<string, string | boolean>, key: string) => {
+      const value = process.env[`CYPRESS_${key}`];
+      if (value !== undefined) {
+        exposed[key] = normalizeValue(value);
+      }
+      return exposed;
+    },
+    {},
+  );
