@@ -276,7 +276,7 @@ resource "aws_lambda_permission" "cognito_pre_signup_lambda_invoke" {
   count         = var.idp_name != "" ? 1 : 0
   statement_id  = "AllowCognitoInvoke"
   action        = "lambda:InvokeFunction"
-  function_name = module.cognito_pre_signup_lambda.function_name
+  function_name = module.cognito_pre_signup_lambda[0].function_name
   principal     = "cognito-idp.amazonaws.com"
   source_arn    = aws_cognito_user_pool.pool.arn
 }
@@ -285,7 +285,7 @@ resource "aws_lambda_permission" "cognito_inbound_federation_lambda_invoke" {
   count         = var.idp_name != "" ? 1 : 0
   statement_id  = "AllowCognitoInvoke"
   action        = "lambda:InvokeFunction"
-  function_name = module.cognito_inbound_federation_lambda.function_name
+  function_name = module.cognito_inbound_federation_lambda[0].function_name
   principal     = "cognito-idp.amazonaws.com"
   source_arn    = aws_cognito_user_pool.pool.arn
 }
