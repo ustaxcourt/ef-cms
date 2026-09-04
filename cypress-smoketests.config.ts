@@ -7,6 +7,7 @@ import {
   getUserByEmail,
 } from './cypress/helpers/cypressTasks/cognito/cognito-helpers';
 import { defineConfig } from 'cypress';
+import { getExposedCypressEnv } from './cypress/helpers/env/exposedCypressEnv';
 import {
   deleteAllItemsInEmailBucket,
   readAllItemsInBucket,
@@ -129,6 +130,7 @@ export default defineConfig({
     supportFile: 'cypress/deployed-and-local/support/index.ts',
     testIsolation: false,
   },
+  expose: getExposedCypressEnv(),
   fixturesFolder: 'cypress/deployed-and-local/fixtures',
   reporter: 'spec',
   reporterOptions: {
