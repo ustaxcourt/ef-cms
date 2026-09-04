@@ -1,6 +1,4 @@
 export const cognitoInboundFederationLambdaHandler = event => {
-  console.log('inbound federation event: ', event);
-
   const { attributes } = event.request;
   const idpAttributes = {
     ...(attributes.userInfo || {}),

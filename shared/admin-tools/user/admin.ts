@@ -6,7 +6,10 @@ import {
   Practitioner,
   RawPractitioner,
 } from '@shared/business/entities/Practitioner';
-import { ROLES } from '@shared/business/entities/EntityConstants';
+import {
+  ALLOWLIST_FEATURE_FLAGS,
+  ROLES,
+} from '@shared/business/entities/EntityConstants';
 import { RawUser, User } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { getClientId, getUserPoolId, requireEnvVars } from '../util';
@@ -128,6 +131,10 @@ export async function createOrUpdateUser(
       poolId: userPoolId,
     });
   } else {
+    const featureFlags = await applicationContext
+      .getUseCases()
+      .getAllFeatureFlagsInteractor(applicationContext);
+
     const cognitoUser = await applicationContext
       .getUserGateway()
       .createUser(applicationContext, {
@@ -141,6 +148,7 @@ export async function createOrUpdateUser(
       });
     if (
       cognitoUser &&
+      featureFlags[ALLOWLIST_FEATURE_FLAGS.ALLOW_IDP_LOGIN.key] &&
       rawUser.entityName === 'User' &&
       rawUser.role !== ROLES.petitioner
     )

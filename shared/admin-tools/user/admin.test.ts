@@ -52,6 +52,14 @@ describe('createOrUpdateUser', () => {
     };
   });
 
+  beforeEach(() => {
+    applicationContext
+      .getUseCases()
+      .getAllFeatureFlagsInteractor.mockReturnValue({
+        'allow-idp-login': true,
+      });
+  });
+
   afterAll(() => {
     process.env = originalEnvironment;
   });
@@ -245,6 +253,23 @@ describe('createOrUpdateUser', () => {
     ).not.toHaveBeenCalled();
   });
 
+  it('should not attempt to link a new user if the feature flag is off', async () => {
+    applicationContext
+      .getUseCases()
+      .getAllFeatureFlagsInteractor.mockReturnValue({
+        'allow-idp-login': false,
+      });
+
+    await createOrUpdateUser(applicationContext, {
+      password,
+      setPasswordAsPermanent: false,
+      user: MOCK_INTERNAL_USER,
+    });
+    expect(
+      applicationContext.getCognito().adminLinkProviderForUser,
+    ).not.toHaveBeenCalled();
+  });
+
   it('should disable access for a legacy judge user', async () => {
     await createOrUpdateUser(applicationContext, {
       password,
@@ -300,6 +325,9 @@ describe('disableUser', () => {
 });
 
 describe('getAuthToken', () => {
+  const adminPass = process.env.USTC_ADMIN_PASSWORD;
+  const adminUser = process.env.USTC_ADMIN_USERNAME;
+
   beforeAll(() => {
     getUserPoolId.mockResolvedValue(userPoolId);
     getClientId.mockResolvedValue('clientId');
@@ -315,8 +343,8 @@ describe('getAuthToken', () => {
     expect(calls[0].args[0].input).toEqual({
       AuthFlow: 'ADMIN_NO_SRP_AUTH',
       AuthParameters: {
-        PASSWORD: undefined,
-        USERNAME: undefined,
+        PASSWORD: adminPass,
+        USERNAME: adminUser,
       },
       ClientId: 'clientId',
       UserPoolId: userPoolId,

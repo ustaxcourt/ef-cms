@@ -1,8 +1,6 @@
 import { getCognito } from '@web-api/persistence/cognito/getCognito';
 
 export const cognitoPreSignupLambdaHandler = async event => {
-  console.log('presign up event: ', event);
-
   const { userPoolId, request } = event;
 
   try {

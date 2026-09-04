@@ -15,6 +15,12 @@ describe('createUser', () => {
     userId: '2f92447e-3a0b-4cfe-95cb-810aef270c03',
   };
 
+  beforeAll(() => {
+    applicationContext.getCognito().adminCreateUser.mockReturnValue({
+      User: mockUser,
+    });
+  });
+
   it('should make a call to persistence to create a user with the provided attributes, and the email lowercased', async () => {
     process.env.STAGE = 'prod';
 
@@ -107,5 +113,18 @@ describe('createUser', () => {
       applicationContext.getCognito().adminCreateUser.mock.calls[0][0]
         .TemporaryPassword,
     ).toBe('personperson');
+  });
+
+  it('should return new user information', async () => {
+    const result = await createUser(applicationContext, {
+      email: mockUser.email,
+      name: 'matilda',
+      role: 'adc',
+      sendWelcomeEmail: true,
+      temporaryPassword: 'personperson',
+      userId: '2d09e076-1220-4abe-adb9-f73e9acb114d',
+    });
+
+    expect(result).toEqual(mockUser);
   });
 });
