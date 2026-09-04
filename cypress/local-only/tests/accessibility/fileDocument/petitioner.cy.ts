@@ -34,4 +34,17 @@ describe('File Document Page - Petitioner Accessibility', () => {
 
     checkA11y();
   });
+
+  it('should be free of a11y issues on the Exhibit in Support Nonstandard A association step', () => {
+    loginAsPetitioner('petitioner@example.com');
+    cy.visit('/case-detail/101-19/file-a-document');
+    selectTypeaheadInput(
+      'complete-doc-document-type-search',
+      'Exhibit in Support',
+    );
+
+    cy.get('[data-testid="previous-document-search"]').should('exist');
+
+    checkA11y();
+  });
 });
