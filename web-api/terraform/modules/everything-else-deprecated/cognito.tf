@@ -159,7 +159,7 @@ resource "aws_cognito_user_pool" "pool" {
   }
 
   lambda_config {
-    pre_sign_up = var.idp_name != "" ? module.cognito_pre_signup_lambda.arn : null
+    pre_sign_up = var.idp_name != "" ? module.cognito_pre_signup_lambda[0].arn : null
   }
 }
 
