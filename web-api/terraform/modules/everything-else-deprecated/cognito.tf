@@ -159,7 +159,7 @@ resource "aws_cognito_user_pool" "pool" {
   }
 
   lambda_config {
-    pre_sign_up = module.cognito_pre_signup_lambda.arn
+    pre_sign_up = var.idp_name != "" ? module.cognito_pre_signup_lambda[0].arn : null
   }
 }
 
@@ -245,11 +245,12 @@ resource "aws_cognito_identity_provider" "idp" {
   }
 }
 module "cognito_pre_signup_lambda" {
+  count          = var.idp_name != "" ? 1 : 0
   source         = "../lambda"
   handler_file   = "./web-api/src/lambdas/cognitoPreSignup/cognitoPreSignupLambda.ts"
   handler_method = "cognitoPreSignupLambdaHandler"
   lambda_name    = "cognito_pre_signup_lambda_${var.environment}"
-  role           = aws_iam_role.pre_signup_lambda.arn
+  role           = aws_iam_role.pre_signup_lambda[0].arn
   environment = {
     IDP_NAME = var.idp_name
   }
@@ -258,11 +259,12 @@ module "cognito_pre_signup_lambda" {
 }
 
 module "cognito_inbound_federation_lambda" {
+  count          = var.idp_name != "" ? 1 : 0
   source         = "../lambda"
   handler_file   = "./web-api/src/lambdas/cognitoInboundFederation/cognitoInboundFederationLambda.ts"
   handler_method = "cognitoInboundFederationLambdaHandler"
   lambda_name    = "cognito_inbound_federation_lambda_${var.environment}"
-  role           = aws_iam_role.inbound_federation_lambda.arn
+  role           = aws_iam_role.inbound_federation_lambda[0].arn
   environment = {
     IDP_NAME = var.idp_name
   }
@@ -271,23 +273,26 @@ module "cognito_inbound_federation_lambda" {
 }
 
 resource "aws_lambda_permission" "cognito_pre_signup_lambda_invoke" {
+  count         = var.idp_name != "" ? 1 : 0
   statement_id  = "AllowCognitoInvoke"
   action        = "lambda:InvokeFunction"
-  function_name = module.cognito_pre_signup_lambda.function_name
+  function_name = module.cognito_pre_signup_lambda[0].function_name
   principal     = "cognito-idp.amazonaws.com"
   source_arn    = aws_cognito_user_pool.pool.arn
 }
 
 resource "aws_lambda_permission" "cognito_inbound_federation_lambda_invoke" {
+  count         = var.idp_name != "" ? 1 : 0
   statement_id  = "AllowCognitoInvoke"
   action        = "lambda:InvokeFunction"
-  function_name = module.cognito_inbound_federation_lambda.function_name
+  function_name = module.cognito_inbound_federation_lambda[0].function_name
   principal     = "cognito-idp.amazonaws.com"
   source_arn    = aws_cognito_user_pool.pool.arn
 }
 
 resource "aws_iam_role" "pre_signup_lambda" {
-  name = "pre_signup_lambda_role_${var.environment}"
+  count = var.idp_name != "" ? 1 : 0
+  name  = "pre_signup_lambda_role_${var.environment}"
 
   assume_role_policy = <<EOF
 {
@@ -310,7 +315,8 @@ EOF
 }
 
 resource "aws_iam_role" "inbound_federation_lambda" {
-  name = "inbound_federation_lambda_role_${var.environment}"
+  count = var.idp_name != "" ? 1 : 0
+  name  = "inbound_federation_lambda_role_${var.environment}"
 
   assume_role_policy = <<EOF
 {
@@ -333,8 +339,9 @@ EOF
 }
 
 resource "aws_iam_role_policy" "presignup_policy" {
-  name = "pre_signup_policy_${var.environment}"
-  role = aws_iam_role.pre_signup_lambda.id
+  count = var.idp_name != "" ? 1 : 0
+  name  = "pre_signup_policy_${var.environment}"
+  role  = aws_iam_role.pre_signup_lambda[0].id
 
   policy = <<EOF
 {
@@ -365,8 +372,9 @@ EOF
 }
 
 resource "aws_iam_role_policy" "inbound_federation_policy" {
-  name = "inbound_federation_policy_${var.environment}"
-  role = aws_iam_role.inbound_federation_lambda.id
+  count = var.idp_name != "" ? 1 : 0
+  name  = "inbound_federation_policy_${var.environment}"
+  role  = aws_iam_role.inbound_federation_lambda[0].id
 
   policy = <<EOF
 {
