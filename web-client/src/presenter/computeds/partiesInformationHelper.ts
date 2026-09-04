@@ -7,6 +7,7 @@ import {
   ROLES,
   SERVICE_INDICATOR_TYPES,
 } from '@shared/business/entities/EntityConstants';
+import { canUserUpdatePetitionerContact } from '@shared/business/utilities/canUserUpdatePetitionerContact';
 
 export const formatCounsel = ({ counsel, screenMetadata }) => {
   const counselPendingEmail = screenMetadata.pendingEmails
@@ -71,9 +72,7 @@ export const partiesInformationHelper = (
     .getUtilities()
     .isExternalUser(user.role);
 
-  const formattedPrivatePractitioners = (
-    caseDetail.privatePractitioners || []
-  ).map(practitioner =>
+  caseDetail.privatePractitioners?.map(practitioner =>
     formatCounsel({ counsel: practitioner, screenMetadata }),
   );
 
@@ -108,22 +107,10 @@ export const partiesInformationHelper = (
         : 'No email provided';
     }
 
-    const userAssociatedWithCase = !!formattedPrivatePractitioners.find(
-      practitioner =>
-        user.barNumber === practitioner.barNumber &&
-        practitioner.representing?.includes(petitioner.contactId),
-    );
-
-    const canAllowDocumentServiceForCase = !!applicationContext
-      .getUtilities()
-      .canAllowDocumentServiceForCase(caseDetail);
-
-    const canEditPetitioner = getCanEditPetitioner({
-      permissions,
-      petitionIsServed: canAllowDocumentServiceForCase,
-      petitioner,
+    const canEditPetitioner = canUserUpdatePetitionerContact({
+      petitionerCaseRaw: caseDetail,
+      updatedPetitionerData: petitioner,
       user,
-      userAssociatedWithCase,
     });
 
     const editPetitionerLink = isExternalUser

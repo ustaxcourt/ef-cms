@@ -1,16 +1,16 @@
 import {
-  CASE_STATUS_TYPES,
   CONTACT_TYPES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { MOCK_PRACTITIONER } from '../../../../../shared/src/test/mockUsers';
-import { getIsUserAuthorized } from './updatePetitionerInformationInteractor';
+  CASE_STATUS_TYPES,
+} from '@shared/business/entities/EntityConstants';
+import { canUserUpdatePetitionerContact } from '@shared/business/utilities/canUserUpdatePetitionerContact';
 import {
-  mockPetitionerUser,
   mockPrivatePractitionerUser,
+  mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { MOCK_PRACTITIONER } from '@shared/test/mockUsers';
 
-describe('updatePetitionerInformationInteractor getIsUserAuthorized', () => {
+describe('updatePetitionerInformationInteractor canUserUpdatePetitionerContact', () => {
   let mockCase;
   const SECONDARY_CONTACT_ID = '56387318-0092-49a3-8cc1-921b0432bd16';
 
@@ -42,9 +42,9 @@ describe('updatePetitionerInformationInteractor getIsUserAuthorized', () => {
     };
   });
 
-  describe('getIsUserAuthorized', () => {
+  describe('canUserUpdatePetitionerContact', () => {
     it('should return false when the user is a privatePractitioner not associated with the case', () => {
-      const isUserAuthorized = getIsUserAuthorized({
+      const isUserAuthorized = canUserUpdatePetitionerContact({
         petitionerCaseRaw: mockCase,
         updatedPetitionerData: {},
         user: {
@@ -57,7 +57,7 @@ describe('updatePetitionerInformationInteractor getIsUserAuthorized', () => {
     });
 
     it('should return false when the user is a petitioner attempting to modify another petitioner', () => {
-      const isUserAuthorized = getIsUserAuthorized({
+      const isUserAuthorized = canUserUpdatePetitionerContact({
         petitionerCaseRaw: mockCase,
         updatedPetitionerData: {},
         user: {
@@ -69,8 +69,22 @@ describe('updatePetitionerInformationInteractor getIsUserAuthorized', () => {
       expect(isUserAuthorized).toBeFalsy();
     });
 
+    it('should return false when the case is new', () => {
+      mockCase.status = CASE_STATUS_TYPES.new;
+      const isUserAuthorized = canUserUpdatePetitionerContact({
+        petitionerCaseRaw: mockCase,
+        updatedPetitionerData: { contactId: SECONDARY_CONTACT_ID },
+        user: {
+          ...mockPetitionerUser,
+          userId: SECONDARY_CONTACT_ID,
+        },
+      });
+
+      expect(isUserAuthorized).toBeFalsy();
+    });
+
     it('should return true when the user is a petitioner its own contact information', () => {
-      const isUserAuthorized = getIsUserAuthorized({
+      const isUserAuthorized = canUserUpdatePetitionerContact({
         petitionerCaseRaw: mockCase,
         updatedPetitionerData: { contactId: SECONDARY_CONTACT_ID },
         user: {
@@ -83,7 +97,7 @@ describe('updatePetitionerInformationInteractor getIsUserAuthorized', () => {
     });
 
     it('should return true when the user is representingCounsel', () => {
-      const isUserAuthorized = getIsUserAuthorized({
+      const isUserAuthorized = canUserUpdatePetitionerContact({
         petitionerCaseRaw: {
           ...mockCase,
           petitioners: [mockPetitioners[0]],

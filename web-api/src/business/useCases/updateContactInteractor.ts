@@ -29,6 +29,7 @@ import {
   formattedNewEmailForChangeOfAddress,
   formattedOldEmailForChangeOfAddress,
 } from '@web-api/business/utilities/calculateEmail';
+import { canUserUpdatePetitionerContact } from '@shared/business/utilities/canUserUpdatePetitionerContact';
 
 /**
  * updateContact
@@ -102,7 +103,13 @@ export const updateContact = async (
     user: authorizedUser,
   });
 
-  if (!userIsAssociated) {
+  const canUserUpdate = canUserUpdatePetitionerContact({
+    petitionerCaseRaw: caseEntity,
+    updatedPetitionerData: contactInfo,
+    user: authorizedUser,
+  });
+
+  if (!userIsAssociated || !canUserUpdate) {
     throw new UnauthorizedError('Unauthorized for update case contact');
   }
 
