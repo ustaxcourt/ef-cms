@@ -448,35 +448,36 @@ export const formattedDocketEntries = (
       docketRecordFilter,
     });
 
-  let docketEntriesFormatted = preformattedDocketEntries
-    .map(entry =>
-      getFormattedDocketEntry({
-        applicationContext,
-        docketNumber,
-        entry: { ...entry } as FormattedCaseDetailDocketEntry,
-        get,
-        permissions,
-        rawCase: caseDetail,
-        user,
-        visibilityPolicyDateFormatted,
-      }),
-    )
-    .map(docketEntry => {
-      return {
-        ...docketEntry,
-        isDocumentSelected: documentsSelectedForDownload.some(
-          docEntry => docEntry.docketEntryId === docketEntry.docketEntryId,
-        ),
-        isSelectableForDownload: !!isSelectableForDownload(docketEntry),
-        signatory: '',
-      };
-    });
+  const formatDocketEntries = (entries: RawDocketEntry[]) =>
+    sortDocketEntryTable(
+      entries
+        .map(entry =>
+          getFormattedDocketEntry({
+            applicationContext,
+            docketNumber,
+            entry: { ...entry } as FormattedCaseDetailDocketEntry,
+            get,
+            permissions,
+            rawCase: caseDetail,
+            user,
+            visibilityPolicyDateFormatted,
+          }),
+        )
+        .map(docketEntry => {
+          return {
+            ...docketEntry,
+            isDocumentSelected: documentsSelectedForDownload.some(
+              docEntry => docEntry.docketEntryId === docketEntry.docketEntryId,
+            ),
+            isSelectableForDownload: !!isSelectableForDownload(docketEntry),
+            signatory: '',
+          };
+        }),
+      docketRecordSortField,
+      docketRecordSortOrder,
+    );
 
-  docketEntriesFormatted = sortDocketEntryTable(
-    docketEntriesFormatted,
-    docketRecordSortField,
-    docketRecordSortOrder,
-  );
+  const docketEntriesFormatted = formatDocketEntries(preformattedDocketEntries);
 
   const selectableDocumentsCount = docketEntriesFormatted.filter(entry =>
     isSelectableForDownload(entry),
@@ -503,8 +504,20 @@ export const formattedDocketEntries = (
       docketEntryId: docEntry.docketEntryId,
     }));
 
-  const formattedPendingDocketEntriesOnDocketRecord =
-    formattedDocketEntriesOnDocketRecord.filter(docketEntry =>
+  // The pending motions tab under Tracked Items is a separate view of the case,
+  // so the docket record's filter must not reach it. Everything above is derived
+  // from the filtered entries, which left the tab empty whenever the docket
+  // record was filtered by orders or exhibits (#10398). getDocketEntriesByFilter
+  // returns the array it was given when no filter applies, so the reformat only
+  // happens when a filter is actually set.
+  const entriesForPendingList =
+    preformattedDocketEntries === formattedCase.formattedDocketEntries
+      ? docketEntriesFormatted
+      : formatDocketEntries(formattedCase.formattedDocketEntries);
+
+  const formattedPendingDocketEntriesOnDocketRecord = entriesForPendingList
+    .filter(d => d.isOnDocketRecord)
+    .filter(docketEntry =>
       applicationContext.getUtilities().isPending(docketEntry),
     );
 
