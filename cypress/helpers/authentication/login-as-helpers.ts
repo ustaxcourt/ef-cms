@@ -52,6 +52,13 @@ export function loginAsIrsPractitioner1() {
   cy.get('[data-testid="closed-cases-count"]').contains('Closed Cases');
 }
 
+export function loginAsIrsPractitioner2() {
+  login({ email: 'irsPractitioner2@example.com' });
+  cy.get('[data-testid="search-for-a-case-card"]').should('exist');
+  cy.get('[data-testid="open-cases-count"]').contains('Open Cases');
+  cy.get('[data-testid="closed-cases-count"]').contains('Closed Cases');
+}
+
 export function loginAsPetitioner(
   petitionerUser: string = 'petitioner1@example.com',
 ) {

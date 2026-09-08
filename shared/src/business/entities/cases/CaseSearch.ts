@@ -6,10 +6,10 @@ import {
 } from '../EntityConstants';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
-import { JoiDate } from '@joi/date';
+import joiDate from '@joi/date';
 import joiImported, { Root } from 'joi';
 
-const joi: Root = joiImported.extend(JoiDate);
+const joi: Root = joiImported.extend(joiDate);
 
 export class CaseSearch extends JoiValidationEntity {
   countryType?: string;

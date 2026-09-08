@@ -1,0 +1,7 @@
+# ZAP rule suppressions for DAWSON
+# Format: ruleId<TAB>action<TAB>reason
+# Actions: IGNORE (suppress entirely), WARN (report but don't fail), FAIL (fail the build)
+# Source: findings from docs/zap-report.html (last manual scan against api-blue.dev)
+90022	WARN	Application error disclosure — server error responses; investigate before suppressing
+100000	WARN	Server error responses (5xx) — high volume expected from test data endpoints
+10035	WARN	HSTS not set — enforced by CloudFront in production; not set by Express locally

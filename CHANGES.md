@@ -1,3 +1,55 @@
+<details><summary>10266 - Restrict frontend S3 buckets to CloudFront-only access</summary>
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Deploy account-specific Terraform
+
+```bash
+npm run deploy:account-specific
+```
+</details>
+
+<details><summary>Dependency Updates - Week of 2026-08-24</summary>
+
+## Local
+
+#### Upgrade Terraform to `1.15.9`
+use either tfswitch or tfenv
+```bash
+tfswitch 1.15.9
+```
+```bash
+tfenv install 1.15.9
+tfenv use 1.15.9
+```
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Deploy Docker container `4.3.94`
+
+This script will prompt for an environment to pull the image from; choose `exp5`.
+
+```bash
+npm run ecr:check-version
+```
+</details>
+<details><summary>Revert @joi/date 3.0.0 upgrade</summary>
+
+## Local
+
+#### Reinstall dependencies
+
+`@joi/date` was pinned back to **2.1.1**. Run `npm ci` after pulling so the stale ESM `@joi/date` 3.0.0 tree in `node_modules` is replaced.
+
+```bash
+npm ci
+```
+
+</details>
 <details><summary>10170/10199 - Enable new and consolidated trial locations</summary>
 
 ## Manual Deployment Steps
@@ -157,6 +209,26 @@ This script will prompt for an environment to pull the image from; choose `exp3`
 
 ```bash
 npm run ecr:check-version
+```
+</details>
+<details><summary>Install gitleaks</summary>
+
+## Local
+
+#### Install gitleaks (secrets scanning) for the pre-commit hook
+```bash
+brew update && brew install gitleaks
+```
+</details>
+<details><summary>Updating batch job roles/permissions</summary>
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Run an `account-specific` terraform deployment
+```bash
+npm run deploy:account-specific
 ```
 </details>
 <details><summary>Dependency Updates - Week of 2026-07-13</summary>

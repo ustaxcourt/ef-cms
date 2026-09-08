@@ -13,6 +13,7 @@ module "rotate_info_indices" {
 }
 
 resource "aws_cloudwatch_log_group" "rotate_info_indices" {
+  #checkov:skip=CKV_AWS_158: CloudWatch log group CMK not configured — AWS default server-side encryption is adequate for Lambda rotation job logs; CMK adds key management overhead with no security benefit for log data
   count             = var.es_logs_instance_count > 0 ? 1 : 0
   name              = "/aws/lambda/${module.rotate_info_indices[0].function_name}"
   retention_in_days = 14

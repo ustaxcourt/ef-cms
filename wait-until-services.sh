@@ -11,6 +11,10 @@ set -e
 URL=http://localhost:4000/api/swagger ./wait-until.sh
 URL=http://localhost:9200/ ./wait-until.sh
 
+if [[ -n "${WAIT_FOR_PUBLIC_API}" ]]; then
+  URL=http://localhost:4001/public-api/health ./wait-until.sh
+fi
+
 if [[ -n "${WAIT_FOR_CLIENT}" ]]; then
   URL=http://localhost:1234/ ./wait-until.sh
 fi

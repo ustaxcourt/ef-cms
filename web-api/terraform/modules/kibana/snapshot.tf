@@ -72,6 +72,10 @@ EOF
 }
 
 resource "aws_s3_bucket" "ustc_log_snapshots_bucket" {
+  #checkov:skip=CKV_AWS_21: Kibana log snapshot bucket — snapshots are point-in-time exports, not mutable objects; versioning adds cost with no recovery value
+  #checkov:skip=CKV_AWS_18: this bucket IS the log store — enabling access logging on it would create circular log growth
+  #checkov:skip=CKV_AWS_145: AWS-managed SSE is sufficient for OpenSearch log snapshots — operational log data; CMK adds key management overhead without meaningful security benefit
+  #checkov:skip=CKV2_AWS_6: no public access block resource needed — IAM policy restricts access to OpenSearch snapshot role only; account-level S3 Block Public Access covers this
   count         = var.es_logs_instance_count > 0 ? 1 : 0
   bucket        = var.log_snapshot_bucket_name
   force_destroy = false

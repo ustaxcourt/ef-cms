@@ -25,12 +25,14 @@ resource "aws_apigatewayv2_route" "connect" {
 }
 
 resource "aws_apigatewayv2_route" "disconnect" {
+  #checkov:skip=CKV_AWS_309:WebSocket $disconnect is a post-connection event on an already-authenticated connection — auth is enforced on $connect route only (standard WebSocket auth pattern)
   api_id    = aws_apigatewayv2_api.websocket_api.id
   route_key = "$disconnect"
   target    = "integrations/${aws_apigatewayv2_integration.websockets_disconnect_integration.id}"
 }
 
 resource "aws_apigatewayv2_route" "default" {
+  #checkov:skip=CKV_AWS_309:WebSocket $default is a post-connection event on an already-authenticated connection — auth is enforced on $connect route only (standard WebSocket auth pattern)
   api_id    = aws_apigatewayv2_api.websocket_api.id
   route_key = "$default"
   target    = "integrations/${aws_apigatewayv2_integration.websockets_default_integration.id}"
@@ -158,6 +160,8 @@ resource "aws_lambda_permission" "apigw_default_lambda" {
 
 
 resource "aws_apigatewayv2_stage" "stage" {
+  #checkov:skip=CKV2_AWS_51:WAF is associated at the REST API Gateway layer — WebSocket API stage operates separately; WAF on API GW REST covers the primary API surface
+  #checkov:skip=CKV_AWS_76: WebSocket stage access logging not enabled — high-frequency connection events add cost; application-level logging captures meaningful WebSocket activity
   api_id        = aws_apigatewayv2_api.websocket_api.id
   name          = var.environment
   deployment_id = aws_apigatewayv2_deployment.websocket_deploy.id
@@ -189,6 +193,10 @@ resource "aws_apigatewayv2_deployment" "websocket_deploy" {
 resource "aws_acm_certificate" "websockets" {
   domain_name       = "ws-${var.current_color}.${var.dns_domain}"
   validation_method = "DNS"
+
+  lifecycle {
+    create_before_destroy = true
+  }
 
   tags = {
     Name          = "ws-${var.current_color}.${var.dns_domain}"
