@@ -157,6 +157,7 @@ resource "aws_iam_policy" "ci_cd_policy" {
         "cloudfront:GetPublicKey",
         "cloudfront:GetOriginAccessControl",
         "cloudfront:CreateOriginAccessControl",
+        "cloudfront:UpdateOriginAccessControl",
         "cloudfront:GetKeyGroup",
         "cloudfront:DeleteOriginAccessControl",
         "cloudfront:DeleteKeyGroup",

@@ -1,3 +1,16 @@
+<details><summary>10266 - Restrict frontend S3 buckets to CloudFront-only access</summary>
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Deploy account-specific Terraform
+
+```bash
+npm run deploy:account-specific
+```
+</details>
+
 <details><summary>Dependency Updates - Week of 2026-08-24</summary>
 
 ## Local
