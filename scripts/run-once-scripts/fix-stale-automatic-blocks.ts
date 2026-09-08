@@ -82,16 +82,16 @@ const updateCaseWithLocking = withLocking(
     });
     const updatedCase = await updateCase(oldCase);
 
-    if (dryRun) {
-      return !updatedCase.automaticBlocked;
-    }
-
     if (
       oldCase.automaticBlocked === updatedCase.automaticBlocked &&
       oldCase.automaticBlockedReason === updatedCase.automaticBlockedReason &&
       oldCase.hasPendingItems === updatedCase.hasPendingItems
     ) {
       return false;
+    }
+
+    if (dryRun) {
+      return true;
     }
 
     await withTransaction(async () => {
