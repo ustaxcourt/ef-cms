@@ -1,4 +1,5 @@
 import { defineConfig } from 'cypress';
+import { getExposedCypressEnv } from './cypress/helpers/env/exposedCypressEnv';
 
 export default defineConfig({
   defaultCommandTimeout: 60000,
@@ -12,6 +13,7 @@ export default defineConfig({
     supportFile: 'cypress/readonly/support/index.ts',
     testIsolation: false,
   },
+  expose: getExposedCypressEnv(),
   fixturesFolder: 'cypress/readonly/fixtures',
   reporter: 'spec',
   reporterOptions: {
