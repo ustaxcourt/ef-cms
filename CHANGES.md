@@ -1,3 +1,16 @@
+<details><summary>10266 - Restrict frontend S3 buckets to CloudFront-only access</summary>
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Deploy account-specific Terraform
+
+```bash
+npm run deploy:account-specific
+```
+</details>
+
 <details><summary>Fix stale automaticBlocked on cases set for trial</summary>
 
 ## Manual Deployment Steps
