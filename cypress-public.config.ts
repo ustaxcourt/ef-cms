@@ -1,4 +1,5 @@
 import { defineConfig } from 'cypress';
+import { getExposedCypressEnv } from './cypress/helpers/env/exposedCypressEnv';
 import { toggleFeatureFlag } from './cypress/helpers/cypressTasks/postgres/featureFlagsCypress';
 import { assertCorrectNetworkData } from './cypress/helpers/cypressTasks/network/assertCorrectNetworkData';
 import fs from 'fs';
@@ -42,6 +43,7 @@ export default defineConfig({
     supportFile: 'cypress/local-only/support/index.ts',
     testIsolation: false,
   },
+  expose: getExposedCypressEnv(),
   fixturesFolder: 'cypress/local-only/fixtures',
   injectDocumentDomain: true,
   reporter: 'spec',

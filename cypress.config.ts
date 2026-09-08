@@ -4,6 +4,7 @@ import {
   getUserByEmail,
 } from './cypress/helpers/cypressTasks/cognito/cognito-helpers';
 import { defineConfig } from 'cypress';
+import { getExposedCypressEnv } from './cypress/helpers/env/exposedCypressEnv';
 import {
   deleteAllFilesInFolder,
   ensureFolderExists,
@@ -177,6 +178,7 @@ export default defineConfig({
     supportFile: 'cypress/local-only/support/index.ts',
     testIsolation: false,
   },
+  expose: getExposedCypressEnv(),
   fixturesFolder: 'cypress/local-only/fixtures',
   reporter: 'spec',
   reporterOptions: {
