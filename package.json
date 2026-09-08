@@ -375,6 +375,6 @@
     "fsevents": false,
     "unrs-resolver": false,
     "utf-8-validate": false,
-    "cypress@15.21.0": true
+    "cypress@16.0.0": true
   }
 }
