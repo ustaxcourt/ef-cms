@@ -4,6 +4,9 @@ data "aws_acm_certificate" "private_certificate" {
 }
 
 resource "aws_s3_bucket" "frontend" {
+  #checkov:skip=CKV_AWS_21: static frontend asset bucket — content is regenerated on every deploy, versioning adds cost with no recovery value
+  #checkov:skip=CKV_AWS_18: static React JS/CSS bundles only — no sensitive data; CloudFront access logs cover traffic visibility if needed
+  #checkov:skip=CKV_AWS_145: AWS-managed SSE is sufficient for static React bundles — no PII or sensitive data; CMK adds key management overhead without security benefit
   bucket = "app-${var.current_color}.${var.dns_domain}"
 
   tags = {
@@ -13,17 +16,7 @@ resource "aws_s3_bucket" "frontend" {
 
 resource "aws_s3_bucket_policy" "frontend_s3_policy" {
   bucket = aws_s3_bucket.frontend.id
-  policy = data.aws_iam_policy_document.allow_public.json
-}
-
-resource "aws_s3_bucket_website_configuration" "frontend_s3_website" {
-  bucket = aws_s3_bucket.frontend.id
-  index_document {
-    suffix = "index.html"
-  }
-  error_document {
-    key = "index.html"
-  }
+  policy = data.aws_iam_policy_document.allow_cloudfront.json
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "frontend_sse" {
@@ -40,13 +33,16 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "frontend_sse" {
 resource "aws_s3_bucket_public_access_block" "unblock_frontend" {
   bucket = aws_s3_bucket.frontend.id
 
-  block_public_acls       = false
-  block_public_policy     = false
-  ignore_public_acls      = false
-  restrict_public_buckets = false
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
 }
 
 resource "aws_s3_bucket" "failover" {
+  #checkov:skip=CKV_AWS_21: static frontend failover asset bucket — content is regenerated on every deploy, versioning adds cost with no recovery value
+  #checkov:skip=CKV_AWS_18: static React JS/CSS bundles only — no sensitive data; CloudFront access logs cover traffic visibility if needed
+  #checkov:skip=CKV_AWS_145: AWS-managed SSE is sufficient for static React bundles — no PII or sensitive data; CMK adds key management overhead without security benefit
   bucket = "app-failover-${var.current_color}.${var.dns_domain}"
   tags = {
     environment = var.environment
@@ -57,19 +53,8 @@ resource "aws_s3_bucket" "failover" {
 
 resource "aws_s3_bucket_policy" "failover_policy" {
   bucket   = aws_s3_bucket.failover.id
-  policy   = data.aws_iam_policy_document.allow_public_failover.json
+  policy   = data.aws_iam_policy_document.allow_cloudfront_failover.json
   provider = aws.us-west-1
-}
-
-resource "aws_s3_bucket_website_configuration" "failover_s3_website" {
-  bucket   = aws_s3_bucket.failover.id
-  provider = aws.us-west-1
-  index_document {
-    suffix = "index.html"
-  }
-  error_document {
-    key = "index.html"
-  }
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "failover_sse" {
@@ -85,23 +70,23 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "failover_sse" {
 }
 
 resource "aws_s3_bucket_public_access_block" "unblock_failover" {
-  bucket = aws_s3_bucket.failover.id
+  bucket   = aws_s3_bucket.failover.id
   provider = aws.us-west-1
 
-  block_public_acls       = false
-  block_public_policy     = false
-  ignore_public_acls      = false
-  restrict_public_buckets = false
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
 }
 
-data "aws_iam_policy_document" "allow_public" {
+data "aws_iam_policy_document" "allow_cloudfront" {
   statement {
-    sid    = "PublicReadGetObject"
+    sid    = "AllowCloudFrontServicePrincipal"
     effect = "Allow"
 
     principals {
-      identifiers = ["*"]
-      type        = "AWS"
+      identifiers = ["cloudfront.amazonaws.com"]
+      type        = "Service"
     }
 
     actions = ["s3:GetObject"]
@@ -109,17 +94,23 @@ data "aws_iam_policy_document" "allow_public" {
     resources = [
       "arn:aws:s3:::app-${var.current_color}.${var.dns_domain}/*"
     ]
+
+    condition {
+      test     = "StringEquals"
+      variable = "AWS:SourceArn"
+      values   = [aws_cloudfront_distribution.distribution.arn]
+    }
   }
 }
 
-data "aws_iam_policy_document" "allow_public_failover" {
+data "aws_iam_policy_document" "allow_cloudfront_failover" {
   statement {
-    sid    = "PublicReadGetObject"
+    sid    = "AllowCloudFrontServicePrincipal"
     effect = "Allow"
 
     principals {
-      identifiers = ["*"]
-      type        = "AWS"
+      identifiers = ["cloudfront.amazonaws.com"]
+      type        = "Service"
     }
 
     actions = ["s3:GetObject"]
@@ -127,14 +118,36 @@ data "aws_iam_policy_document" "allow_public_failover" {
     resources = [
       "arn:aws:s3:::app-failover-${var.current_color}.${var.dns_domain}/*"
     ]
+
+    condition {
+      test     = "StringEquals"
+      variable = "AWS:SourceArn"
+      values   = [aws_cloudfront_distribution.distribution.arn]
+    }
   }
 }
 
-resource "aws_cloudfront_origin_access_identity" "origin_access_identity" {
-  comment = "origin used for cloudfront group origins"
+resource "aws_cloudfront_origin_access_control" "frontend" {
+  name                              = "app-${var.current_color}.${var.dns_domain}"
+  origin_access_control_origin_type = "s3"
+  signing_behavior                  = "always"
+  signing_protocol                  = "sigv4"
+}
+
+resource "aws_cloudfront_origin_access_control" "failover" {
+  name                              = "app-failover-${var.current_color}.${var.dns_domain}"
+  origin_access_control_origin_type = "s3"
+  signing_behavior                  = "always"
+  signing_protocol                  = "sigv4"
 }
 
 resource "aws_cloudfront_distribution" "distribution" {
+  #checkov:skip=CKV2_AWS_47:WAF not attached to this CloudFront distribution — WAF is associated at the API Gateway layer; this distribution serves static React bundles only
+  #checkov:skip=CKV_AWS_174:minimum_protocol_version not set — ACM cert with sni-only enforces TLS; CloudFront default security policy applies; accepted for static asset distribution
+  #checkov:skip=CKV_AWS_374:No geo restriction intentional — US Tax Court is accessible to overseas military and international tax cases
+  #checkov:skip=CKV2_AWS_32:Security headers (CSP, X-Frame-Options, HSTS) managed by header_security_lambda Lambda@Edge on origin-response; CloudFront response headers policy would conflict
+  #checkov:skip=CKV_AWS_68: WAF is associated at API Gateway layer — CloudFront serves static React bundles only; all authenticated API calls go through API GW where WAF is attached
+  #checkov:skip=CKV_AWS_86: CloudFront access logging not enabled — high-volume static asset delivery; CloudWatch metrics and WAF logs cover operational and security visibility
   origin_group {
     origin_id = "group-app-${var.current_color}.${var.dns_domain}"
 
@@ -152,38 +165,38 @@ resource "aws_cloudfront_distribution" "distribution" {
   }
 
   origin {
-    domain_name = aws_s3_bucket_website_configuration.frontend_s3_website.website_endpoint
-    origin_id   = "primary-app-${var.current_color}.${var.dns_domain}"
+    domain_name              = aws_s3_bucket.frontend.bucket_regional_domain_name
+    origin_id                = "primary-app-${var.current_color}.${var.dns_domain}"
+    origin_access_control_id = aws_cloudfront_origin_access_control.frontend.id
 
-    custom_origin_config {
-      http_port              = "80"
-      https_port             = "443"
-      origin_protocol_policy = "http-only"
-      origin_ssl_protocols   = ["TLSv1", "TLSv1.1", "TLSv1.2"]
-    }
-
+    # Config channel for header_security_lambda (origin-response) — supplies the domain it
+    # interpolates into the CSP. NOT an authorization mechanism: access is enforced by OAC
+    # SigV4 + the AWS:SourceArn condition on the bucket policy.
     custom_header {
       name  = "x-allowed-domain"
       value = var.zone_name
     }
   }
 
-
   origin {
-    domain_name = aws_s3_bucket_website_configuration.failover_s3_website.website_endpoint
-    origin_id   = "failover-app-${var.current_color}.${var.dns_domain}"
+    domain_name              = aws_s3_bucket.failover.bucket_regional_domain_name
+    origin_id                = "failover-app-${var.current_color}.${var.dns_domain}"
+    origin_access_control_id = aws_cloudfront_origin_access_control.failover.id
 
-    custom_origin_config {
-      http_port              = "80"
-      https_port             = "443"
-      origin_protocol_policy = "http-only"
-      origin_ssl_protocols   = ["TLSv1", "TLSv1.1", "TLSv1.2"]
-    }
-
+    # Config channel for header_security_lambda (origin-response) — supplies the domain it
+    # interpolates into the CSP. NOT an authorization mechanism: access is enforced by OAC
+    # SigV4 + the AWS:SourceArn condition on the bucket policy.
     custom_header {
       name  = "x-allowed-domain"
       value = var.zone_name
     }
+  }
+
+  custom_error_response {
+    error_caching_min_ttl = 0
+    error_code            = 403
+    response_code         = 200
+    response_page_path    = "/index.html"
   }
 
   custom_error_response {

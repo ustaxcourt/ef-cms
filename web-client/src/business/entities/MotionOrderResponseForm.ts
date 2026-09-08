@@ -8,11 +8,11 @@ import {
   MAX_ORDER_RESPONSE_TEXT_CHARACTERS,
   MOTION_ORDER_RESPONSE_OPTIONS,
 } from '@shared/business/entities/EntityConstants';
-import { JoiDate } from '@joi/date';
+import joiDate from '@joi/date';
 import joiImported, { Root } from 'joi';
 import { JoiValidationConstants } from '@shared/business/entities/JoiValidationConstants';
 
-const joi: Root = joiImported.extend(JoiDate);
+const joi: Root = joiImported.extend(joiDate);
 
 export class MotionOrderResponseForm extends JoiValidationEntity {
   public motionOrderResponse?: boolean;

@@ -1,0 +1,183 @@
+name: Security - DAST
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, ready_for_review]
+    branches: [staging]
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+      - '.nvmrc'
+  schedule:
+    - cron: '0 6 * * 1'   # Weekly Monday 06:00 UTC
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
+  cancel-in-progress: false   # don't cancel DAST mid-scan; findings may be partial
+
+permissions:
+  contents: read
+
+jobs:
+  dast-api:
+    name: ZAP API Scan (${{ matrix.role }})
+    if: github.event_name == 'pull_request' && !github.event.pull_request.draft
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write   # needed for SARIF upload to Security tab
+    timeout-minutes: 45
+    env:
+      CI: true
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - role: petitionsclerk
+            username: petitionsclerk@example.com
+          - role: petitioner
+            username: petitioner@example.com
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: example
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: NPM Install
+        uses: ./.github/actions/dawson-node-bootstrap
+
+      - name: Setup and Start DAWSON
+        uses: ./.github/actions/dawson-app-setup
+        with:
+          log_file: /tmp/dast-dawson-output.txt
+          wait_flags: MAX_TRIES=150 WAIT_FOR_PUBLIC_API=1
+
+      - name: Acquire ZAP auth token (${{ matrix.role }})
+        env:
+          ZAP_USERNAME: ${{ matrix.username }}
+        run: node scripts/get-local-zap-token.mjs "$ZAP_USERNAME"
+
+      - name: ZAP API Scan (${{ matrix.role }})
+        continue-on-error: true
+        uses: zaproxy/action-api-scan@5158fe4d9d8fcc75ea204db81317cce7f9e5453d  # v0.10.0
+        with:
+          target: 'http://localhost:4000/api/swagger.json'
+          format: openapi
+          rules_file_name: '.zap/rules.tsv'
+          cmd_options: '-z "-configfile /zap/wrk/options-${{ matrix.role }}.prop"'
+
+      - name: Upload ZAP API report (${{ matrix.role }})
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: zap-api-report-${{ matrix.role }}
+          path: report_html
+          retention-days: 30
+
+      - name: Upload SARIF to Security tab (${{ matrix.role }})
+        if: always()
+        uses: ./.github/actions/dawson-upload-sarif
+        with:
+          sarif_file: report_json
+          category: zap-api-${{ matrix.role }}
+        continue-on-error: true
+
+      - name: ZAP Public API Baseline Scan
+        if: matrix.role == 'petitioner'
+        continue-on-error: true
+        uses: zaproxy/action-baseline@7c4deb10e6261301961c86d65d54a516394f9aed7 # v0.14.0
+        with:
+          target: 'http://localhost:4001'
+          rules_file_name: '.zap/rules.tsv'
+          artifact_name: zap-public-api-report
+
+      - name: Upload SARIF to Security tab (public-api)
+        if: always() && matrix.role == 'petitioner'
+        uses: ./.github/actions/dawson-upload-sarif
+        with:
+          sarif_file: report_json
+          category: zap-public-api
+        continue-on-error: true
+
+      - name: Upload DAWSON logs (${{ matrix.role }})
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: dast-dawson-logs-${{ matrix.role }}
+          path: /tmp/dast-dawson-output.txt
+          retention-days: 14
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # Job 2: Full web scan — weekly schedule + manual dispatch only (NOT on PRs)
+  # ─────────────────────────────────────────────────────────────────────────────
+  dast-web:
+    name: ZAP Web Full Scan
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    timeout-minutes: 75
+    env:
+      CI: true
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: example
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: NPM Install
+        uses: ./.github/actions/dawson-node-bootstrap
+
+      - name: Setup and Start DAWSON
+        uses: ./.github/actions/dawson-app-setup
+        with:
+          log_file: /tmp/dast-web-dawson-output.txt
+
+      - name: Acquire ZAP auth token
+        run: node scripts/get-local-zap-token.mjs
+
+      - name: ZAP Full Scan — Private Client
+        continue-on-error: true
+        uses: zaproxy/action-full-scan@3c58388149901b9a03b7718852c5ba889646c27c  # v0.13.0
+        with:
+          target: 'http://localhost:1234/'
+          rules_file_name: '.zap/rules.tsv'
+          cmd_options: '-z "-configfile /zap/wrk/options-petitionsclerk.prop"'
+          artifact_name: zap-web-private-report
+
+      - name: ZAP Full Scan — Public Client
+        continue-on-error: true
+        uses: zaproxy/action-full-scan@3c58388149901b9a03b7718852c5ba889646c27c  # v0.13.0
+        with:
+          target: 'http://localhost:5678/'
+          rules_file_name: '.zap/rules.tsv'
+          artifact_name: zap-web-public-report
+
+      - name: Upload DAWSON logs
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: dast-web-dawson-logs
+          path: /tmp/dast-web-dawson-output.txt
+          retention-days: 14

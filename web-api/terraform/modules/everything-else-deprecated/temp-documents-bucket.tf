@@ -1,4 +1,5 @@
 resource "aws_s3_bucket" "temp_documents_us_east_1" {
+  #checkov:skip=CKV_AWS_145:AWS-managed SSE-S3 encryption is sufficient — only 3 court employees have prod access; CMK would add key management overhead without meaningful security benefit
   bucket = "${var.dns_domain}-temp-documents-${var.environment}-us-east-1"
 
   tags = {
@@ -25,6 +26,7 @@ resource "aws_s3_bucket_cors_configuration" "temp_documents_s3_cors_us_east_1" {
 }
 
 resource "aws_s3_bucket_lifecycle_configuration" "temp_documents_s3_lc_us_east_1" {
+  #checkov:skip=CKV_AWS_300: incomplete multipart upload abort rule not configured — storage cost issue only, not a security risk; temp documents have a 1-day expiry lifecycle rule already in place
   bucket = aws_s3_bucket.temp_documents_us_east_1.id
 
   rule {
@@ -65,6 +67,7 @@ resource "aws_s3_bucket_public_access_block" "block_temp_east" {
 }
 
 resource "aws_s3_bucket" "temp_documents_us_west_1" {
+  #checkov:skip=CKV_AWS_145:AWS-managed SSE-S3 encryption is sufficient — only 3 court employees have prod access; CMK would add key management overhead without meaningful security benefit
   provider = aws.us-west-1
   bucket   = "${var.dns_domain}-temp-documents-${var.environment}-us-west-1"
 
@@ -94,6 +97,7 @@ resource "aws_s3_bucket_cors_configuration" "temp_documents_s3_cors_us_west_1" {
 }
 
 resource "aws_s3_bucket_lifecycle_configuration" "temp_documents_s3_lc_us_west_1" {
+  #checkov:skip=CKV_AWS_300: incomplete multipart upload abort rule not configured — storage cost issue only, not a security risk; temp documents have a 1-day expiry lifecycle rule already in place
   bucket   = aws_s3_bucket.temp_documents_us_west_1.id
   provider = aws.us-west-1
 

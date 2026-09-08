@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { ROLES } from '@shared/business/entities/EntityConstants';
 import { NewUserOnCaseKysely } from '@web-api/persistence/postgres/cases/userOnCase/schema';
 
@@ -452,10 +453,24 @@ export const usersOnCases: NewUserOnCaseKysely[] = [
     actingAsRole: ROLES.petitioner,
   },
   {
+    serviceIndicator: 'Electronic',
+    userId: '9805d1ab-18d0-43ec-bafb-654e83405416',
+    docketNumber: '111-19',
+    actingAsRole: ROLES.privatePractitioner,
+    representing: JSON.stringify(['7805d1ab-18d0-43ec-bafb-654e83405416']),
+  },
+  {
     serviceIndicator: 'None',
     userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
     docketNumber: '112-19',
     actingAsRole: ROLES.petitioner,
+  },
+  {
+    serviceIndicator: 'Electronic',
+    userId: '9805d1ab-18d0-43ec-bafb-654e83405416',
+    docketNumber: '112-19',
+    actingAsRole: ROLES.privatePractitioner,
+    representing: JSON.stringify(['7805d1ab-18d0-43ec-bafb-654e83405416']),
   },
   {
     serviceIndicator: 'None',

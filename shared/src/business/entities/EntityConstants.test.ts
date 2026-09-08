@@ -1,5 +1,8 @@
 import {
+  ALLOWED_EVENT_CODES,
+  JUDGE_ACTIVITY_REPORT_ORDER_EVENT_CODES,
   ORDER_TYPES,
+  STANDING_ORDER_EVENT_CODES,
   US_STATES,
   US_STATES_OTHER,
   US_STATES_SORTED,
@@ -48,6 +51,30 @@ describe('EntityConstants', () => {
           firstName.localeCompare(secondName),
         ),
       );
+    });
+  });
+
+  describe('JUDGE_ACTIVITY_REPORT_ORDER_EVENT_CODES', () => {
+    it('excludes every standing order event code', () => {
+      STANDING_ORDER_EVENT_CODES.forEach(eventCode => {
+        expect(JUDGE_ACTIVITY_REPORT_ORDER_EVENT_CODES).not.toContain(
+          eventCode,
+        );
+      });
+    });
+
+    it('still includes order event codes that are not excluded', () => {
+      expect(JUDGE_ACTIVITY_REPORT_ORDER_EVENT_CODES).toContain('O');
+      expect(JUDGE_ACTIVITY_REPORT_ORDER_EVENT_CODES).not.toContain('OAJ');
+      expect(JUDGE_ACTIVITY_REPORT_ORDER_EVENT_CODES).not.toContain('OST');
+    });
+  });
+
+  describe('ALLOWED_EVENT_CODES', () => {
+    it('includes every standing order event code so external users can access them before service', () => {
+      STANDING_ORDER_EVENT_CODES.forEach(eventCode => {
+        expect(ALLOWED_EVENT_CODES).toContain(eventCode);
+      });
     });
   });
 });
