@@ -38,9 +38,6 @@ export const GRANT_DENY_MOTION_TYPE = 'Motion for Continuance';
 
 export const GRANT_DENY_OTHER_FILING_PARTY = 'Chamber Of Commerce';
 
-/**
- * The description the application generates for a granted motion's draft order.
- */
 export const grantedOrderDescription = (
   motionType: string = GRANT_DENY_MOTION_TYPE,
 ): string => `Order - ${motionType} is granted`;
@@ -119,26 +116,19 @@ const addAndServeMotion = ({
   cy.get('[data-testid="save-and-serve"]').click();
   cy.get('[data-testid="modal-button-confirm"]').click();
 
-  // The paper service printout only renders when a party is served on paper, so
-  // a case whose parties are all electronic goes straight back to case detail.
+  // the printout only renders when a party is served on paper
   if (hasPaperServiceParty) {
     dismissPaperServiceNotice();
   }
 
   cy.wait('@uploadPolicy');
 
-  // Serving a paper filing finishes asynchronously, and clicking through the
-  // paper service printout was what used to hold the test until it did. Wait
-  // for the motion to reach the docket record so every caller gets a case the
-  // motion is actually filed on.
+  // service finishes asynchronously, so wait for the motion to reach the docket record
   cy.get('[data-testid="tab-docket-record"]').click();
   cy.contains(motionType).should('be.visible');
 };
 
-/**
- * Creates a served electronic case with a single petitioner (or a petitioner and spouse when
- * `withSpouse` is set) and serves a motion on it filed by the requested combination of parties.
- */
+// creates a served electronic case, with a spouse when requested, and serves a motion on it
 export const createElectronicMotionCase = ({
   filedByPetitioners = true,
   filedByRespondent = false,
@@ -196,10 +186,7 @@ export const openGrantDenyMotionFromMessage = (): void => {
   cy.get('#page-title').should('contain.text', 'Grant/Deny Motion');
 };
 
-/**
- * Opens the served motion as the judge, selects GRANTED, and submits the draft order.
- * Callers wait on the aliased `@courtIssuedOrder` request to assert the generated order HTML.
- */
+// grants the motion as the judge; callers wait on the `@courtIssuedOrder` alias
 export const grantMotionAsJudge = (
   docketNumber: string,
   motionType: string = GRANT_DENY_MOTION_TYPE,
@@ -215,11 +202,7 @@ export const grantMotionAsJudge = (
   cy.get('[data-testid="save-draft-button"]').click();
 };
 
-/**
- * Grants the served motion as the judge, hands the generated order HTML to the
- * caller to assert on, then skips signing and confirms the draft order landed
- * on the Drafts tab.
- */
+// grants the motion, hands the order HTML to the caller, then confirms the draft was created
 export const grantMotionAndAssertOrderHtml = ({
   assertOrderHtml,
   docketNumber,

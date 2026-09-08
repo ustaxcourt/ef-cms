@@ -4,7 +4,7 @@ import { runAction } from '@web-client/presenter/test.cerebral';
 // prepareGrantDenyMotionAction returns nothing; tests assert against result.state.
 export type GrantDenyActionResult = ReturnType<typeof runAction<void>>;
 
-export const wrap = (inner: string): string =>
+const wrap = (inner: string): string =>
   `<p class="grant-deny-indent-paragraph">${inner}</p>`;
 
 export const expectedPreamble = ({
@@ -18,7 +18,7 @@ export const expectedPreamble = ({
     `${preamblePrepend}On ${date}, ${movant} filed a ${motionTitle} ${documentNumberText}. For cause, it is`,
   );
 
-export const motionId = 'motion-docket-entry-id';
+const motionId = 'motion-docket-entry-id';
 
 export const motion = {
   docketEntryId: motionId,

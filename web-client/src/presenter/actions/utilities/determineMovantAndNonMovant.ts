@@ -33,6 +33,12 @@ const filedByNamesParty = (filedBy: string, name: string): boolean => {
   return false;
 };
 
+// generateFiledBy prefixes the respondent as `Resp.`, so entries whose partyIrsPractitioner
+// flag was never persisted (legacy or migrated data) are still recognized from filedBy, the
+// same way petitioners are matched by name.
+const filedByNamesRespondent = (filedBy: string): boolean =>
+  /^Resp(?:t)?\.(?=$|[\s,&])/.test(filedBy);
+
 // The other filing party is free text appended to the end of filedBy; dropping it keeps
 // a party whose name matches a petitioner's from being mistaken for that petitioner.
 const withoutOtherFilingParty = (
@@ -51,6 +57,8 @@ export const determineMovantAndNonMovant = ({
   motion,
 }: DetermineMovantArgs): { movant: string; nonMovant: string } => {
   const { petitioners } = caseDetail;
+  // "petitioner" refers to the party in the abstract, so the label is plural whenever the
+  // case has multiple petitioners, regardless of how many of them filed the motion.
   const pNames = petitioners.map(p => p.name);
   const petitioner = pNames.length > 1 ? 'petitioners' : 'petitioner';
 
@@ -65,7 +73,8 @@ export const determineMovantAndNonMovant = ({
     petitioners.some(
       p => p.contactId && filerContactIds.includes(p.contactId),
     ) || pNames.some(name => filedByNamesParty(filedByParties, name));
-  const respondentIsFiling = !!motion.partyIrsPractitioner;
+  const respondentIsFiling =
+    !!motion.partyIrsPractitioner || filedByNamesRespondent(filedByParties);
 
   if (petitionerIsFiling && respondentIsFiling) {
     return { movant: 'the parties', nonMovant: 'the parties' };

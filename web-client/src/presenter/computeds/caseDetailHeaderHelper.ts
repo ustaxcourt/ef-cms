@@ -1,38 +1,26 @@
 import { Case } from '../../../../shared/src/business/entities/cases/Case';
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
-import {
-  PRACTICE_TYPE,
-  ROLES,
-} from '@shared/business/entities/EntityConstants';
-import { RawIrsPractitioner } from '@shared/business/entities/IrsPractitioner';
-import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { RawUser } from '@shared/business/entities/User';
 import { state } from '@web-client/presenter/app.cerebral';
-
-const isUserADojPractitioner = (
-  user: RawUser | RawPractitioner | RawIrsPractitioner,
-): boolean => {
-  if (user.role !== ROLES.irsPractitioner) return false;
-  const irsPractitioner: RawPractitioner = user as RawPractitioner;
-  if (irsPractitioner.practiceType !== PRACTICE_TYPE.DOJ) return false;
-  return true;
-};
+import { canUserFileFirstIrsFiling } from '@shared/business/utilities/canUserFileFirstIrsFiling';
+import { canPractitionerFileEntryOfAppearance } from '@shared/business/utilities/canPractitionerFileEntryOfAppearance';
 
 const shouldShowRepresentAPartyButton = (
   caseDetail: RawCase,
-  isDojPractitioner: boolean,
-  caseHasRespondent: boolean,
+  user: RawUser,
   isRepresentAPartyForm: boolean,
-  isCaseSealed: boolean,
   isCurrentPageFilePetitionSuccess: boolean,
 ): boolean => {
   return (
-    caseHasRespondent &&
+    canPractitionerFileEntryOfAppearance({
+      user,
+      caseDetail,
+      canDojPractitionersRepresentParty:
+        caseDetail.canDojPractitionersRepresentParty,
+    }) &&
     !isRepresentAPartyForm &&
-    !isCaseSealed &&
-    !isCurrentPageFilePetitionSuccess &&
-    !!(!isDojPractitioner || caseDetail.canDojPractitionersRepresentParty)
+    !isCurrentPageFilePetitionSuccess
   );
 };
 
@@ -68,7 +56,6 @@ export const caseDetailHeaderHelper = (
   let showRepresentAPartyButton = false;
   let showPendingAccessToCaseButton = false;
   let showFileFirstDocumentButton = false;
-  const isDojPractitioner = isUserADojPractitioner(user);
 
   if (isExternalUser && !userDirectlyAssociatedWithCase) {
     const pendingAssociation = get(state.screenMetadata.pendingAssociation);
@@ -79,24 +66,22 @@ export const caseDetailHeaderHelper = (
 
     if (user.role === USER_ROLES.privatePractitioner) {
       showRepresentAPartyButton =
-        !pendingAssociation &&
+        canPractitionerFileEntryOfAppearance({
+          user,
+          caseDetail,
+          hasPendingAssociation: pendingAssociation,
+        }) &&
         !isRepresentAPartyForm &&
-        !isCaseSealed &&
         !isCurrentPageFilePetitionSuccess;
 
       showPendingAccessToCaseButton = pendingAssociation;
     } else if (user.role === USER_ROLES.irsPractitioner) {
-      const caseHasRespondent = !!caseDetail.irsPractitioners?.length;
-
-      showFileFirstDocumentButton =
-        !caseHasRespondent && !isCaseSealed && !isDojPractitioner;
+      showFileFirstDocumentButton = canUserFileFirstIrsFiling(user, caseDetail);
 
       showRepresentAPartyButton = shouldShowRepresentAPartyButton(
         caseDetail,
-        isDojPractitioner,
-        caseHasRespondent,
+        user,
         isRepresentAPartyForm,
-        isCaseSealed,
         isCurrentPageFilePetitionSuccess,
       );
     }

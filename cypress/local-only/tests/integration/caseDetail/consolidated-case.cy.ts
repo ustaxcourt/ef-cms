@@ -1,12 +1,28 @@
 import { loginAsDocketClerk } from 'cypress/helpers/authentication/login-as-helpers';
 import { attachFile } from '../../../../helpers/file/upload-file';
 import { getCaseDetailTab } from '../../../support/pages/case-detail';
+import { createAndServeConsolidatedGroup } from '../../../../helpers/fileAPetition/create-consolidated-case-group';
 
 describe('Docket clerk views consolidated case', function () {
   describe('case detail header', () => {
+    let leadDocketNumber: string;
+    let memberDocketNumbers: string[];
+
+    before(() => {
+      createAndServeConsolidatedGroup({}).then(
+        ({
+          leadDocketNumber: newLeadDocketNumber,
+          memberDocketNumbers: newMemberDocketNumbers,
+        }) => {
+          leadDocketNumber = newLeadDocketNumber;
+          memberDocketNumbers = newMemberDocketNumbers;
+        },
+      );
+    });
+
     it('should display lead case tag on the lead case in a consolidated group', () => {
       loginAsDocketClerk();
-      cy.visit('/case-detail/111-19');
+      cy.visit(`/case-detail/${leadDocketNumber}`);
       cy.get('#lead-case-tag').should('exist');
     });
 
@@ -42,7 +58,7 @@ describe('Docket clerk views consolidated case', function () {
       cy.get('label.usa-checkbox__label').click();
       cy.get('button#modal-button-confirm').click();
       getCaseDetailTab('overview').click();
-      cy.contains('a', '112-19L').should('exist');
+      cy.contains('a', `${memberDocketNumbers[0]}L`).should('exist');
     });
 
     it('should persist the populated consolidated cases in the overview tab when respondent counsel is added to parties', () => {
@@ -53,7 +69,7 @@ describe('Docket clerk views consolidated case', function () {
       cy.get('button#search-for-respondent').click();
       cy.get('button#modal-button-confirm').click();
       getCaseDetailTab('overview').click();
-      cy.contains('a', '112-19L').should('exist');
+      cy.contains('a', `${memberDocketNumbers[0]}L`).should('exist');
     });
 
     it('should persist the populated consolidated cases in the overview tab when correspondence is deleted', () => {
@@ -76,7 +92,7 @@ describe('Docket clerk views consolidated case', function () {
 
       getCaseDetailTab('case-information').click();
       // verify Consolidated Cases is not empty
-      cy.contains('a', '112-19L').should('exist');
+      cy.contains('a', `${memberDocketNumbers[0]}L`).should('exist');
     });
   });
 });
