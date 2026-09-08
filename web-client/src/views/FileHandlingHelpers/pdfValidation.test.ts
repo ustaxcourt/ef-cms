@@ -11,7 +11,10 @@ import {
 } from './pdfValidation';
 import { validatePdfHeader } from '@web-client/views/FileHandlingHelpers/pdfValidationHelpers';
 import { getPdfJs as getPdfJsMock } from '@shared/business/utilities/pdfs/getPdfJs';
-import { hasDuplicateObjectNumbers as hasDuplicateObjectNumbersMock } from '@shared/business/utilities/pdfs/hasDuplicateObjectNumbers';
+import {
+  hasDuplicateObjectNumbers as hasDuplicateObjectNumbersMock,
+  hasRaisedGenerationHeader as hasRaisedGenerationHeaderMock,
+} from '@shared/business/utilities/pdfs/hasDuplicateObjectNumbers';
 
 const VALID_PDF_HEADER_BYTES = [0x25, 0x50, 0x44, 0x46, 0x2d]; // %PDF-
 const INVALID_PDF_HEADER_BYTES = [0x50, 0x44, 0x46, 0x25, 0x2d]; // PFD%-
@@ -37,6 +40,7 @@ describe('validatePdfHeader', () => {
 describe('validatePdf', () => {
   const getPdfJs = jest.mocked(getPdfJsMock);
   const hasDuplicateObjectNumbers = jest.mocked(hasDuplicateObjectNumbersMock);
+  const hasRaisedGenerationHeader = jest.mocked(hasRaisedGenerationHeaderMock);
 
   let mockFile: File;
   let mockPdfJs: any;
@@ -66,6 +70,7 @@ describe('validatePdf', () => {
     };
     getPdfJs.mockResolvedValue(mockPdfJs);
 
+    hasRaisedGenerationHeader.mockReturnValue(true);
     hasDuplicateObjectNumbers.mockResolvedValue(false);
   });
 
@@ -124,6 +129,42 @@ describe('validatePdf', () => {
       },
       isValid: false,
     });
+  });
+
+  it('should still find the duplicate after pdf.js detaches the buffer', async () => {
+    // pdf.js takes ownership of the TypedArray it is handed, so by the time the
+    // duplicate check runs the original bytes are gone.
+    mockFileReader.result = new Uint8Array(VALID_PDF_HEADER_BYTES).buffer;
+    mockPdfJs.getDocument.mockImplementation(({ data }) => {
+      structuredClone(data.buffer, { transfer: [data.buffer] });
+      return { promise: Promise.resolve() };
+    });
+    hasDuplicateObjectNumbers.mockResolvedValue(true);
+
+    const resultPromise = validatePdf({ file: mockFile });
+    mockFileReader.onload();
+    const result = await resultPromise;
+
+    expect(hasDuplicateObjectNumbers).toHaveBeenCalledWith(
+      new Uint8Array(VALID_PDF_HEADER_BYTES),
+    );
+    expect(result.errorInformation?.errorType).toBe(
+      ErrorTypes.UNSUPPORTED_PDF_REVISION,
+    );
+  });
+
+  it('should not parse the document when no header carries a raised generation', async () => {
+    mockPdfJs.getDocument.mockReturnValue({
+      promise: Promise.resolve(),
+    });
+    hasRaisedGenerationHeader.mockReturnValue(false);
+
+    const resultPromise = validatePdf({ file: mockFile });
+    mockFileReader.onload();
+    const result = await resultPromise;
+
+    expect(result).toEqual({ isValid: true });
+    expect(hasDuplicateObjectNumbers).not.toHaveBeenCalled();
   });
 
   it('should not run the duplicate check on an encrypted PDF', async () => {

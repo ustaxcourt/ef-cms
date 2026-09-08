@@ -7,7 +7,10 @@ import {
   validatePermissions,
 } from '@web-client/views/FileHandlingHelpers/pdfValidationHelpers';
 import { getPdfJs } from '@shared/business/utilities/pdfs/getPdfJs';
-import { hasDuplicateObjectNumbers } from '@shared/business/utilities/pdfs/hasDuplicateObjectNumbers';
+import {
+  hasDuplicateObjectNumbers,
+  hasRaisedGenerationHeader,
+} from '@shared/business/utilities/pdfs/hasDuplicateObjectNumbers';
 
 export const UNSUPPORTED_BROWSER_ERROR_MESSAGE =
   'Your internet browser is unsupported. Please update your browser and try again.';
@@ -61,6 +64,14 @@ export const validatePdf = ({
           corruptPdfError.name = 'CorruptPDFHeaderException';
           throw corruptPdfError;
         }
+        // getDocument transfers this buffer to the pdf.js worker and detaches
+        // it, so anything needing the bytes afterwards needs its own copy.
+        const bytesForRevisionCheck = hasRaisedGenerationHeader(
+          fileAsArrayBuffer,
+        )
+          ? fileAsArrayBuffer.slice()
+          : undefined;
+
         const pdfjs = await getPdfJs();
         const document = await pdfjs.getDocument({
           data: fileAsArrayBuffer,
@@ -77,7 +88,10 @@ export const validatePdf = ({
 
         // A document holding one object number at two generations is valid
         // here, but our save path rewrites it into an unreadable one.
-        if (await hasDuplicateObjectNumbers(fileAsArrayBuffer)) {
+        if (
+          bytesForRevisionCheck &&
+          (await hasDuplicateObjectNumbers(bytesForRevisionCheck))
+        ) {
           resolve({
             errorInformation: {
               errorMessageToDisplay: PDF_UNSUPPORTED_REVISION_ERROR_MESSAGE,
