@@ -132,8 +132,7 @@ describe('validatePdf', () => {
   });
 
   it('should still find the duplicate after pdf.js detaches the buffer', async () => {
-    // pdf.js takes ownership of the TypedArray it is handed, so by the time the
-    // duplicate check runs the original bytes are gone.
+    // pdf.js detaches the buffer, so the original bytes are gone by this point.
     mockFileReader.result = new Uint8Array(VALID_PDF_HEADER_BYTES).buffer;
     mockPdfJs.getDocument.mockImplementation(({ data }) => {
       structuredClone(data.buffer, { transfer: [data.buffer] });

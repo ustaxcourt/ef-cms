@@ -13,10 +13,7 @@ const readTestAsset = (fileName: string): Uint8Array =>
 const encode = (text: string): Uint8Array =>
   Uint8Array.from(text, character => character.charCodeAt(0));
 
-/**
- * A conforming document whose catalog was freed and reused at generation 1.
- * The raised generation clears the screen, but no object number collides.
- */
+/** Catalog reused at generation 1: clears the screen, collides with nothing. */
 const buildSoundReuseDocument = (): Uint8Array => {
   const objects = [
     '1 0 obj\n<< /Type /Pages /Kids [] /Count 0 >>\nendobj\n',

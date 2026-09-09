@@ -1,6 +1,5 @@
 import { Case } from '../../../../shared/src/business/entities/cases/Case';
 import { DocketEntry } from '../../../../shared/src/business/entities/DocketEntry';
-import { PDF_SAVE_OPTIONS } from '@shared/business/utilities/pdfs/pdfSaveOptions';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { generateCoverSheetData } from './generateCoverSheetData';
 
@@ -65,7 +64,7 @@ export const addCoverToPdf = async ({
     pdfDoc.insertPage(0, coverPageDocumentPages[0]);
   }
 
-  const newPdfData = await pdfDoc.save(PDF_SAVE_OPTIONS);
+  const newPdfData = await pdfDoc.save();
   const numberOfPages = pdfDoc.getPageCount();
 
   return {

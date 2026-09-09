@@ -64,8 +64,7 @@ export const validatePdf = ({
           corruptPdfError.name = 'CorruptPDFHeaderException';
           throw corruptPdfError;
         }
-        // getDocument transfers this buffer to the pdf.js worker and detaches
-        // it, so anything needing the bytes afterwards needs its own copy.
+        // pdf.js takes ownership of this buffer, so keep a copy for later use.
         const bytesForRevisionCheck = hasRaisedGenerationHeader(
           fileAsArrayBuffer,
         )
@@ -86,8 +85,7 @@ export const validatePdf = ({
           throw readOnlyError;
         }
 
-        // A document holding one object number at two generations is valid
-        // here, but our save path rewrites it into an unreadable one.
+        // Valid to every reader, but our save path rewrites it into a broken file.
         if (
           bytesForRevisionCheck &&
           (await hasDuplicateObjectNumbers(bytesForRevisionCheck))

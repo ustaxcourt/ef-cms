@@ -1,5 +1,3 @@
-import { PDF_SAVE_OPTIONS } from '@shared/business/utilities/pdfs/pdfSaveOptions';
-
 export const TEXT_SIZE = 15;
 const PADDING = 13;
 
@@ -177,5 +175,7 @@ export const generateSignedDocumentInteractor = async (
     y: sigTitleY,
   });
 
-  return await pdfDoc.save(PDF_SAVE_OPTIONS);
+  return await pdfDoc.save({
+    useObjectStreams: false,
+  });
 };
