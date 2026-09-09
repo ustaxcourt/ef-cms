@@ -47,6 +47,7 @@ import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseA
 import { getUniqueId } from '@shared/sharedAppContext';
 import { countPagesInDocument } from '@web-api/business/useCaseHelper/countPagesInDocument';
 import { uploadDocument } from '@web-api/persistence/s3/uploadDocument';
+import { updateCaseAutomaticBlock } from '@web-api/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock';
 
 export const addDocketEntryForPaymentStatus = ({ caseEntity, user }) => {
   if (caseEntity.petitionPaymentStatus === PAYMENT_STATUS.PAID) {
@@ -594,7 +595,10 @@ export const serveCaseToIrs = async (
       user: authorizedUser,
     });
 
-    caseEntity.updateAutomaticBlocked({ hasCaseDeadline: false });
+    await updateCaseAutomaticBlock({
+      caseEntity,
+      hasCaseDeadline: false,
+    });
 
     caseEntity
       .updateCaseCaptionDocketRecord({ authorizedUser })
