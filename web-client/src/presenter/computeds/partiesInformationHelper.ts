@@ -109,7 +109,7 @@ export const partiesInformationHelper = (
 
     const canEditPetitioner = canUserUpdatePetitionerContact({
       petitionerCaseRaw: caseDetail,
-      updatedPetitionerData: petitioner,
+      contactId: petitioner.contactId,
       user,
     });
 

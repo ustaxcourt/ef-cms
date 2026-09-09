@@ -46,7 +46,7 @@ describe('updatePetitionerInformationInteractor canUserUpdatePetitionerContact',
     it('should return false when the user is a privatePractitioner not associated with the case', () => {
       const isUserAuthorized = canUserUpdatePetitionerContact({
         petitionerCaseRaw: mockCase,
-        updatedPetitionerData: {},
+        contactId: '',
         user: {
           ...mockPrivatePractitionerUser,
           userId: 'a003e912-7b2f-4d2f-bf00-b99ec0d29de1',
@@ -59,7 +59,7 @@ describe('updatePetitionerInformationInteractor canUserUpdatePetitionerContact',
     it('should return false when the user is a petitioner attempting to modify another petitioner', () => {
       const isUserAuthorized = canUserUpdatePetitionerContact({
         petitionerCaseRaw: mockCase,
-        updatedPetitionerData: {},
+        contactId: '',
         user: {
           ...mockPetitionerUser,
           userId: 'a003e912-7b2f-4d2f-bf00-b99ec0d29de1',
@@ -73,7 +73,7 @@ describe('updatePetitionerInformationInteractor canUserUpdatePetitionerContact',
       mockCase.status = CASE_STATUS_TYPES.new;
       const isUserAuthorized = canUserUpdatePetitionerContact({
         petitionerCaseRaw: mockCase,
-        updatedPetitionerData: { contactId: SECONDARY_CONTACT_ID },
+        contactId: SECONDARY_CONTACT_ID,
         user: {
           ...mockPetitionerUser,
           userId: SECONDARY_CONTACT_ID,
@@ -86,7 +86,7 @@ describe('updatePetitionerInformationInteractor canUserUpdatePetitionerContact',
     it('should return true when the user is a petitioner its own contact information', () => {
       const isUserAuthorized = canUserUpdatePetitionerContact({
         petitionerCaseRaw: mockCase,
-        updatedPetitionerData: { contactId: SECONDARY_CONTACT_ID },
+        contactId: SECONDARY_CONTACT_ID,
         user: {
           ...mockPetitionerUser,
           userId: SECONDARY_CONTACT_ID,
@@ -109,7 +109,7 @@ describe('updatePetitionerInformationInteractor canUserUpdatePetitionerContact',
             },
           ],
         },
-        updatedPetitionerData: { contactId: SECONDARY_CONTACT_ID },
+        contactId: SECONDARY_CONTACT_ID,
         user: {
           ...mockPrivatePractitionerUser,
           userId: SECONDARY_CONTACT_ID,

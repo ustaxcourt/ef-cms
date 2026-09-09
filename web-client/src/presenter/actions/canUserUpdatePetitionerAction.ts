@@ -9,10 +9,12 @@ export const canUserUpdatePetitionerAction = ({
   const user = get(state.user);
   const { caseDetail, contactId } = props;
 
+  if (!caseDetail || !contactId) return path.no();
+
   if (
     canUserUpdatePetitionerContact({
       petitionerCaseRaw: caseDetail,
-      updatedPetitionerData: { contactId },
+      contactId,
       user,
     })
   )
