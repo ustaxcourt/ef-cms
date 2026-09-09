@@ -8,8 +8,7 @@ export const canUserUpdatePetitionerAction = ({
 }: ActionProps) => {
   const user = get(state.user);
   const { caseDetail, contactId } = props;
-
-  if (!caseDetail || !contactId) return path.no();
+  if (!caseDetail || !contactId || !user) return path.no();
 
   if (
     canUserUpdatePetitionerContact({
