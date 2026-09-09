@@ -492,15 +492,14 @@ describe('fix-stale-automatic-blocks.ts', () => {
     await runScript();
 
     expect(console.error).toHaveBeenCalledWith(
-      'Failed to update case 115-20',
+      'Failed to update case',
+      '115-20',
       expect.any(Error),
     );
     expect(console.log).toHaveBeenCalledWith(
-      '0 cases were updated; 1 failed to update.',
+      '1 cases were updated; 0 failed to update.',
     );
-    expect(console.log).toHaveBeenCalledWith('Failed to update these cases:', [
-      '115-20',
-    ]);
+    expect(console.log).toHaveBeenCalledWith('cases updated:', []);
     expect(getCaseRow('115-20')).toMatchObject({ automaticBlocked: true });
   });
 
