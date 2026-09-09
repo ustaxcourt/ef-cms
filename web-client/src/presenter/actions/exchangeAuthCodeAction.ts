@@ -1,11 +1,22 @@
-import { authCodeInteractor } from '@web-client/proxies/auth/authCodeProxy';
+import * as oAuthClient from 'openid-client';
 
 export const exchangeAuthCodeAction = async ({
   applicationContext,
   props,
   path,
 }: ActionProps) => {
-  const { authCode, error, errorDescription } = props;
+  const { error, errorDescription } = props;
+  const config = new oAuthClient.Configuration(
+    {
+      issuer: process.env.MANAGED_LOGIN_DOMAIN!,
+      authorization_endpoint: `${process.env.MANAGED_LOGIN_DOMAIN}/oauth2/authorize`,
+      token_endpoint: `${process.env.MANAGED_LOGIN_DOMAIN}/oauth2/token`,
+    },
+    process.env.COGNITO_CLIENT_ID!,
+  );
+  const code_verifier = applicationContext
+    .getPersistenceGateway()
+    .getItem({ key: 'code_verifier' });
 
   if (error) {
     return path.error({
@@ -18,10 +29,18 @@ export const exchangeAuthCodeAction = async ({
   }
 
   try {
-    const { accessToken, idToken, refreshToken } = await authCodeInteractor(
-      applicationContext,
-      authCode,
-    );
+    const { accessToken, idToken, refreshToken } =
+      await oAuthClient.authorizationCodeGrant(
+        config,
+        new window.URL(window.location.href),
+        {
+          pkceCodeVerifier: code_verifier,
+        },
+      );
+    // const { accessToken, idToken, refreshToken } = await authCodeInteractor(
+    //   applicationContext,
+    //   authCode,
+    // );
 
     return path.success({ accessToken, idToken, refreshToken });
   } catch (error) {

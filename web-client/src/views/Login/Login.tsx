@@ -25,6 +25,7 @@ export const Login = connect(
     alertHelper: state.alertHelper,
     dismissAlertSequence: sequences.dismissAlertSequence,
     loginHelper: state.loginHelper,
+    idpLoginSequence: sequences.idpLoginSequence,
   },
   ({
     alertInfo,
@@ -38,6 +39,7 @@ export const Login = connect(
     alertHelper,
     dismissAlertSequence,
     loginHelper,
+    idpLoginSequence,
   }) => {
     return (
       <>
@@ -171,9 +173,7 @@ export const Login = connect(
                           variant="primaryTertiary"
                           data-testid="microsoft-login-button"
                           className="tw:mr-auto tw:w-auto"
-                          onClick={() => {
-                            window.location.href = loginHelper.idpLoginUrl;
-                          }}
+                          onClick={() => idpLoginSequence()}
                         >
                           Court user sign in
                         </Button>

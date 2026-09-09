@@ -12,19 +12,8 @@ export const loginHelper = (get: Get): LoginHelperType => {
     !!process.env.IDP_NAME &&
     !!get(state.featureFlags[ALLOWLIST_FEATURE_FLAGS.ALLOW_IDP_LOGIN.key]);
 
-  const idpLoginParams = new URLSearchParams();
-  idpLoginParams.append('identity_provider', process.env.IDP_NAME || '');
-  idpLoginParams.append(
-    'redirect_uri',
-    `https://app.${process.env.EFCMS_DOMAIN}/auth-code`,
-  );
-  idpLoginParams.append('response_type', 'CODE');
-  idpLoginParams.append('client_id', process.env.COGNITO_CLIENT_ID || '');
-
-  const idpLoginUrl = `${process.env.MANAGED_LOGIN_DOMAIN}/oauth2/authorize?${idpLoginParams.toString()}`;
-
   return {
     showIdpLoginButton,
-    idpLoginUrl,
+    idpLoginUrl: '',
   };
 };
