@@ -11,11 +11,11 @@ import { ROLES } from '@shared/business/entities/EntityConstants';
 
 export const canUserUpdatePetitionerContact = ({
   petitionerCaseRaw,
-  updatedPetitionerData,
+  contactId,
   user,
 }: {
   petitionerCaseRaw: RawCase;
-  updatedPetitionerData: any;
+  contactId: string;
   user: AuthUser;
 }) => {
   if (!canAllowDocumentServiceForCase(petitionerCaseRaw)) return false;
@@ -24,7 +24,7 @@ export const canUserUpdatePetitionerContact = ({
   if (user.role === ROLES.privatePractitioner) {
     const practitioners = getPractitionersRepresenting(
       petitionerCaseRaw,
-      updatedPetitionerData?.contactId,
+      contactId,
     );
 
     isRepresentingCounsel = practitioners?.find(
@@ -34,7 +34,7 @@ export const canUserUpdatePetitionerContact = ({
 
   let isCurrentPetitioner = false;
   if (user.role === ROLES.petitioner) {
-    isCurrentPetitioner = updatedPetitionerData?.contactId === user.userId;
+    isCurrentPetitioner = contactId === user.userId;
   }
 
   return (

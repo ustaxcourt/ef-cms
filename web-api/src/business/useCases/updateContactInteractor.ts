@@ -105,7 +105,7 @@ export const updateContact = async (
 
   const canUserUpdate = canUserUpdatePetitionerContact({
     petitionerCaseRaw: caseEntity,
-    updatedPetitionerData: contactInfo,
+    contactId: contactInfo.contactId,
     user: authorizedUser,
   });
 

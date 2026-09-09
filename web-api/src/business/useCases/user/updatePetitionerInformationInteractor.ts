@@ -149,7 +149,7 @@ export const updatePetitionerInformation = async (
 
   const hasAuthorization = canUserUpdatePetitionerContact({
     petitionerCaseRaw,
-    updatedPetitionerData,
+    contactId: updatedPetitionerData.contactId,
     user: authorizedUser,
   });
 
