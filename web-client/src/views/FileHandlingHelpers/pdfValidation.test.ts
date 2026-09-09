@@ -5,7 +5,6 @@ import { ErrorTypes } from '@web-client/views/FileHandlingHelpers/fileValidation
 import {
   PDF_CORRUPTED_ERROR_MESSAGE,
   PDF_PASSWORD_PROTECTED_ERROR_MESSAGE,
-  PDF_UNSUPPORTED_REVISION_ERROR_MESSAGE,
   UNSUPPORTED_BROWSER_ERROR_MESSAGE,
   validatePdf,
 } from './pdfValidation';
@@ -123,9 +122,9 @@ describe('validatePdf', () => {
 
     expect(result).toEqual({
       errorInformation: {
-        errorMessageToDisplay: PDF_UNSUPPORTED_REVISION_ERROR_MESSAGE,
-        errorMessageToLog: `${PDF_UNSUPPORTED_REVISION_ERROR_MESSAGE} (DuplicateObjectNumberException)`,
-        errorType: ErrorTypes.UNSUPPORTED_PDF_REVISION,
+        errorMessageToDisplay: PDF_CORRUPTED_ERROR_MESSAGE,
+        errorMessageToLog: `${PDF_CORRUPTED_ERROR_MESSAGE} (DuplicateObjectNumberException)`,
+        errorType: ErrorTypes.CORRUPT_FILE,
       },
       isValid: false,
     });
@@ -147,9 +146,7 @@ describe('validatePdf', () => {
     expect(hasDuplicateObjectNumbers).toHaveBeenCalledWith(
       new Uint8Array(VALID_PDF_HEADER_BYTES),
     );
-    expect(result.errorInformation?.errorType).toBe(
-      ErrorTypes.UNSUPPORTED_PDF_REVISION,
-    );
+    expect(result.errorInformation?.errorType).toBe(ErrorTypes.CORRUPT_FILE);
   });
 
   it('should skip the duplicate check when no header carries a raised generation', async () => {

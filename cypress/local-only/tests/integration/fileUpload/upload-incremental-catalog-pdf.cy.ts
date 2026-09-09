@@ -15,7 +15,7 @@ describe('uploading a PDF whose catalog is superseded by an incremental revision
     cy.get('[data-testid="menu-button-upload-pdf"]').click();
   });
 
-  it('rejects the file and tells the filer to re-save it', () => {
+  it('rejects the file with the unsupported-format message', () => {
     cy.intercept('POST', '/logError').as('logErrorRequest');
 
     attachFile({
@@ -26,7 +26,7 @@ describe('uploading a PDF whose catalog is superseded by an incremental revision
     cy.wait('@logErrorRequest');
 
     cy.get('[data-testid="file-upload-error-modal"]').contains(
-      'The file was saved in a format DAWSON cannot process. Open the file in your PDF editor, use Save As to save a new copy, and upload that copy instead.',
+      'The file is corrupted or in an unsupported PDF format. Ensure that the file is not corrupted and/or is in a supported PDF format and try again.',
     );
     checkA11y();
 

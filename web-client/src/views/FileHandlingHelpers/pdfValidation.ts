@@ -20,9 +20,6 @@ export const PDF_PASSWORD_PROTECTED_ERROR_MESSAGE =
 export const PDF_CORRUPTED_ERROR_MESSAGE =
   'The file is corrupted or in an unsupported PDF format. Ensure that the file is not corrupted and/or is in a supported PDF format and try again.';
 
-export const PDF_UNSUPPORTED_REVISION_ERROR_MESSAGE =
-  'The file was saved in a format DAWSON cannot process. Open the file in your PDF editor, use Save As to save a new copy, and upload that copy instead.';
-
 const GENERIC_FILE_ERROR_MESSAGE =
   'There is a problem uploading the file. Try again later.';
 
@@ -92,9 +89,9 @@ export const validatePdf = ({
         ) {
           resolve({
             errorInformation: {
-              errorMessageToDisplay: PDF_UNSUPPORTED_REVISION_ERROR_MESSAGE,
-              errorMessageToLog: `${PDF_UNSUPPORTED_REVISION_ERROR_MESSAGE} (DuplicateObjectNumberException)`,
-              errorType: ErrorTypes.UNSUPPORTED_PDF_REVISION,
+              errorMessageToDisplay: PDF_CORRUPTED_ERROR_MESSAGE,
+              errorMessageToLog: `${PDF_CORRUPTED_ERROR_MESSAGE} (DuplicateObjectNumberException)`,
+              errorType: ErrorTypes.CORRUPT_FILE,
             },
             isValid: false,
           });

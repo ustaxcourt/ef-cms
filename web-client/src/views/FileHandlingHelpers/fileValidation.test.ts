@@ -343,7 +343,7 @@ describe('genericOnValidationErrorHandler', () => {
     const mockFunc = jest.fn();
 
     fileValidation.genericOnValidationErrorHandler({
-      errorType: fileValidation.ErrorTypes.UNSUPPORTED_PDF_REVISION,
+      errorType: fileValidation.ErrorTypes.CORRUPT_FILE,
       messageToDisplay: 'messageToDisplayTest',
       showFileUploadErrorModalSequence: mockFunc,
     });
