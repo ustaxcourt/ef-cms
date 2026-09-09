@@ -152,7 +152,7 @@ describe('validatePdf', () => {
     );
   });
 
-  it('should not parse the document when no header carries a raised generation', async () => {
+  it('should skip the duplicate check when no header carries a raised generation', async () => {
     mockPdfJs.getDocument.mockReturnValue({
       promise: Promise.resolve(),
     });

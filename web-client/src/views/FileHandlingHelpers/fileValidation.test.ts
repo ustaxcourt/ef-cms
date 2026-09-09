@@ -275,7 +275,7 @@ describe('validateFile', () => {
 });
 
 describe('validateFile wrong file type messages', () => {
-  it('should name an extension it has no display name for', async () => {
+  it('should accept a file whose allowed extension is not a PDF', async () => {
     const file = new File([], 'test.xyz', { type: 'application/xyz' });
 
     const validationResult = await validateFile({

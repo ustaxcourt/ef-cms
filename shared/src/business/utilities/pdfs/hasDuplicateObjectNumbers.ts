@@ -16,7 +16,7 @@ const isRegularCharacter = (byte: number): boolean =>
   !isPdfWhitespace(byte) &&
   ![0x28, 0x29, 0x3c, 0x3e, 0x5b, 0x5d, 0x7b, 0x7d, 0x2f, 0x25].includes(byte);
 
-/** Walks backwards over a run of `predicate` bytes, returning where it starts. */
+/** Walks back over a run of `predicate` bytes, returning the index just before it. */
 const scanBackWhile = (
   bytes: Uint8Array,
   from: number,
@@ -74,7 +74,7 @@ export const hasRaisedGenerationHeader = (bytes: Uint8Array): boolean => {
   return false;
 };
 
-/** True when an object number repeats; false if pdf-lib cannot load the file. */
+/** True when an object number repeats; a file pdf-lib cannot load counts as false. */
 export const hasDuplicateObjectNumbers = async (
   bytes: Uint8Array,
 ): Promise<boolean> => {
