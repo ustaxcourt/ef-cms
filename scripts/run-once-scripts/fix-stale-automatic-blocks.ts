@@ -70,6 +70,7 @@ const updateCase = async (
   return updatedCase;
 };
 
+const updatedCases: string[] = [];
 // Re-evaluates a single case under an advisory lock and persists the change if it is no longer blocked.
 const updateCaseWithLocking = withLocking(
   async (
@@ -91,22 +92,28 @@ const updateCaseWithLocking = withLocking(
     }
 
     if (dryRun) {
+      updatedCases.push(updatedCase.docketNumber);
       return true;
     }
 
     await withTransaction(async () => {
-      await pgUpdateTable({
-        table: 'dwCase',
-        values: {
-          automaticBlocked: updatedCase.automaticBlocked,
-          automaticBlockedDate: updatedCase.automaticBlockedDate
-            ? calculateDate({ dateString: updatedCase.automaticBlockedDate })
-            : null,
-          automaticBlockedReason: updatedCase.automaticBlockedReason ?? null,
-          hasPendingItems: updatedCase.hasPendingItems,
-        },
-        where: qb => qb.where('docketNumber', '=', docketNumber),
-      });
+      try {
+        await pgUpdateTable({
+          table: 'dwCase',
+          values: {
+            automaticBlocked: updatedCase.automaticBlocked,
+            automaticBlockedDate: updatedCase.automaticBlockedDate
+              ? calculateDate({ dateString: updatedCase.automaticBlockedDate })
+              : null,
+            automaticBlockedReason: updatedCase.automaticBlockedReason ?? null,
+            hasPendingItems: updatedCase.hasPendingItems,
+          },
+          where: qb => qb.where('docketNumber', '=', docketNumber),
+        });
+        updatedCases.push(updatedCase.docketNumber);
+      } catch (e) {
+        console.error('Failed to update case', docketNumber, e);
+      }
     });
 
     return true;
@@ -154,6 +161,8 @@ const updateCaseWithLocking = withLocking(
       }),
     ),
   );
+
+  console.log('cases updated:', updatedCases);
 
   console.log(
     `${updated} cases were updated; ${failed.length} failed to update.`,
