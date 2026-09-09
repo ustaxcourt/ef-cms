@@ -36,7 +36,7 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Trivy config scan (Dockerfiles)
         uses: aquasecurity/trivy-action@v0.36.0
@@ -69,7 +69,7 @@ jobs:
     timeout-minutes: 45
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Build DAWSON container images
         uses: ./.github/actions/dawson-container-images
@@ -108,7 +108,7 @@ jobs:
             image: node:24
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Trivy scan — ${{ matrix.image }}
         uses: ./.github/actions/dawson-trivy-image-scan
@@ -133,7 +133,7 @@ jobs:
     timeout-minutes: 45
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Build DAWSON container images
         uses: ./.github/actions/dawson-container-images

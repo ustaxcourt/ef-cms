@@ -71,7 +71,7 @@ jobs:
           - 5432:5432
     steps:
       - name: Checkout Current Branch
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: ${{ inputs.fetch_depth }}
       - name: Collect Workflow Telemetry
