@@ -159,6 +159,9 @@ describe('validateFileOnSelect', () => {
 describe('validateFile', () => {
   beforeEach(() => {
     jest.spyOn(pdfValidation, 'validatePdf').mockImplementation(jest.fn());
+    jest
+      .spyOn(pdfValidation, 'validatePdfSurvivesUpload')
+      .mockResolvedValue({ isValid: true });
   });
 
   afterEach(() => {
@@ -256,6 +259,44 @@ describe('validateFile', () => {
     });
 
     expect(validationResult).toMatchObject({ isValid: true });
+  });
+
+  it('should still refuse a PDF the upload would break when skipFileTypeValidation is passed', async () => {
+    const file = new File([], 'test.pdf', { type: 'application/pdf' });
+    const rejection = {
+      errorInformation: {
+        errorMessageToDisplay: 'The file is corrupted.',
+        errorType: fileValidation.ErrorTypes.CORRUPT_FILE,
+      },
+      isValid: false,
+    };
+    jest
+      .mocked(pdfValidation.validatePdfSurvivesUpload)
+      .mockResolvedValue(rejection);
+
+    const validationResult = await validateFile({
+      allowedFileExtensions: ['.pdf', '.docx'],
+      file,
+      megabyteLimit: 250,
+      skipFileTypeValidation: true,
+    });
+
+    expect(validationResult).toEqual(rejection);
+    expect(validatePdf).not.toHaveBeenCalled();
+  });
+
+  it('should run no PDF checks on a non-PDF when skipFileTypeValidation is passed', async () => {
+    const file = new File([], 'test.docx');
+
+    const validationResult = await validateFile({
+      allowedFileExtensions: ['.pdf'],
+      file,
+      megabyteLimit: 250,
+      skipFileTypeValidation: true,
+    });
+
+    expect(validationResult).toEqual({ isValid: true });
+    expect(pdfValidation.validatePdfSurvivesUpload).not.toHaveBeenCalled();
   });
 
   it('BUG: should return valid for valid file with uppercase extension', async () => {

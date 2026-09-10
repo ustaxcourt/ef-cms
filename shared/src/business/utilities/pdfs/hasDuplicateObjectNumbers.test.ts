@@ -145,6 +145,21 @@ describe('hasDuplicateObjectNumbers', () => {
     ).resolves.toBe(true);
   });
 
+  it('clears an encrypted document, which the upload leaves untouched', async () => {
+    const original = Buffer.from(
+      readTestAsset('incrementally-updated.pdf'),
+    ).toString('latin1');
+
+    await expect(
+      hasDuplicateObjectNumbers(
+        encode(original.replace('/Root 2 1 R', '/Root 2 1 R /Encrypt 1 0 R')),
+      ),
+    ).resolves.toBe(false);
+
+    // It loaded, so the encryption, not a failed parse, is what cleared it.
+    expect(consoleError).not.toHaveBeenCalled();
+  });
+
   it('clears a document that carries no duplicate', async () => {
     const bytes = readTestAsset('sample.pdf');
 

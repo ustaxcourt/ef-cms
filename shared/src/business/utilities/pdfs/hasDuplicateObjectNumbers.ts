@@ -113,7 +113,7 @@ export const hasRaisedGenerationHeader = (bytes: Uint8Array): boolean => {
   return false;
 };
 
-/** True when an object number repeats; a file pdf-lib cannot load counts as false. */
+/** True when an object number repeats in a file our upload would rewrite. */
 export const hasDuplicateObjectNumbers = async (
   bytes: Uint8Array,
   { alreadyScreened = false }: { alreadyScreened?: boolean } = {},
@@ -134,6 +134,11 @@ export const hasDuplicateObjectNumbers = async (
   } catch (error) {
     // A file pdf-lib cannot load is a file it never rewrites.
     console.error('Could not load PDF to check for duplicate objects', error);
+    return false;
+  }
+
+  // cleanFileMetadata leaves encrypted files untouched, so they cannot be broken.
+  if (pdfDoc.isEncrypted) {
     return false;
   }
 

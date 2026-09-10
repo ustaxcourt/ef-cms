@@ -4,6 +4,7 @@ import { externalUserCreatesElectronicCase } from '../../../../helpers/fileAPeti
 import { fillPetitionerInformation } from '../fileAPetitionUpdated/petition-helper';
 import { goToCase } from '../../../../helpers/caseDetail/go-to-case';
 import {
+  loginAsAdmissionsClerk,
   loginAsDocketClerk1,
   loginAsPetitioner,
   loginAsPrivatePractitioner,
@@ -75,6 +76,38 @@ describe('uploading a PDF whose catalog is superseded by an incremental revision
       cy.get('[data-testid="file-upload-error-modal"]').contains(
         REJECTION_MESSAGE,
       );
+    });
+  });
+
+  describe('admissions clerk adding a practitioner document', () => {
+    beforeEach(() => {
+      loginAsAdmissionsClerk();
+      cy.visit('/practitioner-detail/PT1234/add-document');
+      cy.get('[data-testid="add-edit-practitioner-document-header"]');
+    });
+
+    it('rejects the file with the unsupported-format message', () => {
+      attachFile({
+        encoding,
+        filePath: FIXTURE,
+        selector: 'input#practitioner-document-file',
+      });
+
+      cy.get('[data-testid="file-upload-error-modal"]').contains(
+        REJECTION_MESSAGE,
+      );
+      checkA11y();
+    });
+
+    it('still accepts an edit-restricted PDF, as this input always has', () => {
+      attachFile({
+        encoding,
+        filePath: '../../helpers/file/readonly-pdf.pdf',
+        selector: 'input#practitioner-document-file',
+      });
+
+      cy.get('[data-testid^="upload-file-success"]').should('exist');
+      cy.get('[data-testid="file-upload-error-modal"]').should('not.exist');
     });
   });
 
