@@ -56,6 +56,8 @@ describe('getPractitionerByBarNumberInteractor', () => {
         mockPetitionsClerkUser,
       );
 
+      expect((practitioner as any).isValidated).toBe(true);
+
       expect(practitioner).toEqual({
         accountStatus: ACCOUNT_STATUS.active,
         additionalPhone: undefined,
@@ -111,6 +113,8 @@ describe('getPractitionerByBarNumberInteractor', () => {
         },
         mockPetitionsClerkUser,
       );
+
+      expect((practitioner as any).isValidated).toBe(true);
 
       expect(practitioner).toEqual({
         accountStatus: ACCOUNT_STATUS.active,
@@ -195,6 +199,8 @@ describe('getPractitionerByBarNumberInteractor', () => {
         },
         undefined,
       );
+
+      expect((results as any[])[0].isValidated).toBe(true);
 
       expect(results).toEqual([
         {

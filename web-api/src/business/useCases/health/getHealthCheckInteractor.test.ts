@@ -1,6 +1,7 @@
 jest.mock('@web-api/persistence/elasticsearch/elasticSearchHealthCheck.ts');
 import { S3 } from '@aws-sdk/client-s3';
 import { getHealthCheckInteractor } from './getHealthCheckInteractor';
+import { HealthCheckResponse } from '@shared/business/dto/public/HealthCheckResponse';
 import { elasticSearchHealthCheck as elasticSearchHealthCheckMock } from '@web-api/persistence/elasticsearch/elasticSearchHealthCheck';
 import { SearchClientResultsType } from '@web-api/persistence/elasticsearch/searchClient';
 
@@ -43,21 +44,23 @@ describe('getHealthCheckInteractor', () => {
       },
     } as any);
 
-    expect(statusResult).toEqual({
-      cognito: true,
-      elasticsearch: true,
-      emailService: true,
-      s3: {
-        app: true,
-        appFailover: true,
-        eastDocuments: true,
-        eastTempDocuments: true,
-        public: true,
-        publicFailover: true,
-        westDocuments: true,
-        westTempDocuments: true,
-      },
-    });
+    expect(statusResult).toEqual(
+      new HealthCheckResponse({
+        cognito: true,
+        elasticsearch: true,
+        emailService: true,
+        s3: {
+          app: true,
+          appFailover: true,
+          eastDocuments: true,
+          eastTempDocuments: true,
+          public: true,
+          publicFailover: true,
+          westDocuments: true,
+          westTempDocuments: true,
+        },
+      }),
+    );
   });
 
   it('should return false for all services when services are down', async () => {
@@ -95,21 +98,23 @@ describe('getHealthCheckInteractor', () => {
       },
     } as any);
 
-    expect(status).toEqual({
-      cognito: false,
-      elasticsearch: false,
-      emailService: false,
-      s3: {
-        app: false,
-        appFailover: false,
-        eastDocuments: false,
-        eastTempDocuments: false,
-        public: false,
-        publicFailover: false,
-        westDocuments: false,
-        westTempDocuments: false,
-      },
-    });
+    expect(status).toEqual(
+      new HealthCheckResponse({
+        cognito: false,
+        elasticsearch: false,
+        emailService: false,
+        s3: {
+          app: false,
+          appFailover: false,
+          eastDocuments: false,
+          eastTempDocuments: false,
+          public: false,
+          publicFailover: false,
+          westDocuments: false,
+          westTempDocuments: false,
+        },
+      }),
+    );
   });
 
   describe('s3', () => {

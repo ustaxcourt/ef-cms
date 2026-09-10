@@ -92,6 +92,7 @@ describe('getTodaysOpinionsInteractor', () => {
     const results = await getTodaysOpinionsInteractor(applicationContext);
 
     expect(results).toHaveLength(1);
+    expect(results[0].isValidated).toEqual(true);
     expect(results[0].docketEntryId).toEqual(
       mockOpinionSearchResult[0].docketEntryId,
     );

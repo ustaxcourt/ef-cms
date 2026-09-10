@@ -17,8 +17,24 @@ describe('getPublicTrialSessionsInteractor', () => {
 
   it('should return open trial sessions', async () => {
     const result = await getPublicTrialSessionsInteractor();
+
+    expect(result).toHaveLength(2);
     expect(result.every(session => session.sessionStatus === 'Open')).toBe(
       true,
+    );
+  });
+
+  it('should throw when a trial session cannot be validated', async () => {
+    const invalidTrialSession: RawTrialSession = {
+      ...MOCK_TRIAL_SESSIONS[0],
+      // @ts-expect-error Intentionally invalid
+      proceedingType: undefined,
+    };
+
+    getTrialSessions.mockResolvedValue([invalidTrialSession]);
+
+    await expect(getPublicTrialSessionsInteractor()).rejects.toThrow(
+      'The PublicTrialSessionInfo entity was invalid',
     );
   });
 });

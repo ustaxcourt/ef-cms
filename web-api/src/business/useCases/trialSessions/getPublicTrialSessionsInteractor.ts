@@ -1,14 +1,14 @@
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { getTrialSessions } from '@web-api/persistence/postgres/trialSessions/getTrialSessions';
-import { PublicTrialSessionInfoDTO } from '@shared/business/dto/trialSessions/PublicTrialSessionInfoDTO';
+import { PublicTrialSessionInfo } from '@shared/business/dto/trialSessions/PublicTrialSessionInfo';
 
 export const getPublicTrialSessionsInteractor = async (): Promise<
-  PublicTrialSessionInfoDTO[]
+  PublicTrialSessionInfo[]
 > => {
   const trialSessions = await getTrialSessions();
 
   return trialSessions
     .map(t => new TrialSession(t).toRawObject())
-    .map(trialSession => new PublicTrialSessionInfoDTO(trialSession))
-    .filter(trialSession => trialSession.sessionStatus === 'Open');
+    .filter(trialSession => trialSession.sessionStatus === 'Open')
+    .map(trialSession => new PublicTrialSessionInfo(trialSession).validate());
 };

@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import {
   CASE_STATUS_TYPES,
   CONTACT_TYPES,
@@ -61,9 +62,6 @@ describe('PublicCase', () => {
       );
 
       expect(entity.getFormattedValidationErrors()).toMatchObject({
-        // docketNumber is permitted
-        // docketNumberSuffix is permitted
-        // isSealed is permitted
         caseCaption: expect.anything(),
         receivedAt: expect.anything(),
       });
@@ -191,6 +189,88 @@ describe('PublicCase', () => {
     });
   });
 
+  describe('docketEntries filtering and sorting', () => {
+    it('should handle empty docketEntries array', () => {
+      const entity = new PublicCase(
+        {
+          ...MOCK_CASE,
+          docketEntries: [],
+        },
+        { authorizedUser: undefined },
+      );
+
+      expect(entity.docketEntries).toEqual([]);
+    });
+
+    it('should filter out entries that are drafts', () => {
+      const entity = new PublicCase(
+        {
+          ...MOCK_CASE,
+          docketEntries: [
+            { docketEntryId: '1', isDraft: true, isOnDocketRecord: true },
+            { docketEntryId: '2', isDraft: false, isOnDocketRecord: true },
+          ],
+        },
+        { authorizedUser: undefined },
+      );
+
+      expect(entity.docketEntries).toHaveLength(1);
+      expect(entity.docketEntries[0].docketEntryId).toBe('2');
+    });
+
+    it('should filter out entries that are not on docket record', () => {
+      const entity = new PublicCase(
+        {
+          ...MOCK_CASE,
+          docketEntries: [
+            { docketEntryId: '1', isDraft: false, isOnDocketRecord: false },
+            { docketEntryId: '2', isDraft: false, isOnDocketRecord: true },
+          ],
+        },
+        { authorizedUser: undefined },
+      );
+
+      expect(entity.docketEntries).toHaveLength(1);
+      expect(entity.docketEntries[0].docketEntryId).toBe('2');
+    });
+
+    it('should handle both filter conditions together', () => {
+      const entity = new PublicCase(
+        {
+          ...MOCK_CASE,
+          docketEntries: [
+            { docketEntryId: '1', isDraft: true, isOnDocketRecord: true },
+            { docketEntryId: '2', isDraft: true, isOnDocketRecord: false },
+            { docketEntryId: '3', isDraft: false, isOnDocketRecord: false },
+            { docketEntryId: '4', isDraft: false, isOnDocketRecord: true },
+            { docketEntryId: '5', isDraft: false, isOnDocketRecord: true },
+          ],
+        },
+        { authorizedUser: undefined },
+      );
+
+      expect(entity.docketEntries).toHaveLength(2);
+      expect(
+        entity.docketEntries.map((entry: any) => entry.docketEntryId),
+      ).toEqual(['4', '5']);
+    });
+
+    it('should handle when entries have no receivedAt or docketEntryId for sorting', () => {
+      const entity = new PublicCase(
+        {
+          ...MOCK_CASE,
+          docketEntries: [
+            { isDraft: false, isOnDocketRecord: true },
+            { docketEntryId: 'a', isDraft: false, isOnDocketRecord: true },
+          ],
+        },
+        { authorizedUser: undefined },
+      );
+
+      expect(entity.docketEntries).toHaveLength(2);
+    });
+  });
+
   it('should filter draft docketEntries out of the docketEntries array', () => {
     const entity = new PublicCase(
       {
@@ -302,6 +382,223 @@ describe('PublicCase', () => {
     expect(() => {
       entity.validate();
     }).not.toThrow();
+  });
+
+  describe('sealed case with different user roles', () => {
+    it('should skip both if and else if branches when case is sealed regardless of user role', () => {
+      const sealedCaseData = {
+        ...MOCK_CASE,
+        docketEntries: [
+          {
+            docketEntryId: '1',
+            isDraft: false,
+            isOnDocketRecord: true,
+            receivedAt: '2024-03-01T00:00:00.000Z',
+          },
+        ],
+        irsPractitioners: [{ userId: '123', name: 'IRS' }],
+        privatePractitioners: [{ userId: '456', name: 'Private' }],
+        petitioners: [
+          { contactType: CONTACT_TYPES.primary, name: 'Petitioner' },
+        ],
+        isSealed: true,
+      };
+
+      const entity = new PublicCase(sealedCaseData, {
+        authorizedUser: undefined,
+      });
+
+      expect(entity.isSealed).toBe(true);
+      expect(entity.petitioners).toBeUndefined();
+      expect(entity.irsPractitioners).toBeUndefined();
+      expect(entity.privatePractitioners).toBeUndefined();
+      expect(entity.docketEntries).toHaveLength(1);
+    });
+
+    it('should skip both branches for irsPractitioner user when case is sealed', () => {
+      const sealedCaseData = {
+        ...MOCK_CASE,
+        docketEntries: [
+          {
+            docketEntryId: '1',
+            isDraft: false,
+            isOnDocketRecord: true,
+            receivedAt: '2024-03-01T00:00:00.000Z',
+          },
+        ],
+        irsPractitioners: [
+          { userId: '123', name: 'IRS', role: ROLES.irsPractitioner },
+        ],
+        privatePractitioners: [{ userId: '456', name: 'Private' }],
+        petitioners: [
+          { contactType: CONTACT_TYPES.primary, name: 'Petitioner' },
+        ],
+        isSealed: true,
+      };
+
+      const entity = new PublicCase(sealedCaseData, {
+        authorizedUser: mockIrsPractitionerUser,
+      });
+
+      expect(entity.isSealed).toBe(true);
+      expect(entity.petitioners).toBeUndefined();
+      expect(entity.irsPractitioners).toBeUndefined();
+      expect(entity.privatePractitioners).toBeUndefined();
+    });
+  });
+
+  describe('sealed case handling', () => {
+    it('should not include practitioner information for sealed cases even when user is an irsPractitioner', () => {
+      const entity = new PublicCase(
+        {
+          ...MOCK_CASE,
+          irsPractitioners: [{ name: 'Test IRS' }],
+          privatePractitioners: [{ name: 'Test Private' }],
+          petitioners: [
+            { contactType: CONTACT_TYPES.primary, name: 'Test Petitioner' },
+          ],
+          sealedDate: '2020-01-05T03:30:45.007Z',
+        },
+        { authorizedUser: mockIrsPractitionerUser },
+      );
+
+      expect(entity.isSealed).toBe(true);
+      expect(entity.irsPractitioners).toBeUndefined();
+      expect(entity.privatePractitioners).toBeUndefined();
+      expect(entity.petitioners).toBeUndefined();
+    });
+
+    it('should not include practitioner information for sealed cases when user is not an irsPractitioner', () => {
+      const entity = new PublicCase(
+        {
+          ...MOCK_CASE,
+          irsPractitioners: [{ name: 'Test IRS' }],
+          privatePractitioners: [{ name: 'Test Private' }],
+          petitioners: [
+            { contactType: CONTACT_TYPES.primary, name: 'Test Petitioner' },
+          ],
+          sealedDate: '2020-01-05T03:30:45.007Z',
+        },
+        { authorizedUser: undefined },
+      );
+
+      expect(entity.isSealed).toBe(true);
+      expect(entity.irsPractitioners).toBeUndefined();
+      expect(entity.privatePractitioners).toBeUndefined();
+      expect(entity.petitioners).toBeUndefined();
+    });
+
+    it('should handle undefined practitioner arrays for non-sealed cases', () => {
+      const entity = new PublicCase(
+        {
+          ...MOCK_CASE,
+          irsPractitioners: undefined,
+          privatePractitioners: undefined,
+          petitioners: [{ contactType: CONTACT_TYPES.primary }],
+        },
+        { authorizedUser: undefined },
+      );
+
+      expect(entity.petitioners).toBeDefined();
+      expect(entity.irsPractitioners).toBeUndefined();
+      expect(entity.privatePractitioners).toBeUndefined();
+    });
+
+    it('should handle empty practitioner arrays for non-sealed cases', () => {
+      const entity = new PublicCase(
+        {
+          ...MOCK_CASE,
+          irsPractitioners: [],
+          privatePractitioners: [],
+          petitioners: [{ contactType: CONTACT_TYPES.primary }],
+        },
+        { authorizedUser: undefined },
+      );
+
+      expect(entity.petitioners).toBeDefined();
+      expect(entity.irsPractitioners).toEqual([]);
+      expect(entity.privatePractitioners).toEqual([]);
+    });
+
+    it('should map practitioner arrays through PublicContact for non-sealed cases with non-IRS-Practitioner user', () => {
+      const entity = new PublicCase(
+        {
+          ...MOCK_CASE,
+          irsPractitioners: [
+            { userId: '123', name: 'IRS Practitioner', address1: '100 IRS St' },
+          ],
+          privatePractitioners: [
+            {
+              userId: '456',
+              name: 'Private Practitioner',
+              address1: '200 Private Ave',
+            },
+          ],
+          petitioners: [
+            {
+              contactType: CONTACT_TYPES.primary,
+              name: 'Primary Petitioner',
+              address1: '300 Main St',
+            },
+            {
+              contactType: CONTACT_TYPES.secondary,
+              name: 'Secondary Petitioner',
+              address1: '400 Second St',
+            },
+          ],
+        },
+        { authorizedUser: undefined },
+      );
+
+      expect(entity.petitioners).toHaveLength(2);
+      expect(entity.irsPractitioners).toHaveLength(1);
+      expect(entity.privatePractitioners).toHaveLength(1);
+      expect(entity.petitioners?.[0]).toHaveProperty(
+        'entityName',
+        'PublicContact',
+      );
+      expect(entity.irsPractitioners?.[0]).toHaveProperty(
+        'entityName',
+        'PublicContact',
+      );
+      expect(entity.privatePractitioners?.[0]).toHaveProperty(
+        'entityName',
+        'PublicContact',
+      );
+    });
+
+    it('should handle consolidatedCases for irsPractitioner users on non-sealed cases', () => {
+      const mockConsolidatedCase = {
+        caseCaption: 'Consolidated Test',
+        docketNumber: '999-99',
+      };
+
+      const entity = new PublicCase(
+        {
+          ...MOCK_CASE,
+          consolidatedCases: [mockConsolidatedCase],
+          irsPractitioners: [{ name: 'Test IRS' }],
+        },
+        { authorizedUser: mockIrsPractitionerUser },
+      );
+
+      expect(entity.consolidatedCases).toBeDefined();
+      expect(entity.consolidatedCases).toHaveLength(1);
+    });
+
+    it('should handle undefined consolidatedCases for irsPractitioner users', () => {
+      const entity = new PublicCase(
+        {
+          ...MOCK_CASE,
+          consolidatedCases: undefined,
+          irsPractitioners: [{ name: 'Test IRS' }],
+        },
+        { authorizedUser: mockIrsPractitionerUser },
+      );
+
+      expect(entity.consolidatedCases).toBeDefined();
+      expect(entity.consolidatedCases).toHaveLength(0);
+    });
   });
 
   describe('irsPractitioner', () => {

@@ -1,11 +1,11 @@
 import { MOCK_TRIAL_REMOTE } from '@shared/test/mockTrial';
-import { PublicTrialSessionInfoDTO } from './PublicTrialSessionInfoDTO';
+import { PublicTrialSessionInfo } from './PublicTrialSessionInfo';
 
-describe('PublicTrialSessionInfoDTO', () => {
+describe('PublicTrialSessionInfo', () => {
   it('maps a raw trial session to public DTO fields', () => {
-    const dto = new PublicTrialSessionInfoDTO(MOCK_TRIAL_REMOTE);
+    const dto = new PublicTrialSessionInfo(MOCK_TRIAL_REMOTE);
 
-    expect(dto.entityName).toBe('PublicTrialSessionInfoDTO');
+    expect(dto.entityName).toBe('PublicTrialSessionInfo');
     expect(dto.isCalendared).toBe(MOCK_TRIAL_REMOTE.isCalendared);
     expect(dto.judge!.name).toBe(MOCK_TRIAL_REMOTE.judge!.name);
     expect(dto.proceedingType).toBe(MOCK_TRIAL_REMOTE.proceedingType);
@@ -18,5 +18,17 @@ describe('PublicTrialSessionInfoDTO', () => {
     expect(dto.termYear).toBe(MOCK_TRIAL_REMOTE.termYear);
     expect(dto.trialLocation).toBe(MOCK_TRIAL_REMOTE.trialLocation);
     expect(dto.trialSessionId).toBe(MOCK_TRIAL_REMOTE.trialSessionId);
+  });
+
+  it('sets judge to undefined when raw trial session has no judge', () => {
+    const rawTrialSessionWithoutJudge = {
+      ...MOCK_TRIAL_REMOTE,
+      judge: undefined,
+    };
+
+    const dto = new PublicTrialSessionInfo(rawTrialSessionWithoutJudge);
+
+    expect(dto.entityName).toBe('PublicTrialSessionInfo');
+    expect(dto.judge).toBeUndefined();
   });
 });
