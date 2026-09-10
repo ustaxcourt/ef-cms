@@ -353,9 +353,9 @@ describe('validatePdf', () => {
 describe('validatePdfSurvivesUpload', () => {
   const hasDuplicateObjectNumbers = jest.mocked(hasDuplicateObjectNumbersMock);
   const bytes = new Uint8Array(VALID_PDF_HEADER_BYTES);
-  // jsdom's File has no arrayBuffer, so stand in for one that does.
-  const fileWith = (arrayBuffer: jest.Mock) =>
-    ({ arrayBuffer }) as unknown as File;
+  // jsdom's File has no arrayBuffer, so give this one its own.
+  const fileWith = (arrayBuffer: jest.Mock): File =>
+    Object.assign(new File([], 'test.pdf'), { arrayBuffer });
 
   it('should resolve as valid when the upload would not break the PDF', async () => {
     hasDuplicateObjectNumbers.mockResolvedValue(false);
