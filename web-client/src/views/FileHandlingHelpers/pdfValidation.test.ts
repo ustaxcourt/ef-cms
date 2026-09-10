@@ -1,4 +1,5 @@
 jest.mock('@shared/business/utilities/pdfs/getPdfJs');
+jest.mock('@shared/business/utilities/pdfs/hasDuplicateObjectNumbers');
 import * as pdfValidationHelpers from './pdfValidationHelpers';
 import { ErrorTypes } from '@web-client/views/FileHandlingHelpers/fileValidation';
 import {
@@ -9,6 +10,10 @@ import {
 } from './pdfValidation';
 import { validatePdfHeader } from '@web-client/views/FileHandlingHelpers/pdfValidationHelpers';
 import { getPdfJs as getPdfJsMock } from '@shared/business/utilities/pdfs/getPdfJs';
+import {
+  hasDuplicateObjectNumbers as hasDuplicateObjectNumbersMock,
+  hasRaisedGenerationHeader as hasRaisedGenerationHeaderMock,
+} from '@shared/business/utilities/pdfs/hasDuplicateObjectNumbers';
 
 const VALID_PDF_HEADER_BYTES = [0x25, 0x50, 0x44, 0x46, 0x2d]; // %PDF-
 const INVALID_PDF_HEADER_BYTES = [0x50, 0x44, 0x46, 0x25, 0x2d]; // PFD%-
@@ -33,6 +38,8 @@ describe('validatePdfHeader', () => {
 
 describe('validatePdf', () => {
   const getPdfJs = jest.mocked(getPdfJsMock);
+  const hasDuplicateObjectNumbers = jest.mocked(hasDuplicateObjectNumbersMock);
+  const hasRaisedGenerationHeader = jest.mocked(hasRaisedGenerationHeaderMock);
 
   let mockFile: File;
   let mockPdfJs: any;
@@ -61,6 +68,9 @@ describe('validatePdf', () => {
       getDocument: jest.fn(),
     };
     getPdfJs.mockResolvedValue(mockPdfJs);
+
+    hasRaisedGenerationHeader.mockReturnValue(true);
+    hasDuplicateObjectNumbers.mockResolvedValue(false);
   });
 
   it('should return error message for unsupported browser', async () => {
@@ -98,6 +108,76 @@ describe('validatePdf', () => {
     const result = await resultPromise;
 
     expect(result).toEqual({ isValid: true });
+  });
+
+  it('should return error message when the PDF holds one object number at two generations', async () => {
+    mockPdfJs.getDocument.mockReturnValue({
+      promise: Promise.resolve(),
+    });
+    hasDuplicateObjectNumbers.mockResolvedValue(true);
+
+    const resultPromise = validatePdf({ file: mockFile });
+    mockFileReader.onload();
+    const result = await resultPromise;
+
+    expect(result).toEqual({
+      errorInformation: {
+        errorMessageToDisplay: PDF_CORRUPTED_ERROR_MESSAGE,
+        errorMessageToLog: `${PDF_CORRUPTED_ERROR_MESSAGE} (DuplicateObjectNumberException)`,
+        errorType: ErrorTypes.CORRUPT_FILE,
+      },
+      isValid: false,
+    });
+  });
+
+  it('should still find the duplicate after pdf.js detaches the buffer', async () => {
+    // pdf.js detaches the buffer, so the original bytes are gone by this point.
+    mockFileReader.result = new Uint8Array(VALID_PDF_HEADER_BYTES).buffer;
+    mockPdfJs.getDocument.mockImplementation(({ data }) => {
+      structuredClone(data.buffer, { transfer: [data.buffer] });
+      return { promise: Promise.resolve() };
+    });
+    hasDuplicateObjectNumbers.mockResolvedValue(true);
+
+    const resultPromise = validatePdf({ file: mockFile });
+    mockFileReader.onload();
+    const result = await resultPromise;
+
+    expect(hasDuplicateObjectNumbers).toHaveBeenCalledWith(
+      new Uint8Array(VALID_PDF_HEADER_BYTES),
+      { alreadyScreened: true },
+    );
+    expect(result.errorInformation?.errorType).toBe(ErrorTypes.CORRUPT_FILE);
+  });
+
+  it('should skip the duplicate check when no header carries a raised generation', async () => {
+    mockPdfJs.getDocument.mockReturnValue({
+      promise: Promise.resolve(),
+    });
+    hasRaisedGenerationHeader.mockReturnValue(false);
+
+    const resultPromise = validatePdf({ file: mockFile });
+    mockFileReader.onload();
+    const result = await resultPromise;
+
+    expect(result).toEqual({ isValid: true });
+    expect(hasDuplicateObjectNumbers).not.toHaveBeenCalled();
+  });
+
+  it('should not run the duplicate check on an encrypted PDF', async () => {
+    const error = new Error();
+    error.name = 'PasswordException';
+    mockPdfJs.getDocument.mockReturnValue({
+      promise: Promise.reject(error),
+    });
+    hasDuplicateObjectNumbers.mockResolvedValue(true);
+
+    const resultPromise = validatePdf({ file: mockFile });
+    mockFileReader.onload();
+    const result = await resultPromise;
+
+    expect(result.errorInformation?.errorType).toBe(ErrorTypes.ENCRYPTED_FILE);
+    expect(hasDuplicateObjectNumbers).not.toHaveBeenCalled();
   });
 
   it('should return error message for password-protected PDF', async () => {
@@ -176,6 +256,52 @@ describe('validatePdf', () => {
         errorMessageToDisplay: PDF_CORRUPTED_ERROR_MESSAGE,
         errorMessageToLog: `${PDF_CORRUPTED_ERROR_MESSAGE} (InvalidPDFException)`,
         errorType: ErrorTypes.CORRUPT_FILE,
+      },
+      isValid: false,
+    });
+  });
+
+  it('should return the generic error message for an unrecognised exception name', async () => {
+    const error = new Error();
+    error.name = 'SomeOtherException';
+    mockPdfJs.getDocument.mockReturnValue({
+      promise: Promise.reject(error),
+    });
+
+    const resultPromise = validatePdf({ file: mockFile });
+    mockFileReader.onload();
+    const result = await resultPromise;
+
+    expect(result).toEqual({
+      errorInformation: {
+        errorMessageToDisplay:
+          'There is a problem uploading the file. Try again later.',
+        errorMessageToLog:
+          'There is a problem uploading the file. Try again later. (An unknown error occurred: SomeOtherException)',
+        errorType: ErrorTypes.UNKNOWN,
+      },
+      isValid: false,
+    });
+  });
+
+  it('should return the generic error message when something other than an Error is thrown', async () => {
+    mockPdfJs.getDocument.mockReturnValue({
+      // A non-Error rejection is the case under test.
+      // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
+      promise: Promise.reject('not an error object'),
+    });
+
+    const resultPromise = validatePdf({ file: mockFile });
+    mockFileReader.onload();
+    const result = await resultPromise;
+
+    expect(result).toEqual({
+      errorInformation: {
+        errorMessageToDisplay:
+          'There is a problem uploading the file. Try again later.',
+        errorMessageToLog:
+          'There is a problem uploading the file. Try again later. (An unknown error occurred: not an error object)',
+        errorType: ErrorTypes.UNKNOWN,
       },
       isValid: false,
     });

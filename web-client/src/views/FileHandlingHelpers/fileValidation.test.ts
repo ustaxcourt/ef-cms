@@ -274,6 +274,34 @@ describe('validateFile', () => {
   });
 });
 
+describe('validateFile wrong file type messages', () => {
+  it('should accept a file whose allowed extension is not a PDF', async () => {
+    const file = new File([], 'test.xyz', { type: 'application/xyz' });
+
+    const validationResult = await validateFile({
+      allowedFileExtensions: ['.xyz'],
+      file,
+      megabyteLimit: 5,
+    });
+
+    expect(validationResult).toEqual({ isValid: true });
+  });
+
+  it('should report the raw extension when a single unsupported type is allowed', async () => {
+    const file = new File([], 'test.pdf', { type: 'application/pdf' });
+
+    const validationResult = await validateFile({
+      allowedFileExtensions: ['.xyz'],
+      file,
+      megabyteLimit: 5,
+    });
+
+    expect(validationResult.errorInformation?.errorMessageToDisplay).toBe(
+      'The file is not .xyz. Select .xyz file or resave the file as .xyz.',
+    );
+  });
+});
+
 describe('getFileExtension', () => {
   it('should get correct file extension for .pdf file', () => {
     expect(fileValidation.getFileExtension('test.pdf')).toBe('.pdf');
@@ -309,6 +337,20 @@ describe('genericOnValidationErrorHandler', () => {
         linkUrl: TROUBLESHOOTING_INFO.FILE_UPLOAD_TROUBLESHOOTING_LINK,
       },
     });
+  });
+
+  it('should fall back to the displayed message when there is nothing separate to log', () => {
+    const mockFunc = jest.fn();
+
+    fileValidation.genericOnValidationErrorHandler({
+      errorType: fileValidation.ErrorTypes.CORRUPT_FILE,
+      messageToDisplay: 'messageToDisplayTest',
+      showFileUploadErrorModalSequence: mockFunc,
+    });
+
+    expect(mockFunc).toHaveBeenCalledWith(
+      expect.objectContaining({ errorToLog: 'messageToDisplayTest' }),
+    );
   });
 
   it('should call error modal sequence with correct arguments for wrong file type error', () => {

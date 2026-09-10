@@ -7,6 +7,10 @@ import {
   validatePermissions,
 } from '@web-client/views/FileHandlingHelpers/pdfValidationHelpers';
 import { getPdfJs } from '@shared/business/utilities/pdfs/getPdfJs';
+import {
+  hasDuplicateObjectNumbers,
+  hasRaisedGenerationHeader,
+} from '@shared/business/utilities/pdfs/hasDuplicateObjectNumbers';
 
 export const UNSUPPORTED_BROWSER_ERROR_MESSAGE =
   'Your internet browser is unsupported. Please update your browser and try again.';
@@ -57,6 +61,13 @@ export const validatePdf = ({
           corruptPdfError.name = 'CorruptPDFHeaderException';
           throw corruptPdfError;
         }
+        // pdf.js takes ownership of this buffer, so keep a copy for later use.
+        const bytesForRevisionCheck = hasRaisedGenerationHeader(
+          fileAsArrayBuffer,
+        )
+          ? fileAsArrayBuffer.slice()
+          : undefined;
+
         const pdfjs = await getPdfJs();
         const document = await pdfjs.getDocument({
           data: fileAsArrayBuffer,
@@ -69,6 +80,25 @@ export const validatePdf = ({
           );
           readOnlyError.name = 'ReadOnlyException';
           throw readOnlyError;
+        }
+
+        // Valid to every reader, but our save path rewrites it into a broken file.
+        if (
+          bytesForRevisionCheck &&
+          (await hasDuplicateObjectNumbers(bytesForRevisionCheck, {
+            alreadyScreened: true,
+          }))
+        ) {
+          resolve({
+            errorInformation: {
+              errorMessageToDisplay: PDF_CORRUPTED_ERROR_MESSAGE,
+              errorMessageToLog: `${PDF_CORRUPTED_ERROR_MESSAGE} (DuplicateObjectNumberException)`,
+              errorType: ErrorTypes.CORRUPT_FILE,
+            },
+            isValid: false,
+          });
+
+          return;
         }
 
         resolve({ isValid: true });
