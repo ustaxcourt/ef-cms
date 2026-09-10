@@ -228,6 +228,20 @@ describe('validateFile', () => {
     expect(validatePdf).toHaveBeenCalled();
   });
 
+  it('should call pdf validation for a .pdf the browser gives no MIME type', async () => {
+    const file = new File([], 'test.pdf', { type: '' });
+    const allowedFileExtensions = ['.pdf'];
+    const megabyteLimit = 250;
+
+    await validateFile({
+      allowedFileExtensions,
+      file,
+      megabyteLimit,
+    });
+
+    expect(validatePdf).toHaveBeenCalled();
+  });
+
   it('should not validate file type when skipFileTypeValidation is passed', async () => {
     const file = new File([], 'test.pdf', { type: 'application/pdf' });
     const allowedFileExtensions = ['.csv'];

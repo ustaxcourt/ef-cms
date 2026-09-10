@@ -58,10 +58,28 @@ describe('hasRaisedGenerationHeader', () => {
     expect(hasRaisedGenerationHeader(encode('2 00012 obj'))).toBe(true);
   });
 
-  it('does not match words that merely begin with obj', () => {
-    expect(hasRaisedGenerationHeader(encode('/Type /ObjStm 2 1 objstm'))).toBe(
-      false,
-    );
+  it('matches a keyword glued to what follows, as pdf-lib does', () => {
+    expect(hasRaisedGenerationHeader(encode('2 1 objstm'))).toBe(true);
+  });
+
+  it('finds a generation separated from its object number by a comment', () => {
+    expect(hasRaisedGenerationHeader(encode('2 % note\n1 obj'))).toBe(true);
+  });
+
+  it('finds a keyword separated from its generation by a comment', () => {
+    expect(hasRaisedGenerationHeader(encode('2 1 % note\nobj'))).toBe(true);
+  });
+
+  it('ends a comment at a carriage return', () => {
+    expect(hasRaisedGenerationHeader(encode('2 %a\r1 obj'))).toBe(true);
+  });
+
+  it('finds a keyword with no whitespace before it', () => {
+    expect(hasRaisedGenerationHeader(encode('2 1obj'))).toBe(true);
+  });
+
+  it('does not match when a comment runs to the end of the file', () => {
+    expect(hasRaisedGenerationHeader(encode('2 1 % obj'))).toBe(false);
   });
 
   it('does not match obj without a generation before it', () => {
@@ -72,7 +90,7 @@ describe('hasRaisedGenerationHeader', () => {
     expect(hasRaisedGenerationHeader(encode('   obj'))).toBe(false);
   });
 
-  it('does not match a generation with no whitespace before it', () => {
+  it('does not match a name ending in a digit', () => {
     expect(hasRaisedGenerationHeader(encode('/Name1 obj'))).toBe(false);
   });
 
@@ -104,6 +122,18 @@ describe('hasDuplicateObjectNumbers', () => {
     const bytes = readTestAsset('incrementally-updated.pdf');
 
     await expect(hasDuplicateObjectNumbers(bytes)).resolves.toBe(true);
+  });
+
+  it('detects a collision whose header separates its tokens with a comment', async () => {
+    const original = Buffer.from(
+      readTestAsset('incrementally-updated.pdf'),
+    ).toString('latin1');
+
+    await expect(
+      hasDuplicateObjectNumbers(
+        encode(original.replace('2 1 obj', '2 % note\n1 obj')),
+      ),
+    ).resolves.toBe(true);
   });
 
   it('clears a document that carries no duplicate', async () => {
