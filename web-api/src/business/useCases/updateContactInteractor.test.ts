@@ -24,6 +24,7 @@ import { updateContactInteractor } from './updateContactInteractor';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { petitionerUser } from '@shared/test/mockUsers';
 
 describe('updates the contact on a case', () => {
   let mockCase;
@@ -289,6 +290,30 @@ describe('updates the contact on a case', () => {
         mockPetitionerUser,
       ),
     ).rejects.toThrow('Error: Petitioner was not found on case 109-19.');
+  });
+
+  it('throws an error if the user to update is not the user being updated', async () => {
+    getCaseByDocketNumber.mockResolvedValue({
+      ...mockCase,
+      petitioners: [
+        mockCaseContactPrimary,
+        { ...mockCaseContactPrimary, contactId: petitionerUser.userId },
+      ],
+    });
+
+    await expect(
+      updateContactInteractor(
+        applicationContext,
+        {
+          contactInfo: {
+            ...mockCaseContactPrimary,
+            contactId: petitionerUser.userId,
+          },
+          docketNumber: mockCase.docketNumber,
+        },
+        mockPetitionerUser,
+      ),
+    ).rejects.toThrow('Unauthorized for update case contact');
   });
 
   it('does not update the case if the contact information does not change', async () => {
