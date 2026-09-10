@@ -105,6 +105,15 @@ describe('hasRaisedGenerationHeader', () => {
   it('returns false for an empty file', () => {
     expect(hasRaisedGenerationHeader(new Uint8Array())).toBe(false);
   });
+
+  it('reads a long comment full of digits in linear time', () => {
+    // Rescanning the comment from each digit took seconds on this input.
+    const longComment = encode(`%${'1%'.repeat(100_000)}`);
+
+    const start = performance.now();
+    expect(hasRaisedGenerationHeader(longComment)).toBe(false);
+    expect(performance.now() - start).toBeLessThan(1000);
+  });
 });
 
 describe('hasDuplicateObjectNumbers', () => {

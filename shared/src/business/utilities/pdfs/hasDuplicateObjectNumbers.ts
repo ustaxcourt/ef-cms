@@ -16,65 +16,98 @@ const isPdfWhitespace = (byte: number): boolean =>
 
 const isEndOfLine = (byte: number): boolean => byte === 0x0a || byte === 0x0d;
 
-const skipDigits = (bytes: Uint8Array, from: number): number => {
-  let index = from;
-  while (index < bytes.length && isDigit(bytes[index])) {
-    index += 1;
-  }
+/** A run of whitespace and comments; several candidate headers may share it. */
+interface Separator {
+  betweenTokens: boolean;
+  inComment: boolean;
+}
 
-  return index;
+/** Every candidate header underway, however many overlap. */
+interface HeaderScan {
+  inObjectNumber: boolean;
+  beforeGeneration: Separator;
+  inZeroGeneration: boolean;
+  inRaisedGeneration: boolean;
+  beforeKeyword: Separator;
+  keywordBytesMatched: number;
+}
+
+/** Moves a separator on by one byte, as pdf-lib's skipWhitespaceAndComments would. */
+const advanceSeparator = (
+  separator: Separator,
+  tokenJustEnded: boolean,
+  byte: number,
+): void => {
+  const open = tokenJustEnded || separator.betweenTokens;
+  const endsComment = isEndOfLine(byte);
+  separator.betweenTokens =
+    isPdfWhitespace(byte) && (open || (separator.inComment && endsComment));
+  separator.inComment =
+    (byte === 0x25 && open) || (separator.inComment && !endsComment);
 };
 
-/** Mirrors pdf-lib's skipWhitespaceAndComments: a comment runs to end of line. */
-const skipWhitespaceAndComments = (bytes: Uint8Array, from: number): number => {
-  let index = from;
-  while (index < bytes.length) {
-    if (isPdfWhitespace(bytes[index])) {
-      index += 1;
-    } else if (bytes[index] === 0x25) {
-      while (index < bytes.length && !isEndOfLine(bytes[index])) {
-        index += 1;
-      }
-    } else {
-      break;
-    }
+/** Moves every candidate on by one byte; true once one completes a raised-generation header. */
+const advanceHeaderScan = (scan: HeaderScan, byte: number): boolean => {
+  // pdf-lib does not check what follows the keyword, so neither do we.
+  if (scan.keywordBytesMatched === 2 && byte === OBJ_KEYWORD[2]) {
+    return true;
   }
 
-  return index;
+  const keywordMayStart =
+    scan.inRaisedGeneration || scan.beforeKeyword.betweenTokens;
+  scan.keywordBytesMatched =
+    byte === OBJ_KEYWORD[0] && keywordMayStart
+      ? 1
+      : byte === OBJ_KEYWORD[1] && scan.keywordBytesMatched === 1
+        ? 2
+        : 0;
+  advanceSeparator(scan.beforeKeyword, scan.inRaisedGeneration, byte);
+
+  const generationStillZero =
+    scan.beforeGeneration.betweenTokens || scan.inZeroGeneration;
+  scan.inRaisedGeneration =
+    isDigit(byte) &&
+    (scan.inRaisedGeneration || (byte !== 0x30 && generationStillZero));
+  scan.inZeroGeneration = byte === 0x30 && generationStillZero;
+  advanceSeparator(scan.beforeGeneration, scan.inObjectNumber, byte);
+  scan.inObjectNumber = isDigit(byte);
+
+  return false;
 };
+
+const isSeparatorIdle = (separator: Separator): boolean =>
+  !separator.betweenTokens && !separator.inComment;
+
+const isHeaderScanIdle = (scan: HeaderScan): boolean =>
+  !scan.inObjectNumber &&
+  !scan.inZeroGeneration &&
+  !scan.inRaisedGeneration &&
+  scan.keywordBytesMatched === 0 &&
+  isSeparatorIdle(scan.beforeGeneration) &&
+  isSeparatorIdle(scan.beforeKeyword);
 
 /** Cheap screen using pdf-lib's own header grammar: no raised generation, no collision. */
 export const hasRaisedGenerationHeader = (bytes: Uint8Array): boolean => {
+  // Follows every candidate header at once, so each byte is read only once.
+  const scan: HeaderScan = {
+    beforeGeneration: { betweenTokens: false, inComment: false },
+    beforeKeyword: { betweenTokens: false, inComment: false },
+    inObjectNumber: false,
+    inRaisedGeneration: false,
+    inZeroGeneration: false,
+    keywordBytesMatched: 0,
+  };
+  let idle = true;
+
   for (let index = 0; index < bytes.length; index += 1) {
-    // Try each digit run once, from its first digit, as an object number.
-    if (!isDigit(bytes[index]) || (index > 0 && isDigit(bytes[index - 1]))) {
+    // With nothing underway, only a digit can start a header.
+    if (idle && !isDigit(bytes[index])) {
       continue;
     }
-
-    const generationStart = skipWhitespaceAndComments(
-      bytes,
-      skipDigits(bytes, index),
-    );
-    const generationEnd = skipDigits(bytes, generationStart);
-    if (generationEnd === generationStart) {
-      continue;
+    if (advanceHeaderScan(scan, bytes[index])) {
+      return true;
     }
-
-    // pdf-lib does not check what follows the keyword, so neither do we.
-    const keyword = skipWhitespaceAndComments(bytes, generationEnd);
-    if (
-      bytes[keyword] !== OBJ_KEYWORD[0] ||
-      bytes[keyword + 1] !== OBJ_KEYWORD[1] ||
-      bytes[keyword + 2] !== OBJ_KEYWORD[2]
-    ) {
-      continue;
-    }
-
-    for (let digit = generationStart; digit < generationEnd; digit += 1) {
-      if (bytes[digit] !== 0x30) {
-        return true;
-      }
-    }
+    idle = isHeaderScanIdle(scan);
   }
 
   return false;
