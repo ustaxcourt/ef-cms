@@ -23,6 +23,16 @@ export const PDF_CORRUPTED_ERROR_MESSAGE =
 const GENERIC_FILE_ERROR_MESSAGE =
   'There is a problem uploading the file. Try again later.';
 
+// A function, not a constant: ErrorTypes is unset while these two modules load each other.
+const duplicateObjectNumberError = (): FileValidationResponse => ({
+  errorInformation: {
+    errorMessageToDisplay: PDF_CORRUPTED_ERROR_MESSAGE,
+    errorMessageToLog: `${PDF_CORRUPTED_ERROR_MESSAGE} (DuplicateObjectNumberException)`,
+    errorType: ErrorTypes.CORRUPT_FILE,
+  },
+  isValid: false,
+});
+
 export const validatePdf = ({
   file,
 }: {
@@ -89,14 +99,7 @@ export const validatePdf = ({
             alreadyScreened: true,
           }))
         ) {
-          resolve({
-            errorInformation: {
-              errorMessageToDisplay: PDF_CORRUPTED_ERROR_MESSAGE,
-              errorMessageToLog: `${PDF_CORRUPTED_ERROR_MESSAGE} (DuplicateObjectNumberException)`,
-              errorType: ErrorTypes.CORRUPT_FILE,
-            },
-            isValid: false,
-          });
+          resolve(duplicateObjectNumberError());
 
           return;
         }
@@ -161,4 +164,29 @@ export const validatePdf = ({
       });
     };
   });
+};
+
+/** For inputs that skip the checks above: still refuse a PDF our upload would break. */
+export const validatePdfSurvivesUpload = async ({
+  file,
+}: {
+  file: File;
+}): Promise<FileValidationResponse> => {
+  let bytes: Uint8Array;
+  try {
+    bytes = new Uint8Array(await file.arrayBuffer());
+  } catch (error) {
+    return {
+      errorInformation: {
+        errorMessageToDisplay: GENERIC_FILE_ERROR_MESSAGE,
+        errorMessageToLog: `${GENERIC_FILE_ERROR_MESSAGE} (Failed to read file: ${error}.)`,
+        errorType: ErrorTypes.UNKNOWN,
+      },
+      isValid: false,
+    };
+  }
+
+  return (await hasDuplicateObjectNumbers(bytes))
+    ? duplicateObjectNumberError()
+    : { isValid: true };
 };

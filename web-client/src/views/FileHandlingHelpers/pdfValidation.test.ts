@@ -7,6 +7,7 @@ import {
   PDF_PASSWORD_PROTECTED_ERROR_MESSAGE,
   UNSUPPORTED_BROWSER_ERROR_MESSAGE,
   validatePdf,
+  validatePdfSurvivesUpload,
 } from './pdfValidation';
 import { validatePdfHeader } from '@web-client/views/FileHandlingHelpers/pdfValidationHelpers';
 import { getPdfJs as getPdfJsMock } from '@shared/business/utilities/pdfs/getPdfJs';
@@ -346,5 +347,59 @@ describe('validatePdf', () => {
       `FileReader result is invalid for file: ${mockFile.name}. Result: null`,
     );
     consoleErrorSpy.mockRestore();
+  });
+});
+
+describe('validatePdfSurvivesUpload', () => {
+  const hasDuplicateObjectNumbers = jest.mocked(hasDuplicateObjectNumbersMock);
+  const bytes = new Uint8Array(VALID_PDF_HEADER_BYTES);
+  // jsdom's File has no arrayBuffer, so stand in for one that does.
+  const fileWith = (arrayBuffer: jest.Mock) =>
+    ({ arrayBuffer }) as unknown as File;
+
+  it('should resolve as valid when the upload would not break the PDF', async () => {
+    hasDuplicateObjectNumbers.mockResolvedValue(false);
+
+    const result = await validatePdfSurvivesUpload({
+      file: fileWith(jest.fn().mockResolvedValue(bytes.buffer)),
+    });
+
+    expect(result).toEqual({ isValid: true });
+    expect(hasDuplicateObjectNumbers).toHaveBeenCalledWith(bytes);
+  });
+
+  it('should return error message when the PDF holds one object number at two generations', async () => {
+    hasDuplicateObjectNumbers.mockResolvedValue(true);
+
+    const result = await validatePdfSurvivesUpload({
+      file: fileWith(jest.fn().mockResolvedValue(bytes.buffer)),
+    });
+
+    expect(result).toEqual({
+      errorInformation: {
+        errorMessageToDisplay: PDF_CORRUPTED_ERROR_MESSAGE,
+        errorMessageToLog: `${PDF_CORRUPTED_ERROR_MESSAGE} (DuplicateObjectNumberException)`,
+        errorType: ErrorTypes.CORRUPT_FILE,
+      },
+      isValid: false,
+    });
+  });
+
+  it('should return the generic error message when the file cannot be read', async () => {
+    const result = await validatePdfSurvivesUpload({
+      file: fileWith(jest.fn().mockRejectedValue(new Error('gone'))),
+    });
+
+    expect(result).toEqual({
+      errorInformation: {
+        errorMessageToDisplay:
+          'There is a problem uploading the file. Try again later.',
+        errorMessageToLog:
+          'There is a problem uploading the file. Try again later. (Failed to read file: Error: gone.)',
+        errorType: ErrorTypes.UNKNOWN,
+      },
+      isValid: false,
+    });
+    expect(hasDuplicateObjectNumbers).not.toHaveBeenCalled();
   });
 });

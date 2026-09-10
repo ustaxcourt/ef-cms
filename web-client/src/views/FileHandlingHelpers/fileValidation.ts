@@ -1,6 +1,9 @@
 import { TROUBLESHOOTING_INFO } from '@shared/business/entities/EntityConstants';
 import { TroubleshootingLinkInfo } from '@web-client/presenter/sequences/showFileUploadErrorModalSequence';
-import { validatePdf } from '@web-client/views/FileHandlingHelpers/pdfValidation';
+import {
+  validatePdf,
+  validatePdfSurvivesUpload,
+} from '@web-client/views/FileHandlingHelpers/pdfValidation';
 import React from 'react';
 
 export enum ErrorTypes {
@@ -160,6 +163,10 @@ export const validateFile = async ({
     return fileSizeValidation;
   }
 
+  // A .pdf may arrive with no MIME type, yet it is still uploaded as a PDF.
+  const isPdf =
+    file.type === 'application/pdf' || getFileExtension(file.name) === '.pdf';
+
   if (!skipFileTypeValidation) {
     const correctFileValidation = validateCorrectFileType({
       allowedFileExtensions,
@@ -168,13 +175,12 @@ export const validateFile = async ({
     if (!correctFileValidation.isValid) {
       return correctFileValidation;
     }
-    // A .pdf may arrive with no MIME type, yet it is still uploaded as a PDF.
-    if (
-      file.type === 'application/pdf' ||
-      getFileExtension(file.name) === '.pdf'
-    ) {
+    if (isPdf) {
       return await validatePdf({ file });
     }
+  } else if (isPdf) {
+    // Mixed-type inputs skip the PDF checks, but not the file our upload would break.
+    return await validatePdfSurvivesUpload({ file });
   }
 
   return { isValid: true };
