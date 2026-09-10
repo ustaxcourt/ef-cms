@@ -85,7 +85,9 @@ export const validatePdf = ({
         // Valid to every reader, but our save path rewrites it into a broken file.
         if (
           bytesForRevisionCheck &&
-          (await hasDuplicateObjectNumbers(bytesForRevisionCheck))
+          (await hasDuplicateObjectNumbers(bytesForRevisionCheck, {
+            alreadyScreened: true,
+          }))
         ) {
           resolve({
             errorInformation: {

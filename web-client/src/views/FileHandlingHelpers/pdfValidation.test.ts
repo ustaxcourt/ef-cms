@@ -145,6 +145,7 @@ describe('validatePdf', () => {
 
     expect(hasDuplicateObjectNumbers).toHaveBeenCalledWith(
       new Uint8Array(VALID_PDF_HEADER_BYTES),
+      { alreadyScreened: true },
     );
     expect(result.errorInformation?.errorType).toBe(ErrorTypes.CORRUPT_FILE);
   });

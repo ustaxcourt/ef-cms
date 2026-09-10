@@ -90,6 +90,16 @@ describe('hasRaisedGenerationHeader', () => {
 });
 
 describe('hasDuplicateObjectNumbers', () => {
+  let consoleError: jest.SpyInstance;
+
+  beforeEach(() => {
+    consoleError = jest.spyOn(console, 'error').mockImplementation();
+  });
+
+  afterEach(() => {
+    consoleError.mockRestore();
+  });
+
   it('detects the precondition in an incrementally updated document', async () => {
     const bytes = readTestAsset('incrementally-updated.pdf');
 
@@ -118,5 +128,24 @@ describe('hasDuplicateObjectNumbers', () => {
     await expect(
       hasDuplicateObjectNumbers(encode('2 1 obj\n<<>>\nendobj\n')),
     ).resolves.toBe(false);
+
+    expect(consoleError).toHaveBeenCalled();
+  });
+
+  it('goes straight to the parse when the caller has already screened', async () => {
+    // No raised generation here, so reaching the failed parse proves the screen was skipped.
+    await expect(
+      hasDuplicateObjectNumbers(encode('2 0 obj'), { alreadyScreened: true }),
+    ).resolves.toBe(false);
+
+    expect(consoleError).toHaveBeenCalled();
+  });
+
+  it('runs the screen itself when the caller has not', async () => {
+    await expect(
+      hasDuplicateObjectNumbers(encode('2 0 obj'), { alreadyScreened: false }),
+    ).resolves.toBe(false);
+
+    expect(consoleError).not.toHaveBeenCalled();
   });
 });

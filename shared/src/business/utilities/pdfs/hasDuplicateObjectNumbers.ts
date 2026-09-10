@@ -1,5 +1,7 @@
 /** One object number at two generations: what pdf-lib rewrites into a broken file. */
 
+import type { PDFDocument } from 'pdf-lib';
+
 const OBJ_KEYWORD = [0x6f, 0x62, 0x6a]; // "obj"
 
 const isDigit = (byte: number): boolean => byte >= 0x30 && byte <= 0x39;
@@ -77,12 +79,13 @@ export const hasRaisedGenerationHeader = (bytes: Uint8Array): boolean => {
 /** True when an object number repeats; a file pdf-lib cannot load counts as false. */
 export const hasDuplicateObjectNumbers = async (
   bytes: Uint8Array,
+  { alreadyScreened = false }: { alreadyScreened?: boolean } = {},
 ): Promise<boolean> => {
-  if (!hasRaisedGenerationHeader(bytes)) {
+  if (!alreadyScreened && !hasRaisedGenerationHeader(bytes)) {
     return false;
   }
 
-  let pdfDoc;
+  let pdfDoc: PDFDocument;
   try {
     // Lazy so pdf-lib stays out of the main client bundle.
     const { PDFDocument } = await import('pdf-lib');
@@ -91,7 +94,9 @@ export const hasDuplicateObjectNumbers = async (
       throwOnInvalidObject: false,
       updateMetadata: false,
     });
-  } catch {
+  } catch (error) {
+    // A file pdf-lib cannot load is a file it never rewrites.
+    console.error('Could not load PDF to check for duplicate objects', error);
     return false;
   }
 
