@@ -409,7 +409,7 @@ Used in: `.github/workflows/security-sast.yml` — installed via `curl` in the `
 Below is a list of dependencies that are locked down due to known issues with security, integration problems within DAWSON, etc. Try to update these items but please be aware of the issue that's documented and ensure it's been resolved.
 
 ### pdfjs-dist
-**Current Version Installed: 6.2.108**
+**Current Version Installed: 6.2.289**
 
 - When upgrading to version 5.4.624 the newer pdfjs-dist release relies on DOMMatrix, which caused errors in AWS Lambda when scraping text from PDFs. This worked locally but failed in the deployed environment because Lambda does not provide DOMMatrix. To resolve this, I added a polyfill using the `dommatrix` library that is used when DOMMatrix is undefined. See `getPdfJs.ts` and `parsePdf.ts` for details.
    - I debugged this by temporarily ignoring the smoketests in search.cy.ts in order for the build to pass and deploy to an exp environment. From there I ran the cypress smoketests on the exp environement locally, found the error in cloudwatch logs, tested multiple fixes and made the neccessary changes.
@@ -419,7 +419,7 @@ Below is a list of dependencies that are locked down due to known issues with se
 - As of 8/10/2026: Updated to **6.2.108** for [GHSA-hq66-cqwq-w95j](https://github.com/advisories/GHSA-hq66-cqwq-w95j) (arbitrary JavaScript execution on opening a malicious PDF, affecting `>=5.6.83 <6.2.108`). Re-verify `getPdfJs.ts` and `parsePdf.ts`, especially the `DOMMatrix` polyfill, in an experimental deploy — the Lambda-only failure mode does not reproduce locally.
 
 ### DWT
-**Current Installed DWT: 19.4.2**
+**Current Installed DWT: 19.4.3**
 
 Minor and patch versions of DWT _should_ be updated, but require that Court IT update the Windows clients in concert with our app. Do not bump `dwt` during weekly dependency rotations even if a newer version appears on npm — upgrades require the coordination sequence below and a standalone PR to `test`, not a bundled rotation.
 
@@ -444,8 +444,8 @@ If an update is available for DWT:
    1. The old Windows client and new server version are backwards-compatible.
 
 ### puppeteer and @sparticuz/chromium
-**Current Installed Puppeteer/Puppeteer-core: 25.1.0**
-**Current Installed @sparticuz/chromium: 149.0.0**
+**Current Installed Puppeteer/Puppeteer-core: 25.10.0**
+**Current Installed @sparticuz/chromium: 152.0.0**
 
 - When updating puppeteer or puppeteer core in the project, make sure to also match versions in `web-api/runtimes/puppeteer/package.json` as this is our lambda layer which we use to generate pdfs. Puppeteer and chromium versions should always match between package.json and web-api/runtimes/puppeteer/package.json. Remember to run `npm install --prefix web-api/runtimes/puppeteer` to install and update the package-lock file.
 - Puppeteer also has recommended versions of Chromium, so we should make sure to use the recommended version of chromium for the version of puppeteer that we are on. The chromium versions supported by puppeteer can be found [here](https://pptr.dev/supported-browsers)
@@ -458,6 +458,7 @@ If an update is available for DWT:
 - As of June 25, 2026: Puppeteer 25.2.1 requires Chrome for Testing 150.0.7871.24, which means `@sparticuz/chromium` would need to be updated to `150.x`. However, `@sparticuz/chromium@150.x` has not yet been published to npm (latest available is `149.0.0`). Skipping the puppeteer 25.2.x update until `@sparticuz/chromium@150.x` is available.
 - As of July 27, 2026: Puppeteer **25.4.0** is available. Still blocked — `@sparticuz/chromium` latest on npm remains **149.0.0**; puppeteer 25.2.x and above require Chrome for Testing 150.x.
 - As of 8/10/2026: Puppeteer **25.5.0** is available. Still blocked — `@sparticuz/chromium` latest on npm remains **149.0.0**; puppeteer 25.2.x and above require Chrome for Testing 150.x.
+- As of 9/8/2026: `@sparticuz/chromium` version **152.0.0** has been released, so we have now upgraded to Puppeteer **25.5.10**
 
 ### ws, 3rd party dependency of Cerebral
 
@@ -485,6 +486,7 @@ If an update is available for DWT:
 - Upgrade `jest`, `babel-jest`, and `jest-environment-jsdom` together manually rather than via the upgrade script. `babel-jest` is also excluded by the upgrade script's `caveats` array. Verify the full unit test suites after any bump.
 - On June 26, 2025, newer versions of `jest` conflicted with `ts-jest` 29.x; we stayed on Jest 29 until `ts-jest` caught up.
 - On June 30, 2025, a `jest-environment-jsdom` bump caused failures in unit tests that use `Object.defineProperty` (for example, `getPdfJs.test.ts`). Re-test those specs before removing this pin.
+- On September 9, 2026, we were able to upgrade `jest`, `jeset-environment-jsdom`, and `babel-jest` to **30.5.1** successfully
 
 ### websocket
 **Installed Version: 1.0.35**
@@ -650,9 +652,9 @@ The issue is with Jest. Jest doesn't work with mjs, so in our config we need to 
 - As of 8/10/2026: **@recharts/devtools 0.0.16** peers on `recharts: 3.9.0` exactly, and we are on **3.10.1**. Still pinned at **0.0.14**.
 
 ### aws-sigv4-sign
-**Installed Version: 1.2.1**
+**Installed Version: 2.0.1**
 
-- Pinned until tested in an experimental environment with payment-portal integration. A 2.x release is available but was reverted in [PR #10354](https://github.com/ustaxcourt/ef-cms/pull/10354) pending validation. This package is excluded by the upgrade script's `caveats` array.
+- This package was successfully upgraded to version **2.0.1** and validated in `exp2`. Until we have set up payment portal integration in all experimental environments, we should be careful upgrading this package as it need to be tested in `exp2` before going to `test`. Once all environments have this integration, this caveat can be removed.
 
 ## Troubleshooting
 
