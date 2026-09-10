@@ -1,21 +1,24 @@
-import * as oAuthClient from 'openid-client';
+import {
+  buildAuthorizationUrl,
+  calculatePKCECodeChallenge,
+  Configuration,
+  randomPKCECodeVerifier,
+} from 'openid-client';
 
 export const idpLoginAction = async ({
   router,
   applicationContext,
 }: ActionProps) => {
-  const config = new oAuthClient.Configuration(
+  const config = new Configuration(
     {
       issuer: process.env.MANAGED_LOGIN_DOMAIN!,
       authorization_endpoint: `${process.env.MANAGED_LOGIN_DOMAIN}/oauth2/authorize`,
-      token_endpoint: `${process.env.MANAGED_LOGIN_DOMAIN}/oauth2/token`,
     },
     process.env.COGNITO_CLIENT_ID!,
   );
 
-  const code_verifier = oAuthClient.randomPKCECodeVerifier();
-  const code_challenge =
-    await oAuthClient.calculatePKCECodeChallenge(code_verifier);
+  const code_verifier = randomPKCECodeVerifier();
+  const code_challenge = await calculatePKCECodeChallenge(code_verifier);
 
   applicationContext.getPersistenceGateway().setItem({
     key: 'code_verifier',
@@ -29,7 +32,7 @@ export const idpLoginAction = async ({
     code_challenge_method: 'S256',
   };
 
-  const idpLoginUrl = oAuthClient.buildAuthorizationUrl(config, params);
+  const idpLoginUrl = buildAuthorizationUrl(config, params);
 
   router.externalRoute(idpLoginUrl);
 };
