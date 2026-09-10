@@ -14,59 +14,63 @@ const isPdfWhitespace = (byte: number): boolean =>
   byte === 0x0d ||
   byte === 0x20;
 
-const isRegularCharacter = (byte: number): boolean =>
-  !isPdfWhitespace(byte) &&
-  ![0x28, 0x29, 0x3c, 0x3e, 0x5b, 0x5d, 0x7b, 0x7d, 0x2f, 0x25].includes(byte);
+const isEndOfLine = (byte: number): boolean => byte === 0x0a || byte === 0x0d;
 
-/** Walks back over a run of `predicate` bytes, returning the index just before it. */
-const scanBackWhile = (
-  bytes: Uint8Array,
-  from: number,
-  predicate: (byte: number) => boolean,
-): number => {
+const skipDigits = (bytes: Uint8Array, from: number): number => {
   let index = from;
-  while (index >= 0 && predicate(bytes[index])) {
-    index -= 1;
+  while (index < bytes.length && isDigit(bytes[index])) {
+    index += 1;
   }
 
   return index;
 };
 
-/** Cheap screen: no header above generation zero means no collision is possible. */
+/** Mirrors pdf-lib's skipWhitespaceAndComments: a comment runs to end of line. */
+const skipWhitespaceAndComments = (bytes: Uint8Array, from: number): number => {
+  let index = from;
+  while (index < bytes.length) {
+    if (isPdfWhitespace(bytes[index])) {
+      index += 1;
+    } else if (bytes[index] === 0x25) {
+      while (index < bytes.length && !isEndOfLine(bytes[index])) {
+        index += 1;
+      }
+    } else {
+      break;
+    }
+  }
+
+  return index;
+};
+
+/** Cheap screen using pdf-lib's own header grammar: no raised generation, no collision. */
 export const hasRaisedGenerationHeader = (bytes: Uint8Array): boolean => {
-  for (let index = 0; index + OBJ_KEYWORD.length <= bytes.length; index += 1) {
+  for (let index = 0; index < bytes.length; index += 1) {
+    // Try each digit run once, from its first digit, as an object number.
+    if (!isDigit(bytes[index]) || (index > 0 && isDigit(bytes[index - 1]))) {
+      continue;
+    }
+
+    const generationStart = skipWhitespaceAndComments(
+      bytes,
+      skipDigits(bytes, index),
+    );
+    const generationEnd = skipDigits(bytes, generationStart);
+    if (generationEnd === generationStart) {
+      continue;
+    }
+
+    // pdf-lib does not check what follows the keyword, so neither do we.
+    const keyword = skipWhitespaceAndComments(bytes, generationEnd);
     if (
-      bytes[index] !== OBJ_KEYWORD[0] ||
-      bytes[index + 1] !== OBJ_KEYWORD[1] ||
-      bytes[index + 2] !== OBJ_KEYWORD[2]
+      bytes[keyword] !== OBJ_KEYWORD[0] ||
+      bytes[keyword + 1] !== OBJ_KEYWORD[1] ||
+      bytes[keyword + 2] !== OBJ_KEYWORD[2]
     ) {
       continue;
     }
 
-    // Reject "object", "objstm" and the like; the keyword must end here.
-    const after = index + OBJ_KEYWORD.length;
-    if (after < bytes.length && isRegularCharacter(bytes[after])) {
-      continue;
-    }
-
-    // "<objectNumber> <generation> obj", read right to left.
-    const generationEnd = scanBackWhile(bytes, index - 1, isPdfWhitespace);
-    if (generationEnd === index - 1) {
-      continue;
-    }
-    const generationStart = scanBackWhile(bytes, generationEnd, isDigit);
-    if (generationStart === generationEnd) {
-      continue;
-    }
-    const numberEnd = scanBackWhile(bytes, generationStart, isPdfWhitespace);
-    if (numberEnd === generationStart) {
-      continue;
-    }
-    if (numberEnd === scanBackWhile(bytes, numberEnd, isDigit)) {
-      continue;
-    }
-
-    for (let digit = generationStart + 1; digit <= generationEnd; digit += 1) {
+    for (let digit = generationStart; digit < generationEnd; digit += 1) {
       if (bytes[digit] !== 0x30) {
         return true;
       }

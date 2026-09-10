@@ -168,7 +168,11 @@ export const validateFile = async ({
     if (!correctFileValidation.isValid) {
       return correctFileValidation;
     }
-    if (file.type === 'application/pdf') {
+    // A .pdf may arrive with no MIME type, yet it is still uploaded as a PDF.
+    if (
+      file.type === 'application/pdf' ||
+      getFileExtension(file.name) === '.pdf'
+    ) {
       return await validatePdf({ file });
     }
   }
