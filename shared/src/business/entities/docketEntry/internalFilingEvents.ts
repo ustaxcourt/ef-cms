@@ -3341,6 +3341,16 @@ export const INTERNAL_FILING_EVENTS: AllInteralFilingEvents = {
       ordinalField: '',
     },
     {
+      documentTitle: 'Exhibit in Support of [Document Name]',
+      documentType: 'Exhibit in Support',
+      category: 'Supporting Document',
+      eventCode: 'EXS',
+      scenario: 'Nonstandard A',
+      labelPreviousDocument: 'Which document is this exhibit in support of?',
+      labelFreeText: '',
+      ordinalField: '',
+    },
+    {
       documentTitle: 'Memorandum in Support of [Document Name]',
       documentType: 'Memorandum in Support',
       category: 'Supporting Document',

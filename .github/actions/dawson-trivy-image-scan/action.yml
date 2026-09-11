@@ -1,0 +1,35 @@
+name: DAWSON Trivy Image Scan
+description: Scan a container image with Trivy and upload its SARIF report.
+
+inputs:
+  category:
+    description: Code scanning category for the SARIF report.
+    required: true
+  image_ref:
+    description: Container image reference to scan.
+    required: true
+  report_path:
+    description: Path for the SARIF report.
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Scan container image with Trivy
+      uses: aquasecurity/trivy-action@v0.36.0
+      with:
+        scan-type: image
+        image-ref: ${{ inputs.image_ref }}
+        vuln-type: 'os,library'
+        severity: 'HIGH,CRITICAL'
+        format: sarif
+        output: ${{ inputs.report_path }}
+        # Keep image scans non-blocking until the initial vulnerability baseline is triaged.
+        exit-code: '0'
+
+    - name: Upload Trivy SARIF
+      if: always()
+      uses: ./.github/actions/dawson-upload-sarif
+      with:
+        sarif_file: ${{ inputs.report_path }}
+        category: ${{ inputs.category }}

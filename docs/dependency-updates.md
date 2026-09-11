@@ -268,13 +268,121 @@ If an OpenSearch update is available, we'll need to update OpenSearch locally.
 
 If an OpenSearch update is available, we'll need to update OpenSearch in github actions.
 
-1. Search the project for `opensearch-version:` and make sure it's set to the latest version. For example, some files in the `.github/workflows` directory will need to be updated.
+1. Search the project for `opensearch-version:` and make sure it's set to the latest version in `.github/actions/dawson-app-setup/action.yml`.
 
 ### 7. Wrap up
 
 - Check through the list of caveats to see if any of the documented issues have been resolved.
 
 - Validate updates by deploying to an experimental environment
+
+### 8. Update CI security tool versions
+
+**Background:** We update all CI tool versions manually as part of the monthly dependency rotation. This covers two categories:
+
+- **GitHub Actions `uses:` pins** — action version tags in `.github/workflows/` files
+- **Inline tool versions** — tools pinned in `run:` steps or `container:` blocks that are not visible to any automated tooling
+
+Do all of these together in a single PR each month.
+
+#### 8.0 GitHub Actions `uses:` pins (manual — monthly)
+
+These are the `uses: owner/action@vX.Y.Z` lines in every workflow file. Check and update each one manually.
+
+**Actions used across security workflows:**
+
+| Action | Where used | Check releases |
+|---|---|---|
+| `actions/checkout` | All security workflows | [releases](https://github.com/actions/checkout/releases) |
+| `actions/upload-artifact` | All security workflows | [releases](https://github.com/actions/upload-artifact/releases) |
+| `actions/cache/restore`, `actions/cache/save` | `dawson-node-bootstrap` action | [releases](https://github.com/actions/cache/releases) |
+| `actions/setup-node` | `dawson-node-bootstrap` action | [releases](https://github.com/actions/setup-node/releases) |
+| `actions/setup-python` | `security-sast.yml` (Checkov job) | [releases](https://github.com/actions/setup-python/releases) |
+| `actions/dependency-review-action` | `security-supply-chain.yml` | [releases](https://github.com/actions/dependency-review-action/releases) |
+| `github/codeql-action/init`, `analyze` | `security-sast.yml`; SARIF upload is centralized in `dawson-upload-sarif` | [releases](https://github.com/github/codeql-action/releases) |
+| `ankane/setup-opensearch` | `dawson-app-setup` action | [releases](https://github.com/ankane/setup-opensearch/releases) |
+| `zaproxy/action-api-scan` | `security-dast.yml` | [releases](https://github.com/zaproxy/action-api-scan/releases) |
+| `zaproxy/action-full-scan` | `security-dast.yml` | [releases](https://github.com/zaproxy/action-full-scan/releases) |
+| `zaproxy/action-baseline` | `security-dast.yml` | [releases](https://github.com/zaproxy/action-baseline/releases) |
+| `aquasecurity/trivy-action` | `dawson-trivy-image-scan` action and `security-supply-chain.yml` | [releases](https://github.com/aquasecurity/trivy-action/releases) |
+
+**Steps to update a `uses:` pin:**
+
+1. Check the releases page for the action (links above).
+2. Find the latest stable release version tag (e.g. `v4.2.0`).
+3. Search the project for the current version string:
+   ```bash
+   grep -r "owner/action-name@" .github/
+   ```
+4. Update every occurrence to the new version tag.
+5. Verify CI passes before merging.
+
+> **Important:** Some actions are centralized in reusable composite actions. Update the action definition rather than copying a version change into each caller.
+
+#### 8.0.1 Container images in `services:` blocks (manual — monthly)
+
+These are Docker images used as service containers in workflow jobs (e.g. the Postgres sidecar). They are separate from `uses:` pins.
+
+| Image | Where used | How to update |
+|---|---|---|
+| `postgres` | `security-dast.yml` (dast-api, dast-web), all `template_app*.yml` workflows | See §5.4 above — keep in sync with local and CircleCI postgres version |
+
+> Currently `image: postgres` is unpinned (floats to latest). When §5.4 is executed, pin it to a specific tag (e.g. `postgres:17.5-bookworm`) here too.
+
+#### 8.1 Semgrep container image
+
+Used in: `.github/workflows/security-sast.yml` (line 33)
+
+1. Check the latest release at [https://github.com/semgrep/semgrep/releases](https://github.com/semgrep/semgrep/releases)
+1. Search the project for `semgrep/semgrep:` and update the version tag. For example:
+   ```yaml
+   image: semgrep/semgrep:1.167.0
+   ```
+
+#### 8.2 Checkov pip install
+
+Used in: `.github/workflows/security-sast.yml` (line 97)
+
+1. Check the latest release at [https://pypi.org/project/checkov/](https://pypi.org/project/checkov/)
+1. Search the project for `checkov==` and update the version. For example:
+   ```bash
+   pip install checkov==3.3.2
+   ```
+1. After bumping, verify the Checkov CI job still passes — Checkov minor versions occasionally change CLI flag behavior.
+
+#### 8.3 Gitleaks binary download
+
+Used in: `.github/actions/dawson-gitleaks/action.yml`
+
+1. Check the latest release at [https://github.com/gitleaks/gitleaks/releases](https://github.com/gitleaks/gitleaks/releases)
+1. Update the `version` input in `.github/actions/dawson-gitleaks/action.yml`. For example:
+   ```yaml
+   version: 8.31.0
+   ```
+   The download URL and archive filename are derived from this value.
+
+#### 8.4 lockfile-lint npx
+
+Used in: `.github/workflows/security-supply-chain.yml` (line 69)
+
+1. Check the latest release at [https://www.npmjs.com/package/lockfile-lint](https://www.npmjs.com/package/lockfile-lint)
+1. Search the project for `lockfile-lint@` and update the version. For example:
+   ```bash
+   npx lockfile-lint@5.1.0 \
+   ```
+
+#### 8.5 shellcheck binary
+
+Used in: `.github/workflows/security-sast.yml` — installed via `curl` in the `shellcheck` job
+
+1. Check the latest release at [https://github.com/koalaman/shellcheck/releases](https://github.com/koalaman/shellcheck/releases)
+2. Search the project for `SHELLCHECK_VERSION=` and update the version variable. For example:
+   ```bash
+   SHELLCHECK_VERSION=0.10.0
+   ```
+3. The install URL and filename derive from the variable automatically — no other changes needed.
+
+> **Note:** The `opensearch-version:` input in `dawson-app-setup` is covered by §6.3 above. The `image: postgres` service container in `security-dast.yml` is covered by §5.4 above. GitHub Actions `uses:` pins (including `aquasecurity/trivy-action`, `zaproxy/*`, `github/codeql-action`) are covered by §8.0 above.
 
 ## Configurations
 **Safe to upgrade, but we use a non-standard configuration intentionally**
