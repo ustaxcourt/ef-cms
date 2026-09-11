@@ -34,10 +34,10 @@ jobs:
       security-events: write
     timeout-minutes: 15
     container:
-      image: semgrep/semgrep:1.167.0
+      image: semgrep/semgrep:1.176.0
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -95,15 +95,15 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: '3.12'
 
       - name: Install Checkov
-        run: pip install checkov==3.3.2
+        run: pip install checkov==3.3.16
 
       - name: Run Checkov
         run: |
@@ -189,7 +189,7 @@ jobs:
         language: [javascript-typescript]
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v4
@@ -212,11 +212,11 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Install shellcheck
         run: |
-          SHELLCHECK_VERSION=0.10.0
+          SHELLCHECK_VERSION=0.11.0
           curl -sSL "https://github.com/koalaman/shellcheck/releases/download/v${SHELLCHECK_VERSION}/shellcheck-v${SHELLCHECK_VERSION}.linux.x86_64.tar.xz" \
             | tar -xJf - -C /tmp
           sudo mv "/tmp/shellcheck-v${SHELLCHECK_VERSION}/shellcheck" /usr/local/bin/shellcheck
