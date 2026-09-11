@@ -4,7 +4,6 @@ import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
 import {
   NOT_PROVIDED,
-  ROLES,
   SERVICE_INDICATOR_TYPES,
 } from '@shared/business/entities/EntityConstants';
 import { canUserUpdatePetitionerContact } from '@shared/business/utilities/canUserUpdatePetitionerContact';
@@ -27,30 +26,6 @@ export const formatCounsel = ({ counsel, screenMetadata }) => {
   }
 
   return counsel;
-};
-
-export const getCanEditPetitioner = ({
-  permissions,
-  petitioner,
-  petitionIsServed,
-  user,
-  userAssociatedWithCase,
-}) => {
-  if (!petitionIsServed) return false;
-
-  if (user.role === ROLES.petitioner) {
-    return petitioner.contactId === user.userId;
-  }
-
-  if (user.role === ROLES.privatePractitioner) {
-    return !!userAssociatedWithCase;
-  }
-
-  if (permissions.EDIT_PETITIONER_INFO) {
-    return true;
-  }
-
-  return false;
 };
 
 export const partiesInformationHelper = (

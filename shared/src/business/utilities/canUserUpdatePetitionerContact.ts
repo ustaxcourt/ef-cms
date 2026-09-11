@@ -17,7 +17,7 @@ export const canUserUpdatePetitionerContact = ({
   petitionerCaseRaw: RawCase;
   contactId: string;
   user: AuthUser;
-}) => {
+}): boolean => {
   if (!canAllowDocumentServiceForCase(petitionerCaseRaw)) return false;
 
   let isRepresentingCounsel = false;

@@ -106,7 +106,7 @@ describe('canUserUpdatePetitionerAction', () => {
         presenter,
       },
       props: {
-        contactId: petitionerUser,
+        contactId: petitionerUser.userId,
         caseDetail: {
           ...MOCK_CASE_WITH_SECONDARY_OTHERS,
           petitioners: [
