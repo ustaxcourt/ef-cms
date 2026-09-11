@@ -164,8 +164,6 @@ const updateCaseWithLocking = withLocking(
   console.log('cases updated:');
   updatedCases.forEach(docketNumber => console.log(docketNumber));
 
-  console.log('cases updated:', updatedCases);
-
   console.log(
     `${updated} cases were updated; ${failed.length} failed to update.`,
   );
