@@ -1,0 +1,41 @@
+# .gitleaks.toml — Gitleaks secret scanning configuration
+# Used by: .husky/pre-commit (staged files) and .github/workflows/security-secrets.yml (PR diff)
+# Docs: https://github.com/gitleaks/gitleaks/tree/master#configuration
+
+[extend]
+# Inherit the full built-in ruleset (AWS keys, JWTs, private keys, GitHub tokens, etc.)
+useDefault = true
+
+[allowlist]
+description = "Known dev fallbacks, test data, and paths that are intentionally excluded"
+
+# --- Path exclusions ---
+paths = [
+  # Third-party code and build artifacts — not owned by this project
+  "node_modules",
+  ".cache",
+  "dist",
+  "dist-public",
+  "dist-lambdas",
+  ".terraform",
+  # Test files — synthetic/dummy data is expected
+  "cypress",
+  "coverage",
+  # Template env files are intentionally tracked; their values are placeholders
+  ".*example\\.env$",
+]
+
+# --- Known dev fallbacks in web-api/src/environment.ts ---
+# These are local-development defaults that are NOT used in any deployed environment.
+# Real secrets are injected at runtime from AWS Secrets Manager via scripts/load-environment-from-secrets.sh.
+regexes = [
+  # DEFAULT_ACCOUNT_PASS dev fallback (environment.ts line ~DEFAULT_ACCOUNT_PASS)
+  "Testing1234\\$",
+  # POSTGRES_PASSWORD dev fallback
+  '''password.*[=:]\s*['"]?example['"]?''',
+]
+
+stopwords = [
+  # Hardcoded dev cognitoClientId placeholder in environment.ts — not a real client ID
+  "cognitoClientId",
+]

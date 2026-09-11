@@ -28,6 +28,7 @@ resource "aws_api_gateway_resource" "api_async_resource" {
 }
 
 resource "aws_api_gateway_method" "api_async_method_post" {
+  #checkov:skip=CKV2_AWS_53:API uses {proxy+} catch-all routing — API GW request validation requires per-route JSON Schema models which are meaningless on a proxy resource. Input validation is handled by ~120 Joi entity schemas in shared/src/business/entities/, called inside every interactor before persistence.
   rest_api_id   = aws_api_gateway_rest_api.gateway_for_api.id
   resource_id   = aws_api_gateway_resource.api_async_resource.id
   http_method   = "POST"
@@ -36,6 +37,7 @@ resource "aws_api_gateway_method" "api_async_method_post" {
 }
 
 resource "aws_api_gateway_method" "api_async_method_put" {
+  #checkov:skip=CKV2_AWS_53:API uses {proxy+} catch-all routing — API GW request validation requires per-route JSON Schema models which are meaningless on a proxy resource. Input validation is handled by ~120 Joi entity schemas in shared/src/business/entities/, called inside every interactor before persistence.
   depends_on = [
     aws_api_gateway_method.api_async_method_post
   ]
@@ -47,6 +49,7 @@ resource "aws_api_gateway_method" "api_async_method_put" {
 }
 
 resource "aws_api_gateway_method" "api_async_method_get" {
+  #checkov:skip=CKV2_AWS_53:API uses {proxy+} catch-all routing — API GW request validation requires per-route JSON Schema models which are meaningless on a proxy resource. Input validation is handled by ~120 Joi entity schemas in shared/src/business/entities/, called inside every interactor before persistence.
   depends_on = [
     aws_api_gateway_method.api_async_method_put
   ]
@@ -58,6 +61,7 @@ resource "aws_api_gateway_method" "api_async_method_get" {
 }
 
 resource "aws_api_gateway_method" "api_async_method_delete" {
+  #checkov:skip=CKV2_AWS_53:API uses {proxy+} catch-all routing — API GW request validation requires per-route JSON Schema models which are meaningless on a proxy resource. Input validation is handled by ~120 Joi entity schemas in shared/src/business/entities/, called inside every interactor before persistence.
   depends_on = [
     aws_api_gateway_method.api_async_method_get
   ]
@@ -69,6 +73,7 @@ resource "aws_api_gateway_method" "api_async_method_delete" {
 }
 
 resource "aws_api_gateway_method" "api_async_method_options" {
+  #checkov:skip=CKV2_AWS_53:API uses {proxy+} catch-all routing — API GW request validation requires per-route JSON Schema models which are meaningless on a proxy resource. Input validation is handled by ~120 Joi entity schemas in shared/src/business/entities/, called inside every interactor before persistence.
   depends_on = [
     aws_api_gateway_method.api_async_method_delete
   ]
