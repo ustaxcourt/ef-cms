@@ -451,6 +451,7 @@ describe('fix-stale-automatic-blocks.ts', () => {
     expect(console.log).toHaveBeenCalledWith(
       '1 cases were updated; 0 failed to update.',
     );
+    expect(console.log).toHaveBeenCalledWith('107-20');
   });
 
   it('should report cases whose evaluation failed without updating them', async () => {
@@ -499,7 +500,7 @@ describe('fix-stale-automatic-blocks.ts', () => {
     expect(console.log).toHaveBeenCalledWith(
       '1 cases were updated; 0 failed to update.',
     );
-    expect(console.log).toHaveBeenCalledWith('cases updated:', []);
+    expect(console.log).not.toHaveBeenCalledWith('115-20');
     expect(getCaseRow('115-20')).toMatchObject({ automaticBlocked: true });
   });
 
