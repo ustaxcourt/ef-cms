@@ -46,7 +46,7 @@ describe('updatePetitionerInformationInteractor canUserUpdatePetitionerContact',
     it('should return false when the user is a privatePractitioner not associated with the case', () => {
       const isUserAuthorized = canUserUpdatePetitionerContact({
         petitionerCaseRaw: mockCase,
-        contactId: '',
+        contactId: SECONDARY_CONTACT_ID,
         user: {
           ...mockPrivatePractitionerUser,
           userId: 'a003e912-7b2f-4d2f-bf00-b99ec0d29de1',
@@ -59,7 +59,7 @@ describe('updatePetitionerInformationInteractor canUserUpdatePetitionerContact',
     it('should return false when the user is a petitioner attempting to modify another petitioner', () => {
       const isUserAuthorized = canUserUpdatePetitionerContact({
         petitionerCaseRaw: mockCase,
-        contactId: '',
+        contactId: SECONDARY_CONTACT_ID,
         user: {
           ...mockPetitionerUser,
           userId: 'a003e912-7b2f-4d2f-bf00-b99ec0d29de1',
@@ -71,6 +71,20 @@ describe('updatePetitionerInformationInteractor canUserUpdatePetitionerContact',
 
     it('should return false when the case is new', () => {
       mockCase.status = CASE_STATUS_TYPES.new;
+      const isUserAuthorized = canUserUpdatePetitionerContact({
+        petitionerCaseRaw: mockCase,
+        contactId: SECONDARY_CONTACT_ID,
+        user: {
+          ...mockPetitionerUser,
+          userId: SECONDARY_CONTACT_ID,
+        },
+      });
+
+      expect(isUserAuthorized).toBeFalsy();
+    });
+
+    it('should return false when the contact id is not in the case', () => {
+      mockCase.petitioners[1].contactId = '1234';
       const isUserAuthorized = canUserUpdatePetitionerContact({
         petitionerCaseRaw: mockCase,
         contactId: SECONDARY_CONTACT_ID,

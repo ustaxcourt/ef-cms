@@ -34,7 +34,10 @@ export const canUserUpdatePetitionerContact = ({
 
   let isCurrentPetitioner = false;
   if (user.role === ROLES.petitioner) {
-    isCurrentPetitioner = contactId === user.userId;
+    const isContactOnCase = petitionerCaseRaw?.petitioners?.some(
+      petitioner => petitioner.contactId === contactId,
+    );
+    isCurrentPetitioner = isContactOnCase && contactId === user.userId;
   }
 
   return (
