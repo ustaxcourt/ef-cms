@@ -6,7 +6,10 @@ import {
   Practitioner,
   RawPractitioner,
 } from '@shared/business/entities/Practitioner';
-import { ROLES } from '@shared/business/entities/EntityConstants';
+import {
+  ALLOWLIST_FEATURE_FLAGS,
+  ROLES,
+} from '@shared/business/entities/EntityConstants';
 import { RawUser, User } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { getClientId, getUserPoolId, requireEnvVars } from '../util';
@@ -128,15 +131,39 @@ export async function createOrUpdateUser(
       poolId: userPoolId,
     });
   } else {
-    await applicationContext.getUserGateway().createUser(applicationContext, {
-      email: rawUser.email!,
-      name: rawUser.name,
-      poolId: userPoolId,
-      role: rawUser.role,
-      sendWelcomeEmail: true,
-      temporaryPassword: password,
-      userId,
-    });
+    const featureFlags = await applicationContext
+      .getUseCases()
+      .getAllFeatureFlagsInteractor(applicationContext);
+
+    const cognitoUser = await applicationContext
+      .getUserGateway()
+      .createUser(applicationContext, {
+        email: rawUser.email!,
+        name: rawUser.name,
+        poolId: userPoolId,
+        role: rawUser.role,
+        sendWelcomeEmail: true,
+        temporaryPassword: password,
+        userId,
+      });
+    if (
+      cognitoUser &&
+      featureFlags[ALLOWLIST_FEATURE_FLAGS.ALLOW_IDP_LOGIN.key] &&
+      rawUser.entityName === 'User' &&
+      rawUser.role !== ROLES.petitioner
+    )
+      await applicationContext.getCognito().adminLinkProviderForUser({
+        UserPoolId: userPoolId,
+        SourceUser: {
+          ProviderName: process.env.IDP_NAME,
+          ProviderAttributeName: 'email',
+          ProviderAttributeValue: rawUser.email,
+        },
+        DestinationUser: {
+          ProviderName: 'Cognito',
+          ProviderAttributeValue: cognitoUser.Username,
+        },
+      });
   }
 
   if (user.role === ROLES.legacyJudge) {

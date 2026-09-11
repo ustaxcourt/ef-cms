@@ -188,6 +188,9 @@ export const ALLOWLIST_FEATURE_FLAGS = {
       'A flag to know when to use the change of address lambda for processing.',
     key: 'use-change-of-address-lambda',
   },
+  ALLOW_IDP_LOGIN: {
+    key: 'allow-idp-login',
+  },
 };
 
 type FeatureFlags = typeof ALLOWLIST_FEATURE_FLAGS;

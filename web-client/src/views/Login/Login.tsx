@@ -24,6 +24,7 @@ export const Login = connect(
     alertError: state.alertError,
     alertHelper: state.alertHelper,
     dismissAlertSequence: sequences.dismissAlertSequence,
+    loginHelper: state.loginHelper,
   },
   ({
     alertInfo,
@@ -36,6 +37,7 @@ export const Login = connect(
     alertError,
     alertHelper,
     dismissAlertSequence,
+    loginHelper,
   }) => {
     return (
       <>
@@ -162,6 +164,21 @@ export const Login = connect(
                         Create your account now.
                       </Button>
                     </div>
+                    {loginHelper.showIdpLoginButton && (
+                      <div className="tw:flex tw:w-full">
+                        <Button
+                          aria-label="Sign in with Microsoft"
+                          variant="primaryTertiary"
+                          data-testid="microsoft-login-button"
+                          className="tw:mr-auto tw:w-auto"
+                          onClick={() => {
+                            window.location.href = loginHelper.idpLoginUrl;
+                          }}
+                        >
+                          Court user sign in
+                        </Button>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

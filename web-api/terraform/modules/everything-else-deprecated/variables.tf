@@ -57,3 +57,25 @@ variable "should_es_beta_exist" {
 variable "es_engine_version" {
   type = string
 }
+
+variable "idp_name" {
+  type     = string
+  nullable = true
+}
+
+variable "oidc_issuer_url" {
+  type     = string
+  nullable = true
+}
+
+variable "oidc_client_id" {
+  type     = string
+  nullable = true
+
+}
+
+variable "oidc_client_secret" {
+  type      = string
+  nullable  = true
+  sensitive = true
+}
