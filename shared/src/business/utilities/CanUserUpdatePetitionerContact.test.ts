@@ -12,31 +12,31 @@ import { MOCK_PRACTITIONER } from '@shared/test/mockUsers';
 
 describe('updatePetitionerInformationInteractor canUserUpdatePetitionerContact', () => {
   let mockCase;
+  let mockPetitioners;
+  let basePractitioner;
   const SECONDARY_CONTACT_ID = '56387318-0092-49a3-8cc1-921b0432bd16';
 
-  const mockPetitioners = [
-    {
-      ...MOCK_CASE.petitioners[0],
-      contactType: CONTACT_TYPES.petitioner,
-      name: 'Test Primary Petitioner',
-    },
-    {
-      ...MOCK_CASE.petitioners[0],
-      contactId: SECONDARY_CONTACT_ID,
-      contactType: CONTACT_TYPES.petitioner,
-      name: 'Test Secondary Petitioner',
-    },
-  ];
-
-  const basePractitioner = {
-    ...MOCK_PRACTITIONER,
-    representing: [mockPetitioners[0].contactId],
-  };
-
   beforeEach(() => {
+    mockPetitioners = [
+      {
+        ...MOCK_CASE.petitioners[0],
+        contactType: CONTACT_TYPES.petitioner,
+        name: 'Test Primary Petitioner',
+      },
+      {
+        ...MOCK_CASE.petitioners[0],
+        contactId: SECONDARY_CONTACT_ID,
+        contactType: CONTACT_TYPES.petitioner,
+        name: 'Test Secondary Petitioner',
+      },
+    ];
+    basePractitioner = {
+      ...MOCK_PRACTITIONER,
+      representing: [mockPetitioners[0].contactId],
+    };
     mockCase = {
       ...MOCK_CASE,
-      petitioners: mockPetitioners,
+      petitioners: [...mockPetitioners],
       privatePractitioners: [],
       status: CASE_STATUS_TYPES.generalDocket,
     };
