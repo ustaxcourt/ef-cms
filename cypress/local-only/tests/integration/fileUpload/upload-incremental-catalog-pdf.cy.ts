@@ -42,6 +42,13 @@ describe('uploading a PDF whose catalog is superseded by an incremental revision
       cy.get('[data-testid="file-upload-error-modal"]').contains(
         REJECTION_MESSAGE,
       );
+      cy.get('[data-testid="file-upload-error-modal"]')
+        .contains('a', 'Learn about troubleshooting files')
+        .should(
+          'have.attr',
+          'href',
+          'https://ustaxcourt.gov/dawson_faqs_case_management.html#FAQS6',
+        );
       checkA11y();
 
       cy.get('[data-testid="modal-button-confirm"]').click();
