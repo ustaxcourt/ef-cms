@@ -229,4 +229,32 @@ describe('addCaseToTrialSessionInteractor', () => {
 
     expect(createOrUpdateTrialSessionCases).not.toHaveBeenCalled();
   });
+
+  it('should update the automaticBlock field to false when adding a case to a trial session', async () => {
+    getCaseByDocketNumber.mockImplementation(() => ({
+      ...mockCase,
+      automaticBlocked: true,
+      automaticBlockedReason: 'some reason',
+      automaticBlockedDate: 'yesterday',
+    }));
+    await addCaseToTrialSessionInteractor(
+      applicationContext,
+      {
+        calendarNotes: 'testing',
+        docketNumber: MOCK_CASE.docketNumber,
+        trialSessionId: mockTrialSession.trialSessionId,
+      },
+      mockPetitionsClerkUser,
+    );
+
+    expect(updateCaseAndAssociations).toHaveBeenCalledWith(
+      expect.objectContaining({
+        caseToUpdate: expect.objectContaining({
+          automaticBlocked: false,
+          automaticBlockedReason: undefined,
+          automaticBlockedDate: undefined,
+        }),
+      }),
+    );
+  });
 });
