@@ -2087,7 +2087,7 @@ export const MAX_STATUS_REPORT_ORDER_TEXT_CHARACTERS = 256;
 export const TROUBLESHOOTING_INFO = {
   APP_SUPPORT_EMAIL: 'dawson.support@ustaxcourt.gov',
   FILE_UPLOAD_TROUBLESHOOTING_LINK:
-    'https://ustaxcourt.gov/dawson_faqs_case_management.html#FileUpload',
+    'https://ustaxcourt.gov/dawson_faqs_case_management.html#FAQS6',
 };
 
 export const MINUTE_SHEET_FORM_SECTION_MAP = {
