@@ -134,24 +134,20 @@ describe('Advanced Search', () => {
         cy.get('[data-testid="search-link"]').click();
         cy.get('[data-testid="order-search-tab"]').click();
         cy.get('[data-testid="keyword-search-input"]').type(orderContents);
+        // Re-submit until OpenSearch indexes it; assertions here would abort the retry.
+        cy.intercept('GET', '**/order-search**').as('orderSearch');
         let count: number;
         retry(() => {
-          cy.intercept('GET', '**/order-search**').as('orderSearch');
-          cy.get(
-            '[data-testid="submit-order-advanced-search-button"], [data-testid="advanced-search-button"], button#advanced-search-button, form[data-testid="order-search-container"] button[type=submit]',
-          )
-            .first()
-            .click();
-
+          cy.get('[data-testid="submit-order-advanced-search-button"]').click();
           cy.wait('@orderSearch').then(({ response }) => {
             count = response?.body?.results?.length || 0;
           });
-
-          cy.get('.search-results').should('exist');
           return assertExists(
             `[data-testid="docket-number-link-${docketNumber}"]`,
           );
         }, 12);
+
+        cy.get('.search-results').should('exist');
 
         /** Assert */
         // Ensure the results table exists and the new order appears as the first result
@@ -234,23 +230,20 @@ describe('Advanced Search', () => {
         cy.get('[data-testid="search-link"]').click();
         cy.get('[data-testid="opinion-search-tab"]').click();
         cy.get('[data-testid="keyword-search-input"]').type(opinionTitle);
-        // need to wait for elasticsearch potentially
+        // Re-submit until OpenSearch indexes it; assertions here would abort the retry.
+        cy.intercept('GET', '**/opinion-search**').as('opinionSearch');
         let count: number;
         retry(() => {
-          cy.intercept('GET', '**/opinion-search**').as('opinionSearch');
-          cy.get(
-            '[data-testid="submit-opinion-advanced-search-button"], [data-testid="advanced-search-button"], button#advanced-search-button, form[data-testid="opinion-search-container"] button[type=submit]',
-          )
-            .first()
-            .click();
+          cy.get('[data-testid="advanced-search-button"]').click();
           cy.wait('@opinionSearch').then(({ response }) => {
             count = response?.body?.results?.length || 0;
           });
-          cy.get('.search-results').should('exist');
           return assertExists(
             `[data-testid="docket-number-link-${docketNumber}"]`,
           );
         }, 12);
+
+        cy.get('.search-results').should('exist');
         /** Assert */
         // Ensure the results table exists and the new opinion appears as the first result
         cy.get('[data-testid="advanced-document-search-results-table"]').should(

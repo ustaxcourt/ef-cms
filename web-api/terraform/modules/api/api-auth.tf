@@ -14,6 +14,8 @@ resource "aws_api_gateway_resource" "api_auth_resource" {
 }
 
 resource "aws_api_gateway_method" "api_auth_method_post" {
+  #checkov:skip=CKV2_AWS_53:API uses {proxy+} catch-all routing
+  #checkov:skip=CKV_AWS_59:Auth endpoints intentionally unauthenticated — these are the login/token endpoints themselves; authorization is enforced at the application layer
   rest_api_id   = aws_api_gateway_rest_api.gateway_for_api.id
   resource_id   = aws_api_gateway_resource.api_auth_resource.id
   http_method   = "POST"
@@ -21,6 +23,8 @@ resource "aws_api_gateway_method" "api_auth_method_post" {
 }
 
 resource "aws_api_gateway_method" "api_auth_method_get" {
+  #checkov:skip=CKV2_AWS_53:API uses {proxy+} catch-all routing
+  #checkov:skip=CKV_AWS_59:Auth endpoints intentionally unauthenticated — these are the login/token endpoints themselves; authorization is enforced at the application layer
   depends_on = [
     aws_api_gateway_method.api_auth_method_post
   ]
@@ -31,6 +35,7 @@ resource "aws_api_gateway_method" "api_auth_method_get" {
 }
 
 resource "aws_api_gateway_method" "api_auth_method_options" {
+  #checkov:skip=CKV2_AWS_53:API uses {proxy+} catch-all routing — API GW request validation requires per-route JSON Schema models which are meaningless on a proxy resource. Input validation is handled by ~120 Joi entity schemas in shared/src/business/entities/, called inside every interactor before persistence.
   depends_on = [
     aws_api_gateway_method.api_auth_method_get
   ]
@@ -41,6 +46,8 @@ resource "aws_api_gateway_method" "api_auth_method_options" {
 }
 
 resource "aws_api_gateway_method" "api_auth_method_delete" {
+  #checkov:skip=CKV2_AWS_53:API uses {proxy+} catch-all routing
+  #checkov:skip=CKV_AWS_59:Auth endpoints intentionally unauthenticated — these are the login/token endpoints themselves; authorization is enforced at the application layer
   depends_on = [
     aws_api_gateway_method.api_auth_method_options
   ]
@@ -51,6 +58,8 @@ resource "aws_api_gateway_method" "api_auth_method_delete" {
 }
 
 resource "aws_api_gateway_method" "api_auth_method_put" {
+  #checkov:skip=CKV2_AWS_53:API uses {proxy+} catch-all routing
+  #checkov:skip=CKV_AWS_59:Auth endpoints intentionally unauthenticated — these are the login/token endpoints themselves; authorization is enforced at the application layer
   depends_on = [
     aws_api_gateway_method.api_auth_method_delete
   ]

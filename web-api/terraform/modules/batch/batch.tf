@@ -29,7 +29,7 @@ data "aws_security_group" "default" {
 }
 
 resource "aws_iam_role" "batch_service_role" {
-  name = "batch_role_${var.environment}_${var.current_color}_${var.region}"
+  name = "batch_service_role_${var.environment}_${var.current_color}_${var.region}"
 
   assume_role_policy = <<EOF
 {
@@ -41,7 +41,24 @@ resource "aws_iam_role" "batch_service_role" {
         "Service": "batch.amazonaws.com"
       },
       "Action": "sts:AssumeRole"
-    },
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy_attachment" "batch_service_role_policy" {
+  role       = aws_iam_role.batch_service_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSBatchServiceRole"
+}
+
+resource "aws_iam_role" "batch_job_role" {
+  name = "batch_job_role_${var.environment}_${var.current_color}_${var.region}"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
 		{
       "Effect": "Allow",
       "Principal": {
@@ -54,19 +71,9 @@ resource "aws_iam_role" "batch_service_role" {
 EOF
 }
 
-resource "aws_iam_role_policy_attachment" "batch_service_role_admin_policy" {
-  role       = aws_iam_role.batch_service_role.name
-  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
-}
-
-resource "aws_iam_role_policy_attachment" "ecs_task_execution_role_policy" {
-  role       = aws_iam_role.batch_service_role.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
-}
-
-resource "aws_iam_role_policy" "batch_service_role_policy" {
-  name = "batch_service_role_policy_${var.environment}_${var.current_color}_${var.region}"
-  role = aws_iam_role.batch_service_role.id
+resource "aws_iam_role_policy" "batch_job_role_policy" {
+  name = "batch_job_role_policy_${var.environment}_${var.current_color}_${var.region}"
+  role = aws_iam_role.batch_job_role.id
 
   policy = <<EOF
 {
@@ -87,15 +94,11 @@ resource "aws_iam_role_policy" "batch_service_role_policy" {
             "Effect": "Allow"
         },
         {
+            "Effect": "Allow",
             "Action": [
-                "ecs:DeleteCluster",
-                "ecs:DescribeClusters"
+                "execute-api:ManageConnections"
             ],
-            "Resource": [
-                "arn:aws:ecs:us-east-1:${data.aws_caller_identity.current.account_id}:cluster/compute_environment_*",
-                "arn:aws:ecs:us-west-1:${data.aws_caller_identity.current.account_id}:cluster/compute_environment_*"
-            ],
-            "Effect": "Allow"
+            "Resource": "arn:aws:execute-api:*:*:*"
         }
     ]
 }
@@ -171,7 +174,7 @@ resource "aws_batch_job_definition" "example_aws_batch_job_definition" {
       }
     ]
 
-    jobRoleArn = aws_iam_role.batch_service_role.arn
+    jobRoleArn = aws_iam_role.batch_job_role.arn
 
     executionRoleArn = aws_iam_role.job_definition_iam_role.arn
 

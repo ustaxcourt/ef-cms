@@ -18,6 +18,10 @@ EOF
 }
 
 resource "aws_iam_role_policy" "s3_replication_policy" {
+  #checkov:skip=CKV_AWS_288: s3:GetObject/GetObjectVersion on Resource:* — replication role reads from source bucket; overly broad, should be scoped to documents-* bucket ARNs (known tech debt)
+  #checkov:skip=CKV_AWS_289: s3:PutBucketReplication on Resource:* — permissions-management action required by replication; should be scoped; known tech debt
+  #checkov:skip=CKV_AWS_290: s3:* on Resource:* is overly broad — should be scoped to documents-* and temp-documents-* bucket ARNs; accepted tech debt
+  #checkov:skip=CKV_AWS_355: same reason as CKV_AWS_290 — wildcard resource on replication role is known tech debt
   name = "s3_replication_policy_${var.environment}"
   role = aws_iam_role.s3_replication_role.id
 
@@ -36,6 +40,7 @@ EOF
 }
 
 resource "aws_s3_bucket" "documents_us_east_1" {
+  #checkov:skip=CKV_AWS_145:AWS-managed SSE-S3 encryption is sufficient — only 3 court employees have prod access; CMK would add key management overhead without meaningful security benefit
   bucket   = "${var.dns_domain}-documents-${var.environment}-us-east-1"
   tags = {
     environment = var.environment
@@ -76,6 +81,7 @@ resource "aws_s3_bucket_cors_configuration" "documents_s3_cors_us_east_1" {
 }
 
 resource "aws_s3_bucket_lifecycle_configuration" "documents_s3_lc_us_east_1" {
+  #checkov:skip=CKV_AWS_300: incomplete multipart upload abort rule not configured — storage cost issue only, not a security risk; abort rules can be added opportunistically
   bucket = aws_s3_bucket.documents_us_east_1.id
 
   rule {
@@ -148,6 +154,7 @@ resource "aws_s3_bucket_public_access_block" "block_documents_east" {
 }
 
 resource "aws_s3_bucket" "documents_us_west_1" {
+  #checkov:skip=CKV_AWS_145:AWS-managed SSE-S3 encryption is sufficient — only 3 court employees have prod access; CMK would add key management overhead without meaningful security benefit
   provider = aws.us-west-1
   bucket   = "${var.dns_domain}-documents-${var.environment}-us-west-1"
 
@@ -178,6 +185,7 @@ resource "aws_s3_bucket_cors_configuration" "documents_s3_cors_us_west_1" {
 }
 
 resource "aws_s3_bucket_lifecycle_configuration" "documents_s3_lc_us_west_1" {
+  #checkov:skip=CKV_AWS_300: incomplete multipart upload abort rule not configured — storage cost issue only, not a security risk; abort rules can be added opportunistically
   bucket   = aws_s3_bucket.documents_us_west_1.id
   provider = aws.us-west-1
 

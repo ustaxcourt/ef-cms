@@ -80,13 +80,6 @@ jobs:
           comment_on_pr: false
       - name: NPM Install on Current Branch
         uses: ./.github/actions/dawson-node-bootstrap
-      - name: Configure sysctl limits
-        if: ${{ inputs.configure_sysctl }}
-        run: |
-          sudo swapoff -a
-          sudo sysctl -w vm.swappiness=1
-          sudo sysctl -w fs.file-max=262144
-          sudo sysctl -w vm.max_map_count=262144
       - name: Restore historical test file timings
         continue-on-error: true
         env:
@@ -94,15 +87,6 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
           scripts/github-actions/download-historical-test-file-times.ts ${{ inputs.workflow_filename }} historical-test-file-times $TEST_FILE_TIMINGS_PATH
-      - name: Setup OpenSearch
-        uses: ankane/setup-opensearch@v1
-        with:
-          opensearch-version: 3.7.0
-      - name: Prepare Postgres
-        run: |
-          npm run migration:postgres
-          npm run migration:postgres:contract
-          npm run seed:postgres
       - name: Create Cypress Output Directory
         if: ${{ inputs.is_cypress }}
         run: |
@@ -111,12 +95,11 @@ jobs:
       - name: Create Test Execution Times Directory
         run: |
           mkdir -p /tmp/test-file-times
-      - name: Start DAWSON
-        run: |
-          npm run start:all:ci >> /tmp/${{ inputs.workflow_filename }}-dawson-output-shard-${{ inputs.ci_node_index }}.txt &
-      - name: Wait for DAWSON to be ready
-        run: |
-          WAIT_FOR_CLIENT=1 WAIT_FOR_PUBLIC=1 ./wait-until-services.sh
+      - name: Setup and Start DAWSON
+        uses: ./.github/actions/dawson-app-setup
+        with:
+          configure_sysctl: ${{ inputs.configure_sysctl }}
+          log_file: /tmp/${{ inputs.workflow_filename }}-dawson-output-shard-${{ inputs.ci_node_index }}.txt
       - name: Run tests
         shell: bash
         run: |

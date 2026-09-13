@@ -1,0 +1,202 @@
+name: Security - Containers
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, ready_for_review]
+    paths-ignore:
+      - '**.md'
+      - '**/.gitignore'
+      - '.nvmrc'
+      - 'docs/**'
+  workflow_dispatch:
+  push:
+    branches: [staging]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  TRIVY_DB_REPOSITORY: ghcr.io/aquasecurity/trivy-db,public.ecr.aws/aquasecurity/trivy-db
+  TRIVY_JAVA_DB_REPOSITORY: ghcr.io/aquasecurity/trivy-java-db,public.ecr.aws/aquasecurity/trivy-java-db
+
+jobs:
+  trivy-config:
+    name: Trivy Dockerfile Config
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'pull_request' && !github.event.pull_request.draft)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Trivy config scan (Dockerfiles)
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          scan-type: config
+          scan-ref: .
+          severity: 'MEDIUM,HIGH,CRITICAL'
+          format: sarif
+          output: trivy-config.sarif
+          skip-dirs: 'node_modules,.terraform,web-api/terraform,coverage,dist,dist-public,dist-lambdas,cypress'
+          # >>> CONFIRM WITH JIM BEFORE FLIPPING THIS TO BLOCKING <<<
+          exit-code: '0'
+
+      - name: Upload SARIF
+        if: always()
+        uses: ./.github/actions/dawson-upload-sarif
+        with:
+          sarif_file: trivy-config.sarif
+          category: trivy-config
+
+  trivy-image:
+    name: Trivy Image Scan (core)
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'pull_request' && !github.event.pull_request.draft)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    timeout-minutes: 45
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Build DAWSON container images
+        uses: ./.github/actions/dawson-container-images
+
+      - name: Trivy scan — ef-cms-us-east-1 (base)
+        uses: ./.github/actions/dawson-trivy-image-scan
+        with:
+          image_ref: ef-cms-us-east-1:latest
+          report_path: trivy-base.sarif
+          category: trivy-image-base
+
+      - name: Trivy scan — efcms-local
+        uses: ./.github/actions/dawson-trivy-image-scan
+        with:
+          image_ref: efcms-local:latest
+          report_path: trivy-local.sarif
+          category: trivy-image-local
+
+  trivy-runtime-base:
+    name: Trivy Base Scan (${{ matrix.name }})
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'pull_request' && !github.event.pull_request.draft)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: puppeteer
+            image: node:24.16.0-slim
+          - name: batch
+            image: node:24
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Trivy scan — ${{ matrix.image }}
+        uses: ./.github/actions/dawson-trivy-image-scan
+        with:
+          image_ref: ${{ matrix.image }}
+          report_path: trivy-${{ matrix.name }}.sarif
+          category: trivy-image-${{ matrix.name }}
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # Job 4: staging baseline (non-blocking). Runs only on merge to staging and scans
+  # ALL FOUR images, so the Security tab holds a complete picture of what's actually
+  # live. This is where we discover the full CVE set to triage into .trivyignore.
+  # Mirrors the gitleaks-baseline pattern in the sibling workflows.
+  # ─────────────────────────────────────────────────────────────────────────────
+  trivy-baseline:
+    name: Trivy Baseline (staging)
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    timeout-minutes: 45
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Build DAWSON container images
+        uses: ./.github/actions/dawson-container-images
+
+      - name: Trivy scan — ef-cms-us-east-1 (baseline)
+        uses: ./.github/actions/dawson-trivy-image-scan
+        with:
+          image_ref: ef-cms-us-east-1:latest
+          report_path: trivy-baseline-base.sarif
+          category: trivy-baseline-base
+
+      - name: Trivy scan — efcms-local (baseline)
+        uses: ./.github/actions/dawson-trivy-image-scan
+        with:
+          image_ref: efcms-local:latest
+          report_path: trivy-baseline-local.sarif
+          category: trivy-baseline-local
+
+      - name: Trivy scan — node:24.16.0-slim (baseline)
+        uses: ./.github/actions/dawson-trivy-image-scan
+        with:
+          image_ref: node:24.16.0-slim
+          report_path: trivy-baseline-puppeteer.sarif
+          category: trivy-baseline-puppeteer
+
+      - name: Trivy scan — node:24 (baseline)
+        uses: ./.github/actions/dawson-trivy-image-scan
+        with:
+          image_ref: node:24
+          report_path: trivy-baseline-batch.sarif
+          category: trivy-baseline-batch
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # Aggregate gate. Today every scan is warn-only (exit-code 0), so this only trips
+  # on infrastructure failures (build error, action crash). When a scan is flipped
+  # to blocking, this is the single check to require in branch protection.
+  # ─────────────────────────────────────────────────────────────────────────────
+  containers-gate:
+    name: Security Gate (Containers)
+    if: >-
+      always() &&
+      (github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'pull_request' && !github.event.pull_request.draft))
+    needs: [trivy-config, trivy-image, trivy-runtime-base]
+    runs-on: ubuntu-latest
+    permissions: {}
+    steps:
+      - name: Check scan outcomes
+        env:
+          CONFIG_RESULT: ${{ needs.trivy-config.result }}
+          IMAGE_RESULT: ${{ needs.trivy-image.result }}
+          RUNTIME_RESULT: ${{ needs.trivy-runtime-base.result }}
+        run: |
+          if [[ "$CONFIG_RESULT" == "failure" ]]; then
+            echo "Trivy Dockerfile config scan failed — see the Security tab for details"
+            exit 1
+          fi
+          if [[ "$IMAGE_RESULT" == "failure" ]]; then
+            echo "Trivy core image scan failed — see the Security tab for details"
+            exit 1
+          fi
+          if [[ "$RUNTIME_RESULT" == "failure" ]]; then
+            echo "Trivy runtime base scan failed — see the Security tab for details"
+            exit 1
+          fi
+          echo "Containers gate passed"

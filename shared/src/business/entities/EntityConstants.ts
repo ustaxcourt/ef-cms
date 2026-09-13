@@ -73,11 +73,19 @@ export const MAX_PREFERRED_COMMUNICATION_METHOD_CHARACTERS = 20;
 
 export const MAX_MESSAGE_SUBJECT_CHARACTERS = 250;
 
-export const EXHIBIT_EVENT_CODES = ['EXH', 'PTE', 'HE', 'TE', 'M123', 'STIP'];
+export const EXHIBIT_EVENT_CODES = [
+  'EXH',
+  'EXS',
+  'PTE',
+  'HE',
+  'TE',
+  'M123',
+  'STIP',
+];
 
 export const AMENDMENT_EVENT_CODES = ['AMAT', 'ADMT'];
 
-export const STANDING_PRETRIAL_EVENT_CODES = ['SPOS', 'SPTO'];
+export const STANDING_ORDER_EVENT_CODES = ['SPOS', 'SPTO', 'SSO'];
 
 export const CLERK_OF_THE_COURT_CONFIGURATION = 'clerk-of-court-configuration';
 
@@ -576,7 +584,11 @@ export const EVENT_CODES_REQUIRING_JUDGE_SIGNATURE = without(
 
 export const JUDGE_ACTIVITY_REPORT_ORDER_EVENT_CODES = ORDER_EVENT_CODES.filter(
   eventCode => {
-    const excludedOrderEventCodes = ['OAJ', 'SPOS', 'SPTO', 'OST'];
+    const excludedOrderEventCodes = [
+      'OAJ',
+      ...STANDING_ORDER_EVENT_CODES,
+      'OST',
+    ];
     return !excludedOrderEventCodes.includes(eventCode);
   },
 );
@@ -2267,7 +2279,7 @@ export const MOTION_ORDER_RESPONSE_OPTIONS = {
   orderType: 'motionOrderResponse',
 };
 
-export const MAX_ORDER_RESPONSE_TEXT_CHARACTERS = 240;
+export const MAX_ORDER_RESPONSE_TEXT_CHARACTERS = 256;
 
 export const GRANT_DENY_MOTION_OPTIONS = {
   issueOrderOptions: {
@@ -2316,8 +2328,7 @@ export const ALLOWED_EVENT_CODES = [
   'NOT',
   'NOTR',
   'NTD',
-  'SPOS',
-  'SPTO',
+  ...STANDING_ORDER_EVENT_CODES,
   'TCRP',
   'NORP',
   'NOIP',

@@ -1,0 +1,83 @@
+{
+  "failed_checks": [
+    {
+      "file": "/../../modules/ci-cd/ci-cd-permissions.tf",
+      "findings": [
+        {
+          "resource": "module.ci-cd.aws_iam_user.ci_cd",
+          "check_ids": [
+            "CKV_AWS_273"
+          ]
+        },
+        {
+          "resource": "module.ci-cd.aws_iam_user_policy_attachment.ci_cd_iam_policy_attachment",
+          "check_ids": [
+            "CKV_AWS_40"
+          ]
+        },
+        {
+          "resource": "module.ci-cd.aws_iam_user_policy_attachment.ci_cd_policy_attachment",
+          "check_ids": [
+            "CKV_AWS_40"
+          ]
+        },
+        {
+          "resource": "module.ci-cd.aws_iam_user_policy_attachment.ci_cd_route53_policy_attachment",
+          "check_ids": [
+            "CKV_AWS_40"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "/../../modules/dawson-developer-permissions/dawson-developer-permissions.tf",
+      "findings": [
+        {
+          "resource": "module.dawson-developer-permissions.aws_iam_policy.dawson_dev_policy",
+          "check_ids": [
+            "CKV_AWS_286",
+            "CKV_AWS_287",
+            "CKV_AWS_288",
+            "CKV_AWS_289",
+            "CKV_AWS_290",
+            "CKV_AWS_355"
+          ]
+        },
+        {
+          "resource": "module.dawson-developer-permissions.aws_iam_role_policy_attachment.dawson_dev_policy_attachment",
+          "check_ids": [
+            "CKV_AWS_274"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "/../../modules/kibana/kibana.tf",
+      "findings": [
+        {
+          "resource": "module.kibana.aws_opensearch_domain.efcms-logs[0]",
+          "check_ids": [
+            "CKV2_AWS_52",
+            "CKV2_AWS_59",
+            "CKV_AWS_137",
+            "CKV_AWS_248",
+            "CKV_AWS_317",
+            "CKV_AWS_318"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "/../../modules/route53-zone/route53-zone.tf",
+      "findings": [
+        {
+          "resource": "module.route53-zone.aws_route53_zone.primary",
+          "check_ids": [
+            "CKV2_AWS_38",
+            "CKV2_AWS_39"
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -45,7 +45,7 @@ export class MotionOrderResponseForm extends JoiValidationEntity {
         JoiValidationConstants.STRING.max(MAX_ORDER_RESPONSE_TEXT_CHARACTERS)
           .allow('')
           .messages({
-            'string.max': 'Limit is 240 characters.',
+            'string.max': 'Limit is 256 characters.',
           }),
       )
       .min(1)

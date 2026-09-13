@@ -4,9 +4,9 @@ import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
 import {
   NOT_PROVIDED,
-  ROLES,
   SERVICE_INDICATOR_TYPES,
 } from '@shared/business/entities/EntityConstants';
+import { canUserUpdatePetitionerContact } from '@shared/business/utilities/canUserUpdatePetitionerContact';
 
 export const formatCounsel = ({ counsel, screenMetadata }) => {
   const counselPendingEmail = screenMetadata.pendingEmails
@@ -28,30 +28,6 @@ export const formatCounsel = ({ counsel, screenMetadata }) => {
   return counsel;
 };
 
-export const getCanEditPetitioner = ({
-  permissions,
-  petitioner,
-  petitionIsServed,
-  user,
-  userAssociatedWithCase,
-}) => {
-  if (!petitionIsServed) return false;
-
-  if (user.role === ROLES.petitioner) {
-    return petitioner.contactId === user.userId;
-  }
-
-  if (user.role === ROLES.privatePractitioner) {
-    return !!userAssociatedWithCase;
-  }
-
-  if (permissions.EDIT_PETITIONER_INFO) {
-    return true;
-  }
-
-  return false;
-};
-
 export const partiesInformationHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
@@ -71,9 +47,7 @@ export const partiesInformationHelper = (
     .getUtilities()
     .isExternalUser(user.role);
 
-  const formattedPrivatePractitioners = (
-    caseDetail.privatePractitioners || []
-  ).map(practitioner =>
+  caseDetail.privatePractitioners?.map(practitioner =>
     formatCounsel({ counsel: practitioner, screenMetadata }),
   );
 
@@ -108,22 +82,10 @@ export const partiesInformationHelper = (
         : 'No email provided';
     }
 
-    const userAssociatedWithCase = !!formattedPrivatePractitioners.find(
-      practitioner =>
-        user.barNumber === practitioner.barNumber &&
-        practitioner.representing?.includes(petitioner.contactId),
-    );
-
-    const canAllowDocumentServiceForCase = !!applicationContext
-      .getUtilities()
-      .canAllowDocumentServiceForCase(caseDetail);
-
-    const canEditPetitioner = getCanEditPetitioner({
-      permissions,
-      petitionIsServed: canAllowDocumentServiceForCase,
-      petitioner,
+    const canEditPetitioner = canUserUpdatePetitionerContact({
+      petitionerCaseRaw: caseDetail,
+      contactId: petitioner.contactId,
       user,
-      userAssociatedWithCase,
     });
 
     const editPetitionerLink = isExternalUser

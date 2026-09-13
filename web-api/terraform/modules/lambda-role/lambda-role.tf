@@ -22,6 +22,8 @@ EOF
 
 
 resource "aws_iam_role_policy" "lambda_policy" {
+  #checkov:skip=CKV_AWS_290: xray:PutTraceSegments/PutTelemetryRecords, batch:SubmitJob/DescribeJobs, ec2:CreateNetworkInterface/AttachNetworkInterface/DeleteNetworkInterface, and autoscaling:CompleteLifecycleAction require Resource: * — AWS does not support resource-level ARNs for these service APIs
+  #checkov:skip=CKV_AWS_355: same reason as CKV_AWS_290 — service APIs without resource-level ARN support
   name = "lambda_policy_${var.environment}"
   role = aws_iam_role.lambda_role.id
 

@@ -67,33 +67,16 @@ jobs:
           comment_on_pr: false
       - name: NPM Install in Current Branch
         uses: ./.github/actions/dawson-node-bootstrap
-      - name: Configure sysctl limits
-        if: ${{ inputs.configure_sysctl }}
-        run: |
-          sudo swapoff -a
-          sudo sysctl -w vm.swappiness=1
-          sudo sysctl -w fs.file-max=262144
-          sudo sysctl -w vm.max_map_count=262144
-      - name: Setup OpenSearch
-        uses: ankane/setup-opensearch@v1
-        with:
-          opensearch-version: 3.7.0
-      - name: Prepare Postgres
-        run: |
-          npm run migration:postgres
-          npm run migration:postgres:contract
-          npm run seed:postgres
       - name: Create Cypress Output Directory
         if: ${{ inputs.is_cypress }}
         run: |
           mkdir -p /tmp/cypress/
           mkdir -p /tmp/cypress-logs/
-      - name: Start DAWSON
-        run: |
-          npm run start:all:ci >> /tmp/${{ inputs.workflow_filename }}-dawson-output.txt &
-      - name: Wait for DAWSON to be ready
-        run: |
-          WAIT_FOR_CLIENT=1 WAIT_FOR_PUBLIC=1 ./wait-until-services.sh
+      - name: Setup and Start DAWSON
+        uses: ./.github/actions/dawson-app-setup
+        with:
+          configure_sysctl: ${{ inputs.configure_sysctl }}
+          log_file: /tmp/${{ inputs.workflow_filename }}-dawson-output.txt
       - name: Run tests
         shell: bash
         run: |

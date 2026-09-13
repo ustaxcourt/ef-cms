@@ -55,8 +55,13 @@ const buildPreamble = ({
     `${preamblePrepend}On ${motionFilingDateFormatted}, ${movant} filed a ${motionDocumentTitle} ${documentNumberText}. For cause, it is`,
   );
 
-const getMovantPossessive = (movant: string): string =>
-  movant === 'respondent' ? "respondent's" : "petitioner's";
+const getMovantPossessive = (movant: string): string => {
+  if (movant === 'respondent') return "respondent's";
+  if (movant === 'the parties') return "the parties'";
+  if (movant === 'petitioners') return "petitioners'";
+  if (movant === 'petitioner') return "petitioner's";
+  return `${movant}'s`;
+};
 
 const formatFilingPartyForDocument = (filingParty: string): string =>
   filingParty.toLowerCase();

@@ -1,0 +1,44 @@
+framework:
+  - terraform
+  - dockerfile
+  - github_actions
+
+directory:
+  - web-api/terraform/applyables/account-specific
+  - web-api/terraform/applyables/allColors
+  - web-api/terraform/applyables/blue
+  - web-api/terraform/applyables/green
+  - web-api/terraform/applyables/reindex-cron
+  - web-api/terraform/applyables/stale-cases-email-cron
+  - web-api/terraform/applyables/switch-colors-cron
+  - web-api/terraform/applyables/terraform-state-backend
+  - web-api/terraform/applyables/wait-for-workflow
+
+skip-path:
+  - node_modules
+  - .terraform
+
+compact: true
+soft-fail: true
+
+skip-check:
+  # --- Lambda: serverless-by-design, these checks don't apply ---
+  - CKV_AWS_117  # Lambda in VPC: functions reach AWS services (DynamoDB, SQS, Cognito) via public
+                 # endpoints; no private-subnet resources. VPC adds latency/NAT cost, no security gain.
+  - CKV_AWS_115  # Reserved concurrency: resource-allocation knob, not a security control.
+  - CKV_AWS_116  # Lambda DLQ: API Lambdas are synchronous (APIGW->Lambda->response). Async workers
+                 # already have DLQs via SQS redrive policies in worker.tf / opensearch-sync.tf.
+  - CKV_AWS_272  # Code signing: integrity enforced by CI/CD pipeline + ECR scanning, not Lambda signing.
+
+  # --- S3: CloudFront static-asset buckets, these are operational not security gaps ---
+  - CKV2_AWS_62  # S3 event notifications: not a security control for static asset buckets.
+  - CKV2_AWS_61  # S3 lifecycle: assets overwritten on deploy; lifecycle config would delete live assets.
+  - CKV_AWS_144  # S3 cross-region replication: handled at CloudFront (multi-origin) and RDS layers.
+
+  # --- CloudWatch: retention handled downstream via OpenSearch ---
+  - CKV_AWS_338  # Log retention >=1yr: logs forwarded to OpenSearch via subscription filters.
+  - CKV_AWS_66   # Log retention days set: same — CloudWatch is the ephemeral hop, OpenSearch is store.
+
+  # --- Terraform meta-checks: not applicable to this module layout ---
+  - CKV_TF_3     # State file locking: configured in the S3 backend block, not in .tf resource blocks.
+  - CKV_TF_1     # Module commit-hash sources: internal modules use relative paths, not external git refs.

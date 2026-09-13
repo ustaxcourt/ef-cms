@@ -89,6 +89,7 @@ export class SupportingDocumentInformationFactory extends JoiValidationEntity {
     const supportingDocumentFileCategories = [
       'Memorandum in Support',
       'Brief in Support',
+      'Exhibit in Support',
       'Affidavit in Support',
       'Declaration in Support',
       'Unsworn Declaration under Penalty of Perjury in Support',

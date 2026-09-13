@@ -54,6 +54,14 @@ export const COURT_ISSUED_EVENTS: CourtIssuedEvent[] = [
     requiresSignature: false,
   },
   {
+    eventCode: 'SSO',
+    documentType: 'Standing Scheduling Order',
+    documentTitle: 'Standing Scheduling Order',
+    scenario: 'Type B',
+    isOrder: true,
+    requiresSignature: false,
+  },
+  {
     eventCode: 'TCRP',
     documentType: 'Tax Court Report Pamphlet',
     documentTitle: '[Anything]',

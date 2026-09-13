@@ -1,0 +1,53 @@
+name: DAWSON App Setup
+description: Configure and start DAWSON locally. Single source of truth for all CI workflows.
+
+inputs:
+  configure_sysctl:
+    description: Whether to configure kernel limits for browser-heavy test suites.
+    default: 'false'
+  log_file:
+    description: Path to redirect DAWSON stdout/stderr.
+    required: true
+  wait_flags:
+    description: Environment variables prepended to wait-until-services.sh (e.g. "MAX_TRIES=150 WAIT_FOR_PUBLIC_API=1").
+    required: false
+    default: 'WAIT_FOR_CLIENT=1 WAIT_FOR_PUBLIC=1'
+
+runs:
+  using: composite
+  steps:
+    - name: Configure sysctl limits
+      if: ${{ inputs.configure_sysctl == 'true' }}
+      shell: bash
+      run: |
+        sudo swapoff -a
+        sudo sysctl -w vm.swappiness=1
+        sudo sysctl -w fs.file-max=262144
+        sudo sysctl -w vm.max_map_count=262144
+
+    - name: Setup OpenSearch
+      uses: ankane/setup-opensearch@v1
+      with:
+        opensearch-version: 3.7.0
+
+    - name: Prepare Postgres
+      shell: bash
+      run: |
+        npm run migration:postgres
+        npm run migration:postgres:contract
+        npm run seed:postgres
+
+    - name: Start DAWSON
+      shell: bash
+      env:
+        LOG_FILE: ${{ inputs.log_file }}
+      run: |
+        npm run start:all:ci >> "$LOG_FILE" 2>&1 &
+
+    - name: Wait for DAWSON
+      shell: bash
+      env:
+        WAIT_FLAGS: ${{ inputs.wait_flags }}
+      run: |
+        read -r -a WAIT_ARGS <<< "$WAIT_FLAGS"
+        env "${WAIT_ARGS[@]}" ./wait-until-services.sh
