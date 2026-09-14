@@ -409,7 +409,7 @@ Used in: `.github/workflows/security-sast.yml` — installed via `curl` in the `
 Below is a list of dependencies that are locked down due to known issues with security, integration problems within DAWSON, etc. Try to update these items but please be aware of the issue that's documented and ensure it's been resolved.
 
 ### pdfjs-dist
-**Current Version Installed: 6.2.289**
+**Current Version Installed: 6.3.289**
 
 - When upgrading to version 5.4.624 the newer pdfjs-dist release relies on DOMMatrix, which caused errors in AWS Lambda when scraping text from PDFs. This worked locally but failed in the deployed environment because Lambda does not provide DOMMatrix. To resolve this, I added a polyfill using the `dommatrix` library that is used when DOMMatrix is undefined. See `getPdfJs.ts` and `parsePdf.ts` for details.
    - I debugged this by temporarily ignoring the smoketests in search.cy.ts in order for the build to pass and deploy to an exp environment. From there I ran the cypress smoketests on the exp environement locally, found the error in cloudwatch logs, tested multiple fixes and made the neccessary changes.
@@ -486,7 +486,7 @@ If an update is available for DWT:
 - Upgrade `jest`, `babel-jest`, and `jest-environment-jsdom` together manually rather than via the upgrade script. `babel-jest` is also excluded by the upgrade script's `caveats` array. Verify the full unit test suites after any bump.
 - On June 26, 2025, newer versions of `jest` conflicted with `ts-jest` 29.x; we stayed on Jest 29 until `ts-jest` caught up.
 - On June 30, 2025, a `jest-environment-jsdom` bump caused failures in unit tests that use `Object.defineProperty` (for example, `getPdfJs.test.ts`). Re-test those specs before removing this pin.
-- On September 9, 2026, we were able to upgrade `jest`, `jeset-environment-jsdom`, and `babel-jest` to **30.5.1** successfully
+- On September 9, 2026, we were able to upgrade `jest`, `jest-environment-jsdom`, and `babel-jest` to **30.5.1** successfully
 
 ### websocket
 **Installed Version: 1.0.35**
