@@ -188,11 +188,11 @@ describe('prepareStatusReportOrderAction,', () => {
   it.each([
     [
       STATUS_REPORT_ORDER_OPTIONS.jurisdictionOptions.retained,
-      `<p class="indent-paragraph">On ${statusReportFilingDateFormatted}, a status report was filed (doc no. 4). For cause, it is</p><p class="indent-paragraph">ORDERED that jurisdiction is retained by the undersigned.</p>`,
+      `<p class="indent-paragraph">On ${statusReportFilingDateFormatted}, a status report was filed (doc. no. 4). For cause, it is</p><p class="indent-paragraph">ORDERED that jurisdiction is retained by the undersigned.</p>`,
     ],
     [
       STATUS_REPORT_ORDER_OPTIONS.jurisdictionOptions.restored,
-      `<p class="indent-paragraph">On ${statusReportFilingDateFormatted}, a status report was filed (doc no. 4). For cause, it is</p><p class="indent-paragraph">ORDERED that this case is restored to the general docket.</p>`,
+      `<p class="indent-paragraph">On ${statusReportFilingDateFormatted}, a status report was filed (doc. no. 4). For cause, it is</p><p class="indent-paragraph">ORDERED that this case is restored to the general docket.</p>`,
     ],
   ])(
     'should have correct output for jurisdiction %s',
@@ -223,11 +223,11 @@ describe('prepareStatusReportOrderAction,', () => {
   it.each([
     [
       STATUS_REPORT_ORDER_OPTIONS.orderTypeOptions.statusReport,
-      `<p class="indent-paragraph">On ${statusReportFilingDateFormatted}, a status report was filed (doc no. 4). For cause, it is</p><p class="indent-paragraph">ORDERED that the parties shall file a further status report by ${dueDateFormatted}.</p>`,
+      `<p class="indent-paragraph">On ${statusReportFilingDateFormatted}, a status report was filed (doc. no. 4). For cause, it is</p><p class="indent-paragraph">ORDERED that the parties shall file a further status report by ${dueDateFormatted}.</p>`,
     ],
     [
       STATUS_REPORT_ORDER_OPTIONS.orderTypeOptions.stipulatedDecision,
-      `<p class="indent-paragraph">On ${statusReportFilingDateFormatted}, a status report was filed (doc no. 4). For cause, it is</p><p class="indent-paragraph">ORDERED that the parties shall file a status report or proposed stipulated decision by ${dueDateFormatted}.</p>`,
+      `<p class="indent-paragraph">On ${statusReportFilingDateFormatted}, a status report was filed (doc. no. 4). For cause, it is</p><p class="indent-paragraph">ORDERED that the parties shall file a status report or proposed stipulated decision by ${dueDateFormatted}.</p>`,
     ],
   ])('should have correct output for order type %s', async (input, output) => {
     const result = await runAction(prepareStatusReportOrderAction, {
