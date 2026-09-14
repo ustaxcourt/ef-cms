@@ -6,6 +6,9 @@ export const exchangeAuthCodeAction = async ({
   path,
 }: ActionProps) => {
   const { authCode, error, errorDescription } = props;
+  const code_verifier = applicationContext
+    .getPersistenceGateway()
+    .getItem({ key: 'code_verifier' });
 
   if (error) {
     return path.error({
@@ -21,6 +24,7 @@ export const exchangeAuthCodeAction = async ({
     const { accessToken, idToken, refreshToken } = await authCodeInteractor(
       applicationContext,
       authCode,
+      code_verifier,
     );
 
     return path.success({ accessToken, idToken, refreshToken });

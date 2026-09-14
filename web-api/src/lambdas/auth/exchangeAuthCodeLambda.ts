@@ -6,11 +6,12 @@ export const exchangeAuthCodeLambda = event =>
   genericHandler(
     event,
     async ({ applicationContext }) => {
-      const { authCode } = JSON.parse(event.body);
+      const { authCode, code_verifier } = JSON.parse(event.body);
 
       const { accessToken, idToken, refreshToken, expiresAt } =
         await exchangeAuthCodeInteractor(applicationContext, {
           authCode,
+          code_verifier,
         });
 
       return {

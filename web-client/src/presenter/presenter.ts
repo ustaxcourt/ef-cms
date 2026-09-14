@@ -661,6 +661,7 @@ import { paymentCancelSequence } from '@web-client/presenter/sequences/paymentCa
 import { paymentSuccessSequence } from '@web-client/presenter/sequences/paymentSuccessSequence';
 import { setClerkOfCourtDashboardOptionsSequence } from '@web-client/presenter/sequences/setClerkOfCourtDashboardOptionSequence';
 import { authCodeSequence } from '@web-client/presenter/sequences/authCodeSequence';
+import { idpLoginSequence } from '@web-client/presenter/sequences/Login/idpLoginSequence';
 
 export const presenterSequences = {
   addAnotherIrsNoticeToFormSequence,
@@ -1028,6 +1029,7 @@ export const presenterSequences = {
   gotoWorkQueueSequence: gotoWorkQueueSequence as unknown as Function,
   gotoRecentFilingsSequence: gotoRecentFilingsSequence as unknown as Function,
   handleAppHasUpdatedSequence,
+  idpLoginSequence: idpLoginSequence as unknown as Function,
   initAppSequence,
   initFilingFeePaymentSequence:
     initFilingFeePaymentSequence as unknown as Function,
