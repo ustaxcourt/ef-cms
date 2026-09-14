@@ -16,6 +16,7 @@ describe('FeatureFlagResponseDTO', () => {
       [ALLOWLIST_FEATURE_FLAGS.CHIEF_JUDGE_NAME.key]: 'Test Chief Judge',
       [ALLOWLIST_FEATURE_FLAGS.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key]: true,
       [ALLOWLIST_FEATURE_FLAGS.RESTRICTED_EVENT_CODES.key]: ['A', 'B'],
+      [ALLOWLIST_FEATURE_FLAGS.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.key]: '',
     });
 
     expect(dto.isValid()).toBe(true);
