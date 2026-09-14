@@ -4,7 +4,12 @@ import joi from 'joi';
 
 const FEATURE_FLAG_VALUE_SCHEMA = joi
   .alternatives()
-  .try(joi.string(), joi.boolean(), joi.number().integer(), joi.array())
+  .try(
+    joi.string().allow(''),
+    joi.boolean(),
+    joi.number().integer(),
+    joi.array(),
+  )
   .optional();
 
 const ALLOWLIST_FEATURE_FLAG_VALIDATION_RULES = Object.fromEntries(
