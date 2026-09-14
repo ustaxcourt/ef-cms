@@ -4,7 +4,6 @@ import { Get } from 'node_modules/cerebral';
 
 type LoginHelperType = {
   showIdpLoginButton: boolean;
-  idpLoginUrl: string;
 };
 
 export const loginHelper = (get: Get): LoginHelperType => {
@@ -14,6 +13,5 @@ export const loginHelper = (get: Get): LoginHelperType => {
 
   return {
     showIdpLoginButton,
-    idpLoginUrl: '',
   };
 };

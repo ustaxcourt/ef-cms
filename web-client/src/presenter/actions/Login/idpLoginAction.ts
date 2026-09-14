@@ -9,12 +9,19 @@ export const idpLoginAction = async ({
   router,
   applicationContext,
 }: ActionProps) => {
+  const managedLoginDomain = process.env.MANAGED_LOGIN_DOMAIN;
+  const clientId = process.env.COGNITO_CLIENT_ID;
+  const idpName = process.env.IDP_NAME;
+  const efcmsDomain = process.env.EFCMS_DOMAIN;
+  if (!managedLoginDomain || !clientId || !idpName || !efcmsDomain)
+    throw new Error('Missing env variables to perform idp login.');
+
   const config = new Configuration(
     {
-      issuer: process.env.MANAGED_LOGIN_DOMAIN!,
-      authorization_endpoint: `${process.env.MANAGED_LOGIN_DOMAIN}/oauth2/authorize`,
+      issuer: managedLoginDomain,
+      authorization_endpoint: `${managedLoginDomain}/oauth2/authorize`,
     },
-    process.env.COGNITO_CLIENT_ID!,
+    clientId,
   );
 
   const code_verifier = randomPKCECodeVerifier();
@@ -26,8 +33,8 @@ export const idpLoginAction = async ({
   });
 
   const params = {
-    identity_provider: process.env.IDP_NAME || 'ustcEntra',
-    redirect_uri: `https://app.${process.env.EFCMS_DOMAIN}/auth-code`,
+    identity_provider: idpName || 'ustcEntra',
+    redirect_uri: `https://app.${efcmsDomain}/auth-code`,
     code_challenge,
     code_challenge_method: 'S256',
   };
