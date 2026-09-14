@@ -81,6 +81,9 @@ When updating Node.js, keep in mind:
  1. Manually update the images in:
    - `./Dockerfile`
    - `./web-api/runtimes/puppeteer/Dockerfile`
+ 1. Manually update the base image tags scanned in:
+   - `./.github/workflows/security-containers.yml`
+     - The `trivy-runtime-base` matrix and the `trivy-baseline` steps repeat the tags from the Dockerfiles above. Nothing fails if they are missed, the scans just keep reporting on an image we no longer use.
  1. Manually update the Node.js version defined for the `docker-image-zipper` step in:
    - `./.circleci/config.yml`
  1. Update the node version used by our lambdas.
