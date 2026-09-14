@@ -220,7 +220,7 @@
     "start:api:ci": "CI=true npm run start:api",
     "start:api:docker": "USTC_ENV=dev ./run-api.sh",
     "start:api:resume": "RESUME=true npm run start:api",
-    "start:client": "WATCH=true FILE_UPLOAD_MODAL_TIMEOUT=1 USTC_ENV=dev ENV=local run-p start:client-host start:client:esbuild",
+    "start:client": "WATCH=true FILE_UPLOAD_MODAL_TIMEOUT=1 USTC_ENV=dev ENV=local IDP_NAME=ustc_entra run-p start:client-host start:client:esbuild",
     "start:client-host": "servor dist index.html 1234",
     "start:client:ci": "CI=true NODE_ENV=production npm run start:client",
     "start:client:esbuild": "node esbuild.config.mjs",
