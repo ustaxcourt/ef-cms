@@ -238,6 +238,16 @@ describe('DateHandler', () => {
       expect(result).toEqual('2020-03-01T05:00:00.000Z');
     });
 
+    it('handles adding seconds to a date', () => {
+      const result = calculateISODate({
+        dateString: '2020-03-01T05:00:00.000Z',
+        howMuch: 65,
+        units: 'seconds',
+      });
+
+      expect(result).toEqual('2020-03-01T05:01:05.000Z');
+    });
+
     describe('Daylight Saving Time (DST) arithmetic logic', () => {
       it('calculates boundaries correctly crossing Fall back (Nov)', () => {
         // Midnight EDT (-04:00) before boundary jump
