@@ -71,8 +71,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
+      # efcms-local is not scanned: it is FROM ef-cms-us-east-1 and adds no OS packages,
+      # so Trivy reports the same CVEs under a second image name.
       - name: Build DAWSON container images
         uses: ./.github/actions/dawson-container-images
+        with:
+          build_local: 'false'
 
       - name: Trivy scan — ef-cms-us-east-1 (base)
         uses: ./.github/actions/dawson-trivy-image-scan
@@ -80,13 +84,6 @@ jobs:
           image_ref: ef-cms-us-east-1:latest
           report_path: trivy-base.sarif
           category: trivy-image-base
-
-      - name: Trivy scan — efcms-local
-        uses: ./.github/actions/dawson-trivy-image-scan
-        with:
-          image_ref: efcms-local:latest
-          report_path: trivy-local.sarif
-          category: trivy-image-local
 
   trivy-runtime-base:
     name: Trivy Base Scan (${{ matrix.name }})
@@ -119,7 +116,7 @@ jobs:
 
   # ─────────────────────────────────────────────────────────────────────────────
   # Job 4: staging baseline (non-blocking). Runs only on merge to staging and scans
-  # ALL FOUR images, so the Security tab holds a complete picture of what's actually
+  # every distinct image, so the Security tab holds a complete picture of what's actually
   # live. This is where we discover the full CVE set to triage into .trivyignore.
   # Mirrors the gitleaks-baseline pattern in the sibling workflows.
   # ─────────────────────────────────────────────────────────────────────────────
@@ -135,8 +132,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
+      # efcms-local is not scanned: see the note in the trivy-image job above.
       - name: Build DAWSON container images
         uses: ./.github/actions/dawson-container-images
+        with:
+          build_local: 'false'
 
       - name: Trivy scan — ef-cms-us-east-1 (baseline)
         uses: ./.github/actions/dawson-trivy-image-scan
@@ -144,13 +144,6 @@ jobs:
           image_ref: ef-cms-us-east-1:latest
           report_path: trivy-baseline-base.sarif
           category: trivy-baseline-base
-
-      - name: Trivy scan — efcms-local (baseline)
-        uses: ./.github/actions/dawson-trivy-image-scan
-        with:
-          image_ref: efcms-local:latest
-          report_path: trivy-baseline-local.sarif
-          category: trivy-baseline-local
 
       - name: Trivy scan — node:24.16.0-slim (baseline)
         uses: ./.github/actions/dawson-trivy-image-scan
