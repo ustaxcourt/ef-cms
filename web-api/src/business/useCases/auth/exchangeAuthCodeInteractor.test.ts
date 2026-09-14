@@ -1,8 +1,13 @@
 import { exchangeAuthCodeInteractor } from '@web-api/business/useCases/auth/exchangeAuthCodeInteractor';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
+import { calculateISODate } from '@shared/business/utilities/DateHandler';
 
 describe('exchangeAuthCodeInteractor', () => {
   it('should successfully exchange auth code', async () => {
+    const mockNow = '2026-09-01T00:00:00.000Z';
+    const createISODateString = jest.fn().mockReturnValue(mockNow);
+
     const mockResult = {
       data: {
         expires_in: 200,
@@ -13,6 +18,7 @@ describe('exchangeAuthCodeInteractor', () => {
     };
     const result = await exchangeAuthCodeInteractor(
       {
+        ...applicationContext,
         getHttpClient: () => {
           return {
             CancelToken: {
@@ -23,6 +29,12 @@ describe('exchangeAuthCodeInteractor', () => {
             post: () => Promise.resolve(mockResult),
           };
         },
+        getUtilities: () => {
+          return {
+            createISODateString,
+            calculateISODate,
+          };
+        },
       } as any,
       { authCode: '1234abcd', code_verifier: '1234' },
     );
@@ -30,7 +42,7 @@ describe('exchangeAuthCodeInteractor', () => {
       accessToken: '12341234',
       idToken: '5678gefd',
       refreshToken: '1234',
-      expiresAt: 200,
+      expiresAt: '2026-09-01T00:03:20.000Z',
     });
   });
 

@@ -29,11 +29,17 @@ export const exchangeAuthCodeInteractor = async (
         },
       });
 
+    const expiresAt = applicationContext.getUtilities().calculateISODate({
+      dateString: applicationContext.getUtilities().createISODateString(),
+      howMuch: response.data.expires_in,
+      units: 'seconds',
+    });
+
     return {
       accessToken: response.data.access_token,
       idToken: response.data.id_token,
       refreshToken: response.data.refresh_token,
-      expiresAt: response.data.expires_in,
+      expiresAt,
     };
   } catch (err: any) {
     if (err.name === 'NotAuthorizedException') {
