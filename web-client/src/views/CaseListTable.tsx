@@ -17,7 +17,10 @@ import {
   PaginationResult,
   useClientSidePaginator,
 } from '@web-client/utilities/useClientSidePaginator';
-import { CASE_LIST_PAGE_SIZE } from '@shared/business/entities/EntityConstants';
+import {
+  ALLOWLIST_FEATURE_FLAGS,
+  CASE_LIST_PAGE_SIZE,
+} from '@shared/business/entities/EntityConstants';
 
 export const CaseListTable = connect(
   {
@@ -26,7 +29,12 @@ export const CaseListTable = connect(
       sequences.clearOpenClosedCasesCurrentPageSequence,
     closedTab: state.constants.EXTERNAL_USER_DASHBOARD_TABS.CLOSED,
     dashboardExternalHelper: state.dashboardExternalHelper,
+    enablePaymentPortalIntegration:
+      state.featureFlags[
+        ALLOWLIST_FEATURE_FLAGS.ENABLE_PAYMENT_PORTAL_INTEGRATION.key
+      ],
     externalUserCasesHelper: state.externalUserCasesHelper,
+    initFilingFeePaymentSequence: sequences.initFilingFeePaymentSequence,
     openTab: state.constants.EXTERNAL_USER_DASHBOARD_TABS.OPEN,
     setCaseTypeToDisplaySequence: sequences.setCaseTypeToDisplaySequence,
     showMoreClosedCasesSequence: sequences.showMoreClosedCasesSequence,
@@ -41,7 +49,9 @@ export const CaseListTable = connect(
     clearOpenClosedCasesCurrentPageSequence,
     closedTab,
     dashboardExternalHelper,
+    enablePaymentPortalIntegration,
     externalUserCasesHelper,
+    initFilingFeePaymentSequence,
     openTab,
     setCaseTypeToDisplaySequence,
     showCaseStatusInfoSequence,
@@ -180,7 +190,13 @@ export const CaseListTable = connect(
                 <tbody>
                   {cases.map(item => (
                     <CaseListRowExternal
+                      enablePaymentPortalIntegration={
+                        !!enablePaymentPortalIntegration
+                      }
                       formattedCase={item}
+                      initFilingFeePaymentSequence={
+                        initFilingFeePaymentSequence
+                      }
                       isNestedCase={false}
                       key={item.docketNumber}
                       showFilingFee={dashboardExternalHelper.showFilingFee}

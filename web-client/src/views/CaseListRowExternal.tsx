@@ -7,13 +7,17 @@ import classNames from 'classnames';
 import { Button } from '@web-client/ustc-ui/Button/Button';
 
 export const CaseListRowExternal = ({
+  enablePaymentPortalIntegration,
   formattedCase,
+  initFilingFeePaymentSequence,
   isNestedCase,
   showFilingFee,
   showCaseStatusInfoSequence,
   showCaseStatus,
 }: {
+  enablePaymentPortalIntegration: boolean;
   formattedCase: TAssociatedCaseFormatted;
+  initFilingFeePaymentSequence: Function;
   isNestedCase: boolean;
   showFilingFee: boolean;
   showCaseStatusInfoSequence: any;
@@ -65,9 +69,26 @@ export const CaseListRowExternal = ({
                 </Button>
               </td>
             )}
-            {showFilingFee && (
+            {showFilingFee && !enablePaymentPortalIntegration && (
               <td data-testid="petition-payment-status">
                 {formattedCase.petitionPaymentStatus}
+              </td>
+            )}
+            {showFilingFee && enablePaymentPortalIntegration && (
+              <td data-testid="petition-payment-status">
+                {formattedCase.petitionPaymentStatus === 'Not paid' ? (
+                  <button
+                    className="usa-button margin-right-205 usa-button--unstyled ustc-button--unstyled"
+                    data-testid="pay-filing-fee-button"
+                    onClick={() => {
+                      initFilingFeePaymentSequence();
+                    }}
+                  >
+                    Pay now
+                  </button>
+                ) : (
+                  formattedCase.petitionPaymentStatus
+                )}
               </td>
             )}
           </tr>
@@ -75,6 +96,10 @@ export const CaseListRowExternal = ({
             formattedCase.consolidatedCases.map(consolidatedCase => {
               return (
                 <CaseListRowExternal
+                  enablePaymentPortalIntegration={
+                    enablePaymentPortalIntegration
+                  }
+                  initFilingFeePaymentSequence={initFilingFeePaymentSequence}
                   isNestedCase
                   formattedCase={consolidatedCase}
                   key={consolidatedCase.docketNumber}
@@ -171,6 +196,8 @@ export const CaseListRowExternal = ({
           formattedCase.consolidatedCases.map(consolidatedCase => {
             return (
               <CaseListRowExternal
+                enablePaymentPortalIntegration={enablePaymentPortalIntegration}
+                initFilingFeePaymentSequence={initFilingFeePaymentSequence}
                 isNestedCase
                 formattedCase={consolidatedCase}
                 key={consolidatedCase.docketNumber}
