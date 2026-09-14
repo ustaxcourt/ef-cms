@@ -1,4 +1,3 @@
-import { getCypressEnv } from '../../../../helpers/env/cypressEnvironment';
 import { checkA11y } from '../../../support/generalCommands/checkA11y';
 
 describe('Login - Accessibility', () => {
@@ -14,10 +13,6 @@ describe('Login - Accessibility', () => {
   });
 
   after(function () {
-    if (getCypressEnv().isLocal) {
-      return;
-    }
-
     cy.get('@ORIGINAL_FEATURE_FLAG_VALUE').then(ORIGINAL_FEATURE_FLAG_VALUE => {
       cy.task('toggleFeatureFlag', {
         flag: 'allow-idp-login',
