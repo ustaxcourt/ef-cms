@@ -1,17 +1,6 @@
 import { checkA11y } from '../../../support/generalCommands/checkA11y';
 
 describe('Login - Accessibility', () => {
-  before(function () {
-    cy.task('getRawFeatureFlagValue', {
-      flag: 'allow-idp-login',
-    }).as('ORIGINAL_FEATURE_FLAG_VALUE');
-
-    cy.task('toggleFeatureFlag', {
-      flag: 'allow-idp-login',
-      flagValue: true,
-    });
-  });
-
   after(function () {
     cy.get('@ORIGINAL_FEATURE_FLAG_VALUE').then(ORIGINAL_FEATURE_FLAG_VALUE => {
       cy.task('toggleFeatureFlag', {
@@ -23,6 +12,15 @@ describe('Login - Accessibility', () => {
 
   beforeEach(() => {
     Cypress.session.clearCurrentSessionData();
+
+    cy.task('getRawFeatureFlagValue', {
+      flag: 'allow-idp-login',
+    }).as('ORIGINAL_FEATURE_FLAG_VALUE');
+
+    cy.task('toggleFeatureFlag', {
+      flag: 'allow-idp-login',
+      flagValue: true,
+    });
   });
 
   it('should be free of a11y issues', () => {
