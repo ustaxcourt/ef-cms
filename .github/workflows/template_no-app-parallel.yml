@@ -40,7 +40,7 @@ jobs:
       TEST_FILE_TIMINGS_SHARD_FILE: /tmp/test-file-times/${{ inputs.workflow_filename }}-historical-test-file-times-shard-${{ inputs.ci_node_index }}.json
     steps:
       - name: Checkout Current Branch
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: ${{ inputs.fetch_depth }}
       - name: Collect Workflow Telemetry
