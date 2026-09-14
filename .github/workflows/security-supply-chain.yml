@@ -101,7 +101,9 @@ jobs:
           scan-type: fs
           scan-ref: .
           scanners: vuln
-          severity: HIGH,CRITICAL
+          severity: HIGH,CRITICAL,UNKNOWN
+          # trivy-action drops the severity filter for SARIF unless this is set
+          limit-severities-for-sarif: true
           format: sarif
           output: trivy-results.sarif
 

@@ -43,7 +43,9 @@ jobs:
         with:
           scan-type: config
           scan-ref: .
-          severity: 'MEDIUM,HIGH,CRITICAL'
+          severity: 'MEDIUM,HIGH,CRITICAL,UNKNOWN'
+          # trivy-action drops the severity filter for SARIF unless this is set
+          limit-severities-for-sarif: true
           format: sarif
           output: trivy-config.sarif
           skip-dirs: 'node_modules,.terraform,web-api/terraform,coverage,dist,dist-public,dist-lambdas,cypress'

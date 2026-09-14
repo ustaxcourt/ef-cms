@@ -33,13 +33,19 @@ roughly 2,500 duplicate alerts. It is still built for the PDF and integration te
 
 ### Dockerfile config scan (`trivy-config`)
 
-Checks for misconfigurations in Dockerfiles (e.g., running as root, using `latest` tag, missing health checks). Severity threshold: MEDIUM and above.
+Checks for misconfigurations in Dockerfiles (e.g., running as root, using `latest` tag, missing health checks). Severity threshold: MEDIUM and above, plus UNKNOWN.
 
 Excluded directories: `node_modules`, `.terraform`, `web-api/terraform`, `coverage`, `dist`, `dist-public`, `dist-lambdas`, `cypress`.
 
 ### Image vulnerability scan (`trivy-image`, `trivy-runtime-base`)
 
-Scans OS packages and application libraries in the built image for known CVEs. Severity threshold: HIGH and CRITICAL only.
+Scans OS packages and application libraries in the built image for known CVEs. Severity threshold: HIGH and CRITICAL, plus UNKNOWN.
+
+UNKNOWN is included deliberately: a CVE with no CVSS score yet can be rated high later, and
+excluding it would hide the finding until someone happened to rescan after the rating landed.
+
+`limit-severities-for-sarif: true` must accompany the `severity` input. Without it, trivy-action
+unsets the filter for SARIF output and uploads every severity, including LOW and UNKNOWN.
 
 ## Staging baseline
 
