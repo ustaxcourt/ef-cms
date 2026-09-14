@@ -8165,6 +8165,50 @@
         }
       }
     },
+    "/auth/code": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "exchanges an authorization code for tokens",
+        "description": "Exchanges an authorization code for access and refresh tokens.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "the access, identity, and refresh tokens",
+            "schema": {
+              "$ref": "#/definitions/authorization"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
     "/cases/{docketNumber}/case-worksheet": {
       "parameters": [
         {
