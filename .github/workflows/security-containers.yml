@@ -36,7 +36,7 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Trivy config scan (Dockerfiles)
         uses: aquasecurity/trivy-action@v0.36.0
@@ -71,7 +71,7 @@ jobs:
     timeout-minutes: 45
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       # efcms-local is not scanned: it is FROM ef-cms-us-east-1 and adds no OS packages,
       # so Trivy reports the same CVEs under a second image name.
@@ -107,7 +107,7 @@ jobs:
             image: node:24
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Trivy scan — ${{ matrix.image }}
         uses: ./.github/actions/dawson-trivy-image-scan
@@ -132,7 +132,7 @@ jobs:
     timeout-minutes: 45
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       # efcms-local is not scanned: see the note in the trivy-image job above.
       - name: Build DAWSON container images
