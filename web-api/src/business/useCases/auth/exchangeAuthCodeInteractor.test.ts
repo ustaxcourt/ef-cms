@@ -24,7 +24,7 @@ describe('exchangeAuthCodeInteractor', () => {
           };
         },
       } as any,
-      { authCode: '1234abcd' },
+      { authCode: '1234abcd', code_verifier: '1234' },
     );
     expect(result).toEqual({
       accessToken: '12341234',
@@ -48,7 +48,7 @@ describe('exchangeAuthCodeInteractor', () => {
           };
         },
       } as any,
-      { authCode: '1234abcd' },
+      { authCode: '1234abcd', code_verifier: '1234' },
     );
     await expect(callPromise).rejects.toThrow(new Error('Bad Request'));
   });
@@ -68,7 +68,7 @@ describe('exchangeAuthCodeInteractor', () => {
           };
         },
       } as any,
-      { authCode: '1234abcd' },
+      { authCode: '1234abcd', code_verifier: '1234' },
     );
     await expect(callPromise).rejects.toThrow(
       new UnauthorizedError('Invalid refresh token'),

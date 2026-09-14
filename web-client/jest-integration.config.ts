@@ -16,6 +16,9 @@ const transformIgnoreModules = [
   'htmlparser2',
   'kysely',
   'uuid',
+  'openid-client',
+  'oauth4webapi',
+  'jose',
 ];
 
 const config: Config = {
