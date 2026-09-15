@@ -149,6 +149,7 @@ export async function createOrUpdateUser(
     if (
       cognitoUser &&
       featureFlags[ALLOWLIST_FEATURE_FLAGS.ALLOW_IDP_LOGIN.key] &&
+      !!process.env.IDP_NAME &&
       rawUser.entityName === 'User' &&
       rawUser.role !== ROLES.petitioner
     )

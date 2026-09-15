@@ -47,9 +47,6 @@ describe('createOrUpdateUser', () => {
     applicationContext.getUserGateway().createUser.mockReturnValue({
       Username: cognitoUserName,
     });
-    process.env = {
-      IDP_NAME: 'idp',
-    };
   });
 
   beforeEach(() => {
@@ -58,6 +55,9 @@ describe('createOrUpdateUser', () => {
       .getAllFeatureFlagsInteractor.mockReturnValue({
         'allow-idp-login': true,
       });
+    process.env = {
+      IDP_NAME: 'idp',
+    };
   });
 
   afterAll(() => {
@@ -260,6 +260,18 @@ describe('createOrUpdateUser', () => {
         'allow-idp-login': false,
       });
 
+    await createOrUpdateUser(applicationContext, {
+      password,
+      setPasswordAsPermanent: false,
+      user: MOCK_INTERNAL_USER,
+    });
+    expect(
+      applicationContext.getCognito().adminLinkProviderForUser,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should not attempt to link a new user if the IDP_NAME env variable is not set', async () => {
+    process.env = {};
     await createOrUpdateUser(applicationContext, {
       password,
       setPasswordAsPermanent: false,
