@@ -41,8 +41,8 @@ _PRs that do not meet these criteria may be closed without review._
 
 ### Dependencies checklist
 
-- [ ] I have lists the updated packages, their purpose, and where they are used in the PR description (packages under `@aws-sdk` are optional to list for brevity).
-- [ ] I have deployed a new dockerfile to an experimental environment's ECR if needed, and updated CHANGES.md with the environment it is deployed to.
+- [ ] I have listed the updated packages, their purpose, and where they are used in the PR description (packages under `@aws-sdk` are optional to list for brevity).
+- [ ] I have built and pushed a new Docker image from the Dockerfile to the experimental environment's ECR if needed, and updated CHANGES.md with the environment where it is deployed.
 - [ ] I have reviewed and updated caveats/hand-managed dependencies as needed.
 - [ ] I have successfully deployed the dependencies branch to an experimental environment.
 - [ ] I have created new Devex/Opex tickets addressing further issues for examination as needed.
