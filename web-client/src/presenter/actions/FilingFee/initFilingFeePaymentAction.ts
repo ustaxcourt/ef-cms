@@ -5,14 +5,13 @@ export const initFilingFeePaymentAction = async ({
   applicationContext,
   store,
   path,
-  props,
-}: ActionProps<{ docketNumber?: string }>) => {
-  const docketNumber = props.docketNumber || get(state.caseDetail.docketNumber);
+}: ActionProps) => {
+  const caseDetail = get(state.caseDetail);
   try {
     const result = await applicationContext
       .getUseCases()
       .initPaymentInteractor(applicationContext, {
-        docketNumber: docketNumber,
+        docketNumber: caseDetail.docketNumber,
       });
     window.location.href = result.paymentRedirect;
     return path.success();

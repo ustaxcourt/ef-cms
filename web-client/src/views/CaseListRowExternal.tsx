@@ -9,7 +9,7 @@ import { Button } from '@web-client/ustc-ui/Button/Button';
 export const CaseListRowExternal = ({
   enablePaymentPortalIntegration,
   formattedCase,
-  initFilingFeePaymentSequence,
+  initMyCasesFilingFeePaymentSequence,
   isNestedCase,
   showFilingFee,
   showCaseStatusInfoSequence,
@@ -17,7 +17,7 @@ export const CaseListRowExternal = ({
 }: {
   enablePaymentPortalIntegration: boolean;
   formattedCase: TAssociatedCaseFormatted;
-  initFilingFeePaymentSequence: Function;
+  initMyCasesFilingFeePaymentSequence: Function;
   isNestedCase: boolean;
   showFilingFee: boolean;
   showCaseStatusInfoSequence: any;
@@ -81,8 +81,8 @@ export const CaseListRowExternal = ({
                     className="usa-button margin-right-205 usa-button--unstyled ustc-button--unstyled tw:font-light tw:underline-offset-3 tw:decoration-1"
                     data-testid="pay-filing-fee-button"
                     onClick={() => {
-                      initFilingFeePaymentSequence({
-                        docketNumber: formattedCase.docketNumber,
+                      initMyCasesFilingFeePaymentSequence({
+                        caseDetail: formattedCase,
                       });
                     }}
                   >
@@ -101,7 +101,9 @@ export const CaseListRowExternal = ({
                   enablePaymentPortalIntegration={
                     enablePaymentPortalIntegration
                   }
-                  initFilingFeePaymentSequence={initFilingFeePaymentSequence}
+                  initMyCasesFilingFeePaymentSequence={
+                    initMyCasesFilingFeePaymentSequence
+                  }
                   isNestedCase
                   formattedCase={consolidatedCase}
                   key={consolidatedCase.docketNumber}
@@ -199,7 +201,9 @@ export const CaseListRowExternal = ({
             return (
               <CaseListRowExternal
                 enablePaymentPortalIntegration={enablePaymentPortalIntegration}
-                initFilingFeePaymentSequence={initFilingFeePaymentSequence}
+                initMyCasesFilingFeePaymentSequence={
+                  initMyCasesFilingFeePaymentSequence
+                }
                 isNestedCase
                 formattedCase={consolidatedCase}
                 key={consolidatedCase.docketNumber}

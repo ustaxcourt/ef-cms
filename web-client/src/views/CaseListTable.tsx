@@ -34,7 +34,8 @@ export const CaseListTable = connect(
         ALLOWLIST_FEATURE_FLAGS.ENABLE_PAYMENT_PORTAL_INTEGRATION.key
       ],
     externalUserCasesHelper: state.externalUserCasesHelper,
-    initFilingFeePaymentSequence: sequences.initFilingFeePaymentSequence,
+    initMyCasesFilingFeePaymentSequence:
+      sequences.initMyCasesFilingFeePaymentSequence,
     openTab: state.constants.EXTERNAL_USER_DASHBOARD_TABS.OPEN,
     setCaseTypeToDisplaySequence: sequences.setCaseTypeToDisplaySequence,
     showMoreClosedCasesSequence: sequences.showMoreClosedCasesSequence,
@@ -51,7 +52,7 @@ export const CaseListTable = connect(
     dashboardExternalHelper,
     enablePaymentPortalIntegration,
     externalUserCasesHelper,
-    initFilingFeePaymentSequence,
+    initMyCasesFilingFeePaymentSequence,
     openTab,
     setCaseTypeToDisplaySequence,
     showCaseStatusInfoSequence,
@@ -194,8 +195,8 @@ export const CaseListTable = connect(
                         !!enablePaymentPortalIntegration
                       }
                       formattedCase={item}
-                      initFilingFeePaymentSequence={
-                        initFilingFeePaymentSequence
+                      initMyCasesFilingFeePaymentSequence={
+                        initMyCasesFilingFeePaymentSequence
                       }
                       isNestedCase={false}
                       key={item.docketNumber}

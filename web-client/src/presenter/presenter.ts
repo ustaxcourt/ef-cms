@@ -657,6 +657,7 @@ import { saveMinuteSheetToDraftsSequence } from './sequences/TrialSessionMinutes
 import { showCaseStatusInfoSequence } from '@web-client/presenter/sequences/showCaseStatusInfoSequence';
 import { openConfirmTrialSessionLocationChangeModalSequence } from '@web-client/presenter/sequences/openConfirmTrialSessionLocationChangeModalSequence';
 import { initFilingFeePaymentSequence } from '@web-client/presenter/sequences/initFilingFeePaymentSequence';
+import { initMyCasesFilingFeePaymentSequence } from '@web-client/presenter/sequences/initMyCasesFilingFeePaymentSequence';
 import { paymentCancelSequence } from '@web-client/presenter/sequences/paymentCancelSequence';
 import { paymentSuccessSequence } from '@web-client/presenter/sequences/paymentSuccessSequence';
 import { setClerkOfCourtDashboardOptionsSequence } from '@web-client/presenter/sequences/setClerkOfCourtDashboardOptionSequence';
@@ -1030,6 +1031,8 @@ export const presenterSequences = {
   initAppSequence,
   initFilingFeePaymentSequence:
     initFilingFeePaymentSequence as unknown as Function,
+  initMyCasesFilingFeePaymentSequence:
+    initMyCasesFilingFeePaymentSequence as unknown as Function,
   leaveCaseForLaterServiceSequence:
     leaveCaseForLaterServiceSequence as unknown as Function,
   loadDefaultDocketViewerDocumentToDisplaySequence:
