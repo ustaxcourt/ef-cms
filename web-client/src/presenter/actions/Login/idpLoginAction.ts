@@ -40,7 +40,7 @@ export const idpLoginAction = async ({
   });
 
   const params = {
-    identity_provider: idpName || 'ustcEntra',
+    // identity_provider: idpName || 'ustcEntra',
     redirect_uri: `https://app.${efcmsDomain}/auth-code`,
     code_challenge,
     code_challenge_method: 'S256',

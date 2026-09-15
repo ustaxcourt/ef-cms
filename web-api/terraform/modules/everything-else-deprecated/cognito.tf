@@ -209,7 +209,7 @@ resource "aws_cognito_user_pool_client" "client" {
   callback_urls                = var.idp_name != "" ? ["https://app.${var.dns_domain}/auth-code"] : null
   allowed_oauth_flows          = var.idp_name != "" ? ["code"] : null
   allowed_oauth_scopes         = var.idp_name != "" ? ["openid", "email", "profile"] : null
-  supported_identity_providers = var.idp_name != "" ? [aws_cognito_identity_provider.idp[0].provider_name] : null
+  supported_identity_providers = var.idp_name != "" ? [aws_cognito_identity_provider.idp[0].provider_name, "COGNITO"] : null
 }
 
 resource "aws_cognito_user_pool_domain" "domain" {
