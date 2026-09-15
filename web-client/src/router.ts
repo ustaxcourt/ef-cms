@@ -1269,6 +1269,15 @@ const router = {
       return app.getSequence('gotoIdleLogoutSequence')();
     });
 
+    registerRoute('/auth-code?..', () => {
+      const { code, error, error_description } = route.query();
+      return app.getSequence('authCodeSequence')({
+        authCode: code,
+        error,
+        errorDescription: error_description,
+      });
+    });
+
     registerRoute('/login', () => {
       if (!app.getState('token')) {
         setPageTitle('Login');
