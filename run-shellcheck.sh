@@ -19,6 +19,7 @@ while IFS= read -r -d '' file; do
      ! -path '*/.terraform/*' \
      ! -path '*/dist/*' \
      ! -path '*/coverage/*' \
+     ! -path '*/.husky/_/*' \
      -print0
  )
 

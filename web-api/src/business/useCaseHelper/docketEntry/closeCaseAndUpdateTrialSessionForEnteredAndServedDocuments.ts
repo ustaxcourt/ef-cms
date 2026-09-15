@@ -14,6 +14,7 @@ import { deleteCasesFromTrialSession } from '@web-api/persistence/postgres/trial
 import { removeCaseFromTrialSession } from '@web-api/persistence/postgres/trialSessions/removeCaseFromTrialSession';
 import { getCaseDeadlinesByConsolidatedCaseDeadlineIds } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineIds';
 import { upsertCaseDeadlines } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
+import { updateCaseAutomaticBlock } from '@web-api/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock';
 
 export const closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments =
   async ({ applicationContext, caseEntity, eventCode }) => {
@@ -41,10 +42,7 @@ export const closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments =
     });
 
     const LEAD_CASE_DEADLINES = caseDeadlines.map(cd => cd.caseDeadlineId);
-    if (
-      isLeadCase(caseEntity) &&
-      LEAD_CASE_DEADLINES.length
-    ) {
+    if (isLeadCase(caseEntity) && LEAD_CASE_DEADLINES.length) {
       const CHILDREN_DEADLINES =
         await getCaseDeadlinesByConsolidatedCaseDeadlineIds(
           LEAD_CASE_DEADLINES,
@@ -63,7 +61,10 @@ export const closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments =
     }
 
     await settlePromises(DEADLINE_TASKS);
-    caseEntity.updateAutomaticBlocked({ hasCaseDeadline: false });
+    await updateCaseAutomaticBlock({
+      caseEntity,
+      hasCaseDeadline: false,
+    });
 
     if (caseEntity.trialSessionId) {
       const trialSession = await getTrialSessionById({

@@ -268,7 +268,7 @@ If an OpenSearch update is available, we'll need to update OpenSearch locally.
 
 If an OpenSearch update is available, we'll need to update OpenSearch in github actions.
 
-1. Search the project for `opensearch-version:` and make sure it's set to the latest version. For example, some files in the `.github/workflows` directory will need to be updated.
+1. Search the project for `opensearch-version:` and make sure it's set to the latest version in `.github/actions/dawson-app-setup/action.yml`.
 
 ### 7. Wrap up
 
@@ -299,12 +299,12 @@ These are the `uses: owner/action@vX.Y.Z` lines in every workflow file. Check an
 | `actions/setup-node` | `dawson-node-bootstrap` action | [releases](https://github.com/actions/setup-node/releases) |
 | `actions/setup-python` | `security-sast.yml` (Checkov job) | [releases](https://github.com/actions/setup-python/releases) |
 | `actions/dependency-review-action` | `security-supply-chain.yml` | [releases](https://github.com/actions/dependency-review-action/releases) |
-| `github/codeql-action/init`, `analyze`, `upload-sarif` | `security-sast.yml`, all SARIF uploads | [releases](https://github.com/github/codeql-action/releases) |
-| `ankane/setup-opensearch` | `security-dast.yml`, `security-containers.yml` | [releases](https://github.com/ankane/setup-opensearch/releases) |
+| `github/codeql-action/init`, `analyze` | `security-sast.yml`; SARIF upload is centralized in `dawson-upload-sarif` | [releases](https://github.com/github/codeql-action/releases) |
+| `ankane/setup-opensearch` | `dawson-app-setup` action | [releases](https://github.com/ankane/setup-opensearch/releases) |
 | `zaproxy/action-api-scan` | `security-dast.yml` | [releases](https://github.com/zaproxy/action-api-scan/releases) |
 | `zaproxy/action-full-scan` | `security-dast.yml` | [releases](https://github.com/zaproxy/action-full-scan/releases) |
-| `zaproxy/action-baseline-scan` | `security-dast.yml` | [releases](https://github.com/zaproxy/action-baseline-scan/releases) |
-| `aquasecurity/trivy-action` | `security-supply-chain.yml`, `security-containers.yml` | [releases](https://github.com/aquasecurity/trivy-action/releases) |
+| `zaproxy/action-baseline` | `security-dast.yml` | [releases](https://github.com/zaproxy/action-baseline/releases) |
+| `aquasecurity/trivy-action` | `dawson-trivy-image-scan` action and `security-supply-chain.yml` | [releases](https://github.com/aquasecurity/trivy-action/releases) |
 
 **Steps to update a `uses:` pin:**
 
@@ -317,7 +317,7 @@ These are the `uses: owner/action@vX.Y.Z` lines in every workflow file. Check an
 4. Update every occurrence to the new version tag.
 5. Verify CI passes before merging.
 
-> **Important:** Some actions appear in multiple workflow files. Always update all occurrences to the same version. For example, `github/codeql-action/upload-sarif@v4` appears in `security-sast.yml`, `security-dast.yml`, `security-supply-chain.yml`, `security-secrets.yml`, and `security-containers.yml` — all must match.
+> **Important:** Some actions are centralized in reusable composite actions. Update the action definition rather than copying a version change into each caller.
 
 #### 8.0.1 Container images in `services:` blocks (manual — monthly)
 
@@ -352,14 +352,14 @@ Used in: `.github/workflows/security-sast.yml` (line 97)
 
 #### 8.3 Gitleaks binary download
 
-Used in: `.github/workflows/security-secrets.yml` (lines 39 and 83 — **both must be updated to the same version**)
+Used in: `.github/actions/dawson-gitleaks/action.yml`
 
 1. Check the latest release at [https://github.com/gitleaks/gitleaks/releases](https://github.com/gitleaks/gitleaks/releases)
-1. Search the project for `gitleaks/releases/download/` and update both the version in the URL path and the filename. For example:
-   ```bash
-   curl -sSfL https://github.com/gitleaks/gitleaks/releases/download/v8.31.0/gitleaks_8.31.0_linux_x64.tar.gz \
-     | tar -xz -C /usr/local/bin gitleaks
+1. Update the `version` input in `.github/actions/dawson-gitleaks/action.yml`. For example:
+   ```yaml
+   version: 8.31.0
    ```
+   The download URL and archive filename are derived from this value.
 
 #### 8.4 lockfile-lint npx
 
@@ -382,7 +382,7 @@ Used in: `.github/workflows/security-sast.yml` — installed via `curl` in the `
    ```
 3. The install URL and filename derive from the variable automatically — no other changes needed.
 
-> **Note:** The `opensearch-version:` input in `security-dast.yml` is covered by §6.3 above. The `image: postgres` service container in `security-dast.yml` is covered by §5.4 above. GitHub Actions `uses:` pins (including `aquasecurity/trivy-action`, `zaproxy/*`, `github/codeql-action`) are covered by §8.0 above.
+> **Note:** The `opensearch-version:` input in `dawson-app-setup` is covered by §6.3 above. The `image: postgres` service container in `security-dast.yml` is covered by §5.4 above. GitHub Actions `uses:` pins (including `aquasecurity/trivy-action`, `zaproxy/*`, `github/codeql-action`) are covered by §8.0 above.
 
 ## Configurations
 **Safe to upgrade, but we use a non-standard configuration intentionally**
@@ -409,7 +409,7 @@ Used in: `.github/workflows/security-sast.yml` — installed via `curl` in the `
 Below is a list of dependencies that are locked down due to known issues with security, integration problems within DAWSON, etc. Try to update these items but please be aware of the issue that's documented and ensure it's been resolved.
 
 ### pdfjs-dist
-**Current Version Installed: 6.2.108**
+**Current Version Installed: 6.3.289**
 
 - When upgrading to version 5.4.624 the newer pdfjs-dist release relies on DOMMatrix, which caused errors in AWS Lambda when scraping text from PDFs. This worked locally but failed in the deployed environment because Lambda does not provide DOMMatrix. To resolve this, I added a polyfill using the `dommatrix` library that is used when DOMMatrix is undefined. See `getPdfJs.ts` and `parsePdf.ts` for details.
    - I debugged this by temporarily ignoring the smoketests in search.cy.ts in order for the build to pass and deploy to an exp environment. From there I ran the cypress smoketests on the exp environement locally, found the error in cloudwatch logs, tested multiple fixes and made the neccessary changes.
@@ -419,7 +419,7 @@ Below is a list of dependencies that are locked down due to known issues with se
 - As of 8/10/2026: Updated to **6.2.108** for [GHSA-hq66-cqwq-w95j](https://github.com/advisories/GHSA-hq66-cqwq-w95j) (arbitrary JavaScript execution on opening a malicious PDF, affecting `>=5.6.83 <6.2.108`). Re-verify `getPdfJs.ts` and `parsePdf.ts`, especially the `DOMMatrix` polyfill, in an experimental deploy — the Lambda-only failure mode does not reproduce locally.
 
 ### DWT
-**Current Installed DWT: 19.4.2**
+**Current Installed DWT: 19.4.3**
 
 Minor and patch versions of DWT _should_ be updated, but require that Court IT update the Windows clients in concert with our app. Do not bump `dwt` during weekly dependency rotations even if a newer version appears on npm — upgrades require the coordination sequence below and a standalone PR to `test`, not a bundled rotation.
 
@@ -444,8 +444,8 @@ If an update is available for DWT:
    1. The old Windows client and new server version are backwards-compatible.
 
 ### puppeteer and @sparticuz/chromium
-**Current Installed Puppeteer/Puppeteer-core: 25.1.0**
-**Current Installed @sparticuz/chromium: 149.0.0**
+**Current Installed Puppeteer/Puppeteer-core: 25.10.0**
+**Current Installed @sparticuz/chromium: 152.0.0**
 
 - When updating puppeteer or puppeteer core in the project, make sure to also match versions in `web-api/runtimes/puppeteer/package.json` as this is our lambda layer which we use to generate pdfs. Puppeteer and chromium versions should always match between package.json and web-api/runtimes/puppeteer/package.json. Remember to run `npm install --prefix web-api/runtimes/puppeteer` to install and update the package-lock file.
 - Puppeteer also has recommended versions of Chromium, so we should make sure to use the recommended version of chromium for the version of puppeteer that we are on. The chromium versions supported by puppeteer can be found [here](https://pptr.dev/supported-browsers)
@@ -458,6 +458,7 @@ If an update is available for DWT:
 - As of June 25, 2026: Puppeteer 25.2.1 requires Chrome for Testing 150.0.7871.24, which means `@sparticuz/chromium` would need to be updated to `150.x`. However, `@sparticuz/chromium@150.x` has not yet been published to npm (latest available is `149.0.0`). Skipping the puppeteer 25.2.x update until `@sparticuz/chromium@150.x` is available.
 - As of July 27, 2026: Puppeteer **25.4.0** is available. Still blocked — `@sparticuz/chromium` latest on npm remains **149.0.0**; puppeteer 25.2.x and above require Chrome for Testing 150.x.
 - As of 8/10/2026: Puppeteer **25.5.0** is available. Still blocked — `@sparticuz/chromium` latest on npm remains **149.0.0**; puppeteer 25.2.x and above require Chrome for Testing 150.x.
+- As of 9/8/2026: `@sparticuz/chromium` version **152.0.0** has been released, so we have now upgraded to Puppeteer **25.5.10**
 
 ### ws, 3rd party dependency of Cerebral
 
@@ -485,6 +486,7 @@ If an update is available for DWT:
 - Upgrade `jest`, `babel-jest`, and `jest-environment-jsdom` together manually rather than via the upgrade script. `babel-jest` is also excluded by the upgrade script's `caveats` array. Verify the full unit test suites after any bump.
 - On June 26, 2025, newer versions of `jest` conflicted with `ts-jest` 29.x; we stayed on Jest 29 until `ts-jest` caught up.
 - On June 30, 2025, a `jest-environment-jsdom` bump caused failures in unit tests that use `Object.defineProperty` (for example, `getPdfJs.test.ts`). Re-test those specs before removing this pin.
+- On September 9, 2026, we were able to upgrade `jest`, `jest-environment-jsdom`, and `babel-jest` to **30.5.1** successfully
 
 ### websocket
 **Installed Version: 1.0.35**
@@ -650,9 +652,9 @@ The issue is with Jest. Jest doesn't work with mjs, so in our config we need to 
 - As of 8/10/2026: **@recharts/devtools 0.0.16** peers on `recharts: 3.9.0` exactly, and we are on **3.10.1**. Still pinned at **0.0.14**.
 
 ### aws-sigv4-sign
-**Installed Version: 1.2.1**
+**Installed Version: 2.0.1**
 
-- Pinned until tested in an experimental environment with payment-portal integration. A 2.x release is available but was reverted in [PR #10354](https://github.com/ustaxcourt/ef-cms/pull/10354) pending validation. This package is excluded by the upgrade script's `caveats` array.
+- This package was successfully upgraded to version **2.0.1** and validated in `exp2`. Until we have set up payment portal integration in all experimental environments, we should be careful upgrading this package as it need to be tested in `exp2` before going to `test`. Once all environments have this integration, this caveat can be removed.
 
 ## Troubleshooting
 

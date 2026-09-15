@@ -21,6 +21,7 @@ import { updateTrialSession } from '@web-api/persistence/postgres/trialSessions/
 import { removeCaseFromTrialSession } from '@web-api/persistence/postgres/trialSessions/removeCaseFromTrialSession';
 import { getCaseDeadlinesByConsolidatedCaseDeadlineIds } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineIds';
 import { upsertCaseDeadlines } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
+import { updateCaseAutomaticBlock } from '@web-api/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock';
 
 const updateCaseContext = async (
   _applicationContext: ServerApplicationContext,
@@ -148,7 +149,10 @@ const updateCaseContext = async (
         }
 
         await settlePromises(DEADLINE_TASKS);
-        newCase.updateAutomaticBlocked({ hasCaseDeadline: false });
+        await updateCaseAutomaticBlock({
+          caseEntity: newCase,
+          hasCaseDeadline: false,
+        });
       }
     }
 

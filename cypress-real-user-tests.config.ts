@@ -1,4 +1,5 @@
 import { defineConfig } from 'cypress';
+import { getExposedCypressEnv } from './cypress/helpers/env/exposedCypressEnv';
 import {
   getOpenAndRecentCasesByEmail,
   getPractionerWithMostCasesEmail,
@@ -35,6 +36,7 @@ export default defineConfig({
     supportFile: 'cypress/real-users/support/index.ts',
     testIsolation: false,
   },
+  expose: getExposedCypressEnv(),
   fixturesFolder: 'cypress/real-users/fixtures',
   reporter: 'spec',
   reporterOptions: {

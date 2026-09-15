@@ -3,6 +3,7 @@ name: Security - SAST
 on:
   pull_request:
     types: [opened, reopened, synchronize, ready_for_review]
+    branches: [staging]
     paths-ignore:
       - '**.md'
       - '**/.gitignore'
@@ -24,25 +25,29 @@ permissions:
 jobs:
   semgrep:
     name: Semgrep Scan
-    if: github.event_name == 'pull_request' && !github.event.pull_request.draft
+    if: >-
+      github.event_name == 'push' ||
+      (github.event_name == 'pull_request' && !github.event.pull_request.draft)
     runs-on: ubuntu-latest
     permissions:
       contents: read
       security-events: write
     timeout-minutes: 15
     container:
-      image: semgrep/semgrep:1.167.0
+      image: semgrep/semgrep:1.176.0
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
       - name: Run Semgrep
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          EVENT_NAME: ${{ github.event_name }}
         run: |
-          semgrep scan \
+          set -- \
+            scan \
             --config p/typescript \
             --config p/nodejs \
             --config p/react \
@@ -65,21 +70,24 @@ jobs:
             --exclude='aws/lambdas' \
             --exclude='.terraform' \
             --exclude='docs' \
-            --metrics=off \
-            --baseline-commit "$BASE_SHA"
+            --metrics=off
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            set -- "$@" --baseline-commit "$BASE_SHA"
+          fi
+          semgrep "$@"
 
       - name: Upload SARIF
-        if: >-
-          always() &&
-          github.event.pull_request.head.repo.full_name == github.event.pull_request.base.repo.full_name
-        uses: github/codeql-action/upload-sarif@v4
+        if: always()
+        uses: ./.github/actions/dawson-upload-sarif
         with:
           sarif_file: semgrep-results.sarif
           category: semgrep
 
   checkov:
     name: Checkov IaC Scan
-    if: github.event_name == 'pull_request' && !github.event.pull_request.draft
+    if: >-
+      github.event_name == 'push' ||
+      (github.event_name == 'pull_request' && !github.event.pull_request.draft)
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -87,15 +95,15 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: '3.12'
 
       - name: Install Checkov
-        run: pip install checkov==3.3.2
+        run: pip install checkov==3.3.16
 
       - name: Run Checkov
         run: |
@@ -159,18 +167,17 @@ jobs:
           exit $EXIT_CODE
 
       - name: Upload SARIF
-        if: >-
-          always() &&
-          hashFiles('checkov-results.sarif') != '' &&
-          github.event.pull_request.head.repo.full_name == github.event.pull_request.base.repo.full_name
-        uses: github/codeql-action/upload-sarif@v4
+        if: always()
+        uses: ./.github/actions/dawson-upload-sarif
         with:
           sarif_file: checkov-results.sarif
           category: checkov
 
   codeql:
     name: CodeQL Deep Analysis
-    if: github.event_name == 'push'
+    if: >-
+      github.event_name == 'push' ||
+      (github.event_name == 'pull_request' && !github.event.pull_request.draft)
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -182,7 +189,7 @@ jobs:
         language: [javascript-typescript]
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v4
@@ -205,11 +212,11 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Install shellcheck
         run: |
-          SHELLCHECK_VERSION=0.10.0
+          SHELLCHECK_VERSION=0.11.0
           curl -sSL "https://github.com/koalaman/shellcheck/releases/download/v${SHELLCHECK_VERSION}/shellcheck-v${SHELLCHECK_VERSION}.linux.x86_64.tar.xz" \
             | tar -xJf - -C /tmp
           sudo mv "/tmp/shellcheck-v${SHELLCHECK_VERSION}/shellcheck" /usr/local/bin/shellcheck
@@ -221,7 +228,7 @@ jobs:
   security-gate:
     name: Security Gate (SAST)
     if: always() && github.event_name == 'pull_request' && !github.event.pull_request.draft
-    needs: [semgrep, checkov, shellcheck]
+    needs: [semgrep, checkov, codeql, shellcheck]
     runs-on: ubuntu-latest
     permissions: {}
     steps:
@@ -229,6 +236,7 @@ jobs:
         env:
           SEMGREP_RESULT: ${{ needs.semgrep.result }}
           CHECKOV_RESULT: ${{ needs.checkov.result }}
+          CODEQL_RESULT: ${{ needs.codeql.result }}
           SHELLCHECK_RESULT: ${{ needs.shellcheck.result }}
         run: |
           if [[ "$SEMGREP_RESULT" == "failure" ]]; then
@@ -237,6 +245,10 @@ jobs:
           fi
           if [[ "$CHECKOV_RESULT" == "failure" ]]; then
             echo "Checkov scan failed"
+            exit 1
+          fi
+          if [[ "$CODEQL_RESULT" != "success" ]]; then
+            echo "CodeQL analysis did not complete successfully"
             exit 1
           fi
           if [[ "$SHELLCHECK_RESULT" == "failure" ]]; then

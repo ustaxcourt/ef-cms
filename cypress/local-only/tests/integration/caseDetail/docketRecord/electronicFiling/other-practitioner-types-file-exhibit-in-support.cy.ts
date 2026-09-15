@@ -88,6 +88,50 @@ describe('Respondent-side practitioners file an Exhibit in Support (EXS)', () =>
 
       cy.get('#document-filter-by').select('Exhibits');
       cy.get('[data-testid="document-download-link-EXS"]').should('exist');
+
+      // "Exhibit in Support" is also selectable as the primary e-filed
+      // document type for a respondent-side practitioner, associated with
+      // a previously docketed filing (Nonstandard A).
+      loginAsIrsPractitioner();
+      externalUserSearchesDocketNumber(docketNumber);
+      cy.get('[data-testid="button-file-document"]').click();
+      cy.get('[data-testid="ready-to-file"]').click();
+      selectTypeaheadInput(
+        'complete-doc-document-type-search',
+        'Exhibit in Support',
+      );
+      cy.get('[data-testid="previous-document-search"]')
+        .find('option')
+        .then($options => {
+          const answerOption = Array.from($options).find(opt =>
+            opt.textContent?.includes('Answer'),
+          );
+          const optionText = answerOption?.textContent?.trim() || '';
+          cy.get('[data-testid="previous-document-search"]').select(optionText);
+        });
+      cy.get('[data-testid="submit-document"]').click();
+      attachFile({
+        filePath: '../../helpers/file/sample.pdf',
+        selector: '[data-testid="primary-document"]',
+        selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
+      });
+      cy.get('[data-testid="party-irs-practitioner-label"]').click();
+      cy.get('[data-testid="file-document-submit-document"]').click();
+      cy.get('[data-testid="redaction-acknowledgement-label"]').click();
+      cy.get('[data-testid="file-document-review-submit-document"]').click();
+      cy.get('[data-testid="loading-overlay"]').should('not.exist');
+      cy.get('[data-testid="success-alert"]').should('exist');
+
+      cy.contains('#docket-record-table tr', 'Exhibit in Support of Answer')
+        .should('contain', 'EXS')
+        .find('[data-testid="docket-entry-filedBy"]')
+        .should('contain', 'Resp.');
+
+      cy.get('[data-testid="header-recent-filings-link"]').click();
+      cy.get('[data-testid="recent-filings-page"]').should('be.visible');
+      cy.contains('[data-testid="case-number-link"]', docketNumber)
+        .closest('tr')
+        .should('contain', 'Exhibit in Support of Answer');
     });
   });
 
@@ -169,6 +213,53 @@ describe('Respondent-side practitioners file an Exhibit in Support (EXS)', () =>
 
       cy.get('#document-filter-by').select('Exhibits');
       cy.get('[data-testid="document-download-link-EXS"]').should('exist');
+
+      // "Exhibit in Support" is also selectable as the primary e-filed
+      // document type for a respondent-side practitioner, associated with
+      // a previously docketed filing (Nonstandard A).
+      loginAsDojPractitioner();
+      externalUserSearchesDocketNumber(docketNumber);
+      cy.get('[data-testid="button-file-document"]').click();
+      cy.get('[data-testid="ready-to-file"]').click();
+      selectTypeaheadInput(
+        'complete-doc-document-type-search',
+        'Exhibit in Support',
+      );
+      cy.get('[data-testid="previous-document-search"]')
+        .find('option')
+        .then($options => {
+          const eaOption = Array.from($options).find(opt =>
+            opt.textContent?.includes('Entry of Appearance'),
+          );
+          const optionText = eaOption?.textContent?.trim() || '';
+          cy.get('[data-testid="previous-document-search"]').select(optionText);
+        });
+      cy.get('[data-testid="submit-document"]').click();
+      attachFile({
+        filePath: '../../helpers/file/sample.pdf',
+        selector: '[data-testid="primary-document"]',
+        selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
+      });
+      cy.get('[data-testid="party-irs-practitioner-label"]').click();
+      cy.get('[data-testid="file-document-submit-document"]').click();
+      cy.get('[data-testid="redaction-acknowledgement-label"]').click();
+      cy.get('[data-testid="file-document-review-submit-document"]').click();
+      cy.get('[data-testid="loading-overlay"]').should('not.exist');
+      cy.get('[data-testid="success-alert"]').should('exist');
+
+      cy.contains(
+        '#docket-record-table tr',
+        'Exhibit in Support of Entry of Appearance',
+      )
+        .should('contain', 'EXS')
+        .find('[data-testid="docket-entry-filedBy"]')
+        .should('contain', 'Resp.');
+
+      cy.get('[data-testid="header-recent-filings-link"]').click();
+      cy.get('[data-testid="recent-filings-page"]').should('be.visible');
+      cy.contains('[data-testid="case-number-link"]', docketNumber)
+        .closest('tr')
+        .should('contain', 'Exhibit in Support of Entry of Appearance');
     });
   });
 });
