@@ -81,7 +81,9 @@ export const CaseListRowExternal = ({
                     className="usa-button margin-right-205 usa-button--unstyled ustc-button--unstyled tw:font-light tw:underline-offset-3 tw:decoration-1"
                     data-testid="pay-filing-fee-button"
                     onClick={() => {
-                      initFilingFeePaymentSequence();
+                      initFilingFeePaymentSequence({
+                        docketNumber: formattedCase.docketNumber,
+                      });
                     }}
                   >
                     Pay now
