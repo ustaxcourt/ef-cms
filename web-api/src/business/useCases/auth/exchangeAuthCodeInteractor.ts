@@ -31,8 +31,8 @@ export const exchangeAuthCodeInteractor = async (
 
     const expiresAt = applicationContext.getUtilities().calculateISODate({
       dateString: applicationContext.getUtilities().createISODateString(),
-      howMuch: response.data.expires_in,
-      units: 'seconds',
+      howMuch: 1,
+      units: 'days',
     });
 
     return {

@@ -42,7 +42,7 @@ describe('exchangeAuthCodeInteractor', () => {
       accessToken: '12341234',
       idToken: '5678gefd',
       refreshToken: '1234',
-      expiresAt: '2026-09-01T00:03:20.000Z',
+      expiresAt: '2026-09-02T00:00:00.000Z',
     });
   });
 

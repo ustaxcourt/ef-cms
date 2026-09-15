@@ -17,6 +17,38 @@ Blocked Cases Report. Run the following to recompute those cases:
 ./scripts/run-once-scripts/fix-stale-automatic-blocks.ts
 ```
 </details>
+<details><summary>Single Sign-on Updates</summary>
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+If SSO is needed in an environment, first set up a new application in Microsoft Entra for this environment, then set the following secrets. Those prefixed with `OIDC_` will be found on the Microsoft side
+
+```bash
+. ./scripts/env/set-env.zsh {YOUR_ENV}
+./scripts/secrets/update-secret.ts -k IDP_NAME -v ustc_entra
+./scripts/secrets/update-secret.ts -k OIDC_ISSUER_URL -v https://login.microsoftonline.com/{application id}/v2.0
+./scripts/secrets/update-secret.ts -k OIDC_CLIENT_ID -v {app client id}
+./scripts/secrets/update-secret.ts -k OIDC_CLIENT_SECRET -v {app client secret}
+```
+
+An account specific deployment will then be required for new roles that will be created
+```bash
+npm run deploy:account-specific
+```
+
+### After Deployment
+
+Once everything is deployed, set the feature flag to show the SSO button on the login page
+```bash
+./scripts/postgres/featureFlags/setup-idp-login.ts
+```
+
+### Notes
+
+If this feature is not needed, no updates are required. The terraform updates will not take place if `IDP_NAME` is not set.
+</details>
 <details><summary>Dependency Updates - Week of 2026-09-08</summary>
 
 ## Local

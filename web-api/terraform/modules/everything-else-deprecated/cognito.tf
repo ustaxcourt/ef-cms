@@ -206,7 +206,7 @@ resource "aws_cognito_user_pool_client" "client" {
     "zoneinfo",
   ]
 
-  callback_urls                = var.idp_name != "" ? ["https://app.${var.environment}.ef-cms.ustaxcourt.gov/auth-code"] : null
+  callback_urls                = var.idp_name != "" ? ["https://app.${var.dns_domain}/auth-code"] : null
   allowed_oauth_flows          = var.idp_name != "" ? ["code"] : null
   allowed_oauth_scopes         = var.idp_name != "" ? ["openid", "email", "profile"] : null
   supported_identity_providers = var.idp_name != "" ? [aws_cognito_identity_provider.idp[0].provider_name] : null
@@ -224,6 +224,7 @@ resource "aws_cognito_managed_login_branding" "login_branding" {
   client_id                   = aws_cognito_user_pool_client.client.id
   user_pool_id                = aws_cognito_user_pool.pool.id
   use_cognito_provided_values = true
+  depends_on                  = [aws_cognito_user_pool_domain.domain]
 }
 
 resource "aws_cognito_identity_provider" "idp" {
@@ -232,7 +233,7 @@ resource "aws_cognito_identity_provider" "idp" {
   provider_name = var.idp_name
   provider_type = "OIDC"
   provider_details = {
-    authorize_scopes          = "openid"
+    authorize_scopes          = "openid email profile"
     client_id                 = var.oidc_client_id
     client_secret             = var.oidc_client_secret
     oidc_issuer               = var.oidc_issuer_url
