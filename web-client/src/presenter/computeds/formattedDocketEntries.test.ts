@@ -808,6 +808,50 @@ describe('formattedDocketEntries', () => {
       ]);
     });
 
+    it.each([
+      ['exhibits', DOCKET_RECORD_FILTER_OPTIONS.exhibits],
+      ['orders', DOCKET_RECORD_FILTER_OPTIONS.orders],
+      ['motions', DOCKET_RECORD_FILTER_OPTIONS.motions],
+    ])(
+      'should keep the pending list intact when the docket record is filtered by %s',
+      (_label, docketRecordFilter) => {
+        const pendingMotion = {
+          ...mockDocketEntry,
+          docketEntryId: 'b8dd9fa0-46bd-4a2a-a1d1-7bcbc2c78d0d',
+          documentTitle: 'Motion for Continuance',
+          documentType: 'Motion for Continuance',
+          eventCode: 'M006',
+          index: 4,
+          isFileAttached: true,
+          isOnDocketRecord: true,
+          isStricken: false,
+          pending: true,
+          servedAt: '2020-09-18T17:38:32.418Z',
+          servedParties: [
+            { email: 'petitioner@example.com', name: 'Mona Schultz' },
+          ],
+        };
+        const caseDetail = {
+          ...MOCK_CASE,
+          docketEntries: [...mockDocketEntries, pendingMotion],
+        };
+
+        const result = runCompute(formattedDocketEntries, {
+          state: {
+            ...getBaseState(petitionsClerkUser),
+            caseDetail,
+            sessionMetadata: { docketRecordFilter },
+          },
+        });
+
+        expect(
+          result.formattedPendingDocketEntriesOnDocketRecord.map(
+            entry => entry.eventCode,
+          ),
+        ).toEqual(['M006']);
+      },
+    );
+
     it('should ONLY show exhibit docket entries when "Exhibits" has been selected as the filter', () => {
       const caseDetail = {
         ...MOCK_CASE,
