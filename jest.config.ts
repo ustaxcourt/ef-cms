@@ -6,7 +6,6 @@ import path from 'node:path';
 const tsConfigPaths = loadTsConfigPaths('tsconfig.json');
 
 const transformIgnoreModules = [
-  '@joi/date',
   'aws-sdk-client-mock',
   'kysely',
   'sinon',
@@ -27,7 +26,7 @@ const config: Config = {
   clearMocks: true,
   coverageDirectory: './coverage',
   coverageProvider: 'babel',
-  moduleFileExtensions: ['js', 'jsx', 'mjs', 'ts', 'tsx'],
+  moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx'],
   moduleNameMapper: {
     ...pathsToModuleNameMapper(tsConfigPaths, {
       prefix: '<rootDir>',
@@ -37,7 +36,7 @@ const config: Config = {
   testEnvironment: 'jsdom',
   testSequencer: path.resolve(process.cwd(), 'jestSequencer.js'),
   transform: {
-    '\\.m?[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
+    '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
     '^.+\\.html?$': path.resolve(process.cwd(), 'web-client/htmlLoader.js'),
   },
   transformIgnorePatterns: [

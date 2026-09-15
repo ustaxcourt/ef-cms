@@ -1,4 +1,3 @@
-import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { presenter } from '@web-client/presenter/presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
@@ -101,13 +100,13 @@ describe('updateIrsNoticeIndexPropertyAction', () => {
       props: {
         key: '0',
         property: 'noticeIssuedDate',
-        toFormat: FORMATS.ISO,
+        toFormat: "yyyy-MM-dd'T'HH:mm:ss.SSSZZ",
         value: '07/30/2024',
       },
     });
 
     expect(results.state.irsNoticeUploadFormInfo).toEqual({
-      0: { noticeIssuedDate: '2024-07-30T04:00:00.000Z' },
+      0: { noticeIssuedDate: '2024-07-30T00:00:00.000-04:00' },
     });
   });
 });

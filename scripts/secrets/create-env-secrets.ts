@@ -70,7 +70,7 @@ const scriptConfig: ScriptConfig = {
       type: 'string',
     },
     opensearchEngineVersion: {
-      default: 'OpenSearch_2.19',
+      default: 'OpenSearch_3.7',
       long: 'opensearch-engine-version',
       type: 'string',
     },

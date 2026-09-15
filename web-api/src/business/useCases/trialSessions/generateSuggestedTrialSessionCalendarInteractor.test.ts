@@ -1,4 +1,5 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/featureFlag/mocks.jest';
 import '@web-api/persistence/postgres/trialSessions/mocks.jest';
 import * as excelModule from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/writeTrialSessionDataToExcel';
 import * as generateCalendarModule from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/generateCalendar';
@@ -8,6 +9,8 @@ import {
 } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/createProspectiveTrialSessions';
 import { CaseCountsAndSessionsByCity } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/getDataForCalendaring';
 import {
+  ALLOWLIST_FEATURE_FLAGS,
+  NEW_TRIAL_CITY_STRINGS,
   SESSION_TYPES,
   SUGGESTED_TRIAL_SESSION_TITLES,
   TRIAL_CITY_STRINGS,
@@ -28,10 +31,12 @@ import mockSpecialSessions from '@shared/test/mockTrialSessions.json';
 import { getSuggestedCalendarCases as getSuggestedCalendarCasesMock } from '@web-api/persistence/postgres/cases/reports/getSuggestedCalendarCases';
 import { getTrialSessions as getTrialSessionsMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessions';
 import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
+import { getFeatureFlagValues as getFeatureFlagValuesMock } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
 
 const getSuggestedCalendarCases = getSuggestedCalendarCasesMock as jest.Mock;
 
 describe('generateSuggestedTrialSessionCalendar', () => {
+  const getFeatureFlagValues = jest.mocked(getFeatureFlagValuesMock);
   const getTrialSessions = jest.mocked(getTrialSessionsMock);
 
   beforeAll(() => {
@@ -40,6 +45,10 @@ describe('generateSuggestedTrialSessionCalendar', () => {
     getTrialSessions.mockResolvedValue(
       mockSpecialSessions as unknown as RawTrialSession[],
     );
+  });
+
+  beforeEach(() => {
+    getFeatureFlagValues.mockResolvedValue([]);
   });
 
   it('should generate a trial term when valid date range is provided and sufficient data is present in the system', async () => {
@@ -82,14 +91,14 @@ describe('generateSuggestedTrialSessionCalendar', () => {
 
   it('should pass valid data to the routine that creates the spreadsheet', async () => {
     // Arrange
+    getFeatureFlagValues.mockResolvedValue([
+      {
+        name: ALLOWLIST_FEATURE_FLAGS.NEW_TRIAL_CITIES.key,
+        value: { current: true },
+      },
+    ]);
     const mockStartDate = '2019-08-22T00:00:00.000Z';
     const mockEndDate = '2019-09-22T00:00:00.000Z';
-    jest.mock(
-      '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/generateCalendar',
-    );
-    jest.mock(
-      '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/writeTrialSessionDataToExcel',
-    );
     const generateCalendarSpy = jest.spyOn(
       generateCalendarModule,
       'generateCalendar',
@@ -127,7 +136,7 @@ describe('generateSuggestedTrialSessionCalendar', () => {
     // Assert
     expect(writeTrialSessionDataToExcelSpy).toHaveBeenCalled();
 
-    const { caseCountsAndSessionsByCity } =
+    const { caseCountsAndSessionsByCity, incorrectSizeRegularCases } =
       writeTrialSessionDataToExcelSpy.mock.calls[0][0];
     const { calendaringConfig } = generateCalendarSpy.mock.calls[0][0];
 
@@ -135,6 +144,7 @@ describe('generateSuggestedTrialSessionCalendar', () => {
       true,
     );
     expect(allTrialCitiesAreIncluded(caseCountsAndSessionsByCity)).toBe(true);
+    expect(incorrectSizeRegularCases).toEqual([]);
     expect(
       caseCountsAndSessionsByCity[WASHINGTON_DC_SOUTH_STRING],
     ).toBeDefined();
@@ -163,6 +173,51 @@ describe('generateSuggestedTrialSessionCalendar', () => {
         calendaringConfig,
       ),
     ).toBe(true);
+  });
+
+  it('should exclude new cities and retain incorrectly-sized cases when the feature flag is disabled', async () => {
+    getFeatureFlagValues.mockResolvedValue([
+      {
+        name: ALLOWLIST_FEATURE_FLAGS.NEW_TRIAL_CITIES.key,
+        value: { current: false },
+      },
+    ]);
+    const writeTrialSessionDataToExcelSpy = jest.spyOn(
+      excelModule,
+      'writeTrialSessionDataToExcel',
+    );
+
+    await generateSuggestedTrialSessionCalendarInteractor(
+      {
+        termEndDate: '2019-09-22T00:00:00.000Z',
+        termStartDate: '2019-08-22T00:00:00.000Z',
+        termName: 'TEST_TERM_NAME',
+        maxSessionsPerLocation:
+          TERM_GENERATOR_DEFAULT_VALUES.MAX_SESSIONS_PER_LOCATION,
+        maxSessionsPerWeek: TERM_GENERATOR_DEFAULT_VALUES.MAX_SESSIONS_PER_WEEK,
+        smallCaseMinimumQuantity:
+          TERM_GENERATOR_DEFAULT_VALUES.SMALL_CASE_MINIMUM_QUANTITY,
+        smallCaseMaxQuantity:
+          TERM_GENERATOR_DEFAULT_VALUES.SMALL_CASE_MAX_QUANTITY,
+        regularCaseMinimumQuantity:
+          TERM_GENERATOR_DEFAULT_VALUES.REGULAR_CASE_MINIMUM_QUANTITY,
+        regularCaseMaxQuantity:
+          TERM_GENERATOR_DEFAULT_VALUES.REGULAR_CASE_MAX_QUANTITY,
+        hybridCaseMinimumQuantity:
+          TERM_GENERATOR_DEFAULT_VALUES.HYBRID_CASE_MINIMUM_QUANTITY,
+        hybridCaseMaxQuantity:
+          TERM_GENERATOR_DEFAULT_VALUES.HYBRID_CASE_MAX_QUANTITY,
+      },
+      mockPetitionsClerkUser,
+    );
+
+    const { caseCountsAndSessionsByCity, incorrectSizeRegularCases } =
+      writeTrialSessionDataToExcelSpy.mock.calls[0][0];
+
+    NEW_TRIAL_CITY_STRINGS.forEach(trialCity => {
+      expect(caseCountsAndSessionsByCity[trialCity]).toBeUndefined();
+    });
+    expect(incorrectSizeRegularCases.length).toBeGreaterThan(0);
   });
 
   it('should not generate a trial term for a user without the necessary permissions', async () => {

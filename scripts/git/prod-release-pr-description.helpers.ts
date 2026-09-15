@@ -17,11 +17,17 @@ import {
   type GitHubUser,
 } from './github-client';
 import { haveValidationRulesChanged } from '../entity-validation/entityValidation';
+import {
+  dedupeManualSteps,
+  extractBashCodeBlocks,
+  extractManualSteps,
+  renderManualSteps,
+  type ManualStep,
+  type ManualStepSection,
+} from './prod-release-pr-description.manual-steps-helpers';
 
-export type ManualStep = {
-  command: string;
-  description: string;
-};
+export { extractBashCodeBlocks };
+export type { ManualStep, ManualStepSection };
 
 export type EnrichedPullRequest = {
   issue?: GitHubIssue;
@@ -47,8 +53,6 @@ const OPEX_PATTERN = /^opex\b/i;
 const BUG_DESCRIPTION_HEADING_PATTERN = /^[\s*_#>~-]*describe the bug\b/i;
 const BUG_LABEL = 'bug';
 const BUGFIX_LABEL = 'bugfix';
-const BASH_CODE_BLOCK_PATTERN = /```bash\s*\n([\s\S]*?)```/gi;
-const CHECKBOX_LIST_ITEM_PATTERN = /^\s*-\s*(?:\[[ xX]]\s*)?(.*?):?\s*$/;
 const COPILOT_PATTERN = /copilot/i;
 const CIRCLE_CONFIG_PATH = path.join(
   __dirname,
@@ -62,16 +66,8 @@ const DOCKER_IMAGE_TAG_PATTERN =
 const TABLE_HEADER = '| Ticket/Task | Type | Other Contributors | PR Made By |';
 const TABLE_DIVIDER = '| --- | --- | --- | --- |';
 
-const normalizeLineEndings = (value: string): string => {
-  return value.replace(/\r\n/g, '\n');
-};
-
 const normalizeLabelName = (label: GitHubLabel): string => {
   return label.name.trim().toLowerCase();
-};
-
-const normalizeWhitespace = (value: string): string => {
-  return normalizeLineEndings(value).trim();
 };
 
 export const extractIssueNumberFromTitle = (
@@ -144,21 +140,6 @@ export const resolveType = ({
   }
 
   return 'story';
-};
-
-export const extractBashCodeBlocks = (body: string): string[] => {
-  const normalizedBody = normalizeLineEndings(body);
-  const codeBlocks: string[] = [];
-
-  for (const match of normalizedBody.matchAll(BASH_CODE_BLOCK_PATTERN)) {
-    const codeBlock = normalizeWhitespace(match[1]);
-
-    if (codeBlock) {
-      codeBlocks.push(codeBlock);
-    }
-  }
-
-  return codeBlocks;
 };
 
 export const extractDockerImageTag = (
@@ -259,79 +240,12 @@ const renderGroupedTableRow = (
   return `| ${escapeTableCell(groupedReleaseEntry.ticketTask)} | ${escapeTableCell(groupedReleaseEntry.type)} | ${escapeTableCell(groupedReleaseEntry.otherContributors.join('<br />'))} | ${escapeTableCell(prMadeBy)} |`;
 };
 
-const extractManualSteps = (body: string): ManualStep[] => {
-  const lines = normalizeLineEndings(body).split('\n');
-  const manualSteps: ManualStep[] = [];
-
-  for (let index = 0; index < lines.length; index += 1) {
-    if (lines[index].trim() !== '```bash') {
-      continue;
-    }
-
-    const openingFenceIndex = index;
-    const commandLines: string[] = [];
-
-    for (
-      let commandIndex = index + 1;
-      commandIndex < lines.length;
-      commandIndex += 1
-    ) {
-      if (lines[commandIndex].trim() === '```') {
-        index = commandIndex;
-        break;
-      }
-
-      commandLines.push(lines[commandIndex]);
-    }
-
-    const command = normalizeWhitespace(commandLines.join('\n'));
-
-    if (!command) {
-      continue;
-    }
-
-    const previousNonEmptyLine = [...lines.slice(0, openingFenceIndex)]
-      .reverse()
-      .find(line => line.trim().length > 0);
-    const descriptionMatch = previousNonEmptyLine?.match(
-      CHECKBOX_LIST_ITEM_PATTERN,
-    );
-    const description = descriptionMatch?.[1]?.trim() || 'Manual step';
-
-    manualSteps.push({ command, description });
-  }
-
-  return manualSteps;
-};
-
 const hasDockerfileChange = (pullRequest: GitHubPullRequest): boolean => {
   return (
     pullRequest.files?.some(
       (file: GitHubPullRequestFile): boolean => file.path === 'Dockerfile',
     ) ?? false
   );
-};
-
-const dedupeManualSteps = (manualSteps: ManualStep[]): ManualStep[] => {
-  const uniqueSteps = new Map<string, ManualStep>();
-
-  for (const manualStep of manualSteps) {
-    const existingManualStep = uniqueSteps.get(manualStep.command);
-
-    if (!existingManualStep) {
-      uniqueSteps.set(manualStep.command, manualStep);
-      continue;
-    }
-
-    if (
-      existingManualStep.description === 'Manual step' &&
-      manualStep.description !== 'Manual step'
-    ) {
-      uniqueSteps.set(manualStep.command, manualStep);
-    }
-  }
-
-  return Array.from(uniqueSteps.values());
 };
 
 const resolveManualSteps = ({
@@ -347,12 +261,21 @@ const resolveManualSteps = ({
     resolveTicketTask(pullRequest.title) === 'dependencies' &&
     hasDockerfileChange(pullRequest)
   ) {
-    manualSteps.push({
-      command: 'npm run ecr:check-version',
-      description: dockerImageTag
-        ? `docker container \`${dockerImageTag}\``
-        : 'docker container',
-    });
+    const dockerCheckAlreadyIncluded = manualSteps.some(
+      manualStep =>
+        manualStep.command === 'npm run ecr:check-version' &&
+        (manualStep.section === undefined || manualStep.section === 'before'),
+    );
+
+    if (!dockerCheckAlreadyIncluded) {
+      manualSteps.push({
+        command: 'npm run ecr:check-version',
+        description: dockerImageTag
+          ? `docker container \`${dockerImageTag}\``
+          : 'docker container',
+        section: 'before',
+      });
+    }
   }
 
   return dedupeManualSteps(manualSteps);
@@ -397,15 +320,6 @@ const groupEnrichedPullRequests = (
   }
 
   return Array.from(groupedEntries.values());
-};
-
-const renderManualStep = (manualStep: ManualStep): string[] => {
-  return [
-    `- [ ] ${manualStep.description}`,
-    '   ```bash',
-    `   ${manualStep.command.replace(/\n/g, '\n   ')}`,
-    '   ```',
-  ];
 };
 
 const hasDataMigrationChange = (pullRequest: GitHubPullRequest): boolean => {
@@ -497,14 +411,7 @@ export const renderPrDescription = ({
   if (manualSteps.length === 0) {
     lines.push('');
   } else {
-    lines.push('');
-    manualSteps.forEach((manualStep: ManualStep, index: number) => {
-      lines.push(...renderManualStep(manualStep));
-
-      if (index < manualSteps.length - 1) {
-        lines.push('');
-      }
-    });
+    lines.push('', ...renderManualSteps(manualSteps));
   }
 
   if (suggestedLabels.length > 0) {

@@ -26,9 +26,10 @@ export const validateRemoteTrialPermissionAction = ({
     });
   }
 
+  const { DATE_FORMATS } = applicationContext.getConstants();
   const isValidDate = applicationContext
     .getUtilities()
-    .isStringISOFormatted(remoteTrialGrantedDate);
+    .isValidDateString(remoteTrialGrantedDate, [DATE_FORMATS.ISO]);
 
   if (!isValidDate) {
     return path.error({

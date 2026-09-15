@@ -20,7 +20,7 @@ describe('updateDocketEntryWorksheetInteractor', () => {
 
   const VALID_WORKSHEET: RawDocketEntryWorksheet = {
     docketEntryId: TEST_DOCKET_ENTRY_ID,
-    finalBriefDueDate: '2023-07-29T04:00:00.000Z',
+    finalBriefDueDate: '2023-07-29T00:00:00.000-04:00',
     primaryIssue: 'tests primaryIssue',
     statusOfMatter: 'AwaitingConsideration',
   };
@@ -77,7 +77,7 @@ describe('updateDocketEntryWorksheetInteractor', () => {
       {
         docketEntryId: TEST_DOCKET_ENTRY_ID,
         entityName: 'DocketEntryWorksheet',
-        finalBriefDueDate: '2023-07-29T04:00:00.000Z',
+        finalBriefDueDate: '2023-07-29T00:00:00.000-04:00',
         primaryIssue: 'tests primaryIssue',
         statusOfMatter: 'AwaitingConsideration',
       },
@@ -86,7 +86,7 @@ describe('updateDocketEntryWorksheetInteractor', () => {
     expect(results).toEqual({
       docketEntryId: TEST_DOCKET_ENTRY_ID,
       entityName: 'DocketEntryWorksheet',
-      finalBriefDueDate: '2023-07-29T04:00:00.000Z',
+      finalBriefDueDate: '2023-07-29T00:00:00.000-04:00',
       primaryIssue: 'tests primaryIssue',
       statusOfMatter: 'AwaitingConsideration',
     });

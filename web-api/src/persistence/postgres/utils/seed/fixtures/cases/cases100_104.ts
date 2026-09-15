@@ -639,7 +639,7 @@ export const cases100_104: Omit<RawCase, 'docketNumberWithSuffix'>[] = [
     preferredTrialCity: 'Honolulu, Hawaii',
     procedureType: PROCEDURE_TYPES_MAP.regular,
     qcCompleteForTrial: {},
-    receivedAt: '2024-05-26T04:00:00.000Z',
+    receivedAt: '2024-05-26T00:00:00.000-04:00',
     sortableDocketNumber: 2024000101,
     status: CASE_STATUS_TYPES.generalDocket,
     petitioners: [

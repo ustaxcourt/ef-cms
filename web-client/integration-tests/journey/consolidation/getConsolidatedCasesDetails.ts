@@ -16,6 +16,10 @@ export const getConsolidatedCasesDetails = (cerebralTest, docketNumber) => {
       consolidatedCaseDetailGroup.push(cerebralTest.getState('caseDetail'));
     }
 
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber,
+    });
+
     cerebralTest.consolidatedCaseDetailGroup = consolidatedCaseDetailGroup;
   });
 };

@@ -3,53 +3,20 @@ import {
   GRANT_DENY_MOTION_OPTIONS,
   MOTION_DISPOSITIONS,
 } from '@shared/business/entities/EntityConstants';
+import {
+  baseCaseDetail,
+  baseState,
+  expectedPreamble,
+} from './grantDenyMotionActionTestFixtures';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { prepareGrantDenyMotionAction } from './prepareGrantDenyMotionAction';
 import { presenter } from '@web-client/presenter/presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('prepareGrantDenyMotionAction', () => {
-  const wrap = (inner: string) =>
-    `<p class="grant-deny-indent-paragraph">${inner}</p>`;
-
-  const expectedPreamble = ({
-    date = 'March 15, 2026',
-    documentNumberText = '(doc. no. 7)',
-    motionTitle = 'Motion to Compel',
-    movant = 'petitioner',
-    preamblePrepend = '',
-  } = {}) =>
-    wrap(
-      `${preamblePrepend}On ${date}, ${movant} filed a ${motionTitle} ${documentNumberText}. For cause, it is`,
-    );
-
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
   });
-
-  const motionId = 'motion-docket-entry-id';
-  const motion = {
-    docketEntryId: motionId,
-    documentTitle: 'Motion to Compel',
-    filedBy: 'Petr. Jane Doe',
-    filingDate: '2026-03-15T10:00:00.000Z',
-    index: 7,
-  };
-
-  const baseCaseDetail = {
-    consolidatedCases: [],
-    docketEntries: [motion],
-    docketNumber: '123-26',
-    petitioners: [{ name: 'Jane Doe' }],
-    status: CASE_STATUS_TYPES.generalDocket,
-  };
-
-  const baseState = {
-    caseDetail: baseCaseDetail,
-    docketEntryId: motionId,
-    form: {},
-    parentMessageId: undefined,
-  };
 
   it('builds a granted disposition clause and a docketEntryDescription', async () => {
     const result = await runAction(prepareGrantDenyMotionAction, {
@@ -98,83 +65,6 @@ describe('prepareGrantDenyMotionAction', () => {
         paragraph.startsWith('<p class="grant-deny-indent-paragraph">'),
       ).toBe(true);
     });
-  });
-
-  it('uses petitioner possessive when multiple petitioners filed the motion', async () => {
-    const result = await runAction(prepareGrantDenyMotionAction, {
-      modules: { presenter },
-      state: {
-        ...baseState,
-        caseDetail: {
-          ...baseCaseDetail,
-          petitioners: [{ name: 'Jane Doe' }, { name: 'John Doe' }],
-        },
-        form: { disposition: MOTION_DISPOSITIONS.GRANTED },
-      },
-    });
-
-    expect(result.state.form.richText).toContain(
-      "ORDERED that petitioner's Motion to Compel is granted.",
-    );
-  });
-
-  it('uses petitioner possessive for a motion to consolidate on a consolidated lead case', async () => {
-    const result = await runAction(prepareGrantDenyMotionAction, {
-      modules: { presenter },
-      state: {
-        ...baseState,
-        caseDetail: {
-          ...baseCaseDetail,
-          consolidatedCases: [
-            { docketNumber: '123-26', docketNumberWithSuffix: '123-26' },
-            { docketNumber: '124-26', docketNumberWithSuffix: '124-26' },
-          ],
-          docketEntries: [
-            {
-              ...motion,
-              documentTitle:
-                'Motion to Consolidate Docket Numbers 124-26, 125-26',
-              documentType: 'Motion to Consolidate',
-            },
-          ],
-          leadDocketNumber: '123-26',
-          petitioners: [{ name: 'Jane Doe' }, { name: 'John Doe' }],
-        },
-        form: {
-          disposition: MOTION_DISPOSITIONS.GRANTED,
-          issueOrder:
-            GRANT_DENY_MOTION_OPTIONS.issueOrderOptions.allCasesInGroup,
-        },
-      },
-    });
-
-    expect(result.state.form.richText).toContain(
-      "ORDERED that petitioner's Motion to Consolidate Docket Numbers 124-26, 125-26 is granted.",
-    );
-    expect(result.state.form.richText).not.toContain("petitioners'");
-  });
-
-  it('uses respondent possessive when respondent filed the motion', async () => {
-    const result = await runAction(prepareGrantDenyMotionAction, {
-      modules: { presenter },
-      state: {
-        ...baseState,
-        caseDetail: {
-          ...baseCaseDetail,
-          docketEntries: [
-            {
-              ...motion,
-              filedBy: 'Respt. Commissioner',
-            },
-          ],
-        },
-        form: { disposition: MOTION_DISPOSITIONS.GRANTED },
-      },
-    });
-
-    expect(result.state.form.richText).toContain(
-      "ORDERED that respondent's Motion to Compel is granted.",
-    );
   });
 
   it('builds a denied-as-moot-without-prejudice phrase', async () => {

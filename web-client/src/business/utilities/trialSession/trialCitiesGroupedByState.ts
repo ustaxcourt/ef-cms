@@ -1,14 +1,27 @@
-import { TRIAL_CITIES } from '@shared/business/entities/EntityConstants';
+import {
+  NEW_TRIAL_CITY_STRINGS,
+  TRIAL_CITIES,
+} from '@shared/business/entities/EntityConstants';
 import { sortBy } from 'lodash';
 
-export const getTrialCitiesGroupedByState = (): {
+export const getTrialCitiesGroupedByState = ({
+  newTrialCitiesEnabled = false,
+}: {
+  newTrialCitiesEnabled?: boolean;
+} = {}): {
   label: string;
   options: {
     label: string;
     value: string;
   }[];
 }[] => {
-  const trialCities = sortBy(TRIAL_CITIES.ALL, ['state', 'city']);
+  const trialCities = sortBy(TRIAL_CITIES.ALL, ['state', 'city']).filter(
+    cityStatePair =>
+      newTrialCitiesEnabled ||
+      !NEW_TRIAL_CITY_STRINGS.includes(
+        `${cityStatePair.city}, ${cityStatePair.state}`,
+      ),
+  );
   const states = trialCities.reduce(
     (listOfStates, cityStatePair) => {
       const existingState = listOfStates.find(

@@ -18,7 +18,7 @@ At the moment, the only task we rotate is updating dependencies. As an open-sour
 - `./web-api/runtimes/puppeteer/package.json`
 - `./web-api/terraform/modules/batch/docker-image/package.json`
 
-1. Before running the `upgrade-npm-packages.ts` script, ensure that all packages listed in the caveats section below are in parity with the caveats list in the `upgrade-npm-packages.ts` file. As of 8/10/2026, `babel-jest`, `ts-jest`, `recharts`, and `eslint-plugin-cypress` are documented as hand-managed caveats below but are absent from the script's `caveats` array — the upgrade script will bump them unless reverted manually after each run. Only `eslint-plugin-cypress` required attention during the 8/10/2026 rotation (the other three were already at their latest versions), but the gap is real and should be closed over time.
+1. Before running the `upgrade-npm-packages.ts` script, ensure that all packages listed in the caveats section below are in parity with the caveats list in the `upgrade-npm-packages.ts` file. As of 8/17/2026, the script and docs are in sync; the following hand-managed packages are excluded by the upgrade script: `babel-jest`, `ts-jest`, `recharts`, `eslint-plugin-cypress`, and `aws-sigv4-sign`.
 
 1. You can use the `upgrade-npm-packages.ts` script for this process if you would like. Run the script in each directory containing a package.json:
    ```bash
@@ -268,13 +268,121 @@ If an OpenSearch update is available, we'll need to update OpenSearch locally.
 
 If an OpenSearch update is available, we'll need to update OpenSearch in github actions.
 
-1. Search the project for `opensearch-version:` and make sure it's set to the latest version. For example, some files in the `.github/workflows` directory will need to be updated.
+1. Search the project for `opensearch-version:` and make sure it's set to the latest version in `.github/actions/dawson-app-setup/action.yml`.
 
 ### 7. Wrap up
 
 - Check through the list of caveats to see if any of the documented issues have been resolved.
 
 - Validate updates by deploying to an experimental environment
+
+### 8. Update CI security tool versions
+
+**Background:** We update all CI tool versions manually as part of the monthly dependency rotation. This covers two categories:
+
+- **GitHub Actions `uses:` pins** — action version tags in `.github/workflows/` files
+- **Inline tool versions** — tools pinned in `run:` steps or `container:` blocks that are not visible to any automated tooling
+
+Do all of these together in a single PR each month.
+
+#### 8.0 GitHub Actions `uses:` pins (manual — monthly)
+
+These are the `uses: owner/action@vX.Y.Z` lines in every workflow file. Check and update each one manually.
+
+**Actions used across security workflows:**
+
+| Action | Where used | Check releases |
+|---|---|---|
+| `actions/checkout` | All security workflows | [releases](https://github.com/actions/checkout/releases) |
+| `actions/upload-artifact` | All security workflows | [releases](https://github.com/actions/upload-artifact/releases) |
+| `actions/cache/restore`, `actions/cache/save` | `dawson-node-bootstrap` action | [releases](https://github.com/actions/cache/releases) |
+| `actions/setup-node` | `dawson-node-bootstrap` action | [releases](https://github.com/actions/setup-node/releases) |
+| `actions/setup-python` | `security-sast.yml` (Checkov job) | [releases](https://github.com/actions/setup-python/releases) |
+| `actions/dependency-review-action` | `security-supply-chain.yml` | [releases](https://github.com/actions/dependency-review-action/releases) |
+| `github/codeql-action/init`, `analyze` | `security-sast.yml`; SARIF upload is centralized in `dawson-upload-sarif` | [releases](https://github.com/github/codeql-action/releases) |
+| `ankane/setup-opensearch` | `dawson-app-setup` action | [releases](https://github.com/ankane/setup-opensearch/releases) |
+| `zaproxy/action-api-scan` | `security-dast.yml` | [releases](https://github.com/zaproxy/action-api-scan/releases) |
+| `zaproxy/action-full-scan` | `security-dast.yml` | [releases](https://github.com/zaproxy/action-full-scan/releases) |
+| `zaproxy/action-baseline` | `security-dast.yml` | [releases](https://github.com/zaproxy/action-baseline/releases) |
+| `aquasecurity/trivy-action` | `dawson-trivy-image-scan` action and `security-supply-chain.yml` | [releases](https://github.com/aquasecurity/trivy-action/releases) |
+
+**Steps to update a `uses:` pin:**
+
+1. Check the releases page for the action (links above).
+2. Find the latest stable release version tag (e.g. `v4.2.0`).
+3. Search the project for the current version string:
+   ```bash
+   grep -r "owner/action-name@" .github/
+   ```
+4. Update every occurrence to the new version tag.
+5. Verify CI passes before merging.
+
+> **Important:** Some actions are centralized in reusable composite actions. Update the action definition rather than copying a version change into each caller.
+
+#### 8.0.1 Container images in `services:` blocks (manual — monthly)
+
+These are Docker images used as service containers in workflow jobs (e.g. the Postgres sidecar). They are separate from `uses:` pins.
+
+| Image | Where used | How to update |
+|---|---|---|
+| `postgres` | `security-dast.yml` (dast-api, dast-web), all `template_app*.yml` workflows | See §5.4 above — keep in sync with local and CircleCI postgres version |
+
+> Currently `image: postgres` is unpinned (floats to latest). When §5.4 is executed, pin it to a specific tag (e.g. `postgres:17.5-bookworm`) here too.
+
+#### 8.1 Semgrep container image
+
+Used in: `.github/workflows/security-sast.yml` (line 33)
+
+1. Check the latest release at [https://github.com/semgrep/semgrep/releases](https://github.com/semgrep/semgrep/releases)
+1. Search the project for `semgrep/semgrep:` and update the version tag. For example:
+   ```yaml
+   image: semgrep/semgrep:1.167.0
+   ```
+
+#### 8.2 Checkov pip install
+
+Used in: `.github/workflows/security-sast.yml` (line 97)
+
+1. Check the latest release at [https://pypi.org/project/checkov/](https://pypi.org/project/checkov/)
+1. Search the project for `checkov==` and update the version. For example:
+   ```bash
+   pip install checkov==3.3.2
+   ```
+1. After bumping, verify the Checkov CI job still passes — Checkov minor versions occasionally change CLI flag behavior.
+
+#### 8.3 Gitleaks binary download
+
+Used in: `.github/actions/dawson-gitleaks/action.yml`
+
+1. Check the latest release at [https://github.com/gitleaks/gitleaks/releases](https://github.com/gitleaks/gitleaks/releases)
+1. Update the `version` input in `.github/actions/dawson-gitleaks/action.yml`. For example:
+   ```yaml
+   version: 8.31.0
+   ```
+   The download URL and archive filename are derived from this value.
+
+#### 8.4 lockfile-lint npx
+
+Used in: `.github/workflows/security-supply-chain.yml` (line 69)
+
+1. Check the latest release at [https://www.npmjs.com/package/lockfile-lint](https://www.npmjs.com/package/lockfile-lint)
+1. Search the project for `lockfile-lint@` and update the version. For example:
+   ```bash
+   npx lockfile-lint@5.1.0 \
+   ```
+
+#### 8.5 shellcheck binary
+
+Used in: `.github/workflows/security-sast.yml` — installed via `curl` in the `shellcheck` job
+
+1. Check the latest release at [https://github.com/koalaman/shellcheck/releases](https://github.com/koalaman/shellcheck/releases)
+2. Search the project for `SHELLCHECK_VERSION=` and update the version variable. For example:
+   ```bash
+   SHELLCHECK_VERSION=0.10.0
+   ```
+3. The install URL and filename derive from the variable automatically — no other changes needed.
+
+> **Note:** The `opensearch-version:` input in `dawson-app-setup` is covered by §6.3 above. The `image: postgres` service container in `security-dast.yml` is covered by §5.4 above. GitHub Actions `uses:` pins (including `aquasecurity/trivy-action`, `zaproxy/*`, `github/codeql-action`) are covered by §8.0 above.
 
 ## Configurations
 **Safe to upgrade, but we use a non-standard configuration intentionally**
@@ -301,7 +409,7 @@ If an OpenSearch update is available, we'll need to update OpenSearch in github 
 Below is a list of dependencies that are locked down due to known issues with security, integration problems within DAWSON, etc. Try to update these items but please be aware of the issue that's documented and ensure it's been resolved.
 
 ### pdfjs-dist
-**Current Version Installed: 6.2.108**
+**Current Version Installed: 6.3.289**
 
 - When upgrading to version 5.4.624 the newer pdfjs-dist release relies on DOMMatrix, which caused errors in AWS Lambda when scraping text from PDFs. This worked locally but failed in the deployed environment because Lambda does not provide DOMMatrix. To resolve this, I added a polyfill using the `dommatrix` library that is used when DOMMatrix is undefined. See `getPdfJs.ts` and `parsePdf.ts` for details.
    - I debugged this by temporarily ignoring the smoketests in search.cy.ts in order for the build to pass and deploy to an exp environment. From there I ran the cypress smoketests on the exp environement locally, found the error in cloudwatch logs, tested multiple fixes and made the neccessary changes.
@@ -311,7 +419,7 @@ Below is a list of dependencies that are locked down due to known issues with se
 - As of 8/10/2026: Updated to **6.2.108** for [GHSA-hq66-cqwq-w95j](https://github.com/advisories/GHSA-hq66-cqwq-w95j) (arbitrary JavaScript execution on opening a malicious PDF, affecting `>=5.6.83 <6.2.108`). Re-verify `getPdfJs.ts` and `parsePdf.ts`, especially the `DOMMatrix` polyfill, in an experimental deploy — the Lambda-only failure mode does not reproduce locally.
 
 ### DWT
-**Current Installed DWT: 19.4.2**
+**Current Installed DWT: 19.4.3**
 
 Minor and patch versions of DWT _should_ be updated, but require that Court IT update the Windows clients in concert with our app. Do not bump `dwt` during weekly dependency rotations even if a newer version appears on npm — upgrades require the coordination sequence below and a standalone PR to `test`, not a bundled rotation.
 
@@ -336,8 +444,8 @@ If an update is available for DWT:
    1. The old Windows client and new server version are backwards-compatible.
 
 ### puppeteer and @sparticuz/chromium
-**Current Installed Puppeteer/Puppeteer-core: 25.1.0**
-**Current Installed @sparticuz/chromium: 149.0.0**
+**Current Installed Puppeteer/Puppeteer-core: 25.10.0**
+**Current Installed @sparticuz/chromium: 152.0.0**
 
 - When updating puppeteer or puppeteer core in the project, make sure to also match versions in `web-api/runtimes/puppeteer/package.json` as this is our lambda layer which we use to generate pdfs. Puppeteer and chromium versions should always match between package.json and web-api/runtimes/puppeteer/package.json. Remember to run `npm install --prefix web-api/runtimes/puppeteer` to install and update the package-lock file.
 - Puppeteer also has recommended versions of Chromium, so we should make sure to use the recommended version of chromium for the version of puppeteer that we are on. The chromium versions supported by puppeteer can be found [here](https://pptr.dev/supported-browsers)
@@ -350,6 +458,7 @@ If an update is available for DWT:
 - As of June 25, 2026: Puppeteer 25.2.1 requires Chrome for Testing 150.0.7871.24, which means `@sparticuz/chromium` would need to be updated to `150.x`. However, `@sparticuz/chromium@150.x` has not yet been published to npm (latest available is `149.0.0`). Skipping the puppeteer 25.2.x update until `@sparticuz/chromium@150.x` is available.
 - As of July 27, 2026: Puppeteer **25.4.0** is available. Still blocked — `@sparticuz/chromium` latest on npm remains **149.0.0**; puppeteer 25.2.x and above require Chrome for Testing 150.x.
 - As of 8/10/2026: Puppeteer **25.5.0** is available. Still blocked — `@sparticuz/chromium` latest on npm remains **149.0.0**; puppeteer 25.2.x and above require Chrome for Testing 150.x.
+- As of 9/8/2026: `@sparticuz/chromium` version **152.0.0** has been released, so we have now upgraded to Puppeteer **25.5.10**
 
 ### ws, 3rd party dependency of Cerebral
 
@@ -374,9 +483,10 @@ If an update is available for DWT:
 **jest: 30.4.2**
 **jest-environment-jsdom: 30.4.1**
 
-- Upgrade `jest`, `babel-jest`, and `jest-environment-jsdom` together manually rather than via the upgrade script. Verify the full unit test suites after any bump.
+- Upgrade `jest`, `babel-jest`, and `jest-environment-jsdom` together manually rather than via the upgrade script. `babel-jest` is also excluded by the upgrade script's `caveats` array. Verify the full unit test suites after any bump.
 - On June 26, 2025, newer versions of `jest` conflicted with `ts-jest` 29.x; we stayed on Jest 29 until `ts-jest` caught up.
 - On June 30, 2025, a `jest-environment-jsdom` bump caused failures in unit tests that use `Object.defineProperty` (for example, `getPdfJs.test.ts`). Re-test those specs before removing this pin.
+- On September 9, 2026, we were able to upgrade `jest`, `jest-environment-jsdom`, and `babel-jest` to **30.5.1** successfully
 
 ### websocket
 **Installed Version: 1.0.35**
@@ -487,7 +597,7 @@ error: too many arguments. Expected 0 arguments but got 2.
 ### eslint-plugin-cypress
 **Installed Version: 6.4.4**
 
-- As of 8/10/2026: **eslint-plugin-cypress 7.0.0** declares `peerDependencies: { eslint: ">=10" }`, but we are pinned to eslint **9.39.5** by the `eslint-plugin-jsx-a11y` / `eslint-plugin-react` block. Keep at **6.4.4** until eslint 10 is unblocked. This package is absent from the upgrade script's `caveats` array, so the script will bump it to 7.x each rotation unless reverted manually afterward.
+- As of 8/10/2026: **eslint-plugin-cypress 7.0.0** declares `peerDependencies: { eslint: ">=10" }`, but we are pinned to eslint **9.39.5** by the `eslint-plugin-jsx-a11y` / `eslint-plugin-react` block. Keep at **6.4.4** until eslint 10 is unblocked. This package is excluded by the upgrade script's `caveats` array.
 
 ### uuid
 - On 05-18-2026, we added an override for uuid to fix a vulnerability with versions below 11.
@@ -508,9 +618,9 @@ error: too many arguments. Expected 0 arguments but got 2.
 `import ImageBlobReduce, { pica } from 'image-blob-reduce';`
 
 ### @joi/date
-**Installed Version: 3.0.0**
+**Installed Version: 2.1.1**
 
-- 8/7/26 - @joi/date had a major version update with breaking changes: the package is ESM-only (`.mjs`), and date format parsing moved from **moment** to **dayjs**. Updating requires changing how we import this package in validators that use tests.
+- 8/7/26 - @joi/date had a major version update with breaking changes. Biggest thing is that it changed to just mjs. Updating requires changing how we import this package in validators that use tests.
 From
 
 ```ts
@@ -526,52 +636,25 @@ import { JoiDate } from '@joi/date';
 const joi: Root = joiImported.extend(JoiDate);
 ```
 
-Because of the moment → dayjs switch:
+The issue is with Jest. Jest doesn't work with mjs, so in our config we need to either map to a cjs version of the package or transform it ourselves. The package does not have a cjs dist and trying to run a transformation on the package wasn't working with our tests.
 
-- Keep the same allowed date shapes, but escape a trailing literal `Z` in Joi format strings (`YYYY-MM-DDTHH:mm:ss.SSSZ` → `YYYY-MM-DDTHH:mm:ss.SSS[Z]`) so DateHandler ISO output still matches.
-- Do **not** drop `.format(...)` / allowed-format lists — that widens validation.
-- For ISO timestamps with a literal `Z` suffix, pass **`utc: true`** on `format()` (e.g. `format({ format: 'YYYY-MM-DDTHH:mm:ss.SSS[Z]', utc: true })`), reuse **`JoiValidationConstants.ISO_DATE`**, or chain `.format()` from it.
+- 8/24/26 - Attempted upgrade to **3.0.0** again and reverted to **2.1.1** (second revert). Jest ESM transforms were required to load the package, and the moment → dayjs switch caused dayjs to parse UTC ISO strings in local time, breaking `.max('now')` validation (e.g. paper-petition creation in Cypress). Re-added `@joi/date` to the upgrade script's `caveats` array.
 
-Without `utc: true`, dayjs parses the time in the machine's local timezone. That makes `.max('now')` reject valid UTC timestamps as "in the future" (this broke paper-petition creation in Cypress).
+### recharts
+**Installed Version: 3.10.1**
 
-**UTC ISO validation (required pattern).**
-
-Prefer these exports from `shared/src/business/entities/JoiValidationConstants.ts`:
-
-- **`JoiValidationConstants.ISO_DATE`** — default for entity validators (already includes `utc: true`).
-- **`ISO_DATE_FORMAT_STRING`** — the canonical `'YYYY-MM-DDTHH:mm:ss.SSS[Z]'` string when building allowed-format lists.
-- **`ISO_DATE_JOI_FORMAT`** — `{ format: ISO_DATE_FORMAT_STRING, utc: true }` when a standalone `joi.date().iso().format(...)` is needed.
-
-Example: `DocumentSearch` chains `.format()` from `ISO_DATE` and includes `ISO_DATE_FORMAT_STRING` in its allowed formats.
-
-**ESLint guard: `custom-rules-plugin/joi-iso-date-utc`.**
-
-Registered in `eslint.config.mjs` and enforced on every `npm run lint` / CI run.
-
-The rule errors when code calls `.format(...)` with a format that includes the literal `[Z]` suffix but omits `utc: true`. Chaining from `JoiValidationConstants.ISO_DATE.format(...)` is allowed.
-
-- Rule: `eslint-custom-rules/eslint-joi-iso-date-utc-rule.js`
-- Tests: `scripts/eslint-custom-rules/eslint-joi-iso-date-utc-rule.test.ts`
-
-Calendar-only formats (`MM/DD/YYYY`, `YYYY-MM-DD`) are unaffected.
-
-- 8/11/26 - Upgraded to **3.0.0**.
-
-  Jest failed because our transform regex `'\\.[jt]sx?$'` never matched `.mjs`, so babel-jest never transformed the ESM-only package. Fixed by:
-
-  - Widening the transform regex to `'\\.m?[jt]sx?$'`
-  - Adding `@joi/date` to each config's `transformIgnoreModules` (or inline `transformIgnorePatterns`)
-  - Adding `mjs` to `moduleFileExtensions` where declared
-
-  Removed from the upgrade script's `caveats` array.
-
-  Also fixed **`JoiValidationConstants.ISO_DATE`** to use `utc: true`, and added **`custom-rules-plugin/joi-iso-date-utc`** plus the exports above so future validators cannot reintroduce local-time parsing for UTC ISO strings.
+- Pinned because `@recharts/devtools` does not yet peer-match recharts 3.10.x. Upgrade manually in coordination with `@recharts/devtools` when a compatible devtools release is available. This package is excluded by the upgrade script's `caveats` array.
 
 ### @recharts/devtools
 **Installed Version: 0.0.14**
 
 - 8/7/26 - Newer versions of this dependency restrict the version rechart that it supports. The current version of recharts is at `3.10.1`. Newer versions of devtools only supports `3.9.0`. Keeping it pinned at `0.0.14` until new versions support our version of recharts.
 - As of 8/10/2026: **@recharts/devtools 0.0.16** peers on `recharts: 3.9.0` exactly, and we are on **3.10.1**. Still pinned at **0.0.14**.
+
+### aws-sigv4-sign
+**Installed Version: 2.0.1**
+
+- This package was successfully upgraded to version **2.0.1** and validated in `exp2`. Until we have set up payment portal integration in all experimental environments, we should be careful upgrading this package as it need to be tested in `exp2` before going to `test`. Once all environments have this integration, this caveat can be removed.
 
 ## Troubleshooting
 

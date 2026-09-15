@@ -1,0 +1,48 @@
+name: DAWSON Gitleaks Scan
+description: Install the pinned Gitleaks release and scan the repository.
+
+inputs:
+  exit_code:
+    description: Exit code returned when findings are detected.
+    default: '1'
+  log_opts:
+    description: Optional git log options used to limit the scan.
+    default: ''
+  report_path:
+    description: Path for the SARIF report.
+    default: gitleaks.sarif
+  version:
+    description: Gitleaks release version.
+    default: 8.30.1
+
+runs:
+  using: composite
+  steps:
+    - name: Install Gitleaks
+      shell: bash
+      env:
+        GITLEAKS_VERSION: ${{ inputs.version }}
+      run: |
+        curl -sSfL "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz" \
+          | tar -xz -C /usr/local/bin gitleaks
+        gitleaks version
+
+    - name: Run Gitleaks
+      shell: bash
+      env:
+        EXIT_CODE: ${{ inputs.exit_code }}
+        LOG_OPTS: ${{ inputs.log_opts }}
+        REPORT_PATH: ${{ inputs.report_path }}
+      run: |
+        GITLEAKS_ARGS=(
+          detect
+          --config .gitleaks.toml
+          --redact
+          --report-format sarif
+          --report-path "$REPORT_PATH"
+          --exit-code "$EXIT_CODE"
+        )
+        if [[ -n "$LOG_OPTS" ]]; then
+          GITLEAKS_ARGS+=(--log-opts "$LOG_OPTS")
+        fi
+        gitleaks "${GITLEAKS_ARGS[@]}"

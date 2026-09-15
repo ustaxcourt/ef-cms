@@ -1,7 +1,9 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/featureFlag/mocks.jest';
 import '@web-api/persistence/postgres/trialSessions/mocks.jest';
 import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import {
+  ALLOWLIST_FEATURE_FLAGS,
   PROCEDURE_TYPES_MAP,
   SESSION_TERMS_DICT,
   SESSION_TYPES,
@@ -17,8 +19,11 @@ import { getBlockedCasesCount as getBlockedCasesCountMock } from '@web-api/persi
 import { getEligibleCasesCount as getEligibleCasesCountMock } from '@web-api/persistence/postgres/cases/getEligibleCasesCount';
 import { getTrialSessionById as getTrialSessionByIdMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 import { getTrialSessions as getTrialSessionsMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessions';
+import { getFeatureFlagValues as getFeatureFlagValuesMock } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
 
 describe('getTrialSessionPlanningReportDataInteractor', () => {
+  const getFeatureFlagValues = jest.mocked(getFeatureFlagValuesMock);
+
   const ALL_TRIAL_SESSIONS_MOCK: RawTrialSession[] = [
     {
       isCalendared: true,
@@ -153,6 +158,8 @@ describe('getTrialSessionPlanningReportDataInteractor', () => {
     });
 
     getBlockedCasesCount.mockResolvedValue(BLOCKED_CASES_COUNT_MOCK);
+
+    getFeatureFlagValues.mockResolvedValue([]);
   });
 
   it('should throw error if the user is "Unauthorized"', async () => {
@@ -227,6 +234,47 @@ describe('getTrialSessionPlanningReportDataInteractor', () => {
       lastVisitedDate: '1999-03-01T00:00:00.000Z',
       specialCaseCount: 2,
       trialCityState: 'Fresno, California',
+    });
+  });
+
+  describe('new-trial-cities feature flag', () => {
+    const NEW_TRIAL_CITIES_FLAG_KEY =
+      ALLOWLIST_FEATURE_FLAGS.NEW_TRIAL_CITIES.key;
+
+    it('should NOT include new trial cities in trialLocationData when flag is disabled', async () => {
+      const { trialLocationData } =
+        await getTrialSessionPlanningReportDataInteractor(
+          applicationContext,
+          { term: 'winter', year: '2024' },
+          mockPetitionsClerkUser,
+        );
+
+      const cityNames = trialLocationData.map(ts => ts.trialCityState);
+      expect(cityNames).not.toContain('Austin, Texas');
+      expect(cityNames).not.toContain('Charlotte, North Carolina');
+      expect(cityNames).not.toContain('Newark, New Jersey');
+      expect(cityNames).not.toContain('Orlando, Florida');
+      expect(cityNames).not.toContain('Sacramento, California');
+    });
+
+    it('should include new trial cities in trialLocationData when flag is enabled', async () => {
+      getFeatureFlagValues.mockResolvedValue([
+        { name: NEW_TRIAL_CITIES_FLAG_KEY, value: { current: true } },
+      ]);
+
+      const { trialLocationData } =
+        await getTrialSessionPlanningReportDataInteractor(
+          applicationContext,
+          { term: 'winter', year: '2024' },
+          mockPetitionsClerkUser,
+        );
+
+      const cityNames = trialLocationData.map(ts => ts.trialCityState);
+      expect(cityNames).toContain('Austin, Texas');
+      expect(cityNames).toContain('Charlotte, North Carolina');
+      expect(cityNames).toContain('Newark, New Jersey');
+      expect(cityNames).toContain('Orlando, Florida');
+      expect(cityNames).toContain('Sacramento, California');
     });
   });
 });

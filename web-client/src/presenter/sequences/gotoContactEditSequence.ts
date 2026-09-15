@@ -5,6 +5,8 @@ import { setupContactFormAction } from '../actions/setupContactFormAction';
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
+import { canUserUpdatePetitionerAction } from '@web-client/presenter/actions/canUserUpdatePetitionerAction';
+import { navigateToPathSequence } from '@web-client/presenter/sequences/navigateToPathSequence';
 
 export const gotoContactEditSequence =
   startWebSocketConnectionSequenceDecorator([
@@ -13,6 +15,16 @@ export const gotoContactEditSequence =
     clearFormAction,
     clearScreenMetadataAction,
     getCaseAction,
-    setupContactFormAction,
-    setupCurrentPageAction('ContactEdit'),
+    canUserUpdatePetitionerAction,
+    {
+      yes: [setupContactFormAction, setupCurrentPageAction('ContactEdit')],
+      no: [
+        [
+          () => ({
+            path: '404',
+          }),
+          navigateToPathSequence,
+        ],
+      ],
+    },
   ]);

@@ -8,7 +8,7 @@ describe('File Document Page - Petitioner Accessibility', () => {
   });
 
   it('should be free of a11y issues', () => {
-    loginAsPetitioner();
+    loginAsPetitioner('petitioner@example.com');
     cy.visit('/case-detail/101-19/file-a-document');
     cy.get('[data-testid="complete-doc-document-type-search"]').should('exist');
 
@@ -16,7 +16,7 @@ describe('File Document Page - Petitioner Accessibility', () => {
   });
 
   it('should be free of a11y issues on step 2', () => {
-    loginAsPetitioner();
+    loginAsPetitioner('petitioner@example.com');
     cy.visit('/case-detail/101-19/file-a-document');
     selectTypeaheadInput(
       'complete-doc-document-type-search',
@@ -31,6 +31,19 @@ describe('File Document Page - Petitioner Accessibility', () => {
     cy.get('#submit-document').click();
     cy.get('#primaryDocument-certificateOfService-label').click();
     cy.get('#primaryDocument-service-date-picker').should('exist');
+
+    checkA11y();
+  });
+
+  it('should be free of a11y issues on the Exhibit in Support Nonstandard A association step', () => {
+    loginAsPetitioner('petitioner@example.com');
+    cy.visit('/case-detail/101-19/file-a-document');
+    selectTypeaheadInput(
+      'complete-doc-document-type-search',
+      'Exhibit in Support',
+    );
+
+    cy.get('[data-testid="previous-document-search"]').should('exist');
 
     checkA11y();
   });

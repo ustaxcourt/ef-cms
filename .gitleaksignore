@@ -1,0 +1,6 @@
+# .gitleaksignore — per-finding risk-accept list
+# Format: <commit-sha>:<fingerprint>
+# Generate fingerprints from a gitleaks report: gitleaks detect --report-format json | jq '.[].Fingerprint'
+# Each entry requires a PR with justification — same process as allow-ghsas in security-supply-chain.yml.
+#
+# This file is intentionally empty until the first run surfaces findings that need accepting.

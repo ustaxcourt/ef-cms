@@ -36,7 +36,7 @@ const config: Config = {
   },
   maxWorkers: '50%',
 
-  moduleFileExtensions: ['js', 'jsx', 'mjs', 'ts', 'tsx'],
+  moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx'],
   moduleNameMapper: {
     ...pathsToModuleNameMapper(tsConfigPaths, {
       prefix: '<rootDir>/../',
@@ -59,7 +59,7 @@ const config: Config = {
   ),
   testMatch: ['<rootDir>/src/**/?(*.)+(spec|test).[jt]s?(x)'],
   transform: {
-    '\\.m?[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
+    '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
     '^.+\\.html?$': path.resolve(process.cwd(), 'web-client/htmlLoader.js'), //this is to ignore imported html files
   },
   transformIgnorePatterns: [
