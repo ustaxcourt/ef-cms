@@ -38,3 +38,11 @@ _PRs that do not meet these criteria may be closed without review._
 - [ ] I assert that all DoD criteria for this issue have been met.
 - [ ] If this PR includes a data migration with timing-specific manual test steps, I will coordinate the deployment with a manual tester to verify the timing-specific manual tests in real time.
 - [ ] All user-facing changes have been verified to be free of accessibility issues via manual testing and automated accessibility tests.
+
+### Dependencies checklist
+
+- [ ] I have listed the updated packages, their purpose, and where they are used in the PR description (packages under `@aws-sdk` are optional to list for brevity).
+- [ ] I have built and pushed a new Docker image from the Dockerfile to the experimental environment's ECR if needed, and updated CHANGES.md with the environment where it is deployed.
+- [ ] I have reviewed and updated caveats/hand-managed dependencies as needed.
+- [ ] I have successfully deployed the dependencies branch to an experimental environment.
+- [ ] I have created new Devex/Opex tickets addressing further issues for examination as needed.
