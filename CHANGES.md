@@ -17,6 +17,34 @@ Blocked Cases Report. Run the following to recompute those cases:
 ./scripts/run-once-scripts/fix-stale-automatic-blocks.ts
 ```
 </details>
+
+<details><summary>Dependency Updates - Week of 2026-09-08</summary>
+
+## Local
+
+#### Upgrade Terraform to `1.16.2`
+use either tfswitch or tfenv
+```bash
+tfswitch 1.16.2
+```
+```bash
+tfenv install 1.16.2
+tfenv use 1.16.2
+```
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Deploy Docker container `4.3.96`
+
+This script will prompt for an environment to pull the image from; choose `exp2`.
+
+```bash
+npm run ecr:check-version
+```
+
+</details>
 <details><summary>Dependency Updates - Week of 2026-08-31</summary>
 
 ## Local

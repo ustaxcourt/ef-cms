@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout coverage updater dependencies
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 1
           sparse-checkout: |
@@ -47,12 +47,12 @@ jobs:
             tsconfig.json
           sparse-checkout-cone-mode: false
       - name: Setup Node
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version-file: .nvmrc
       - name: Restore Node Dependencies
         id: cache-dependencies
-        uses: actions/cache/restore@v5
+        uses: actions/cache/restore@v6
         with:
           path: node_modules
           key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
@@ -87,7 +87,7 @@ jobs:
       - name: Checkout badge generator dependencies
         env:
           GITHUB_TOKEN: ${{ steps.badge-bot-token.outputs.token }}
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           ref: ${{ github.event.pull_request.base.ref }}
           persist-credentials: true
@@ -95,14 +95,14 @@ jobs:
       - name: Setup Node
         env:
           GITHUB_TOKEN: ${{ steps.badge-bot-token.outputs.token }}
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version-file: .nvmrc
       - name: Restore Node Dependencies
         env:
           GITHUB_TOKEN: ${{ steps.badge-bot-token.outputs.token }}
         id: cache-dependencies
-        uses: actions/cache/restore@v5
+        uses: actions/cache/restore@v6
         with:
           path: node_modules
           key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
