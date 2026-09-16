@@ -102,7 +102,7 @@ jobs:
       matrix:
         include:
           - name: puppeteer
-            image: node:24.16.0-slim
+            image: node:24.20.0-slim
           - name: batch
             image: node:24
     steps:

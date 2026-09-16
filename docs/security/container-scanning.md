@@ -22,7 +22,7 @@ Removing a scan does not clear alerts it already reported. Existing alerts have 
 |-------|-----------|---------|
 | `ef-cms-us-east-1` | `Dockerfile` | Production Lambda base image |
 | `efcms-local` | `Dockerfile-local` (FROM ef-cms-us-east-1) | Local dev / CI test runner — **not scanned** |
-| `node:24.16.0-slim` | Docker Hub | Puppeteer / PDF generation base |
+| `node:24.20.0-slim` | Docker Hub | Puppeteer / PDF generation base |
 | `node:24` | Docker Hub | Batch processing base |
 
 `efcms-local` is `FROM ef-cms-us-east-1` plus `COPY . /home/app` and `npm ci`. It installs no OS
