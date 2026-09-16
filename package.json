@@ -376,6 +376,6 @@
     "unrs-resolver": false,
     "utf-8-validate": false,
     "cypress@16.0.0": true,
-    "puppeteer@25.10.0": true
+    "puppeteer@25.11.0": true
   }
 }
