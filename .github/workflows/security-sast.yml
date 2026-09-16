@@ -3,7 +3,6 @@ name: Security - SAST
 on:
   pull_request:
     types: [opened, reopened, synchronize, ready_for_review]
-    branches: [staging]
     paths-ignore:
       - '**.md'
       - '**/.gitignore'
