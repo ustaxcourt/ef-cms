@@ -12,14 +12,17 @@ describe('exchangeAuthCodeAction', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    presenter.providers.applicationContext = applicationContext;
+    const mockAuthState = '5678efgh';
+    applicationContext
+      .getPersistenceGateway()
+      .getItem.mockReturnValue(mockAuthState);
+
+    presenter.providers.path = {
+      success: pathSuccessStub,
+      error: pathErrorStub,
+    };
   });
-
-  presenter.providers.applicationContext = applicationContext;
-
-  presenter.providers.path = {
-    success: pathSuccessStub,
-    error: pathErrorStub,
-  };
 
   it('should return success if auth code is successfully exchanged', async () => {
     const mockRespons = {
@@ -35,6 +38,7 @@ describe('exchangeAuthCodeAction', () => {
       },
       props: {
         authCode: '1234abc',
+        state: '5678efgh',
       },
     });
 
@@ -58,6 +62,7 @@ describe('exchangeAuthCodeAction', () => {
       },
       props: {
         authCode: '1234abc',
+        state: '5678efgh',
       },
     });
 
@@ -88,6 +93,75 @@ describe('exchangeAuthCodeAction', () => {
       alertError: {
         title: 'Bad Request',
         message: 'Auth code expired.',
+      },
+    });
+    expect(pathSuccessStub).not.toHaveBeenCalled();
+  });
+
+  it('should return error if the state was not stored', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getItem.mockReturnValue(undefined);
+
+    await runAction(exchangeAuthCodeAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        authCode: '1234abc',
+        state: '5678efgh',
+      },
+    });
+
+    expect(mockauthCodeInteractor).not.toHaveBeenCalled();
+    expect(pathErrorStub).toHaveBeenCalledTimes(1);
+    expect(pathErrorStub).toHaveBeenCalledWith({
+      alertError: {
+        title: 'Bad State',
+        message: 'Stored state did not match returned state.',
+      },
+    });
+    expect(pathSuccessStub).not.toHaveBeenCalled();
+  });
+
+  it('should return error if the state was not provided', async () => {
+    await runAction(exchangeAuthCodeAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        authCode: '1234abc',
+      },
+    });
+
+    expect(mockauthCodeInteractor).not.toHaveBeenCalled();
+    expect(pathErrorStub).toHaveBeenCalledTimes(1);
+    expect(pathErrorStub).toHaveBeenCalledWith({
+      alertError: {
+        title: 'Bad State',
+        message: 'Stored state did not match returned state.',
+      },
+    });
+    expect(pathSuccessStub).not.toHaveBeenCalled();
+  });
+
+  it('should return error if the state does not match', async () => {
+    await runAction(exchangeAuthCodeAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        authCode: '1234abc',
+        state: 'other string',
+      },
+    });
+
+    expect(mockauthCodeInteractor).not.toHaveBeenCalled();
+    expect(pathErrorStub).toHaveBeenCalledTimes(1);
+    expect(pathErrorStub).toHaveBeenCalledWith({
+      alertError: {
+        title: 'Bad State',
+        message: 'Stored state did not match returned state.',
       },
     });
     expect(pathSuccessStub).not.toHaveBeenCalled();

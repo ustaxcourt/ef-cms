@@ -2,6 +2,7 @@ import { exchangeAuthCodeInteractor } from '@web-api/business/useCases/auth/exch
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { calculateISODate } from '@shared/business/utilities/DateHandler';
+import { AxiosError } from 'node_modules/axios/index.cjs';
 
 describe('exchangeAuthCodeInteractor', () => {
   it('should successfully exchange auth code', async () => {
@@ -76,14 +77,17 @@ describe('exchangeAuthCodeInteractor', () => {
               }),
             },
             post: () =>
-              Promise.reject({ name: 'NotAuthorizedException' } as Error),
+              Promise.reject({
+                name: 'NotAuthorizedException',
+                response: { status: 403 },
+              } as AxiosError),
           };
         },
       } as any,
       { authCode: '1234abcd', code_verifier: '1234' },
     );
     await expect(callPromise).rejects.toThrow(
-      new UnauthorizedError('Invalid refresh token'),
+      new UnauthorizedError('Code exchange failed: Unauthorized'),
     );
   });
 });

@@ -8081,12 +8081,7 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "CognitoUserPool": []
-          }
-        ]
+        }
       },
       "options": {
         "consumes": ["application/json"],
@@ -8134,12 +8129,7 @@
               "$ref": "#/definitions/accessToken"
             }
           }
-        },
-        "security": [
-          {
-            "CognitoUserPool": []
-          }
-        ]
+        }
       },
       "options": {
         "consumes": ["application/json"],
@@ -8194,14 +8184,21 @@
             "description": "the access, identity, and refresh tokens",
             "schema": {
               "$ref": "#/definitions/authorization"
+            },
+            "headers": {
+              "Set-Cookie": {
+                "type": "string",
+                "description": "the cookie that securly stores the refreshToken which can be used later when hitting the /auth/refresh endpoint"
+              }
+            }
+          },
+          "403": {
+            "description": "Unauthorized error",
+            "schema": {
+              "$ref": "#/definitions/unauthorizedError"
             }
           }
-        },
-        "security": [
-          {
-            "CognitoUserPool": []
-          }
-        ]
+        }
       },
       "options": {
         "consumes": ["application/json"],
@@ -8447,6 +8444,16 @@
         }
       },
       "description": "a unprocessable entity error (422), due to a problem in the body or the id in the url"
+    },
+    "unauthorizedError": {
+      "type": "object",
+      "required": ["message"],
+      "properties": {
+        "message": {
+          "type": "string"
+        }
+      },
+      "description": "An error caused by the user performing an action they are not authorized for"
     },
     "workItem": {
       "type": "object",
