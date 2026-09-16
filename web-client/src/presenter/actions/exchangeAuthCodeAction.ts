@@ -6,6 +6,17 @@ export const exchangeAuthCodeAction = async ({
   path,
 }: ActionProps) => {
   const { authCode, state, error, errorDescription } = props;
+
+  if (error) {
+    return path.error({
+      alertError: {
+        title: error,
+        message:
+          errorDescription || 'Error when trying to login with Microsoft.',
+      },
+    });
+  }
+
   const code_verifier = applicationContext
     .getPersistenceGateway()
     .getItem({ key: 'code_verifier' });
@@ -19,16 +30,6 @@ export const exchangeAuthCodeAction = async ({
       alertError: {
         title: 'Bad State',
         message: 'Stored state did not match returned state.',
-      },
-    });
-  }
-
-  if (error) {
-    return path.error({
-      alertError: {
-        title: error,
-        message:
-          errorDescription || 'Error when trying to login with Microsoft.',
       },
     });
   }
