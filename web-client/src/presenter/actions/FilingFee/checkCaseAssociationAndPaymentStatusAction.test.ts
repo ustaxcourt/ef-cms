@@ -2,18 +2,31 @@ import { applicationContextForClient as applicationContext } from '@web-client/t
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { checkCaseAssociationAndPaymentStatusAction } from '@web-client/presenter/actions/FilingFee/checkCaseAssociationAndPaymentStatusAction';
+import {
+  PAYMENT_FILLING_FEE_ORIGIN,
+  persistPaymentFillingFeeOrigin,
+} from '@web-client/presenter/actions/FilingFee/paymentFillingFeeOriginStorage';
 import { PAYMENT_STATUS } from '@shared/business/entities/EntityConstants';
 
 describe('checkCaseAssociationAndPaymentStatusAction', () => {
+  const pathDashboardStub = jest.fn();
   const pathSuccessStub = jest.fn();
   const pathErrorStub = jest.fn();
 
   presenter.providers.applicationContext = applicationContext;
 
   presenter.providers.path = {
+    dashboard: pathDashboardStub,
     success: pathSuccessStub,
     error: pathErrorStub,
   };
+
+  beforeEach(() => {
+    window.sessionStorage.clear();
+    pathDashboardStub.mockClear();
+    pathSuccessStub.mockClear();
+    pathErrorStub.mockClear();
+  });
 
   it('should error if the case has already been paid', async () => {
     await runAction(checkCaseAssociationAndPaymentStatusAction, {
@@ -61,5 +74,25 @@ describe('checkCaseAssociationAndPaymentStatusAction', () => {
     });
 
     expect(pathSuccessStub).toHaveBeenCalled();
+    expect(pathDashboardStub).not.toHaveBeenCalled();
+  });
+
+  it('should go to the dashboard if payment started from My Cases', async () => {
+    persistPaymentFillingFeeOrigin(PAYMENT_FILLING_FEE_ORIGIN.DASHBOARD);
+
+    await runAction(checkCaseAssociationAndPaymentStatusAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        isDirectlyAssociated: true,
+      },
+      state: {
+        caseDetail: { petitionPaymentStatus: PAYMENT_STATUS.UNPAID },
+      },
+    });
+
+    expect(pathDashboardStub).toHaveBeenCalled();
+    expect(pathSuccessStub).not.toHaveBeenCalled();
   });
 });

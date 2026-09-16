@@ -1,5 +1,10 @@
+import { clearPaymentFillingFeeOriginAction } from '@web-client/presenter/actions/FilingFee/clearPaymentFillingFeeOriginAction';
+import { setFilingFeeAlertsAction } from '@web-client/presenter/actions/FilingFee/setFilingFeeAlertsAction';
+import { getOpenAndClosedCasesForUserAction } from '@web-client/presenter/actions/Dashboard/getOpenAndClosedCasesForUserAction';
 import { setCaseAction } from '@web-client/presenter/actions/setCaseAction';
 import { getCaseAction } from '@web-client/presenter/actions/getCaseAction';
+import { setCasesAction } from '@web-client/presenter/actions/setCasesAction';
+import { setDefaultCaseTypeToDisplayAction } from '@web-client/presenter/actions/setDefaultCaseTypeToDisplayAction';
 import { setStepIndicatorAction } from '@web-client/presenter/actions/setStepIndicatorAction';
 import { setupCurrentPageAction } from '@web-client/presenter/actions/setupCurrentPageAction';
 import { setStepIndicatorInfoForPetitionGeneratorAction } from '@web-client/presenter/actions/setStepIndicatorInfoForPetitionGeneratorAction';
@@ -13,6 +18,14 @@ export const paymentCancelSequence = [
   getCaseAssociationAction,
   checkCaseAssociationAndPaymentStatusAction,
   {
+    dashboard: [
+      clearPaymentFillingFeeOriginAction,
+      setDefaultCaseTypeToDisplayAction,
+      getOpenAndClosedCasesForUserAction,
+      setCasesAction,
+      setupCurrentPageAction('DashboardExternalUser'),
+      setFilingFeeAlertsAction,
+    ],
     success: [
       setStepIndicatorInfoForPetitionGeneratorAction,
       () => {
