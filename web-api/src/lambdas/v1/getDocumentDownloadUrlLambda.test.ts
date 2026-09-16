@@ -15,6 +15,7 @@ import {
   mockDocketClerkUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
+import { FeatureFlagResponseDTO } from '@shared/business/dto/system/FeatureFlagResponseDTO';
 
 const REQUEST_EVENT = {
   body: {},
@@ -40,7 +41,9 @@ describe('getDocumentDownloadUrlLambda', () => {
   });
 
   beforeEach(() => {
-    getAllFeatureFlagsInteractor.mockResolvedValue({});
+    getAllFeatureFlagsInteractor.mockResolvedValue(
+      {} as FeatureFlagResponseDTO,
+    );
     getMaintenanceMode.mockResolvedValue({ current: false });
     getDownloadPolicyUrl.mockImplementation(({ key, useTempBucket }) => {
       return Promise.resolve({

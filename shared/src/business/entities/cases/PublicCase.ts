@@ -13,8 +13,8 @@ import joi from 'joi';
 
 export class PublicCase extends JoiValidationEntity {
   public entityName: string;
-  public canAllowDocumentService?: string;
-  public canAllowPrintableDocketRecord?: string;
+  public canAllowDocumentService?: boolean;
+  public canAllowPrintableDocketRecord?: boolean;
   public canDojPractitionersRepresentParty?: boolean;
   public caseCaption: string;
   public createdAt?: string;

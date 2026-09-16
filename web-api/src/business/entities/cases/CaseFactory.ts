@@ -25,8 +25,8 @@ import {
 import { RestrictedCase } from '@shared/business/entities/cases/RestrictedCase';
 import { formatSealedAddresses } from '@web-api/business/utilities/caseFilter';
 import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
-import { RestrictedCaseDTO } from '@shared/business/dto/cases/RestrictedCaseDTO';
-import { PublicCaseDTO } from '@shared/business/dto/cases/PublicCaseDTO';
+import { RestrictedCaseResponse } from '@shared/business/dto/cases/RestrictedCaseResponse';
+import { PublicCaseResponse } from '@shared/business/dto/cases/PublicCaseResponse';
 
 function assertInstanceOf<T>(
   instance: any,
@@ -70,9 +70,7 @@ export class CaseFactory {
 
   static getCase({ rawCase, user }: { rawCase: any; user: UnknownAuthUser }) {
     return constructCaseForUser({ rawCase, user }) as
-      | Case
-      | PublicCase
-      | RestrictedCase;
+      Case | PublicCase | RestrictedCase;
   }
 
   static getCaseDTO({
@@ -83,9 +81,7 @@ export class CaseFactory {
     user: UnknownAuthUser;
   }) {
     return constructCaseForUser({ rawCase, user, useDTO: true }) as
-      | CaseDTO
-      | PublicCaseDTO
-      | RestrictedCaseDTO;
+      CaseDTO | PublicCaseResponse | RestrictedCaseResponse;
   }
 }
 
@@ -103,8 +99,8 @@ function constructCaseForUser({
   | PublicCase
   | RestrictedCase
   | CaseDTO
-  | PublicCaseDTO
-  | RestrictedCaseDTO {
+  | PublicCaseResponse
+  | RestrictedCaseResponse {
   const userIsLoggedIn = isAuthUser(user);
   const caseIsSealed = isSealedCase(rawCase);
   rawCase.isSealed = caseIsSealed;
@@ -137,11 +133,11 @@ function constructCaseForUser({
   if (!userIsLoggedIn) {
     if (caseIsSealed) {
       return useDTO
-        ? new RestrictedCaseDTO(new RestrictedCase(rawCase).toRawObject())
+        ? new RestrictedCaseResponse(new RestrictedCase(rawCase).toRawObject())
         : new RestrictedCase(rawCase);
     } else {
       return useDTO
-        ? new PublicCaseDTO(
+        ? new PublicCaseResponse(
             new PublicCase(rawCase, { authorizedUser: user }).toRawObject(),
           )
         : new PublicCase(rawCase, { authorizedUser: user });
@@ -192,11 +188,11 @@ function constructCaseForUser({
   // so they see whatever subset of data is allowed to the public
   if (caseIsSealed) {
     return useDTO
-      ? new RestrictedCaseDTO(new RestrictedCase(rawCase).toRawObject())
+      ? new RestrictedCaseResponse(new RestrictedCase(rawCase).toRawObject())
       : new RestrictedCase(rawCase);
   } else {
     return useDTO
-      ? new PublicCaseDTO(
+      ? new PublicCaseResponse(
           new PublicCase(rawCase, { authorizedUser: user }).toRawObject(),
         )
       : new PublicCase(rawCase, { authorizedUser: user });
