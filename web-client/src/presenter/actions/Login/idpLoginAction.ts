@@ -39,13 +39,29 @@ export const idpLoginAction = async ({
     value: auth_state,
   });
 
-  const params = {
-    identity_provider: idpName || 'ustcEntra',
+  const currentOrigin = window.location.origin;
+  const deployingColor = process.env.DEPLOYING_COLOR || '';
+  const isOnDeployingColor = currentOrigin.includes(deployingColor);
+
+  console.log(currentOrigin, deployingColor);
+  console.log(isOnDeployingColor, process.env.ENV === 'prod');
+
+  const params: {
+    identity_provider?: string;
+    redirect_uri: string;
+    code_challenge: string;
+    code_challenge_method: string;
+    state: string;
+  } = {
     redirect_uri: `https://app.${efcmsDomain}/auth-code`,
     code_challenge,
     code_challenge_method: 'S256',
     state: auth_state,
   };
+
+  if (!isOnDeployingColor || process.env.ENV === 'prod') {
+    params.identity_provider = idpName || 'ustcEntra';
+  }
 
   const idpLoginUrl = buildAuthorizationUrl(config, params);
 
