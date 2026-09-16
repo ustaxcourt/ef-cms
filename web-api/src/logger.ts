@@ -61,7 +61,7 @@ export const expressLogger = (req, res, next) => {
 };
 
 function redactPasswordFields(obj) {
-  const passwordRegex = /password/i;
+  const passwordRegex = /password|authCode|code_verifier/i;
 
   for (const key in obj) {
     if (typeof obj[key] === 'object' || Array.isArray(obj[key])) {

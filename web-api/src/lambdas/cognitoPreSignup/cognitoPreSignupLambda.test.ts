@@ -1,6 +1,7 @@
 jest.mock('@web-api/persistence/cognito/getCognito');
 import { cognitoPreSignupLambdaHandler } from '@web-api/lambdas/cognitoPreSignup/cognitoPreSignupLambda';
 import { getCognito as getCognitoMock } from '@web-api/persistence/cognito/getCognito';
+import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 
 const getCognito = jest.mocked(getCognitoMock);
 
@@ -10,7 +11,7 @@ const adminLinkProviderForUser = jest.fn();
 getCognito.mockReturnValue({
   adminGetUser,
   adminLinkProviderForUser,
-} as unknown as ReturnType<typeof getCognitoMock>);
+} as Partial<CognitoIdentityProvider> as CognitoIdentityProvider);
 
 const userNotFoundException = new Error('User not found');
 userNotFoundException.name = 'UserNotFoundException';
