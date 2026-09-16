@@ -8081,12 +8081,7 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "CognitoUserPool": []
-          }
-        ]
+        }
       },
       "options": {
         "consumes": ["application/json"],
@@ -8134,12 +8129,7 @@
               "$ref": "#/definitions/accessToken"
             }
           }
-        },
-        "security": [
-          {
-            "CognitoUserPool": []
-          }
-        ]
+        }
       },
       "options": {
         "consumes": ["application/json"],
@@ -8208,12 +8198,7 @@
               "$ref": "#/definitions/unauthorizedError"
             }
           }
-        },
-        "security": [
-          {
-            "CognitoUserPool": []
-          }
-        ]
+        }
       },
       "options": {
         "consumes": ["application/json"],
