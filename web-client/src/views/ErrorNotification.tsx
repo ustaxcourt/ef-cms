@@ -1,14 +1,20 @@
+import { Button } from '../ustc-ui/Button/Button';
 import { Focus } from '../ustc-ui/Focus/Focus';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect, useRef } from 'react';
 import { TROUBLESHOOTING_INFO } from '@shared/business/entities/EntityConstants';
 
 export const ErrorNotification = connect(
-  { alertError: state.alertError, alertHelper: state.alertHelper },
+  {
+    alertError: state.alertError,
+    alertHelper: state.alertHelper,
+    dismissAlertSequence: sequences.dismissAlertSequence,
+  },
   function ErrorNotification({
     alertError,
     alertHelper,
+    dismissAlertSequence = sequences.dismissAlertSequence,
   }: {
     alertError?: {
       title?: string;
@@ -25,6 +31,7 @@ export const ErrorNotification = connect(
       messagesDeduped: any;
       insertContactSupportClause: boolean;
     };
+    dismissAlertSequence?: Function;
   }) {
     const notificationRef = useRef(null);
 
@@ -46,42 +53,60 @@ export const ErrorNotification = connect(
             role="alert"
           >
             <div className="usa-alert__body">
-              <Focus>
-                {alertError.strongTitle ? (
-                  <h3 className="usa-alert__heading">
-                    <strong>{alertError.title}</strong>
-                  </h3>
-                ) : (
-                  <h3 className="usa-alert__heading">{alertError.title}</h3>
-                )}
-              </Focus>
-              {alertHelper.showSingleMessage && (
-                <p className="usa-alert__text">
-                  {alertError.message}
-                  {alertHelper.insertContactSupportClause && (
-                    <span>
-                      {' '}
-                      Contact{' '}
-                      <a
-                        href={`mailto:${TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}`}
-                      >
-                        {TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}
-                      </a>
-                      .
-                    </span>
-                  )}
-                </p>
-              )}
-              {alertHelper.showMultipleMessages && (
-                <ul>
-                  {alertHelper.messagesDeduped.map(message => (
-                    <li key={message}>{message}</li>
-                  ))}
-                </ul>
-              )}
-              {alertHelper.showTitleOnly && (
-                <div className="alert-blank-message" />
-              )}
+              <div className="grid-container padding-x-0">
+                <div className="grid-row flex-align-start">
+                  <div className="tablet:grid-col-9 grid-col-8">
+                    <Focus>
+                      {alertError.strongTitle ? (
+                        <h3 className="usa-alert__heading">
+                          <strong>{alertError.title}</strong>
+                        </h3>
+                      ) : (
+                        <h3 className="usa-alert__heading">
+                          {alertError.title}
+                        </h3>
+                      )}
+                    </Focus>
+                    {alertHelper.showSingleMessage && (
+                      <p className="usa-alert__text">
+                        {alertError.message}
+                        {alertHelper.insertContactSupportClause && (
+                          <span>
+                            {' '}
+                            Contact{' '}
+                            <a
+                              href={`mailto:${TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}`}
+                            >
+                              {TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}
+                            </a>
+                            .
+                          </span>
+                        )}
+                      </p>
+                    )}
+                    {alertHelper.showMultipleMessages && (
+                      <ul>
+                        {alertHelper.messagesDeduped.map(message => (
+                          <li key={message}>{message}</li>
+                        ))}
+                      </ul>
+                    )}
+                    {alertHelper.showTitleOnly && (
+                      <div className="alert-blank-message" />
+                    )}
+                  </div>
+                  <div className="tablet:grid-col-3 grid-col-4 usa-alert__action display-flex flex-justify-end flex-align-start padding-right-105 no-wrap-white-space">
+                    <Button
+                      link
+                      className="no-underline padding-0 no-wrap-white-space"
+                      icon="times-circle"
+                      onClick={() => dismissAlertSequence()}
+                    >
+                      Close
+                    </Button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         )}
