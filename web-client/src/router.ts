@@ -1270,11 +1270,12 @@ const router = {
     });
 
     registerRoute('/auth-code?..', () => {
-      const { code, error, error_description } = route.query();
+      const { code, state, error, error_description } = route.query();
       return app.getSequence('authCodeSequence')({
         authCode: code,
         error,
         errorDescription: error_description,
+        state,
       });
     });
 

@@ -3,6 +3,7 @@ import {
   calculatePKCECodeChallenge,
   Configuration,
   randomPKCECodeVerifier,
+  randomState,
 } from 'openid-client';
 
 export const idpLoginAction = async ({
@@ -26,10 +27,16 @@ export const idpLoginAction = async ({
 
   const code_verifier = randomPKCECodeVerifier();
   const code_challenge = await calculatePKCECodeChallenge(code_verifier);
+  const auth_state = randomState();
 
   applicationContext.getPersistenceGateway().setItem({
     key: 'code_verifier',
     value: code_verifier,
+  });
+
+  applicationContext.getPersistenceGateway().setItem({
+    key: 'auth_state',
+    value: auth_state,
   });
 
   const params = {
@@ -37,6 +44,7 @@ export const idpLoginAction = async ({
     redirect_uri: `https://app.${efcmsDomain}/auth-code`,
     code_challenge,
     code_challenge_method: 'S256',
+    state: auth_state,
   };
 
   const idpLoginUrl = buildAuthorizationUrl(config, params);

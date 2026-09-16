@@ -8170,6 +8170,24 @@
         "tags": ["auth"],
         "summary": "exchanges an authorization code for tokens",
         "description": "Exchanges an authorization code for access and refresh tokens.\n",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Auth code & PKCE code verifier",
+            "description": "Auth code & PKCE code verifier",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "authCode": {
+                  "type": "string"
+                },
+                "code_verifier": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
         "produces": ["application/json"],
         "responses": {
           "200": {
