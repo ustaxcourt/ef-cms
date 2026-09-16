@@ -30,6 +30,7 @@ export const initFilingFeePaymentAction = async ({
           strongTitle: true,
           title: 'Error: payment cannot be started.',
           message: `Error: payment cannot be started for ${caseDetail.docketNumber}`,
+          scrollToErrorNotification: true,
         }
       : {
           message: 'Error: payment cannot be started',

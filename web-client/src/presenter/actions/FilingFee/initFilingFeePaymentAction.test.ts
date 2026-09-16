@@ -65,6 +65,7 @@ describe('initFilingFeePaymentAction', () => {
 
     expect(state.alertError).toEqual({
       message: 'Error: payment cannot be started',
+      scrollToErrorNotification: true,
     });
     expect(pathErrorStub).toHaveBeenCalled();
   });
