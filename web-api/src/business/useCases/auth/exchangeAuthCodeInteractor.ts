@@ -42,8 +42,8 @@ export const exchangeAuthCodeInteractor = async (
       expiresAt,
     };
   } catch (err: any) {
-    if (err.name === 'NotAuthorizedException') {
-      throw new UnauthorizedError('Invalid refresh token');
+    if (err?.response?.status === 403) {
+      throw new UnauthorizedError('Code exchange failed: Unauthorized');
     }
 
     throw err;
