@@ -2,10 +2,11 @@ import { applicationContextForClient as applicationContext } from '@web-client/t
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { idpLoginAction } from '@web-client/presenter/actions/Login/idpLoginAction';
-import { calculatePKCECodeChallenge } from 'openid-client';
+import { calculatePKCECodeChallenge, randomState } from 'openid-client';
 jest.mock('openid-client', () => ({
   ...jest.requireActual('openid-client'),
   calculatePKCECodeChallenge: jest.fn(),
+  randomState: jest.fn(),
 }));
 
 describe('idpLoginAction', () => {
@@ -41,6 +42,7 @@ describe('idpLoginAction', () => {
 
   it('should successfully navigate to the idp login', async () => {
     (calculatePKCECodeChallenge as jest.Mock).mockResolvedValue('1234abcd');
+    (randomState as jest.Mock).mockReturnValue('5678efgh');
     await expect(
       runAction(idpLoginAction, {
         modules: { presenter },
@@ -55,7 +57,7 @@ describe('idpLoginAction', () => {
     expect(expectedCallValue).toEqual(
       // Could not get toHaveBeenCalledWith to work, this was the workaround
       // eslint-disable-next-line no-useless-escape
-      '\"https://example.com/oauth2/authorize?identity_provider=entraId&redirect_uri=https%3A%2F%2Fapp.efcms.example.com%2Fauth-code&code_challenge=1234abcd&code_challenge_method=S256&client_id=test-client-id&response_type=code\"',
+      '\"https://example.com/oauth2/authorize?identity_provider=entraId&redirect_uri=https%3A%2F%2Fapp.efcms.example.com%2Fauth-code&code_challenge=1234abcd&code_challenge_method=S256&state=5678efgh&client_id=test-client-id&response_type=code\"',
     );
   });
 
