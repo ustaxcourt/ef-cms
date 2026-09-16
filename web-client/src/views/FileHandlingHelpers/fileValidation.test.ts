@@ -159,6 +159,9 @@ describe('validateFileOnSelect', () => {
 describe('validateFile', () => {
   beforeEach(() => {
     jest.spyOn(pdfValidation, 'validatePdf').mockImplementation(jest.fn());
+    jest
+      .spyOn(pdfValidation, 'validatePdfSurvivesUpload')
+      .mockResolvedValue({ isValid: true });
   });
 
   afterEach(() => {
@@ -228,6 +231,20 @@ describe('validateFile', () => {
     expect(validatePdf).toHaveBeenCalled();
   });
 
+  it('should call pdf validation for a .pdf the browser gives no MIME type', async () => {
+    const file = new File([], 'test.pdf', { type: '' });
+    const allowedFileExtensions = ['.pdf'];
+    const megabyteLimit = 250;
+
+    await validateFile({
+      allowedFileExtensions,
+      file,
+      megabyteLimit,
+    });
+
+    expect(validatePdf).toHaveBeenCalled();
+  });
+
   it('should not validate file type when skipFileTypeValidation is passed', async () => {
     const file = new File([], 'test.pdf', { type: 'application/pdf' });
     const allowedFileExtensions = ['.csv'];
@@ -242,6 +259,44 @@ describe('validateFile', () => {
     });
 
     expect(validationResult).toMatchObject({ isValid: true });
+  });
+
+  it('should still refuse a PDF the upload would break when skipFileTypeValidation is passed', async () => {
+    const file = new File([], 'test.pdf', { type: 'application/pdf' });
+    const rejection = {
+      errorInformation: {
+        errorMessageToDisplay: 'The file is corrupted.',
+        errorType: fileValidation.ErrorTypes.CORRUPT_FILE,
+      },
+      isValid: false,
+    };
+    jest
+      .mocked(pdfValidation.validatePdfSurvivesUpload)
+      .mockResolvedValue(rejection);
+
+    const validationResult = await validateFile({
+      allowedFileExtensions: ['.pdf', '.docx'],
+      file,
+      megabyteLimit: 250,
+      skipFileTypeValidation: true,
+    });
+
+    expect(validationResult).toEqual(rejection);
+    expect(validatePdf).not.toHaveBeenCalled();
+  });
+
+  it('should run no PDF checks on a non-PDF when skipFileTypeValidation is passed', async () => {
+    const file = new File([], 'test.docx');
+
+    const validationResult = await validateFile({
+      allowedFileExtensions: ['.pdf'],
+      file,
+      megabyteLimit: 250,
+      skipFileTypeValidation: true,
+    });
+
+    expect(validationResult).toEqual({ isValid: true });
+    expect(pdfValidation.validatePdfSurvivesUpload).not.toHaveBeenCalled();
   });
 
   it('BUG: should return valid for valid file with uppercase extension', async () => {
@@ -271,6 +326,34 @@ describe('validateFile', () => {
     });
 
     expect(validationResult).toMatchObject({ isValid: true });
+  });
+});
+
+describe('validateFile wrong file type messages', () => {
+  it('should accept a file whose allowed extension is not a PDF', async () => {
+    const file = new File([], 'test.xyz', { type: 'application/xyz' });
+
+    const validationResult = await validateFile({
+      allowedFileExtensions: ['.xyz'],
+      file,
+      megabyteLimit: 5,
+    });
+
+    expect(validationResult).toEqual({ isValid: true });
+  });
+
+  it('should report the raw extension when a single unsupported type is allowed', async () => {
+    const file = new File([], 'test.pdf', { type: 'application/pdf' });
+
+    const validationResult = await validateFile({
+      allowedFileExtensions: ['.xyz'],
+      file,
+      megabyteLimit: 5,
+    });
+
+    expect(validationResult.errorInformation?.errorMessageToDisplay).toBe(
+      'The file is not .xyz. Select .xyz file or resave the file as .xyz.',
+    );
   });
 });
 
@@ -309,6 +392,20 @@ describe('genericOnValidationErrorHandler', () => {
         linkUrl: TROUBLESHOOTING_INFO.FILE_UPLOAD_TROUBLESHOOTING_LINK,
       },
     });
+  });
+
+  it('should fall back to the displayed message when there is nothing separate to log', () => {
+    const mockFunc = jest.fn();
+
+    fileValidation.genericOnValidationErrorHandler({
+      errorType: fileValidation.ErrorTypes.CORRUPT_FILE,
+      messageToDisplay: 'messageToDisplayTest',
+      showFileUploadErrorModalSequence: mockFunc,
+    });
+
+    expect(mockFunc).toHaveBeenCalledWith(
+      expect.objectContaining({ errorToLog: 'messageToDisplayTest' }),
+    );
   });
 
   it('should call error modal sequence with correct arguments for wrong file type error', () => {
