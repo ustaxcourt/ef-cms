@@ -12,6 +12,7 @@ export const ErrorNotification = connect(
   }: {
     alertError?: {
       title?: string;
+      strongTitle?: boolean;
       message?: string;
       scrollToErrorNotification?: boolean;
       insertContactSupportClause?: boolean;
@@ -46,7 +47,13 @@ export const ErrorNotification = connect(
           >
             <div className="usa-alert__body">
               <Focus>
-                <h3 className="usa-alert__heading">{alertError.title}</h3>
+                {alertError.strongTitle ? (
+                  <h3 className="usa-alert__heading">
+                    <strong>{alertError.title}</strong>
+                  </h3>
+                ) : (
+                  <h3 className="usa-alert__heading">{alertError.title}</h3>
+                )}
               </Focus>
               {alertHelper.showSingleMessage && (
                 <p className="usa-alert__text">
