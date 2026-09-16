@@ -1,0 +1,26 @@
+name: DAWSON SARIF Summary
+description: Render a SARIF report into the workflow log and the job summary.
+
+inputs:
+  max_rules:
+    description: Maximum number of rules to list in the table.
+    required: false
+    default: '25'
+  sarif_file:
+    description: Path to the SARIF report.
+    required: true
+  title:
+    description: Heading for the summary section.
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Summarize SARIF
+      if: always() && hashFiles(inputs.sarif_file) != ''
+      shell: bash
+      env:
+        MAX_RULES: ${{ inputs.max_rules }}
+        SARIF_FILE: ${{ inputs.sarif_file }}
+        SUMMARY_TITLE: ${{ inputs.title }}
+      run: ${{ github.action_path }}/summarize-sarif.sh

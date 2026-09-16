@@ -197,10 +197,20 @@ jobs:
           queries: +security-extended,security-and-quality
           config-file: .github/codeql/codeql-config.yml
 
+      # CodeQL uploads its own SARIF, so it needs the same staging-only rule as dawson-upload-sarif.
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v4
         with:
           category: '/language:${{ matrix.language }}'
+          output: codeql-results
+          upload: ${{ (github.event_name != 'pull_request' || github.event.pull_request.base.ref == 'staging') && 'always' || 'never' }}
+
+      - name: Summarize CodeQL findings
+        if: always()
+        uses: ./.github/actions/dawson-sarif-summary
+        with:
+          sarif_file: codeql-results/${{ matrix.language }}.sarif
+          title: CodeQL (${{ matrix.language }})
 
   shellcheck:
     name: Shellcheck (Shell Script SAST)
