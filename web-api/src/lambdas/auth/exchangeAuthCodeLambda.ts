@@ -12,6 +12,7 @@ export const exchangeAuthCodeLambda = event =>
         await exchangeAuthCodeInteractor(applicationContext, {
           authCode,
           code_verifier,
+          isTestUser: !!event.headers['x-test-user'],
         });
 
       return {

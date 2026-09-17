@@ -13,7 +13,7 @@ describe('irs superuser integration', () => {
       onBeforeLoad(win) {
         win.localStorage.setItem(
           'cypressRunningColor',
-          getCypressEnv().deployingColor,
+          `"${getCypressEnv().deployingColor}"`,
         );
       },
     });
