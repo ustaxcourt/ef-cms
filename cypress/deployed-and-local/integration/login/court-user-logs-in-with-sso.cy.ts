@@ -1,9 +1,18 @@
 import { getCypressEnv } from '../../../helpers/env/cypressEnvironment';
 
-describe('irs superuser integration', () => {
-  beforeEach(function () {
+describe('court user logs in with single sign-on', () => {
+  before(function () {
     if (getCypressEnv().isLocal) {
       this.skip();
+    } else {
+      cy.task('getRawFeatureFlagValue', {
+        flag: 'allow-idp-login',
+      }).as('ALLOW_IDP_LOGIN');
+      cy.get('@ALLOW_IDP_LOGIN').then(ALLOW_IDP_LOGIN => {
+        if (!ALLOW_IDP_LOGIN) {
+          this.skip();
+        }
+      });
     }
     Cypress.session.clearCurrentSessionData();
   });
