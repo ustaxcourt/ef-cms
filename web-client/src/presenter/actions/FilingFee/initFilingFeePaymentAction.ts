@@ -29,6 +29,7 @@ export const initFilingFeePaymentAction = async ({
   } catch (e) {
     const options = originDashboard
       ? {
+          className: 'tw:max-w-[547px]!',
           titleClass: 'tw:font-bold tw:text-lg tw:leading-7',
           title: 'Error: payment cannot be started.',
           messageClass: 'tw:font-normal tw:text-xl tw:leading-7',

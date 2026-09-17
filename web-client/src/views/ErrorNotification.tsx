@@ -22,6 +22,7 @@ export const ErrorNotification = connect(
       titleClass?: string;
       message?: string;
       messageClass?: string;
+      className?: string;
       scrollToErrorNotification?: boolean;
       insertContactSupportClause?: boolean;
     };
@@ -44,6 +45,11 @@ export const ErrorNotification = connect(
       }
     });
 
+    const alertClassName = classNames(
+      'usa-alert',
+      'usa-alert--error',
+      alertError?.className,
+    );
     const titleClassName = classNames(
       'usa-alert__heading',
       alertError?.titleClass,
@@ -58,7 +64,7 @@ export const ErrorNotification = connect(
         {alertError && alertHelper.showErrorAlert && (
           <div
             aria-live="polite"
-            className="usa-alert usa-alert--error"
+            className={alertClassName}
             data-testid="error-alert"
             ref={notificationRef}
             role="alert"
