@@ -39,12 +39,9 @@ export const idpLoginAction = async ({
     value: auth_state,
   });
 
-  const currentOrigin = window.location.origin;
-  const deployingColor = process.env.DEPLOYING_COLOR || '';
-  const isOnDeployingColor = currentOrigin.includes(deployingColor);
-
-  console.log(currentOrigin, deployingColor);
-  console.log(isOnDeployingColor, process.env.ENV === 'prod');
+  const cypressRunningColor = applicationContext
+    .getPersistenceGateway()
+    .getItem({ key: 'cypressRunningColor' });
 
   const params: {
     identity_provider?: string;
@@ -57,10 +54,12 @@ export const idpLoginAction = async ({
     code_challenge,
     code_challenge_method: 'S256',
     state: auth_state,
+    identity_provider: idpName || 'ustcEntra',
   };
 
-  if (!isOnDeployingColor || process.env.ENV === 'prod') {
-    params.identity_provider = idpName || 'ustcEntra';
+  if (cypressRunningColor && process.env.ENV !== 'prod') {
+    delete params.identity_provider;
+    params.redirect_uri = `https://app-${cypressRunningColor}.${efcmsDomain}/auth-code`;
   }
 
   const idpLoginUrl = buildAuthorizationUrl(config, params);

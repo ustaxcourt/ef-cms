@@ -9,24 +9,30 @@ describe('irs superuser integration', () => {
   });
 
   it('should let user sign in with single sign-on', () => {
-    cy.visit('/login');
+    cy.visit('/login', {
+      onBeforeLoad(win) {
+        win.localStorage.setItem(
+          'cypressRunningColor',
+          getCypressEnv().deployingColor,
+        );
+      },
+    });
+    cy.on('uncaught:exception', () => {
+      return false;
+    });
 
     cy.get('[data-testid="microsoft-login-button"]').click();
 
-    // cy.origin(
-    //   getCypressEnv().managedLoginOrigin
-    // )
-    // cy.visit(
-    //   'https://ef-cms-exp4.auth.us-east-1.amazoncognito.com/login?client_id=3uf5b6t2rqtno64n82vrqmnli7&redirect_uri=https://app.exp4.ef-cms.ustaxcourt.gov/auth-code&response_type=code',
-    // );
-    // cy.on('uncaught:exception', () => {
-    //   return false;
-    // });
+    cy.origin(
+      getCypressEnv().managedLoginOrigin,
+      { args: { defaultAccountPass: getCypressEnv().defaultAccountPass } },
+      ({ defaultAccountPass }) => {
+        cy.get('input[type="email"]').type('petitionsclerk1@example.com');
+        cy.get('input[type="password"]').type(defaultAccountPass);
+        cy.get('button[type="submit"]').click();
+      },
+    );
 
-    cy.origin(getCypressEnv().managedLoginOrigin, () => {
-      cy.get('input[type="email"]').type('petitioner1@example.com');
-      cy.get('input[type="password"]').type(getCypressEnv().defaultAccountPass);
-      cy.get('button[type="submit"]').click();
-    });
+    cy.get('[data-testid="inbox-tab-content"]').should('exist');
   });
 });
