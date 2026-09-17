@@ -78,6 +78,30 @@ describe('initFilingFeePaymentAction', () => {
     });
   });
 
+  it('should pass filingFeeReturnPage when dashboard page index is greater than zero', async () => {
+    applicationContext.getUseCases().initPaymentInteractor.mockResolvedValue({
+      paymentRedirect: 'newUrl',
+    });
+    await runAction(initFilingFeePaymentAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: { docketNumber: '101-20' },
+        paymentFillingFeeOrigin: PAYMENT_FILLING_FEE_ORIGIN.DASHBOARD,
+        dashboardCaseListPageIndex: 2,
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().initPaymentInteractor,
+    ).toHaveBeenCalledWith(expect.anything(), {
+      docketNumber: '101-20',
+      filingFeeReturnOrigin: 'dashboard',
+      filingFeeReturnPage: 3,
+    });
+  });
+
   it('should set alertError and call error path if initPaymentInteractor fails', async () => {
     applicationContext.getUseCases().initPaymentInteractor.mockRejectedValue();
     const { state } = await runAction(initFilingFeePaymentAction, {
