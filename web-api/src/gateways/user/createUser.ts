@@ -27,7 +27,7 @@ export async function createUser(
     temporaryPassword?: string;
     sendWelcomeEmail: boolean;
   },
-): Promise<UserType | undefined> {
+): Promise<UserType> {
   const formattedAttributes: AttributeType[] = [
     {
       Name: 'custom:userId',
@@ -72,6 +72,10 @@ export async function createUser(
   const result = await applicationContext
     .getCognito()
     .adminCreateUser(createUserArgs);
+
+  if (!result.User) {
+    throw new Error('No user returned');
+  }
 
   return result.User;
 }

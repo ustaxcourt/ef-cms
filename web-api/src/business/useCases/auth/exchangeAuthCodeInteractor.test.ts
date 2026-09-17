@@ -2,7 +2,8 @@ import { exchangeAuthCodeInteractor } from '@web-api/business/useCases/auth/exch
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { calculateISODate } from '@shared/business/utilities/DateHandler';
-import { AxiosError } from 'node_modules/axios/index.cjs';
+import axios, { AxiosResponse } from 'axios';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 
 describe('exchangeAuthCodeInteractor', () => {
   const createISODateStringMock = jest.fn();
@@ -56,10 +57,13 @@ describe('exchangeAuthCodeInteractor', () => {
   });
 
   it('should successfully exchange auth code', async () => {
-    const result = await exchangeAuthCodeInteractor(appContext as any, {
-      authCode: '1234abcd',
-      code_verifier: '1234',
-    });
+    const result = await exchangeAuthCodeInteractor(
+      appContext as ServerApplicationContext,
+      {
+        authCode: '1234abcd',
+        code_verifier: '1234',
+      },
+    );
 
     expect(result).toEqual({
       accessToken: '12341234',
@@ -76,7 +80,7 @@ describe('exchangeAuthCodeInteractor', () => {
 
   it('should successfully exchange auth code with Test user', async () => {
     const result = await exchangeAuthCodeInteractor(
-      appContext as any,
+      appContext as ServerApplicationContext,
       {
         authCode: '1234abcd',
         code_verifier: '1234',
@@ -98,32 +102,35 @@ describe('exchangeAuthCodeInteractor', () => {
 
   it('should throw an error if auth is unsuccessful', async () => {
     appContext.getHttpClient().post.mockRejectedValue(new Error('Bad Request'));
-    const callPromise = exchangeAuthCodeInteractor(appContext as any, {
-      authCode: '1234abcd',
-      code_verifier: '1234',
-    });
+    const callPromise = exchangeAuthCodeInteractor(
+      appContext as ServerApplicationContext,
+      {
+        authCode: '1234abcd',
+        code_verifier: '1234',
+      },
+    );
     await expect(callPromise).rejects.toThrow(new Error('Bad Request'));
   });
 
   it('should throw an unauthorized error if auth is unsuccessful', async () => {
+    appContext.getHttpClient().post.mockRejectedValue(
+      new axios.AxiosError(
+        'NotAuthorizedException',
+        '403',
+        undefined,
+        undefined,
+        {
+          status: 403,
+        } as AxiosResponse,
+      ),
+    );
+
     const callPromise = exchangeAuthCodeInteractor(
+      appContext as ServerApplicationContext,
       {
-        getHttpClient: () => {
-          return {
-            CancelToken: {
-              source: () => ({
-                cancel: () => null,
-              }),
-            },
-            post: () =>
-              Promise.reject({
-                name: 'NotAuthorizedException',
-                response: { status: 403 },
-              } as AxiosError),
-          };
-        },
-      } as any,
-      { authCode: '1234abcd', code_verifier: '1234' },
+        authCode: '1234abcd',
+        code_verifier: '1234',
+      },
     );
     await expect(callPromise).rejects.toThrow(
       new UnauthorizedError('Code exchange failed: Unauthorized'),

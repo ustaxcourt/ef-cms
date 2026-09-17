@@ -127,4 +127,18 @@ describe('createUser', () => {
 
     expect(result).toEqual(mockUser);
   });
+
+  it('should throw error if new user information is not returned from aws', async () => {
+    applicationContext.getCognito().adminCreateUser.mockReturnValue({});
+    await expect(
+      createUser(applicationContext, {
+        email: mockUser.email,
+        name: 'matilda',
+        role: 'adc',
+        sendWelcomeEmail: true,
+        temporaryPassword: 'personperson',
+        userId: '2d09e076-1220-4abe-adb9-f73e9acb114d',
+      }),
+    ).rejects.toThrow('No user returned');
+  });
 });
