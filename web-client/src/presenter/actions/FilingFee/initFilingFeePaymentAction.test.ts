@@ -108,7 +108,7 @@ describe('initFilingFeePaymentAction', () => {
     });
 
     expect(state.alertError).toEqual({
-      strongTitle: true,
+      titleClass: 'tw:font-bold tw:text-base',
       title: 'Error: payment cannot be started.',
       message: 'Error: payment cannot be started for 101-20',
       scrollToErrorNotification: true,

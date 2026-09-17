@@ -23,7 +23,7 @@ export const initFilingFeePaymentAction = async ({
   } catch (e) {
     const options = originDashboard
       ? {
-          strongTitle: true,
+          titleClass: 'tw:font-bold tw:text-base',
           title: 'Error: payment cannot be started.',
           message: `Error: payment cannot be started for ${caseDetail.docketNumber}`,
           scrollToErrorNotification: true,

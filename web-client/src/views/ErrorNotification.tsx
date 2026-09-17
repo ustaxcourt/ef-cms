@@ -4,6 +4,7 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect, useRef } from 'react';
 import { TROUBLESHOOTING_INFO } from '@shared/business/entities/EntityConstants';
+import classNames from 'classnames';
 
 export const ErrorNotification = connect(
   {
@@ -18,7 +19,7 @@ export const ErrorNotification = connect(
   }: {
     alertError?: {
       title?: string;
-      strongTitle?: boolean;
+      titleClass?: string;
       message?: string;
       scrollToErrorNotification?: boolean;
       insertContactSupportClause?: boolean;
@@ -42,6 +43,11 @@ export const ErrorNotification = connect(
       }
     });
 
+    const titleClassName = classNames(
+      'usa-alert__heading',
+      alertError?.titleClass,
+    );
+
     return (
       <>
         {alertError && alertHelper.showErrorAlert && (
@@ -57,15 +63,7 @@ export const ErrorNotification = connect(
                 <div className="grid-row flex-align-start">
                   <div className="tablet:grid-col-9 grid-col-8">
                     <Focus>
-                      {alertError.strongTitle ? (
-                        <h3 className="usa-alert__heading">
-                          <strong>{alertError.title}</strong>
-                        </h3>
-                      ) : (
-                        <h3 className="usa-alert__heading">
-                          {alertError.title}
-                        </h3>
-                      )}
+                      <h3 className={titleClassName}>{alertError.title}</h3>
                     </Focus>
                     {alertHelper.showSingleMessage && (
                       <p className="usa-alert__text">
