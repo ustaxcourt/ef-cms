@@ -41,7 +41,7 @@ export const idpLoginAction = async ({
 
   const cypressRunningColor = applicationContext
     .getPersistenceGateway()
-    .getItem({ key: 'cypressRunningColor' });
+    .getItem({ key: '__cypressRunningColor' });
 
   const params: {
     identity_provider?: string;

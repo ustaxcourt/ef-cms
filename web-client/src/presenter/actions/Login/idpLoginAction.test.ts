@@ -16,18 +16,19 @@ describe('idpLoginAction', () => {
     MANAGED_LOGIN_DOMAIN: process.env.MANAGED_LOGIN_DOMAIN,
     COGNITO_CLIENT_ID: process.env.COGNITO_CLIENT_ID,
     EFCMS_DOMAIN: process.env.EFCMS_DOMAIN,
-    DEPLOYING_COLOR: process.env.DEPLOYING_COLOR,
+    ENV: process.env.ENV,
   };
 
   beforeEach(() => {
     jest.resetModules();
     jest.clearAllMocks();
+    localStorage.clear();
     routeExternalStub = jest.fn();
     process.env.IDP_NAME = 'entraId';
     process.env.MANAGED_LOGIN_DOMAIN = 'https://example.com';
     process.env.COGNITO_CLIENT_ID = 'test-client-id';
     process.env.EFCMS_DOMAIN = 'efcms.example.com';
-    process.env.DEPLOYING_COLOR = 'blue';
+    process.env.ENV = 'local';
 
     presenter.providers.applicationContext = applicationContext;
     presenter.providers.router = {
@@ -42,7 +43,7 @@ describe('idpLoginAction', () => {
     process.env.MANAGED_LOGIN_DOMAIN = originalEnv.MANAGED_LOGIN_DOMAIN;
     process.env.COGNITO_CLIENT_ID = originalEnv.COGNITO_CLIENT_ID;
     process.env.EFCMS_DOMAIN = originalEnv.EFCMS_DOMAIN;
-    process.env.DEPLOYING_COLOR = originalEnv.EFCMS_DOMAIN;
+    process.env.ENV = originalEnv.ENV;
   });
 
   it('should successfully navigate to the idp login', async () => {
@@ -64,8 +65,8 @@ describe('idpLoginAction', () => {
     );
   });
 
-  it('should exclude idp from url when running on deploying color not on prod', async () => {
-    process.env.DEPLOYING_COLOR = 'localhost';
+  it('should exclude idp from url when running a cypress test and not on prod', async () => {
+    localStorage.setItem('__cypressRunningColor', '"green"');
 
     await expect(
       runAction(idpLoginAction, {
@@ -77,10 +78,13 @@ describe('idpLoginAction', () => {
       routeExternalStub.mock.calls[0][0],
     );
     expect(expectedCallValue).not.toContain('identity_provider=entraId');
+    expect(expectedCallValue).toContain(
+      'redirect_uri=https%3A%2F%2Fapp-green.efcms.example.com',
+    );
   });
 
   it('should include idp from url when running on deploying color on prod', async () => {
-    process.env.DEPLOYING_COLOR = 'localhost';
+    localStorage.setItem('__cypressRunningColor', '"green"');
     process.env.ENV = 'prod';
 
     await expect(
@@ -93,6 +97,9 @@ describe('idpLoginAction', () => {
       routeExternalStub.mock.calls[0][0],
     );
     expect(expectedCallValue).toContain('identity_provider=entraId');
+    expect(expectedCallValue).not.toContain(
+      'redirect_uri=https%3A%2F%2Fapp-green.efcms.example.com',
+    );
   });
 
   describe('missing environment variables', () => {

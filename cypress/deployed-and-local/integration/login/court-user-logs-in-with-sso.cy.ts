@@ -12,7 +12,7 @@ describe('irs superuser integration', () => {
     cy.visit('/login', {
       onBeforeLoad(win) {
         win.localStorage.setItem(
-          'cypressRunningColor',
+          '__cypressRunningColor',
           `"${getCypressEnv().deployingColor}"`,
         );
       },

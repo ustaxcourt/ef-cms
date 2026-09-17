@@ -3,11 +3,8 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 
 export const exchangeAuthCodeInteractor = async (
   applicationContext: ServerApplicationContext,
-  {
-    authCode,
-    code_verifier,
-    isTestUser,
-  }: { authCode: string; code_verifier: string; isTestUser: boolean },
+  { authCode, code_verifier }: { authCode: string; code_verifier: string },
+  isTestUser?: boolean,
 ): Promise<{
   accessToken: string;
   idToken: string;
