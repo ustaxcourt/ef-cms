@@ -3,9 +3,9 @@ import { getCypressEnv } from '../../../helpers/env/cypressEnvironment';
 describe('irs superuser integration', () => {
   beforeEach(function () {
     if (getCypressEnv().isLocal) {
-      //this.skip();
+      this.skip();
     }
-    Cypress.session.clearCurrentSessionData(); // maybe keep?
+    Cypress.session.clearCurrentSessionData();
   });
 
   it('should let user sign in with single sign-on', () => {
