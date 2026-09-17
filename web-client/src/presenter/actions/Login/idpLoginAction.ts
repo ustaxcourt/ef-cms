@@ -39,13 +39,28 @@ export const idpLoginAction = async ({
     value: auth_state,
   });
 
-  const params = {
-    identity_provider: idpName || 'ustcEntra',
+  const cypressRunningColor = applicationContext
+    .getPersistenceGateway()
+    .getItem({ key: '__cypressRunningColor' });
+
+  const params: {
+    identity_provider?: string;
+    redirect_uri: string;
+    code_challenge: string;
+    code_challenge_method: string;
+    state: string;
+  } = {
     redirect_uri: `https://app.${efcmsDomain}/auth-code`,
     code_challenge,
     code_challenge_method: 'S256',
     state: auth_state,
+    identity_provider: idpName || 'ustcEntra',
   };
+
+  if (cypressRunningColor && process.env.ENV !== 'prod') {
+    delete params.identity_provider;
+    params.redirect_uri = `https://app-${cypressRunningColor}.${efcmsDomain}/auth-code`;
+  }
 
   const idpLoginUrl = buildAuthorizationUrl(config, params);
 

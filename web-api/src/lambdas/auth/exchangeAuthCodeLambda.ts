@@ -9,10 +9,14 @@ export const exchangeAuthCodeLambda = event =>
       const { authCode, code_verifier } = JSON.parse(event.body);
 
       const { accessToken, idToken, refreshToken, expiresAt } =
-        await exchangeAuthCodeInteractor(applicationContext, {
-          authCode,
-          code_verifier,
-        });
+        await exchangeAuthCodeInteractor(
+          applicationContext,
+          {
+            authCode,
+            code_verifier,
+          },
+          !!event.headers['x-test-user'],
+        );
 
       return {
         body: { accessToken, idToken, refreshToken },

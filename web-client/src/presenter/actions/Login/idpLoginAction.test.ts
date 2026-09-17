@@ -16,21 +16,26 @@ describe('idpLoginAction', () => {
     MANAGED_LOGIN_DOMAIN: process.env.MANAGED_LOGIN_DOMAIN,
     COGNITO_CLIENT_ID: process.env.COGNITO_CLIENT_ID,
     EFCMS_DOMAIN: process.env.EFCMS_DOMAIN,
+    ENV: process.env.ENV,
   };
 
   beforeEach(() => {
     jest.resetModules();
     jest.clearAllMocks();
+    localStorage.clear();
     routeExternalStub = jest.fn();
     process.env.IDP_NAME = 'entraId';
     process.env.MANAGED_LOGIN_DOMAIN = 'https://example.com';
     process.env.COGNITO_CLIENT_ID = 'test-client-id';
     process.env.EFCMS_DOMAIN = 'efcms.example.com';
+    process.env.ENV = 'local';
 
     presenter.providers.applicationContext = applicationContext;
     presenter.providers.router = {
       externalRoute: routeExternalStub,
     };
+    (calculatePKCECodeChallenge as jest.Mock).mockResolvedValue('1234abcd');
+    (randomState as jest.Mock).mockReturnValue('5678efgh');
   });
 
   afterAll(() => {
@@ -38,6 +43,7 @@ describe('idpLoginAction', () => {
     process.env.MANAGED_LOGIN_DOMAIN = originalEnv.MANAGED_LOGIN_DOMAIN;
     process.env.COGNITO_CLIENT_ID = originalEnv.COGNITO_CLIENT_ID;
     process.env.EFCMS_DOMAIN = originalEnv.EFCMS_DOMAIN;
+    process.env.ENV = originalEnv.ENV;
   });
 
   it('should successfully navigate to the idp login', async () => {
@@ -57,7 +63,44 @@ describe('idpLoginAction', () => {
     expect(expectedCallValue).toEqual(
       // Could not get toHaveBeenCalledWith to work, this was the workaround
       // eslint-disable-next-line no-useless-escape
-      '\"https://example.com/oauth2/authorize?identity_provider=entraId&redirect_uri=https%3A%2F%2Fapp.efcms.example.com%2Fauth-code&code_challenge=1234abcd&code_challenge_method=S256&state=5678efgh&client_id=test-client-id&response_type=code\"',
+      '\"https://example.com/oauth2/authorize?redirect_uri=https%3A%2F%2Fapp.efcms.example.com%2Fauth-code&code_challenge=1234abcd&code_challenge_method=S256&state=5678efgh&identity_provider=entraId&client_id=test-client-id&response_type=code\"',
+    );
+  });
+
+  it('should exclude idp from url when running a cypress test and not on prod', async () => {
+    localStorage.setItem('__cypressRunningColor', '"green"');
+
+    await expect(
+      runAction(idpLoginAction, {
+        modules: { presenter },
+      }),
+    ).resolves.not.toThrow();
+
+    const expectedCallValue = JSON.stringify(
+      routeExternalStub.mock.calls[0][0],
+    );
+    expect(expectedCallValue).not.toContain('identity_provider=entraId');
+    expect(expectedCallValue).toContain(
+      'redirect_uri=https%3A%2F%2Fapp-green.efcms.example.com',
+    );
+  });
+
+  it('should include idp from url when running on deploying color on prod', async () => {
+    localStorage.setItem('__cypressRunningColor', '"green"');
+    process.env.ENV = 'prod';
+
+    await expect(
+      runAction(idpLoginAction, {
+        modules: { presenter },
+      }),
+    ).resolves.not.toThrow();
+
+    const expectedCallValue = JSON.stringify(
+      routeExternalStub.mock.calls[0][0],
+    );
+    expect(expectedCallValue).toContain('identity_provider=entraId');
+    expect(expectedCallValue).not.toContain(
+      'redirect_uri=https%3A%2F%2Fapp-green.efcms.example.com',
     );
   });
 

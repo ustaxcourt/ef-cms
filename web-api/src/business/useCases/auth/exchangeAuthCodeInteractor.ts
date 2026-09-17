@@ -4,6 +4,7 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 export const exchangeAuthCodeInteractor = async (
   applicationContext: ServerApplicationContext,
   { authCode, code_verifier }: { authCode: string; code_verifier: string },
+  isTestUser?: boolean,
 ): Promise<{
   accessToken: string;
   idToken: string;
@@ -16,10 +17,17 @@ export const exchangeAuthCodeInteractor = async (
     params.append('client_id', process.env.COGNITO_CLIENT_ID || '');
     params.append('code', authCode);
     params.append('code_verifier', code_verifier);
-    params.append(
-      'redirect_uri',
-      `https://app.${process.env.EFCMS_DOMAIN}/auth-code`,
-    );
+    if (isTestUser) {
+      params.append(
+        'redirect_uri',
+        `https://app-${process.env.CURRENT_COLOR}.${process.env.EFCMS_DOMAIN}/auth-code`,
+      );
+    } else {
+      params.append(
+        'redirect_uri',
+        `https://app.${process.env.EFCMS_DOMAIN}/auth-code`,
+      );
+    }
 
     const response = await applicationContext
       .getHttpClient()
