@@ -13,10 +13,15 @@ export const initFilingFeePaymentAction = async ({
   const caseDetail = get(state.caseDetail);
 
   try {
+    const originDashboard =
+      readPaymentFillingFeeOriginFromStorage() ===
+      PAYMENT_FILLING_FEE_ORIGIN.DASHBOARD;
+
     const result = await applicationContext
       .getUseCases()
       .initPaymentInteractor(applicationContext, {
         docketNumber: caseDetail.docketNumber,
+        filingFeeReturnOrigin: originDashboard ? 'dashboard' : 'petition',
       });
     window.location.href = result.paymentRedirect;
     return path.success();

@@ -144,6 +144,23 @@ describe('initPaymentInteractor', () => {
     expect(applicationContext.getUniqueId).not.toHaveBeenCalled();
   });
 
+  it('should append origin query to urlCancel when filingFeeReturnOrigin is dashboard', async () => {
+    await initPaymentInteractor(
+      applicationContext,
+      { docketNumber, filingFeeReturnOrigin: 'dashboard' },
+      mockPetitioner,
+    );
+
+    expect(
+      applicationContext.getPaymentPortalClient().initPayment,
+    ).toHaveBeenCalledWith(
+      applicationContext,
+      expect.objectContaining({
+        urlCancel: `http://localhost:1234/payment-cancel/${docketNumber}?origin=dashboard`,
+      }),
+    );
+  });
+
   it('should use deployed domain for urlSuccess and urlCancel if not running locally', async () => {
     applicationContext.environment.stage = 'notlocal';
     process.env.EFCMS_DOMAIN = 'env.mock';

@@ -9,15 +9,19 @@ export const checkCaseAssociationAndPaymentStatusAction = ({
   get,
   props,
   path,
-}: ActionProps) => {
+}: ActionProps<{
+  isDirectlyAssociated?: boolean;
+  origin?: string;
+}>) => {
   const caseDetail = get(state.caseDetail);
 
   if (
     props.isDirectlyAssociated &&
     caseDetail.petitionPaymentStatus === PAYMENT_STATUS.UNPAID
   )
-    return readPaymentFillingFeeOriginFromStorage() ===
-      PAYMENT_FILLING_FEE_ORIGIN.DASHBOARD
+    return props.origin === PAYMENT_FILLING_FEE_ORIGIN.DASHBOARD ||
+      readPaymentFillingFeeOriginFromStorage() ===
+        PAYMENT_FILLING_FEE_ORIGIN.DASHBOARD
       ? path.dashboard()
       : path.success();
   else return path.error();

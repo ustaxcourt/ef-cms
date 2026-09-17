@@ -18,9 +18,17 @@ import {
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
+export type FilingFeePaymentReturnOrigin = 'dashboard' | 'petition';
+
 export const initPayment = async (
   applicationContext: ServerApplicationContext,
-  { docketNumber }: { docketNumber: string },
+  {
+    docketNumber,
+    filingFeeReturnOrigin,
+  }: {
+    docketNumber: string;
+    filingFeeReturnOrigin?: FilingFeePaymentReturnOrigin;
+  },
   authorizedUser: UnknownAuthUser,
 ): Promise<{ paymentRedirect: string }> => {
   const featureFlags = await applicationContext
@@ -72,7 +80,9 @@ export const initPayment = async (
     transactionReferenceId,
     fee: PAYMENT_PORTAL_FEE_TYPES.PETITION_FILING_FEE,
     urlSuccess: `${domain}/payment-success/${docketNumber}`,
-    urlCancel: `${domain}/payment-cancel/${docketNumber}`,
+    urlCancel: `${domain}/payment-cancel/${docketNumber}${
+      filingFeeReturnOrigin === 'dashboard' ? '?origin=dashboard' : ''
+    }`,
     metadata: {
       docketNumber,
     },

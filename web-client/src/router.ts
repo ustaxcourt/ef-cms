@@ -1643,8 +1643,14 @@ const router = {
       return app.getSequence('paymentSuccessSequence')({ docketNumber });
     });
 
-    registerRoute('/payment-cancel/*', docketNumber => {
-      return app.getSequence('paymentCancelSequence')({ docketNumber });
+    // Query ?origin=dashboard must be supported; riot-route's * stops at ?, so use ..
+    // and read origin from route.query() (URL parameter, not a /dashboard path).
+    registerRoute('/payment-cancel/..', pathSegment => {
+      const docketNumber = String(pathSegment).split(/[?#]/)[0];
+      return app.getSequence('paymentCancelSequence')({
+        docketNumber,
+        origin: route.query().origin,
+      });
     });
 
     registerRoute(

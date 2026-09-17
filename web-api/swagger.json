@@ -3749,6 +3749,11 @@
                 "docketNumber": {
                   "type": "string",
                   "description": "the unique docket number associated with the case"
+                },
+                "filingFeeReturnOrigin": {
+                  "type": "string",
+                  "enum": ["dashboard", "petition"],
+                  "description": "Where the user started filing-fee payment; builds cancel URL query ?origin=dashboard when dashboard"
                 }
               }
             }
