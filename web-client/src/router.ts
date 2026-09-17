@@ -1639,17 +1639,26 @@ const router = {
       return app.getSequence('gotoMaintenanceSequence')();
     });
 
-    registerRoute('/payment-success/*', docketNumber => {
-      return app.getSequence('paymentSuccessSequence')({ docketNumber });
+    // Query params (e.g. ?page=3) must be supported; riot-route's * stops at ?, so use ..
+    // and read page from route.query().
+    registerRoute('/payment-success/..', pathSegment => {
+      const docketNumber = String(pathSegment).split(/[?#]/)[0];
+      const { page } = route.query();
+      return app.getSequence('paymentSuccessSequence')({
+        docketNumber,
+        page,
+      });
     });
 
     // Query ?origin=dashboard must be supported; riot-route's * stops at ?, so use ..
     // and read origin from route.query() (URL parameter, not a /dashboard path).
     registerRoute('/payment-cancel/..', pathSegment => {
       const docketNumber = String(pathSegment).split(/[?#]/)[0];
+      const { origin, page } = route.query();
       return app.getSequence('paymentCancelSequence')({
         docketNumber,
-        origin: route.query().origin,
+        origin,
+        page,
       });
     });
 

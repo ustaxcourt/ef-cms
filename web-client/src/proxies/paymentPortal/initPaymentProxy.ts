@@ -8,14 +8,16 @@ export const initPaymentInteractor = (
   {
     docketNumber,
     filingFeeReturnOrigin,
+    filingFeeReturnPage,
   }: {
     docketNumber: string;
     filingFeeReturnOrigin?: FilingFeePaymentReturnOrigin;
+    filingFeeReturnPage?: number;
   },
 ): Promise<{ paymentRedirect: string }> => {
   return put({
     applicationContext,
-    body: { docketNumber, filingFeeReturnOrigin },
+    body: { docketNumber, filingFeeReturnOrigin, filingFeeReturnPage },
     endpoint: '/filing-fee/init-payment',
   });
 };

@@ -13,8 +13,10 @@ import { setStepIndicatorInfoForPetitionGeneratorAction } from '@web-client/pres
 import { getCaseAssociationAction } from '@web-client/presenter/actions/getCaseAssociationAction';
 import { redirectToDashboardAction } from '@web-client/presenter/actions/redirectToDashboardAction';
 import { checkCaseAssociationAndPaymentStatusAction } from '@web-client/presenter/actions/FilingFee/checkCaseAssociationAndPaymentStatusAction';
+import { setFilingFeeReturnPageAction } from '@web-client/presenter/actions/FilingFee/setFilingFeeReturnPageAction';
 
 const paymentCancelDashboardReturn = [
+  setFilingFeeReturnPageAction,
   replaceBrowserUrlWithDashboardAction,
   clearPaymentFillingFeeOriginAction,
   setDefaultCaseTypeToDisplayAction,
@@ -28,6 +30,7 @@ export const paymentCancelSequence = [
   paymentCancelRouteByOriginAction,
   {
     dashboard: [
+      setFilingFeeReturnPageAction,
       clearPaymentFillingFeeOriginAction,
       setDefaultCaseTypeToDisplayAction,
       setupCurrentPageAction('DashboardExternalUser'),

@@ -20,14 +20,45 @@ import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 export type FilingFeePaymentReturnOrigin = 'dashboard' | 'petition';
 
+function buildPaymentReturnQuery(
+  params: Record<string, string | undefined>,
+): string {
+  const searchParams = new URLSearchParams();
+
+  Object.entries(params).forEach(([key, value]) => {
+    if (value !== undefined && value !== '') {
+      searchParams.set(key, value);
+    }
+  });
+
+  const query = searchParams.toString();
+  return query ? `?${query}` : '';
+}
+
+function formatFilingFeeReturnPageQuery(
+  filingFeeReturnPage?: number,
+): string | undefined {
+  if (
+    filingFeeReturnPage === undefined ||
+    !Number.isFinite(filingFeeReturnPage) ||
+    filingFeeReturnPage <= 1
+  ) {
+    return undefined;
+  }
+
+  return String(Math.floor(filingFeeReturnPage));
+}
+
 export const initPayment = async (
   applicationContext: ServerApplicationContext,
   {
     docketNumber,
     filingFeeReturnOrigin,
+    filingFeeReturnPage,
   }: {
     docketNumber: string;
     filingFeeReturnOrigin?: FilingFeePaymentReturnOrigin;
+    filingFeeReturnPage?: number;
   },
   authorizedUser: UnknownAuthUser,
 ): Promise<{ paymentRedirect: string }> => {
@@ -76,13 +107,23 @@ export const initPayment = async (
     domain = `https://app.${process.env.EFCMS_DOMAIN}`;
   else domain = 'http://localhost:1234';
 
+  const returnPageQuery = formatFilingFeeReturnPageQuery(filingFeeReturnPage);
+
   const data: InitPaymentRequest = {
     transactionReferenceId,
     fee: PAYMENT_PORTAL_FEE_TYPES.PETITION_FILING_FEE,
-    urlSuccess: `${domain}/payment-success/${docketNumber}`,
-    urlCancel: `${domain}/payment-cancel/${docketNumber}${
-      filingFeeReturnOrigin === 'dashboard' ? '?origin=dashboard' : ''
-    }`,
+    urlSuccess: `${domain}/payment-success/${docketNumber}${buildPaymentReturnQuery(
+      {
+        page: returnPageQuery,
+      },
+    )}`,
+    urlCancel: `${domain}/payment-cancel/${docketNumber}${buildPaymentReturnQuery(
+      {
+        origin: filingFeeReturnOrigin === 'dashboard' ? 'dashboard' : undefined,
+        page:
+          filingFeeReturnOrigin === 'dashboard' ? returnPageQuery : undefined,
+      },
+    )}`,
     metadata: {
       docketNumber,
     },

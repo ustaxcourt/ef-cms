@@ -3754,6 +3754,10 @@
                   "type": "string",
                   "enum": ["dashboard", "petition"],
                   "description": "Where the user started filing-fee payment; builds cancel URL query ?origin=dashboard when dashboard"
+                },
+                "filingFeeReturnPage": {
+                  "type": "integer",
+                  "description": "1-based dashboard open-cases page to restore after Pay.gov cancel or success"
                 }
               }
             }
