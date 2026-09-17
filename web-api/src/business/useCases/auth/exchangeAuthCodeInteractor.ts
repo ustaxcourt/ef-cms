@@ -1,5 +1,6 @@
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import axios from 'axios';
 
 export const exchangeAuthCodeInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -50,7 +51,7 @@ export const exchangeAuthCodeInteractor = async (
       expiresAt,
     };
   } catch (err: any) {
-    if (err?.response?.status === 403) {
+    if (axios.isAxiosError(err) && err.response?.status === 403) {
       throw new UnauthorizedError('Code exchange failed: Unauthorized');
     }
 
