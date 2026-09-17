@@ -1,8 +1,5 @@
 import { state } from '@web-client/presenter/app.cerebral';
-import {
-  PAYMENT_FILLING_FEE_ORIGIN,
-  readPaymentFillingFeeOriginFromStorage,
-} from '@web-client/presenter/actions/FilingFee/paymentFillingFeeOriginStorage';
+import { PAYMENT_FILLING_FEE_ORIGIN } from '@web-client/presenter/actions/FilingFee/paymentFillingFeeOrigin';
 
 export const initFilingFeePaymentAction = async ({
   get,
@@ -11,12 +8,10 @@ export const initFilingFeePaymentAction = async ({
   path,
 }: ActionProps) => {
   const caseDetail = get(state.caseDetail);
+  const originDashboard =
+    get(state.paymentFillingFeeOrigin) === PAYMENT_FILLING_FEE_ORIGIN.DASHBOARD;
 
   try {
-    const originDashboard =
-      readPaymentFillingFeeOriginFromStorage() ===
-      PAYMENT_FILLING_FEE_ORIGIN.DASHBOARD;
-
     const result = await applicationContext
       .getUseCases()
       .initPaymentInteractor(applicationContext, {
@@ -26,10 +21,6 @@ export const initFilingFeePaymentAction = async ({
     window.location.href = result.paymentRedirect;
     return path.success();
   } catch (e) {
-    const originDashboard =
-      readPaymentFillingFeeOriginFromStorage() ===
-      PAYMENT_FILLING_FEE_ORIGIN.DASHBOARD;
-
     const options = originDashboard
       ? {
           strongTitle: true,

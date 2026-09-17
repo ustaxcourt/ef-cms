@@ -1,8 +1,5 @@
 import { PAYMENT_STATUS } from '@shared/business/entities/EntityConstants';
-import {
-  PAYMENT_FILLING_FEE_ORIGIN,
-  readPaymentFillingFeeOriginFromStorage,
-} from '@web-client/presenter/actions/FilingFee/paymentFillingFeeOriginStorage';
+import { PAYMENT_FILLING_FEE_ORIGIN } from '@web-client/presenter/actions/FilingFee/paymentFillingFeeOrigin';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const checkCaseAssociationAndPaymentStatusAction = ({
@@ -19,9 +16,7 @@ export const checkCaseAssociationAndPaymentStatusAction = ({
     props.isDirectlyAssociated &&
     caseDetail.petitionPaymentStatus === PAYMENT_STATUS.UNPAID
   )
-    return props.origin === PAYMENT_FILLING_FEE_ORIGIN.DASHBOARD ||
-      readPaymentFillingFeeOriginFromStorage() ===
-        PAYMENT_FILLING_FEE_ORIGIN.DASHBOARD
+    return props.origin === PAYMENT_FILLING_FEE_ORIGIN.DASHBOARD
       ? path.dashboard()
       : path.success();
   else return path.error();

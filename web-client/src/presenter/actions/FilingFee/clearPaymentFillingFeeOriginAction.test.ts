@@ -1,26 +1,17 @@
 import { clearPaymentFillingFeeOriginAction } from '@web-client/presenter/actions/FilingFee/clearPaymentFillingFeeOriginAction';
-import {
-  PAYMENT_FILLING_FEE_ORIGIN,
-  PAYMENT_FILLING_FEE_ORIGIN_STORAGE_KEY,
-  persistPaymentFillingFeeOrigin,
-} from '@web-client/presenter/actions/FilingFee/paymentFillingFeeOriginStorage';
+import { PAYMENT_FILLING_FEE_ORIGIN } from '@web-client/presenter/actions/FilingFee/paymentFillingFeeOrigin';
 import { presenter } from '@web-client/presenter/presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('clearPaymentFillingFeeOriginAction', () => {
-  beforeEach(() => {
-    window.sessionStorage.clear();
-  });
-
-  it('should clear the payment origin from session storage', async () => {
-    persistPaymentFillingFeeOrigin(PAYMENT_FILLING_FEE_ORIGIN.DASHBOARD);
-
-    await runAction(clearPaymentFillingFeeOriginAction, {
+  it('should clear paymentFillingFeeOrigin from cerebral state', async () => {
+    const { state } = await runAction(clearPaymentFillingFeeOriginAction, {
       modules: { presenter },
+      state: {
+        paymentFillingFeeOrigin: PAYMENT_FILLING_FEE_ORIGIN.DASHBOARD,
+      },
     });
 
-    expect(
-      window.sessionStorage.getItem(PAYMENT_FILLING_FEE_ORIGIN_STORAGE_KEY),
-    ).toBeNull();
+    expect(state.paymentFillingFeeOrigin).toBeNull();
   });
 });

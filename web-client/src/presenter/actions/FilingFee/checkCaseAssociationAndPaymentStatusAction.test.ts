@@ -2,10 +2,7 @@ import { applicationContextForClient as applicationContext } from '@web-client/t
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { checkCaseAssociationAndPaymentStatusAction } from '@web-client/presenter/actions/FilingFee/checkCaseAssociationAndPaymentStatusAction';
-import {
-  PAYMENT_FILLING_FEE_ORIGIN,
-  persistPaymentFillingFeeOrigin,
-} from '@web-client/presenter/actions/FilingFee/paymentFillingFeeOriginStorage';
+import { PAYMENT_FILLING_FEE_ORIGIN } from '@web-client/presenter/actions/FilingFee/paymentFillingFeeOrigin';
 import { PAYMENT_STATUS } from '@shared/business/entities/EntityConstants';
 
 describe('checkCaseAssociationAndPaymentStatusAction', () => {
@@ -22,7 +19,6 @@ describe('checkCaseAssociationAndPaymentStatusAction', () => {
   };
 
   beforeEach(() => {
-    window.sessionStorage.clear();
     pathDashboardStub.mockClear();
     pathSuccessStub.mockClear();
     pathErrorStub.mockClear();
@@ -77,15 +73,14 @@ describe('checkCaseAssociationAndPaymentStatusAction', () => {
     expect(pathDashboardStub).not.toHaveBeenCalled();
   });
 
-  it('should go to the dashboard if payment started from My Cases', async () => {
-    persistPaymentFillingFeeOrigin(PAYMENT_FILLING_FEE_ORIGIN.DASHBOARD);
-
+  it('should go to the dashboard when origin prop is dashboard', async () => {
     await runAction(checkCaseAssociationAndPaymentStatusAction, {
       modules: {
         presenter,
       },
       props: {
         isDirectlyAssociated: true,
+        origin: PAYMENT_FILLING_FEE_ORIGIN.DASHBOARD,
       },
       state: {
         caseDetail: { petitionPaymentStatus: PAYMENT_STATUS.UNPAID },

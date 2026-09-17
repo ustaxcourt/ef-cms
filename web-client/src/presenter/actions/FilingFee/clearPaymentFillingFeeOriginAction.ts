@@ -1,5 +1,7 @@
-import { clearPaymentFillingFeeOriginFromStorage } from '@web-client/presenter/actions/FilingFee/paymentFillingFeeOriginStorage';
+import { state } from '@web-client/presenter/app.cerebral';
 
-export const clearPaymentFillingFeeOriginAction = (): void => {
-  clearPaymentFillingFeeOriginFromStorage();
+export const clearPaymentFillingFeeOriginAction = ({
+  store,
+}: ActionProps): void => {
+  store.set(state.paymentFillingFeeOrigin, null);
 };

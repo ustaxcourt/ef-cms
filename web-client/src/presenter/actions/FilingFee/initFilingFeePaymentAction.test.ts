@@ -2,6 +2,7 @@ import { applicationContextForClient as applicationContext } from '@web-client/t
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { initFilingFeePaymentAction } from '@web-client/presenter/actions/FilingFee/initFilingFeePaymentAction';
+import { PAYMENT_FILLING_FEE_ORIGIN } from '@web-client/presenter/actions/FilingFee/paymentFillingFeeOrigin';
 
 describe('initFilingFeePaymentAction', () => {
   let hrefSetter: jest.SpyInstance | undefined;
@@ -46,10 +47,35 @@ describe('initFilingFeePaymentAction', () => {
 
     expect(
       applicationContext.getUseCases().initPaymentInteractor,
-    ).toHaveBeenCalled();
+    ).toHaveBeenCalledWith(expect.anything(), {
+      docketNumber: '101-20',
+      filingFeeReturnOrigin: 'petition',
+    });
 
     expect(hrefSetter).toHaveBeenCalledWith('newUrl');
     expect(pathSuccessStub).toHaveBeenCalled();
+  });
+
+  it('should pass dashboard filingFeeReturnOrigin when paymentFillingFeeOrigin is dashboard', async () => {
+    applicationContext.getUseCases().initPaymentInteractor.mockResolvedValue({
+      paymentRedirect: 'newUrl',
+    });
+    await runAction(initFilingFeePaymentAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: { docketNumber: '101-20' },
+        paymentFillingFeeOrigin: PAYMENT_FILLING_FEE_ORIGIN.DASHBOARD,
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().initPaymentInteractor,
+    ).toHaveBeenCalledWith(expect.anything(), {
+      docketNumber: '101-20',
+      filingFeeReturnOrigin: 'dashboard',
+    });
   });
 
   it('should set alertError and call error path if initPaymentInteractor fails', async () => {
@@ -65,6 +91,26 @@ describe('initFilingFeePaymentAction', () => {
 
     expect(state.alertError).toEqual({
       message: 'Error: payment cannot be started',
+    });
+    expect(pathErrorStub).toHaveBeenCalled();
+  });
+
+  it('should set dashboard-style alertError when paymentFillingFeeOrigin is dashboard', async () => {
+    applicationContext.getUseCases().initPaymentInteractor.mockRejectedValue();
+    const { state } = await runAction(initFilingFeePaymentAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: { docketNumber: '101-20' },
+        paymentFillingFeeOrigin: PAYMENT_FILLING_FEE_ORIGIN.DASHBOARD,
+      },
+    });
+
+    expect(state.alertError).toEqual({
+      strongTitle: true,
+      title: 'Error: payment cannot be started.',
+      message: 'Error: payment cannot be started for 101-20',
       scrollToErrorNotification: true,
     });
     expect(pathErrorStub).toHaveBeenCalled();
