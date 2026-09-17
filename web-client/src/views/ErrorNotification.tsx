@@ -21,6 +21,7 @@ export const ErrorNotification = connect(
       title?: string;
       titleClass?: string;
       message?: string;
+      messageClass?: string;
       scrollToErrorNotification?: boolean;
       insertContactSupportClause?: boolean;
     };
@@ -47,6 +48,10 @@ export const ErrorNotification = connect(
       'usa-alert__heading',
       alertError?.titleClass,
     );
+    const messageClassName = classNames(
+      'usa-alert__text',
+      alertError?.messageClass,
+    );
 
     return (
       <>
@@ -66,7 +71,7 @@ export const ErrorNotification = connect(
                       <h3 className={titleClassName}>{alertError.title}</h3>
                     </Focus>
                     {alertHelper.showSingleMessage && (
-                      <p className="usa-alert__text">
+                      <p className={messageClassName}>
                         {alertError.message}
                         {alertHelper.insertContactSupportClause && (
                           <span>
@@ -96,8 +101,9 @@ export const ErrorNotification = connect(
                   <div className="tablet:grid-col-3 grid-col-4 usa-alert__action display-flex flex-justify-end flex-align-start padding-right-105 no-wrap-white-space">
                     <Button
                       link
-                      className="no-underline padding-0 no-wrap-white-space"
+                      className="padding-0 no-wrap-white-space"
                       icon="times-circle"
+                      iconRight
                       onClick={() => dismissAlertSequence()}
                     >
                       Close
