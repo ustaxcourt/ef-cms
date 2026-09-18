@@ -155,8 +155,8 @@ describe('initPaymentInteractor', () => {
     ).toHaveBeenCalledWith(applicationContext, {
       transactionReferenceId,
       fee: PAYMENT_PORTAL_FEE_TYPES.PETITION_FILING_FEE,
-      urlSuccess: `http://localhost:1234/payment-success/${docketNumber}`,
-      urlCancel: `http://localhost:1234/payment-cancel/${docketNumber}`,
+      urlSuccess: `http://localhost:1234/payment-success?docketNumber=${docketNumber}`,
+      urlCancel: `http://localhost:1234/payment-cancel?docketNumber=${docketNumber}`,
       metadata: {
         docketNumber,
       },
@@ -203,7 +203,7 @@ describe('initPaymentInteractor', () => {
     ).toHaveBeenCalledWith(
       applicationContext,
       expect.objectContaining({
-        urlCancel: `http://localhost:1234/payment-cancel/${docketNumber}?origin=dashboard`,
+        urlCancel: `http://localhost:1234/payment-cancel?docketNumber=${docketNumber}&origin=dashboard`,
       }),
     );
   });
@@ -223,8 +223,8 @@ describe('initPaymentInteractor', () => {
     ).toHaveBeenCalledWith(applicationContext, {
       transactionReferenceId,
       fee: PAYMENT_PORTAL_FEE_TYPES.PETITION_FILING_FEE,
-      urlSuccess: `https://app.env.mock/payment-success/${docketNumber}`,
-      urlCancel: `https://app.env.mock/payment-cancel/${docketNumber}`,
+      urlSuccess: `https://app.env.mock/payment-success?docketNumber=${docketNumber}`,
+      urlCancel: `https://app.env.mock/payment-cancel?docketNumber=${docketNumber}`,
       metadata: {
         docketNumber,
       },

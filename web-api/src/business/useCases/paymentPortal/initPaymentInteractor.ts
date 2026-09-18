@@ -121,18 +121,15 @@ export const initPayment = async (
   const data: InitPaymentRequest = {
     transactionReferenceId,
     fee: PAYMENT_PORTAL_FEE_TYPES.PETITION_FILING_FEE,
-    urlSuccess: `${domain}/payment-success/${docketNumber}${buildPaymentReturnQuery(
-      {
-        page: returnPageQuery,
-      },
-    )}`,
-    urlCancel: `${domain}/payment-cancel/${docketNumber}${buildPaymentReturnQuery(
-      {
-        origin: filingFeeReturnOrigin === 'dashboard' ? 'dashboard' : undefined,
-        page:
-          filingFeeReturnOrigin === 'dashboard' ? returnPageQuery : undefined,
-      },
-    )}`,
+    urlSuccess: `${domain}/payment-success${buildPaymentReturnQuery({
+      docketNumber,
+      page: returnPageQuery,
+    })}`,
+    urlCancel: `${domain}/payment-cancel${buildPaymentReturnQuery({
+      docketNumber,
+      origin: filingFeeReturnOrigin === 'dashboard' ? 'dashboard' : undefined,
+      page: filingFeeReturnOrigin === 'dashboard' ? returnPageQuery : undefined,
+    })}`,
     metadata: {
       docketNumber,
     },
