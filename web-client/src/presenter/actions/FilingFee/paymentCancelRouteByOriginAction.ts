@@ -1,9 +1,5 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
-/**
- * Branches payment-cancel by URL query origin (?origin=dashboard).
- * Dashboard: leave /payment-cancel immediately. No origin → petition flow.
- */
 export const paymentCancelRouteByOriginAction = ({
   path,
   props,
