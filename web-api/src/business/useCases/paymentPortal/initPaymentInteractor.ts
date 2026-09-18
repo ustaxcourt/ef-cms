@@ -2,10 +2,15 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import {
   ALLOWLIST_FEATURE_FLAGS,
   PAYMENT_PORTAL_FEE_TYPES,
+  PAYMENT_STATUS,
 } from '@shared/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { InitPaymentRequest } from '@ustaxcourt/payment-portal';
-import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
+import {
+  InvalidRequest,
+  NotFoundError,
+  UnauthorizedError,
+} from '@web-api/errors/errors';
 import {
   isAuthorized,
   ROLE_PERMISSIONS,
@@ -96,7 +101,11 @@ export const initPayment = async (
     );
   }
 
-  // TODO: check petitionPaymentStatus before letting user initiate a filing fee payment
+  if (currentCaseEntity.petitionPaymentStatus !== PAYMENT_STATUS.UNPAID) {
+    throw new InvalidRequest(
+      `Cannot initiate filing fee payment for ${docketNumber} with status ${currentCaseEntity.petitionPaymentStatus}`,
+    );
+  }
 
   const transactionReferenceId =
     currentCaseEntity.petitionPaymentTransactionReferenceId ||
