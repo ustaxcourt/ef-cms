@@ -57,7 +57,6 @@ jobs:
             --config p/expressjs \
             --config .semgrep/ \
             --sarif --output semgrep-results.sarif \
-            --error \
             --exclude='node_modules' \
             --exclude='coverage' \
             --exclude='dist' \
@@ -70,8 +69,10 @@ jobs:
             --exclude='.terraform' \
             --exclude='docs' \
             --metrics=off
+          # --error only with a baseline: on push there is none, so it would fail on every
+          # pre-existing finding.
           if [ "$EVENT_NAME" = "pull_request" ]; then
-            set -- "$@" --baseline-commit "$BASE_SHA"
+            set -- "$@" --error --baseline-commit "$BASE_SHA"
           fi
           semgrep "$@"
 
