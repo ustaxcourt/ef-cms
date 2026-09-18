@@ -11,7 +11,7 @@ export const initMyCasesFilingFeePaymentSequence = [
   setWaitingForResponseAction,
   initFilingFeePaymentAction,
   {
-    success: [unsetCasePaymentFillingFeeAction],
+    success: [unsetWaitingForResponseAction, unsetCasePaymentFillingFeeAction],
     error: [unsetWaitingForResponseAction, unsetCasePaymentFillingFeeAction],
   },
 ];
