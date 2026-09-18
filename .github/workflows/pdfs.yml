@@ -21,7 +21,7 @@ jobs:
 
     steps:
       - name: Checkout Current Branch
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Collect Workflow Telemetry
         uses: runforesight/workflow-telemetry-action@v2
         with:
