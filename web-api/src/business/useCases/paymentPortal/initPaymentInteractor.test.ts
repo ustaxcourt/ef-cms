@@ -11,8 +11,15 @@ import {
 } from '@shared/test/mockAuthUsers';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { MOCK_CASE } from '@shared/test/mockCase';
-import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
-import { PAYMENT_PORTAL_FEE_TYPES } from '@shared/business/entities/EntityConstants';
+import {
+  InvalidRequest,
+  NotFoundError,
+  UnauthorizedError,
+} from '@web-api/errors/errors';
+import {
+  PAYMENT_PORTAL_FEE_TYPES,
+  PAYMENT_STATUS,
+} from '@shared/business/entities/EntityConstants';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 import { Case } from '@shared/business/entities/cases/Case';
@@ -94,6 +101,46 @@ describe('initPaymentInteractor', () => {
     ).rejects.toThrow(UnauthorizedError);
   });
 
+  it('should throw InvalidRequest if petition payment status is paid', async () => {
+    getCaseByDocketNumber.mockResolvedValue({
+      ...MOCK_CASE,
+      petitionPaymentStatus: PAYMENT_STATUS.PAID,
+    });
+
+    await expect(
+      initPaymentInteractor(
+        applicationContext,
+        { docketNumber },
+        mockPetitioner,
+      ),
+    ).rejects.toThrow(InvalidRequest);
+
+    expect(
+      applicationContext.getPaymentPortalClient().initPayment,
+    ).not.toHaveBeenCalled();
+    expect(updateCaseAndAssociations).not.toHaveBeenCalled();
+  });
+
+  it('should throw InvalidRequest if petition payment status is waived', async () => {
+    getCaseByDocketNumber.mockResolvedValue({
+      ...MOCK_CASE,
+      petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
+    });
+
+    await expect(
+      initPaymentInteractor(
+        applicationContext,
+        { docketNumber },
+        mockPetitioner,
+      ),
+    ).rejects.toThrow(InvalidRequest);
+
+    expect(
+      applicationContext.getPaymentPortalClient().initPayment,
+    ).not.toHaveBeenCalled();
+    expect(updateCaseAndAssociations).not.toHaveBeenCalled();
+  });
+
   it('should call init endpoint on payment portal, set fields in case, and return redirect url', async () => {
     const result = await initPaymentInteractor(
       applicationContext,
@@ -108,8 +155,8 @@ describe('initPaymentInteractor', () => {
     ).toHaveBeenCalledWith(applicationContext, {
       transactionReferenceId,
       fee: PAYMENT_PORTAL_FEE_TYPES.PETITION_FILING_FEE,
-      urlSuccess: `http://localhost:1234/payment-success/${docketNumber}`,
-      urlCancel: `http://localhost:1234/payment-cancel/${docketNumber}`,
+      urlSuccess: `http://localhost:1234/payment-success?docketNumber=${docketNumber}`,
+      urlCancel: `http://localhost:1234/payment-cancel?docketNumber=${docketNumber}`,
       metadata: {
         docketNumber,
       },
@@ -144,6 +191,23 @@ describe('initPaymentInteractor', () => {
     expect(applicationContext.getUniqueId).not.toHaveBeenCalled();
   });
 
+  it('should append origin query to urlCancel when filingFeeReturnOrigin is dashboard', async () => {
+    await initPaymentInteractor(
+      applicationContext,
+      { docketNumber, filingFeeReturnOrigin: 'dashboard' },
+      mockPetitioner,
+    );
+
+    expect(
+      applicationContext.getPaymentPortalClient().initPayment,
+    ).toHaveBeenCalledWith(
+      applicationContext,
+      expect.objectContaining({
+        urlCancel: `http://localhost:1234/payment-cancel?docketNumber=${docketNumber}&origin=dashboard`,
+      }),
+    );
+  });
+
   it('should use deployed domain for urlSuccess and urlCancel if not running locally', async () => {
     applicationContext.environment.stage = 'notlocal';
     process.env.EFCMS_DOMAIN = 'env.mock';
@@ -159,8 +223,8 @@ describe('initPaymentInteractor', () => {
     ).toHaveBeenCalledWith(applicationContext, {
       transactionReferenceId,
       fee: PAYMENT_PORTAL_FEE_TYPES.PETITION_FILING_FEE,
-      urlSuccess: `https://app.env.mock/payment-success/${docketNumber}`,
-      urlCancel: `https://app.env.mock/payment-cancel/${docketNumber}`,
+      urlSuccess: `https://app.env.mock/payment-success?docketNumber=${docketNumber}`,
+      urlCancel: `https://app.env.mock/payment-cancel?docketNumber=${docketNumber}`,
       metadata: {
         docketNumber,
       },
