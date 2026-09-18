@@ -1460,41 +1460,6 @@ export class Case extends JoiValidationEntity {
     }
   }
 
-  /**
-   * update as automaticBlocked with an automaticBlockedReason based on
-   * provided case deadlines and pending items
-   * @param {object} caseDeadlines - the case deadlines
-   * @returns {Case} the updated case entity
-   */
-  updateAutomaticBlocked({ hasCaseDeadline }: { hasCaseDeadline: boolean }) {
-    this.hasPendingItems = this.doesHavePendingItems();
-    let automaticBlockedReason;
-    if (this.hasPendingItems && hasCaseDeadline) {
-      automaticBlockedReason = AUTOMATIC_BLOCKED_REASONS.pendingAndDueDate;
-    } else if (this.hasPendingItems) {
-      automaticBlockedReason = AUTOMATIC_BLOCKED_REASONS.pending;
-    } else if (hasCaseDeadline) {
-      automaticBlockedReason = AUTOMATIC_BLOCKED_REASONS.dueDate;
-    }
-    if (automaticBlockedReason) {
-      this.automaticBlocked = true;
-      this.automaticBlockedDate = createISODateString();
-      this.automaticBlockedReason = automaticBlockedReason;
-    } else {
-      this.automaticBlocked = false;
-      this.automaticBlockedDate = undefined;
-      this.automaticBlockedReason = undefined;
-    }
-
-    this.consolidatedCases.forEach(c => {
-      if (c.docketNumber === this.docketNumber) {
-        c.automaticBlocked = this.automaticBlocked;
-      }
-    });
-
-    return this;
-  }
-
   removeFromTrial({
     associatedJudge = CHIEF_JUDGE,
     associatedJudgeId = undefined,
