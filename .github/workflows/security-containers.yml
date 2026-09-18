@@ -11,10 +11,14 @@ on:
   workflow_dispatch:
   push:
     branches: [staging]
+    # The coverage badge bot pushes immediately after each merge; badges cannot change results.
+    paths-ignore:
+      - 'docs/badges/**'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
-  cancel-in-progress: true
+  # Staging pushes queue: a cancelled run still uploads a partial, failed analysis.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 permissions:
   contents: read
@@ -43,7 +47,9 @@ jobs:
         with:
           scan-type: config
           scan-ref: .
-          severity: 'MEDIUM,HIGH,CRITICAL'
+          severity: 'MEDIUM,HIGH,CRITICAL,UNKNOWN'
+          # trivy-action drops the severity filter for SARIF unless this is set
+          limit-severities-for-sarif: true
           format: sarif
           output: trivy-config.sarif
           skip-dirs: 'node_modules,.terraform,web-api/terraform,coverage,dist,dist-public,dist-lambdas,cypress'
@@ -71,8 +77,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
 
+      # efcms-local is not scanned: it is FROM ef-cms-us-east-1 and adds no OS packages,
+      # so Trivy reports the same CVEs under a second image name.
       - name: Build DAWSON container images
         uses: ./.github/actions/dawson-container-images
+        with:
+          build_local: 'false'
 
       - name: Trivy scan — ef-cms-us-east-1 (base)
         uses: ./.github/actions/dawson-trivy-image-scan
@@ -80,13 +90,6 @@ jobs:
           image_ref: ef-cms-us-east-1:latest
           report_path: trivy-base.sarif
           category: trivy-image-base
-
-      - name: Trivy scan — efcms-local
-        uses: ./.github/actions/dawson-trivy-image-scan
-        with:
-          image_ref: efcms-local:latest
-          report_path: trivy-local.sarif
-          category: trivy-image-local
 
   trivy-runtime-base:
     name: Trivy Base Scan (${{ matrix.name }})
@@ -103,7 +106,7 @@ jobs:
       matrix:
         include:
           - name: puppeteer
-            image: node:24.16.0-slim
+            image: node:24.20.0-slim
           - name: batch
             image: node:24
     steps:
@@ -119,7 +122,7 @@ jobs:
 
   # ─────────────────────────────────────────────────────────────────────────────
   # Job 4: staging baseline (non-blocking). Runs only on merge to staging and scans
-  # ALL FOUR images, so the Security tab holds a complete picture of what's actually
+  # every distinct image, so the Security tab holds a complete picture of what's actually
   # live. This is where we discover the full CVE set to triage into .trivyignore.
   # Mirrors the gitleaks-baseline pattern in the sibling workflows.
   # ─────────────────────────────────────────────────────────────────────────────
@@ -135,8 +138,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
 
+      # efcms-local is not scanned: see the note in the trivy-image job above.
       - name: Build DAWSON container images
         uses: ./.github/actions/dawson-container-images
+        with:
+          build_local: 'false'
 
       - name: Trivy scan — ef-cms-us-east-1 (baseline)
         uses: ./.github/actions/dawson-trivy-image-scan
@@ -144,13 +150,6 @@ jobs:
           image_ref: ef-cms-us-east-1:latest
           report_path: trivy-baseline-base.sarif
           category: trivy-baseline-base
-
-      - name: Trivy scan — efcms-local (baseline)
-        uses: ./.github/actions/dawson-trivy-image-scan
-        with:
-          image_ref: efcms-local:latest
-          report_path: trivy-baseline-local.sarif
-          category: trivy-baseline-local
 
       - name: Trivy scan — node:24.16.0-slim (baseline)
         uses: ./.github/actions/dawson-trivy-image-scan
