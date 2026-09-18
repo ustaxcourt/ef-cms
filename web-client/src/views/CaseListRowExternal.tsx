@@ -182,7 +182,7 @@ export const CaseListRowExternal = ({
               </Button>
             </td>
           )}
-          {showFilingFee && (
+          {showFilingFee && !enablePaymentPortalIntegration && (
             <td
               className={classNames({
                 'consolidated-case-padding':
@@ -193,6 +193,33 @@ export const CaseListRowExternal = ({
               data-testid="petition-payment-status"
             >
               {formattedCase.petitionPaymentStatus}
+            </td>
+          )}
+          {showFilingFee && enablePaymentPortalIntegration && (
+            <td
+              className={classNames({
+                'consolidated-case-padding':
+                  formattedCase.inConsolidatedGroup &&
+                  !formattedCase.isLeadCase,
+              })}
+              data-label="Filing Fee*"
+              data-testid="petition-payment-status"
+            >
+              {formattedCase.petitionPaymentStatus === 'Not paid' ? (
+                <button
+                  className="usa-button margin-right-205 usa-button--unstyled ustc-button--unstyled tw:font-light tw:underline-offset-3 tw:decoration-1"
+                  data-testid="pay-filing-fee-button"
+                  onClick={() => {
+                    initMyCasesFilingFeePaymentSequence({
+                      caseDetail: formattedCase,
+                    });
+                  }}
+                >
+                  Pay now
+                </button>
+              ) : (
+                formattedCase.petitionPaymentStatus
+              )}
             </td>
           )}
         </tr>
