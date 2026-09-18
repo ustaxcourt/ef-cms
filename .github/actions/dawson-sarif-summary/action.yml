@@ -23,4 +23,5 @@ runs:
         MAX_RULES: ${{ inputs.max_rules }}
         SARIF_FILE: ${{ inputs.sarif_file }}
         SUMMARY_TITLE: ${{ inputs.title }}
-      run: ${{ github.action_path }}/summarize-sarif.sh
+      # Not github.action_path: that is the host path, which containerized jobs cannot see.
+      run: "$GITHUB_WORKSPACE/.github/actions/dawson-sarif-summary/summarize-sarif.sh"
