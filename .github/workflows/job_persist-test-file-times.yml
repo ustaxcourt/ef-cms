@@ -19,7 +19,7 @@ jobs:
       SHARD_TEST_FILE_TIMINGS_DIR: /tmp/test-file-times/shards
     steps:
       - name: Checkout Current Branch
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: NPM Install in Current Branch
         uses: ./.github/actions/dawson-node-bootstrap
       - name: Download historical test file times
