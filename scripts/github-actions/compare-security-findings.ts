@@ -9,8 +9,9 @@ import {
 } from './compare-security-findings.helpers';
 
 /*
- Compares SARIF findings on this branch against staging, the way
- compareTypescriptErrors.ts compares type errors. Both sides are scanned in the same
+ Compares SARIF finding counts on this branch against staging, the way
+ compareTypescriptErrors.ts compares type error counts. This enforces no net increase: a
+ finding that replaces another of equal count passes, as it does for type errors. Both sides are scanned in the same
  job so they share a vulnerability database, and a newly published CVE cannot fail a
  pull request on its own.
 
@@ -51,9 +52,9 @@ if (process.env.GITHUB_STEP_SUMMARY) {
 
 if (hasRegressions(comparisons)) {
   console.error(
-    '\nERROR: this branch introduces security findings that staging does not have.',
+    '\nERROR: this branch reports more security findings than staging.',
   );
   process.exit(1);
 }
 
-console.log('\nNo new security findings compared with staging.');
+console.log('\nNo increase in security findings compared with staging.');

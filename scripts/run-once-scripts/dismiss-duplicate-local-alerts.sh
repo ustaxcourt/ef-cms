@@ -11,8 +11,9 @@
 # already filed: no further analysis is uploaded for those categories, so they stay
 # open until dismissed. The same CVEs remain tracked under the base image categories.
 #
-# Run this AFTER the severity-filter fix has landed on staging. The filter closes the
-# below-threshold alerts on its own, which leaves far fewer to dismiss by hand.
+# These categories are no longer scanned, so no further analysis is uploaded for them and
+# the severity filter cannot close their below-threshold alerts. Every duplicate listed
+# here has to be dismissed explicitly.
 #
 # Usage
 #   ./dismiss-duplicate-local-alerts.sh           # dry run; lists what would be dismissed
@@ -68,14 +69,17 @@ gh api --paginate \
 TOTAL_DISMISSED=0
 
 for CATEGORY in "${CATEGORIES[@]}"; do
-  NUMBERS=()
-  while IFS= read -r NUMBER; do
-    [[ -n "$NUMBER" ]] && NUMBERS+=("$NUMBER")
-  done < <(jq -r --arg category "$CATEGORY" --arg prefix "$IMAGE_PATH_PREFIX" \
+  # Captured first: a jq failure inside process substitution would not abort the script.
+  MATCHING="$(jq -r --arg category "$CATEGORY" --arg prefix "$IMAGE_PATH_PREFIX" \
     '.[] | select(.most_recent_instance.category == $category)
          | select(.most_recent_instance.location.path | startswith($prefix))
          | .number' \
-    "$ALERTS_JSON")
+    "$ALERTS_JSON")"
+
+  NUMBERS=()
+  while IFS= read -r NUMBER; do
+    [[ -n "$NUMBER" ]] && NUMBERS+=("$NUMBER")
+  done <<< "$MATCHING"
 
   SKIPPED="$(jq -r --arg category "$CATEGORY" --arg prefix "$IMAGE_PATH_PREFIX" \
     '[.[] | select(.most_recent_instance.category == $category)
