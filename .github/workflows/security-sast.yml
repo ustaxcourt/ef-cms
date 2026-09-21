@@ -215,7 +215,7 @@ jobs:
         with:
           category: '/language:${{ matrix.language }}'
           output: codeql-results
-          upload: ${{ (github.event_name != 'pull_request' || github.event.pull_request.base.ref == 'staging') && 'always' || 'never' }}
+          upload: ${{ (github.event_name != 'pull_request' || (github.event.pull_request.base.ref == 'staging' && github.event.pull_request.head.repo.full_name == github.event.pull_request.base.repo.full_name)) && 'always' || 'never' }}
 
       - name: Summarize CodeQL findings
         if: always()

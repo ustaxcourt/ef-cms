@@ -151,10 +151,10 @@ jobs:
           report_path: trivy-baseline-base.sarif
           category: trivy-baseline-base
 
-      - name: Trivy scan — node:24.16.0-slim (baseline)
+      - name: Trivy scan — node:24.20.0-slim (baseline)
         uses: ./.github/actions/dawson-trivy-image-scan
         with:
-          image_ref: node:24.16.0-slim
+          image_ref: node:24.20.0-slim
           report_path: trivy-baseline-puppeteer.sarif
           category: trivy-baseline-puppeteer
 

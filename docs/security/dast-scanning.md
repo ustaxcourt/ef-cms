@@ -4,11 +4,11 @@
 
 | Job | Trigger | Roles scanned | Target |
 |---|---|---|---|
-| `dast-api` (2× matrix) | Every non-draft PR targeting `staging` | `petitionsclerk`, `petitioner` | `http://localhost:4000/api/swagger.json` |
+| `dast-api` (2× matrix) | Every non-draft PR | `petitionsclerk`, `petitioner` | `http://localhost:4000/api/swagger.json` |
 | `dast-api` (public baseline) | Same (runs inside `petitioner` matrix leg) | unauthenticated | `http://localhost:4001` |
 | `dast-web` | Weekly Monday 06:00 UTC + `workflow_dispatch` | `petitionsclerk` (private), unauthenticated (public) | `http://localhost:1234`, `http://localhost:5678` |
 
-Both jobs are **warn-only** (`continue-on-error: true`). Findings appear in the GitHub Security tab under categories `zap-api-petitionsclerk`, `zap-api-petitioner`, and `zap-public-api`. They never fail the PR gate.
+Both jobs are **warn-only** (`continue-on-error: true`) and never fail the PR gate. Findings are published as run artifacts (`zap-api-report-*`, `zap-public-api-report-files`, `zap-web-reports`) rather than to the Security tab: ZAP emits its own JSON, which is not SARIF, so the upload is disabled until a converter lands (#10412).
 
 ## Multi-role authenticated scans
 

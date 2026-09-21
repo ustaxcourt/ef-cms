@@ -25,7 +25,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      security-events: write # for the SARIF upload that returns with the zap-to-sarif converter (#10412)
     timeout-minutes: 45
     env:
       CI: true
@@ -102,7 +101,8 @@ jobs:
         if: always() && matrix.role == 'petitioner'
         uses: actions/upload-artifact@v7
         with:
-          name: zap-public-api-report
+          # Distinct from the action's own zap-public-api-report artifact.
+          name: zap-public-api-report-files
           path: |
             report_html.html
             report_json.json
