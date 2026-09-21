@@ -208,6 +208,72 @@ describe('initPaymentInteractor', () => {
     );
   });
 
+  it('should append page query to urlSuccess and dashboard urlCancel when filingFeeReturnPage is greater than 1', async () => {
+    await initPaymentInteractor(
+      applicationContext,
+      {
+        docketNumber,
+        filingFeeReturnOrigin: 'dashboard',
+        filingFeeReturnPage: 3,
+      },
+      mockPetitioner,
+    );
+
+    expect(
+      applicationContext.getPaymentPortalClient().initPayment,
+    ).toHaveBeenCalledWith(
+      applicationContext,
+      expect.objectContaining({
+        urlSuccess: `http://localhost:1234/payment-success?docketNumber=${docketNumber}&page=3`,
+        urlCancel: `http://localhost:1234/payment-cancel?docketNumber=${docketNumber}&origin=dashboard&page=3`,
+      }),
+    );
+  });
+
+  it('should append page to urlSuccess but not urlCancel when origin is not dashboard', async () => {
+    await initPaymentInteractor(
+      applicationContext,
+      {
+        docketNumber,
+        filingFeeReturnOrigin: 'petition',
+        filingFeeReturnPage: 4,
+      },
+      mockPetitioner,
+    );
+
+    expect(
+      applicationContext.getPaymentPortalClient().initPayment,
+    ).toHaveBeenCalledWith(
+      applicationContext,
+      expect.objectContaining({
+        urlSuccess: `http://localhost:1234/payment-success?docketNumber=${docketNumber}&page=4`,
+        urlCancel: `http://localhost:1234/payment-cancel?docketNumber=${docketNumber}`,
+      }),
+    );
+  });
+
+  it('should omit page query when filingFeeReturnPage is the first page', async () => {
+    await initPaymentInteractor(
+      applicationContext,
+      {
+        docketNumber,
+        filingFeeReturnOrigin: 'dashboard',
+        filingFeeReturnPage: 1,
+      },
+      mockPetitioner,
+    );
+
+    expect(
+      applicationContext.getPaymentPortalClient().initPayment,
+    ).toHaveBeenCalledWith(
+      applicationContext,
+      expect.objectContaining({
+        urlSuccess: `http://localhost:1234/payment-success?docketNumber=${docketNumber}`,
+        urlCancel: `http://localhost:1234/payment-cancel?docketNumber=${docketNumber}&origin=dashboard`,
+      }),
+    );
+  });
+
   it('should use deployed domain for urlSuccess and urlCancel if not running locally', async () => {
     applicationContext.environment.stage = 'notlocal';
     process.env.EFCMS_DOMAIN = 'env.mock';
