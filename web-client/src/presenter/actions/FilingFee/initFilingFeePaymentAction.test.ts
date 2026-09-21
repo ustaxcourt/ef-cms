@@ -2,7 +2,7 @@ import { applicationContextForClient as applicationContext } from '@web-client/t
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { initFilingFeePaymentAction } from '@web-client/presenter/actions/FilingFee/initFilingFeePaymentAction';
-import { PAYMENT_FILLING_FEE_ORIGIN } from '@web-client/presenter/actions/FilingFee/paymentFillingFeeOrigin';
+import { PAYMENT_FILING_FEE_ORIGIN } from '@shared/business/entities/EntityConstants';
 
 describe('initFilingFeePaymentAction', () => {
   let hrefSetter: jest.SpyInstance | undefined;
@@ -49,7 +49,7 @@ describe('initFilingFeePaymentAction', () => {
       applicationContext.getUseCases().initPaymentInteractor,
     ).toHaveBeenCalledWith(expect.anything(), {
       docketNumber: '101-20',
-      filingFeeReturnOrigin: 'petition',
+      filingFeeReturnOrigin: PAYMENT_FILING_FEE_ORIGIN.PETITION,
     });
 
     expect(hrefSetter).toHaveBeenCalledWith('newUrl');
@@ -66,7 +66,7 @@ describe('initFilingFeePaymentAction', () => {
       },
       state: {
         caseDetail: { docketNumber: '101-20' },
-        paymentFillingFeeOrigin: PAYMENT_FILLING_FEE_ORIGIN.DASHBOARD,
+        paymentFillingFeeOrigin: PAYMENT_FILING_FEE_ORIGIN.DASHBOARD,
       },
     });
 
@@ -74,7 +74,7 @@ describe('initFilingFeePaymentAction', () => {
       applicationContext.getUseCases().initPaymentInteractor,
     ).toHaveBeenCalledWith(expect.anything(), {
       docketNumber: '101-20',
-      filingFeeReturnOrigin: 'dashboard',
+      filingFeeReturnOrigin: PAYMENT_FILING_FEE_ORIGIN.DASHBOARD,
     });
   });
 
@@ -88,7 +88,7 @@ describe('initFilingFeePaymentAction', () => {
       },
       state: {
         caseDetail: { docketNumber: '101-20' },
-        paymentFillingFeeOrigin: PAYMENT_FILLING_FEE_ORIGIN.DASHBOARD,
+        paymentFillingFeeOrigin: PAYMENT_FILING_FEE_ORIGIN.DASHBOARD,
         dashboardCaseListPageIndex: 2,
       },
     });
@@ -97,7 +97,7 @@ describe('initFilingFeePaymentAction', () => {
       applicationContext.getUseCases().initPaymentInteractor,
     ).toHaveBeenCalledWith(expect.anything(), {
       docketNumber: '101-20',
-      filingFeeReturnOrigin: 'dashboard',
+      filingFeeReturnOrigin: PAYMENT_FILING_FEE_ORIGIN.DASHBOARD,
       filingFeeReturnPage: 3,
     });
   });
@@ -127,7 +127,7 @@ describe('initFilingFeePaymentAction', () => {
       },
       state: {
         caseDetail: { docketNumber: '101-20' },
-        paymentFillingFeeOrigin: PAYMENT_FILLING_FEE_ORIGIN.DASHBOARD,
+        paymentFillingFeeOrigin: PAYMENT_FILING_FEE_ORIGIN.DASHBOARD,
       },
     });
 

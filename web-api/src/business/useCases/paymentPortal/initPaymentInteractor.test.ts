@@ -17,6 +17,7 @@ import {
   UnauthorizedError,
 } from '@web-api/errors/errors';
 import {
+  PAYMENT_FILING_FEE_ORIGIN,
   PAYMENT_PORTAL_FEE_TYPES,
   PAYMENT_STATUS,
 } from '@shared/business/entities/EntityConstants';
@@ -194,7 +195,10 @@ describe('initPaymentInteractor', () => {
   it('should append origin query to urlCancel when filingFeeReturnOrigin is dashboard', async () => {
     await initPaymentInteractor(
       applicationContext,
-      { docketNumber, filingFeeReturnOrigin: 'dashboard' },
+      {
+        docketNumber,
+        filingFeeReturnOrigin: PAYMENT_FILING_FEE_ORIGIN.DASHBOARD,
+      },
       mockPetitioner,
     );
 
@@ -203,7 +207,7 @@ describe('initPaymentInteractor', () => {
     ).toHaveBeenCalledWith(
       applicationContext,
       expect.objectContaining({
-        urlCancel: `http://localhost:1234/payment-cancel?docketNumber=${docketNumber}&origin=dashboard`,
+        urlCancel: `http://localhost:1234/payment-cancel?docketNumber=${docketNumber}&origin=${PAYMENT_FILING_FEE_ORIGIN.DASHBOARD}`,
       }),
     );
   });
@@ -213,7 +217,7 @@ describe('initPaymentInteractor', () => {
       applicationContext,
       {
         docketNumber,
-        filingFeeReturnOrigin: 'dashboard',
+        filingFeeReturnOrigin: PAYMENT_FILING_FEE_ORIGIN.DASHBOARD,
         filingFeeReturnPage: 3,
       },
       mockPetitioner,
@@ -225,7 +229,7 @@ describe('initPaymentInteractor', () => {
       applicationContext,
       expect.objectContaining({
         urlSuccess: `http://localhost:1234/payment-success?docketNumber=${docketNumber}&page=3`,
-        urlCancel: `http://localhost:1234/payment-cancel?docketNumber=${docketNumber}&origin=dashboard&page=3`,
+        urlCancel: `http://localhost:1234/payment-cancel?docketNumber=${docketNumber}&origin=${PAYMENT_FILING_FEE_ORIGIN.DASHBOARD}&page=3`,
       }),
     );
   });
@@ -235,7 +239,7 @@ describe('initPaymentInteractor', () => {
       applicationContext,
       {
         docketNumber,
-        filingFeeReturnOrigin: 'petition',
+        filingFeeReturnOrigin: PAYMENT_FILING_FEE_ORIGIN.PETITION,
         filingFeeReturnPage: 4,
       },
       mockPetitioner,
@@ -257,7 +261,7 @@ describe('initPaymentInteractor', () => {
       applicationContext,
       {
         docketNumber,
-        filingFeeReturnOrigin: 'dashboard',
+        filingFeeReturnOrigin: PAYMENT_FILING_FEE_ORIGIN.DASHBOARD,
         filingFeeReturnPage: 1,
       },
       mockPetitioner,
@@ -269,7 +273,7 @@ describe('initPaymentInteractor', () => {
       applicationContext,
       expect.objectContaining({
         urlSuccess: `http://localhost:1234/payment-success?docketNumber=${docketNumber}`,
-        urlCancel: `http://localhost:1234/payment-cancel?docketNumber=${docketNumber}&origin=dashboard`,
+        urlCancel: `http://localhost:1234/payment-cancel?docketNumber=${docketNumber}&origin=${PAYMENT_FILING_FEE_ORIGIN.DASHBOARD}`,
       }),
     );
   });
