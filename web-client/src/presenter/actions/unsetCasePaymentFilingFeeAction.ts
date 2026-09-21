@@ -1,8 +1,8 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const unsetCasePaymentFillingFeeAction = ({
+export const unsetCasePaymentFilingFeeAction = ({
   store,
 }: ActionProps): void => {
   store.unset(state.caseDetail);
-  store.set(state.paymentFillingFeeOrigin, null);
+  store.set(state.paymentFilingFeeOrigin, null);
 };

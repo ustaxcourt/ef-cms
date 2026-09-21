@@ -712,7 +712,7 @@ export const baseState = {
   },
   caseDeadlines: [] as RawCaseDeadline[],
   caseDetail: {} as RawCase & { messages?: RawMessage[] },
-  paymentFillingFeeOrigin: null as PaymentFilingFeeOrigin | null,
+  paymentFilingFeeOrigin: null as PaymentFilingFeeOrigin | null,
   dashboardCaseListPageIndex: undefined as number | undefined,
   caseInventoryReportData: {
     foundCasesForCurrentPage: [] as FormattedCaseInventoryReportEntry[],

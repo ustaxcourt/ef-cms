@@ -1,4 +1,4 @@
-import { clearPaymentFillingFeeOriginAction } from '@web-client/presenter/actions/FilingFee/clearPaymentFillingFeeOriginAction';
+import { clearPaymentFilingFeeOriginAction } from '@web-client/presenter/actions/FilingFee/clearPaymentFilingFeeOriginAction';
 import { paymentCancelRouteByOriginAction } from '@web-client/presenter/actions/FilingFee/paymentCancelRouteByOriginAction';
 import { setFilingFeeAlertsAction } from '@web-client/presenter/actions/FilingFee/setFilingFeeAlertsAction';
 import { getOpenAndClosedCasesForUserAction } from '@web-client/presenter/actions/Dashboard/getOpenAndClosedCasesForUserAction';
@@ -19,7 +19,7 @@ export const paymentCancelSequence = [
   {
     dashboard: [
       setFilingFeeReturnPageAction,
-      clearPaymentFillingFeeOriginAction,
+      clearPaymentFilingFeeOriginAction,
       setDefaultCaseTypeToDisplayAction,
       setupCurrentPageAction('DashboardExternalUser'),
       getOpenAndClosedCasesForUserAction,
