@@ -2,24 +2,20 @@ import { applicationContextForClient as applicationContext } from '@web-client/t
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { checkCaseAssociationAndPaymentStatusAction } from '@web-client/presenter/actions/FilingFee/checkCaseAssociationAndPaymentStatusAction';
-import { PAYMENT_FILLING_FEE_ORIGIN } from '@web-client/presenter/actions/FilingFee/paymentFillingFeeOrigin';
 import { PAYMENT_STATUS } from '@shared/business/entities/EntityConstants';
 
 describe('checkCaseAssociationAndPaymentStatusAction', () => {
-  const pathDashboardStub = jest.fn();
   const pathSuccessStub = jest.fn();
   const pathErrorStub = jest.fn();
 
   presenter.providers.applicationContext = applicationContext;
 
   presenter.providers.path = {
-    dashboard: pathDashboardStub,
     success: pathSuccessStub,
     error: pathErrorStub,
   };
 
   beforeEach(() => {
-    pathDashboardStub.mockClear();
     pathSuccessStub.mockClear();
     pathErrorStub.mockClear();
   });
@@ -70,24 +66,5 @@ describe('checkCaseAssociationAndPaymentStatusAction', () => {
     });
 
     expect(pathSuccessStub).toHaveBeenCalled();
-    expect(pathDashboardStub).not.toHaveBeenCalled();
-  });
-
-  it('should go to the dashboard when origin prop is dashboard', async () => {
-    await runAction(checkCaseAssociationAndPaymentStatusAction, {
-      modules: {
-        presenter,
-      },
-      props: {
-        isDirectlyAssociated: true,
-        origin: PAYMENT_FILLING_FEE_ORIGIN.DASHBOARD,
-      },
-      state: {
-        caseDetail: { petitionPaymentStatus: PAYMENT_STATUS.UNPAID },
-      },
-    });
-
-    expect(pathDashboardStub).toHaveBeenCalled();
-    expect(pathSuccessStub).not.toHaveBeenCalled();
   });
 });
