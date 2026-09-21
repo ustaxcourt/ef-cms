@@ -8,11 +8,13 @@ DAWSON uses [Trivy](https://trivy.dev/) to scan Dockerfiles and built container 
 |-----|--------------|---------|-----------|
 | `trivy-config` | Dockerfile misconfigurations (all Dockerfiles in repo) | PR or manual dispatch | No (warn-only) |
 | `trivy-image` | Built image: `ef-cms-us-east-1` | PR or manual dispatch | No (warn-only) |
-| `trivy-runtime-base` | Base images: `node:24.16.0-slim` (puppeteer), `node:24` (batch) | PR or manual dispatch | No (warn-only) |
+| `trivy-runtime-base` | Base images: `node:24.20.0-slim` (puppeteer), `node:24` (batch) | PR or manual dispatch | No (warn-only) |
 | `trivy-baseline` | All three images above (full baseline) | Push to staging | No (informational) |
 | `containers-gate` | Aggregates above three PR/manual jobs | PR or manual dispatch | Yes (infra failures only) |
 
-All scans currently use `exit-code: '0'` (warn-only). Findings appear in the **Security tab** under categories `trivy-config`, `trivy-image-base`, `trivy-image-puppeteer`, `trivy-image-batch` (PR and manual dispatch) and `trivy-baseline-base`, `trivy-baseline-puppeteer`, `trivy-baseline-batch` (staging).
+All scans currently use `exit-code: '0'` (warn-only).
+
+SARIF reaches the **Security tab** only from pushes to staging and from same-repository PRs targeting staging, under categories `trivy-config`, `trivy-image-base`, `trivy-image-puppeteer`, `trivy-image-batch` (PR and manual dispatch) and `trivy-baseline-base`, `trivy-baseline-puppeteer`, `trivy-baseline-batch` (staging). A PR targeting any other branch reports its findings in the workflow log and job summary instead.
 
 Removing a scan does not clear alerts it already reported. Existing alerts have to be dismissed in the Security tab, or their analyses deleted by a repo admin.
 

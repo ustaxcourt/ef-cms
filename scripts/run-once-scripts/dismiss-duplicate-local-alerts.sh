@@ -2,6 +2,9 @@
 
 # Dismisses the efcms-local Trivy alerts that duplicate ef-cms-us-east-1.
 #
+# Only alerts whose location is the image itself are dismissed. Alerts under real file
+# paths come from the npm ci layer and are not duplicated in the base image reports.
+#
 # efcms-local is FROM ef-cms-us-east-1 plus COPY and npm ci, so it installs no OS
 # packages and Trivy restated the base image's CVEs under a second image name.
 # The scan was removed for #10412, but removing a scan does not close the alerts it
@@ -22,6 +25,9 @@ set -euo pipefail
 REPO="${REPO:-ustaxcourt/ef-cms}"
 REF="${REF:-refs/heads/staging}"
 CATEGORIES=("trivy-baseline-local" "trivy-image-local")
+# Only the image rows duplicate the base image. Findings under real file paths come from
+# the npm ci layer (app dependencies, the Cypress cache) and exist in no other category.
+IMAGE_PATH_PREFIX="${IMAGE_PATH_PREFIX:-library/efcms-local}"
 # GitHub accepts exactly: "false positive", "won't fix", "used in tests"
 DEFAULT_DISMISS_REASON="won't fix"
 DISMISS_REASON="${DISMISS_REASON:-$DEFAULT_DISMISS_REASON}"
@@ -39,6 +45,11 @@ fi
 
 if ! command -v gh > /dev/null; then
   echo "gh was not found on your path. Please install the GitHub CLI." >&2
+  exit 1
+fi
+
+if ! command -v jq > /dev/null; then
+  echo "jq was not found on your path. Please install jq." >&2
   exit 1
 fi
 
@@ -60,12 +71,19 @@ for CATEGORY in "${CATEGORIES[@]}"; do
   NUMBERS=()
   while IFS= read -r NUMBER; do
     [[ -n "$NUMBER" ]] && NUMBERS+=("$NUMBER")
-  done < <(jq -r --arg category "$CATEGORY" \
-    '.[] | select(.most_recent_instance.category == $category) | .number' \
+  done < <(jq -r --arg category "$CATEGORY" --arg prefix "$IMAGE_PATH_PREFIX" \
+    '.[] | select(.most_recent_instance.category == $category)
+         | select(.most_recent_instance.location.path | startswith($prefix))
+         | .number' \
     "$ALERTS_JSON")
 
+  SKIPPED="$(jq -r --arg category "$CATEGORY" --arg prefix "$IMAGE_PATH_PREFIX" \
+    '[.[] | select(.most_recent_instance.category == $category)
+          | select(.most_recent_instance.location.path | startswith($prefix) | not)] | length' \
+    "$ALERTS_JSON")"
+
   echo ""
-  echo "${CATEGORY}: ${#NUMBERS[@]} open alerts"
+  echo "${CATEGORY}: ${#NUMBERS[@]} duplicate image alerts, ${SKIPPED} left alone (not duplicates)"
 
   if [[ "${#NUMBERS[@]}" -eq 0 ]]; then
     continue
