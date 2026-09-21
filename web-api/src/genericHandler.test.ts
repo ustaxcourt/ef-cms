@@ -213,6 +213,20 @@ describe('genericHandler', () => {
       });
     });
 
+    it('propagates isValidated to the reconstructed entity when the source data was validated', () => {
+      const data = {
+        entityName: 'MockEntity',
+        public: 'public',
+      };
+      Object.defineProperty(data, 'isValidated', {
+        enumerable: false,
+        value: true,
+        writable: false,
+      });
+      const result = dataSecurityFilter(data, { authorizedUser: undefined });
+      expect((result as any).isValidated).toBe(true);
+    });
+
     it('returns data without passing through entity constructor if entityName is not present in getEntityConstructors', () => {
       getEntityByName.mockReturnValue(null);
       const data = {
