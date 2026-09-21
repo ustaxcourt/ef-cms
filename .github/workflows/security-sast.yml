@@ -37,7 +37,7 @@ jobs:
       security-events: write
     timeout-minutes: 15
     container:
-      image: semgrep/semgrep:1.176.0
+      image: semgrep/semgrep:1.177.0
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -81,6 +81,9 @@ jobs:
           # pull_request.base.sha is frozen at event time. When the base moves mid-review,
           # files it gained look new and their existing findings block the pull request.
           if [ "$EVENT_NAME" = "pull_request" ]; then
+            # This job runs in a container, where the workspace has a different owner
+            # than the container user and git refuses to read the repository.
+            git config --global --add safe.directory "$GITHUB_WORKSPACE"
             BASE_SHA="$(git merge-base HEAD "origin/${BASE_REF}")"
             echo "Comparing against ${BASE_REF} at ${BASE_SHA}"
             set -- "$@" --error --baseline-commit "$BASE_SHA"
@@ -114,7 +117,7 @@ jobs:
           python-version: '3.12'
 
       - name: Install Checkov
-        run: pip install checkov==3.3.16
+        run: pip install checkov==3.3.17
 
       - name: Run Checkov
         run: |
