@@ -2,6 +2,7 @@ import { applicationContext } from '../../applicationContext';
 import { completeDocumentTypeSectionHelper as completeDocumentTypeSectionHelperComputed } from './completeDocumentTypeSectionHelper';
 import {
   irsPractitionerUser,
+  petitionerUser,
   privatePractitionerUser,
 } from '@shared/test/mockUsers';
 import { runCompute } from '@web-client/presenter/test.cerebral';
@@ -84,8 +85,7 @@ describe('completeDocumentTypeSectionHelper', () => {
     const categoryKey = 'Application';
     const categoryIdx = 0;
 
-    const { category } =
-    EXTERNAL_FILING_EVENTS[categoryKey][categoryIdx];
+    const { category } = EXTERNAL_FILING_EVENTS[categoryKey][categoryIdx];
 
     const result = runCompute(completeDocumentTypeSectionHelper, {
       state: {
@@ -214,6 +214,58 @@ describe('completeDocumentTypeSectionHelper', () => {
     expect(result.documentTypesForSelectSorted!.length).toBeGreaterThan(0);
     expect(result.documentTypesForSelectSorted).not.toEqual(
       expect.arrayContaining([expect.objectContaining({ eventCode: 'EA' })]),
+    );
+  });
+
+  it('returns an array of documentTypes for select excluding NOTW and M112 for petitioners', () => {
+    applicationContext.getUtilities().isSealedCase = jest
+      .fn()
+      .mockReturnValue(false);
+
+    const result = runCompute(completeDocumentTypeSectionHelper, {
+      state: {
+        caseDetail: {
+          docketNumber: '101-20',
+        },
+        form: {},
+        user: petitionerUser,
+      },
+    });
+
+    expect(result.primary).toBeTruthy();
+    expect(result.documentTypesForSelectSorted).toBeDefined();
+    expect(result.documentTypesForSelectSorted!.length).toBeGreaterThan(0);
+    expect(result.documentTypesForSelectSorted).not.toEqual(
+      expect.arrayContaining([expect.objectContaining({ eventCode: 'NOTW' })]),
+    );
+    expect(result.documentTypesForSelectSorted).not.toEqual(
+      expect.arrayContaining([expect.objectContaining({ eventCode: 'M112' })]),
+    );
+  });
+
+  it('returns an array of documentTypes for select including NOTW and M112 for practitioners', () => {
+    applicationContext.getUtilities().isSealedCase = jest
+      .fn()
+      .mockReturnValue(false);
+
+    const result = runCompute(completeDocumentTypeSectionHelper, {
+      state: {
+        caseDetail: {
+          docketNumber: '101-20',
+        },
+        form: {},
+        user: privatePractitionerUser,
+      },
+    });
+
+    expect(result.primary).toBeTruthy();
+    expect(result.documentTypesForSelectSorted).toBeDefined();
+    expect(result.documentTypesForSelectSorted!.length).toBeGreaterThan(0);
+    expect(result.documentTypesForSelectSorted).toEqual(
+      expect.arrayContaining([expect.objectContaining({ eventCode: 'NOTW' })]),
+    );
+    expect(result.documentTypesForSelectSorted).toEqual(
+      expect.arrayContaining([expect.objectContaining({ eventCode: 'M112' })]),
     );
   });
 });
