@@ -1,3 +1,77 @@
+<details><summary>Dependency Updates - Week of 2026-09-14</summary>
+
+## Local
+
+#### Upgrade Terraform to `1.16.3`
+use either tfswitch or tfenv
+```bash
+tfswitch 1.16.3
+```
+```bash
+tfenv install 1.16.3
+tfenv use 1.16.3
+```
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Deploy Docker container `4.3.97`
+
+This script will prompt for an environment to pull the image from; choose `exp8`.
+
+```bash
+npm run ecr:check-version
+```
+
+</details>
+<details><summary>Fix stale automaticBlocked on cases set for trial</summary>
+
+## Manual Deployment Steps
+
+### After Deployment
+
+Cases that were automatically blocked before being set for trial kept a stale
+`automaticBlocked` flag, because the recompute was skipped whenever the case had
+a trial date. This excluded them from trial eligibility and left them on the
+Blocked Cases Report. Run the following to recompute those cases:
+
+```bash
+# Preview the cases that will be updated
+./scripts/run-once-scripts/fix-stale-automatic-blocks.ts --dry-run
+
+# Apply the fix
+./scripts/run-once-scripts/fix-stale-automatic-blocks.ts
+```
+</details>
+
+<details><summary>Dependency Updates - Week of 2026-09-08</summary>
+
+## Local
+
+#### Upgrade Terraform to `1.16.2`
+use either tfswitch or tfenv
+```bash
+tfswitch 1.16.2
+```
+```bash
+tfenv install 1.16.2
+tfenv use 1.16.2
+```
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Deploy Docker container `4.3.96`
+
+This script will prompt for an environment to pull the image from; choose `exp2`.
+
+```bash
+npm run ecr:check-version
+```
+
+</details>
 <details><summary>Dependency Updates - Week of 2026-08-31</summary>
 
 ## Local
