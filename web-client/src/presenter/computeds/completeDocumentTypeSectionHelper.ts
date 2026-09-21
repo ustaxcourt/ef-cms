@@ -64,6 +64,8 @@ export const completeDocumentTypeSectionHelper = (
           documentType.eventCode === 'EA'
         )
           return false;
+      } else if (currentUser.role === ROLES.petitioner) {
+        if (['M112', 'NOTW'].includes(documentType.eventCode)) return false;
       } else if (documentType.eventCode === 'EA') return false;
 
       return !NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES.includes(
