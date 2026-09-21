@@ -4,7 +4,7 @@ import { getActivePageIndexFromOneBasedPageQuery } from '@web-client/utilities/u
 export const setFilingFeeReturnPageAction = ({
   props,
   store,
-}: ActionProps<{ page?: string }>) => {
+}: ActionProps<{ page?: string }>): void => {
   const pageIndex = getActivePageIndexFromOneBasedPageQuery(props.page);
 
   if (pageIndex > 0) {

@@ -4,7 +4,7 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const setCasePaymentFillingFeeAction = ({
   props,
   store,
-}: ActionProps<{ caseDetail: RawCase }>) => {
+}: ActionProps<{ caseDetail: RawCase }>): void => {
   store.set(state.caseDetail, props.caseDetail);
   store.set(
     state.paymentFillingFeeOrigin,
