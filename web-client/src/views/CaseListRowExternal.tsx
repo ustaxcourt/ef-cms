@@ -77,8 +77,9 @@ export const CaseListRowExternal = ({
             {showFilingFee && enablePaymentPortalIntegration && (
               <td data-testid="petition-payment-status">
                 {formattedCase.petitionPaymentStatus === 'Not paid' ? (
-                  <button
-                    className="usa-button margin-right-205 usa-button--unstyled ustc-button--unstyled tw:font-light tw:underline-offset-3 tw:decoration-1"
+                  <Button
+                    link
+                    className="tw:font-light tw:underline-offset-3 tw:decoration-1"
                     data-testid="pay-filing-fee-button"
                     onClick={() => {
                       initMyCasesFilingFeePaymentSequence({
@@ -87,7 +88,7 @@ export const CaseListRowExternal = ({
                     }}
                   >
                     Pay now
-                  </button>
+                  </Button>
                 ) : (
                   formattedCase.petitionPaymentStatus
                 )}
@@ -206,8 +207,9 @@ export const CaseListRowExternal = ({
               data-testid="petition-payment-status"
             >
               {formattedCase.petitionPaymentStatus === 'Not paid' ? (
-                <button
-                  className="usa-button margin-right-205 usa-button--unstyled ustc-button--unstyled tw:font-light tw:underline-offset-3 tw:decoration-1"
+                <Button
+                  link
+                  className="tw:font-light tw:underline-offset-3 tw:decoration-1"
                   data-testid="pay-filing-fee-button"
                   onClick={() => {
                     initMyCasesFilingFeePaymentSequence({
@@ -216,7 +218,7 @@ export const CaseListRowExternal = ({
                   }}
                 >
                   Pay now
-                </button>
+                </Button>
               ) : (
                 formattedCase.petitionPaymentStatus
               )}
