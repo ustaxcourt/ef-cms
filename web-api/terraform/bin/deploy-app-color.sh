@@ -49,6 +49,7 @@ echo "  - PROD_ENV_ACCOUNT_ID=${PROD_ENV_ACCOUNT_ID}"
 echo "  - SLACK_WEBHOOK_URL=${SLACK_WEBHOOK_URL}"
 echo "  - PAYMENT_PORTAL_ARN=${PAYMENT_PORTAL_ARN}"
 echo "  - PAYMENT_PORTAL_HOST=${PAYMENT_PORTAL_HOST}"
+echo "  - IDP_NAME=${IDP_NAME}"
 
 ../../../../scripts/verify-terraform-version.sh
 
@@ -127,6 +128,8 @@ export TF_VAR_slack_webhook_url=$SLACK_WEBHOOK_URL
 export TF_VAR_green_elasticsearch_domain=$GREEN_ELASTICSEARCH_DOMAIN
 export TF_VAR_payment_portal_arn=$PAYMENT_PORTAL_ARN
 export TF_VAR_payment_portal_host=$PAYMENT_PORTAL_HOST
+export TF_VAR_managed_login_domain=$MANAGED_LOGIN_DOMAIN
+export TF_VAR_idp_name=$IDP_NAME
 
 if [[ -n "${CW_VIEWER_PROTOCOL_POLICY}" ]]
 then
