@@ -10,7 +10,7 @@ export const initFilingFeePaymentAction = async ({
 }: ActionProps) => {
   const caseDetail = get(state.caseDetail);
   const originDashboard =
-    get(state.paymentFillingFeeOrigin) === PAYMENT_FILING_FEE_ORIGIN.DASHBOARD;
+    get(state.paymentFilingFeeOrigin) === PAYMENT_FILING_FEE_ORIGIN.DASHBOARD;
 
   try {
     const filingFeeReturnPage = originDashboard

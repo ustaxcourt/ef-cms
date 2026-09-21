@@ -2,16 +2,16 @@ import { clearErrorAlertsAction } from '@web-client/presenter/actions/clearError
 import { initFilingFeePaymentAction } from '@web-client/presenter/actions/FilingFee/initFilingFeePaymentAction';
 import { setWaitingForResponseAction } from '@web-client/presenter/actions/setWaitingForResponseAction';
 import { unsetWaitingForResponseAction } from '@web-client/presenter/actions/unsetWaitingForResponseAction';
-import { setCasePaymentFillingFeeAction } from '@web-client/presenter/actions/setCasePaymentFillingFeeAction';
-import { unsetCasePaymentFillingFeeAction } from '@web-client/presenter/actions/unsetCasePaymentFillingFeeAction';
+import { setCasePaymentFilingFeeAction } from '@web-client/presenter/actions/setCasePaymentFilingFeeAction';
+import { unsetCasePaymentFilingFeeAction } from '@web-client/presenter/actions/unsetCasePaymentFilingFeeAction';
 
 export const initMyCasesFilingFeePaymentSequence = [
   clearErrorAlertsAction,
-  setCasePaymentFillingFeeAction,
+  setCasePaymentFilingFeeAction,
   setWaitingForResponseAction,
   initFilingFeePaymentAction,
   {
-    success: [unsetWaitingForResponseAction, unsetCasePaymentFillingFeeAction],
-    error: [unsetWaitingForResponseAction, unsetCasePaymentFillingFeeAction],
+    success: [unsetWaitingForResponseAction, unsetCasePaymentFilingFeeAction],
+    error: [unsetWaitingForResponseAction, unsetCasePaymentFilingFeeAction],
   },
 ];

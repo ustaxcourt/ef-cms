@@ -56,7 +56,7 @@ describe('initFilingFeePaymentAction', () => {
     expect(pathSuccessStub).toHaveBeenCalled();
   });
 
-  it('should pass dashboard filingFeeReturnOrigin when paymentFillingFeeOrigin is dashboard', async () => {
+  it('should pass dashboard filingFeeReturnOrigin when paymentFilingFeeOrigin is dashboard', async () => {
     applicationContext.getUseCases().initPaymentInteractor.mockResolvedValue({
       paymentRedirect: 'newUrl',
     });
@@ -66,7 +66,7 @@ describe('initFilingFeePaymentAction', () => {
       },
       state: {
         caseDetail: { docketNumber: '101-20' },
-        paymentFillingFeeOrigin: PAYMENT_FILING_FEE_ORIGIN.DASHBOARD,
+        paymentFilingFeeOrigin: PAYMENT_FILING_FEE_ORIGIN.DASHBOARD,
       },
     });
 
@@ -88,7 +88,7 @@ describe('initFilingFeePaymentAction', () => {
       },
       state: {
         caseDetail: { docketNumber: '101-20' },
-        paymentFillingFeeOrigin: PAYMENT_FILING_FEE_ORIGIN.DASHBOARD,
+        paymentFilingFeeOrigin: PAYMENT_FILING_FEE_ORIGIN.DASHBOARD,
         dashboardCaseListPageIndex: 2,
       },
     });
@@ -119,7 +119,7 @@ describe('initFilingFeePaymentAction', () => {
     expect(pathErrorStub).toHaveBeenCalled();
   });
 
-  it('should set dashboard-style alertError when paymentFillingFeeOrigin is dashboard', async () => {
+  it('should set dashboard-style alertError when paymentFilingFeeOrigin is dashboard', async () => {
     applicationContext.getUseCases().initPaymentInteractor.mockRejectedValue();
     const { state } = await runAction(initFilingFeePaymentAction, {
       modules: {
@@ -127,7 +127,7 @@ describe('initFilingFeePaymentAction', () => {
       },
       state: {
         caseDetail: { docketNumber: '101-20' },
-        paymentFillingFeeOrigin: PAYMENT_FILING_FEE_ORIGIN.DASHBOARD,
+        paymentFilingFeeOrigin: PAYMENT_FILING_FEE_ORIGIN.DASHBOARD,
       },
     });
 
