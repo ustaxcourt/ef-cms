@@ -46,7 +46,7 @@ jobs:
 
       - name: Run Semgrep
         env:
-          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          BASE_REF: ${{ github.event.pull_request.base.ref }}
           EVENT_NAME: ${{ github.event_name }}
         run: |
           set -- \
@@ -75,7 +75,14 @@ jobs:
             --metrics=off
           # --error only with a baseline: on push there is none, so it would fail on every
           # pre-existing finding.
+          #
+          # The baseline comes from git, not from the event payload. We scan the merge ref,
+          # which GitHub recomputes against the base branch's current tip, while
+          # pull_request.base.sha is frozen at event time. When the base moves mid-review,
+          # files it gained look new and their existing findings block the pull request.
           if [ "$EVENT_NAME" = "pull_request" ]; then
+            BASE_SHA="$(git merge-base HEAD "origin/${BASE_REF}")"
+            echo "Comparing against ${BASE_REF} at ${BASE_SHA}"
             set -- "$@" --error --baseline-commit "$BASE_SHA"
           fi
           semgrep "$@"
