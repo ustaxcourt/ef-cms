@@ -6,6 +6,61 @@ import React from 'react';
 import classNames from 'classnames';
 import { Button } from '@web-client/ustc-ui/Button/Button';
 
+const FilingFeeStatus = ({
+  className,
+  dataLabel,
+  enablePaymentPortalIntegration,
+  formattedCase,
+  initMyCasesFilingFeePaymentSequence,
+}: {
+  className?: string;
+  dataLabel?: string;
+  enablePaymentPortalIntegration: boolean;
+  formattedCase: TAssociatedCaseFormatted;
+  initMyCasesFilingFeePaymentSequence: Function;
+}) => {
+  if (!enablePaymentPortalIntegration) {
+    return (
+      <td
+        className={className}
+        data-label={dataLabel}
+        data-testid="petition-payment-status"
+      >
+        {formattedCase.petitionPaymentStatus}
+      </td>
+    );
+  }
+
+  const canPayFilingFee =
+    formattedCase.petitionPaymentStatus === 'Not paid' &&
+    formattedCase.isRequestingUserAssociated;
+
+  return (
+    <td
+      className={className}
+      data-label={dataLabel}
+      data-testid="petition-payment-status"
+    >
+      {canPayFilingFee ? (
+        <Button
+          link
+          className="tw:font-light tw:underline-offset-3 tw:decoration-1"
+          data-testid="pay-filing-fee-button"
+          onClick={() => {
+            initMyCasesFilingFeePaymentSequence({
+              caseDetail: formattedCase,
+            });
+          }}
+        >
+          Pay now
+        </Button>
+      ) : (
+        formattedCase.petitionPaymentStatus
+      )}
+    </td>
+  );
+};
+
 export const CaseListRowExternal = ({
   enablePaymentPortalIntegration,
   formattedCase,
@@ -69,30 +124,14 @@ export const CaseListRowExternal = ({
                 </Button>
               </td>
             )}
-            {showFilingFee && !enablePaymentPortalIntegration && (
-              <td data-testid="petition-payment-status">
-                {formattedCase.petitionPaymentStatus}
-              </td>
-            )}
-            {showFilingFee && enablePaymentPortalIntegration && (
-              <td data-testid="petition-payment-status">
-                {formattedCase.petitionPaymentStatus === 'Not paid' ? (
-                  <Button
-                    link
-                    className="tw:font-light tw:underline-offset-3 tw:decoration-1"
-                    data-testid="pay-filing-fee-button"
-                    onClick={() => {
-                      initMyCasesFilingFeePaymentSequence({
-                        caseDetail: formattedCase,
-                      });
-                    }}
-                  >
-                    Pay now
-                  </Button>
-                ) : (
-                  formattedCase.petitionPaymentStatus
-                )}
-              </td>
+            {showFilingFee && (
+              <FilingFeeStatus
+                enablePaymentPortalIntegration={enablePaymentPortalIntegration}
+                formattedCase={formattedCase}
+                initMyCasesFilingFeePaymentSequence={
+                  initMyCasesFilingFeePaymentSequence
+                }
+              />
             )}
           </tr>
           {formattedCase.consolidatedCases &&
@@ -183,46 +222,20 @@ export const CaseListRowExternal = ({
               </Button>
             </td>
           )}
-          {showFilingFee && !enablePaymentPortalIntegration && (
-            <td
+          {showFilingFee && (
+            <FilingFeeStatus
               className={classNames({
                 'consolidated-case-padding':
                   formattedCase.inConsolidatedGroup &&
                   !formattedCase.isLeadCase,
               })}
-              data-label="Filing Fee*"
-              data-testid="petition-payment-status"
-            >
-              {formattedCase.petitionPaymentStatus}
-            </td>
-          )}
-          {showFilingFee && enablePaymentPortalIntegration && (
-            <td
-              className={classNames({
-                'consolidated-case-padding':
-                  formattedCase.inConsolidatedGroup &&
-                  !formattedCase.isLeadCase,
-              })}
-              data-label="Filing Fee*"
-              data-testid="petition-payment-status"
-            >
-              {formattedCase.petitionPaymentStatus === 'Not paid' ? (
-                <Button
-                  link
-                  className="tw:font-light tw:underline-offset-3 tw:decoration-1"
-                  data-testid="pay-filing-fee-button"
-                  onClick={() => {
-                    initMyCasesFilingFeePaymentSequence({
-                      caseDetail: formattedCase,
-                    });
-                  }}
-                >
-                  Pay now
-                </Button>
-              ) : (
-                formattedCase.petitionPaymentStatus
-              )}
-            </td>
+              dataLabel="Filing Fee*"
+              enablePaymentPortalIntegration={enablePaymentPortalIntegration}
+              formattedCase={formattedCase}
+              initMyCasesFilingFeePaymentSequence={
+                initMyCasesFilingFeePaymentSequence
+              }
+            />
           )}
         </tr>
         {formattedCase.consolidatedCases &&

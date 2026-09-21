@@ -80,6 +80,17 @@ describe('CaseListRowExternal filing fee payment control', () => {
       buttons.push(node);
     }
 
+    if (
+      typeof node.type === 'function' &&
+      node.type.name === 'FilingFeeStatus'
+    ) {
+      const rendered = (node.type as (props: unknown) => React.ReactNode)(
+        node.props,
+      );
+      collectPayButtons(rendered, buttons);
+      return buttons;
+    }
+
     collectPayButtons(node.props.children, buttons);
     return buttons;
   };
@@ -117,6 +128,18 @@ describe('CaseListRowExternal filing fee payment control', () => {
 
     expect(markup).not.toContain('pay-filing-fee-button');
     expect(markup).toContain(PAYMENT_STATUS.WAIVED);
+  });
+
+  it('should not render Pay now when the user is not associated with the case', () => {
+    const markup = renderMarkup({
+      formattedCase: {
+        ...unpaidCase,
+        isRequestingUserAssociated: false,
+      },
+    });
+
+    expect(markup).not.toContain('pay-filing-fee-button');
+    expect(markup).toContain(PAYMENT_STATUS.UNPAID);
   });
 
   it('should render Pay now for unpaid cases and invoke the sequence from desktop and mobile controls', () => {
