@@ -23,6 +23,7 @@ import { updateTrialSession } from '@web-api/persistence/postgres/trialSessions/
 import { createOrUpdateTrialSessionCases } from '@web-api/persistence/postgres/trialSessions/createOrUpdateTrialSessionCases';
 import { deleteCasesFromTrialSession } from '@web-api/persistence/postgres/trialSessions/deleteCasesFromTrialSession';
 import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
+import { updateCaseAutomaticBlock } from '@web-api/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock';
 
 export const setTrialSessionCalendarInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -122,34 +123,55 @@ export const setTrialSessionCalendarInteractor = async (
       identifiers: docketNumbersToLock.map(item => `case|${item}`),
     });
 
-    const manuallyAddedQcCompleteCaseEntities =
-      manuallyAddedQcCompleteCases.map(c => {
+    const manuallyAddedQcCompleteCaseEntities = await Promise.all(
+      manuallyAddedQcCompleteCases.map(async c => {
         const theCase = new Case(c, { authorizedUser });
         theCase.setAsCalendared(trialSessionEntity);
+        await updateCaseAutomaticBlock({
+          caseEntity: theCase,
+          hasCaseDeadline: false,
+        });
         return theCase.validate().toRawObject();
-      });
+      }),
+    );
 
-    const caseOrdersToAdd: TCaseOrder[] = [];
     const caseOrdersToDelete: TCaseOrder[] = [];
 
-    const eligibleCaseEntities = eligibleCases.map(c => {
-      const theCase = new Case(c, { authorizedUser });
-      theCase.setAsCalendared(trialSessionEntity);
-      caseOrdersToAdd.push(trialSessionEntity.addCaseToCalendar(theCase));
-      return theCase.validate().toRawObject();
-    });
+    const calendaredEligibleCases = await Promise.all(
+      eligibleCases.map(async c => {
+        const theCase = new Case(c, { authorizedUser });
+        theCase.setAsCalendared(trialSessionEntity);
+        await updateCaseAutomaticBlock({
+          caseEntity: theCase,
+          hasCaseDeadline: false,
+        });
+        return theCase;
+      }),
+    );
 
-    const manuallyAddedQcIncompleteCaseEntities =
-      manuallyAddedQcIncompleteCases.map(c => {
+    // caseOrder drives the trial calendar sequence, so it is built in a synchronous
+    // pass rather than from within the concurrent map above.
+    const caseOrdersToAdd: TCaseOrder[] = calendaredEligibleCases.map(theCase =>
+      trialSessionEntity.addCaseToCalendar(theCase),
+    );
+
+    const eligibleCaseEntities = calendaredEligibleCases.map(theCase =>
+      theCase.validate().toRawObject(),
+    );
+
+    const manuallyAddedQcIncompleteCaseEntities = await Promise.all(
+      manuallyAddedQcIncompleteCases.map(async c => {
         const theCase = new Case(c, { authorizedUser });
         theCase.removeFromTrialWithAssociatedJudge();
+        await updateCaseAutomaticBlock({ caseEntity: theCase });
         caseOrdersToDelete.push(
           trialSessionEntity.deleteCaseFromCalendar({
             docketNumber: theCase.docketNumber,
           })!,
         );
         return theCase.validate().toRawObject();
-      });
+      }),
+    );
 
     const caseEntitiesToCalendar = [
       ...manuallyAddedQcCompleteCaseEntities,
