@@ -1,4 +1,4 @@
-name: Security - No New Findings
+name: Security - No Increase In Findings
 
 # Fails a pull request that carries more security findings than staging, the way
 # typescript-error-check.yml fails one that carries more type errors. Both sides are

@@ -28,8 +28,15 @@ Removing a scan does not clear alerts it already reported. Existing alerts have 
 | `node:24` | Docker Hub | Batch processing base |
 
 `efcms-local` is `FROM ef-cms-us-east-1` plus `COPY . /home/app` and `npm ci`. It installs no OS
-packages, so scanning it restated the base image's CVEs under a second image name and produced
-roughly 2,500 duplicate alerts. It is still built for the PDF and integration test workflows.
+packages, so the CVEs reported against the image itself restated the base image's, under a second
+image name: 3,327 of its staging alerts duplicated `trivy-baseline-base` exactly.
+
+The `npm ci` layer is not duplicated. Around 180 alerts sit under real file paths, mostly
+vulnerable dependencies bundled inside the Cypress binary in `~/.cache`, and those appear in no
+other category. Retiring this scan gives that up. It is an accepted trade: `efcms-local` is a
+local dev and CI test runner that is never deployed, and dependencies declared in a lockfile are
+still covered by the full-tree scan in `security-supply-chain.yml`. The image is still built for
+the PDF and integration test workflows.
 
 ## Scan types
 

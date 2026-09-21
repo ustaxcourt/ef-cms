@@ -17,7 +17,8 @@ runs:
   using: composite
   steps:
     - name: Summarize SARIF
-      if: always() && hashFiles(inputs.sarif_file) != ''
+      # No hashFiles guard: the script reports a missing report, which a skipped step cannot.
+      if: always()
       shell: bash
       env:
         MAX_RULES: ${{ inputs.max_rules }}
