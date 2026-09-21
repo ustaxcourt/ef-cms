@@ -1,8 +1,10 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import {
   ALLOWLIST_FEATURE_FLAGS,
+  PAYMENT_FILING_FEE_ORIGIN,
   PAYMENT_PORTAL_FEE_TYPES,
   PAYMENT_STATUS,
+  type PaymentFilingFeeOrigin,
 } from '@shared/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { InitPaymentRequest } from '@ustaxcourt/payment-portal';
@@ -23,7 +25,7 @@ import {
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
-export type FilingFeePaymentReturnOrigin = 'dashboard' | 'petition';
+export type FilingFeePaymentReturnOrigin = PaymentFilingFeeOrigin;
 
 function buildPaymentReturnQuery(
   params: Record<string, string | undefined>,
@@ -127,8 +129,14 @@ export const initPayment = async (
     })}`,
     urlCancel: `${domain}/payment-cancel${buildPaymentReturnQuery({
       docketNumber,
-      origin: filingFeeReturnOrigin === 'dashboard' ? 'dashboard' : undefined,
-      page: filingFeeReturnOrigin === 'dashboard' ? returnPageQuery : undefined,
+      origin:
+        filingFeeReturnOrigin === PAYMENT_FILING_FEE_ORIGIN.DASHBOARD
+          ? PAYMENT_FILING_FEE_ORIGIN.DASHBOARD
+          : undefined,
+      page:
+        filingFeeReturnOrigin === PAYMENT_FILING_FEE_ORIGIN.DASHBOARD
+          ? returnPageQuery
+          : undefined,
     })}`,
     metadata: {
       docketNumber,

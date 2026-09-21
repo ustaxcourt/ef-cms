@@ -1,3 +1,4 @@
+import { PAYMENT_FILING_FEE_ORIGIN } from '@shared/business/entities/EntityConstants';
 import { paymentCancelRouteByOriginAction } from '@web-client/presenter/actions/FilingFee/paymentCancelRouteByOriginAction';
 import { presenter } from '@web-client/presenter/presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
@@ -22,7 +23,7 @@ describe('paymentCancelRouteByOriginAction', () => {
 
     const { state } = await runAction(paymentCancelRouteByOriginAction, {
       modules: { presenter },
-      props: { origin: 'dashboard' },
+      props: { origin: PAYMENT_FILING_FEE_ORIGIN.DASHBOARD },
     });
 
     expect(replaceStateSpy).toHaveBeenCalledWith({}, '', '/');

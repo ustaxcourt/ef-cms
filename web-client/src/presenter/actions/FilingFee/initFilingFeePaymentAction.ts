@@ -1,5 +1,5 @@
+import { PAYMENT_FILING_FEE_ORIGIN } from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
-import { PAYMENT_FILLING_FEE_ORIGIN } from '@web-client/presenter/actions/FilingFee/paymentFillingFeeOrigin';
 import { getOneBasedPageForFilingFeeReturn } from '@web-client/utilities/useClientSidePaginator';
 
 export const initFilingFeePaymentAction = async ({
@@ -10,7 +10,7 @@ export const initFilingFeePaymentAction = async ({
 }: ActionProps) => {
   const caseDetail = get(state.caseDetail);
   const originDashboard =
-    get(state.paymentFillingFeeOrigin) === PAYMENT_FILLING_FEE_ORIGIN.DASHBOARD;
+    get(state.paymentFillingFeeOrigin) === PAYMENT_FILING_FEE_ORIGIN.DASHBOARD;
 
   try {
     const filingFeeReturnPage = originDashboard
@@ -21,7 +21,9 @@ export const initFilingFeePaymentAction = async ({
       .getUseCases()
       .initPaymentInteractor(applicationContext, {
         docketNumber: caseDetail.docketNumber,
-        filingFeeReturnOrigin: originDashboard ? 'dashboard' : 'petition',
+        filingFeeReturnOrigin: originDashboard
+          ? PAYMENT_FILING_FEE_ORIGIN.DASHBOARD
+          : PAYMENT_FILING_FEE_ORIGIN.PETITION,
         ...(filingFeeReturnPage !== undefined ? { filingFeeReturnPage } : {}),
       });
     window.location.href = result.paymentRedirect;

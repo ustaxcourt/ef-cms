@@ -1,7 +1,8 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { put } from '@web-client/proxies/requests';
+import { type PaymentFilingFeeOrigin } from '@shared/business/entities/EntityConstants';
 
-export type FilingFeePaymentReturnOrigin = 'dashboard' | 'petition';
+export type FilingFeePaymentReturnOrigin = PaymentFilingFeeOrigin;
 
 export const initPaymentInteractor = (
   applicationContext: ClientApplicationContext,
