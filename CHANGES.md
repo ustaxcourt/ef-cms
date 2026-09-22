@@ -43,7 +43,7 @@ Documented in [dependency-updates.md](docs/dependency-updates.md) (notes stamped
 - **@joi/date 3** — blocked ([#10383](https://github.com/ustaxcourt/ef-cms/issues/10383)); remain on **2.1.1**.
 - **Cerebral** stack and **babel-plugin-cerebral** — unchanged.
 - **Quill 1.3.7** / **quill-delta-to-html 0.12.1** — unchanged (Word editor migration).
-- **DWT** — unchanged (**19.4.3**); not part of weekly npm rotation.
+- **DWT** — no new releases this rotation; remain on **19.4.3**.
 - **@fortawesome** — vulnerability-only; unchanged.
 - **pdfjs-dist** — unchanged (**6.3.289**); no Lambda PDF re-validation required this rotation.
 - **Puppeteer 25.11.0** / **@sparticuz/chromium 153.0.0** — already latest; root and `web-api/runtimes/puppeteer` stay aligned.
