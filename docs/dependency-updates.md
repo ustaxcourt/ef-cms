@@ -514,7 +514,7 @@ If an update is available for DWT:
 
 ### @types/node
 **Installed Version: 24.13.6**
-The major version of this package should match our major version of Node. We should use a package that starts with 24. <b>However</b>, the current installed version is 24.13.6, which <b>does not match the current installed version of Node</b> (`24.20.0` in `.nvmrc`). It is a known issue and another attempt will be made at the next Node.js and @types/node update.
+The major version of this package should match our major version of Node. We should use a package that starts with 24. <b>However</b>, the current installed version is 24.13.6, which <b>does not match the current installed version of Node</b> (`24.21.0` in `.nvmrc`). It is a known issue and another attempt will be made at the next Node.js and @types/node update.
 
 - [Dependencies 03 09 2026](https://github.com/ustaxcourt/ef-cms/pull/9465/files), Node.js was `v24.14.0`, but `@types/node` could not be updated to `24.14.0`, so it stayed pinned at `24.12.0`.
 
@@ -534,7 +534,7 @@ The major version of this package should match our major version of Node. We sho
 
 - As of 8/10/2026: **24.13.3** remains the latest published version under major `24` (latest overall is 26.2.0). No change.
 
-- As of 9/17/2026: updated to **24.13.5**, the latest published version under major `24`. No `24.14+` published yet, so it still does not match Node.js `v24.20.0` in `.nvmrc`. Updated in both `package.json` and `web-api/terraform/modules/batch/docker-image/package.json`.
+- As of 9/17/2026: updated to **24.13.5**, the latest published version under major `24`. No `24.14+` published yet, so it still does not match Node.js `v24.21.0` in `.nvmrc`. Updated in both `package.json` and `web-api/terraform/modules/batch/docker-image/package.json`.
 - As of 9/22/2026: updated to **24.13.6**, the latest published version under major `24`. No `24.14+` published yet. Updated in both `package.json` and `web-api/terraform/modules/batch/docker-image/package.json`.
 
 ### TypeScript
