@@ -34,6 +34,24 @@ Repo Postgres images are `17.10-bookworm`. If your cluster is not on `17.10` yet
 
 No upgrade this rotation. AWS OpenSearch Service latest engine version is **OpenSearch_3.7**; local Docker and GitHub Actions already use **3.7.0**. No `ES_ENGINE_VERSION` change, indices report, or experimental deploy validation is required unless `aws opensearch list-versions` (from your exp env after assuming credentials) lists a version newer than **OpenSearch_3.7**.
 
+## Caveats (still blocked or unchanged)
+
+Documented in [dependency-updates.md](docs/dependency-updates.md) (notes stamped **9/22/2026** where applicable):
+
+- **eslint 10** — still blocked by `eslint-plugin-jsx-a11y` / `eslint-plugin-react`; remain on **9.39.5** with `@eslint/js`.
+- **@babel 8** — blocked by `esbuild-plugin-babel-cached` and `ts-jest` peers; remain on **7.29.7**.
+- **@joi/date 3** — blocked ([#10383](https://github.com/ustaxcourt/ef-cms/issues/10383)); remain on **2.1.1**.
+- **Cerebral** stack and **babel-plugin-cerebral** — unchanged.
+- **Quill 1.3.7** / **quill-delta-to-html 0.12.1** — unchanged (Word editor migration).
+- **DWT** — unchanged (**19.4.3**); not part of weekly npm rotation.
+- **@fortawesome** — vulnerability-only; unchanged.
+- **pdfjs-dist** — unchanged (**6.3.289**); no Lambda PDF re-validation required this rotation.
+- **Puppeteer 25.11.0** / **@sparticuz/chromium 153.0.0** — already latest; root and `web-api/runtimes/puppeteer` stay aligned.
+- **@types/node 24.13.6** — latest under major 24; still does not match Node **24.21.0** patch (known).
+- **TypeScript** dual alias (**7.0.2** / **6.0.2**) and batch Dockerfile global install — unchanged.
+
+After pulling this branch locally, run `npm ci` at the repo root, then `npm ci` in `web-api/runtimes/puppeteer` and `web-api/terraform/modules/batch/docker-image` if lockfiles changed.
+
 </details>
 <details><summary>Dependency Updates - Week of 2026-09-14</summary>
 
