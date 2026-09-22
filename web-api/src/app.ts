@@ -225,6 +225,7 @@ import { unsealCaseContactAddressLambda } from '@web-api/lambdas/cases/unsealCas
 import { initPaymentLambda } from '@web-api/lambdas/paymentPortal/initPaymentLambda';
 import { processPaymentLambda } from '@web-api/lambdas/paymentPortal/processPaymentLambda';
 import { getTransactionDetailsLambda } from '@web-api/lambdas/paymentPortal/getTransactionDetailsLambda';
+import { exchangeAuthCodeLambda } from '@web-api/lambdas/auth/exchangeAuthCodeLambda';
 
 export const app = express();
 
@@ -1222,6 +1223,7 @@ app.post(
     .delete(lambdaWrapper(deleteAuthCookieLambda))
     .post(lambdaWrapper(loginLambda));
   app.post('/auth/refresh', lambdaWrapper(renewIdTokenLambda));
+  app.post('/auth/code', lambdaWrapper(exchangeAuthCodeLambda));
   app.post('/auth/confirm-signup', lambdaWrapper(confirmSignUpLambda));
   app.post('/auth/account/create', lambdaWrapper(signUpUserLambda));
   app.post('/auth/change-password', lambdaWrapper(changePasswordLambda));
