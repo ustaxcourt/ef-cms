@@ -461,6 +461,7 @@ If an update is available for DWT:
 - As of 8/10/2026: Puppeteer **25.5.0** is available. Still blocked — `@sparticuz/chromium` latest on npm remains **149.0.0**; puppeteer 25.2.x and above require Chrome for Testing 150.x.
 - As of 9/8/2026: `@sparticuz/chromium` version **152.0.0** has been released, so we have now upgraded to Puppeteer **25.5.10**
 - As of 9/17/2026: upgraded to Puppeteer **25.11.0** with `@sparticuz/chromium` **153.0.0** in both `package.json` and `web-api/runtimes/puppeteer/package.json`.
+- As of 9/22/2026: Puppeteer **25.11.0** and `@sparticuz/chromium` **153.0.0** remain the latest on npm; versions already match in `package.json` and `web-api/runtimes/puppeteer/package.json`. No change.
 
 ### ws, 3rd party dependency of Cerebral
 
@@ -482,14 +483,15 @@ If an update is available for DWT:
 
 ### jest and jest-environment-jsdom
 **Installed Versions:**
-**jest: 30.5.1**
-**jest-environment-jsdom: 30.5.1**
-**babel-jest: 30.5.1**
+**jest: 30.5.2**
+**jest-environment-jsdom: 30.5.2**
+**babel-jest: 30.5.2**
 
 - Upgrade `jest`, `babel-jest`, and `jest-environment-jsdom` together manually rather than via the upgrade script. `babel-jest` is also excluded by the upgrade script's `caveats` array. Verify the full unit test suites after any bump.
 - On June 26, 2025, newer versions of `jest` conflicted with `ts-jest` 29.x; we stayed on Jest 29 until `ts-jest` caught up.
 - On June 30, 2025, a `jest-environment-jsdom` bump caused failures in unit tests that use `Object.defineProperty` (for example, `getPdfJs.test.ts`). Re-test those specs before removing this pin.
 - On September 9, 2026, we were able to upgrade `jest`, `jest-environment-jsdom`, and `babel-jest` to **30.5.1** successfully
+- As of 9/22/2026: upgraded `jest`, `jest-environment-jsdom`, and `babel-jest` together to **30.5.2** (latest). Re-ran `shared/src/business/utilities/pdfs/getPdfJs.test.ts` successfully after the bump.
 
 ### websocket
 **Installed Version: 1.0.35**
@@ -511,8 +513,8 @@ If an update is available for DWT:
 - As of 9/17/2026: `@babel/core` **8.0.5** is available. Tracked in DevEx ticket [#10428](https://github.com/ustaxcourt/ef-cms/issues/10428). There is a second blocker: `ts-jest@29.4.12` declares peer `@babel/core <8`, so replacing `esbuild-plugin-babel-cached` alone will not unblock the upgrade. The plugin is ~50 lines (`babel.loadOptions` + `babel.transform`) used solely by `esbuildHelper.mjs`, so it could be inlined into the repo rather than republished to npm.
 
 ### @types/node
-**Installed Version: 24.13.5**
-The major version of this package should match our major version of Node. We should use a package that starts with 24. <b>However</b>, the current installed version is 24.13.5, which <b>does not match the current installed version</b>. It is a known issue and another attempt will be made at the next Node.js and @types/node update.
+**Installed Version: 24.13.6**
+The major version of this package should match our major version of Node. We should use a package that starts with 24. <b>However</b>, the current installed version is 24.13.6, which <b>does not match the current installed version of Node</b> (`24.20.0` in `.nvmrc`). It is a known issue and another attempt will be made at the next Node.js and @types/node update.
 
 - [Dependencies 03 09 2026](https://github.com/ustaxcourt/ef-cms/pull/9465/files), Node.js was `v24.14.0`, but `@types/node` could not be updated to `24.14.0`, so it stayed pinned at `24.12.0`.
 
@@ -533,6 +535,7 @@ The major version of this package should match our major version of Node. We sho
 - As of 8/10/2026: **24.13.3** remains the latest published version under major `24` (latest overall is 26.2.0). No change.
 
 - As of 9/17/2026: updated to **24.13.5**, the latest published version under major `24`. No `24.14+` published yet, so it still does not match Node.js `v24.20.0` in `.nvmrc`. Updated in both `package.json` and `web-api/terraform/modules/batch/docker-image/package.json`.
+- As of 9/22/2026: updated to **24.13.6**, the latest published version under major `24`. No `24.14+` published yet. Updated in both `package.json` and `web-api/terraform/modules/batch/docker-image/package.json`.
 
 ### TypeScript
 **Installed Version: 7.0.2 and 6.0.2**
@@ -600,6 +603,7 @@ error: too many arguments. Expected 0 arguments but got 2.
 - As of July 27, 2026: eslint **10.8.0** and `@eslint/js` **10.0.1** are available. Still blocked — `eslint-plugin-jsx-a11y` peer is `^3 || … || ^9` and `eslint-plugin-react` peer is `^3 || … || ^9.7`; neither accepts eslint 10. Latest 9.x remains **9.39.5**.
 - As of 8/10/2026: eslint **10.8.1** and `@eslint/js` **10.0.1** are available. Still blocked — `eslint-plugin-jsx-a11y` and `eslint-plugin-react` peers do not accept eslint 10. Latest 9.x remains **9.39.5**.
 - As of 9/17/2026: eslint **10.10.0** is available. Still blocked as`eslint-plugin-jsx-a11y@6.10.2` and `eslint-plugin-react@7.37.5` are still the latest releases and neither accepts eslint 10. No DevEx ticket exists yet; a possible path is evaluating replacements for both plugins that support eslint 10. The other lint packages we use (`eslint-config-prettier`, `eslint-plugin-jest`, `typescript-eslint`) already accept eslint 10. Unblocking eslint 10 would also unblock `eslint-plugin-cypress` 7.x, which requires `eslint >=10`.
+- As of 9/22/2026: eslint **10.x** remains blocked by `eslint-plugin-jsx-a11y` and `eslint-plugin-react` peers. Latest 9.x patches remain **9.39.5** for both `eslint` and `@eslint/js`; already installed. TypeScript dual alias (`typescript@npm:@typescript/typescript6@6.0.2`, `@typescript/native@npm:typescript@7.0.2`) and batch `Dockerfile` global install unchanged — **7.0.2** / **6.0.2** are still latest on npm.
 
 ### eslint-plugin-cypress
 **Installed Version: 6.4.4**
