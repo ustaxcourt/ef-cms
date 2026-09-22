@@ -40,7 +40,7 @@ jobs:
             username: petitioner@example.com
     services:
       postgres:
-        image: postgres
+        image: postgres:17.10-bookworm
         env:
           POSTGRES_PASSWORD: example
         options: >-
@@ -132,7 +132,7 @@ jobs:
       CI: true
     services:
       postgres:
-        image: postgres
+        image: postgres:17.10-bookworm
         env:
           POSTGRES_PASSWORD: example
         options: >-

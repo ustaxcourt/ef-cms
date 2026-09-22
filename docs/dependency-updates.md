@@ -327,7 +327,7 @@ These are Docker images used as service containers in workflow jobs (e.g. the Po
 |---|---|---|
 | `postgres` | `security-dast.yml` (dast-api, dast-web), all `template_app*.yml` workflows | See §5.4 above — keep in sync with local and CircleCI postgres version |
 
-> Currently `image: postgres` is unpinned (floats to latest). When §5.4 is executed, pin it to a specific tag (e.g. `postgres:17.5-bookworm`) here too.
+> GHA service containers use a pinned tag (e.g. `postgres:17.10-bookworm`); keep in sync with local `docker-compose.yml` per §5.4.
 
 #### 8.1 Semgrep container image
 

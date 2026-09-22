@@ -127,7 +127,7 @@ const scriptConfig: ScriptConfig = {
       type: 'string',
     },
     rdsEngineVersion: {
-      default: '17.5',
+      default: '17.10',
       long: 'rds-engine-version',
       type: 'string',
     },
