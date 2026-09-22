@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 
 # Renders a SARIF report as a markdown table in the job summary and the workflow log.
-# Scanners upload SARIF only from staging pushes and PRs into staging, so on every other
-# run this output is the only place the findings are visible.
+# On runs that do not upload SARIF, this is the only place findings are visible.
 
 set -euo pipefail
 

@@ -9,11 +9,9 @@ import {
 } from './compare-security-findings.helpers';
 
 /*
- Compares SARIF finding counts on this branch against staging, the way
- compareTypescriptErrors.ts compares type error counts. This enforces no net increase: a
- finding that replaces another of equal count passes, as it does for type errors. Both sides are scanned in the same
- job so they share a vulnerability database, and a newly published CVE cannot fail a
- pull request on its own.
+ Compares SARIF finding counts against staging, like compareTypescriptErrors.ts does for
+ type errors. Enforces no net increase, and scans both sides in one job so a newly
+ published CVE cannot fail a pull request on its own.
 
  Usage: compare-security-findings.ts <tool>:<branch.sarif>:<staging.sarif> ...
 */

@@ -1,9 +1,7 @@
 name: Security - No Increase In Findings
 
-# Fails a pull request that carries more security findings than staging, the way
-# typescript-error-check.yml fails one that carries more type errors. Both sides are
-# scanned in the same job, so they share a vulnerability database and a newly published
-# CVE cannot fail a pull request on its own.
+# Fails a pull request carrying more security findings than staging, like
+# typescript-error-check.yml does for type errors. Both sides are scanned in one job.
 
 on:
   pull_request:
