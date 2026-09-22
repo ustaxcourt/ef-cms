@@ -2,18 +2,11 @@
 
 # Dismisses the efcms-local Trivy alerts that duplicate ef-cms-us-east-1.
 #
-# Only alerts whose location is the image itself are dismissed. Alerts under real file
-# paths come from the npm ci layer and are not duplicated in the base image reports.
+# efcms-local is FROM ef-cms-us-east-1 plus COPY and npm ci, so its image-level CVEs
+# restate the base image's. Only those are dismissed: alerts under real file paths come
+# from the npm ci layer and exist in no other category.
 #
-# efcms-local is FROM ef-cms-us-east-1 plus COPY and npm ci, so it installs no OS
-# packages and Trivy restated the base image's CVEs under a second image name.
-# The scan was removed for #10412, but removing a scan does not close the alerts it
-# already filed: no further analysis is uploaded for those categories, so they stay
-# open until dismissed. The same CVEs remain tracked under the base image categories.
-#
-# These categories are no longer scanned, so no further analysis is uploaded for them and
-# the severity filter cannot close their below-threshold alerts. Every duplicate listed
-# here has to be dismissed explicitly.
+# The scan was removed for #10412, so nothing will close these alerts automatically.
 #
 # Usage
 #   ./dismiss-duplicate-local-alerts.sh           # dry run; lists what would be dismissed
@@ -26,8 +19,7 @@ set -euo pipefail
 REPO="${REPO:-ustaxcourt/ef-cms}"
 REF="${REF:-refs/heads/staging}"
 CATEGORIES=("trivy-baseline-local" "trivy-image-local")
-# Only the image rows duplicate the base image. Findings under real file paths come from
-# the npm ci layer (app dependencies, the Cypress cache) and exist in no other category.
+# Only the image rows duplicate the base image.
 IMAGE_PATH_PREFIX="${IMAGE_PATH_PREFIX:-library/efcms-local}"
 # GitHub accepts exactly: "false positive", "won't fix", "used in tests"
 DEFAULT_DISMISS_REASON="won't fix"
