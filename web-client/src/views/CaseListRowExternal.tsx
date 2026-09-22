@@ -44,7 +44,6 @@ const FilingFeeStatus = ({
       {canPayFilingFee ? (
         <Button
           link
-          className="tw:font-light tw:underline-offset-3 tw:decoration-1"
           data-testid="pay-filing-fee-button"
           onClick={() => {
             initMyCasesFilingFeePaymentSequence({
