@@ -196,7 +196,9 @@ We run postgres via Docker locally and in GitHub Actions. The postgres image we 
    ```bash
    curl -s "https://registry.hub.docker.com/v2/repositories/library/postgres/tags?page_size=100" | jq -r '.results[].name' | sort -V
    ```
-1. The correct tag to use is the target version of postgres plus the Debian codename (e.g. `17.5-bookworm` for postgres 17.5 on Debian bookworm). Generally, the `postgres` images in Dockerhub will have newer versions of postgres than Aurora RDS has available, so don't be alarmed by this discrepancy.
+1. Pin local and GHA service containers to the published version tag on Docker Hub (e.g. `postgres:17.10`). Confirm the tag exists before merging. Generally, Docker Hub Postgres versions run ahead of Aurora RDS; do not assume the local image patch must match `RDS_ENGINE_VERSION` exactly.
+
+> **As of 9/22/2026:** Local `docker-compose.yml`, `web-api/src/persistence/postgres/docker-compose.yml`, and GHA `postgres` service containers use **`postgres:17.10`**. Aurora **`RDS_ENGINE_VERSION`** for new deploy defaults remains **`17.10`**. Optional `{version}-{debian-codename}` tags (from §5.2 step 1) are not required when the plain version tag is published.
 
 #### 5.3 Update PostgreSQL to the latest version locally
 
@@ -329,7 +331,7 @@ These are Docker images used as service containers in workflow jobs (e.g. the Po
 |---|---|---|
 | `postgres` | `security-dast.yml` (dast-api, dast-web), all `template_app*.yml` workflows | See §5.4 above — keep in sync with local and CircleCI postgres version |
 
-> GHA service containers use a pinned tag (e.g. `postgres:17.10-bookworm`); keep in sync with local `docker-compose.yml` per §5.4.
+> GHA service containers use a pinned tag (e.g. `postgres:17.10`); keep in sync with local `docker-compose.yml` per §5.2–§5.4. Aurora `RDS_ENGINE_VERSION` (e.g. `17.10`) is the deployed engine version and may differ from the newest Postgres patch on Docker Hub.
 
 #### 8.1 Semgrep container image
 

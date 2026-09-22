@@ -23,7 +23,7 @@ npm run ecr:check-version
 
 #### Aurora PostgreSQL `17.10` — experimental environment owners
 
-Repo Postgres images are `17.10-bookworm`. If your cluster is not on `17.10` yet (e.g. exp2–exp6, exp8–exp9 on `17.5`; exp3 on `17.9`), upgrade **your** env only, one at a time:
+Repo Postgres images are `17.10`. If your cluster is not on `17.10` yet (e.g. exp2–exp6, exp8–exp9 on `17.5`; exp3 on `17.9`), upgrade **your** env only, one at a time:
 
 1. `. scripts/env/set-env.zsh expN`
 2. `scripts/secrets/update-secret.ts --key "RDS_ENGINE_VERSION" --value "17.10"`
