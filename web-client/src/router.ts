@@ -1639,12 +1639,21 @@ const router = {
       return app.getSequence('gotoMaintenanceSequence')();
     });
 
-    registerRoute('/payment-success/*', docketNumber => {
-      return app.getSequence('paymentSuccessSequence')({ docketNumber });
+    registerRoute('/payment-success..', () => {
+      const { docketNumber, page } = route.query();
+      return app.getSequence('paymentSuccessSequence')({
+        docketNumber,
+        page,
+      });
     });
 
-    registerRoute('/payment-cancel/*', docketNumber => {
-      return app.getSequence('paymentCancelSequence')({ docketNumber });
+    registerRoute('/payment-cancel..', () => {
+      const { docketNumber, origin, page } = route.query();
+      return app.getSequence('paymentCancelSequence')({
+        docketNumber,
+        origin,
+        page,
+      });
     });
 
     registerRoute(

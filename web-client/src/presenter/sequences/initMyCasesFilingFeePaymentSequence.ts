@@ -2,13 +2,16 @@ import { clearErrorAlertsAction } from '@web-client/presenter/actions/clearError
 import { initFilingFeePaymentAction } from '@web-client/presenter/actions/FilingFee/initFilingFeePaymentAction';
 import { setWaitingForResponseAction } from '@web-client/presenter/actions/setWaitingForResponseAction';
 import { unsetWaitingForResponseAction } from '@web-client/presenter/actions/unsetWaitingForResponseAction';
+import { setCasePaymentFilingFeeAction } from '@web-client/presenter/actions/setCasePaymentFilingFeeAction';
+import { unsetCasePaymentFilingFeeAction } from '@web-client/presenter/actions/unsetCasePaymentFilingFeeAction';
 
-export const initFilingFeePaymentSequence = [
+export const initMyCasesFilingFeePaymentSequence = [
   clearErrorAlertsAction,
+  setCasePaymentFilingFeeAction,
   setWaitingForResponseAction,
   initFilingFeePaymentAction,
   {
-    success: [unsetWaitingForResponseAction],
-    error: [unsetWaitingForResponseAction],
+    success: [unsetWaitingForResponseAction, unsetCasePaymentFilingFeeAction],
+    error: [unsetWaitingForResponseAction, unsetCasePaymentFilingFeeAction],
   },
 ];
