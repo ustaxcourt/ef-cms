@@ -30,6 +30,10 @@ Repo Postgres images are `17.10-bookworm`. If your cluster is not on `17.10` yet
 3. Deploy **`court/experimentalN`**
 4. During the CircleCI **`deploy`** job, follow [dependency-updates.md §5.1](docs/dependency-updates.md)
 
+#### OpenSearch engine (§6)
+
+No upgrade this rotation. AWS OpenSearch Service latest engine version is **OpenSearch_3.7**; local Docker and GitHub Actions already use **3.7.0**. No `ES_ENGINE_VERSION` change, indices report, or experimental deploy validation is required unless `aws opensearch list-versions` (from your exp env after assuming credentials) lists a version newer than **OpenSearch_3.7**.
+
 </details>
 <details><summary>Dependency Updates - Week of 2026-09-14</summary>
 

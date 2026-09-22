@@ -270,6 +270,8 @@ If an OpenSearch update is available, we'll need to update OpenSearch in github 
 
 1. Search the project for `opensearch-version:` and make sure it's set to the latest version in `.github/actions/dawson-app-setup/action.yml`.
 
+> **As of 9/22/2026:** Amazon OpenSearch Service supports up to **OpenSearch_3.7** ([release notes, July 29, 2026](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/release-notes.html)). Upstream **3.8.0** is on Docker Hub but is not yet an AWS engine option. From an experimental environment (`. scripts/env/set-env.zsh expN`), confirm with `aws opensearch list-versions` and compare to `aws opensearch describe-domain --domain-name "efcms-search-${ENV}-${SOURCE_TABLE_VERSION}" --query "DomainStatus.EngineVersion" --output text`. Repo pins already match the AWS maximum: `ES_ENGINE_VERSION` default `OpenSearch_3.7` in `scripts/secrets/create-env-secrets.ts`, local `opensearchproject/opensearch:3.7.0` in `docker-compose.yml` and `web-api/elasticsearch/docker-compose.yml`, and `opensearch-version: 3.7.0` in `.github/actions/dawson-app-setup/action.yml`. No §6.1 secret update, indices report, deploy, or local/GHA bump this rotation.
+
 ### 7. Wrap up
 
 - Check through the list of caveats to see if any of the documented issues have been resolved.
