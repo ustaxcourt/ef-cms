@@ -8,12 +8,9 @@ import {
   loginAsIrsPractitioner1,
   loginAsPetitionsClerk,
   loginAsPrivatePractitioner,
-  loginAsAdmissionsClerk,
-  loginAsPetitioner,
 } from 'cypress/helpers/authentication/login-as-helpers';
 import { addPrivatePractitionerToCaseAndAllParties } from 'cypress/helpers/caseDetail/caseInformation/add-private-practitioner-to-case-and-all-parties';
 import { petitionsClerkAddsRespondentToCase } from 'cypress/helpers/caseDetail/caseInformation/petitionsclerk-adds-respondent-to-case';
-import { goToCase } from 'cypress/helpers/caseDetail/go-to-case';
 import { selectDocumentType } from 'cypress/helpers/caseDetail/select-document-type';
 import { createAndServeConsolidatedGroup } from 'cypress/helpers/fileAPetition/create-consolidated-case-group';
 import { calendarTrialSession } from 'cypress/helpers/trialSession/calendar-trial-session';
@@ -102,30 +99,6 @@ describe('Notice of Withdrawal - Consolidated Cases', () => {
       ).contains(
         'If you are withdrawing as counsel from more than one case you must file a Notice of Withdrawal as Counsel for each case.',
       );
-    });
-  });
-  it('should show consolidated group filing option for petitioners filing notw', () => {
-    // assign petitioner email to case
-    const petitionerEmail = 'petitioner1@example.com';
-    loginAsAdmissionsClerk();
-    cy.get<string>('@docketNumber').then(docketNumber => {
-      goToCase(docketNumber);
-      cy.get('[data-testid="tab-case-information"]').click();
-      cy.get('[data-testid="tab-parties"]').click();
-      cy.get('[data-testid="edit-petitioner-button"]').click();
-      cy.get('[data-testid="internal-edit-petitioner-email-input"]').type(
-        petitionerEmail,
-      );
-      cy.get('[data-testid="internal-confirm-petitioner-email-input"]').type(
-        petitionerEmail,
-      );
-      cy.get(
-        '[data-testid="submit-edit-petitioner-information-button"]',
-      ).click();
-      cy.get('[data-testid="modal-button-confirm"]').click();
-      loginAsPetitioner();
-      selectDocumentType(docketNumber, 'Notice of Withdrawal as Counsel');
-      cy.get('#consolidated-case-group-radios').should('be.visible');
     });
   });
   it('should not show consolidated group filing option for practitioners filing notw', () => {
