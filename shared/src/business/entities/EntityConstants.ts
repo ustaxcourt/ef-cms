@@ -1143,6 +1143,7 @@ export const PAYMENT_STATUS = {
   PAID: 'Paid',
   UNPAID: 'Not paid',
   WAIVED: 'Waived',
+  PENDING: 'Pending',
 };
 export type PaymentStatusTypes =
   (typeof PAYMENT_STATUS)[keyof typeof PAYMENT_STATUS];

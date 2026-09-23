@@ -96,6 +96,8 @@ export const processPayment = async (
     );
 
     currentCaseEntity.addDocketEntry(filingFeePaidEntry);
+  } else if (processResponse.paymentStatus === 'pending') {
+    currentCaseEntity.petitionPaymentStatus = PAYMENT_STATUS.PENDING;
   }
 
   delete currentCaseEntity.petitionPaymentToken;
