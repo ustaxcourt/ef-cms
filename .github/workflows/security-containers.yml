@@ -103,7 +103,7 @@ jobs:
       matrix:
         include:
           - name: puppeteer
-            image: node:24.16.0-slim
+            image: node:24.21.0-slim
           - name: batch
             image: node:24
     steps:
@@ -152,10 +152,10 @@ jobs:
           report_path: trivy-baseline-local.sarif
           category: trivy-baseline-local
 
-      - name: Trivy scan — node:24.16.0-slim (baseline)
+      - name: Trivy scan — node:24.21.0-slim (baseline)
         uses: ./.github/actions/dawson-trivy-image-scan
         with:
-          image_ref: node:24.16.0-slim
+          image_ref: node:24.21.0-slim
           report_path: trivy-baseline-puppeteer.sarif
           category: trivy-baseline-puppeteer
 
