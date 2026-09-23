@@ -33,6 +33,7 @@ At the moment, the only task we rotate is updating dependencies. As an open-sour
    # web-api/terraform/modules/batch/docker-image/package.json
    (cd web-api/terraform/modules/batch/docker-image && node ../../../../../scripts/npm/upgrade-npm-packages.ts)
    ```
+   
 1. After running, ensure all three package.json files are updated.
 
 #### 1.1 Run `npm outdated`
