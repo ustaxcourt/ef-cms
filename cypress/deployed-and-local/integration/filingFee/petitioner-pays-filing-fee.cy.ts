@@ -221,7 +221,7 @@ describe('Pay Filing Fee Through pay.gov', () => {
 
       cy.get(`[data-testid="${docketNumber}"]`)
         .find('[data-testid="petition-payment-status"]')
-        .should('have.text', 'Not paid');
+        .should('have.text', 'Pending');
 
       cy.get(`[data-testid="${docketNumber}"]`)
         .find('[data-testid="case-link"]')
@@ -229,7 +229,7 @@ describe('Pay Filing Fee Through pay.gov', () => {
 
       cy.get('[data-testid="tab-case-information"]').click();
 
-      cy.contains('[data-testid="case-filing-fee-information"]', 'Not paid');
+      cy.contains('[data-testid="case-filing-fee-information"]', 'Pending');
     });
   };
 
