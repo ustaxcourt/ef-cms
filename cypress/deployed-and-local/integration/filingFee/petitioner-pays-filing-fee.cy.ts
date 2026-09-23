@@ -1,4 +1,8 @@
 import {
+  createISODateAtStartOfDayEST,
+  formatDateString,
+} from '@shared/business/utilities/DateHandler';
+import {
   loginAsPetitioner,
   loginAsPrivatePractitioner,
 } from '../../../helpers/authentication/login-as-helpers';
@@ -28,6 +32,8 @@ describe('Pay Filing Fee Through pay.gov', () => {
       );
     }
   });
+
+  const today = formatDateString(createISODateAtStartOfDayEST(), 'MMDDYY');
 
   const payFeeSuccess = () => {
     cy.intercept('POST', '**/cases').as('postCase');
@@ -79,6 +85,21 @@ describe('Pay Filing Fee Through pay.gov', () => {
           'contain.text',
           `An email was sent confirming the filing fee was paid for docket number(s): ${docketNumber}`,
         );
+
+      cy.get(`[data-testid="${docketNumber}"]`)
+        .find('[data-testid="petition-payment-status"]')
+        .should('have.text', 'Paid');
+
+      cy.get(`[data-testid="${docketNumber}"]`)
+        .find('[data-testid="case-link"]')
+        .click();
+
+      cy.get('[data-testid="tab-case-information"]').click();
+
+      cy.get('[data-testid="case-filing-fee-information"]').should(
+        'have.text',
+        `Paid ${today} Pay.gov`,
+      );
     });
   };
 
@@ -132,6 +153,18 @@ describe('Pay Filing Fee Through pay.gov', () => {
           'contain.text',
           'Something went wrong when paying the filing fee. Please try again.',
         );
+
+      cy.get(`[data-testid="${docketNumber}"]`)
+        .find('[data-testid="petition-payment-status"]')
+        .should('have.text', 'Not paid');
+
+      cy.get(`[data-testid="${docketNumber}"]`)
+        .find('[data-testid="case-link"]')
+        .click();
+
+      cy.get('[data-testid="tab-case-information"]').click();
+
+      cy.contains('[data-testid="case-filing-fee-information"]', 'Not paid');
     });
   };
 
@@ -185,10 +218,22 @@ describe('Pay Filing Fee Through pay.gov', () => {
           'contain.text',
           `Allow 24-48 hours for the payment status to update for docket number(s): ${docketNumber}`,
         );
+
+      cy.get(`[data-testid="${docketNumber}"]`)
+        .find('[data-testid="petition-payment-status"]')
+        .should('have.text', 'Not paid');
+
+      cy.get(`[data-testid="${docketNumber}"]`)
+        .find('[data-testid="case-link"]')
+        .click();
+
+      cy.get('[data-testid="tab-case-information"]').click();
+
+      cy.contains('[data-testid="case-filing-fee-information"]', 'Not paid');
     });
   };
 
-  const payFeeCancel = () => {
+  const payFeeCancelAndPay = () => {
     cy.intercept('POST', '**/cases').as('postCase');
 
     cy.get('[data-testid="step-6-next-button"]').click();
@@ -269,6 +314,21 @@ describe('Pay Filing Fee Through pay.gov', () => {
           'contain.text',
           `An email was sent confirming the filing fee was paid for docket number(s): ${docketNumber}`,
         );
+
+      cy.get(`[data-testid="${docketNumber}"]`)
+        .find('[data-testid="petition-payment-status"]')
+        .should('have.text', 'Paid');
+
+      cy.get(`[data-testid="${docketNumber}"]`)
+        .find('[data-testid="case-link"]')
+        .click();
+
+      cy.get('[data-testid="tab-case-information"]').click();
+
+      cy.get('[data-testid="case-filing-fee-information"]').should(
+        'have.text',
+        `Paid ${today} Pay.gov`,
+      );
     });
   };
 
@@ -325,6 +385,76 @@ describe('Pay Filing Fee Through pay.gov', () => {
           'contain.text',
           'Unable to verify payment status. Contact dawson.support@ustaxcourt.gov.',
         );
+
+      cy.get(`[data-testid="${docketNumber}"]`)
+        .find('[data-testid="petition-payment-status"]')
+        .should('have.text', 'Not paid');
+
+      cy.get(`[data-testid="${docketNumber}"]`)
+        .find('[data-testid="case-link"]')
+        .click();
+
+      cy.get('[data-testid="tab-case-information"]').click();
+
+      cy.contains('[data-testid="case-filing-fee-information"]', 'Not paid');
+    });
+  };
+
+  const payFeeCancel = () => {
+    cy.intercept('POST', '**/cases').as('postCase');
+
+    cy.get('[data-testid="step-6-next-button"]').click();
+    cy.wait('@postCase').then(({ response }) => {
+      if (!response) throw Error('Did not find response');
+      const { docketNumber } = response.body;
+
+      cy.get('[data-testid="pay-filing-fee-button"]').click();
+
+      const { isLocal, efcmsDomain, deployingColor } = getCypressEnv();
+
+      cy.origin(
+        getCypressEnv().payGovOrigin,
+        { args: { isLocal, docketNumber, efcmsDomain, deployingColor } },
+        ({ isLocal, docketNumber, efcmsDomain, deployingColor }) => {
+          if (!isLocal) {
+            cy.contains('a', 'Cancel Payment').then(link => {
+              const redirectUrl = link.attr('href');
+
+              // workaround for the fact that these tests are run during deployments, first check
+              // the url pay.gov has is right, and then override it to go to the proper color
+              expect(redirectUrl).equal(
+                `https://app.${efcmsDomain}/payment-cancel/${docketNumber}`,
+              );
+
+              cy.contains('a', 'Cancel Payment').click();
+
+              cy.visit(
+                `https://app-${deployingColor}.${efcmsDomain}/payment-cancel/${docketNumber}`,
+              );
+            });
+          } else {
+            cy.contains('a', 'Cancel Payment').click();
+          }
+        },
+      );
+
+      cy.get('[data-testid="step-indicator-current-step-7-icon"]').should(
+        'exist',
+      );
+
+      cy.get('[data-testid="my-cases-link"]').click();
+
+      cy.get(`[data-testid="${docketNumber}"]`)
+        .find('[data-testid="petition-payment-status"]')
+        .should('have.text', 'Not paid');
+
+      cy.get(`[data-testid="${docketNumber}"]`)
+        .find('[data-testid="case-link"]')
+        .click();
+
+      cy.get('[data-testid="tab-case-information"]').click();
+
+      cy.contains('[data-testid="case-filing-fee-information"]', 'Not paid');
     });
   };
 
@@ -356,8 +486,13 @@ describe('Pay Filing Fee Through pay.gov', () => {
     );
 
     it(
-      'should let petitioner cancel their payment and return step 7, then attempt again and successfully pay',
+      'should let petitioner cancel their payment and return step 7, and payment info should not be updated',
       payFeeCancel,
+    );
+
+    it(
+      'should let petitioner cancel their payment and return step 7, then attempt again and successfully pay',
+      payFeeCancelAndPay,
     );
 
     it(
@@ -394,8 +529,13 @@ describe('Pay Filing Fee Through pay.gov', () => {
     );
 
     it(
-      'should let practitioner cancel their payment and return step 7, then attempt again and successfully pay',
+      'should let practitioner cancel their payment and return step 7, and payment info should not be updated',
       payFeeCancel,
+    );
+
+    it(
+      'should let practitioner cancel their payment and return step 7, then attempt again and successfully pay',
+      payFeeCancelAndPay,
     );
 
     it(

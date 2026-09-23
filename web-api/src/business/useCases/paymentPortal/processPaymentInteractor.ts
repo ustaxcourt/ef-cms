@@ -7,7 +7,10 @@ import {
   Case,
   userIsDirectlyAssociated,
 } from '@shared/business/entities/cases/Case';
-import { ALLOWLIST_FEATURE_FLAGS } from '@shared/business/entities/EntityConstants';
+import {
+  ALLOWLIST_FEATURE_FLAGS,
+  PAYMENT_STATUS,
+} from '@shared/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import {
@@ -21,6 +24,8 @@ import {
   ProcessPaymentRequest,
   ProcessPaymentResponse,
 } from '@ustaxcourt/payment-portal';
+import { createISODateAtStartOfDayEST } from '@shared/business/utilities/DateHandler';
+import { createFilingFeePaidMinuteEntry } from '@web-api/business/useCases/updateCaseDetailsInteractor';
 
 export const processPayment = async (
   applicationContext: ServerApplicationContext,
@@ -50,6 +55,12 @@ export const processPayment = async (
 
   const currentCaseEntity = new Case(currentCase, { authorizedUser });
 
+  if (currentCaseEntity.petitionPaymentStatus !== PAYMENT_STATUS.UNPAID) {
+    throw new InvalidRequest(
+      `Cannot process filing fee payment for ${docketNumber} with status ${currentCaseEntity.petitionPaymentStatus}`,
+    );
+  }
+
   if (
     !userIsDirectlyAssociated({
       aCase: currentCaseEntity,
@@ -75,7 +86,17 @@ export const processPayment = async (
     .getPaymentPortalClient()
     .processPayment(applicationContext, data);
 
-  // TODO: set other petition payment fields to mark case's filing fee as paid if payment was successful
+  if (processResponse.paymentStatus === 'success') {
+    currentCaseEntity.petitionPaymentStatus = PAYMENT_STATUS.PAID;
+    currentCaseEntity.petitionPaymentDate = createISODateAtStartOfDayEST();
+    currentCaseEntity.petitionPaymentMethod = 'Pay.gov';
+    const filingFeePaidEntry = createFilingFeePaidMinuteEntry(
+      currentCaseEntity,
+      authorizedUser,
+    );
+
+    currentCaseEntity.addDocketEntry(filingFeePaidEntry);
+  }
 
   delete currentCaseEntity.petitionPaymentToken;
 

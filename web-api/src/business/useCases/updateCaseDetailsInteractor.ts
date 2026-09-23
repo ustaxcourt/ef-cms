@@ -10,10 +10,35 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import {
+  AuthUser,
+  UnknownAuthUser,
+} from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
+
+export const createFilingFeePaidMinuteEntry = (
+  caseEntity: Case,
+  authorizedUser: AuthUser,
+): DocketEntry => {
+  const filingFeePaidEntry = new DocketEntry(
+    {
+      documentTitle: 'Filing Fee Paid',
+      documentType: MINUTE_ENTRIES_MAP.filingFeePaid.documentType,
+      eventCode: MINUTE_ENTRIES_MAP.filingFeePaid.eventCode,
+      filingDate: caseEntity.petitionPaymentDate,
+      isFileAttached: false,
+      isOnDocketRecord: true,
+      processingStatus: 'complete',
+    },
+    { authorizedUser },
+  );
+
+  filingFeePaidEntry.setFiledBy(authorizedUser);
+
+  return filingFeePaidEntry;
+};
 
 export const updateCaseDetails = async (
   _applicationContext: ServerApplicationContext,
@@ -76,21 +101,10 @@ export const updateCaseDetails = async (
 
   if (oldCase.petitionPaymentStatus === PAYMENT_STATUS.UNPAID) {
     if (isPaid) {
-      const filingFeePaidEntry = new DocketEntry(
-        {
-          documentTitle: 'Filing Fee Paid',
-          documentType: MINUTE_ENTRIES_MAP.filingFeePaid.documentType,
-          eventCode: MINUTE_ENTRIES_MAP.filingFeePaid.eventCode,
-          filingDate: newCaseEntity.petitionPaymentDate,
-          isFileAttached: false,
-          isOnDocketRecord: true,
-          processingStatus: 'complete',
-        },
-        { authorizedUser },
+      const filingFeePaidEntry = createFilingFeePaidMinuteEntry(
+        newCaseEntity,
+        authorizedUser,
       );
-
-      filingFeePaidEntry.setFiledBy(authorizedUser);
-
       newCaseEntity.addDocketEntry(filingFeePaidEntry);
     } else if (isWaived) {
       const filingFeeWaivedEntry = new DocketEntry(
