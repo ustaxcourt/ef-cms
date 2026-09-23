@@ -14,6 +14,50 @@
 
 {List of steps taken to verify the changes, including any testing performed.}
 
+## Dependencies Updated
+{Template for the weekly dependency updates, delete for other pull requests}
+
+For each runtime package (or group of related packages), document **affected application areas in plain language** under "Possible areas of testing" so reviewers know what to exercise. Prefer workflows over file paths—for example:
+
+- [ ] logging in / signing out
+- [ ] creating a petition or case
+- [ ] filing, signing, and serving a document
+- [ ] opening or viewing a PDF on a case
+- [ ] generating a court- [ ]issued PDF (orders, notices, coversheets)
+- [ ] advanced search (case, opinion, order)
+- [ ] batch downloading a case or trial session
+- [ ] email notifications after serve
+- [ ] scanning a document (DWT)
+- [ ] payment portal checkout
+- [ ] charts or reports on dashboards
+
+**Mandatory manual testing:** After the experimental deploy, manually exercise the application areas you listed (locally and in the experimental environment). Automated CI alone is not sufficient for the dependency rotation.
+
+### Runtime dependencies
+
+| Package | Version | Purpose | Used in | Possible areas of testing |
+|---|---:|---|---|----|
+| | | | | |
+
+### Development dependencies
+
+Verification of these is usually covered by CI (lint, unit, Cypress). Call out manual checks only when a tool change can affect local workflows (e.g. Cypress runner, local Postgres/OpenSearch images).
+
+| Package | Version | Purpose | Used in |
+|---|---:|---|---|
+| | | | | |
+
+### Dependencies checklist
+
+- [ ] I have listed the updated packages, their purpose, where they are used, and the plain-language application areas to test (packages under `@aws-sdk` are optional to list for brevity).
+- [ ] **Mandatory manual testing:** I have exercised the affected application areas listed above:
+  - [ ] Locally
+  - [ ] In an experimental environment after deploying this branch
+- [ ] I have built and pushed a new Docker image from the Dockerfile to the experimental environment's ECR if needed, and updated CHANGES.md with the environment where it is deployed.
+- [ ] I have reviewed and updated caveats/hand-managed dependencies as needed.
+- [ ] I have successfully deployed the dependencies branch to an experimental environment.
+- [ ] I have created new Devex/Opex tickets addressing further issues for examination as needed.
+
 ## Manual Deployment Steps
 
 {Instructions for manually deploying the changes, if applicable. Delete this section if not.}

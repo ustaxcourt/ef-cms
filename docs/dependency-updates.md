@@ -274,7 +274,9 @@ If an OpenSearch update is available, we'll need to update OpenSearch in github 
 
 - Check through the list of caveats to see if any of the documented issues have been resolved.
 
-- Validate updates by deploying to an experimental environment
+- Validate updates by deploying to an experimental environment.
+
+- Open the dependency-updates pull request and complete the **Dependencies Updated** section of [`.github/pull_request_template.md`](../.github/pull_request_template.md) (plain-language testing areas and mandatory manual testing checklist).
 
 ### 8. Update CI security tool versions
 
