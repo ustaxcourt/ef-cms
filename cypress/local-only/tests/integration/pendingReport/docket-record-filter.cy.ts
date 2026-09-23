@@ -6,6 +6,7 @@ import { createAndServePaperFiling } from '../../../../helpers/caseDetail/docket
 import { externalUserCreatesElectronicCase } from '../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { goToCase } from '../../../../helpers/caseDetail/go-to-case';
 import { petitionsClerkQcsAndServesElectronicCase } from '../../../../helpers/documentQC/petitions-clerk-qcs-and-serves-electronic-case';
+import { checkA11y } from '../../../support/generalCommands/checkA11y';
 
 describe('Pending motions and the docket record filter', () => {
   it('should keep the Pending motions visible after filtering the Docket Record to Orders', () => {
@@ -48,6 +49,7 @@ describe('Pending motions and the docket record filter', () => {
           'be.visible',
         );
       });
+      checkA11y();
     });
   });
 });
