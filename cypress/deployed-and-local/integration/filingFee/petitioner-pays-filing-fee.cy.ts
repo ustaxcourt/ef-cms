@@ -35,6 +35,60 @@ describe('Pay Filing Fee Through pay.gov', () => {
 
   const today = formatDateString(createISODateAtStartOfDayEST(), 'MMDDYY');
 
+  const verifySuccessfulPayment = (docketNumber: string) => {
+    cy.get('[data-testid="success-alert"]')
+      .should('contain.text', 'Filing fee payment successful')
+      .and(
+        'contain.text',
+        `An email was sent confirming the filing fee was paid for docket number(s): ${docketNumber}`,
+      );
+
+    cy.get(`[data-testid="${docketNumber}"]`)
+      .find('[data-testid="petition-payment-status"]')
+      .should('have.text', 'Paid');
+
+    cy.get(`[data-testid="${docketNumber}"]`)
+      .find('[data-testid="case-link"]')
+      .click();
+
+    cy.get('[data-testid="docket-record-table"] td')
+      .contains('FEE')
+      .parent()
+      .then(row => {
+        cy.wrap(row)
+          .find('[data-testid^="docket-entry-filedDate-')
+          .should('have.text', today);
+        cy.wrap(row)
+          .find('[data-testid^="docket-entry-eventCode-')
+          .should('have.text', 'FEE');
+        cy.wrap(row)
+          .find('[data-testid^="docket-entry-filingsAndProceedings-')
+          .should('contain.text', 'Filing Fee Paid');
+        cy.wrap(row)
+          .find('[data-testid^="docket-entry-numberOfPages-')
+          .should('have.text', 0);
+        cy.wrap(row)
+          .find('[data-testid="docket-entry-filedBy')
+          .should('have.text', '');
+        cy.wrap(row)
+          .find('[data-testid="docket-entry-action')
+          .should('have.text', '');
+        cy.wrap(row)
+          .find('[data-testid="docket-record-cell-not-served')
+          .should('have.text', '');
+        cy.wrap(row)
+          .find('[data-testid^="docket-entry-servedPartiesCode-')
+          .should('have.text', '');
+      });
+
+    cy.get('[data-testid="tab-case-information"]').click();
+
+    cy.get('[data-testid="case-filing-fee-information"]').should(
+      'have.text',
+      `Paid ${today} Pay.gov`,
+    );
+  };
+
   const payFeeSuccess = () => {
     cy.intercept('POST', '**/cases').as('postCase');
 
@@ -79,27 +133,7 @@ describe('Pay Filing Fee Through pay.gov', () => {
         },
       );
 
-      cy.get('[data-testid="success-alert"]')
-        .should('contain.text', 'Filing fee payment successful')
-        .and(
-          'contain.text',
-          `An email was sent confirming the filing fee was paid for docket number(s): ${docketNumber}`,
-        );
-
-      cy.get(`[data-testid="${docketNumber}"]`)
-        .find('[data-testid="petition-payment-status"]')
-        .should('have.text', 'Paid');
-
-      cy.get(`[data-testid="${docketNumber}"]`)
-        .find('[data-testid="case-link"]')
-        .click();
-
-      cy.get('[data-testid="tab-case-information"]').click();
-
-      cy.get('[data-testid="case-filing-fee-information"]').should(
-        'have.text',
-        `Paid ${today} Pay.gov`,
-      );
+      verifySuccessfulPayment(docketNumber);
     });
   };
 
@@ -161,6 +195,10 @@ describe('Pay Filing Fee Through pay.gov', () => {
       cy.get(`[data-testid="${docketNumber}"]`)
         .find('[data-testid="case-link"]')
         .click();
+
+      cy.get('[data-testid="docket-record-table"] td')
+        .contains('FEE')
+        .should('not.exist');
 
       cy.get('[data-testid="tab-case-information"]').click();
 
@@ -226,6 +264,10 @@ describe('Pay Filing Fee Through pay.gov', () => {
       cy.get(`[data-testid="${docketNumber}"]`)
         .find('[data-testid="case-link"]')
         .click();
+
+      cy.get('[data-testid="docket-record-table"] td')
+        .contains('FEE')
+        .should('not.exist');
 
       cy.get('[data-testid="tab-case-information"]').click();
 
@@ -308,27 +350,7 @@ describe('Pay Filing Fee Through pay.gov', () => {
         },
       );
 
-      cy.get('[data-testid="success-alert"]')
-        .should('contain.text', 'Filing fee payment successful')
-        .and(
-          'contain.text',
-          `An email was sent confirming the filing fee was paid for docket number(s): ${docketNumber}`,
-        );
-
-      cy.get(`[data-testid="${docketNumber}"]`)
-        .find('[data-testid="petition-payment-status"]')
-        .should('have.text', 'Paid');
-
-      cy.get(`[data-testid="${docketNumber}"]`)
-        .find('[data-testid="case-link"]')
-        .click();
-
-      cy.get('[data-testid="tab-case-information"]').click();
-
-      cy.get('[data-testid="case-filing-fee-information"]').should(
-        'have.text',
-        `Paid ${today} Pay.gov`,
-      );
+      verifySuccessfulPayment(docketNumber);
     });
   };
 
@@ -394,6 +416,10 @@ describe('Pay Filing Fee Through pay.gov', () => {
         .find('[data-testid="case-link"]')
         .click();
 
+      cy.get('[data-testid="docket-record-table"] td')
+        .contains('FEE')
+        .should('not.exist');
+
       cy.get('[data-testid="tab-case-information"]').click();
 
       cy.contains('[data-testid="case-filing-fee-information"]', 'Not paid');
@@ -451,6 +477,10 @@ describe('Pay Filing Fee Through pay.gov', () => {
       cy.get(`[data-testid="${docketNumber}"]`)
         .find('[data-testid="case-link"]')
         .click();
+
+      cy.get('[data-testid="docket-record-table"] td')
+        .contains('FEE')
+        .should('not.exist');
 
       cy.get('[data-testid="tab-case-information"]').click();
 
