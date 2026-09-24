@@ -512,11 +512,11 @@ export const formattedDocketEntries = (
       : formatDocketEntries(formattedCase.formattedDocketEntries);
 
   const formattedPendingDocketEntriesOnDocketRecord =
-    formattedDocketEntriesForPendingList
-      .filter(docketEntry => docketEntry.isOnDocketRecord)
-      .filter(docketEntry =>
+    formattedDocketEntriesForPendingList.filter(
+      docketEntry =>
+        docketEntry.isOnDocketRecord &&
         applicationContext.getUtilities().isPending(docketEntry),
-      );
+    );
 
   const formattedDraftDocuments = formattedCase.draftDocuments.map(draftDoc => {
     return {
