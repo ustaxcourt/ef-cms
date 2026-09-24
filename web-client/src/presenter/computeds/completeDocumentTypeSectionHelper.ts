@@ -14,6 +14,7 @@ import {
 import {
   EXTERNAL_DOCUMENTS_ARRAY,
   NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES,
+  PETITIONER_ONLY_EVENT_CODES,
   ROLES,
 } from '@shared/business/entities/EntityConstants';
 
@@ -66,7 +67,7 @@ export const completeDocumentTypeSectionHelper = (
           return false;
       } else if (
         currentUser.role === ROLES.petitioner &&
-        ['M112', 'NOTW'].includes(documentType.eventCode)
+        PETITIONER_ONLY_EVENT_CODES.includes(documentType.eventCode)
       ) {
         return false;
       } else if (documentType.eventCode === 'EA') return false;
