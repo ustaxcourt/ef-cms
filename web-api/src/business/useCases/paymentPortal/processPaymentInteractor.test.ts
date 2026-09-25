@@ -1,7 +1,14 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/utils/mocks.jest';
+import { mockEntireFile } from '@shared/test/mockFactory';
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
+jest.mock('@shared/business/utilities/DateHandler', () =>
+  mockEntireFile({
+    keepImplementation: true,
+    module: '@shared/business/utilities/DateHandler',
+  }),
 );
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import {
@@ -22,7 +29,7 @@ import {
   MINUTE_ENTRIES_MAP,
   PAYMENT_STATUS,
 } from '@shared/business/entities/EntityConstants';
-import * as DateHandler from '@shared/business/utilities/DateHandler';
+import { createISODateAtStartOfDayEST as createISODateAtStartOfDayESTMock } from '@shared/business/utilities/DateHandler';
 
 describe('processPaymentInteractor', () => {
   const docketNumber = '101-01';
@@ -57,15 +64,12 @@ describe('processPaymentInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
   const tryGetLocks = jest.mocked(tryGetLocksMock);
+  const createISODateAtStartOfDayEST = jest.mocked(
+    createISODateAtStartOfDayESTMock,
+  );
 
   beforeAll(() => {
-    jest
-      .spyOn(DateHandler, 'createISODateAtStartOfDayEST')
-      .mockImplementation(() => mockToday);
-  });
-
-  afterAll(() => {
-    jest.restoreAllMocks();
+    createISODateAtStartOfDayEST.mockReturnValue(mockToday);
   });
 
   beforeEach(() => {
