@@ -17,8 +17,12 @@ import {
 } from '@web-api/errors/errors';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
-import { Case } from '@shared/business/entities/cases/Case';
 import { processPaymentInteractor } from '@web-api/business/useCases/paymentPortal/processPaymentInteractor';
+import {
+  MINUTE_ENTRIES_MAP,
+  PAYMENT_STATUS,
+} from '@shared/business/entities/EntityConstants';
+import * as DateHandler from '@shared/business/utilities/DateHandler';
 
 describe('processPaymentInteractor', () => {
   const docketNumber = '101-01';
@@ -29,15 +33,46 @@ describe('processPaymentInteractor', () => {
     userId:
       MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS.privatePractitioners[0].userId,
   };
+  const mockProcessPaymentResponse = {
+    paymentStatus: 'success',
+    transactions: [
+      {
+        payGovTrackingId: 'payGovTrackingId',
+        transactionStatus: 'failed',
+        paymentMethod: 'Credit/Debit Card',
+        createdTimestamp: '2026-06-01T00:00:00.000Z',
+        updatedTimestamp: '2026-06-01T00:00:00.000Z',
+      },
+      {
+        payGovTrackingId: 'payGovTrackingId',
+        transactionStatus: 'processed',
+        paymentMethod: 'PayPal',
+        createdTimestamp: '2026-07-01T00:00:00.000Z',
+        updatedTimestamp: '2026-07-01T00:00:00.000Z',
+      },
+    ],
+  };
+  const mockToday = '2026-09-01T00:00:00-04:00';
 
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
   const tryGetLocks = jest.mocked(tryGetLocksMock);
 
+  beforeAll(() => {
+    jest
+      .spyOn(DateHandler, 'createISODateAtStartOfDayEST')
+      .mockImplementation(() => mockToday);
+  });
+
+  afterAll(() => {
+    jest.restoreAllMocks();
+  });
+
   beforeEach(() => {
     getCaseByDocketNumber.mockResolvedValue({
       ...MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS,
       petitionPaymentToken: mockPaymentToken,
+      docketNumber,
     });
     applicationContext
       .getUseCases()
@@ -46,6 +81,9 @@ describe('processPaymentInteractor', () => {
       });
     applicationContext.getUniqueId.mockReturnValue(transactionReferenceId);
     applicationContext.environment.stage = 'local';
+    applicationContext
+      .getPaymentPortalClient()
+      .processPayment.mockResolvedValue(mockProcessPaymentResponse);
   });
 
   it('should throw not found error if feature flag is not set to true', async () => {
@@ -110,7 +148,43 @@ describe('processPaymentInteractor', () => {
     ).rejects.toThrow(InvalidRequest);
   });
 
-  it('should process endpoint on payment portal, delete token from db, and return process response', async () => {
+  it('should throw an error if filing fee is not unpaid', async () => {
+    getCaseByDocketNumber.mockResolvedValue({
+      ...MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS,
+      petitionPaymentToken: mockPaymentToken,
+      docketNumber,
+      petitionPaymentStatus: PAYMENT_STATUS.PAID,
+    });
+
+    await expect(
+      processPaymentInteractor(
+        applicationContext,
+        { docketNumber },
+        mockPractitioner,
+      ),
+    ).rejects.toThrow(
+      `Cannot process filing fee payment for ${docketNumber} with status Paid`,
+    );
+
+    getCaseByDocketNumber.mockResolvedValue({
+      ...MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS,
+      petitionPaymentToken: mockPaymentToken,
+      docketNumber,
+      petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
+    });
+
+    await expect(
+      processPaymentInteractor(
+        applicationContext,
+        { docketNumber },
+        mockPractitioner,
+      ),
+    ).rejects.toThrow(
+      `Cannot process filing fee payment for ${docketNumber} with status Waived`,
+    );
+  });
+
+  it('should process endpoint on payment portal, delete token from db, update payment fields, and return process response', async () => {
     const result = await processPaymentInteractor(
       applicationContext,
       { docketNumber },
@@ -123,31 +197,74 @@ describe('processPaymentInteractor', () => {
       token: mockPaymentToken,
     });
 
-    expect(updateCaseAndAssociations).toHaveBeenCalledWith(
-      expect.objectContaining({
-        authorizedUser: mockPractitioner,
-        caseToUpdate: {
-          ...new Case(MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS, {
-            authorizedUser: mockPractitioner,
-          }),
-          createdAt: expect.any(String),
-          receivedAt: expect.any(String),
-        },
-      }),
-    );
+    const { authorizedUser, caseToUpdate } =
+      updateCaseAndAssociations.mock.calls[0][0];
 
-    expect(result).toEqual({
-      paymentStatus: 'success',
+    expect(authorizedUser).toEqual(mockPractitioner);
+
+    expect(caseToUpdate).toMatchObject({
+      petitionPaymentStatus: PAYMENT_STATUS.PAID,
+      petitionPaymentDate: mockToday,
+      petitionPaymentMethod: 'Pay.gov',
+    });
+
+    expect(caseToUpdate).not.toHaveProperty('petitionPaymentToken');
+
+    expect(caseToUpdate.docketEntries[0]).toMatchObject({
+      documentTitle: 'Filing Fee Paid',
+      documentType: MINUTE_ENTRIES_MAP.filingFeePaid.documentType,
+      eventCode: MINUTE_ENTRIES_MAP.filingFeePaid.eventCode,
+      filingDate: mockToday,
+      isFileAttached: false,
+      isOnDocketRecord: true,
+      processingStatus: 'complete',
+      filedByRole: 'privatePractitioner',
+      userId: mockPractitioner.userId,
+      docketNumber,
+      index: 1,
+    });
+
+    expect(result).toEqual(mockProcessPaymentResponse);
+  });
+
+  it('should not update case payment information is transaction is not successful', async () => {
+    const mockProcessPaymentResponse = {
+      paymentStatus: 'failed',
       transactions: [
         {
           payGovTrackingId: 'payGovTrackingId',
-          transactionStatus: 'processed',
-          paymentMethod: 'PayPal',
-          createdTimestamp: '2026-07-01T00:00:00.000Z',
-          updatedTimestamp: '2026-07-01T00:00:00.000Z',
+          transactionStatus: 'failed',
+          paymentMethod: 'Credit/Debit Card',
+          createdTimestamp: '2026-06-01T00:00:00.000Z',
+          updatedTimestamp: '2026-06-01T00:00:00.000Z',
         },
       ],
+    };
+
+    applicationContext
+      .getPaymentPortalClient()
+      .processPayment.mockResolvedValue(mockProcessPaymentResponse);
+
+    const result = await processPaymentInteractor(
+      applicationContext,
+      { docketNumber },
+      mockPractitioner,
+    );
+
+    const { authorizedUser, caseToUpdate } =
+      updateCaseAndAssociations.mock.calls[0][0];
+
+    expect(authorizedUser).toEqual(mockPractitioner);
+
+    expect(caseToUpdate).toMatchObject({
+      petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
+      petitionPaymentDate: undefined,
+      petitionPaymentMethod: undefined,
     });
+    expect(caseToUpdate).not.toHaveProperty('petitionPaymentToken');
+    expect(caseToUpdate.docketEntries.length).toEqual(0);
+
+    expect(result).toEqual(mockProcessPaymentResponse);
   });
 
   it('should acquire a lock on the case', async () => {
