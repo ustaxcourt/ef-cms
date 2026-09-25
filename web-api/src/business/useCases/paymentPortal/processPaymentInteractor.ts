@@ -9,6 +9,7 @@ import {
 } from '@shared/business/entities/cases/Case';
 import {
   ALLOWLIST_FEATURE_FLAGS,
+  PAY_GOV_METHOD,
   PAYMENT_STATUS,
 } from '@shared/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
@@ -89,7 +90,7 @@ export const processPayment = async (
   if (processResponse.paymentStatus === 'success') {
     currentCaseEntity.petitionPaymentStatus = PAYMENT_STATUS.PAID;
     currentCaseEntity.petitionPaymentDate = createISODateAtStartOfDayEST();
-    currentCaseEntity.petitionPaymentMethod = 'Pay.gov';
+    currentCaseEntity.petitionPaymentMethod = PAY_GOV_METHOD;
     const filingFeePaidEntry = createFilingFeePaidMinuteEntry(
       currentCaseEntity,
       authorizedUser,
