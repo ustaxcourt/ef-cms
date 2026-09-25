@@ -29,6 +29,7 @@ interface CerebralProps {
     PAID: string;
     UNPAID: string;
     WAIVED: string;
+    PENDING: string;
   };
   validationErrors: Record<string, string | undefined>;
 }
@@ -127,6 +128,32 @@ const PetitionPaymentFormComponent: React.FC<
               htmlFor="payment-status-waived"
             >
               {paymentStatus.WAIVED}
+            </label>
+          </div>
+
+          <div className="usa-radio usa-radio__inline">
+            <input
+              aria-describedby="fee-paid-legend"
+              checked={bind.petitionPaymentStatus === paymentStatus.PENDING}
+              className="usa-radio__input"
+              id="payment-status-pending"
+              name="petitionPaymentStatus"
+              type="radio"
+              value={paymentStatus.PENDING}
+              onChange={e => {
+                onUpdate({
+                  key: e.target.name,
+                  value: e.target.value,
+                });
+                validateFormData();
+              }}
+            />
+            <label
+              className="usa-radio__label"
+              data-testid="payment-status-pending-radio"
+              htmlFor="payment-status-pending"
+            >
+              {paymentStatus.PENDING}
             </label>
           </div>
         </fieldset>
