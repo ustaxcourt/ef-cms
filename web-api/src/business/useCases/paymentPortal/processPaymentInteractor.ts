@@ -55,12 +55,6 @@ export const processPayment = async (
 
   const currentCaseEntity = new Case(currentCase, { authorizedUser });
 
-  if (currentCaseEntity.petitionPaymentStatus !== PAYMENT_STATUS.UNPAID) {
-    throw new InvalidRequest(
-      `Cannot process filing fee payment for ${docketNumber} with status ${currentCaseEntity.petitionPaymentStatus}`,
-    );
-  }
-
   if (
     !userIsDirectlyAssociated({
       aCase: currentCaseEntity,
@@ -69,6 +63,12 @@ export const processPayment = async (
   ) {
     throw new UnauthorizedError(
       `Invalid User attempting to process payment for docket Number: ${docketNumber}`,
+    );
+  }
+
+  if (currentCaseEntity.petitionPaymentStatus !== PAYMENT_STATUS.UNPAID) {
+    throw new InvalidRequest(
+      `Cannot process filing fee payment for ${docketNumber} with status ${currentCaseEntity.petitionPaymentStatus}`,
     );
   }
 

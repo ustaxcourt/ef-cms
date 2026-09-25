@@ -56,28 +56,28 @@ describe('Pay Filing Fee Through pay.gov', () => {
       .parent()
       .then(row => {
         cy.wrap(row)
-          .find('[data-testid^="docket-entry-filedDate-')
+          .find('[data-testid^="docket-entry-filedDate-"]')
           .should('have.text', today);
         cy.wrap(row)
-          .find('[data-testid^="docket-entry-eventCode-')
+          .find('[data-testid^="docket-entry-eventCode-"]')
           .should('have.text', 'FEE');
         cy.wrap(row)
-          .find('[data-testid^="docket-entry-filingsAndProceedings-')
+          .find('[data-testid^="docket-entry-filingsAndProceedings-"]')
           .should('contain.text', 'Filing Fee Paid');
         cy.wrap(row)
-          .find('[data-testid^="docket-entry-numberOfPages-')
+          .find('[data-testid^="docket-entry-numberOfPages-"]')
           .should('have.text', 0);
         cy.wrap(row)
-          .find('[data-testid="docket-entry-filedBy')
+          .find('[data-testid="docket-entry-filedBy"]')
           .should('have.text', '');
         cy.wrap(row)
-          .find('[data-testid="docket-entry-action')
+          .find('[data-testid="docket-entry-action"]')
           .should('have.text', '');
         cy.wrap(row)
-          .find('[data-testid="docket-record-cell-not-served')
+          .find('[data-testid="docket-record-cell-not-served"]')
           .should('have.text', '');
         cy.wrap(row)
-          .find('[data-testid^="docket-entry-servedPartiesCode-')
+          .find('[data-testid^="docket-entry-servedPartiesCode-"]')
           .should('have.text', '');
       });
 

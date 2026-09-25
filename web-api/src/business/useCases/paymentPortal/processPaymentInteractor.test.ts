@@ -267,6 +267,46 @@ describe('processPaymentInteractor', () => {
     expect(result).toEqual(mockProcessPaymentResponse);
   });
 
+  it('should update payment status to pending if pending response is reeturned from payment portal', async () => {
+    const mockProcessPaymentResponse = {
+      paymentStatus: 'pending',
+      transactions: [
+        {
+          payGovTrackingId: 'payGovTrackingId',
+          transactionStatus: 'pending',
+          paymentMethod: 'ACH',
+          createdTimestamp: '2026-06-01T00:00:00.000Z',
+          updatedTimestamp: '2026-06-01T00:00:00.000Z',
+        },
+      ],
+    };
+
+    applicationContext
+      .getPaymentPortalClient()
+      .processPayment.mockResolvedValue(mockProcessPaymentResponse);
+
+    const result = await processPaymentInteractor(
+      applicationContext,
+      { docketNumber },
+      mockPractitioner,
+    );
+
+    const { authorizedUser, caseToUpdate } =
+      updateCaseAndAssociations.mock.calls[0][0];
+
+    expect(authorizedUser).toEqual(mockPractitioner);
+
+    expect(caseToUpdate).toMatchObject({
+      petitionPaymentStatus: PAYMENT_STATUS.PENDING,
+      petitionPaymentDate: undefined,
+      petitionPaymentMethod: undefined,
+    });
+    expect(caseToUpdate).not.toHaveProperty('petitionPaymentToken');
+    expect(caseToUpdate.docketEntries.length).toEqual(0);
+
+    expect(result).toEqual(mockProcessPaymentResponse);
+  });
+
   it('should acquire a lock on the case', async () => {
     await processPaymentInteractor(
       applicationContext,
