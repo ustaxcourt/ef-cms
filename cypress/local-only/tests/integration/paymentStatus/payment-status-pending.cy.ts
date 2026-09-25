@@ -39,9 +39,7 @@ describe('Payment Status Pending', () => {
       cy.get('[data-testid="modal-confirm"]').click();
       cy.get('[data-testid="tab-case-information"]').click();
       cy.get('[data-testid="edit-case-details-button"]').click();
-      cy.get('[data-testid="payment-status-pending-radio"]').contains(
-        'Pending',
-      );
+      cy.get('#payment-status-pending').should('be.checked');
     });
   });
 });
