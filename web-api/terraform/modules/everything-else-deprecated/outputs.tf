@@ -31,3 +31,7 @@ output "api_lambdas_bucket_east_id" {
 output "east_web_acl_arn" {
   value = module.api-east-waf.web_acl_arn
 }
+
+output aws_ses_email_identity_arn {
+  value = aws_ses_email_identity.ses_sender.arn
+}
