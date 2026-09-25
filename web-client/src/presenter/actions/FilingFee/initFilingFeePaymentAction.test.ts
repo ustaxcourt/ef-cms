@@ -2,6 +2,7 @@ import { applicationContextForClient as applicationContext } from '@web-client/t
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { initFilingFeePaymentAction } from '@web-client/presenter/actions/FilingFee/initFilingFeePaymentAction';
+import { PAYMENT_FILING_FEE_ORIGIN } from '@shared/business/entities/EntityConstants';
 
 describe('initFilingFeePaymentAction', () => {
   let hrefSetter: jest.SpyInstance | undefined;
@@ -46,10 +47,59 @@ describe('initFilingFeePaymentAction', () => {
 
     expect(
       applicationContext.getUseCases().initPaymentInteractor,
-    ).toHaveBeenCalled();
+    ).toHaveBeenCalledWith(expect.anything(), {
+      docketNumber: '101-20',
+      filingFeeReturnOrigin: PAYMENT_FILING_FEE_ORIGIN.PETITION,
+    });
 
     expect(hrefSetter).toHaveBeenCalledWith('newUrl');
     expect(pathSuccessStub).toHaveBeenCalled();
+  });
+
+  it('should pass dashboard filingFeeReturnOrigin when paymentFilingFeeOrigin is dashboard', async () => {
+    applicationContext.getUseCases().initPaymentInteractor.mockResolvedValue({
+      paymentRedirect: 'newUrl',
+    });
+    await runAction(initFilingFeePaymentAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: { docketNumber: '101-20' },
+        paymentFilingFeeOrigin: PAYMENT_FILING_FEE_ORIGIN.DASHBOARD,
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().initPaymentInteractor,
+    ).toHaveBeenCalledWith(expect.anything(), {
+      docketNumber: '101-20',
+      filingFeeReturnOrigin: PAYMENT_FILING_FEE_ORIGIN.DASHBOARD,
+    });
+  });
+
+  it('should pass filingFeeReturnPage when dashboard page index is greater than zero', async () => {
+    applicationContext.getUseCases().initPaymentInteractor.mockResolvedValue({
+      paymentRedirect: 'newUrl',
+    });
+    await runAction(initFilingFeePaymentAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: { docketNumber: '101-20' },
+        paymentFilingFeeOrigin: PAYMENT_FILING_FEE_ORIGIN.DASHBOARD,
+        dashboardCaseListPageIndex: 2,
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().initPaymentInteractor,
+    ).toHaveBeenCalledWith(expect.anything(), {
+      docketNumber: '101-20',
+      filingFeeReturnOrigin: PAYMENT_FILING_FEE_ORIGIN.DASHBOARD,
+      filingFeeReturnPage: 3,
+    });
   });
 
   it('should set alertError and call error path if initPaymentInteractor fails', async () => {
@@ -65,6 +115,29 @@ describe('initFilingFeePaymentAction', () => {
 
     expect(state.alertError).toEqual({
       message: 'Error: payment cannot be started',
+    });
+    expect(pathErrorStub).toHaveBeenCalled();
+  });
+
+  it('should set dashboard-style alertError when paymentFilingFeeOrigin is dashboard', async () => {
+    applicationContext.getUseCases().initPaymentInteractor.mockRejectedValue();
+    const { state } = await runAction(initFilingFeePaymentAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: { docketNumber: '101-20' },
+        paymentFilingFeeOrigin: PAYMENT_FILING_FEE_ORIGIN.DASHBOARD,
+      },
+    });
+
+    expect(state.alertError).toEqual({
+      className: 'tw:max-w-[547px]!',
+      titleClass: 'tw:font-bold tw:text-lg tw:leading-7',
+      title: 'Error: payment cannot be started.',
+      messageClass: 'tw:font-normal tw:text-xl tw:leading-7',
+      message: 'Payment cannot be started for 101-20',
+      scrollToErrorNotification: true,
     });
     expect(pathErrorStub).toHaveBeenCalled();
   });

@@ -15,6 +15,11 @@ describe('checkCaseAssociationAndPaymentStatusAction', () => {
     error: pathErrorStub,
   };
 
+  beforeEach(() => {
+    pathSuccessStub.mockClear();
+    pathErrorStub.mockClear();
+  });
+
   it('should error if the case has already been paid', async () => {
     await runAction(checkCaseAssociationAndPaymentStatusAction, {
       modules: {

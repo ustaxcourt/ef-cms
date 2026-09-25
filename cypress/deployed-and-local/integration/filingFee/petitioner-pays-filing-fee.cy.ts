@@ -1,15 +1,15 @@
 import {
   loginAsPetitioner,
   loginAsPrivatePractitioner,
-} from '../../../helpers/authentication/login-as-helpers';
-import { getCypressEnv } from '../../../helpers/env/cypressEnvironment';
+} from 'cypress/helpers/authentication/login-as-helpers';
+import { getCypressEnv } from 'cypress/helpers/env/cypressEnvironment';
 import {
   fillPetitionerInformation,
   fillPetitionFileInformation,
   fillIrsNoticeInformation,
   fillCaseProcedureInformation,
   fillStinInformation,
-} from '../../../local-only/tests/integration/fileAPetitionUpdated/petition-helper';
+} from 'cypress/local-only/tests/integration/fileAPetitionUpdated/petition-helper';
 
 describe('Pay Filing Fee Through pay.gov', () => {
   const VALID_FILE = '../../helpers/file/sample.pdf';
@@ -54,7 +54,7 @@ describe('Pay Filing Fee Through pay.gov', () => {
               // workaround for the fact that these tests are run during deployments, first check
               // the url pay.gov has is right, and then override it to go to the proper color
               expect(redirectUrl).equal(
-                `https://app.${efcmsDomain}/payment-success/${docketNumber}`,
+                `https://app.${efcmsDomain}/payment-success?docketNumber=${docketNumber}`,
               );
 
               cy.get(
@@ -62,7 +62,7 @@ describe('Pay Filing Fee Through pay.gov', () => {
               ).click();
 
               cy.visit(
-                `https://app-${deployingColor}.${efcmsDomain}/payment-success/${docketNumber}`,
+                `https://app-${deployingColor}.${efcmsDomain}/payment-success?docketNumber=${docketNumber}`,
               );
             });
           } else {

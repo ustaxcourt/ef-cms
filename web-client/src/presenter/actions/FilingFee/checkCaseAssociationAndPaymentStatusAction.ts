@@ -5,13 +5,17 @@ export const checkCaseAssociationAndPaymentStatusAction = ({
   get,
   props,
   path,
-}: ActionProps) => {
+}: ActionProps<{
+  isDirectlyAssociated?: boolean;
+}>) => {
   const caseDetail = get(state.caseDetail);
 
   if (
     props.isDirectlyAssociated &&
     caseDetail.petitionPaymentStatus === PAYMENT_STATUS.UNPAID
-  )
+  ) {
     return path.success();
-  else return path.error();
+  }
+
+  return path.error();
 };
