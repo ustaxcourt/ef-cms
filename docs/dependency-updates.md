@@ -424,6 +424,7 @@ Below is a list of dependencies that are locked down due to known issues with se
 Minor and patch versions of DWT _should_ be updated, but require that Court IT update the Windows clients in concert with our app. Do not bump `dwt` during weekly dependency rotations even if a newer version appears on npm — upgrades require the coordination sequence below and a standalone PR to `test`, not a bundled rotation.
 
 - As of 8/10/2026: **Held at 19.4.2** during the 8/10/2026 dependency rotation per operator direction. 19.4.2 is both the pinned version in `package.json` and the latest published release on npm. Re-check each rotation; if a newer version appears, leave it alone until Court IT coordination is complete.
+- As of 9/17/2026: `package.json` pins **19.4.3** (bumped from 19.4.2 in the 8/31/2026 dependency rotation), which is the latest published release on npm.
 
 If an update is available for DWT:
 - Coordinate with Court IT to have the Dynamsoft client updated on Court-owned Windows machines.
@@ -444,8 +445,8 @@ If an update is available for DWT:
    1. The old Windows client and new server version are backwards-compatible.
 
 ### puppeteer and @sparticuz/chromium
-**Current Installed Puppeteer/Puppeteer-core: 25.10.0**
-**Current Installed @sparticuz/chromium: 152.0.0**
+**Current Installed Puppeteer/Puppeteer-core: 25.11.0**
+**Current Installed @sparticuz/chromium: 153.0.0**
 
 - When updating puppeteer or puppeteer core in the project, make sure to also match versions in `web-api/runtimes/puppeteer/package.json` as this is our lambda layer which we use to generate pdfs. Puppeteer and chromium versions should always match between package.json and web-api/runtimes/puppeteer/package.json. Remember to run `npm install --prefix web-api/runtimes/puppeteer` to install and update the package-lock file.
 - Puppeteer also has recommended versions of Chromium, so we should make sure to use the recommended version of chromium for the version of puppeteer that we are on. The chromium versions supported by puppeteer can be found [here](https://pptr.dev/supported-browsers)
@@ -459,6 +460,7 @@ If an update is available for DWT:
 - As of July 27, 2026: Puppeteer **25.4.0** is available. Still blocked — `@sparticuz/chromium` latest on npm remains **149.0.0**; puppeteer 25.2.x and above require Chrome for Testing 150.x.
 - As of 8/10/2026: Puppeteer **25.5.0** is available. Still blocked — `@sparticuz/chromium` latest on npm remains **149.0.0**; puppeteer 25.2.x and above require Chrome for Testing 150.x.
 - As of 9/8/2026: `@sparticuz/chromium` version **152.0.0** has been released, so we have now upgraded to Puppeteer **25.5.10**
+- As of 9/17/2026: upgraded to Puppeteer **25.11.0** with `@sparticuz/chromium` **153.0.0** in both `package.json` and `web-api/runtimes/puppeteer/package.json`.
 
 ### ws, 3rd party dependency of Cerebral
 
@@ -480,8 +482,9 @@ If an update is available for DWT:
 
 ### jest and jest-environment-jsdom
 **Installed Versions:**
-**jest: 30.4.2**
-**jest-environment-jsdom: 30.4.1**
+**jest: 30.5.1**
+**jest-environment-jsdom: 30.5.1**
+**babel-jest: 30.5.1**
 
 - Upgrade `jest`, `babel-jest`, and `jest-environment-jsdom` together manually rather than via the upgrade script. `babel-jest` is also excluded by the upgrade script's `caveats` array. Verify the full unit test suites after any bump.
 - On June 26, 2025, newer versions of `jest` conflicted with `ts-jest` 29.x; we stayed on Jest 29 until `ts-jest` caught up.
@@ -505,10 +508,11 @@ If an update is available for DWT:
 - Update on July 13, 2026: `@babel/core` v8.x is available, but upgrading is blocked by `esbuild-plugin-babel-cached@0.2.3` and `ts-jest@29.4.11`, which have versions below v8 listed as peer dependencies. `ts-jest` is likely to be updated, but `esbuild-plugin-babel` has been archived. `esbuild-plugin-babel-cached` appears to be a fork we developed, so we could update this ourselves to support `babel` v8, or find another solution that doesn't use this plugin.
 - As of July 27, 2026: `@babel/core` **v8.0.x** is available on npm. Still blocked by `esbuild-plugin-babel-cached@0.2.3`, which publishes peer `@babel/core@^7.0.0` only. The nested-override approach noted in prior rotations remains untested.
 - As of 8/10/2026: `@babel/core` **v8.x** is available on npm. Still blocked by `esbuild-plugin-babel-cached@0.2.3`, which publishes peer `@babel/core@^7.0.0` only.
+- As of 9/17/2026: `@babel/core` **8.0.5** is available. Tracked in DevEx ticket [#10428](https://github.com/ustaxcourt/ef-cms/issues/10428). There is a second blocker: `ts-jest@29.4.12` declares peer `@babel/core <8`, so replacing `esbuild-plugin-babel-cached` alone will not unblock the upgrade. The plugin is ~50 lines (`babel.loadOptions` + `babel.transform`) used solely by `esbuildHelper.mjs`, so it could be inlined into the repo rather than republished to npm.
 
 ### @types/node
-**Installed Version: 24.13.3**
-The major version of this package should match our major version of Node. We should use a package that starts with 24. <b>However</b>, the current installed version is 24.13.3, which <b>does not match the current installed version</b>. It is a known issue and another attempt will be made at the next Node.js and @types/node update.
+**Installed Version: 24.13.5**
+The major version of this package should match our major version of Node. We should use a package that starts with 24. <b>However</b>, the current installed version is 24.13.5, which <b>does not match the current installed version</b>. It is a known issue and another attempt will be made at the next Node.js and @types/node update.
 
 - [Dependencies 03 09 2026](https://github.com/ustaxcourt/ef-cms/pull/9465/files), Node.js was `v24.14.0`, but `@types/node` could not be updated to `24.14.0`, so it stayed pinned at `24.12.0`.
 
@@ -527,6 +531,8 @@ The major version of this package should match our major version of Node. We sho
 - As of July 13, 2026: Updated to **24.13.3**, the latest published version under major `24`. No `24.14+` published yet.
 
 - As of 8/10/2026: **24.13.3** remains the latest published version under major `24` (latest overall is 26.2.0). No change.
+
+- As of 9/17/2026: updated to **24.13.5**, the latest published version under major `24`. No `24.14+` published yet, so it still does not match Node.js `v24.20.0` in `.nvmrc`. Updated in both `package.json` and `web-api/terraform/modules/batch/docker-image/package.json`.
 
 ### TypeScript
 **Installed Version: 7.0.2 and 6.0.2**
@@ -593,6 +599,7 @@ error: too many arguments. Expected 0 arguments but got 2.
 - July 13, 2026: updated to 9.39.5
 - As of July 27, 2026: eslint **10.8.0** and `@eslint/js` **10.0.1** are available. Still blocked — `eslint-plugin-jsx-a11y` peer is `^3 || … || ^9` and `eslint-plugin-react` peer is `^3 || … || ^9.7`; neither accepts eslint 10. Latest 9.x remains **9.39.5**.
 - As of 8/10/2026: eslint **10.8.1** and `@eslint/js` **10.0.1** are available. Still blocked — `eslint-plugin-jsx-a11y` and `eslint-plugin-react` peers do not accept eslint 10. Latest 9.x remains **9.39.5**.
+- As of 9/17/2026: eslint **10.10.0** is available. Still blocked as`eslint-plugin-jsx-a11y@6.10.2` and `eslint-plugin-react@7.37.5` are still the latest releases and neither accepts eslint 10. No DevEx ticket exists yet; a possible path is evaluating replacements for both plugins that support eslint 10. The other lint packages we use (`eslint-config-prettier`, `eslint-plugin-jest`, `typescript-eslint`) already accept eslint 10. Unblocking eslint 10 would also unblock `eslint-plugin-cypress` 7.x, which requires `eslint >=10`.
 
 ### eslint-plugin-cypress
 **Installed Version: 6.4.4**
@@ -603,15 +610,16 @@ error: too many arguments. Expected 0 arguments but got 2.
 - On 05-18-2026, we added an override for uuid to fix a vulnerability with versions below 11.
 
 ### js-yaml
-**Installed Version: 4.3.1**
+**Installed Version: 4.3.2**
 - On 06-16-2026, we added a `js-yaml` override to address the code injection vulnerability affecting versions below 3.14.2 and 4.1.1 ([GHSA-h67p-54hq-rp68](https://github.com/advisories/GHSA-h67p-54hq-rp68)).
 - July 27, 2026: moved the override from 4.2.0 to 4.3.0. The 4.2.0 pin sat inside the vulnerable range for merge-key chain quadratic CPU consumption ([GHSA-52cp-r559-cp3m](https://github.com/advisories/GHSA-52cp-r559-cp3m), CVE-2026-59869). Keep the override at 4.3.0 or later unless all transitive consumers are confirmed to resolve to a patched version.
 - As of 8/10/2026: moved the override from 4.3.0 to **4.3.1**. The 4.3.0 pin sat inside the vulnerable range for quadratic CPU consumption in `!!omap` resolution ([GHSA-5p4m-2wfm-xmqj](https://github.com/advisories/GHSA-5p4m-2wfm-xmqj), CVE-2026-59870). **5.2.3** is the latest overall but is a major jump for transitive consumers; **4.3.1** is the minimal patched version.
+- As of 9/17/2026: moved the override from 4.3.1 to **4.3.2**. The 4.3.1 pin sat inside the vulnerable range for `maxTotalMergeKeys` not limiting CPU use for empty merge sources ([GHSA-2883-xcg3-v3hh](https://github.com/advisories/GHSA-2883-xcg3-v3hh), affecting `>=4.0.0 <4.3.2`). **5.x** remains a major jump for transitive consumers; **4.3.2** is the minimal patched version.
 
 ### image-blob-reduce and pica
 **Installed Versions:**
 **image-blob-reduce: 5.0.1**
-**pica: 10.0.2**
+**pica: 10.0.3**
 - image-blob-reduce is packaged with a version of pica, however it is not re-exporting the package correctly, so we directly added pica to our package.json to use it in our web-client applicationContext. Make sure the version of pica we install matches the version image-blob-reduce is using.
 - If image-blob-reduce is upgraded, we can potentially remove pica from our dependency list. Check that the below import works, and if it does we can remove pica.
 
@@ -639,6 +647,7 @@ const joi: Root = joiImported.extend(JoiDate);
 The issue is with Jest. Jest doesn't work with mjs, so in our config we need to either map to a cjs version of the package or transform it ourselves. The package does not have a cjs dist and trying to run a transformation on the package wasn't working with our tests.
 
 - 8/24/26 - Attempted upgrade to **3.0.0** again and reverted to **2.1.1** (second revert). Jest ESM transforms were required to load the package, and the moment → dayjs switch caused dayjs to parse UTC ISO strings in local time, breaking `.max('now')` validation (e.g. paper-petition creation in Cypress). Re-added `@joi/date` to the upgrade script's `caveats` array.
+- 9/17/26 - Tracked in DevEx ticket [#10383](https://github.com/ustaxcourt/ef-cms/issues/10383) (the ticket title says `joi`, but the package is `@joi/date`). The ticket covers stricter dayjs date-format validation failing on older `test` data; a fix also needs to address the Jest ESM loading and UTC ISO string parsing issues noted above.
 
 ### recharts
 **Installed Version: 3.10.1**
