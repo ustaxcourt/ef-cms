@@ -110,17 +110,38 @@ describe('create-env-secrets.helpers', () => {
     it('maps parsed values into the deploy secret payload', () => {
       const secrets = buildDeployEnvSecrets(baseBuildParams);
 
-      expect(secrets).toMatchObject({
+      expect(secrets).toEqual({
         COGNITO_SUFFIX: 'efcms-exp1',
         DATABASE_NAME: 'exp1_dawson',
+        DEFAULT_ACCOUNT_PASS: 'Testing1234$',
         DISABLE_EMAILS: 'true',
+        DYNAMSOFT_PRODUCT_KEYS: 'noop',
         EFCMS_DOMAIN: 'exp1.ef-cms.example.com',
+        EMAIL_DMARC_POLICY: 'none',
         ENABLE_HEALTH_CHECKS: 0,
         ENV: 'exp1',
+        ES_ENGINE_VERSION: 'OpenSearch_3.7',
+        ES_INSTANCE_COUNT: 1,
+        ES_INSTANCE_TYPE: 't3.small.search',
+        ES_VOLUME_SIZE: 10,
         IRS_SUPERUSER_EMAIL: 'service.agent.exp1@example.com',
         IS_DYNAMSOFT_ENABLED: 0,
+        PAYMENT_PORTAL_ARN: 'arn:aws:execute-api:us-east-1:123:abc',
+        PAYMENT_PORTAL_HOST: 'https://payment.example.com',
+        PAY_GOV_ORIGIN: 'https://paygov.example.com',
+        POSTGRES_MASTER_PASSWORD: 'postgres-pass',
+        POSTGRES_MASTER_USERNAME: 'master',
         POSTGRES_USER: 'exp1_dawson',
+        PROD_DOCUMENTS_BUCKET_NAME: 'prod-documents',
+        PROD_ENV_ACCOUNT_ID: '123456789012',
         RDS_ENGINE_VERSION: '17.10',
+        RDS_MAX_CAPACITY: '1',
+        RDS_MIN_CAPACITY: '0.5',
+        RUM_SAMPLE_RATE: '1',
+        USTC_ADMIN_PASS: 'admin-pass',
+        USTC_ADMIN_USER: 'ustcadmin@example.com',
+        USTC_ZENDESK_USER: 'ustczendesk@dawson.ustaxcourt.gov',
+        USTC_ZENDESK_PASS: 'zendesk-pass',
       });
     });
 
