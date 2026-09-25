@@ -355,7 +355,9 @@ resource "aws_iam_role_policy" "presignup_policy" {
         "logs:CreateLogStream",
         "logs:PutLogEvents"
       ],
-      "Resource": "*"
+      "Resource": [
+        "arn:aws:logs:*:*:*"
+      ]
     },
     {
       "Effect": "Allow",
@@ -388,7 +390,9 @@ resource "aws_iam_role_policy" "inbound_federation_policy" {
         "logs:CreateLogStream",
         "logs:PutLogEvents"
       ],
-      "Resource": "*"
+      "Resource": [
+        "arn:aws:logs:*:*:*"
+      ]
     }
   ]
 }
