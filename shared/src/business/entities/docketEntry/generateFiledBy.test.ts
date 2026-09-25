@@ -1,6 +1,11 @@
 import { MOCK_DOCUMENTS } from '@shared/test/mockDocketEntry';
 import { generateFiledBy } from './generateFiledBy';
 import { NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP } from '../EntityConstants';
+import {
+  mockDocketClerkUser,
+  mockIrsPractitionerUser,
+  mockPrivatePractitionerUser,
+} from '@shared/test/mockAuthUsers';
 
 let mockDocketEntry;
 
@@ -317,5 +322,76 @@ describe('generateFiledBy', () => {
     });
 
     expect(filedByResult).toEqual(mockDocketEntry.filedBy);
+  });
+
+  describe('practitioner-named filings', () => {
+    const mockPractitionerName = 'Test Practitioner';
+
+    it.each([
+      ['an M112', { eventCode: 'M112' }],
+      [
+        'a Nonstandard H filing targeting an M112',
+        { eventCode: 'M115', secondaryDocument: { eventCode: 'M112' } },
+      ],
+      ['a NOTW', { eventCode: 'NOTW' }],
+      [
+        'a filing on a previous NOTW',
+        {
+          eventCode: 'SUPM',
+          previousDocument: {
+            documentType: 'Notice of Withdrawal as Counsel',
+          },
+        },
+      ],
+    ])(
+      'should keep the existing filedBy when a practitioner files %s',
+      (_, overrides) => {
+        [mockPrivatePractitionerUser, mockIrsPractitionerUser].forEach(user => {
+          const filedByResult = generateFiledBy({
+            docketEntry: {
+              ...mockDocketEntry,
+              ...overrides,
+              filedBy: mockPractitionerName,
+              filers: [mockPrimaryContactId],
+            },
+            petitioners: mockPetitioners,
+            user,
+          });
+
+          expect(filedByResult).toEqual(mockPractitionerName);
+        });
+      },
+    );
+
+    it('should generate filedBy from the filers when a non-practitioner files an M112', () => {
+      const filedByResult = generateFiledBy({
+        docketEntry: {
+          ...mockDocketEntry,
+          eventCode: 'M112',
+          filedBy: mockPractitionerName,
+          filers: [mockPrimaryContactId],
+        },
+        petitioners: mockPetitioners,
+        user: mockDocketClerkUser,
+      });
+
+      expect(filedByResult).toEqual('Petr. Bob');
+    });
+
+    it('should generate filedBy from the filers when a practitioner files a Nonstandard H filing that does not target an M112', () => {
+      const filedByResult = generateFiledBy({
+        docketEntry: {
+          ...mockDocketEntry,
+          eventCode: 'M115',
+          filedBy: mockPractitionerName,
+          filers: [mockPrimaryContactId],
+          secondaryDocument: { eventCode: 'M000' },
+        },
+        petitioners: mockPetitioners,
+        user: mockPrivatePractitionerUser,
+      });
+
+      expect(filedByResult).toEqual('Petr. Bob');
+    });
   });
 });

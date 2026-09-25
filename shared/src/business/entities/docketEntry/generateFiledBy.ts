@@ -13,6 +13,26 @@ const formatPartyNames = (names: string[], prefix: string): string => {
     : `${prefix}s. ${joinedNames}`;
 };
 
+const isFiledByPractitionerName = ({
+  docketEntry,
+  user,
+}: {
+  docketEntry: RawDocketEntry;
+  user?: UnknownAuthUser;
+}): boolean => {
+  const isNOTWRelated =
+    docketEntry.eventCode === 'NOTW' ||
+    docketEntry.previousDocument?.documentType ===
+      'Notice of Withdrawal as Counsel';
+  const isM112Related =
+    docketEntry.eventCode === 'M112' ||
+    docketEntry.secondaryDocument?.eventCode === 'M112';
+  const isPractitioner =
+    user?.role === ROLES.irsPractitioner ||
+    user?.role === ROLES.privatePractitioner;
+  return (isNOTWRelated || isM112Related) && isPractitioner;
+};
+
 export const generateFiledBy = ({
   docketEntry,
   petitioners,
@@ -33,14 +53,7 @@ export const generateFiledBy = ({
 
   if (!shouldGenerateFiledBy) return docketEntry.filedBy;
 
-  const isNOTWRelated =
-    docketEntry.eventCode === 'NOTW' ||
-    docketEntry.previousDocument?.documentType ===
-      'Notice of Withdrawal as Counsel';
-  const isPractitioner =
-    user?.role === ROLES.irsPractitioner ||
-    user?.role === ROLES.privatePractitioner;
-  if (isNOTWRelated && isPractitioner) {
+  if (isFiledByPractitionerName({ docketEntry, user })) {
     return docketEntry.filedBy;
   }
 
