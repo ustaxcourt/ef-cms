@@ -19,6 +19,7 @@ export const getCypressEnv = () => {
     efcmsDomain: getEnvValue('EFCMS_DOMAIN'),
     env,
     isLocal,
+    managedLoginOrigin: `https://ef-cms-${env}.auth.us-east-1.amazoncognito.com`,
     payGovOrigin:
       env === 'local' ? 'http://localhost:3366' : getEnvValue('PAY_GOV_ORIGIN'),
     publicSiteUrl:
