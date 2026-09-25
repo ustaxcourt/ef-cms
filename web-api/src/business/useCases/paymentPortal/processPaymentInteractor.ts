@@ -9,6 +9,7 @@ import {
 } from '@shared/business/entities/cases/Case';
 import {
   ALLOWLIST_FEATURE_FLAGS,
+  PAY_GOV_METHOD,
   PAYMENT_STATUS,
 } from '@shared/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
@@ -55,12 +56,6 @@ export const processPayment = async (
 
   const currentCaseEntity = new Case(currentCase, { authorizedUser });
 
-  if (currentCaseEntity.petitionPaymentStatus !== PAYMENT_STATUS.UNPAID) {
-    throw new InvalidRequest(
-      `Cannot process filing fee payment for ${docketNumber} with status ${currentCaseEntity.petitionPaymentStatus}`,
-    );
-  }
-
   if (
     !userIsDirectlyAssociated({
       aCase: currentCaseEntity,
@@ -69,6 +64,12 @@ export const processPayment = async (
   ) {
     throw new UnauthorizedError(
       `Invalid User attempting to process payment for docket Number: ${docketNumber}`,
+    );
+  }
+
+  if (currentCaseEntity.petitionPaymentStatus !== PAYMENT_STATUS.UNPAID) {
+    throw new InvalidRequest(
+      `Cannot process filing fee payment for ${docketNumber} with status ${currentCaseEntity.petitionPaymentStatus}`,
     );
   }
 
@@ -89,7 +90,7 @@ export const processPayment = async (
   if (processResponse.paymentStatus === 'success') {
     currentCaseEntity.petitionPaymentStatus = PAYMENT_STATUS.PAID;
     currentCaseEntity.petitionPaymentDate = createISODateAtStartOfDayEST();
-    currentCaseEntity.petitionPaymentMethod = 'Pay.gov';
+    currentCaseEntity.petitionPaymentMethod = PAY_GOV_METHOD;
     const filingFeePaidEntry = createFilingFeePaidMinuteEntry(
       currentCaseEntity,
       authorizedUser,
