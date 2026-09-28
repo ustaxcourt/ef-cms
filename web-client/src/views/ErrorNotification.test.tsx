@@ -42,6 +42,8 @@ type ErrorNotificationProps = {
     message?: string;
     messageClass?: string;
     className?: string;
+    filingFeePaymentStatusDocketNumber?: string;
+    scrollToErrorNotification?: boolean;
   };
   alertHelper: {
     insertContactSupportClause: boolean;
