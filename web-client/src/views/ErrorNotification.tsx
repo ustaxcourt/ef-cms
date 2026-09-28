@@ -25,6 +25,7 @@ export const ErrorNotification = connect(
       className?: string;
       scrollToErrorNotification?: boolean;
       insertContactSupportClause?: boolean;
+      filingFeePaymentStatusDocketNumber?: string;
     };
     alertHelper: {
       showErrorAlert?: boolean;
@@ -78,18 +79,38 @@ export const ErrorNotification = connect(
                     </Focus>
                     {alertHelper.showSingleMessage && (
                       <p className={messageClassName}>
-                        {alertError.message}
-                        {alertHelper.insertContactSupportClause && (
-                          <span>
-                            {' '}
-                            Contact{' '}
+                        {alertHelper.insertContactSupportClause &&
+                        alertError.filingFeePaymentStatusDocketNumber ? (
+                          <>
+                            {alertError.message}{' '}
+                            <span className="usa-alert__filing-fee-docket-contact">
+                              {alertError.filingFeePaymentStatusDocketNumber}.
+                              Contact{' '}
+                            </span>
                             <a
+                              className="usa-alert__support-email-link"
                               href={`mailto:${TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}`}
                             >
                               {TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}
                             </a>
                             .
-                          </span>
+                          </>
+                        ) : (
+                          <>
+                            {alertError.message}
+                            {alertHelper.insertContactSupportClause && (
+                              <span>
+                                {' '}
+                                Contact{' '}
+                                <a
+                                  href={`mailto:${TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}`}
+                                >
+                                  {TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}
+                                </a>
+                                .
+                              </span>
+                            )}
+                          </>
                         )}
                       </p>
                     )}

@@ -217,6 +217,22 @@ option:first-child {
     font-weight: 600;
   }
 
+  &.usa-alert--filing-fee-status-unknown {
+    @media only screen and (max-width: ($medium-screen - 1px)) {
+      .usa-alert__support-email-link {
+        display: block;
+      }
+    }
+
+    @media only screen and (min-width: $medium-screen) {
+      max-width: 50em;
+
+      .usa-alert__text {
+        white-space: nowrap;
+      }
+    }
+  }
+
   &.usa-alert--success-max-width-none {
     max-width: none;
   }

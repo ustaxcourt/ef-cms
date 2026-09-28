@@ -1178,6 +1178,7 @@ export type AlertError = {
   title?: string;
   message?: string;
   messages?: string[];
+  filingFeePaymentStatusDocketNumber?: string;
   responseCode?: number;
   scrollToErrorNotification?: boolean;
   insertContactSupportClause?: boolean;
