@@ -3,26 +3,22 @@ import {
   loginAsPrivatePractitioner,
 } from 'cypress/helpers/authentication/login-as-helpers';
 import { externalUserCreatesElectronicCase } from 'cypress/helpers/fileAPetition/petitioner-creates-electronic-case';
+import {
+  clickDashboardPayNow,
+  stripDocketSuffix,
+} from 'cypress/helpers/filingFee/dashboardFilingFeeHelpers';
 import { checkA11y } from '../../../support/generalCommands/checkA11y';
 
 function assertDashboardInitPaymentErrorNotification(): void {
   externalUserCreatesElectronicCase().then(docketNumber => {
-    const docketNumberWithoutSuffix = String(docketNumber).replace(
-      /[A-Za-z]+$/,
-      '',
-    );
+    const docketNumberWithoutSuffix = stripDocketSuffix(docketNumber);
 
     cy.intercept('PUT', '**/filing-fee/init-payment', {
       statusCode: 500,
       body: { message: 'payment unavailable' },
-    }).as('initPaymentFailure');
+    });
 
-    cy.get(`[data-testid="${docketNumberWithoutSuffix}"]`)
-      .find('[data-testid="pay-filing-fee-button"]')
-      .should('be.visible')
-      .click();
-
-    cy.wait('@initPaymentFailure');
+    clickDashboardPayNow(docketNumber);
 
     cy.get('[data-testid="error-alert"]')
       .should('be.visible')
