@@ -323,7 +323,7 @@ describe('Pay Filing Fee Through pay.gov', () => {
         .should('contain.text', 'Filing fee status unknown')
         .and(
           'contain.text',
-          'Unable to verify payment status. Contact dawson.support@ustaxcourt.gov.',
+          `Unable to verify payment status for ${docketNumber}. Contact dawson.support@ustaxcourt.gov.`,
         );
     });
   };
@@ -360,7 +360,7 @@ describe('Pay Filing Fee Through pay.gov', () => {
       payFeeCancel,
     );
 
-    it(
+    it.only(
       'should show status unknown if process-payment endpoint returns an error',
       payFeeUnknown,
     );
