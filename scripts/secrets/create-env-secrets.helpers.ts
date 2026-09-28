@@ -1,4 +1,11 @@
+import {
+  CreateSecretCommand,
+  PutSecretValueCommand,
+  SecretsManagerClient,
+} from '@aws-sdk/client-secrets-manager';
 import { type ScriptConfig } from '../helpers/parseArgsAndEnvVars';
+import { getRepoName } from './createSecretsHelpers';
+import { makeNewPassword } from '../user/make-new-password';
 
 export const createEnvSecretsScriptConfig: ScriptConfig = {
   description:
@@ -155,17 +162,16 @@ export const createEnvSecretsScriptConfig: ScriptConfig = {
   requireActiveAwsSession: false,
 };
 
-export type BuildDeployEnvSecretsParams = {
+export type CreateEnvSecretsParams = {
   adminUserEmail: string;
-  adminUserPassword: string;
   baseDomain: string;
-  defaultAccountPass: string;
   dynamsoftProductKeys: string;
   emailDmarcPolicy: string;
   enableDynamsoft: boolean;
   enableEmail: boolean;
   enableHealthChecks: boolean;
   env: string;
+  generateSecureDefaultAccountPassword: boolean;
   irsSuperuserEmail?: string;
   opensearchEngineVersion: string;
   opensearchInstanceCount: number;
@@ -174,64 +180,29 @@ export type BuildDeployEnvSecretsParams = {
   paymentPortalArn: string;
   paymentPortalHost: string;
   payGovOrigin: string;
-  postgresOriginalPassword: string;
   postgresOriginalUsername: string;
   prodAccountId: string;
   prodDocumentsBucket: string;
   rdsEngineVersion: string;
   rdsMaxCapacity: string;
   rdsMinCapacity: string;
-  repoName: string;
+  region: string;
   rumSampleRate: string;
+  secretsClient?: SecretsManagerClient;
+  update: boolean;
   zendeskUserEmail: string;
-  zendeskUserPassword: string;
 };
 
-export type DeployEnvSecrets = {
-  COGNITO_SUFFIX: string;
-  DATABASE_NAME: string;
-  DEFAULT_ACCOUNT_PASS: string;
-  DISABLE_EMAILS: string;
-  DYNAMSOFT_PRODUCT_KEYS: string;
-  EFCMS_DOMAIN: string;
-  EMAIL_DMARC_POLICY: string;
-  ENABLE_HEALTH_CHECKS: number;
-  ENV: string;
-  ES_ENGINE_VERSION: string;
-  ES_INSTANCE_COUNT: number;
-  ES_INSTANCE_TYPE: string;
-  ES_VOLUME_SIZE: number;
-  IRS_SUPERUSER_EMAIL: string;
-  IS_DYNAMSOFT_ENABLED: number;
-  PAYMENT_PORTAL_ARN: string;
-  PAYMENT_PORTAL_HOST: string;
-  PAY_GOV_ORIGIN: string;
-  POSTGRES_MASTER_PASSWORD: string;
-  POSTGRES_MASTER_USERNAME: string;
-  POSTGRES_USER: string;
-  PROD_DOCUMENTS_BUCKET_NAME: string;
-  PROD_ENV_ACCOUNT_ID: string;
-  RDS_ENGINE_VERSION: string;
-  RDS_MAX_CAPACITY: string;
-  RDS_MIN_CAPACITY: string;
-  RUM_SAMPLE_RATE: string;
-  USTC_ADMIN_PASS: string;
-  USTC_ADMIN_USER: string;
-  USTC_ZENDESK_USER: string;
-  USTC_ZENDESK_PASS: string;
-};
-
-export const buildDeployEnvSecrets = ({
+export const createEnvSecrets = async ({
   adminUserEmail,
-  adminUserPassword,
   baseDomain,
-  defaultAccountPass,
   dynamsoftProductKeys,
   emailDmarcPolicy,
   enableDynamsoft,
   enableEmail,
   enableHealthChecks,
   env,
+  generateSecureDefaultAccountPassword,
   irsSuperuserEmail,
   opensearchEngineVersion,
   opensearchInstanceCount,
@@ -240,21 +211,39 @@ export const buildDeployEnvSecrets = ({
   paymentPortalArn,
   paymentPortalHost,
   payGovOrigin,
-  postgresOriginalPassword,
   postgresOriginalUsername,
   prodAccountId,
   prodDocumentsBucket,
   rdsEngineVersion,
   rdsMaxCapacity,
   rdsMinCapacity,
-  repoName,
+  region,
   rumSampleRate,
+  secretsClient,
+  update,
   zendeskUserEmail,
-  zendeskUserPassword,
-}: BuildDeployEnvSecretsParams): DeployEnvSecrets => {
+}: CreateEnvSecretsParams): Promise<void> => {
+  if (env === 'prod') {
+    console.log('Do not use in prod');
+    process.exit(1);
+    return;
+  }
+
+  const repoName = await getRepoName();
   const repoSlug = repoName.replace(/[^a-z0-9]/gi, '').toLowerCase();
 
-  return {
+  const adminUserPassword = makeNewPassword();
+  const defaultAccountPass = generateSecureDefaultAccountPassword
+    ? makeNewPassword()
+    : 'Testing1234$';
+  const postgresOriginalPassword = makeNewPassword(
+    ['uppercase', 'lowercase', 'numbers'],
+    42,
+  );
+
+  const zendeskUserPassword = makeNewPassword();
+
+  const envSecrets = {
     COGNITO_SUFFIX: `${repoSlug}-${env}`,
     DATABASE_NAME: `${env}_dawson`,
     DEFAULT_ACCOUNT_PASS: defaultAccountPass,
@@ -288,4 +277,20 @@ export const buildDeployEnvSecrets = ({
     USTC_ZENDESK_USER: zendeskUserEmail,
     USTC_ZENDESK_PASS: zendeskUserPassword,
   };
+
+  const client = secretsClient ?? new SecretsManagerClient({ region });
+  if (update) {
+    const putSecretValueCommand = new PutSecretValueCommand({
+      SecretId: `${env}_deploy`,
+      SecretString: JSON.stringify(envSecrets),
+    });
+    await client.send(putSecretValueCommand);
+  } else {
+    const createSecretCommand = new CreateSecretCommand({
+      Description: `Environment variables for the ${env} environment`,
+      Name: `${env}_deploy`,
+      SecretString: JSON.stringify(envSecrets),
+    });
+    await client.send(createSecretCommand);
+  }
 };
