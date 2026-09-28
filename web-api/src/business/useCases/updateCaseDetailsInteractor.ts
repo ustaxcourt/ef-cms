@@ -99,7 +99,10 @@ export const updateCaseDetails = async (
     { authorizedUser },
   );
 
-  if (oldCase.petitionPaymentStatus === PAYMENT_STATUS.UNPAID) {
+  if (
+    oldCase.petitionPaymentStatus === PAYMENT_STATUS.UNPAID ||
+    oldCase.petitionPaymentStatus === PAYMENT_STATUS.PENDING
+  ) {
     if (isPaid) {
       const filingFeePaidEntry = createFilingFeePaidMinuteEntry(
         newCaseEntity,

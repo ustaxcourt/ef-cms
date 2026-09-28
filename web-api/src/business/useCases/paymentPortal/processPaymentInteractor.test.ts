@@ -26,6 +26,7 @@ import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 import { processPaymentInteractor } from '@web-api/business/useCases/paymentPortal/processPaymentInteractor';
 import {
+  CASE_STATUS_TYPES,
   MINUTE_ENTRIES_MAP,
   PAYMENT_STATUS,
 } from '@shared/business/entities/EntityConstants';
@@ -77,6 +78,7 @@ describe('processPaymentInteractor', () => {
       ...MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS,
       petitionPaymentToken: mockPaymentToken,
       docketNumber,
+      status: CASE_STATUS_TYPES.generalDocket,
     });
     applicationContext
       .getUseCases()
@@ -227,6 +229,44 @@ describe('processPaymentInteractor', () => {
       docketNumber,
       index: 1,
     });
+
+    expect(result).toEqual(mockProcessPaymentResponse);
+  });
+
+  it('should not add a minute entry if case is not served', async () => {
+    getCaseByDocketNumber.mockResolvedValue({
+      ...MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS,
+      petitionPaymentToken: mockPaymentToken,
+      docketNumber,
+      status: CASE_STATUS_TYPES.new,
+    });
+
+    const result = await processPaymentInteractor(
+      applicationContext,
+      { docketNumber },
+      mockPractitioner,
+    );
+
+    expect(
+      applicationContext.getPaymentPortalClient().processPayment,
+    ).toHaveBeenCalledWith(applicationContext, {
+      token: mockPaymentToken,
+    });
+
+    const { authorizedUser, caseToUpdate } =
+      updateCaseAndAssociations.mock.calls[0][0];
+
+    expect(authorizedUser).toEqual(mockPractitioner);
+
+    expect(caseToUpdate).toMatchObject({
+      petitionPaymentStatus: PAYMENT_STATUS.PAID,
+      petitionPaymentDate: mockToday,
+      petitionPaymentMethod: 'Pay.gov',
+    });
+
+    expect(caseToUpdate).not.toHaveProperty('petitionPaymentToken');
+
+    expect(caseToUpdate.docketEntries).toEqual([]);
 
     expect(result).toEqual(mockProcessPaymentResponse);
   });

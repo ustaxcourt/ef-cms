@@ -14,6 +14,7 @@ import {
   fillCaseProcedureInformation,
   fillStinInformation,
 } from '../../../local-only/tests/integration/fileAPetitionUpdated/petition-helper';
+import { petitionsClerkQcsAndServesElectronicCase } from '../../../helpers/documentQC/petitions-clerk-qcs-and-serves-electronic-case';
 
 describe('Pay Filing Fee Through pay.gov', () => {
   const VALID_FILE = '../../helpers/file/sample.pdf';
@@ -35,7 +36,7 @@ describe('Pay Filing Fee Through pay.gov', () => {
 
   const today = formatDateString(createISODateAtStartOfDayEST(), 'MMDDYY');
 
-  const verifySuccessfulPayment = (docketNumber: string) => {
+  const verifySuccessfulPaymentOfUnservedCase = (docketNumber: string) => {
     cy.get('[data-testid="success-alert"]')
       .should('contain.text', 'Filing fee payment successful')
       .and(
@@ -50,6 +51,21 @@ describe('Pay Filing Fee Through pay.gov', () => {
     cy.get(`[data-testid="${docketNumber}"]`)
       .find('[data-testid="case-link"]')
       .click();
+
+    cy.get('[data-testid="docket-record-table"] td')
+      .contains('FEE')
+      .should('not.exist');
+
+    cy.get('[data-testid="tab-case-information"]').click();
+
+    cy.get('[data-testid="case-filing-fee-information"]').should(
+      'have.text',
+      `Paid ${today} Pay.gov`,
+    );
+  };
+
+  const verifyFilingFeeMinuteEntry = (docketNumber: string) => {
+    cy.visit(`/case-detail/${docketNumber}`);
 
     cy.get('[data-testid="docket-record-table"] td')
       .contains('FEE')
@@ -80,13 +96,6 @@ describe('Pay Filing Fee Through pay.gov', () => {
           .find('[data-testid^="docket-entry-servedPartiesCode-"]')
           .should('have.text', '');
       });
-
-    cy.get('[data-testid="tab-case-information"]').click();
-
-    cy.get('[data-testid="case-filing-fee-information"]').should(
-      'have.text',
-      `Paid ${today} Pay.gov`,
-    );
   };
 
   const payFeeSuccess = () => {
@@ -133,7 +142,11 @@ describe('Pay Filing Fee Through pay.gov', () => {
         },
       );
 
-      verifySuccessfulPayment(docketNumber);
+      verifySuccessfulPaymentOfUnservedCase(docketNumber);
+
+      // serving case should generate filing fee paid minute entry
+      petitionsClerkQcsAndServesElectronicCase(docketNumber);
+      verifyFilingFeeMinuteEntry(docketNumber);
     });
   };
 
@@ -350,7 +363,7 @@ describe('Pay Filing Fee Through pay.gov', () => {
         },
       );
 
-      verifySuccessfulPayment(docketNumber);
+      verifySuccessfulPaymentOfUnservedCase(docketNumber);
     });
   };
 
