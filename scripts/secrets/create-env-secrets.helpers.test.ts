@@ -68,7 +68,7 @@ const baseParams: CreateEnvSecretsParams = {
   postgresOriginalUsername: 'master',
   prodAccountId: '123456789012',
   prodDocumentsBucket: 'prod-documents',
-  rdsEngineVersion: '17.10',
+  rdsEngineVersion: '17.5',
   rdsMaxCapacity: '1',
   rdsMinCapacity: '0.5',
   region: 'us-east-1',
@@ -101,7 +101,7 @@ const expectedEnvSecrets = {
   POSTGRES_USER: 'exp1_dawson',
   PROD_DOCUMENTS_BUCKET_NAME: 'prod-documents',
   PROD_ENV_ACCOUNT_ID: '123456789012',
-  RDS_ENGINE_VERSION: '17.10',
+  RDS_ENGINE_VERSION: '17.5',
   RDS_MAX_CAPACITY: '1',
   RDS_MIN_CAPACITY: '0.5',
   RUM_SAMPLE_RATE: '1',
@@ -142,22 +142,22 @@ describe('create-env-secrets.helpers', () => {
   });
 
   describe('createEnvSecretsScriptConfig / parseArgsAndEnvVars', () => {
-    it('defaults rdsEngineVersion to 17.10', () => {
-      const { rdsEngineVersion } = parseArgsAndEnvVars(
-        createEnvSecretsScriptConfig,
-      ) as { rdsEngineVersion: string };
-
-      expect(rdsEngineVersion).toEqual('17.10');
-    });
-
-    it('honors an explicit --rds-engine-version override', () => {
-      process.argv = [...requiredArgv, '--rds-engine-version', '17.5'];
-
+    it('defaults rdsEngineVersion to 17.5', () => {
       const { rdsEngineVersion } = parseArgsAndEnvVars(
         createEnvSecretsScriptConfig,
       ) as { rdsEngineVersion: string };
 
       expect(rdsEngineVersion).toEqual('17.5');
+    });
+
+    it('honors an explicit --rds-engine-version override', () => {
+      process.argv = [...requiredArgv, '--rds-engine-version', '17.10'];
+
+      const { rdsEngineVersion } = parseArgsAndEnvVars(
+        createEnvSecretsScriptConfig,
+      ) as { rdsEngineVersion: string };
+
+      expect(rdsEngineVersion).toEqual('17.10');
     });
   });
 

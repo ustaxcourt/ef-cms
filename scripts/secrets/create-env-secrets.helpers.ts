@@ -122,7 +122,7 @@ export const createEnvSecretsScriptConfig: ScriptConfig = {
       type: 'string',
     },
     rdsEngineVersion: {
-      default: '17.10',
+      default: '17.5',
       long: 'rds-engine-version',
       type: 'string',
     },
