@@ -14,7 +14,7 @@ DAWSON uses [Trivy](https://trivy.dev/) to scan Dockerfiles and built container 
 
 All scans currently use `exit-code: '0'` (warn-only).
 
-SARIF reaches the **Security tab** only from pushes to staging and from same-repository PRs targeting staging, under categories `trivy-config`, `trivy-image-base`, `trivy-image-puppeteer`, `trivy-image-batch` (PR and manual dispatch) and `trivy-baseline-base`, `trivy-baseline-puppeteer`, `trivy-baseline-batch` (staging). A PR targeting any other branch reports its findings in the workflow log and job summary instead.
+SARIF reaches the **Security tab** only from pushes to staging and from same-repository PRs targeting staging, under categories `trivy-config`, `trivy-image-base`, `trivy-image-puppeteer`, `trivy-image-batch` (PR and manual dispatch) and `trivy-baseline-base`, `trivy-baseline-puppeteer`, `trivy-baseline-batch` (staging). A PR targeting any other branch reports its findings in the workflow log and job summary instead. Both list every finding, most severe first, with its file, package, installed and fixed versions, and a link to the advisory (up to 100 per scan, with a by-rule count beyond that).
 
 Removing a scan does not clear alerts it already reported. Existing alerts have to be dismissed in the Security tab, or their analyses deleted by a repo admin.
 
