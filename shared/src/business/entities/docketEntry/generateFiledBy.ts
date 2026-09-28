@@ -13,7 +13,7 @@ const formatPartyNames = (names: string[], prefix: string): string => {
     : `${prefix}s. ${joinedNames}`;
 };
 
-const isFiledByPractitionerName = ({
+export const isFiledByPractitionerName = ({
   docketEntry,
   user,
 }: {
@@ -26,7 +26,9 @@ const isFiledByPractitionerName = ({
       'Notice of Withdrawal as Counsel';
   const isM112Related =
     docketEntry.eventCode === 'M112' ||
-    docketEntry.secondaryDocument?.eventCode === 'M112';
+    docketEntry.secondaryDocument?.eventCode === 'M112' ||
+    docketEntry.previousDocument?.documentType ===
+      'Motion to Withdraw as Counsel';
   const isPractitioner =
     user?.role === ROLES.irsPractitioner ||
     user?.role === ROLES.privatePractitioner;

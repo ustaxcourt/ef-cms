@@ -333,6 +333,15 @@ describe('generateFiledBy', () => {
         'a Nonstandard H filing targeting an M112',
         { eventCode: 'M115', secondaryDocument: { eventCode: 'M112' } },
       ],
+      [
+        'a supporting document for an M112',
+        {
+          eventCode: 'EXS',
+          previousDocument: {
+            documentType: 'Motion to Withdraw as Counsel',
+          },
+        },
+      ],
       ['a NOTW', { eventCode: 'NOTW' }],
       [
         'a filing on a previous NOTW',
