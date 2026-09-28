@@ -4,10 +4,23 @@ import {
 } from '../../../../helpers/authentication/login-as-helpers';
 import { PROCEDURE_TYPES_MAP } from '@shared/business/entities/EntityConstants';
 import { attachSamplePdfFile } from '../../../../helpers/file/upload-file';
-import { getCypressEnv } from '../../../../helpers/env/cypressEnvironment';
 import { goToCase } from '../../../../helpers/caseDetail/go-to-case';
+import { getCypressEnv } from '../../../../helpers/env/cypressEnvironment';
 
 describe('Payment Status Pending', () => {
+  before(function () {
+    cy.task('getRawFeatureFlagValue', {
+      flag: 'enable-payment-portal-integration',
+    }).as('ENABLE_PAYMENT_PORTAL_INTEGRATION');
+    cy.get('@ENABLE_PAYMENT_PORTAL_INTEGRATION').then(
+      ENABLE_PAYMENT_PORTAL_INTEGRATION => {
+        if (!ENABLE_PAYMENT_PORTAL_INTEGRATION) {
+          this.skip();
+        }
+      },
+    );
+  });
+
   it('should display "Pending" after petitioner files and submits payment', () => {
     petitionerCreatesElectronicCase().then(docketNumber => {
       cy.get('[data-testid="pay-filing-fee-button"]').click();
@@ -32,6 +45,7 @@ describe('Payment Status Pending', () => {
       cy.get('[data-testid="payment-status-pending-radio"]').contains(
         'Pending',
       );
+      cy.get('#payment-status-pending').should('be.checked');
       cy.get('[data-testid="tab-irs-notice"]').click();
       cy.get('[data-testid="has-irs-verified-notice-no"]').click();
       cy.get('[data-testid="submit-case"]').click();
@@ -42,6 +56,7 @@ describe('Payment Status Pending', () => {
       cy.get('[data-testid="payment-status-pending-radio"]').contains(
         'Pending',
       );
+      cy.get('#payment-status-pending').should('be.checked');
     });
   });
 });
