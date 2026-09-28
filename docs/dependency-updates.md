@@ -197,7 +197,7 @@ We run postgres via Docker locally and in GitHub Actions. The postgres image we 
    ```bash
    curl -s "https://registry.hub.docker.com/v2/repositories/library/postgres/tags?page_size=100" | jq -r '.results[].name' | sort -V
    ```
-1. The correct tag to use is the target version of postgres plus the Debian codename (e.g. `17.5-bookworm` for postgres 17.5 on Debian bookworm). Generally, the `postgres` images in Dockerhub will have newer versions of postgres than Aurora RDS has available, so don't be alarmed by this discrepancy. Keep local Docker, GHA service containers, and Aurora `RDS_ENGINE_VERSION` on the same major.minor as prod/test — do not advance local or experimental ahead of deployed environments.
+1. The correct tag to use is the target version of postgres plus the Debian codename from step 1 (e.g. `17.5-trixie` when the CI `cypress/browsers` base is Debian trixie). Generally, the `postgres` images in Dockerhub will have newer versions of postgres than Aurora RDS has available, so don't be alarmed by this discrepancy. Keep local Docker, GHA service containers, and Aurora `RDS_ENGINE_VERSION` on the same major.minor as prod/test — do not advance local or experimental ahead of deployed environments.
 
 #### 5.3 Update PostgreSQL to the latest version locally
 
@@ -330,7 +330,7 @@ These are Docker images used as service containers in workflow jobs (e.g. the Po
 |---|---|---|
 | `postgres` | `security-dast.yml` (dast-api, dast-web), all `template_app*.yml` workflows | See §5.4 above — keep in sync with local and CircleCI postgres version |
 
-> GHA service containers are pinned to `postgres:17.5-bookworm` to match local `docker-compose.yml` and Aurora `RDS_ENGINE_VERSION` (`17.5` on prod/test). Keep these in sync per §5.2–§5.4; do not bump local/GHA/exp ahead of prod/test.
+> GHA service containers are pinned to `postgres:17.5-trixie` to match local `docker-compose.yml` and Aurora `RDS_ENGINE_VERSION` (`17.5` on prod/test). Keep these in sync per §5.2–§5.4; do not bump local/GHA/exp ahead of prod/test.
 
 #### 8.1 Semgrep container image
 
