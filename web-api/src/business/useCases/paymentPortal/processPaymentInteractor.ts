@@ -4,6 +4,7 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import {
+  canAllowDocumentServiceForCase,
   Case,
   userIsDirectlyAssociated,
 } from '@shared/business/entities/cases/Case';
@@ -91,12 +92,15 @@ export const processPayment = async (
     currentCaseEntity.petitionPaymentStatus = PAYMENT_STATUS.PAID;
     currentCaseEntity.petitionPaymentDate = createISODateAtStartOfDayEST();
     currentCaseEntity.petitionPaymentMethod = PAY_GOV_METHOD;
-    const filingFeePaidEntry = createFilingFeePaidMinuteEntry(
-      currentCaseEntity,
-      authorizedUser,
-    );
 
-    currentCaseEntity.addDocketEntry(filingFeePaidEntry);
+    if (canAllowDocumentServiceForCase(currentCaseEntity)) {
+      const filingFeePaidEntry = createFilingFeePaidMinuteEntry(
+        currentCaseEntity,
+        authorizedUser,
+      );
+
+      currentCaseEntity.addDocketEntry(filingFeePaidEntry);
+    }
   } else if (processResponse.paymentStatus === 'pending') {
     currentCaseEntity.petitionPaymentStatus = PAYMENT_STATUS.PENDING;
   }
