@@ -8081,12 +8081,7 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "CognitoUserPool": []
-          }
-        ]
+        }
       },
       "options": {
         "consumes": ["application/json"],
@@ -8134,12 +8129,76 @@
               "$ref": "#/definitions/accessToken"
             }
           }
-        },
-        "security": [
-          {
-            "CognitoUserPool": []
+        }
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
           }
-        ]
+        }
+      }
+    },
+    "/auth/code": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "exchanges an authorization code for tokens",
+        "description": "Exchanges an authorization code for access and refresh tokens.\n",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Auth code & PKCE code verifier",
+            "description": "Auth code & PKCE code verifier",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "authCode": {
+                  "type": "string"
+                },
+                "code_verifier": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "the access, identity, and refresh tokens",
+            "schema": {
+              "$ref": "#/definitions/authorization"
+            },
+            "headers": {
+              "Set-Cookie": {
+                "type": "string",
+                "description": "the cookie that securly stores the refreshToken which can be used later when hitting the /auth/refresh endpoint"
+              }
+            }
+          },
+          "403": {
+            "description": "Unauthorized error",
+            "schema": {
+              "$ref": "#/definitions/unauthorizedError"
+            }
+          }
+        }
       },
       "options": {
         "consumes": ["application/json"],
@@ -8385,6 +8444,16 @@
         }
       },
       "description": "a unprocessable entity error (422), due to a problem in the body or the id in the url"
+    },
+    "unauthorizedError": {
+      "type": "object",
+      "required": ["message"],
+      "properties": {
+        "message": {
+          "type": "string"
+        }
+      },
+      "description": "An error caused by the user performing an action they are not authorized for"
     },
     "workItem": {
       "type": "object",

@@ -1,0 +1,68 @@
+import {
+  buildAuthorizationUrl,
+  calculatePKCECodeChallenge,
+  Configuration,
+  randomPKCECodeVerifier,
+  randomState,
+} from 'openid-client';
+
+export const idpLoginAction = async ({
+  router,
+  applicationContext,
+}: ActionProps) => {
+  const managedLoginDomain = process.env.MANAGED_LOGIN_DOMAIN;
+  const clientId = process.env.COGNITO_CLIENT_ID;
+  const idpName = process.env.IDP_NAME;
+  const efcmsDomain = process.env.EFCMS_DOMAIN;
+  if (!managedLoginDomain || !clientId || !idpName || !efcmsDomain)
+    throw new Error('Missing env variables to perform idp login.');
+
+  const config = new Configuration(
+    {
+      issuer: managedLoginDomain,
+      authorization_endpoint: `${managedLoginDomain}/oauth2/authorize`,
+    },
+    clientId,
+  );
+
+  const code_verifier = randomPKCECodeVerifier();
+  const code_challenge = await calculatePKCECodeChallenge(code_verifier);
+  const auth_state = randomState();
+
+  applicationContext.getPersistenceGateway().setItem({
+    key: 'code_verifier',
+    value: code_verifier,
+  });
+
+  applicationContext.getPersistenceGateway().setItem({
+    key: 'auth_state',
+    value: auth_state,
+  });
+
+  const cypressRunningColor = applicationContext
+    .getPersistenceGateway()
+    .getItem({ key: '__cypressRunningColor' });
+
+  const params: {
+    identity_provider?: string;
+    redirect_uri: string;
+    code_challenge: string;
+    code_challenge_method: string;
+    state: string;
+  } = {
+    redirect_uri: `https://app.${efcmsDomain}/auth-code`,
+    code_challenge,
+    code_challenge_method: 'S256',
+    state: auth_state,
+    identity_provider: idpName || 'ustcEntra',
+  };
+
+  if (cypressRunningColor && process.env.ENV !== 'prod') {
+    delete params.identity_provider;
+    params.redirect_uri = `https://app-${cypressRunningColor}.${efcmsDomain}/auth-code`;
+  }
+
+  const idpLoginUrl = buildAuthorizationUrl(config, params);
+
+  router.externalRoute(idpLoginUrl);
+};
