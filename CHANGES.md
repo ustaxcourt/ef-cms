@@ -1,5 +1,9 @@
 <details><summary>Dependency Updates - Week of 2026-09-14</summary>
 
+## Manual Deployment Steps
+
+### Before Deployment
+
 ## Local
 
 #### Upgrade Terraform to `1.16.3`

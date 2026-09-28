@@ -1,5 +1,6 @@
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import jwt from 'jsonwebtoken';
 import axios from 'axios';
 
 export const exchangeAuthCodeInteractor = async (
@@ -43,6 +44,10 @@ export const exchangeAuthCodeInteractor = async (
       howMuch: 1,
       units: 'days',
     });
+
+    const decodedToken = jwt.decode(response.data.id_token);
+    if (!decodedToken || !decodedToken['custom:userId'])
+      throw new UnauthorizedError('User Missing DB user ID');
 
     return {
       accessToken: response.data.access_token,
