@@ -41,6 +41,7 @@ FINDINGS="$(jq -c '
                   | trimmed
                   | split("\n")
                   | map(select(startswith("Vulnerability ") | not) | trimmed)
+                  | map(if . == "Fixed Version:" then "Fixed Version: none published" else . end)
                   | map(select(. != ""))
                   | join(" · ")),
         snippet: (($region.snippet.text // "") | trimmed | split("\n")[0] // "" | .[0:120]) }
@@ -61,12 +62,15 @@ TOTAL="$(printf '%s' "$FINDINGS" | jq -s 'length')"
     LEVELS="$(printf '%s\n' "$FINDINGS" | jq -rs 'group_by(.level) | sort_by(.[0].level | {"error": 0, "warning": 1, "note": 2}[.] // 3) | map("\(length) \(.[0].level)") | join(", ")')"
     echo "**${TOTAL} findings** across ${RULE_COUNT} rules (${LEVELS})."
     echo ""
-    printf '%s\n' "$FINDINGS" | head -n "$MAX_FINDINGS" | jq -r '
+    # Sliced in jq rather than piped through head: with pipefail, head closing the pipe
+    # early kills the writer with SIGPIPE and fails the step on any long report.
+    printf '%s\n' "$FINDINGS" | jq -rs --argjson max "$MAX_FINDINGS" '
       def code: if contains("`") then "`` " + . + " ``" else "`" + . + "`" end;
-      "- **\(.level)** `\(.ruleId)` in `\(.uri)\(if .line then ":\(.line)" else "" end)`",
-      ( if .title != "" then "  - \(.title)" else empty end ),
-      ( if .message != "" and .message != .title then "  - \(.message)" else empty end ),
-      ( if .snippet != "" then "  - \(.snippet | code)" else empty end )
+      .[0:$max][]
+      | "- **\(.level)** `\(.ruleId)` in `\(.uri)\(if .line then ":\(.line)" else "" end)`",
+        ( if .title != "" then "  - \(.title)" else empty end ),
+        ( if .message != "" and .message != .title then "  - \(.message)" else empty end ),
+        ( if .snippet != "" then "  - \(.snippet | code)" else empty end )
     '
     if [ "$TOTAL" -gt "$MAX_FINDINGS" ]; then
       echo ""
