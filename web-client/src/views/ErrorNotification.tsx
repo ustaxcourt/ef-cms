@@ -82,18 +82,22 @@ export const ErrorNotification = connect(
                         {alertHelper.insertContactSupportClause &&
                         alertError.filingFeePaymentStatusDocketNumber ? (
                           <>
-                            {alertError.message}{' '}
+                            <span className="usa-alert__filing-fee-message-lead">
+                              {alertError.message}{' '}
+                            </span>
                             <span className="usa-alert__filing-fee-docket-contact">
                               {alertError.filingFeePaymentStatusDocketNumber}.
                               Contact{' '}
                             </span>
-                            <a
-                              className="usa-alert__support-email-link"
-                              href={`mailto:${TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}`}
-                            >
-                              {TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}
-                            </a>
-                            .
+                            <span className="usa-alert__support-email-line">
+                              <a
+                                className="usa-alert__support-email-link"
+                                href={`mailto:${TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}`}
+                              >
+                                {TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}
+                              </a>
+                              .
+                            </span>
                           </>
                         ) : (
                           <>

@@ -360,7 +360,7 @@ describe('Pay Filing Fee Through pay.gov', () => {
       payFeeCancel,
     );
 
-    it.only(
+    it(
       'should show status unknown if process-payment endpoint returns an error',
       payFeeUnknown,
     );
