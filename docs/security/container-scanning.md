@@ -8,7 +8,7 @@ DAWSON uses [Trivy](https://trivy.dev/) to scan Dockerfiles and built container 
 |-----|--------------|---------|-----------|
 | `trivy-config` | Dockerfile misconfigurations (all Dockerfiles in repo) | PR or manual dispatch | No (warn-only) |
 | `trivy-image` | Built image: `ef-cms-us-east-1` | PR or manual dispatch | No (warn-only) |
-| `trivy-runtime-base` | Base images: `node:24.20.0-slim` (puppeteer), `node:24` (batch) | PR or manual dispatch | No (warn-only) |
+| `trivy-runtime-base` | Base images: `node:24.21.0-slim` (puppeteer), `node:24` (batch) | PR or manual dispatch | No (warn-only) |
 | `trivy-baseline` | All three images above (full baseline) | Push to staging | No (informational) |
 | `containers-gate` | Aggregates above three PR/manual jobs | PR or manual dispatch | Yes (infra failures only) |
 
@@ -24,7 +24,7 @@ Removing a scan does not clear alerts it already reported. Existing alerts have 
 |-------|-----------|---------|
 | `ef-cms-us-east-1` | `Dockerfile` | Production Lambda base image |
 | `efcms-local` | `Dockerfile-local` (FROM ef-cms-us-east-1) | Local dev / CI test runner — **not scanned** |
-| `node:24.20.0-slim` | Docker Hub | Puppeteer / PDF generation base |
+| `node:24.21.0-slim` | Docker Hub | Puppeteer / PDF generation base |
 | `node:24` | Docker Hub | Batch processing base |
 
 `efcms-local` is `FROM ef-cms-us-east-1` plus `COPY . /home/app` and `npm ci`. It installs no OS
