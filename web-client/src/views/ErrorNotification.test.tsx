@@ -181,8 +181,10 @@ describe('ErrorNotification', () => {
       },
     });
 
+    expect(markup).toContain('usa-alert__filing-fee-message-lead');
     expect(markup).toContain('Unable to verify payment status for');
     expect(markup).toContain('8689-26L. Contact');
+    expect(markup).toContain('usa-alert__support-email-line');
     expect(markup).toContain('usa-alert__support-email-link');
     expect(markup).toContain(TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL);
   });

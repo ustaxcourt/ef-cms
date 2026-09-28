@@ -219,13 +219,48 @@ option:first-child {
 
   &.usa-alert--filing-fee-status-unknown {
     @media only screen and (max-width: ($medium-screen - 1px)) {
-      .usa-alert__support-email-link {
+      max-width: none;
+
+      .usa-alert__heading {
+        margin-bottom: 4px;
+        font-size: 16px;
+        line-height: 1.25;
+      }
+
+      .usa-alert__text {
+        font-size: 16px;
+        line-height: 1.35;
+      }
+
+      .grid-row > .grid-col-8 {
+        width: 100%;
+        max-width: 100%;
+        flex: 0 0 100%;
+      }
+
+      .usa-alert__action {
+        display: none;
+      }
+
+      .usa-alert__filing-fee-message-lead {
+        display: block;
+      }
+
+      .usa-alert__support-email-line {
         display: block;
       }
     }
 
     @media only screen and (min-width: $medium-screen) {
       max-width: 50em;
+
+      .usa-alert__filing-fee-message-lead {
+        display: inline;
+      }
+
+      .usa-alert__support-email-line {
+        display: inline;
+      }
 
       .usa-alert__text {
         white-space: nowrap;
