@@ -7,12 +7,21 @@ DAWSON uses [Trivy](https://trivy.dev/) to scan Dockerfiles and built container 
 | Job | What it scans | Trigger | Blocking? |
 |-----|--------------|---------|-----------|
 | `trivy-config` | Dockerfile misconfigurations (all Dockerfiles in repo) | PR or manual dispatch | No (warn-only) |
-| `trivy-image` | Built image: `ef-cms-us-east-1` | PR or manual dispatch | No (warn-only) |
-| `trivy-runtime-base` | Base images of the puppeteer and batch Dockerfiles | PR or manual dispatch | No (warn-only) |
-| `trivy-baseline` | All three images above (full baseline) | Push to staging | No (informational) |
+| `trivy-image` | Built image: `ef-cms-us-east-1` | PR that changes image paths, or manual dispatch | No (warn-only) |
+| `trivy-runtime-base` | Base images of the puppeteer and batch Dockerfiles | PR that changes image paths, or manual dispatch | No (warn-only) |
+| `trivy-baseline` | All three images above (full baseline) | Push to staging that changes image paths, and weekly (Monday 06:00 UTC) | No (informational) |
 | `containers-gate` | Aggregates above three PR/manual jobs | PR or manual dispatch | Yes (infra failures only) |
 
 All scans currently use `exit-code: '0'` (warn-only).
+
+"Image paths" are any `Dockerfile*`, this workflow, and the `dawson-container-images`,
+`dawson-trivy-image-scan`, `dawson-upload-sarif` and `dawson-sarif-summary` actions. Nothing else
+can change what the scanned images contain: `ef-cms-us-east-1` copies no application source or
+lockfile, and the two base images are pulled as published. The weekly run picks up CVEs published
+against images that have not changed.
+
+On PRs that change no image paths, `containers-gate` still runs and passes, so it stays safe to
+require in branch protection.
 
 SARIF reaches the **Security tab** only from pushes to staging and from same-repository PRs targeting staging, under categories `trivy-config`, `trivy-image-base`, `trivy-image-puppeteer`, `trivy-image-batch` (PR and manual dispatch) and `trivy-baseline-base`, `trivy-baseline-puppeteer`, `trivy-baseline-batch` (staging). A PR targeting any other branch reports its findings in the workflow log and job summary instead. Both list every finding, most severe first, with its file, package, installed and fixed versions, and a link to the advisory (up to 100 per scan, with a by-rule count beyond that).
 

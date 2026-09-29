@@ -11,9 +11,18 @@ on:
   workflow_dispatch:
   push:
     branches: [staging]
-    # The coverage badge bot pushes immediately after each merge; badges cannot change results.
-    paths-ignore:
-      - 'docs/badges/**'
+    # Only these paths change what the images contain or how they are scanned. Keep in sync
+    # with IMAGE_PATHS in the changes job below.
+    paths:
+      - '**/Dockerfile*'
+      - '.github/workflows/security-containers.yml'
+      - '.github/actions/dawson-container-images/**'
+      - '.github/actions/dawson-trivy-image-scan/**'
+      - '.github/actions/dawson-upload-sarif/**'
+      - '.github/actions/dawson-sarif-summary/**'
+  # New CVEs are published against images we have not changed, which no path filter sees.
+  schedule:
+    - cron: '0 6 * * 1' # Weekly Monday 06:00 UTC
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
@@ -63,11 +72,43 @@ jobs:
           sarif_file: trivy-config.sarif
           category: trivy-config
 
+  # trivy-config runs on every PR since it builds nothing. The image scans only run when
+  # the PR changes something that can change their results.
+  changes:
+    name: Detect image changes
+    if: github.event_name == 'pull_request' && !github.event.pull_request.draft
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    timeout-minutes: 5
+    outputs:
+      images: ${{ steps.diff.outputs.images }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          # The PR merge commit and its base, so HEAD^1..HEAD is the PR's diff.
+          fetch-depth: 2
+
+      - name: Diff against base
+        id: diff
+        env:
+          # Keep in sync with the push trigger paths above.
+          IMAGE_PATHS: '(^|/)Dockerfile[^/]*$|^\.github/workflows/security-containers\.yml$|^\.github/actions/dawson-(container-images|trivy-image-scan|upload-sarif|sarif-summary)/'
+        run: |
+          if git diff --name-only HEAD^1 HEAD | grep -qE "$IMAGE_PATHS"; then
+            echo "images=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "images=false" >> "$GITHUB_OUTPUT"
+            echo "No Dockerfile or scan tooling changes; skipping image scans." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
   trivy-image:
     name: Trivy Image Scan (core)
+    needs: changes
     if: >-
-      github.event_name == 'workflow_dispatch' ||
-      (github.event_name == 'pull_request' && !github.event.pull_request.draft)
+      always() &&
+      (github.event_name == 'workflow_dispatch' || needs.changes.outputs.images == 'true')
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -93,9 +134,10 @@ jobs:
 
   trivy-runtime-base:
     name: Trivy Base Scan (${{ matrix.name }})
+    needs: changes
     if: >-
-      github.event_name == 'workflow_dispatch' ||
-      (github.event_name == 'pull_request' && !github.event.pull_request.draft)
+      always() &&
+      (github.event_name == 'workflow_dispatch' || needs.changes.outputs.images == 'true')
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -128,14 +170,14 @@ jobs:
           category: trivy-image-${{ matrix.name }}
 
   # ─────────────────────────────────────────────────────────────────────────────
-  # Job 4: staging baseline (non-blocking). Runs only on merge to staging and scans
+  # Job 4: staging baseline (non-blocking). Runs on merge to staging and weekly, and scans
   # every distinct image, so the Security tab holds a complete picture of what's actually
   # live. This is where we discover the full CVE set to triage into .trivyignore.
   # Mirrors the gitleaks-baseline pattern in the sibling workflows.
   # ─────────────────────────────────────────────────────────────────────────────
   trivy-baseline:
     name: Trivy Baseline (staging)
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' || github.event_name == 'schedule'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -190,18 +232,23 @@ jobs:
       always() &&
       (github.event_name == 'workflow_dispatch' ||
       (github.event_name == 'pull_request' && !github.event.pull_request.draft))
-    needs: [trivy-config, trivy-image, trivy-runtime-base]
+    needs: [trivy-config, changes, trivy-image, trivy-runtime-base]
     runs-on: ubuntu-latest
     permissions: {}
     steps:
       - name: Check scan outcomes
         env:
           CONFIG_RESULT: ${{ needs.trivy-config.result }}
+          CHANGES_RESULT: ${{ needs.changes.result }}
           IMAGE_RESULT: ${{ needs.trivy-image.result }}
           RUNTIME_RESULT: ${{ needs.trivy-runtime-base.result }}
         run: |
           if [[ "$CONFIG_RESULT" == "failure" ]]; then
             echo "Trivy Dockerfile config scan failed — see the Security tab for details"
+            exit 1
+          fi
+          if [[ "$CHANGES_RESULT" == "failure" ]]; then
+            echo "Could not determine which files changed — image scans did not run"
             exit 1
           fi
           if [[ "$IMAGE_RESULT" == "failure" ]]; then
