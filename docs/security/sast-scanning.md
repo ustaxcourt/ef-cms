@@ -13,8 +13,10 @@ DAWSON uses four static analysis tools, all wired through `.github/workflows/sec
 
 ## Trigger
 
-- **PRs** (non-draft, targeting staging): runs `semgrep`, `checkov`, `codeql`, `shellcheck`, and the `security-gate` job
+- **PRs** (non-draft, any target branch): runs `semgrep`, `checkov`, `codeql`, `shellcheck`, and the `security-gate` job
 - **Push to staging**: runs `semgrep`, `checkov`, and `codeql`; Semgrep and Checkov populate the default-branch baseline
+
+SARIF is uploaded only from pushes to staging and from same-repository PRs targeting staging. Every other run reports its findings in the workflow log and job summary.
 
 ## Semgrep
 

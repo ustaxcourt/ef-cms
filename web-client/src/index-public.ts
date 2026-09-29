@@ -6,4 +6,10 @@ import { applicationContextPublic } from './applicationContextPublic';
  */
 const options = {};
 
-appPublic.initialize(applicationContextPublic, options);
+void (async (): Promise<void> => {
+  try {
+    await appPublic.initialize(applicationContextPublic, options);
+  } catch (error) {
+    console.error('Failed to initialize the public app:', error);
+  }
+})();

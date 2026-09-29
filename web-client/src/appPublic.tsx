@@ -63,7 +63,7 @@ import { faHandPaper } from '@fortawesome/free-solid-svg-icons';
  * Instantiates the Cerebral app with React
  */
 const appPublic = {
-  initialize: (applicationContext, debugTools) => {
+  initialize: async (applicationContext, debugTools) => {
     initializeRealUserMonitoring();
     const withAppContextDecorator = (f, context) => {
       return get => f(get, context || applicationContext);
@@ -149,7 +149,10 @@ const appPublic = {
       route,
     };
 
-    const cerebralApp = App(presenter as ModuleDefinition, debugTools);
+    const cerebralApp = App(presenter as ModuleDefinition, {
+      ...debugTools,
+      returnSequencePromise: true,
+    });
 
     const bootstrapState = {
       isReady: false,
@@ -167,9 +170,6 @@ const appPublic = {
       }),
     );
 
-    router.initialize(cerebralApp);
-    bootstrapState.isReady = true;
-
     const container = window.document.querySelector('#app-public');
     if (container) {
       const root = createRoot(container);
@@ -186,6 +186,9 @@ const appPublic = {
         </Container>,
       );
     }
+
+    await router.initialize(cerebralApp);
+    bootstrapState.isReady = true;
   },
 };
 

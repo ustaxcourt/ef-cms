@@ -3,7 +3,6 @@ name: Security - SAST
 on:
   pull_request:
     types: [opened, reopened, synchronize, ready_for_review]
-    branches: [staging]
     paths-ignore:
       - '**.md'
       - '**/.gitignore'
@@ -12,10 +11,14 @@ on:
       - 'docs/**'
   push:
     branches: [staging]
+    # The coverage badge bot pushes immediately after each merge; badges cannot change results.
+    paths-ignore:
+      - 'docs/badges/**'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
-  cancel-in-progress: true
+  # Staging pushes queue: a cancelled run still uploads a partial, failed analysis.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 permissions:
   actions: read
@@ -43,7 +46,7 @@ jobs:
 
       - name: Run Semgrep
         env:
-          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          BASE_REF: ${{ github.event.pull_request.base.ref }}
           EVENT_NAME: ${{ github.event_name }}
         run: |
           set -- \
@@ -58,7 +61,6 @@ jobs:
             --config p/expressjs \
             --config .semgrep/ \
             --sarif --output semgrep-results.sarif \
-            --error \
             --exclude='node_modules' \
             --exclude='coverage' \
             --exclude='dist' \
@@ -71,8 +73,15 @@ jobs:
             --exclude='.terraform' \
             --exclude='docs' \
             --metrics=off
+          # --error needs a baseline: on push there is none, so it would fail on every
+          # pre-existing finding. The baseline comes from git because the merge ref follows
+          # the base branch's tip, while pull_request.base.sha is frozen at event time.
           if [ "$EVENT_NAME" = "pull_request" ]; then
-            set -- "$@" --baseline-commit "$BASE_SHA"
+            # This job runs in a container, whose user does not own the workspace.
+            git config --global --add safe.directory "$GITHUB_WORKSPACE"
+            BASE_SHA="$(git merge-base HEAD "origin/${BASE_REF}")"
+            echo "Comparing against ${BASE_REF} at ${BASE_SHA}"
+            set -- "$@" --error --baseline-commit "$BASE_SHA"
           fi
           semgrep "$@"
 
@@ -198,10 +207,20 @@ jobs:
           queries: +security-extended,security-and-quality
           config-file: .github/codeql/codeql-config.yml
 
+      # CodeQL uploads its own SARIF, so it needs the same staging-only rule as dawson-upload-sarif.
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v4
         with:
           category: '/language:${{ matrix.language }}'
+          output: codeql-results
+          upload: ${{ (github.event_name != 'pull_request' || (github.event.pull_request.base.ref == 'staging' && github.event.pull_request.head.repo.full_name == github.event.pull_request.base.repo.full_name)) && 'always' || 'never' }}
+
+      - name: Summarize CodeQL findings
+        if: always()
+        uses: ./.github/actions/dawson-sarif-summary
+        with:
+          sarif_file: codeql-results/${{ matrix.language }}.sarif
+          title: CodeQL (${{ matrix.language }})
 
   shellcheck:
     name: Shellcheck (Shell Script SAST)
