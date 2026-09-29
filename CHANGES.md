@@ -24,10 +24,6 @@ npm run ecr:check-version
 </details>
 <details><summary>Dependency Updates - Week of 2026-09-14</summary>
 
-## Manual Deployment Steps
-
-### Before Deployment
-
 ## Local
 
 #### Upgrade Terraform to `1.16.3`
@@ -39,6 +35,10 @@ tfswitch 1.16.3
 tfenv install 1.16.3
 tfenv use 1.16.3
 ```
+
+## Manual Deployment Steps
+
+### Before Deployment
 
 #### Deploy Docker container `4.3.97`
 
