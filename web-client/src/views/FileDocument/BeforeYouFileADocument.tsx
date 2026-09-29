@@ -52,20 +52,20 @@ export const BeforeYouFileADocument = connect(
 
                     <p className="label">Certificate of Service</p>
                     <p>
-                      If one or more of the parties in a consolidated group
-                      requires paper service, you must include a certificate of
-                      service with your document. In most cases, the only party
-                      petitioners will need to serve is the IRS, and no
-                      certificate of service is required. If you have a
-                      certificate of service, include it with your main document
-                      in a single PDF file.
+                      If one or more parties requires paper service, you must
+                      include a certificate of service with your document. In
+                      most cases, the only party petitioners will need to serve
+                      is the IRS, and no certificate of service is required
+                      because the IRS will be served electronically. If you have
+                      a certificate of service, include it with your main
+                      document in a single PDF file.
                     </p>
 
                     <p className="label">Supporting documents</p>
                     <p>
-                      A supporting document is a document that supports and/or
+                      A supporting document is a document that supports or
                       provides depth to specific statements made in your primary
-                      document. Affidavits, briefs, memorandums, and
+                      document. Affidavits, exhibits, briefs, memoranda, and
                       declarations are all examples of supporting documents. If
                       you want to file one of these documents in support of your
                       primary document, you will be give the chance to do so
@@ -75,17 +75,18 @@ export const BeforeYouFileADocument = connect(
                     <p className="label">Attachments</p>
                     <p>
                       An attachment is any other document you are submitting
-                      with your filing. If you have an attachment, include it
+                      with your filing that is not specifically mentioned as a
+                      Supporting document. If you have an attachment, include it
                       with your main document in a single PDF file. You may mail
                       exhibits to the Court that cannot be converted to a PDF
                       format. For more information on mailing exhibits, see the{' '}
                       <a
                         className="usa-link--external"
-                        href="https://ustaxcourt.gov/resources/dawson/DAWSON_Petitioner_Training_Guide.pdf"
+                        href="https://ustaxcourt.gov/dawson-user-guides/"
                         rel="noopener noreferrer"
                         target="_blank"
                       >
-                        Petitioner’s Guide to E-filing
+                        DAWSON User Guides
                       </a>
                     </p>
                   </div>
