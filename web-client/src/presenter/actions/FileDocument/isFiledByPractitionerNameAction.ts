@@ -1,6 +1,9 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const isFiledByPractitionerNameAction = ({ get, path }: ActionProps) => {
+export const isFiledByPractitionerNameAction = ({
+  get,
+  path,
+}: ActionProps): unknown => {
   const { eventCode, secondaryDocument } = get(state.form);
   if (
     eventCode === 'NOTW' ||

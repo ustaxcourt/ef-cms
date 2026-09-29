@@ -118,12 +118,13 @@ export const fileExternalDocument = async (
     ],
   ];
 
-  // every document in an M112/NOTW filing carries the filing practitioner's name
+  // every document in an M112/NOTW filing carries the filing practitioner's name,
+  // taken from the user record rather than the client-supplied filedBy
   const practitionerFiledBy = isFiledByPractitionerName({
     docketEntry: { ...primaryDocumentMetadata, secondaryDocument },
     user: authorizedUser,
   })
-    ? primaryDocumentMetadata.filedBy
+    ? user.name
     : undefined;
 
   if (secondarySupportingDocuments) {
