@@ -1,3 +1,31 @@
+<details><summary>Dependency Updates - Week of 2026-09-28</summary>
+
+## Local
+
+#### Upgrade Terraform to `1.16.4`
+use either tfswitch or tfenv
+```bash
+tfswitch 1.16.4
+```
+```bash
+tfenv install 1.16.4
+tfenv use 1.16.4
+```
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Deploy Docker container `4.3.94`
+
+This script will prompt for an environment to pull the image from; choose `exp6`.
+
+```bash
+npm run ecr:check-version
+```
+
+</details>
+
 <details><summary>Dependency Updates - Week of 2026-09-22</summary>
 
 ## Local
