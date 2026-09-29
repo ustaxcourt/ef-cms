@@ -1,4 +1,8 @@
 import { isFiledByPractitionerNameAction } from './isFiledByPractitionerNameAction';
+import {
+  petitionerUser,
+  privatePractitionerUser,
+} from '@shared/test/mockUsers';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
@@ -10,33 +14,30 @@ describe('isFiledByPractitionerNameAction', () => {
     };
   });
 
-  it.each([
-    ['NOTW', { eventCode: 'NOTW' }],
-    ['M112', { eventCode: 'M112' }],
-    [
-      'a Nonstandard H filing targeting an M112',
-      { eventCode: 'M115', secondaryDocument: { eventCode: 'M112' } },
-    ],
-  ])('calls path.yes when the form is %s', async (_, form) => {
+  it('calls path.yes when a practitioner files an M112', async () => {
     await runAction(isFiledByPractitionerNameAction, {
       modules: { presenter },
-      state: { form },
+      state: { form: { eventCode: 'M112' }, user: privatePractitionerUser },
     });
 
     expect(presenter.providers.path.yes).toHaveBeenCalledTimes(1);
     expect(presenter.providers.path.no).not.toHaveBeenCalled();
   });
 
-  it.each([
-    ['another event code', { eventCode: 'ABC' }],
-    [
-      'a Nonstandard H filing not targeting an M112',
-      { eventCode: 'M115', secondaryDocument: { eventCode: 'M000' } },
-    ],
-  ])('calls path.no when the form is %s', async (_, form) => {
+  it('calls path.no when a practitioner files another document type', async () => {
     await runAction(isFiledByPractitionerNameAction, {
       modules: { presenter },
-      state: { form },
+      state: { form: { eventCode: 'ABC' }, user: privatePractitionerUser },
+    });
+
+    expect(presenter.providers.path.yes).not.toHaveBeenCalled();
+    expect(presenter.providers.path.no).toHaveBeenCalledTimes(1);
+  });
+
+  it('calls path.no when a non-practitioner files an M112', async () => {
+    await runAction(isFiledByPractitionerNameAction, {
+      modules: { presenter },
+      state: { form: { eventCode: 'M112' }, user: petitionerUser },
     });
 
     expect(presenter.providers.path.yes).not.toHaveBeenCalled();

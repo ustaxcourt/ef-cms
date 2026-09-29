@@ -213,7 +213,7 @@ describe('Private practitioner files a Motion to Withdraw as Counsel (M112)', ()
       cy.get('#filed-by').should('have.value', practitionerName);
       cy.get('#filed-by').type(' (QC edit)');
       cy.get('[data-testid="save-and-finish-document-qc"]').click();
-      cy.get('[data-testid="loading-overlay"]').should('not.exist');
+      cy.get('[data-testid="success-alert"]').should('contain', 'QC Completed');
 
       goToCase(docketNumber);
       cy.contains('[data-testid^="docket-entry-eventCode-"]', 'M112')

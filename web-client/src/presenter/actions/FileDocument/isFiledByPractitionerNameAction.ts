@@ -1,16 +1,14 @@
+import { isFiledByPractitionerName } from '@shared/business/entities/docketEntry/isFiledByPractitionerName';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const isFiledByPractitionerNameAction = ({
   get,
   path,
 }: ActionProps): unknown => {
-  const { eventCode, secondaryDocument } = get(state.form);
-  if (
-    eventCode === 'NOTW' ||
-    eventCode === 'M112' ||
-    secondaryDocument?.eventCode === 'M112'
-  ) {
-    return path.yes();
-  }
-  return path.no();
+  return isFiledByPractitionerName({
+    docketEntry: get(state.form),
+    user: get(state.user),
+  })
+    ? path.yes()
+    : path.no();
 };
