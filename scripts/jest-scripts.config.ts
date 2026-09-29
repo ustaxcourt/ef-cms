@@ -68,6 +68,7 @@ const config: Config = {
     'reports/term.helpers.ts',
     '!run-once-scripts/**',
     '!secrets/**',
+    'secrets/create-env-secrets.helpers.ts',
     '!seed/add-missing-seed-docket-entries-pdfs.js',
     '!send-maintenance-mode-notifications-locally.ts',
     '!template.ts',
