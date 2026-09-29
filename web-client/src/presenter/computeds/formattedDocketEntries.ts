@@ -448,35 +448,38 @@ export const formattedDocketEntries = (
       docketRecordFilter,
     });
 
-  let docketEntriesFormatted = preformattedDocketEntries
-    .map(entry =>
-      getFormattedDocketEntry({
-        applicationContext,
-        docketNumber,
-        entry: { ...entry } as FormattedCaseDetailDocketEntry,
-        get,
-        permissions,
-        rawCase: caseDetail,
-        user,
-        visibilityPolicyDateFormatted,
-      }),
-    )
-    .map(docketEntry => {
-      return {
-        ...docketEntry,
-        isDocumentSelected: documentsSelectedForDownload.some(
-          docEntry => docEntry.docketEntryId === docketEntry.docketEntryId,
-        ),
-        isSelectableForDownload: !!isSelectableForDownload(docketEntry),
-        signatory: '',
-      };
-    });
+  const formatDocketEntries = (
+    entries: RawDocketEntry[],
+  ): ComputedFormattedDocketEntry[] =>
+    sortDocketEntryTable(
+      entries
+        .map(entry =>
+          getFormattedDocketEntry({
+            applicationContext,
+            docketNumber,
+            entry: { ...entry } as FormattedCaseDetailDocketEntry,
+            get,
+            permissions,
+            rawCase: caseDetail,
+            user,
+            visibilityPolicyDateFormatted,
+          }),
+        )
+        .map(docketEntry => {
+          return {
+            ...docketEntry,
+            isDocumentSelected: documentsSelectedForDownload.some(
+              docEntry => docEntry.docketEntryId === docketEntry.docketEntryId,
+            ),
+            isSelectableForDownload: !!isSelectableForDownload(docketEntry),
+            signatory: '',
+          };
+        }),
+      docketRecordSortField,
+      docketRecordSortOrder,
+    );
 
-  docketEntriesFormatted = sortDocketEntryTable(
-    docketEntriesFormatted,
-    docketRecordSortField,
-    docketRecordSortOrder,
-  );
+  const docketEntriesFormatted = formatDocketEntries(preformattedDocketEntries);
 
   const selectableDocumentsCount = docketEntriesFormatted.filter(entry =>
     isSelectableForDownload(entry),
@@ -503,9 +506,16 @@ export const formattedDocketEntries = (
       docketEntryId: docEntry.docketEntryId,
     }));
 
+  const formattedDocketEntriesForPendingList =
+    preformattedDocketEntries === formattedCase.formattedDocketEntries
+      ? docketEntriesFormatted
+      : formatDocketEntries(formattedCase.formattedDocketEntries);
+
   const formattedPendingDocketEntriesOnDocketRecord =
-    formattedDocketEntriesOnDocketRecord.filter(docketEntry =>
-      applicationContext.getUtilities().isPending(docketEntry),
+    formattedDocketEntriesForPendingList.filter(
+      docketEntry =>
+        docketEntry.isOnDocketRecord &&
+        applicationContext.getUtilities().isPending(docketEntry),
     );
 
   const formattedDraftDocuments = formattedCase.draftDocuments.map(draftDoc => {

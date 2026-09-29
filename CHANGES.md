@@ -30,6 +30,30 @@ Once everything is deployed, set the feature flag to show the SSO button on the 
 
 If this feature is not needed, no updates are required. The terraform updates will not take place if `IDP_NAME` is not set.
 </details>
+<details><summary>Dependency Updates - Week of 2026-09-22</summary>
+
+## Local
+
+#### Upgrade NodeJS to `24.21.0`
+```bash
+nvm install
+nvm use
+nvm alias default "$(cat .nvmrc)"
+```
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Deploy Docker container `4.3.98`
+
+This script will prompt for an environment to pull the image from; choose `exp7`.
+
+```bash
+npm run ecr:check-version
+```
+
+</details>
 <details><summary>Dependency Updates - Week of 2026-09-14</summary>
 
 ## Local
@@ -76,6 +100,7 @@ Blocked Cases Report. Run the following to recompute those cases:
 ./scripts/run-once-scripts/fix-stale-automatic-blocks.ts
 ```
 </details>
+
 <details><summary>Dependency Updates - Week of 2026-09-08</summary>
 
 ## Local

@@ -1,0 +1,95 @@
+name: Security - No Increase In Findings
+
+# Fails a pull request carrying more security findings than staging, like
+# typescript-error-check.yml does for type errors. Both sides are scanned in one job.
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, ready_for_review]
+    paths-ignore:
+      - '**.md'
+      - '**/.gitignore'
+      - '.nvmrc'
+      - 'docs/**'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  TRIVY_DB_REPOSITORY: ghcr.io/aquasecurity/trivy-db,public.ecr.aws/aquasecurity/trivy-db
+  TRIVY_JAVA_DB_REPOSITORY: ghcr.io/aquasecurity/trivy-java-db,public.ecr.aws/aquasecurity/trivy-java-db
+
+jobs:
+  compare:
+    name: Findings vs staging
+    if: ${{ !github.event.pull_request.draft }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      # Local actions resolve against the workspace root, so they are checked out first.
+      - name: Checkout DAWSON actions
+        uses: actions/checkout@v6
+        with:
+          sparse-checkout: .github/actions
+          sparse-checkout-cone-mode: false
+
+      - name: Checkout current branch
+        uses: actions/checkout@v6
+        with:
+          path: branchToBeCompared
+
+      - name: Checkout USTC staging
+        uses: actions/checkout@v6
+        with:
+          path: stagingBranch
+          ref: staging
+          repository: ustaxcourt/ef-cms
+
+      - name: Trivy full tree (this branch)
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          exit-code: '0'
+          format: sarif
+          limit-severities-for-sarif: true
+          output: trivy-fs-branch.sarif
+          scan-ref: branchToBeCompared
+          scan-type: fs
+          scanners: vuln
+          severity: HIGH,CRITICAL,UNKNOWN
+
+      - name: Trivy full tree (staging)
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          exit-code: '0'
+          format: sarif
+          limit-severities-for-sarif: true
+          output: trivy-fs-staging.sarif
+          scan-ref: stagingBranch
+          scan-type: fs
+          scanners: vuln
+          severity: HIGH,CRITICAL,UNKNOWN
+
+      - name: Summarize this branch's findings
+        if: always()
+        uses: ./.github/actions/dawson-sarif-summary
+        with:
+          sarif_file: trivy-fs-branch.sarif
+          title: Trivy full tree (this branch)
+
+      - name: Node bootstrap
+        uses: ./.github/actions/dawson-node-bootstrap
+        with:
+          node-version-file: branchToBeCompared/.nvmrc
+          restore-cache: 'false'
+          save-cache: 'false'
+          working-directory: ./branchToBeCompared
+
+      - name: Compare findings with staging
+        working-directory: ./branchToBeCompared
+        run: |
+          npx ts-node scripts/github-actions/compare-security-findings.ts \
+            "trivy-fs:../trivy-fs-branch.sarif:../trivy-fs-staging.sarif"
