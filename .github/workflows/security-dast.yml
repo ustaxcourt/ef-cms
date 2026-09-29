@@ -38,7 +38,7 @@ jobs:
             username: petitioner@example.com
     services:
       postgres:
-        image: postgres
+        image: postgres:17.5-trixie
         env:
           POSTGRES_PASSWORD: example
         options: >-
@@ -131,7 +131,7 @@ jobs:
       CI: true
     services:
       postgres:
-        image: postgres
+        image: postgres:17.5-trixie
         env:
           POSTGRES_PASSWORD: example
         options: >-

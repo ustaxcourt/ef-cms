@@ -106,17 +106,24 @@ jobs:
       matrix:
         include:
           - name: puppeteer
-            image: node:24.20.0-slim
+            dockerfile: web-api/runtimes/puppeteer/Dockerfile
           - name: batch
-            image: node:24
+            dockerfile: web-api/terraform/modules/batch/docker-image/Dockerfile
     steps:
       - name: Checkout
         uses: actions/checkout@v7
 
-      - name: Trivy scan — ${{ matrix.image }}
+      # Read from the Dockerfile so the scan follows the weekly base image bumps.
+      - name: Resolve base image
+        id: base
+        env:
+          DOCKERFILE: ${{ matrix.dockerfile }}
+        run: echo "image=$(awk '/^FROM /{print $2; exit}' "$DOCKERFILE")" >> "$GITHUB_OUTPUT"
+
+      - name: Trivy scan — ${{ steps.base.outputs.image }}
         uses: ./.github/actions/dawson-trivy-image-scan
         with:
-          image_ref: ${{ matrix.image }}
+          image_ref: ${{ steps.base.outputs.image }}
           report_path: trivy-${{ matrix.name }}.sarif
           category: trivy-image-${{ matrix.name }}
 
@@ -151,17 +158,24 @@ jobs:
           report_path: trivy-baseline-base.sarif
           category: trivy-baseline-base
 
-      - name: Trivy scan — node:24.20.0-slim (baseline)
+      # Read from the Dockerfiles so the scans follow the weekly base image bumps.
+      - name: Resolve base images
+        id: base
+        run: |
+          echo "puppeteer=$(awk '/^FROM /{print $2; exit}' web-api/runtimes/puppeteer/Dockerfile)" >> "$GITHUB_OUTPUT"
+          echo "batch=$(awk '/^FROM /{print $2; exit}' web-api/terraform/modules/batch/docker-image/Dockerfile)" >> "$GITHUB_OUTPUT"
+
+      - name: Trivy scan — ${{ steps.base.outputs.puppeteer }} (baseline)
         uses: ./.github/actions/dawson-trivy-image-scan
         with:
-          image_ref: node:24.20.0-slim
+          image_ref: ${{ steps.base.outputs.puppeteer }}
           report_path: trivy-baseline-puppeteer.sarif
           category: trivy-baseline-puppeteer
 
-      - name: Trivy scan — node:24 (baseline)
+      - name: Trivy scan — ${{ steps.base.outputs.batch }} (baseline)
         uses: ./.github/actions/dawson-trivy-image-scan
         with:
-          image_ref: node:24
+          image_ref: ${{ steps.base.outputs.batch }}
           report_path: trivy-baseline-batch.sarif
           category: trivy-baseline-batch
 

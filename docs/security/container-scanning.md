@@ -8,7 +8,7 @@ DAWSON uses [Trivy](https://trivy.dev/) to scan Dockerfiles and built container 
 |-----|--------------|---------|-----------|
 | `trivy-config` | Dockerfile misconfigurations (all Dockerfiles in repo) | PR or manual dispatch | No (warn-only) |
 | `trivy-image` | Built image: `ef-cms-us-east-1` | PR or manual dispatch | No (warn-only) |
-| `trivy-runtime-base` | Base images: `node:24.20.0-slim` (puppeteer), `node:24` (batch) | PR or manual dispatch | No (warn-only) |
+| `trivy-runtime-base` | Base images of the puppeteer and batch Dockerfiles | PR or manual dispatch | No (warn-only) |
 | `trivy-baseline` | All three images above (full baseline) | Push to staging | No (informational) |
 | `containers-gate` | Aggregates above three PR/manual jobs | PR or manual dispatch | Yes (infra failures only) |
 
@@ -24,8 +24,11 @@ Removing a scan does not clear alerts it already reported. Existing alerts have 
 |-------|-----------|---------|
 | `ef-cms-us-east-1` | `Dockerfile` | Production Lambda base image |
 | `efcms-local` | `Dockerfile-local` (FROM ef-cms-us-east-1) | Local dev / CI test runner — **not scanned** |
-| `node:24.20.0-slim` | Docker Hub | Puppeteer / PDF generation base |
-| `node:24` | Docker Hub | Batch processing base |
+| `FROM` of `web-api/runtimes/puppeteer/Dockerfile` | Docker Hub | Puppeteer / PDF generation base |
+| `FROM` of `web-api/terraform/modules/batch/docker-image/Dockerfile` | Docker Hub | Batch processing base |
+
+The two base image tags are read from those Dockerfiles when the workflow runs, so they follow
+the weekly dependency updates without a second copy to keep in sync.
 
 `efcms-local` is `FROM ef-cms-us-east-1` plus `COPY . /home/app` and `npm ci`. It installs no OS
 packages, so the CVEs reported against the image itself restated the base image's, under a second
