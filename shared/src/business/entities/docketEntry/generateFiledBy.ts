@@ -1,9 +1,7 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { DocketEntry } from '../DocketEntry';
-import {
-  NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES,
-  ROLES,
-} from '../EntityConstants';
+import { NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES } from '../EntityConstants';
+import { isFiledByPractitionerName } from './isFiledByPractitionerName';
 
 const formatPartyNames = (names: string[], prefix: string): string => {
   if (names.length === 0) return '';
@@ -11,28 +9,6 @@ const formatPartyNames = (names: string[], prefix: string): string => {
   return names.length === 1
     ? `${prefix}. ${joinedNames}`
     : `${prefix}s. ${joinedNames}`;
-};
-
-export const isFiledByPractitionerName = ({
-  docketEntry,
-  user,
-}: {
-  docketEntry: RawDocketEntry;
-  user?: UnknownAuthUser;
-}): boolean => {
-  const isNOTWRelated =
-    docketEntry.eventCode === 'NOTW' ||
-    docketEntry.previousDocument?.documentType ===
-      'Notice of Withdrawal as Counsel';
-  const isM112Related =
-    docketEntry.eventCode === 'M112' ||
-    docketEntry.secondaryDocument?.eventCode === 'M112' ||
-    docketEntry.previousDocument?.documentType ===
-      'Motion to Withdraw as Counsel';
-  const isPractitioner =
-    user?.role === ROLES.irsPractitioner ||
-    user?.role === ROLES.privatePractitioner;
-  return (isNOTWRelated || isM112Related) && isPractitioner;
 };
 
 export const generateFiledBy = ({

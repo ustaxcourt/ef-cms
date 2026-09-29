@@ -36,7 +36,7 @@ import {
 import { canUserFileFirstIrsFiling } from '@shared/business/utilities/canUserFileFirstIrsFiling';
 import { canPractitionerFileEntryOfAppearance } from '@shared/business/utilities/canPractitionerFileEntryOfAppearance';
 import { verifyPendingCaseForUser } from '@web-api/persistence/postgres/cases/pendingCases/verifyPendingCaseForUser';
-import { isFiledByPractitionerName } from '@shared/business/entities/docketEntry/generateFiledBy';
+import { isFiledByPractitionerName } from '@shared/business/entities/docketEntry/isFiledByPractitionerName';
 
 export const fileExternalDocument = async (
   applicationContext: ServerApplicationContext,
