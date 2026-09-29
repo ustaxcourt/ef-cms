@@ -509,7 +509,13 @@ export const formattedDocketEntries = (
   const formattedDocketEntriesForPendingList =
     preformattedDocketEntries === formattedCase.formattedDocketEntries
       ? docketEntriesFormatted
-      : formatDocketEntries(formattedCase.formattedDocketEntries);
+      : formatDocketEntries(
+          formattedCase.formattedDocketEntries.filter(
+            entry =>
+              entry.isOnDocketRecord &&
+              applicationContext.getUtilities().isPending(entry),
+          ),
+        );
 
   const formattedPendingDocketEntriesOnDocketRecord =
     formattedDocketEntriesForPendingList.filter(
