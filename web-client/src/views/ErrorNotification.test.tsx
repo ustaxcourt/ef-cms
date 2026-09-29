@@ -42,6 +42,8 @@ type ErrorNotificationProps = {
     message?: string;
     messageClass?: string;
     className?: string;
+    filingFeePaymentStatusDocketNumber?: string;
+    scrollToErrorNotification?: boolean;
   };
   alertHelper: {
     insertContactSupportClause: boolean;
@@ -165,6 +167,28 @@ describe('ErrorNotification', () => {
 
     expect(markup).toContain('alert-blank-message');
     expect(markup).not.toContain('<ul>');
+  });
+
+  it('should render filing fee payment status unknown message with support link', () => {
+    const markup = renderMarkup({
+      alertError: {
+        filingFeePaymentStatusDocketNumber: '8689-26L',
+        message: 'Unable to verify payment status for',
+        title: 'Filing fee status unknown',
+      },
+      alertHelper: {
+        ...baseHelper,
+        insertContactSupportClause: true,
+        showSingleMessage: true,
+      },
+    });
+
+    expect(markup).toContain('usa-alert__filing-fee-message-lead');
+    expect(markup).toContain('Unable to verify payment status for');
+    expect(markup).toContain('8689-26L. Contact');
+    expect(markup).toContain('usa-alert__support-email-line');
+    expect(markup).toContain('usa-alert__support-email-link');
+    expect(markup).toContain(TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL);
   });
 
   it('should render the contact support clause when enabled', () => {
