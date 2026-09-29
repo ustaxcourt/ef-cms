@@ -608,7 +608,7 @@ describe('fileExternalDocumentInteractor', () => {
     );
   });
 
-  it('should set the filing practitioner as filedBy on every document when a practitioner files a Nonstandard H filing targeting an M112', async () => {
+  it('should set the logged-in practitioner as filedBy on every document when a practitioner files a Nonstandard H filing targeting an M112, ignoring the submitted filedBy', async () => {
     await fileExternalDocumentInteractor(
       applicationContext,
       {
@@ -618,7 +618,7 @@ describe('fileExternalDocumentInteractor', () => {
             'Motion for Leave to File Motion to Withdraw as Counsel',
           documentType: 'Motion for Leave to File',
           eventCode: 'M115',
-          filedBy: mockIrsPractitionerUser.name,
+          filedBy: 'Some Other Practitioner',
           objections: OBJECTIONS_OPTIONS_MAP.NO,
           partyIrsPractitioner: true,
           primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',

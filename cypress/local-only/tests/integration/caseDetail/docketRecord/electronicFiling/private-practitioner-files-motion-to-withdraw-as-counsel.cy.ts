@@ -4,17 +4,24 @@ import { externalUserSearchesDocketNumber } from '../../../../../../helpers/adva
 import { goToCase } from '../../../../../../helpers/caseDetail/go-to-case';
 import {
   loginAsDocketClerk,
+  loginAsIrsPractitioner,
   loginAsPetitioner,
   loginAsPrivatePractitioner,
 } from '../../../../../../helpers/authentication/login-as-helpers';
+import { petitionsClerkAddsRespondentToCase } from '../../../../../../helpers/caseDetail/caseInformation/petitionsclerk-adds-respondent-to-case';
 import { petitionsClerkServesPetition } from '../../../../../../helpers/documentQC/petitionsclerk-serves-petition';
 import { selectTypeaheadInput } from '../../../../../../helpers/components/typeAhead/select-typeahead-input';
+import { checkA11y } from '../../../../../support/generalCommands/checkA11y';
 
 describe('Private practitioner files a Motion to Withdraw as Counsel (M112)', () => {
   const primaryFilerName = 'John';
   const practitionerName = 'Test Private Practitioner';
+  const irsPractitionerName = 'Test IRS Practitioner';
+  const irsPractitionerBarNumber = 'RT6789';
+  const petitionerFilingParty = `filingParty-${primaryFilerName}, Petitioner`;
+  const respondentFilingParty = 'party-irs-practitioner-label';
 
-  const createCaseRepresentedByPractitioner = () => {
+  const createCaseRepresentedByPractitioner = (): Cypress.Chainable<string> => {
     loginAsPetitioner();
     return externalUserCreatesElectronicCase(primaryFilerName).then(
       docketNumber => {
@@ -37,7 +44,29 @@ describe('Private practitioner files a Motion to Withdraw as Counsel (M112)', ()
     );
   };
 
-  const attachSupportingExhibit = (prefix: 'supporting' | 'secondary') => {
+  const createCaseRepresentedByIrsPractitioner =
+    (): Cypress.Chainable<string> => {
+      loginAsPetitioner();
+      return externalUserCreatesElectronicCase(primaryFilerName).then(
+        docketNumber => {
+          petitionsClerkServesPetition(docketNumber);
+          petitionsClerkAddsRespondentToCase(
+            docketNumber,
+            irsPractitionerBarNumber,
+          );
+
+          loginAsIrsPractitioner();
+          goToCase(docketNumber);
+          cy.get('[data-testid="button-file-document"]').should('exist');
+
+          return cy.wrap(docketNumber);
+        },
+      );
+    };
+
+  const attachSupportingExhibit = (
+    prefix: 'supporting' | 'secondary',
+  ): void => {
     const isSecondary = prefix === 'secondary';
     const selectId = isSecondary
       ? '#secondary-supporting-document-0'
@@ -59,10 +88,8 @@ describe('Private practitioner files a Motion to Withdraw as Counsel (M112)', ()
     });
   };
 
-  const submitFiling = () => {
-    cy.get(
-      `[data-testid="filingParty-${primaryFilerName}, Petitioner"]`,
-    ).click();
+  const submitFiling = (filingPartyTestId: string): void => {
+    cy.get(`[data-testid="${filingPartyTestId}"]`).click();
     cy.get('[data-testid="file-document-submit-document"]').click();
     cy.contains('h1', 'Review Your Filing').should('exist');
     cy.get('[data-testid="redaction-acknowledgement-label"]').click();
@@ -71,7 +98,9 @@ describe('Private practitioner files a Motion to Withdraw as Counsel (M112)', ()
     cy.get('[data-testid="success-alert"]').should('contain', 'Print receipt.');
   };
 
-  const fileMotionToWithdrawWithExhibit = () => {
+  const fileMotionToWithdrawWithExhibit = (
+    filingPartyTestId: string = petitionerFilingParty,
+  ): void => {
     cy.get('[data-testid="button-file-document"]').click();
     cy.get('[data-testid="ready-to-file"]').click();
     selectTypeaheadInput(
@@ -88,10 +117,10 @@ describe('Private practitioner files a Motion to Withdraw as Counsel (M112)', ()
     cy.get('[data-testid="primaryDocument-objections-No"]').click();
     attachSupportingExhibit('supporting');
 
-    submitFiling();
+    submitFiling(filingPartyTestId);
   };
 
-  const withdrawalRows = () =>
+  const withdrawalRows = (): Cypress.Chainable<JQuery<HTMLElement>> =>
     cy
       .get('[data-testid="docket-record-table"] tr')
       .filter(':contains("Withdraw as Counsel")');
@@ -106,6 +135,22 @@ describe('Private practitioner files a Motion to Withdraw as Counsel (M112)', ()
           cy.wrap(row)
             .find('[data-testid="docket-entry-filedBy"]')
             .should('have.text', practitionerName);
+        });
+
+      checkA11y();
+    });
+  });
+
+  it('should display the IRS practitioner as filed by on the M112 and its supporting document', () => {
+    createCaseRepresentedByIrsPractitioner().then(() => {
+      fileMotionToWithdrawWithExhibit(respondentFilingParty);
+
+      withdrawalRows()
+        .should('have.length', 2)
+        .each(row => {
+          cy.wrap(row)
+            .find('[data-testid="docket-entry-filedBy"]')
+            .should('have.text', irsPractitionerName);
         });
     });
   });
@@ -141,7 +186,7 @@ describe('Private practitioner files a Motion to Withdraw as Counsel (M112)', ()
       cy.get('[data-testid="secondaryDocument-objections-No"]').click();
       attachSupportingExhibit('secondary');
 
-      submitFiling();
+      submitFiling(petitionerFilingParty);
 
       withdrawalRows()
         .should('have.length', 4)
