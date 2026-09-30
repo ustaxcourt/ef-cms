@@ -190,8 +190,8 @@ describe('Pay Filing Fee Through pay.gov', () => {
         );
 
       cy.get(`[data-testid="${docketNumber}"]`)
-        .find('[data-testid="petition-payment-status"]')
-        .should('have.text', 'Not paid');
+        .find('[data-testid="pay-filing-fee-button"]')
+        .should('be.visible');
 
       cy.get(`[data-testid="${docketNumber}"]`)
         .find('[data-testid="case-link"]')
@@ -410,8 +410,8 @@ describe('Pay Filing Fee Through pay.gov', () => {
         );
 
       cy.get(`[data-testid="${docketNumber}"]`)
-        .find('[data-testid="petition-payment-status"]')
-        .should('have.text', 'Not paid');
+        .find('[data-testid="pay-filing-fee-button"]')
+        .should('be.visible');
 
       cy.get(`[data-testid="${docketNumber}"]`)
         .find('[data-testid="case-link"]')
@@ -450,13 +450,13 @@ describe('Pay Filing Fee Through pay.gov', () => {
               // workaround for the fact that these tests are run during deployments, first check
               // the url pay.gov has is right, and then override it to go to the proper color
               expect(redirectUrl).equal(
-                `https://app.${efcmsDomain}/payment-cancel/${docketNumber}`,
+                `https://app.${efcmsDomain}/payment-cancel?docketNumber=${docketNumber}`,
               );
 
               cy.contains('a', 'Cancel Payment').click();
 
               cy.visit(
-                `https://app-${deployingColor}.${efcmsDomain}/payment-cancel/${docketNumber}`,
+                `https://app-${deployingColor}.${efcmsDomain}/payment-cancel?docketNumber=${docketNumber}`,
               );
             });
           } else {
@@ -472,8 +472,8 @@ describe('Pay Filing Fee Through pay.gov', () => {
       cy.get('[data-testid="my-cases-link"]').click();
 
       cy.get(`[data-testid="${docketNumber}"]`)
-        .find('[data-testid="petition-payment-status"]')
-        .should('have.text', 'Not paid');
+        .find('[data-testid="pay-filing-fee-button"]')
+        .should('be.visible');
 
       cy.get(`[data-testid="${docketNumber}"]`)
         .find('[data-testid="case-link"]')
