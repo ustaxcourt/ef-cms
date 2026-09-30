@@ -7,6 +7,7 @@ import {
   clickDashboardPayNow,
   completeTestPaymentOnPortal,
 } from 'cypress/helpers/filingFee/dashboardFilingFeeHelpers';
+import { skipUnlessPaymentPortalIntegrationEnabled } from 'cypress/helpers/filingFee/skipUnlessPaymentPortalIntegrationEnabled';
 import { checkA11y } from '../../../support/generalCommands/checkA11y';
 
 const assertReturnedToMyCasesDashboard = (): void => {
@@ -37,6 +38,8 @@ const assertDashboardUnknownPaymentStatus = (): void => {
 };
 
 describe('My Cases pay.gov local-only scenarios', () => {
+  before(skipUnlessPaymentPortalIntegrationEnabled);
+
   it('should show filing fee status unknown when process-payment fails after returning from the portal as a petitioner', () => {
     loginAsPetitioner('petitioner@example.com');
     assertDashboardUnknownPaymentStatus();

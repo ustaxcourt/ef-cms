@@ -7,6 +7,7 @@ import {
   clickDashboardPayNow,
   stripDocketSuffix,
 } from 'cypress/helpers/filingFee/dashboardFilingFeeHelpers';
+import { skipUnlessPaymentPortalIntegrationEnabled } from 'cypress/helpers/filingFee/skipUnlessPaymentPortalIntegrationEnabled';
 import { checkA11y } from '../../../support/generalCommands/checkA11y';
 
 function assertDashboardInitPaymentErrorNotification(): void {
@@ -50,6 +51,8 @@ function assertDashboardInitPaymentErrorNotification(): void {
 }
 
 describe('Dashboard filing fee payment error notification', () => {
+  before(skipUnlessPaymentPortalIntegrationEnabled);
+
   it('should show the styled error notification when init payment fails from My Cases as a petitioner', () => {
     loginAsPetitioner('petitioner@example.com');
     assertDashboardInitPaymentErrorNotification();
