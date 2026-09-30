@@ -1142,10 +1142,13 @@ export const PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP = [
 export const PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES =
   PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP.map(d => d.documentType);
 
+export const PAY_GOV_METHOD = 'Pay.gov';
+
 export const PAYMENT_STATUS = {
   PAID: 'Paid',
   UNPAID: 'Not paid',
   WAIVED: 'Waived',
+  PENDING: 'Pending',
 };
 export type PaymentStatusTypes =
   (typeof PAYMENT_STATUS)[keyof typeof PAYMENT_STATUS];
