@@ -852,7 +852,7 @@ export const baseState = {
   },
   draftDocumentViewerDocketEntryId: null,
   editDocumentEntryPoint: 'CaseDetail' as 'CaseDetail' | 'DocumentDetail',
-  featureFlags: undefined as unknown as { [key: string]: string },
+  featureFlags: undefined as unknown as { [key: string]: any },
   fileUploadProgress: {
     isHavingSystemIssues: false,
     isUploading: false,

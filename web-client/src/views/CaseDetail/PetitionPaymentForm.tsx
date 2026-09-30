@@ -1,3 +1,4 @@
+import { ALLOWLIST_FEATURE_FLAGS } from '@shared/business/entities/EntityConstants';
 import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@web-client/presenter/shared.cerebral';
@@ -25,10 +26,12 @@ interface CerebralProps {
     petitionPaymentWaivedDate?: string;
   };
   formatAndUpdateDateFromDatePickerSequence: Function;
+  isPaymentPortalIntegrationEnabled: boolean;
   paymentStatus: {
     PAID: string;
     UNPAID: string;
     WAIVED: string;
+    PENDING: string;
   };
   validationErrors: Record<string, string | undefined>;
 }
@@ -39,6 +42,7 @@ const PetitionPaymentFormComponent: React.FC<
   bind,
   DATE_FORMATS,
   formatAndUpdateDateFromDatePickerSequence,
+  isPaymentPortalIntegrationEnabled,
   onUpdate,
   paymentStatus,
   validateFormData,
@@ -129,6 +133,33 @@ const PetitionPaymentFormComponent: React.FC<
               {paymentStatus.WAIVED}
             </label>
           </div>
+          {isPaymentPortalIntegrationEnabled && (
+            <div className="usa-radio usa-radio__inline">
+              <input
+                aria-describedby="fee-paid-legend"
+                checked={bind.petitionPaymentStatus === paymentStatus.PENDING}
+                className="usa-radio__input"
+                id="payment-status-pending"
+                name="petitionPaymentStatus"
+                type="radio"
+                value={paymentStatus.PENDING}
+                onChange={e => {
+                  onUpdate({
+                    key: e.target.name,
+                    value: e.target.value,
+                  });
+                  validateFormData();
+                }}
+              />
+              <label
+                className="usa-radio__label"
+                data-testid="payment-status-pending-radio"
+                htmlFor="payment-status-pending"
+              >
+                {paymentStatus.PENDING}
+              </label>
+            </div>
+          )}
         </fieldset>
       </FormGroup>
 
@@ -207,6 +238,10 @@ export const PetitionPaymentForm: React.FC<PetitionPaymentFormProps> = connect(
     bind: state[props.bind],
     formatAndUpdateDateFromDatePickerSequence:
       sequences.formatAndUpdateDateFromDatePickerSequence,
+    isPaymentPortalIntegrationEnabled:
+      state.featureFlags[
+        ALLOWLIST_FEATURE_FLAGS.ENABLE_PAYMENT_PORTAL_INTEGRATION.key
+      ],
     paymentStatus: state.constants.PAYMENT_STATUS,
     validationErrors: state[props.validationErrorsBind],
   },
