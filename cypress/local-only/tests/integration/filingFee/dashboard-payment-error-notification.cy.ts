@@ -54,7 +54,7 @@ describe('Dashboard filing fee payment error notification', () => {
   before(skipUnlessPaymentPortalIntegrationEnabled);
 
   it('should show the styled error notification when init payment fails from My Cases as a petitioner', () => {
-    loginAsPetitioner('petitioner@example.com');
+    loginAsPetitioner();
     assertDashboardInitPaymentErrorNotification();
   });
 

@@ -177,12 +177,14 @@ function login({
   waitForAuthLogin = false,
 }: LoginParams) {
   if (clearSessionData) {
-    Cypress.session.clearCurrentSessionData();
+    cy.then(() => Cypress.session.clearCurrentSessionData());
   } else {
     cy.clearAllCookies();
   }
   cy.visit('/login');
+  cy.get('[data-testid="email-input"]').clear();
   cy.get('[data-testid="email-input"]').type(email);
+  cy.get('[data-testid="password-input"]').clear();
   cy.get('[data-testid="password-input"]').type(
     getCypressEnv().defaultAccountPass,
   );
