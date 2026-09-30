@@ -6,8 +6,11 @@ import {
   loginAsPetitioner,
   loginAsPrivatePractitioner,
 } from 'cypress/helpers/authentication/login-as-helpers';
-import { getCypressEnv } from 'cypress/helpers/env/cypressEnvironment';
 import { skipUnlessPaymentPortalIntegrationEnabled } from 'cypress/helpers/filingFee/skipUnlessPaymentPortalIntegrationEnabled';
+import {
+  cancelTestPaymentOnPortal,
+  completeTestPaymentOnPortal,
+} from 'cypress/helpers/filingFee/dashboardFilingFeeHelpers';
 import {
   fillPetitionerInformation,
   fillPetitionFileInformation,
@@ -96,39 +99,11 @@ describe('Pay Filing Fee Through pay.gov', () => {
 
       cy.get('[data-testid="pay-filing-fee-button"]').click();
 
-      const { isLocal, efcmsDomain, deployingColor } = getCypressEnv();
-
-      cy.origin(
-        getCypressEnv().payGovOrigin,
-        { args: { isLocal, docketNumber, efcmsDomain, deployingColor } },
-        ({ isLocal, docketNumber, efcmsDomain, deployingColor }) => {
-          if (!isLocal) {
-            cy.get(
-              '[data-payment-method="PAYPAL"][data-payment-status="Success"]',
-            ).then(link => {
-              const redirectUrl = link.attr('href');
-
-              // workaround for the fact that these tests are run during deployments, first check
-              // the url pay.gov has is right, and then override it to go to the proper color
-              expect(redirectUrl).equal(
-                `https://app.${efcmsDomain}/payment-success?docketNumber=${docketNumber}`,
-              );
-
-              cy.get(
-                '[data-payment-method="PAYPAL"][data-payment-status="Success"]',
-              ).click();
-
-              cy.visit(
-                `https://app-${deployingColor}.${efcmsDomain}/payment-success?docketNumber=${docketNumber}`,
-              );
-            });
-          } else {
-            cy.get(
-              '[data-payment-method="PAYPAL"][data-payment-status="Success"]',
-            ).click();
-          }
-        },
-      );
+      completeTestPaymentOnPortal({
+        docketNumber,
+        paymentMethod: 'PAYPAL',
+        paymentStatus: 'Success',
+      });
 
       verifySuccessfulPaymentOfUnservedCase(docketNumber);
 
@@ -148,39 +123,11 @@ describe('Pay Filing Fee Through pay.gov', () => {
 
       cy.get('[data-testid="pay-filing-fee-button"]').click();
 
-      const { isLocal, efcmsDomain, deployingColor } = getCypressEnv();
-
-      cy.origin(
-        getCypressEnv().payGovOrigin,
-        { args: { isLocal, docketNumber, efcmsDomain, deployingColor } },
-        ({ isLocal, docketNumber, efcmsDomain, deployingColor }) => {
-          if (!isLocal) {
-            cy.get(
-              '[data-payment-method="PAYPAL"][data-payment-status="Failed"]',
-            ).then(link => {
-              const redirectUrl = link.attr('href');
-
-              // workaround for the fact that these tests are run during deployments, first check
-              // the url pay.gov has is right, and then override it to go to the proper color
-              expect(redirectUrl).equal(
-                `https://app.${efcmsDomain}/payment-success?docketNumber=${docketNumber}`,
-              );
-
-              cy.get(
-                '[data-payment-method="PAYPAL"][data-payment-status="Failed"]',
-              ).click();
-
-              cy.visit(
-                `https://app-${deployingColor}.${efcmsDomain}/payment-success?docketNumber=${docketNumber}`,
-              );
-            });
-          } else {
-            cy.get(
-              '[data-payment-method="PAYPAL"][data-payment-status="Failed"]',
-            ).click();
-          }
-        },
-      );
+      completeTestPaymentOnPortal({
+        docketNumber,
+        paymentMethod: 'PAYPAL',
+        paymentStatus: 'Failed',
+      });
 
       cy.get('[data-testid="error-alert"]')
         .should('contain.text', 'Filing fee payment failed')
@@ -217,39 +164,11 @@ describe('Pay Filing Fee Through pay.gov', () => {
 
       cy.get('[data-testid="pay-filing-fee-button"]').click();
 
-      const { isLocal, efcmsDomain, deployingColor } = getCypressEnv();
-
-      cy.origin(
-        getCypressEnv().payGovOrigin,
-        { args: { isLocal, docketNumber, efcmsDomain, deployingColor } },
-        ({ isLocal, docketNumber, efcmsDomain, deployingColor }) => {
-          if (!isLocal) {
-            cy.get(
-              '[data-payment-method="ACH"][data-payment-status="Success"]',
-            ).then(link => {
-              const redirectUrl = link.attr('href');
-
-              // workaround for the fact that these tests are run during deployments, first check
-              // the url pay.gov has is right, and then override it to go to the proper color
-              expect(redirectUrl).equal(
-                `https://app.${efcmsDomain}/payment-success?docketNumber=${docketNumber}`,
-              );
-
-              cy.get(
-                '[data-payment-method="ACH"][data-payment-status="Success"]',
-              ).click();
-
-              cy.visit(
-                `https://app-${deployingColor}.${efcmsDomain}/payment-success?docketNumber=${docketNumber}`,
-              );
-            });
-          } else {
-            cy.get(
-              '[data-payment-method="ACH"][data-payment-status="Success"]',
-            ).click();
-          }
-        },
-      );
+      completeTestPaymentOnPortal({
+        docketNumber,
+        paymentMethod: 'ACH',
+        paymentStatus: 'Success',
+      });
 
       cy.get('[data-testid="warning-alert"]')
         .should('contain.text', 'Filing fee payment is pending')
@@ -286,70 +205,18 @@ describe('Pay Filing Fee Through pay.gov', () => {
 
       cy.get('[data-testid="pay-filing-fee-button"]').click();
 
-      const { isLocal, efcmsDomain, deployingColor } = getCypressEnv();
-
-      cy.origin(
-        getCypressEnv().payGovOrigin,
-        { args: { isLocal, docketNumber, efcmsDomain, deployingColor } },
-        ({ isLocal, docketNumber, efcmsDomain, deployingColor }) => {
-          if (!isLocal) {
-            cy.contains('a', 'Cancel Payment').then(link => {
-              const redirectUrl = link.attr('href');
-
-              // workaround for the fact that these tests are run during deployments, first check
-              // the url pay.gov has is right, and then override it to go to the proper color
-              expect(redirectUrl).equal(
-                `https://app.${efcmsDomain}/payment-cancel?docketNumber=${docketNumber}`,
-              );
-
-              cy.contains('a', 'Cancel Payment').click();
-
-              cy.visit(
-                `https://app-${deployingColor}.${efcmsDomain}/payment-cancel?docketNumber=${docketNumber}`,
-              );
-            });
-          } else {
-            cy.contains('a', 'Cancel Payment').click();
-          }
-        },
-      );
+      cancelTestPaymentOnPortal({ docketNumber });
 
       cy.get('[data-testid="step-indicator-current-step-7-icon"]').should(
         'exist',
       );
 
       cy.get('[data-testid="pay-filing-fee-button"]').click();
-      cy.origin(
-        getCypressEnv().payGovOrigin,
-        { args: { isLocal, docketNumber, efcmsDomain, deployingColor } },
-        ({ isLocal, docketNumber, efcmsDomain, deployingColor }) => {
-          if (!isLocal) {
-            cy.get(
-              '[data-payment-method="PLASTIC_CARD"][data-payment-status="Success"]',
-            ).then(link => {
-              const redirectUrl = link.attr('href');
-
-              // workaround for the fact that these tests are run during deployments, first check
-              // the url pay.gov has is right, and then override it to go to the proper color
-              expect(redirectUrl).equal(
-                `https://app.${efcmsDomain}/payment-success?docketNumber=${docketNumber}`,
-              );
-
-              cy.get(
-                '[data-payment-method="PLASTIC_CARD"][data-payment-status="Success"]',
-              ).click();
-
-              cy.visit(
-                `https://app-${deployingColor}.${efcmsDomain}/payment-success?docketNumber=${docketNumber}`,
-              );
-            });
-          } else {
-            cy.get(
-              '[data-payment-method="PLASTIC_CARD"][data-payment-status="Success"]',
-            ).click();
-          }
-        },
-      );
+      completeTestPaymentOnPortal({
+        docketNumber,
+        paymentMethod: 'PLASTIC_CARD',
+        paymentStatus: 'Success',
+      });
 
       verifySuccessfulPaymentOfUnservedCase(docketNumber);
     });
@@ -368,39 +235,11 @@ describe('Pay Filing Fee Through pay.gov', () => {
 
       cy.get('[data-testid="pay-filing-fee-button"]').click();
 
-      const { isLocal, efcmsDomain, deployingColor } = getCypressEnv();
-
-      cy.origin(
-        getCypressEnv().payGovOrigin,
-        { args: { isLocal, docketNumber, efcmsDomain, deployingColor } },
-        ({ isLocal, docketNumber, efcmsDomain, deployingColor }) => {
-          if (!isLocal) {
-            cy.get(
-              '[data-payment-method="PAYPAL"][data-payment-status="Failed"]',
-            ).then(link => {
-              const redirectUrl = link.attr('href');
-
-              // workaround for the fact that these tests are run during deployments, first check
-              // the url pay.gov has is right, and then override it to go to the proper color
-              expect(redirectUrl).equal(
-                `https://app.${efcmsDomain}/payment-success?docketNumber=${docketNumber}`,
-              );
-
-              cy.get(
-                '[data-payment-method="PAYPAL"][data-payment-status="Failed"]',
-              ).click();
-
-              cy.visit(
-                `https://app-${deployingColor}.${efcmsDomain}/payment-success?docketNumber=${docketNumber}`,
-              );
-            });
-          } else {
-            cy.get(
-              '[data-payment-method="PAYPAL"][data-payment-status="Failed"]',
-            ).click();
-          }
-        },
-      );
+      completeTestPaymentOnPortal({
+        docketNumber,
+        paymentMethod: 'PAYPAL',
+        paymentStatus: 'Failed',
+      });
 
       cy.get('[data-testid="error-alert"]')
         .should('contain.text', 'Filing fee status unknown')
@@ -437,33 +276,7 @@ describe('Pay Filing Fee Through pay.gov', () => {
 
       cy.get('[data-testid="pay-filing-fee-button"]').click();
 
-      const { isLocal, efcmsDomain, deployingColor } = getCypressEnv();
-
-      cy.origin(
-        getCypressEnv().payGovOrigin,
-        { args: { isLocal, docketNumber, efcmsDomain, deployingColor } },
-        ({ isLocal, docketNumber, efcmsDomain, deployingColor }) => {
-          if (!isLocal) {
-            cy.contains('a', 'Cancel Payment').then(link => {
-              const redirectUrl = link.attr('href');
-
-              // workaround for the fact that these tests are run during deployments, first check
-              // the url pay.gov has is right, and then override it to go to the proper color
-              expect(redirectUrl).equal(
-                `https://app.${efcmsDomain}/payment-cancel?docketNumber=${docketNumber}`,
-              );
-
-              cy.contains('a', 'Cancel Payment').click();
-
-              cy.visit(
-                `https://app-${deployingColor}.${efcmsDomain}/payment-cancel?docketNumber=${docketNumber}`,
-              );
-            });
-          } else {
-            cy.contains('a', 'Cancel Payment').click();
-          }
-        },
-      );
+      cancelTestPaymentOnPortal({ docketNumber });
 
       cy.get('[data-testid="step-indicator-current-step-7-icon"]').should(
         'exist',

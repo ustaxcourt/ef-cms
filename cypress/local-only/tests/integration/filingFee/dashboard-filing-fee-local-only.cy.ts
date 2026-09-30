@@ -21,6 +21,7 @@ const assertDashboardUnknownPaymentStatus = (): void => {
 
     clickDashboardPayNow(docketNumber);
     completeTestPaymentOnPortal({
+      docketNumber,
       paymentMethod: 'PAYPAL',
       paymentStatus: 'Failed',
     });
@@ -55,6 +56,7 @@ describe('My Cases pay.gov local-only scenarios', () => {
     externalUserCreatesElectronicCase().then(docketNumber => {
       clickDashboardPayNow(docketNumber);
       completeTestPaymentOnPortal({
+        docketNumber,
         paymentMethod: 'PAYPAL',
         paymentStatus: 'Success',
       });
