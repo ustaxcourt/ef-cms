@@ -168,6 +168,8 @@ function login({ email }: { email: string }) {
     win.localStorage.setItem('__cypressOrderInSameTab', 'true');
     win.localStorage.setItem('__cypressMinuteSheetInSameTab', 'true');
   });
-  cy.get('.ustc-account').should('exist');
+  cy.get(
+    '[data-testid="account-menu-button"], [data-testid="account-menu-button-mobile"]',
+  ).should('exist');
   mockDynamsoftLibrary();
 }

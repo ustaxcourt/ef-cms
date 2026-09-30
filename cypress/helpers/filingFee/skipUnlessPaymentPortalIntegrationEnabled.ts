@@ -5,8 +5,9 @@
 export function skipUnlessPaymentPortalIntegrationEnabled(
   this: Mocha.Context,
 ): void {
-  cy.task('getRawFeatureFlagValue', {
+  cy.task('toggleFeatureFlag', {
     flag: 'enable-payment-portal-integration',
+    readOnly: true,
   }).then(enablePaymentPortalIntegration => {
     if (!enablePaymentPortalIntegration) {
       this.skip();
