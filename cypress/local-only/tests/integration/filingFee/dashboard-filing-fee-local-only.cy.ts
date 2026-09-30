@@ -41,7 +41,7 @@ describe('My Cases pay.gov local-only scenarios', () => {
   before(skipUnlessPaymentPortalIntegrationEnabled);
 
   it('should show filing fee status unknown when process-payment fails after returning from the portal as a petitioner', () => {
-    loginAsPetitioner('petitioner@example.com');
+    loginAsPetitioner();
     assertDashboardUnknownPaymentStatus();
   });
 
@@ -51,7 +51,7 @@ describe('My Cases pay.gov local-only scenarios', () => {
   });
 
   it('should be accessible after returning from the portal with a success banner', () => {
-    loginAsPetitioner('petitioner@example.com');
+    loginAsPetitioner();
     externalUserCreatesElectronicCase().then(docketNumber => {
       clickDashboardPayNow(docketNumber);
       completeTestPaymentOnPortal({

@@ -138,7 +138,10 @@ describe('My Cases pay.gov return flows', () => {
   before(skipUnlessPaymentPortalIntegrationEnabled);
 
   it('should open the payment portal from Pay now before completing payment', () => {
-    loginAsPetitioner('petitioner@example.com', filingFeeSmoketestLoginOptions);
+    loginAsPetitioner(
+      'petitioner1@example.com',
+      filingFeeSmoketestLoginOptions,
+    );
     externalUserCreatesElectronicCase().then(docketNumber => {
       clickDashboardPayNow(docketNumber);
 
@@ -160,7 +163,7 @@ describe('My Cases pay.gov return flows', () => {
       runDashboardPaymentReturnScenario(
         () =>
           loginAsPetitioner(
-            'petitioner@example.com',
+            'petitioner1@example.com',
             filingFeeSmoketestLoginOptions,
           ),
         scenario,
@@ -182,7 +185,7 @@ describe('My Cases pay.gov return flows', () => {
   it('should return to My Cases with Pay now still available after cancel payment as a petitioner', () => {
     runDashboardPaymentCancelScenario(() =>
       loginAsPetitioner(
-        'petitioner@example.com',
+        'petitioner1@example.com',
         filingFeeSmoketestLoginOptions,
       ),
     );
