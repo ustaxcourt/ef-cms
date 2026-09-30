@@ -17,10 +17,7 @@ import {
   PaginationResult,
   useClientSidePaginator,
 } from '@web-client/utilities/useClientSidePaginator';
-import {
-  ALLOWLIST_FEATURE_FLAGS,
-  CASE_LIST_PAGE_SIZE,
-} from '@shared/business/entities/EntityConstants';
+import { CASE_LIST_PAGE_SIZE } from '@shared/business/entities/EntityConstants';
 
 export const CaseListTable = connect(
   {
@@ -32,10 +29,6 @@ export const CaseListTable = connect(
     closedTab: state.constants.EXTERNAL_USER_DASHBOARD_TABS.CLOSED,
     dashboardCaseListPageIndex: state.dashboardCaseListPageIndex,
     dashboardExternalHelper: state.dashboardExternalHelper,
-    enablePaymentPortalIntegration:
-      state.featureFlags[
-        ALLOWLIST_FEATURE_FLAGS.ENABLE_PAYMENT_PORTAL_INTEGRATION.key
-      ],
     externalUserCasesHelper: state.externalUserCasesHelper,
     initMyCasesFilingFeePaymentSequence:
       sequences.initMyCasesFilingFeePaymentSequence,
@@ -57,7 +50,6 @@ export const CaseListTable = connect(
     closedTab,
     dashboardExternalHelper,
     dashboardCaseListPageIndex,
-    enablePaymentPortalIntegration,
     externalUserCasesHelper,
     initMyCasesFilingFeePaymentSequence,
     openTab,
@@ -214,9 +206,6 @@ export const CaseListTable = connect(
                 <tbody>
                   {cases.map(item => (
                     <CaseListRowExternal
-                      enablePaymentPortalIntegration={
-                        !!enablePaymentPortalIntegration
-                      }
                       formattedCase={item}
                       initMyCasesFilingFeePaymentSequence={
                         initMyCasesFilingFeePaymentSequence
