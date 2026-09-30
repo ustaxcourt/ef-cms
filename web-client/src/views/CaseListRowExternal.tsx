@@ -9,39 +9,21 @@ import { Button } from '@web-client/ustc-ui/Button/Button';
 const FilingFeeStatus = ({
   className,
   dataLabel,
-  enablePaymentPortalIntegration,
   formattedCase,
   initMyCasesFilingFeePaymentSequence,
 }: {
   className?: string;
   dataLabel?: string;
-  enablePaymentPortalIntegration: boolean;
   formattedCase: TAssociatedCaseFormatted;
   initMyCasesFilingFeePaymentSequence: Function;
 }) => {
-  if (!enablePaymentPortalIntegration) {
-    return (
-      <td
-        className={className}
-        data-label={dataLabel}
-        data-testid="petition-payment-status"
-      >
-        {formattedCase.petitionPaymentStatus}
-      </td>
-    );
-  }
-
-  const canPayFilingFee =
-    formattedCase.petitionPaymentStatus === 'Not paid' &&
-    formattedCase.isRequestingUserAssociated;
-
   return (
     <td
       className={className}
       data-label={dataLabel}
       data-testid="petition-payment-status"
     >
-      {canPayFilingFee ? (
+      {formattedCase.showMyCasesPayFilingFeeButton ? (
         <Button
           link
           data-testid="pay-filing-fee-button"
@@ -61,7 +43,6 @@ const FilingFeeStatus = ({
 };
 
 export const CaseListRowExternal = ({
-  enablePaymentPortalIntegration,
   formattedCase,
   initMyCasesFilingFeePaymentSequence,
   isNestedCase,
@@ -69,7 +50,6 @@ export const CaseListRowExternal = ({
   showCaseStatusInfoSequence,
   showCaseStatus,
 }: {
-  enablePaymentPortalIntegration: boolean;
   formattedCase: TAssociatedCaseFormatted;
   initMyCasesFilingFeePaymentSequence: Function;
   isNestedCase: boolean;
@@ -125,7 +105,6 @@ export const CaseListRowExternal = ({
             )}
             {showFilingFee && (
               <FilingFeeStatus
-                enablePaymentPortalIntegration={enablePaymentPortalIntegration}
                 formattedCase={formattedCase}
                 initMyCasesFilingFeePaymentSequence={
                   initMyCasesFilingFeePaymentSequence
@@ -137,9 +116,6 @@ export const CaseListRowExternal = ({
             formattedCase.consolidatedCases.map(consolidatedCase => {
               return (
                 <CaseListRowExternal
-                  enablePaymentPortalIntegration={
-                    enablePaymentPortalIntegration
-                  }
                   initMyCasesFilingFeePaymentSequence={
                     initMyCasesFilingFeePaymentSequence
                   }
@@ -229,7 +205,6 @@ export const CaseListRowExternal = ({
                   !formattedCase.isLeadCase,
               })}
               dataLabel="Filing Fee*"
-              enablePaymentPortalIntegration={enablePaymentPortalIntegration}
               formattedCase={formattedCase}
               initMyCasesFilingFeePaymentSequence={
                 initMyCasesFilingFeePaymentSequence
@@ -241,7 +216,6 @@ export const CaseListRowExternal = ({
           formattedCase.consolidatedCases.map(consolidatedCase => {
             return (
               <CaseListRowExternal
-                enablePaymentPortalIntegration={enablePaymentPortalIntegration}
                 initMyCasesFilingFeePaymentSequence={
                   initMyCasesFilingFeePaymentSequence
                 }

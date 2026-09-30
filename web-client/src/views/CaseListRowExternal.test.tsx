@@ -29,12 +29,12 @@ describe('CaseListRowExternal filing fee payment control', () => {
     isLeadCase: false,
     isRequestingUserAssociated: true,
     petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
+    showMyCasesPayFilingFeeButton: true,
     status: 'New',
   } as TAssociatedCaseFormatted;
 
   const renderMarkup = (
     overrides: {
-      enablePaymentPortalIntegration?: boolean;
       formattedCase?: TAssociatedCaseFormatted;
     } = {},
   ): string => {
@@ -42,9 +42,6 @@ describe('CaseListRowExternal filing fee payment control', () => {
       <table>
         <tbody>
           <CaseListRowExternal
-            enablePaymentPortalIntegration={
-              overrides.enablePaymentPortalIntegration ?? true
-            }
             formattedCase={overrides.formattedCase ?? unpaidCase}
             initMyCasesFilingFeePaymentSequence={
               initMyCasesFilingFeePaymentSequence
@@ -99,8 +96,13 @@ describe('CaseListRowExternal filing fee payment control', () => {
     initMyCasesFilingFeePaymentSequence.mockClear();
   });
 
-  it('should not render Pay now when the payment portal feature flag is off', () => {
-    const markup = renderMarkup({ enablePaymentPortalIntegration: false });
+  it('should not render Pay now when showMyCasesPayFilingFeeButton is false', () => {
+    const markup = renderMarkup({
+      formattedCase: {
+        ...unpaidCase,
+        showMyCasesPayFilingFeeButton: false,
+      },
+    });
 
     expect(markup).not.toContain('pay-filing-fee-button');
     expect(markup).toContain(PAYMENT_STATUS.UNPAID);
@@ -111,6 +113,7 @@ describe('CaseListRowExternal filing fee payment control', () => {
       formattedCase: {
         ...unpaidCase,
         petitionPaymentStatus: PAYMENT_STATUS.PAID,
+        showMyCasesPayFilingFeeButton: false,
       },
     });
 
@@ -123,6 +126,7 @@ describe('CaseListRowExternal filing fee payment control', () => {
       formattedCase: {
         ...unpaidCase,
         petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
+        showMyCasesPayFilingFeeButton: false,
       },
     });
 
@@ -135,6 +139,7 @@ describe('CaseListRowExternal filing fee payment control', () => {
       formattedCase: {
         ...unpaidCase,
         isRequestingUserAssociated: false,
+        showMyCasesPayFilingFeeButton: false,
       },
     });
 
@@ -148,7 +153,6 @@ describe('CaseListRowExternal filing fee payment control', () => {
 
     const payButtons = collectPayButtons(
       CaseListRowExternal({
-        enablePaymentPortalIntegration: true,
         formattedCase: unpaidCase,
         initMyCasesFilingFeePaymentSequence,
         isNestedCase: false,
