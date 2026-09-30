@@ -83,7 +83,12 @@ jobs:
             echo "Comparing against ${BASE_REF} at ${BASE_SHA}"
             set -- "$@" --error --baseline-commit "$BASE_SHA"
           fi
-          semgrep "$@"
+          # The findings are listed by the Summarize SARIF step below and in the job summary.
+          semgrep "$@" || {
+            status=$?
+            echo "::error::Semgrep exited with status ${status}. Any findings are listed, with file, line and message, in the job summary and the Upload SARIF step."
+            exit "$status"
+          }
 
       - name: Upload SARIF
         if: always()

@@ -40,7 +40,7 @@ DAWSON-specific taint rules covering both Express (`$REQ.*`) and API Gateway Lam
 
 ### If your PR is blocked by Semgrep
 
-1. Check the **Security tab** > Code scanning alerts > category `semgrep` for details.
+1. Open the workflow run's job summary, or the `Upload SARIF` step of the `Semgrep Scan` job. Every finding is listed with its severity, rule, file and line, message, and the offending line of code. The Security tab holds the same findings only for staging pushes and PRs into staging.
 2. Fix the taint flow (validate/sanitize input before it reaches the sink).
 3. If it's a false positive: add an inline `// nosemgrep: rule-id` comment with a one-line justification.
 
