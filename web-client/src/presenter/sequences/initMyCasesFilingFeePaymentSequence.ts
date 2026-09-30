@@ -12,11 +12,9 @@ export const initMyCasesFilingFeePaymentSequence = [
   setWaitingForResponseAction,
   initFilingFeePaymentAction,
   {
-    success: [unsetWaitingForResponseAction, unsetCasePaymentFilingFeeAction],
-    error: [
-      setAlertErrorAction,
-      unsetWaitingForResponseAction,
-      unsetCasePaymentFilingFeeAction,
-    ],
+    error: [setAlertErrorAction],
+    success: [],
   },
+  unsetWaitingForResponseAction,
+  unsetCasePaymentFilingFeeAction,
 ];
