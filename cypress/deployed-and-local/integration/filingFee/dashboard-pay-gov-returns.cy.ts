@@ -14,6 +14,7 @@ import {
   TestPaymentMethod,
   TestPaymentStatus,
 } from 'cypress/helpers/filingFee/dashboardFilingFeeHelpers';
+import { PAYMENT_FILING_FEE_ORIGIN } from '@shared/business/entities/EntityConstants';
 
 type LoginFn = () => void;
 
@@ -66,7 +67,10 @@ const runDashboardPaymentCancelScenario = (login: LoginFn): void => {
   login();
   externalUserCreatesElectronicCase().then(docketNumber => {
     clickDashboardPayNow(docketNumber);
-    cancelTestPaymentOnPortal({ docketNumber });
+    cancelTestPaymentOnPortal({
+      docketNumber,
+      origin: PAYMENT_FILING_FEE_ORIGIN.DASHBOARD,
+    });
 
     assertReturnedToMyCasesDashboard();
     cy.get(`[data-testid="${stripDocketSuffix(docketNumber)}"]`)
