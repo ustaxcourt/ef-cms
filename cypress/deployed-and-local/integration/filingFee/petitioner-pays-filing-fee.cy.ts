@@ -15,6 +15,7 @@ import {
   fillStinInformation,
 } from '../../../local-only/tests/integration/fileAPetitionUpdated/petition-helper';
 import { petitionsClerkQcsAndServesElectronicCase } from '../../../helpers/documentQC/petitions-clerk-qcs-and-serves-electronic-case';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 
 describe('Pay Filing Fee Through pay.gov', () => {
   const VALID_FILE = '../../helpers/file/sample.pdf';
@@ -64,9 +65,7 @@ describe('Pay Filing Fee Through pay.gov', () => {
     );
   };
 
-  const verifyFilingFeeMinuteEntry = (docketNumber: string) => {
-    cy.visit(`/case-detail/${docketNumber}`);
-
+  const verifyFilingFeeMinuteEntry = () => {
     cy.get('[data-testid="docket-record-table"] td')
       .contains('FEE')
       .parent()
@@ -146,7 +145,20 @@ describe('Pay Filing Fee Through pay.gov', () => {
 
       // serving case should generate filing fee paid minute entry
       petitionsClerkQcsAndServesElectronicCase(docketNumber);
-      verifyFilingFeeMinuteEntry(docketNumber);
+
+      cy.intercept('GET', '**/docket-entries**').as('getDocketEntries');
+
+      cy.visit(`/case-detail/${docketNumber}`);
+      cy.wait('@getDocketEntries').then(({ response }) => {
+        verifyFilingFeeMinuteEntry();
+
+        // no draft order for filing fee should be generated
+        const orderForFilingFee = response?.body.docketEntries.find(
+          (docketEntry: DocketEntry) =>
+            docketEntry.documentType === 'Order for Filing Fee',
+        );
+        expect(orderForFilingFee).equal(undefined);
+      });
     });
   };
 
@@ -216,6 +228,25 @@ describe('Pay Filing Fee Through pay.gov', () => {
       cy.get('[data-testid="tab-case-information"]').click();
 
       cy.contains('[data-testid="case-filing-fee-information"]', 'Not paid');
+
+      // serving case should not generate filing fee paid minute entry
+      petitionsClerkQcsAndServesElectronicCase(docketNumber);
+
+      cy.intercept('GET', '**/docket-entries**').as('getDocketEntries');
+
+      cy.visit(`/case-detail/${docketNumber}`);
+      cy.wait('@getDocketEntries').then(({ response }) => {
+        cy.get('[data-testid="docket-record-table"] td')
+          .contains('FEE')
+          .should('not.exist');
+
+        // a draft order for filing fee should be generated
+        const orderForFilingFee = response?.body.docketEntries.find(
+          (docketEntry: DocketEntry) =>
+            docketEntry.documentType === 'Order for Filing Fee',
+        );
+        expect(orderForFilingFee).not.equal(undefined);
+      });
     });
   };
 
@@ -285,6 +316,25 @@ describe('Pay Filing Fee Through pay.gov', () => {
       cy.get('[data-testid="tab-case-information"]').click();
 
       cy.contains('[data-testid="case-filing-fee-information"]', 'Pending');
+
+      // serving case should not generate filing fee paid minute entry
+      petitionsClerkQcsAndServesElectronicCase(docketNumber);
+
+      cy.intercept('GET', '**/docket-entries**').as('getDocketEntries');
+
+      cy.visit(`/case-detail/${docketNumber}`);
+      cy.wait('@getDocketEntries').then(({ response }) => {
+        cy.get('[data-testid="docket-record-table"] td')
+          .contains('FEE')
+          .should('not.exist');
+
+        // no draft order for filing fee should be generated
+        const orderForFilingFee = response?.body.docketEntries.find(
+          (docketEntry: DocketEntry) =>
+            docketEntry.documentType === 'Order for Filing Fee',
+        );
+        expect(orderForFilingFee).equal(undefined);
+      });
     });
   };
 
