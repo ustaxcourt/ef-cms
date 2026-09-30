@@ -45,9 +45,9 @@ const getDeployedPaymentReturnUrl = ({
 
 /**
  * Completes a test payment on the pay.gov portal.
- * On deployed envs, asserts the stable app redirect URL then visits the
- * deploying-color URL outside cy.origin (clicking the portal link would leave
- * Cypress on app.* while the suite runs against app-{color}.*).
+ * On deployed envs, the portal click POSTs /pay/{method}/{status} then redirects to
+ * app.* (stable). Cypress runs against app-{color}.*, so we POST the status from
+ * within cy.origin (without navigating), then visit the color return URL outside.
  */
 export const completeTestPaymentOnPortal = ({
   docketNumber,
@@ -80,11 +80,32 @@ export const completeTestPaymentOnPortal = ({
 
   cy.origin(
     payGovOrigin,
-    { args: { expectedRedirectUrl, paymentMethod, paymentStatus } },
-    ({ expectedRedirectUrl, paymentMethod, paymentStatus }) => {
+    {
+      args: {
+        expectedRedirectUrl,
+        payGovOrigin,
+        paymentMethod,
+        paymentStatus,
+      },
+    },
+    ({ expectedRedirectUrl, payGovOrigin, paymentMethod, paymentStatus }) => {
       cy.get(
         `[data-payment-method="${paymentMethod}"][data-payment-status="${paymentStatus}"]`,
       ).should('have.attr', 'href', expectedRedirectUrl);
+
+      cy.location('search').then(search => {
+        const token = new URLSearchParams(search).get('token');
+        if (!token) {
+          throw new Error('pay.gov test portal token is missing');
+        }
+
+        cy.request({
+          method: 'POST',
+          url: `${payGovOrigin}/pay/${encodeURIComponent(paymentMethod)}/${encodeURIComponent(paymentStatus)}?token=${encodeURIComponent(token)}`,
+        })
+          .its('status')
+          .should('eq', 200);
+      });
     },
   );
 
