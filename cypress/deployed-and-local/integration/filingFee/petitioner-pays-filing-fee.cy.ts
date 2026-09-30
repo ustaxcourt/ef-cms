@@ -37,7 +37,9 @@ describe('Pay Filing Fee Through pay.gov', () => {
 
   const today = formatDateString(createISODateAtStartOfDayEST(), 'MMDDYY');
 
-  const verifySuccessfulPaymentOfUnservedCase = (docketNumber: string) => {
+  const verifySuccessfulPaymentOfUnservedCase = (
+    docketNumber: string,
+  ): void => {
     cy.get('[data-testid="success-alert"]')
       .should('contain.text', 'Filing fee payment successful')
       .and(
@@ -65,7 +67,7 @@ describe('Pay Filing Fee Through pay.gov', () => {
     );
   };
 
-  const verifyFilingFeeMinuteEntry = () => {
+  const verifyFilingFeeMinuteEntry = (): void => {
     cy.get('[data-testid="docket-record-table"] td')
       .contains('FEE')
       .parent()
