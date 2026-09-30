@@ -8,7 +8,7 @@ export function skipUnlessPaymentPortalIntegrationEnabled(
   cy.task('toggleFeatureFlag', {
     flag: 'enable-payment-portal-integration',
     readOnly: true,
-  }).then(enablePaymentPortalIntegration => {
+  }).then(function (enablePaymentPortalIntegration) {
     if (!enablePaymentPortalIntegration) {
       this.skip();
     }
