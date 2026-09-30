@@ -15,7 +15,7 @@ import {
   fillCaseProcedureInformation,
   fillStinInformation,
 } from 'cypress/local-only/tests/integration/fileAPetitionUpdated/petition-helper';
-import { petitionsClerkQcsAndServesElectronicCase } from '../../../helpers/documentQC/petitions-clerk-qcs-and-serves-electronic-case';
+import { petitionsClerkQcsAndServesElectronicCase } from 'cypress/helpers/documentQC/petitions-clerk-qcs-and-serves-electronic-case';
 
 describe('Pay Filing Fee Through pay.gov', () => {
   const VALID_FILE = '../../helpers/file/sample.pdf';
