@@ -3,6 +3,7 @@ import {
   loginAsPrivatePractitioner,
 } from 'cypress/helpers/authentication/login-as-helpers';
 import { getCypressEnv } from 'cypress/helpers/env/cypressEnvironment';
+import { skipUnlessPaymentPortalIntegrationEnabled } from 'cypress/helpers/filingFee/skipUnlessPaymentPortalIntegrationEnabled';
 import { externalUserCreatesElectronicCase } from 'cypress/helpers/fileAPetition/petitioner-creates-electronic-case';
 import {
   cancelTestPaymentOnPortal,
@@ -133,17 +134,7 @@ const dashboardPaymentReturnScenarios: DashboardPaymentReturnScenario[] = [
 ];
 
 describe('My Cases pay.gov return flows', () => {
-  before(function () {
-    if (!getCypressEnv().isLocal) {
-      cy.task('getRawFeatureFlagValue', {
-        flag: 'enable-payment-portal-integration',
-      }).then(enablePaymentPortalIntegration => {
-        if (!enablePaymentPortalIntegration) {
-          this.skip();
-        }
-      });
-    }
-  });
+  before(skipUnlessPaymentPortalIntegrationEnabled);
 
   it('should open the payment portal from Pay now before completing payment', () => {
     loginAsPetitioner('petitioner@example.com');
