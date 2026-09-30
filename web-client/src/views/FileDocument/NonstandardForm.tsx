@@ -9,6 +9,7 @@ import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect } from 'react';
 import classNames from 'classnames';
 import { RunableSequence as RunnableSequence } from 'cerebral';
+import { getSavedPreviousDocumentTitle } from '@web-client/presenter/computeds/selectDocumentTypeHelper';
 
 type NonstandardFormProps = {
   helper: string;
@@ -150,6 +151,15 @@ export const NonstandardForm: React.FC<NonstandardFormProps> = connect(
     };
 
     namespace = namespace ? `${namespace}.` : '';
+    const previousDocument: RawDocketEntry['previousDocument'] = get(
+      form,
+      `${namespace}previousDocument`,
+    );
+    const selectedDocumentId = previousDocument?.docketEntryId || '';
+    const savedDocumentTitle = getSavedPreviousDocumentTitle({
+      previousDocument,
+      previouslyFiledDocuments: helper[level].previouslyFiledDocuments,
+    });
     return (
       <div className="nonstandard-form">
         {helper[level].showTextInput && (
@@ -193,11 +203,7 @@ export const NonstandardForm: React.FC<NonstandardFormProps> = connect(
               id={`${namespace}previous-document`}
               data-testid={`${namespace}previous-document-search`}
               name={`${namespace}previousDocument`}
-              value={get(
-                form,
-                `${namespace}previousDocument.docketEntryId`,
-                '',
-              )}
+              value={selectedDocumentId}
               onChange={e => {
                 updateSequence({
                   key: e.target.name,
@@ -206,7 +212,12 @@ export const NonstandardForm: React.FC<NonstandardFormProps> = connect(
                 validateSequence();
               }}
             >
-              <option value="">- Select -</option>
+              <option
+                value={savedDocumentTitle ? selectedDocumentId : ''}
+                disabled={!!savedDocumentTitle}
+              >
+                {savedDocumentTitle || '- Select -'}
+              </option>
               {helper[level].previouslyFiledDocuments.map(previousDocument => {
                 return (
                   <option

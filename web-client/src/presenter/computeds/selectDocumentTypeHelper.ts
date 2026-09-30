@@ -4,6 +4,28 @@ import { getDocumentTitleWithAdditionalInfo } from '@shared/business/utilities/g
 import { getFormattedCaseDetail } from '@shared/business/utilities/getFormattedCaseDetail';
 import { applicationContext } from '@web-client/applicationContext';
 
+export const getSavedPreviousDocumentTitle = ({
+  previousDocument,
+  previouslyFiledDocuments,
+}: {
+  previousDocument?: {
+    docketEntryId?: string;
+    documentTitle?: string;
+    documentType?: string;
+  };
+  previouslyFiledDocuments?: { docketEntryId?: string }[];
+}): string | undefined => {
+  if (!previousDocument) return;
+  if (
+    previouslyFiledDocuments?.some(
+      document => document.docketEntryId === previousDocument.docketEntryId,
+    )
+  ) {
+    return;
+  }
+  return previousDocument.documentTitle || previousDocument.documentType;
+};
+
 export const getOptionsForCategory = ({
   caseDetail,
   categoryInformation,
