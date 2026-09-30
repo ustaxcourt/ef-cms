@@ -22,26 +22,109 @@ export const clickDashboardPayNow = (docketNumber: string): void => {
     .click();
 };
 
+const getDeployedPaymentReturnUrl = ({
+  docketNumber,
+  path,
+}: {
+  docketNumber: string;
+  path: 'payment-success' | 'payment-cancel';
+}): { colorUrl: string; expectedRedirectUrl: string } => {
+  const { deployingColor, efcmsDomain } = getCypressEnv();
+
+  if (!deployingColor || !efcmsDomain) {
+    throw new Error(
+      'DEPLOYING_COLOR and EFCMS_DOMAIN are required for deployed payment portal tests',
+    );
+  }
+
+  return {
+    colorUrl: `https://app-${deployingColor}.${efcmsDomain}/${path}?docketNumber=${docketNumber}`,
+    expectedRedirectUrl: `https://app.${efcmsDomain}/${path}?docketNumber=${docketNumber}`,
+  };
+};
+
+/**
+ * Completes a test payment on the pay.gov portal.
+ * On deployed envs, asserts the stable app redirect URL then visits the
+ * deploying-color URL outside cy.origin (clicking the portal link would leave
+ * Cypress on app.* while the suite runs against app-{color}.*).
+ */
 export const completeTestPaymentOnPortal = ({
+  docketNumber,
   paymentMethod,
   paymentStatus,
 }: {
+  docketNumber: string;
   paymentMethod: TestPaymentMethod;
   paymentStatus: TestPaymentStatus;
 }): void => {
+  const { isLocal, payGovOrigin } = getCypressEnv();
+
+  if (isLocal) {
+    cy.origin(
+      payGovOrigin,
+      { args: { paymentMethod, paymentStatus } },
+      ({ paymentMethod, paymentStatus }) => {
+        cy.get(
+          `[data-payment-method="${paymentMethod}"][data-payment-status="${paymentStatus}"]`,
+        ).click();
+      },
+    );
+    return;
+  }
+
+  const { colorUrl, expectedRedirectUrl } = getDeployedPaymentReturnUrl({
+    docketNumber,
+    path: 'payment-success',
+  });
+
   cy.origin(
-    getCypressEnv().payGovOrigin,
-    { args: { paymentMethod, paymentStatus } },
-    ({ paymentMethod, paymentStatus }) => {
+    payGovOrigin,
+    { args: { expectedRedirectUrl, paymentMethod, paymentStatus } },
+    ({ expectedRedirectUrl, paymentMethod, paymentStatus }) => {
       cy.get(
         `[data-payment-method="${paymentMethod}"][data-payment-status="${paymentStatus}"]`,
-      ).click();
+      ).should('have.attr', 'href', expectedRedirectUrl);
     },
   );
+
+  cy.visit(colorUrl);
 };
 
-export const cancelTestPaymentOnPortal = (): void => {
-  cy.origin(getCypressEnv().payGovOrigin, () => {
-    cy.contains('a', 'Cancel Payment').click();
+/**
+ * Cancels a test payment on the pay.gov portal.
+ * Deployed envs use the same color-override pattern as completeTestPaymentOnPortal.
+ */
+export const cancelTestPaymentOnPortal = ({
+  docketNumber,
+}: {
+  docketNumber: string;
+}): void => {
+  const { isLocal, payGovOrigin } = getCypressEnv();
+
+  if (isLocal) {
+    cy.origin(payGovOrigin, () => {
+      cy.contains('a', 'Cancel Payment').click();
+    });
+    return;
+  }
+
+  const { colorUrl, expectedRedirectUrl } = getDeployedPaymentReturnUrl({
+    docketNumber,
+    path: 'payment-cancel',
   });
+
+  cy.origin(
+    payGovOrigin,
+    { args: { expectedRedirectUrl } },
+    ({ expectedRedirectUrl }) => {
+      cy.contains('a', 'Cancel Payment').should(
+        'have.attr',
+        'href',
+        expectedRedirectUrl,
+      );
+    },
+  );
+
+  cy.visit(colorUrl);
 };

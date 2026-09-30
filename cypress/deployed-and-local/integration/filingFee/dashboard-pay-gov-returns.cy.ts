@@ -54,6 +54,7 @@ const runDashboardPaymentReturnScenario = (
   externalUserCreatesElectronicCase().then(docketNumber => {
     clickDashboardPayNow(docketNumber);
     completeTestPaymentOnPortal({
+      docketNumber,
       paymentMethod: scenario.paymentMethod,
       paymentStatus: scenario.paymentStatus,
     });
@@ -65,7 +66,7 @@ const runDashboardPaymentCancelScenario = (login: LoginFn): void => {
   login();
   externalUserCreatesElectronicCase().then(docketNumber => {
     clickDashboardPayNow(docketNumber);
-    cancelTestPaymentOnPortal();
+    cancelTestPaymentOnPortal({ docketNumber });
 
     assertReturnedToMyCasesDashboard();
     cy.get(`[data-testid="${stripDocketSuffix(docketNumber)}"]`)
@@ -150,6 +151,7 @@ describe('My Cases pay.gov return flows', () => {
       });
 
       completeTestPaymentOnPortal({
+        docketNumber,
         paymentMethod: 'PAYPAL',
         paymentStatus: 'Success',
       });
