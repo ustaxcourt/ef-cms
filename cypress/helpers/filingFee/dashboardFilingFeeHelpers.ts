@@ -1,4 +1,11 @@
+import type { LoginAsOptions } from 'cypress/helpers/authentication/login-as-helpers';
 import { getCypressEnv } from 'cypress/helpers/env/cypressEnvironment';
+
+/** Smoketest splits may run filing-fee specs after other specs in one Cypress session. */
+export const filingFeeSmoketestLoginOptions: LoginAsOptions = {
+  clearSessionData: true,
+  waitForAuthLogin: true,
+};
 
 export type TestPaymentMethod = 'PAYPAL' | 'PLASTIC_CARD' | 'ACH';
 export type TestPaymentStatus = 'Success' | 'Failed';

@@ -9,6 +9,7 @@ import {
   cancelTestPaymentOnPortal,
   clickDashboardPayNow,
   completeTestPaymentOnPortal,
+  filingFeeSmoketestLoginOptions,
   stripDocketSuffix,
   TestPaymentMethod,
   TestPaymentStatus,
@@ -137,7 +138,7 @@ describe('My Cases pay.gov return flows', () => {
   before(skipUnlessPaymentPortalIntegrationEnabled);
 
   it('should open the payment portal from Pay now before completing payment', () => {
-    loginAsPetitioner('petitioner@example.com');
+    loginAsPetitioner('petitioner@example.com', filingFeeSmoketestLoginOptions);
     externalUserCreatesElectronicCase().then(docketNumber => {
       clickDashboardPayNow(docketNumber);
 
@@ -157,23 +158,42 @@ describe('My Cases pay.gov return flows', () => {
   dashboardPaymentReturnScenarios.forEach(scenario => {
     it(`should show the expected banner after ${scenario.title} as a petitioner`, () => {
       runDashboardPaymentReturnScenario(
-        () => loginAsPetitioner('petitioner@example.com'),
+        () =>
+          loginAsPetitioner(
+            'petitioner@example.com',
+            filingFeeSmoketestLoginOptions,
+          ),
         scenario,
       );
     });
 
     it(`should show the expected banner after ${scenario.title} as a private practitioner`, () => {
-      runDashboardPaymentReturnScenario(loginAsPrivatePractitioner, scenario);
+      runDashboardPaymentReturnScenario(
+        () =>
+          loginAsPrivatePractitioner(
+            'privatePractitioner1@example.com',
+            filingFeeSmoketestLoginOptions,
+          ),
+        scenario,
+      );
     });
   });
 
   it('should return to My Cases with Pay now still available after cancel payment as a petitioner', () => {
     runDashboardPaymentCancelScenario(() =>
-      loginAsPetitioner('petitioner@example.com'),
+      loginAsPetitioner(
+        'petitioner@example.com',
+        filingFeeSmoketestLoginOptions,
+      ),
     );
   });
 
   it('should return to My Cases with Pay now still available after cancel payment as a private practitioner', () => {
-    runDashboardPaymentCancelScenario(loginAsPrivatePractitioner);
+    runDashboardPaymentCancelScenario(() =>
+      loginAsPrivatePractitioner(
+        'privatePractitioner1@example.com',
+        filingFeeSmoketestLoginOptions,
+      ),
+    );
   });
 });
