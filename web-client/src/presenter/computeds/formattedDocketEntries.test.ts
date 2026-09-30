@@ -808,6 +808,70 @@ describe('formattedDocketEntries', () => {
       ]);
     });
 
+    it('should keep both pending motions visible while filtering the docket record by each document type', () => {
+      const pendingMotion = {
+        ...mockDocketEntry,
+        docketEntryId: 'b8dd9fa0-46bd-4a2a-a1d1-7bcbc2c78d0d',
+        documentTitle: 'Motion to Dismiss',
+        documentType: 'Motion to Dismiss',
+        eventCode: 'M070',
+        index: 4,
+        isFileAttached: true,
+        pending: true,
+        servedAt: '2020-09-18T17:38:32.418Z',
+        servedParties: [
+          { email: petitionerUser.email, name: petitionerUser.name },
+        ],
+      };
+      const secondPendingMotion = {
+        ...pendingMotion,
+        docketEntryId: 'c9ee0ab1-57ce-4b3b-b2e2-8cdc3d389e1e',
+        documentTitle: 'Motion for a New Trial',
+        documentType: 'Motion for a New Trial',
+        eventCode: 'M218',
+        index: 5,
+      };
+      const filterCases: [string, string[]][] = [
+        [DOCKET_RECORD_FILTER_OPTIONS.orders, ['O']],
+        [DOCKET_RECORD_FILTER_OPTIONS.exhibits, ['EXH']],
+        [DOCKET_RECORD_FILTER_OPTIONS.motions, ['M000', 'M070', 'M218']],
+      ];
+
+      for (const [
+        docketRecordFilter,
+        expectedDocketEventCodes,
+      ] of filterCases) {
+        const result = runCompute(formattedDocketEntries, {
+          state: {
+            ...getBaseState(docketClerkUser),
+            caseDetail: {
+              ...MOCK_CASE,
+              docketEntries: [
+                ...mockDocketEntries,
+                pendingMotion,
+                secondPendingMotion,
+              ],
+            },
+            sessionMetadata: { docketRecordFilter },
+          },
+        });
+
+        expect(
+          result.formattedPendingDocketEntriesOnDocketRecord.map(
+            (entry: FormattedDocketEntry): string => entry.docketEntryId,
+          ),
+        ).toEqual([
+          pendingMotion.docketEntryId,
+          secondPendingMotion.docketEntryId,
+        ]);
+        expect(
+          result.formattedDocketEntriesOnDocketRecord
+            .map((entry: FormattedDocketEntry): string => entry.eventCode)
+            .sort(),
+        ).toEqual(expectedDocketEventCodes);
+      }
+    });
+
     it('should ONLY show exhibit docket entries when "Exhibits" has been selected as the filter', () => {
       const caseDetail = {
         ...MOCK_CASE,
