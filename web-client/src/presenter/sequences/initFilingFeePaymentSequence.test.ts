@@ -4,7 +4,7 @@ import { initFilingFeePaymentSequence } from '@web-client/presenter/sequences/in
 import { presenter } from '../presenter-mock';
 
 describe('initFilingFeePaymentSequence', () => {
-  let cerebralTest: CerebralTest;
+  let cerebralTest;
 
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;

@@ -5,7 +5,7 @@ import { presenter } from '../presenter-mock';
 import { PAYMENT_FILING_FEE_ORIGIN } from '@shared/business/entities/EntityConstants';
 
 describe('initMyCasesFilingFeePaymentSequence', () => {
-  let cerebralTest: CerebralTest;
+  let cerebralTest;
 
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
