@@ -9,7 +9,7 @@ export const initFilingFeePaymentSequence = [
   setWaitingForResponseAction,
   initFilingFeePaymentAction,
   {
-    error: [setAlertErrorAction],
+    error: [setAlertErrorAction, unsetWaitingForResponseAction],
     success: [],
   },
   unsetWaitingForResponseAction,
