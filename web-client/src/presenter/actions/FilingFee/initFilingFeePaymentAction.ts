@@ -5,7 +5,6 @@ import { getOneBasedPageForFilingFeeReturn } from '@web-client/utilities/useClie
 export const initFilingFeePaymentAction = async ({
   get,
   applicationContext,
-  store,
   path,
 }: ActionProps) => {
   const caseDetail = get(state.caseDetail);
@@ -41,7 +40,6 @@ export const initFilingFeePaymentAction = async ({
       : {
           message: 'Error: payment cannot be started',
         };
-    store.set(state.alertError, options);
-    return path.error();
+    return path.error({ alertError: options });
   }
 };

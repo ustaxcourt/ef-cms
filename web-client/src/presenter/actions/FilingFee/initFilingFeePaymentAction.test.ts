@@ -102,9 +102,9 @@ describe('initFilingFeePaymentAction', () => {
     });
   });
 
-  it('should set alertError and call error path if initPaymentInteractor fails', async () => {
+  it('should return alertError on the error path if initPaymentInteractor fails', async () => {
     applicationContext.getUseCases().initPaymentInteractor.mockRejectedValue();
-    const { state } = await runAction(initFilingFeePaymentAction, {
+    await runAction(initFilingFeePaymentAction, {
       modules: {
         presenter,
       },
@@ -113,15 +113,16 @@ describe('initFilingFeePaymentAction', () => {
       },
     });
 
-    expect(state.alertError).toEqual({
-      message: 'Error: payment cannot be started',
+    expect(pathErrorStub).toHaveBeenCalledWith({
+      alertError: {
+        message: 'Error: payment cannot be started',
+      },
     });
-    expect(pathErrorStub).toHaveBeenCalled();
   });
 
-  it('should set dashboard-style alertError when paymentFilingFeeOrigin is dashboard', async () => {
+  it('should return dashboard-style alertError when paymentFilingFeeOrigin is dashboard', async () => {
     applicationContext.getUseCases().initPaymentInteractor.mockRejectedValue();
-    const { state } = await runAction(initFilingFeePaymentAction, {
+    await runAction(initFilingFeePaymentAction, {
       modules: {
         presenter,
       },
@@ -131,14 +132,15 @@ describe('initFilingFeePaymentAction', () => {
       },
     });
 
-    expect(state.alertError).toEqual({
-      className: 'tw:max-w-[547px]!',
-      titleClass: 'tw:font-bold tw:text-lg tw:leading-7',
-      title: 'Error: payment cannot be started.',
-      messageClass: 'tw:font-normal tw:text-xl tw:leading-7',
-      message: 'Payment cannot be started for 101-20',
-      scrollToErrorNotification: true,
+    expect(pathErrorStub).toHaveBeenCalledWith({
+      alertError: {
+        className: 'tw:max-w-[547px]!',
+        titleClass: 'tw:font-bold tw:text-lg tw:leading-7',
+        title: 'Error: payment cannot be started.',
+        messageClass: 'tw:font-normal tw:text-xl tw:leading-7',
+        message: 'Payment cannot be started for 101-20',
+        scrollToErrorNotification: true,
+      },
     });
-    expect(pathErrorStub).toHaveBeenCalled();
   });
 });
