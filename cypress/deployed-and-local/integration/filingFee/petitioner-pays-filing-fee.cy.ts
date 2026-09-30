@@ -3,6 +3,7 @@ import {
   loginAsPrivatePractitioner,
 } from 'cypress/helpers/authentication/login-as-helpers';
 import { getCypressEnv } from 'cypress/helpers/env/cypressEnvironment';
+import { skipUnlessPaymentPortalIntegrationEnabled } from 'cypress/helpers/filingFee/skipUnlessPaymentPortalIntegrationEnabled';
 import {
   fillPetitionerInformation,
   fillPetitionFileInformation,
@@ -14,20 +15,7 @@ import {
 describe('Pay Filing Fee Through pay.gov', () => {
   const VALID_FILE = '../../helpers/file/sample.pdf';
 
-  before(function () {
-    if (!getCypressEnv().isLocal) {
-      cy.task('getRawFeatureFlagValue', {
-        flag: 'enable-payment-portal-integration',
-      }).as('ENABLE_PAYMENT_PORTAL_INTEGRATION');
-      cy.get('@ENABLE_PAYMENT_PORTAL_INTEGRATION').then(
-        ENABLE_PAYMENT_PORTAL_INTEGRATION => {
-          if (!ENABLE_PAYMENT_PORTAL_INTEGRATION) {
-            this.skip();
-          }
-        },
-      );
-    }
-  });
+  before(skipUnlessPaymentPortalIntegrationEnabled);
 
   const payFeeSuccess = () => {
     cy.intercept('POST', '**/cases').as('postCase');
@@ -107,7 +95,7 @@ describe('Pay Filing Fee Through pay.gov', () => {
               // workaround for the fact that these tests are run during deployments, first check
               // the url pay.gov has is right, and then override it to go to the proper color
               expect(redirectUrl).equal(
-                `https://app.${efcmsDomain}/payment-success/${docketNumber}`,
+                `https://app.${efcmsDomain}/payment-success?docketNumber=${docketNumber}`,
               );
 
               cy.get(
@@ -115,7 +103,7 @@ describe('Pay Filing Fee Through pay.gov', () => {
               ).click();
 
               cy.visit(
-                `https://app-${deployingColor}.${efcmsDomain}/payment-success/${docketNumber}`,
+                `https://app-${deployingColor}.${efcmsDomain}/payment-success?docketNumber=${docketNumber}`,
               );
             });
           } else {
@@ -160,7 +148,7 @@ describe('Pay Filing Fee Through pay.gov', () => {
               // workaround for the fact that these tests are run during deployments, first check
               // the url pay.gov has is right, and then override it to go to the proper color
               expect(redirectUrl).equal(
-                `https://app.${efcmsDomain}/payment-success/${docketNumber}`,
+                `https://app.${efcmsDomain}/payment-success?docketNumber=${docketNumber}`,
               );
 
               cy.get(
@@ -168,7 +156,7 @@ describe('Pay Filing Fee Through pay.gov', () => {
               ).click();
 
               cy.visit(
-                `https://app-${deployingColor}.${efcmsDomain}/payment-success/${docketNumber}`,
+                `https://app-${deployingColor}.${efcmsDomain}/payment-success?docketNumber=${docketNumber}`,
               );
             });
           } else {
@@ -211,13 +199,13 @@ describe('Pay Filing Fee Through pay.gov', () => {
               // workaround for the fact that these tests are run during deployments, first check
               // the url pay.gov has is right, and then override it to go to the proper color
               expect(redirectUrl).equal(
-                `https://app.${efcmsDomain}/payment-cancel/${docketNumber}`,
+                `https://app.${efcmsDomain}/payment-cancel?docketNumber=${docketNumber}`,
               );
 
               cy.contains('a', 'Cancel Payment').click();
 
               cy.visit(
-                `https://app-${deployingColor}.${efcmsDomain}/payment-cancel/${docketNumber}`,
+                `https://app-${deployingColor}.${efcmsDomain}/payment-cancel?docketNumber=${docketNumber}`,
               );
             });
           } else {
@@ -244,7 +232,7 @@ describe('Pay Filing Fee Through pay.gov', () => {
               // workaround for the fact that these tests are run during deployments, first check
               // the url pay.gov has is right, and then override it to go to the proper color
               expect(redirectUrl).equal(
-                `https://app.${efcmsDomain}/payment-success/${docketNumber}`,
+                `https://app.${efcmsDomain}/payment-success?docketNumber=${docketNumber}`,
               );
 
               cy.get(
@@ -252,7 +240,7 @@ describe('Pay Filing Fee Through pay.gov', () => {
               ).click();
 
               cy.visit(
-                `https://app-${deployingColor}.${efcmsDomain}/payment-success/${docketNumber}`,
+                `https://app-${deployingColor}.${efcmsDomain}/payment-success?docketNumber=${docketNumber}`,
               );
             });
           } else {
@@ -300,7 +288,7 @@ describe('Pay Filing Fee Through pay.gov', () => {
               // workaround for the fact that these tests are run during deployments, first check
               // the url pay.gov has is right, and then override it to go to the proper color
               expect(redirectUrl).equal(
-                `https://app.${efcmsDomain}/payment-success/${docketNumber}`,
+                `https://app.${efcmsDomain}/payment-success?docketNumber=${docketNumber}`,
               );
 
               cy.get(
@@ -308,7 +296,7 @@ describe('Pay Filing Fee Through pay.gov', () => {
               ).click();
 
               cy.visit(
-                `https://app-${deployingColor}.${efcmsDomain}/payment-success/${docketNumber}`,
+                `https://app-${deployingColor}.${efcmsDomain}/payment-success?docketNumber=${docketNumber}`,
               );
             });
           } else {
