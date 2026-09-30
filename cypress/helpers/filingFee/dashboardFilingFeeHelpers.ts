@@ -24,9 +24,11 @@ export const clickDashboardPayNow = (docketNumber: string): void => {
 
 const getDeployedPaymentReturnUrl = ({
   docketNumber,
+  origin,
   path,
 }: {
   docketNumber: string;
+  origin?: string;
   path: 'payment-success' | 'payment-cancel';
 }): { colorUrl: string; expectedRedirectUrl: string } => {
   const { deployingColor, efcmsDomain } = getCypressEnv();
@@ -37,9 +39,15 @@ const getDeployedPaymentReturnUrl = ({
     );
   }
 
+  const query = new URLSearchParams({ docketNumber });
+  if (origin) {
+    query.set('origin', origin);
+  }
+  const queryString = `?${query.toString()}`;
+
   return {
-    colorUrl: `https://app-${deployingColor}.${efcmsDomain}/${path}?docketNumber=${docketNumber}`,
-    expectedRedirectUrl: `https://app.${efcmsDomain}/${path}?docketNumber=${docketNumber}`,
+    colorUrl: `https://app-${deployingColor}.${efcmsDomain}/${path}${queryString}`,
+    expectedRedirectUrl: `https://app.${efcmsDomain}/${path}${queryString}`,
   };
 };
 
@@ -115,11 +123,14 @@ export const completeTestPaymentOnPortal = ({
 /**
  * Cancels a test payment on the pay.gov portal.
  * Deployed envs use the same color-override pattern as completeTestPaymentOnPortal.
+ * Pass origin (e.g. dashboard) when cancel was initiated from My Cases.
  */
 export const cancelTestPaymentOnPortal = ({
   docketNumber,
+  origin,
 }: {
   docketNumber: string;
+  origin?: string;
 }): void => {
   const { isLocal, payGovOrigin } = getCypressEnv();
 
@@ -132,6 +143,7 @@ export const cancelTestPaymentOnPortal = ({
 
   const { colorUrl, expectedRedirectUrl } = getDeployedPaymentReturnUrl({
     docketNumber,
+    origin,
     path: 'payment-cancel',
   });
 
