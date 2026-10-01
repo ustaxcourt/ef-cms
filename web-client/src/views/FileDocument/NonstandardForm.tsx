@@ -1,7 +1,7 @@
 import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
-import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
-import { TrialCity } from '../StartCase/TrialCity';
+import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
+import { Mobile, NonMobile } from '@web-client/ustc-ui/Responsive/Responsive';
+import { TrialCity } from '@web-client/views/StartCase/TrialCity';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { get } from 'lodash';
 import { props } from 'cerebral';

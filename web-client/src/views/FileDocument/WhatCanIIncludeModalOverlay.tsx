@@ -1,8 +1,8 @@
-import { Button } from '../../ustc-ui/Button/Button';
-import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
+import { Button } from '@web-client/ustc-ui/Button/Button';
+import { ConfirmModal } from '@web-client/ustc-ui/Modal/ConfirmModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
-import { Overlay } from '../../ustc-ui/Overlay/Overlay';
+import { Mobile, NonMobile } from '@web-client/ustc-ui/Responsive/Responsive';
+import { Overlay } from '@web-client/ustc-ui/Overlay/Overlay';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import React from 'react';

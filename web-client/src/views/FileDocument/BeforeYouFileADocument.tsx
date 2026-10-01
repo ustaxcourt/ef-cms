@@ -1,8 +1,8 @@
-import { Button } from '../../ustc-ui/Button/Button';
-import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
+import { Button } from '@web-client/ustc-ui/Button/Button';
+import { CaseDetailHeader } from '@web-client/views/CaseDetail/CaseDetailHeader';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { FormCancelModalDialog } from '../FormCancelModalDialog';
-import { NonMobile } from '../../ustc-ui/Responsive/Responsive';
+import { FormCancelModalDialog } from '@web-client/views/FormCancelModalDialog';
+import { NonMobile } from '@web-client/ustc-ui/Responsive/Responsive';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
