@@ -4,7 +4,7 @@ import { getDocumentTitleWithAdditionalInfo } from '@shared/business/utilities/g
 import { getFormattedCaseDetail } from '@shared/business/utilities/getFormattedCaseDetail';
 import { applicationContext } from '@web-client/applicationContext';
 
-export const getSavedPreviousDocumentTitle = ({
+export const getPreviousDocumentFallbackTitle = ({
   previousDocument,
   previouslyFiledDocuments,
 }: {
@@ -13,15 +13,15 @@ export const getSavedPreviousDocumentTitle = ({
     documentTitle?: string;
     documentType?: string;
   };
-  previouslyFiledDocuments?: { docketEntryId?: string }[];
+  previouslyFiledDocuments?: { docketEntryId: string }[];
 }): string | undefined => {
-  if (!previousDocument) return;
+  if (!previousDocument) return undefined;
   if (
     previouslyFiledDocuments?.some(
       document => document.docketEntryId === previousDocument.docketEntryId,
     )
   ) {
-    return;
+    return undefined;
   }
   return previousDocument.documentTitle || previousDocument.documentType;
 };
