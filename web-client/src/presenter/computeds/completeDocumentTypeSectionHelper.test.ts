@@ -101,7 +101,7 @@ describe('completeDocumentTypeSectionHelper', () => {
 
     expect(result.primary).toBeTruthy();
     expect(result.documentTypesForSelectSorted).toBeDefined();
-    expect(result.documentTypesForSelectSorted!.length).toBeGreaterThan(0);
+    expect(result.documentTypesForSelectSorted).not.toHaveLength(0);
     expect(result.documentTypesForSelectSorted).not.toEqual(
       expect.arrayContaining([
         expect.objectContaining({
@@ -137,7 +137,7 @@ describe('completeDocumentTypeSectionHelper', () => {
 
     expect(result.primary).toBeTruthy();
     expect(result.documentTypesForSelectSorted).toBeDefined();
-    expect(result.documentTypesForSelectSorted!.length).toBeGreaterThan(0);
+    expect(result.documentTypesForSelectSorted).not.toHaveLength(0);
     expect(result.documentTypesForSelectSorted).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
@@ -165,7 +165,7 @@ describe('completeDocumentTypeSectionHelper', () => {
 
     expect(result.primary).toBeTruthy();
     expect(result.documentTypesForSelectSorted).toBeDefined();
-    expect(result.documentTypesForSelectSorted!.length).toBeGreaterThan(0);
+    expect(result.documentTypesForSelectSorted).not.toHaveLength(0);
     expect(
       result.documentTypesForSelectSorted!.every(
         entry => entry.canBeFirstIrsDocument === true,
@@ -191,7 +191,7 @@ describe('completeDocumentTypeSectionHelper', () => {
 
     expect(result.primary).toBeTruthy();
     expect(result.documentTypesForSelectSorted).toBeDefined();
-    expect(result.documentTypesForSelectSorted!.length).toBeGreaterThan(0);
+    expect(result.documentTypesForSelectSorted).not.toHaveLength(0);
     expect(result.documentTypesForSelectSorted).not.toEqual(
       expect.arrayContaining([expect.objectContaining({ eventCode: 'EA' })]),
     );
@@ -211,7 +211,7 @@ describe('completeDocumentTypeSectionHelper', () => {
 
     expect(result.primary).toBeTruthy();
     expect(result.documentTypesForSelectSorted).toBeDefined();
-    expect(result.documentTypesForSelectSorted!.length).toBeGreaterThan(0);
+    expect(result.documentTypesForSelectSorted).not.toHaveLength(0);
     expect(result.documentTypesForSelectSorted).not.toEqual(
       expect.arrayContaining([expect.objectContaining({ eventCode: 'EA' })]),
     );
@@ -234,11 +234,20 @@ describe('completeDocumentTypeSectionHelper', () => {
 
     expect(result.primary).toBeTruthy();
     expect(result.documentTypesForSelectSorted).toBeDefined();
-    expect(result.documentTypesForSelectSorted!.length).toBeGreaterThan(0);
+    expect(result.documentTypesForSelectSorted).not.toHaveLength(0);
     expect(result.documentTypesForSelectSorted).not.toEqual(
       expect.arrayContaining([expect.objectContaining({ eventCode: 'NOTW' })]),
     );
     expect(result.documentTypesForSelectSorted).not.toEqual(
+      expect.arrayContaining([expect.objectContaining({ eventCode: 'M112' })]),
+    );
+
+    expect(result.documentTypesForSecondarySelectSorted).toBeDefined();
+    expect(result.documentTypesForSecondarySelectSorted).not.toHaveLength(0);
+    expect(result.documentTypesForSecondarySelectSorted).not.toEqual(
+      expect.arrayContaining([expect.objectContaining({ eventCode: 'NOTW' })]),
+    );
+    expect(result.documentTypesForSecondarySelectSorted).not.toEqual(
       expect.arrayContaining([expect.objectContaining({ eventCode: 'M112' })]),
     );
   });
@@ -260,7 +269,7 @@ describe('completeDocumentTypeSectionHelper', () => {
 
     expect(result.primary).toBeTruthy();
     expect(result.documentTypesForSelectSorted).toBeDefined();
-    expect(result.documentTypesForSelectSorted!.length).toBeGreaterThan(0);
+    expect(result.documentTypesForSelectSorted).not.toHaveLength(0);
     expect(result.documentTypesForSelectSorted).toEqual(
       expect.arrayContaining([expect.objectContaining({ eventCode: 'NOTW' })]),
     );
