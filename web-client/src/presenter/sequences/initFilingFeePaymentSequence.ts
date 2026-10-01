@@ -12,5 +12,4 @@ export const initFilingFeePaymentSequence = [
     error: [setAlertErrorAction, unsetWaitingForResponseAction],
     success: [],
   },
-  unsetWaitingForResponseAction,
 ];
