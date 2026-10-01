@@ -57,8 +57,8 @@ describe('initMyCasesFilingFeePaymentSequence', () => {
     });
 
     expect(cerebralTest.getState('progressIndicator')).toMatchObject({
-      waitingForResponse: false,
-      waitingForResponseRequests: 0,
+      waitingForResponse: true,
+      waitingForResponseRequests: 1,
     });
     expect(cerebralTest.getState('paymentFilingFeeOrigin')).toBeNull();
     expect(
