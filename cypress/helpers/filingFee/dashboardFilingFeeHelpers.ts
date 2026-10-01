@@ -1,10 +1,45 @@
-import type { LoginAsOptions } from 'cypress/helpers/authentication/login-as-helpers';
+import {
+  loginAsPetitioner,
+  loginAsPrivatePractitioner,
+  type LoginAsOptions,
+} from 'cypress/helpers/authentication/login-as-helpers';
 import { getCypressEnv } from 'cypress/helpers/env/cypressEnvironment';
 
 /** Smoketest splits may run filing-fee specs after other specs in one Cypress session. */
 export const filingFeeSmoketestLoginOptions: LoginAsOptions = {
   clearSessionData: true,
   waitForAuthLogin: true,
+};
+
+export const assertMyCasesCaseListDashboard = (): void => {
+  cy.get('[data-testid="petition-welcome-text"]').should('not.exist');
+  cy.get('[data-testid="case-list-table"]').should('be.visible');
+  cy.get('[data-testid="filingFee-sortable-button"]').should('be.visible');
+};
+
+/**
+ * Logs in and waits for dashboard cases to load. When the user already has cases,
+ * asserts the My Cases table (not the zero-case welcome page).
+ */
+export const loginAsPetitionerForFilingFeeSmoketest = (
+  petitionerUser = 'petitioner1@example.com',
+): void => {
+  cy.intercept('GET', '**/cases').as('getDashboardCases');
+  loginAsPetitioner(petitionerUser, filingFeeSmoketestLoginOptions);
+  cy.wait('@getDashboardCases');
+  cy.get('body').then($body => {
+    if ($body.find('[data-testid="case-list-table"]').length) {
+      assertMyCasesCaseListDashboard();
+    }
+  });
+};
+
+export const loginAsPrivatePractitionerForFilingFeeSmoketest = (
+  practitionerUser = 'privatePractitioner1@example.com',
+): void => {
+  cy.intercept('GET', '**/cases').as('getDashboardCases');
+  loginAsPrivatePractitioner(practitionerUser, filingFeeSmoketestLoginOptions);
+  cy.wait('@getDashboardCases');
 };
 
 export type TestPaymentMethod = 'PAYPAL' | 'PLASTIC_CARD' | 'ACH';
@@ -135,9 +170,12 @@ export const cancelTestPaymentOnPortal = ({
   const { isLocal, payGovOrigin } = getCypressEnv();
 
   if (isLocal) {
+    cy.intercept('GET', '**/cases').as('getDashboardCasesAfterPaymentCancel');
     cy.origin(payGovOrigin, () => {
       cy.contains('a', 'Cancel Payment').click();
     });
+    cy.wait('@getDashboardCasesAfterPaymentCancel');
+    assertMyCasesCaseListDashboard();
     return;
   }
 
@@ -159,5 +197,8 @@ export const cancelTestPaymentOnPortal = ({
     },
   );
 
+  cy.intercept('GET', '**/cases').as('getDashboardCasesAfterPaymentCancel');
   cy.visit(colorUrl);
+  cy.wait('@getDashboardCasesAfterPaymentCancel');
+  assertMyCasesCaseListDashboard();
 };

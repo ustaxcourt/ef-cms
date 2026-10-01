@@ -49,10 +49,15 @@ export function externalUserCreatesElectronicCase(
     .get('[data-testid="case-link-docket-number"]', {
       timeout: SLOW_CI_TIMEOUT,
     })
+    .should('be.visible')
     .invoke('text')
-    .then(docketNumber => {
+    .then(docketNumberWithSuffix => {
+      cy.intercept('GET', '**/cases').as('getDashboardCasesAfterFiling');
       cy.get('[data-testid="button-back-to-dashboard"]').click();
-      return cy.wrap<string>(docketNumber);
+      cy.wait('@getDashboardCasesAfterFiling');
+      cy.get('[data-testid="case-list-table"]').should('be.visible');
+      cy.get('[data-testid="petition-welcome-text"]').should('not.exist');
+      return cy.wrap<string>(docketNumberWithSuffix);
     });
 }
 

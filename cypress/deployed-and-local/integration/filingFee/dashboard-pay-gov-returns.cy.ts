@@ -1,15 +1,13 @@
-import {
-  loginAsPetitioner,
-  loginAsPrivatePractitioner,
-} from 'cypress/helpers/authentication/login-as-helpers';
 import { getCypressEnv } from 'cypress/helpers/env/cypressEnvironment';
 import { skipUnlessPaymentPortalIntegrationEnabled } from 'cypress/helpers/filingFee/skipUnlessPaymentPortalIntegrationEnabled';
 import { externalUserCreatesElectronicCase } from 'cypress/helpers/fileAPetition/petitioner-creates-electronic-case';
 import {
+  assertMyCasesCaseListDashboard,
   cancelTestPaymentOnPortal,
   clickDashboardPayNow,
   completeTestPaymentOnPortal,
-  filingFeeSmoketestLoginOptions,
+  loginAsPetitionerForFilingFeeSmoketest,
+  loginAsPrivatePractitionerForFilingFeeSmoketest,
   stripDocketSuffix,
   TestPaymentMethod,
   TestPaymentStatus,
@@ -28,7 +26,7 @@ type DashboardPaymentReturnScenario = {
 
 const assertReturnedToMyCasesDashboard = (): void => {
   cy.url().should('not.include', '/file-a-petition');
-  cy.get('[data-testid="filingFee-sortable-button"]').should('be.visible');
+  assertMyCasesCaseListDashboard();
 };
 
 const assertDashboardPaymentReturnBanner = (
@@ -143,10 +141,7 @@ describe('My Cases pay.gov return flows', () => {
   before(skipUnlessPaymentPortalIntegrationEnabled);
 
   it('should open the payment portal from Pay now before completing payment', () => {
-    loginAsPetitioner(
-      'petitioner1@example.com',
-      filingFeeSmoketestLoginOptions,
-    );
+    loginAsPetitionerForFilingFeeSmoketest();
     externalUserCreatesElectronicCase().then(docketNumber => {
       clickDashboardPayNow(docketNumber);
 
@@ -167,22 +162,14 @@ describe('My Cases pay.gov return flows', () => {
   dashboardPaymentReturnScenarios.forEach(scenario => {
     it(`should show the expected banner after ${scenario.title} as a petitioner`, () => {
       runDashboardPaymentReturnScenario(
-        () =>
-          loginAsPetitioner(
-            'petitioner1@example.com',
-            filingFeeSmoketestLoginOptions,
-          ),
+        () => loginAsPetitionerForFilingFeeSmoketest(),
         scenario,
       );
     });
 
     it(`should show the expected banner after ${scenario.title} as a private practitioner`, () => {
       runDashboardPaymentReturnScenario(
-        () =>
-          loginAsPrivatePractitioner(
-            'privatePractitioner1@example.com',
-            filingFeeSmoketestLoginOptions,
-          ),
+        () => loginAsPrivatePractitionerForFilingFeeSmoketest(),
         scenario,
       );
     });
@@ -190,19 +177,13 @@ describe('My Cases pay.gov return flows', () => {
 
   it('should return to My Cases with Pay now still available after cancel payment as a petitioner', () => {
     runDashboardPaymentCancelScenario(() =>
-      loginAsPetitioner(
-        'petitioner1@example.com',
-        filingFeeSmoketestLoginOptions,
-      ),
+      loginAsPetitionerForFilingFeeSmoketest(),
     );
   });
 
   it('should return to My Cases with Pay now still available after cancel payment as a private practitioner', () => {
     runDashboardPaymentCancelScenario(() =>
-      loginAsPrivatePractitioner(
-        'privatePractitioner1@example.com',
-        filingFeeSmoketestLoginOptions,
-      ),
+      loginAsPrivatePractitionerForFilingFeeSmoketest(),
     );
   });
 });

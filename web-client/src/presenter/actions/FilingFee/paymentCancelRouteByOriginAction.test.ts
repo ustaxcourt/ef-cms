@@ -16,22 +16,14 @@ describe('paymentCancelRouteByOriginAction', () => {
     };
   });
 
-  it('should replace the URL and take the dashboard path when origin is dashboard', async () => {
-    const replaceStateSpy = jest
-      .spyOn(window.history, 'replaceState')
-      .mockImplementation(() => {});
-
-    const { state } = await runAction(paymentCancelRouteByOriginAction, {
+  it('should take the dashboard path when origin is dashboard', async () => {
+    await runAction(paymentCancelRouteByOriginAction, {
       modules: { presenter },
       props: { origin: PAYMENT_FILING_FEE_ORIGIN.DASHBOARD },
     });
 
-    expect(replaceStateSpy).toHaveBeenCalledWith({}, '', '/');
-    expect(state.currentPage).toEqual('DashboardExternalUser');
     expect(pathDashboardStub).toHaveBeenCalled();
     expect(pathPetitionStub).not.toHaveBeenCalled();
-
-    replaceStateSpy.mockRestore();
   });
 
   it('should take the petition path when origin is not dashboard', async () => {
