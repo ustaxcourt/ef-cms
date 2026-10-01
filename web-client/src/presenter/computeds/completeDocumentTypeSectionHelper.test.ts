@@ -276,5 +276,14 @@ describe('completeDocumentTypeSectionHelper', () => {
     expect(result.documentTypesForSelectSorted).toEqual(
       expect.arrayContaining([expect.objectContaining({ eventCode: 'M112' })]),
     );
+
+    expect(result.documentTypesForSecondarySelectSorted).toBeDefined();
+    expect(result.documentTypesForSecondarySelectSorted).not.toHaveLength(0);
+    expect(result.documentTypesForSecondarySelectSorted).toEqual(
+      expect.arrayContaining([expect.objectContaining({ eventCode: 'NOTW' })]),
+    );
+    expect(result.documentTypesForSecondarySelectSorted).toEqual(
+      expect.arrayContaining([expect.objectContaining({ eventCode: 'M112' })]),
+    );
   });
 });
