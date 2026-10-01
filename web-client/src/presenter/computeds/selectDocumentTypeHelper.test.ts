@@ -5,14 +5,15 @@ jest.mock('@shared/business/utilities/getDocumentTitleWithAdditionalInfo', () =>
     keepImplementation: true,
   }),
 );
-import { INITIAL_DOCUMENT_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
+import { INITIAL_DOCUMENT_TYPES } from '@shared/business/entities/EntityConstants';
 import {
   MAX_TITLE_LENGTH,
   getOptionsForCategory,
   getOrdinalValuesForUploadIteration,
+  getPreviousDocumentFallbackTitle,
   getValidPreviouslyFiledDocuments,
 } from './selectDocumentTypeHelper';
-import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
+import { MOCK_CASE } from '@shared/test/mockCase';
 import { MOCK_DOCUMENTS } from '@shared/test/mockDocketEntry';
 import { getDocumentTitleWithAdditionalInfo as getDocumentTitleWithAdditionalInfoMock } from '@shared/business/utilities/getDocumentTitleWithAdditionalInfo';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
@@ -21,6 +22,7 @@ describe('selectDocumentTypeHelper', () => {
   const getDocumentTitleWithAdditionalInfo = jest.mocked(
     getDocumentTitleWithAdditionalInfoMock,
   );
+
   describe('getOptionsForCategory', () => {
     const mockSelectedDocketEntryId = MOCK_CASE.docketEntries.find(
       d => d.eventCode === INITIAL_DOCUMENT_TYPES.stin.eventCode,
@@ -551,6 +553,55 @@ describe('selectDocumentTypeHelper', () => {
       });
 
       expect(result.length).toEqual(0);
+    });
+  });
+
+  describe('getPreviousDocumentFallbackTitle', () => {
+    it('should return no title when no document is selected', () => {
+      expect(getPreviousDocumentFallbackTitle({})).toBeUndefined();
+    });
+
+    it('should show the saved title when a bundled parent has no ID', () => {
+      expect(
+        getPreviousDocumentFallbackTitle({
+          previousDocument: {
+            documentTitle: 'Motion for Continuance',
+            documentType: 'Motion',
+          },
+        }),
+      ).toBe('Motion for Continuance');
+    });
+
+    it('should use the saved type when the title is missing', () => {
+      expect(
+        getPreviousDocumentFallbackTitle({
+          previousDocument: { documentType: 'Motion' },
+        }),
+      ).toBe('Motion');
+    });
+
+    it('should show the saved title when the parent ID is absent from the options', () => {
+      expect(
+        getPreviousDocumentFallbackTitle({
+          previousDocument: {
+            docketEntryId: 'lodged-parent-id',
+            documentTitle: 'Lodged motion',
+          },
+          previouslyFiledDocuments: [{ docketEntryId: 'other-id' }],
+        }),
+      ).toBe('Lodged motion');
+    });
+
+    it('should use the listed parent option when its ID is available', () => {
+      expect(
+        getPreviousDocumentFallbackTitle({
+          previousDocument: {
+            docketEntryId: 'parent-id',
+            documentTitle: 'Old title',
+          },
+          previouslyFiledDocuments: [{ docketEntryId: 'parent-id' }],
+        }),
+      ).toBeUndefined();
     });
   });
 });
