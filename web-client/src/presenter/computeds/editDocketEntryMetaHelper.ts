@@ -41,6 +41,7 @@ export const editDocketEntryMetaHelper = (
   const optionsForCategory = getOptionsForCategory({
     caseDetail,
     categoryInformation,
+    previousDocument: form.previousDocument,
     selectedDocketEntryId,
     authorizedUser: user,
   });

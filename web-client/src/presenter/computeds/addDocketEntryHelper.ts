@@ -63,6 +63,7 @@ export const addDocketEntryHelper = (
   const optionsForCategory = getOptionsForCategory({
     caseDetail,
     categoryInformation,
+    previousDocument: form.previousDocument,
     selectedDocketEntryId,
     authorizedUser: user,
   });
@@ -70,6 +71,7 @@ export const addDocketEntryHelper = (
   const secondaryOptionsForCategory = getOptionsForCategory({
     caseDetail,
     categoryInformation: secondaryCategoryInformation,
+    previousDocument: form.secondaryDocument?.previousDocument,
     selectedDocketEntryId,
     authorizedUser: user,
   });

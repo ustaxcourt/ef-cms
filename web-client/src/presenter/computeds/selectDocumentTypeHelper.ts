@@ -29,14 +29,22 @@ export const getPreviousDocumentFallbackTitle = ({
 export const getOptionsForCategory = ({
   caseDetail,
   categoryInformation,
+  previousDocument,
   selectedDocketEntryId,
   authorizedUser,
 }: {
   caseDetail: any;
   categoryInformation: any;
+  previousDocument?: RawDocketEntry['previousDocument'];
   selectedDocketEntryId: string;
   authorizedUser: AuthUser;
 }): {
+  selectedPreviousDocumentId?: string;
+  previousDocumentDefaultOption?: {
+    disabled: boolean;
+    label: string;
+    value: string;
+  };
   showNonstandardForm?: boolean;
   previousDocumentSelectLabel?: string;
   previouslyFiledDocuments?: any;
@@ -50,6 +58,12 @@ export const getOptionsForCategory = ({
   textInputLabel2?: string;
 } => {
   let options: {
+    selectedPreviousDocumentId?: string;
+    previousDocumentDefaultOption?: {
+      disabled: boolean;
+      label: string;
+      value: string;
+    };
     showNonstandardForm?: boolean;
     previousDocumentSelectLabel?: string;
     previouslyFiledDocuments?: any;
@@ -165,6 +179,21 @@ export const getOptionsForCategory = ({
       };
       break;
     }
+  }
+
+  if (options.previousDocumentSelectLabel) {
+    options.selectedPreviousDocumentId = previousDocument?.docketEntryId || '';
+    const savedPreviousDocumentTitle = getPreviousDocumentFallbackTitle({
+      previousDocument,
+      previouslyFiledDocuments: options.previouslyFiledDocuments,
+    });
+    options.previousDocumentDefaultOption = savedPreviousDocumentTitle
+      ? {
+          disabled: true,
+          label: savedPreviousDocumentTitle,
+          value: options.selectedPreviousDocumentId,
+        }
+      : { disabled: false, label: '- Select -', value: '' };
   }
 
   return options;

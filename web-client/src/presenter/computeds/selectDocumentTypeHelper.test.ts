@@ -79,15 +79,49 @@ describe('selectDocumentTypeHelper', () => {
           docketEntries: mockServedDocuments,
         },
         categoryInformation: mockCategoryInformation,
+        previousDocument: {
+          docketEntryId: mockServedDocuments[0].docketEntryId,
+          documentTitle: 'Petition',
+          documentType: 'Petition',
+        },
         selectedDocketEntryId: mockSelectedDocketEntryId,
       });
 
       expect(result).toMatchObject({
         previousDocumentSelectLabel: 'Which document are you objecting to?',
+        previousDocumentDefaultOption: {
+          disabled: false,
+          label: '- Select -',
+          value: '',
+        },
+        selectedPreviousDocumentId: mockServedDocuments[0].docketEntryId,
         previouslyFiledDocuments: mockServedDocuments.filter(
           d => d.eventCode !== INITIAL_DOCUMENT_TYPES.stin.eventCode,
         ),
         showNonstandardForm: true,
+      });
+    });
+
+    it('should provide a fallback option when the saved parent has no ID', () => {
+      const result = getOptionsForCategory({
+        authorizedUser: mockDocketClerkUser,
+        caseDetail: MOCK_CASE,
+        categoryInformation: {
+          labelPreviousDocument: 'Which document is this in support of?',
+          scenario: 'Nonstandard A',
+        },
+        previousDocument: {
+          documentTitle: 'Motion for Continuance',
+          documentType: 'Motion',
+        },
+        selectedDocketEntryId: '',
+      });
+
+      expect(result.selectedPreviousDocumentId).toBe('');
+      expect(result.previousDocumentDefaultOption).toEqual({
+        disabled: true,
+        label: 'Motion for Continuance',
+        value: '',
       });
     });
 

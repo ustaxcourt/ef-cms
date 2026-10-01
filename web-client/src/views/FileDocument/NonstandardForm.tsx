@@ -9,7 +9,6 @@ import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect } from 'react';
 import classNames from 'classnames';
 import { RunableSequence as RunnableSequence } from 'cerebral';
-import { getPreviousDocumentFallbackTitle } from '@web-client/presenter/computeds/selectDocumentTypeHelper';
 
 type NonstandardFormProps = {
   helper: string;
@@ -151,15 +150,6 @@ export const NonstandardForm: React.FC<NonstandardFormProps> = connect(
     };
 
     namespace = namespace ? `${namespace}.` : '';
-    const previousDocument: RawDocketEntry['previousDocument'] = get(
-      form,
-      `${namespace}previousDocument`,
-    );
-    const selectedDocumentId = previousDocument?.docketEntryId || '';
-    const savedDocumentTitle = getPreviousDocumentFallbackTitle({
-      previousDocument,
-      previouslyFiledDocuments: helper[level].previouslyFiledDocuments,
-    });
     return (
       <div className="nonstandard-form">
         {helper[level].showTextInput && (
@@ -203,7 +193,7 @@ export const NonstandardForm: React.FC<NonstandardFormProps> = connect(
               id={`${namespace}previous-document`}
               data-testid={`${namespace}previous-document-search`}
               name={`${namespace}previousDocument`}
-              value={selectedDocumentId}
+              value={helper[level].selectedPreviousDocumentId}
               onChange={e => {
                 updateSequence({
                   key: e.target.name,
@@ -213,10 +203,10 @@ export const NonstandardForm: React.FC<NonstandardFormProps> = connect(
               }}
             >
               <option
-                value={savedDocumentTitle ? selectedDocumentId : ''}
-                disabled={!!savedDocumentTitle}
+                value={helper[level].previousDocumentDefaultOption.value}
+                disabled={helper[level].previousDocumentDefaultOption.disabled}
               >
-                {savedDocumentTitle || '- Select -'}
+                {helper[level].previousDocumentDefaultOption.label}
               </option>
               {helper[level].previouslyFiledDocuments.map(previousDocument => {
                 return (
