@@ -151,7 +151,9 @@ export async function createOrUpdateUser(
       featureFlags[ALLOWLIST_FEATURE_FLAGS.ALLOW_IDP_LOGIN.key] &&
       !!process.env.IDP_NAME &&
       rawUser.entityName === 'User' &&
-      rawUser.role !== ROLES.petitioner
+      rawUser.role !== ROLES.petitioner &&
+      rawUser.role !== ROLES.irsSuperuser &&
+      userPoolId === applicationContext.environment.userPoolId
     )
       await applicationContext.getCognito().adminLinkProviderForUser({
         UserPoolId: userPoolId,

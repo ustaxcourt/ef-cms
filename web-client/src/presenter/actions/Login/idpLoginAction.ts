@@ -9,7 +9,7 @@ import {
 export const idpLoginAction = async ({
   router,
   applicationContext,
-}: ActionProps) => {
+}: ActionProps): Promise<void> => {
   const managedLoginDomain = process.env.MANAGED_LOGIN_DOMAIN;
   const clientId = process.env.COGNITO_CLIENT_ID;
   const idpName = process.env.IDP_NAME;
