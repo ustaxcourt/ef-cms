@@ -4,6 +4,10 @@ import {
   type LoginAsOptions,
 } from 'cypress/helpers/authentication/login-as-helpers';
 import { getCypressEnv } from 'cypress/helpers/env/cypressEnvironment';
+import {
+  PAYMENT_FILING_FEE_ORIGIN,
+  type PaymentFilingFeeOrigin,
+} from '@shared/business/entities/EntityConstants';
 
 /** Smoketest splits may run filing-fee specs after other specs in one Cypress session. */
 export const filingFeeSmoketestLoginOptions: LoginAsOptions = {
@@ -63,7 +67,7 @@ const getDeployedPaymentReturnUrl = ({
   path,
 }: {
   docketNumber: string;
-  origin?: string;
+  origin?: PaymentFilingFeeOrigin;
   path: 'payment-success' | 'payment-cancel';
 }): { colorUrl: string; expectedRedirectUrl: string } => {
   const { deployingColor, efcmsDomain } = getCypressEnv();
@@ -158,24 +162,33 @@ export const completeTestPaymentOnPortal = ({
 /**
  * Cancels a test payment on the pay.gov portal.
  * Deployed envs use the same color-override pattern as completeTestPaymentOnPortal.
- * Pass origin (e.g. dashboard) when cancel was initiated from My Cases.
+ * Pass origin `dashboard` when cancel was initiated from My Cases; the app returns to
+ * the case list and this helper asserts it. Without a dashboard origin the app returns
+ * to step 7 of the petition flow, which the caller asserts.
  */
 export const cancelTestPaymentOnPortal = ({
   docketNumber,
   origin,
 }: {
   docketNumber: string;
-  origin?: string;
+  origin?: PaymentFilingFeeOrigin;
 }): void => {
   const { isLocal, payGovOrigin } = getCypressEnv();
+  const returnsToMyCases = origin === PAYMENT_FILING_FEE_ORIGIN.DASHBOARD;
 
   if (isLocal) {
-    cy.intercept('GET', '**/cases').as('getDashboardCasesAfterPaymentCancel');
+    if (returnsToMyCases) {
+      cy.intercept('GET', '**/cases').as('getDashboardCasesAfterPaymentCancel');
+    }
+
     cy.origin(payGovOrigin, () => {
       cy.contains('a', 'Cancel Payment').click();
     });
-    cy.wait('@getDashboardCasesAfterPaymentCancel');
-    assertMyCasesCaseListDashboard();
+
+    if (returnsToMyCases) {
+      cy.wait('@getDashboardCasesAfterPaymentCancel');
+      assertMyCasesCaseListDashboard();
+    }
     return;
   }
 
@@ -197,8 +210,14 @@ export const cancelTestPaymentOnPortal = ({
     },
   );
 
-  cy.intercept('GET', '**/cases').as('getDashboardCasesAfterPaymentCancel');
+  if (returnsToMyCases) {
+    cy.intercept('GET', '**/cases').as('getDashboardCasesAfterPaymentCancel');
+  }
+
   cy.visit(colorUrl);
-  cy.wait('@getDashboardCasesAfterPaymentCancel');
-  assertMyCasesCaseListDashboard();
+
+  if (returnsToMyCases) {
+    cy.wait('@getDashboardCasesAfterPaymentCancel');
+    assertMyCasesCaseListDashboard();
+  }
 };
