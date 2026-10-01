@@ -79,6 +79,7 @@ describe('processPaymentInteractor', () => {
       petitionPaymentToken: mockPaymentToken,
       docketNumber,
       status: CASE_STATUS_TYPES.generalDocket,
+      orderForFilingFee: true,
     });
     applicationContext
       .getUseCases()
@@ -212,6 +213,7 @@ describe('processPaymentInteractor', () => {
       petitionPaymentStatus: PAYMENT_STATUS.PAID,
       petitionPaymentDate: mockToday,
       petitionPaymentMethod: 'Pay.gov',
+      orderForFilingFee: false,
     });
 
     expect(caseToUpdate).not.toHaveProperty('petitionPaymentToken');
@@ -239,6 +241,7 @@ describe('processPaymentInteractor', () => {
       petitionPaymentToken: mockPaymentToken,
       docketNumber,
       status: CASE_STATUS_TYPES.new,
+      orderForFilingFee: true,
     });
 
     const result = await processPaymentInteractor(
@@ -262,6 +265,7 @@ describe('processPaymentInteractor', () => {
       petitionPaymentStatus: PAYMENT_STATUS.PAID,
       petitionPaymentDate: mockToday,
       petitionPaymentMethod: 'Pay.gov',
+      orderForFilingFee: false,
     });
 
     expect(caseToUpdate).not.toHaveProperty('petitionPaymentToken');
@@ -304,6 +308,7 @@ describe('processPaymentInteractor', () => {
       petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
       petitionPaymentDate: undefined,
       petitionPaymentMethod: undefined,
+      orderForFilingFee: true,
     });
     expect(caseToUpdate).not.toHaveProperty('petitionPaymentToken');
     expect(caseToUpdate.docketEntries.length).toEqual(0);
@@ -311,7 +316,7 @@ describe('processPaymentInteractor', () => {
     expect(result).toEqual(mockProcessPaymentResponse);
   });
 
-  it('should update payment status to pending if pending response is reeturned from payment portal', async () => {
+  it('should update payment status to pending if pending response is returned from payment portal', async () => {
     const mockProcessPaymentResponse = {
       paymentStatus: 'pending',
       transactions: [
@@ -344,6 +349,7 @@ describe('processPaymentInteractor', () => {
       petitionPaymentStatus: PAYMENT_STATUS.PENDING,
       petitionPaymentDate: undefined,
       petitionPaymentMethod: undefined,
+      orderForFilingFee: false,
     });
     expect(caseToUpdate).not.toHaveProperty('petitionPaymentToken');
     expect(caseToUpdate.docketEntries.length).toEqual(0);

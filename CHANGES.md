@@ -8,7 +8,7 @@ If SSO is needed in an environment, first set up a new application in Microsoft 
 
 ```bash
 . ./scripts/env/set-env.zsh {YOUR_ENV}
-./scripts/secrets/update-secret.ts -k IDP_NAME -v ustc_entra
+./scripts/secrets/update-secret.ts -k IDP_NAME -v ustc-entra
 ./scripts/secrets/update-secret.ts -k OIDC_ISSUER_URL -v https://login.microsoftonline.com/{application id}/v2.0
 ./scripts/secrets/update-secret.ts -k OIDC_CLIENT_ID -v {app client id}
 ./scripts/secrets/update-secret.ts -k OIDC_CLIENT_SECRET -v {app client secret}
@@ -100,7 +100,6 @@ Blocked Cases Report. Run the following to recompute those cases:
 ./scripts/run-once-scripts/fix-stale-automatic-blocks.ts
 ```
 </details>
-
 <details><summary>Dependency Updates - Week of 2026-09-08</summary>
 
 ## Local

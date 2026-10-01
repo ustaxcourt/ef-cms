@@ -92,6 +92,7 @@ export const processPayment = async (
     currentCaseEntity.petitionPaymentStatus = PAYMENT_STATUS.PAID;
     currentCaseEntity.petitionPaymentDate = createISODateAtStartOfDayEST();
     currentCaseEntity.petitionPaymentMethod = PAY_GOV_METHOD;
+    currentCaseEntity.orderForFilingFee = false;
 
     if (canAllowDocumentServiceForCase(currentCaseEntity)) {
       const filingFeePaidEntry = createFilingFeePaidMinuteEntry(
@@ -103,6 +104,7 @@ export const processPayment = async (
     }
   } else if (processResponse.paymentStatus === 'pending') {
     currentCaseEntity.petitionPaymentStatus = PAYMENT_STATUS.PENDING;
+    currentCaseEntity.orderForFilingFee = false;
   }
 
   delete currentCaseEntity.petitionPaymentToken;
