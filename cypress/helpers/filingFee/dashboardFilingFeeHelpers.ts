@@ -159,6 +159,16 @@ export const completeTestPaymentOnPortal = ({
   cy.visit(colorUrl);
 };
 
+const interceptDashboardCases = (): void => {
+  cy.intercept('GET', '**/cases').as('getDashboardCasesAfterPaymentCancel');
+};
+
+const assertReturnedToMyCasesWithoutWelcomePage = (): void => {
+  cy.wait('@getDashboardCasesAfterPaymentCancel');
+  assertMyCasesCaseListDashboard();
+  cy.get('[data-testid="petition-welcome-text"]').should('not.exist');
+};
+
 /**
  * Cancels a test payment on the pay.gov portal.
  * Deployed envs use the same color-override pattern as completeTestPaymentOnPortal.
@@ -178,7 +188,7 @@ export const cancelTestPaymentOnPortal = ({
 
   if (isLocal) {
     if (returnsToMyCases) {
-      cy.intercept('GET', '**/cases').as('getDashboardCasesAfterPaymentCancel');
+      interceptDashboardCases();
     }
 
     cy.origin(payGovOrigin, () => {
@@ -186,8 +196,7 @@ export const cancelTestPaymentOnPortal = ({
     });
 
     if (returnsToMyCases) {
-      cy.wait('@getDashboardCasesAfterPaymentCancel');
-      assertMyCasesCaseListDashboard();
+      assertReturnedToMyCasesWithoutWelcomePage();
     }
     return;
   }
@@ -211,13 +220,12 @@ export const cancelTestPaymentOnPortal = ({
   );
 
   if (returnsToMyCases) {
-    cy.intercept('GET', '**/cases').as('getDashboardCasesAfterPaymentCancel');
+    interceptDashboardCases();
   }
 
   cy.visit(colorUrl);
 
   if (returnsToMyCases) {
-    cy.wait('@getDashboardCasesAfterPaymentCancel');
-    assertMyCasesCaseListDashboard();
+    assertReturnedToMyCasesWithoutWelcomePage();
   }
 };

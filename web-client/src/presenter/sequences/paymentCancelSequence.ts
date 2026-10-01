@@ -9,7 +9,10 @@ import { getCaseAssociationAction } from '@web-client/presenter/actions/getCaseA
 import { redirectToDashboardAction } from '@web-client/presenter/actions/redirectToDashboardAction';
 import { checkCaseAssociationAndPaymentStatusAction } from '@web-client/presenter/actions/FilingFee/checkCaseAssociationAndPaymentStatusAction';
 import { setFilingFeeReturnPageAction } from '@web-client/presenter/actions/FilingFee/setFilingFeeReturnPageAction';
-import { navigateToPathAction } from '@web-client/presenter/actions/navigateToPathAction';
+import { setFilingFeeAlertsAction } from '@web-client/presenter/actions/FilingFee/setFilingFeeAlertsAction';
+import { getOpenAndClosedCasesForUserAction } from '@web-client/presenter/actions/Dashboard/getOpenAndClosedCasesForUserAction';
+import { setCasesAction } from '@web-client/presenter/actions/setCasesAction';
+import { setDefaultCaseTypeToDisplayAction } from '@web-client/presenter/actions/setDefaultCaseTypeToDisplayAction';
 
 export const paymentCancelSequence = [
   paymentCancelRouteByOriginAction,
@@ -17,8 +20,11 @@ export const paymentCancelSequence = [
     dashboard: [
       setFilingFeeReturnPageAction,
       clearPaymentFilingFeeOriginAction,
-      setupCurrentPageAction('Interstitial'),
-      navigateToPathAction,
+      setDefaultCaseTypeToDisplayAction,
+      getOpenAndClosedCasesForUserAction,
+      setCasesAction,
+      setupCurrentPageAction('DashboardExternalUser'),
+      setFilingFeeAlertsAction,
     ],
     petition: [
       getCaseAction,
