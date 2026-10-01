@@ -4,6 +4,8 @@ import { applicationContext } from '@shared/business/test/createTestApplicationC
 import { calculateISODate } from '@shared/business/utilities/DateHandler';
 import axios, { AxiosResponse } from 'axios';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { ROLES } from '@shared/business/entities/EntityConstants';
+import jwt from 'jsonwebtoken';
 
 describe('exchangeAuthCodeInteractor', () => {
   const createISODateStringMock = jest.fn();
@@ -15,11 +17,19 @@ describe('exchangeAuthCodeInteractor', () => {
     CURRENT_COLOR: process.env.CURRENT_COLOR,
   };
 
+  const mockUser = {
+    'custom:role': ROLES.privatePractitioner,
+    'custom:userId': '188a5b0f-e7ae-4647-98a1-43a0d4d00eee',
+    name: 'Test Petitioner',
+  };
+
+  const authToken = jwt.sign(mockUser, 'secret');
+
   const mockResult = {
     data: {
       expires_in: 200,
       refresh_token: '1234',
-      id_token: '5678gefd',
+      id_token: authToken,
       access_token: '12341234',
     },
   };
@@ -67,7 +77,7 @@ describe('exchangeAuthCodeInteractor', () => {
 
     expect(result).toEqual({
       accessToken: '12341234',
-      idToken: '5678gefd',
+      idToken: authToken,
       refreshToken: '1234',
       expiresAt: '2026-09-02T00:00:00.000Z',
     });
@@ -90,7 +100,7 @@ describe('exchangeAuthCodeInteractor', () => {
 
     expect(result).toEqual({
       accessToken: '12341234',
-      idToken: '5678gefd',
+      idToken: authToken,
       refreshToken: '1234',
       expiresAt: '2026-09-02T00:00:00.000Z',
     });
@@ -134,6 +144,33 @@ describe('exchangeAuthCodeInteractor', () => {
     );
     await expect(callPromise).rejects.toThrow(
       new UnauthorizedError('Code exchange failed: Unauthorized'),
+    );
+  });
+
+  it('should throw an error if token does not include DB user id', async () => {
+    const mockUser = {
+      'custom:role': ROLES.privatePractitioner,
+      name: 'Test Practitioner',
+    };
+    const authToken = jwt.sign(mockUser, 'secret');
+    const invalidUserMockResult = {
+      data: {
+        ...mockResult.data,
+        id_token: authToken,
+      },
+    };
+
+    appContext.getHttpClient().post.mockResolvedValue(invalidUserMockResult);
+
+    const callPromise = exchangeAuthCodeInteractor(
+      appContext as ServerApplicationContext,
+      {
+        authCode: '1234abcd',
+        code_verifier: '1234',
+      },
+    );
+    await expect(callPromise).rejects.toThrow(
+      new UnauthorizedError('User Missing DB user ID'),
     );
   });
 });
