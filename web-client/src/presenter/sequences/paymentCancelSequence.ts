@@ -21,10 +21,11 @@ export const paymentCancelSequence = [
       setFilingFeeReturnPageAction,
       clearPaymentFilingFeeOriginAction,
       setDefaultCaseTypeToDisplayAction,
+      setupCurrentPageAction('Interstitial'),
+      setFilingFeeAlertsAction,
       getOpenAndClosedCasesForUserAction,
       setCasesAction,
       setupCurrentPageAction('DashboardExternalUser'),
-      setFilingFeeAlertsAction,
     ],
     petition: [
       getCaseAction,
