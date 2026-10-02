@@ -12,6 +12,7 @@ import {
   PRACTICE_TYPE,
   SERVICE_INDICATOR_TYPES,
   STATE_KEYS,
+  type PaymentFilingFeeOrigin,
 } from '@shared/business/entities/EntityConstants';
 import {
   PreviousTerm,
@@ -711,6 +712,8 @@ export const baseState = {
   },
   caseDeadlines: [] as RawCaseDeadline[],
   caseDetail: {} as RawCase & { messages?: RawMessage[] },
+  paymentFilingFeeOrigin: null as PaymentFilingFeeOrigin | null,
+  dashboardCaseListPageIndex: undefined as number | undefined,
   caseInventoryReportData: {
     foundCasesForCurrentPage: [] as FormattedCaseInventoryReportEntry[],
     foundCasesTotalCount: 0,
@@ -1177,6 +1180,7 @@ export type AlertError = {
   title?: string;
   message?: string;
   messages?: string[];
+  filingFeePaymentStatusDocketNumber?: string;
   responseCode?: number;
   scrollToErrorNotification?: boolean;
   insertContactSupportClause?: boolean;
