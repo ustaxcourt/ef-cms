@@ -1,7 +1,5 @@
-export const parseEventBody = (
-  body: Record<string, any>,
-): Record<string, any> => {
+export const parseEventBody = (body: string): any => {
   const parsedBody = Object.create(null);
-  Object.assign(parsedBody, body);
+  Object.assign(parsedBody, JSON.parse(body));
   return parsedBody;
 };
