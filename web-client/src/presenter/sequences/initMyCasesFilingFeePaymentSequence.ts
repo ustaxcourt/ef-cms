@@ -19,5 +19,4 @@ export const initMyCasesFilingFeePaymentSequence = [
     ],
     success: [],
   },
-  unsetCasePaymentFilingFeeAction,
 ];
