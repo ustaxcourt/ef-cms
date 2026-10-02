@@ -16,7 +16,7 @@ tfenv use 1.16.4
 
 ### Before Deployment
 
-#### Deploy Docker container `4.3.94`
+#### Deploy Docker container `4.3.99`
 
 This script will prompt for an environment to pull the image from; choose `exp6`.
 
