@@ -1147,6 +1147,14 @@ export const PAYMENT_STATUS = {
 export type PaymentStatusTypes =
   (typeof PAYMENT_STATUS)[keyof typeof PAYMENT_STATUS];
 
+export const PAYMENT_FILING_FEE_ORIGIN = {
+  DASHBOARD: 'dashboard',
+  PETITION: 'petition',
+} as const;
+
+export type PaymentFilingFeeOrigin =
+  (typeof PAYMENT_FILING_FEE_ORIGIN)[keyof typeof PAYMENT_FILING_FEE_ORIGIN];
+
 export const PROCEDURE_TYPES_MAP = {
   regular: 'Regular',
   small: 'Small',
