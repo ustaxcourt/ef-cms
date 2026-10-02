@@ -32,18 +32,18 @@ jobs:
     steps:
       # Local actions resolve against the workspace root, so they are checked out first.
       - name: Checkout DAWSON actions
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           sparse-checkout: .github/actions
           sparse-checkout-cone-mode: false
 
       - name: Checkout current branch
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           path: branchToBeCompared
 
       - name: Checkout USTC staging
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           path: stagingBranch
           ref: staging
