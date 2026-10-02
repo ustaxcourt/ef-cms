@@ -13,7 +13,7 @@ DAWSON uses multiple tools to detect vulnerable or compromised dependencies. All
 
 ## Trigger
 
-All jobs run on non-draft PRs targeting staging. No push-to-staging job (container and SAST baselines cover that).
+All jobs run on non-draft PRs, whatever branch they target. The `trivy` full-tree scan also runs on pushes to staging, so its findings reach the Security tab; the other three jobs stay PR-only because they either compare against a PR base or report only to the log.
 
 ## Dependency Review
 
