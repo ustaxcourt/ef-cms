@@ -10,7 +10,7 @@ export class RestrictedCase extends JoiValidationEntity {
   public docketNumberSuffix?: string;
   public docketNumberWithSuffix?: string;
   public isPaper?: boolean;
-  public isSealed?: string;
+  public isSealed?: boolean;
   public leadDocketNumber?: string;
   public docketEntries: DocketEntry[];
 

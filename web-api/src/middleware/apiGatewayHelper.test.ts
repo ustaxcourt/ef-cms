@@ -1,6 +1,7 @@
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { ROLES } from '../../../shared/src/business/entities/EntityConstants';
 import { EXPOSED_RESPONSE_HEADERS } from '@shared/utils/headers';
+import { PublicUser } from '@shared/business/entities/PublicUser';
 import {
   getAuthHeader,
   getConnectionIdFromEvent,
@@ -173,14 +174,62 @@ describe('handle', () => {
     });
   });
 
-  it('should return an object representing 500 status if the function returns an unsanitized entity (response contains private data as defined in app context)', async () => {
-    const response = await handle({}, () => ({
-      pk: 'this is bad!',
-    }));
+  it('should return a 500 response for unsanitized public entity payloads on public routes', async () => {
+    const user = new PublicUser({
+      name: 'Bad User',
+      role: 'petitioner',
+    }).validate();
+    (user as any).privateField = 'this is bad!';
+    const response = await handle(
+      {
+        path: '/public-api/some-endpoint',
+      },
+      () => user,
+    );
     expect(response).toEqual({
-      body: JSON.stringify('Unsanitized entity'),
+      body: JSON.stringify(
+        'Unsanitized entity: unauthorized field privateField',
+      ),
       headers: EXPECTED_HEADERS,
       statusCode: 500,
+    });
+  });
+
+  it('should return a 500 response for unvalidated public entity payloads on public routes', async () => {
+    const user = new PublicUser({ name: 'Bad User', role: 'petitioner' });
+    const response = await handle(
+      {
+        path: '/public-api/some-endpoint',
+      },
+      () => user,
+    );
+    expect(response).toEqual({
+      body: JSON.stringify(
+        'Unsanitized entity: entity PublicUser was not validated before being returned',
+      ),
+      headers: EXPECTED_HEADERS,
+      statusCode: 500,
+    });
+  });
+
+  it('should allow valid public entity payloads on public routes', async () => {
+    const user = new PublicUser({ name: 'Public User', role: 'petitioner' });
+    user.validate();
+    const response = await handle(
+      {
+        path: '/public-api/some-endpoint',
+      },
+      () => user,
+    );
+
+    expect(response).toEqual({
+      body: JSON.stringify({
+        entityName: 'PublicUser',
+        name: 'Public User',
+        role: 'petitioner',
+      }),
+      headers: EXPECTED_HEADERS,
+      statusCode: '200',
     });
   });
 
@@ -202,16 +251,22 @@ describe('handle', () => {
     });
   });
 
-  it('should return an object representing 500 status if the function returns an unsanitized entity as an array (response contains private data as defined in app context)', async () => {
-    const response = await handle({}, () => [
+  it('should not enforce public payload sanitizer rules on non-public routes', async () => {
+    const response = await handle(
       {
-        pk: 'this is bad!',
+        path: '/api/some-internal-endpoint',
       },
-    ]);
+      () => ({
+        privateField: 'allowed for non-public routes',
+      }),
+    );
+
     expect(response).toEqual({
-      body: JSON.stringify('Unsanitized entity'),
+      body: JSON.stringify({
+        privateField: 'allowed for non-public routes',
+      }),
       headers: EXPECTED_HEADERS,
-      statusCode: 500,
+      statusCode: '200',
     });
   });
 
@@ -246,6 +301,35 @@ describe('handle', () => {
       headers: EXPECTED_HEADERS,
       statusCode: '400',
     });
+  });
+
+  it('should skip public validation for pre-formed responses with X-Manual-Refresh-Required header', async () => {
+    const response = await handle(
+      { path: '/public-api/some-endpoint' },
+      () => ({
+        body: {
+          message: 'Application version mismatch detected. Please refresh.',
+        },
+        headers: { 'X-Manual-Refresh-Required': 'true' },
+        statusCode: '409',
+      }),
+    );
+    expect(response).toMatchObject({ statusCode: '409' });
+  });
+
+  it('should enforce public validation for pre-formed responses without skipPublicValidation', async () => {
+    const user = new PublicUser({ name: 'Bad User', role: 'petitioner' });
+    (user as any).privateField = 'bad';
+    user.validate();
+    const response = await handle(
+      { path: '/public-api/some-endpoint' },
+      () => ({
+        body: user,
+        headers: {},
+        statusCode: '200',
+      }),
+    );
+    expect(response).toMatchObject({ statusCode: 500 });
   });
 });
 

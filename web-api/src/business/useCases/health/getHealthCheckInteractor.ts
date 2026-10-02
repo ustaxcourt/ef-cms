@@ -1,5 +1,6 @@
 import { S3 } from '@aws-sdk/client-s3';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { HealthCheckResponse } from '@shared/business/dto/public/HealthCheckResponse';
 import { elasticSearchHealthCheck } from '@web-api/persistence/elasticsearch/elasticSearchHealthCheck';
 
 const regionEast = 'us-east-1';
@@ -14,13 +15,6 @@ type S3BucketsStatus = {
   publicFailover: boolean;
   westDocuments: boolean;
   westTempDocuments: boolean;
-};
-
-export type ApplicationHealth = {
-  cognito: boolean;
-  elasticsearch: boolean;
-  emailService: boolean;
-  s3: S3BucketsStatus;
 };
 
 const getElasticSearchStatus = async ({
@@ -169,7 +163,7 @@ const getEmailServiceStatus = async ({
 
 export const getHealthCheckInteractor = async (
   applicationContext: ServerApplicationContext,
-): Promise<ApplicationHealth> => {
+): Promise<HealthCheckResponse> => {
   const [
     elasticSearchStatus,
     s3BucketStatus,
@@ -186,10 +180,10 @@ export const getHealthCheckInteractor = async (
     }),
   ]);
 
-  return {
+  return new HealthCheckResponse({
     cognito: cognitoStatus,
     elasticsearch: elasticSearchStatus,
     emailService: emailServiceStatus,
     s3: s3BucketStatus,
-  };
+  }).validate();
 };

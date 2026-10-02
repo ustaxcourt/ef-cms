@@ -8,9 +8,9 @@ import { FORMATS, formatNow } from '@shared/business/utilities/DateHandler';
 import { Get } from 'cerebral';
 import { compact, some } from 'lodash';
 import { state } from '@web-client/presenter/app-public.cerebral';
-import { RestrictedCaseDTO } from '@shared/business/dto/cases/RestrictedCaseDTO';
-import { PublicCaseDTO } from '@shared/business/dto/cases/PublicCaseDTO';
-type CalendaredPublicCase = PublicCaseDTO | RestrictedCaseDTO;
+import { RestrictedCaseResponse } from '@shared/business/dto/cases/RestrictedCaseResponse';
+import { PublicCaseResponse } from '@shared/business/dto/cases/PublicCaseResponse';
+type CalendaredPublicCase = PublicCaseResponse | RestrictedCaseResponse;
 
 export type FormattedPublicTrialSession = {
   formattedStartDate: string;
@@ -98,10 +98,10 @@ export const publicTrialSessionDetailsHelper = (
   };
 };
 
-const isRestrictedCaseDTO = (
+const isRestrictedCaseResponse = (
   calendaredCase: CalendaredPublicCase,
-): calendaredCase is RestrictedCaseDTO => {
-  return calendaredCase.entityName === 'RestrictedCaseDTO';
+): calendaredCase is RestrictedCaseResponse => {
+  return calendaredCase.entityName === 'RestrictedCaseResponse';
 };
 
 const formatPublicCase = (
@@ -111,9 +111,11 @@ const formatPublicCase = (
   const inConsolidatedGroup = isInConsolidatedGroup(calendaredCase);
   const isTheLeadCase = isLeadCase(calendaredCase);
   const caseTitle = isSealed
-    ? 'Sealed' // if the case is sealed, it will be a 'RestrictedCaseDTO'
+    ? 'Sealed' // if the case is sealed, it will be a 'RestrictedCaseResponse'
     : Case.getCaseTitle(
-        isRestrictedCaseDTO(calendaredCase) ? '' : calendaredCase.caseCaption,
+        isRestrictedCaseResponse(calendaredCase)
+          ? ''
+          : calendaredCase.caseCaption,
       );
   let consolidatedIconTooltipText;
 
@@ -131,12 +133,12 @@ const formatPublicCase = (
     docketNumber: calendaredCase.docketNumber,
     docketNumberWithSuffix: calendaredCase.docketNumberWithSuffix,
     inConsolidatedGroup,
-    irsPractitioners: isRestrictedCaseDTO(calendaredCase)
+    irsPractitioners: isRestrictedCaseResponse(calendaredCase)
       ? undefined
       : calendaredCase.irsPractitioners,
     isLeadCase: isTheLeadCase,
     isSealed: !!isSealed,
-    privatePractitioners: isRestrictedCaseDTO(calendaredCase)
+    privatePractitioners: isRestrictedCaseResponse(calendaredCase)
       ? undefined
       : calendaredCase.privatePractitioners,
   };
