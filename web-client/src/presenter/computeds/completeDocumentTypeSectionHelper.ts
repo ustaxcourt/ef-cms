@@ -103,7 +103,6 @@ export const completeDocumentTypeSectionHelper = (
   const primary = getOptionsForCategory({
     caseDetail,
     categoryInformation,
-    previousDocument: form.previousDocument,
     selectedDocketEntryId,
     authorizedUser: user,
   });
@@ -125,7 +124,6 @@ export const completeDocumentTypeSectionHelper = (
       secondary = getOptionsForCategory({
         caseDetail,
         categoryInformation: secondaryCategoryInformation,
-        previousDocument: form.secondaryDocument.previousDocument,
         selectedDocketEntryId,
         authorizedUser: user,
       });

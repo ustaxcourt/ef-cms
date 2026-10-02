@@ -10,7 +10,6 @@ import {
   MAX_TITLE_LENGTH,
   getOptionsForCategory,
   getOrdinalValuesForUploadIteration,
-  getPreviousDocumentFallbackTitle,
   getValidPreviouslyFiledDocuments,
 } from './selectDocumentTypeHelper';
 import { MOCK_CASE } from '@shared/test/mockCase';
@@ -22,7 +21,6 @@ describe('selectDocumentTypeHelper', () => {
   const getDocumentTitleWithAdditionalInfo = jest.mocked(
     getDocumentTitleWithAdditionalInfoMock,
   );
-
   describe('getOptionsForCategory', () => {
     const mockSelectedDocketEntryId = MOCK_CASE.docketEntries.find(
       d => d.eventCode === INITIAL_DOCUMENT_TYPES.stin.eventCode,
@@ -79,49 +77,15 @@ describe('selectDocumentTypeHelper', () => {
           docketEntries: mockServedDocuments,
         },
         categoryInformation: mockCategoryInformation,
-        previousDocument: {
-          docketEntryId: mockServedDocuments[0].docketEntryId,
-          documentTitle: 'Petition',
-          documentType: 'Petition',
-        },
         selectedDocketEntryId: mockSelectedDocketEntryId,
       });
 
       expect(result).toMatchObject({
         previousDocumentSelectLabel: 'Which document are you objecting to?',
-        previousDocumentDefaultOption: {
-          disabled: false,
-          label: '- Select -',
-          value: '',
-        },
-        selectedPreviousDocumentId: mockServedDocuments[0].docketEntryId,
         previouslyFiledDocuments: mockServedDocuments.filter(
           d => d.eventCode !== INITIAL_DOCUMENT_TYPES.stin.eventCode,
         ),
         showNonstandardForm: true,
-      });
-    });
-
-    it('should provide a fallback option when the saved parent has no ID', () => {
-      const result = getOptionsForCategory({
-        authorizedUser: mockDocketClerkUser,
-        caseDetail: MOCK_CASE,
-        categoryInformation: {
-          labelPreviousDocument: 'Which document is this in support of?',
-          scenario: 'Nonstandard A',
-        },
-        previousDocument: {
-          documentTitle: 'Motion for Continuance',
-          documentType: 'Motion',
-        },
-        selectedDocketEntryId: '',
-      });
-
-      expect(result.selectedPreviousDocumentId).toBe('');
-      expect(result.previousDocumentDefaultOption).toEqual({
-        disabled: true,
-        label: 'Motion for Continuance',
-        value: '',
       });
     });
 
@@ -587,55 +551,6 @@ describe('selectDocumentTypeHelper', () => {
       });
 
       expect(result.length).toEqual(0);
-    });
-  });
-
-  describe('getPreviousDocumentFallbackTitle', () => {
-    it('should return no title when no document is selected', () => {
-      expect(getPreviousDocumentFallbackTitle({})).toBeUndefined();
-    });
-
-    it('should show the saved title when a bundled parent has no ID', () => {
-      expect(
-        getPreviousDocumentFallbackTitle({
-          previousDocument: {
-            documentTitle: 'Motion for Continuance',
-            documentType: 'Motion',
-          },
-        }),
-      ).toBe('Motion for Continuance');
-    });
-
-    it('should use the saved type when the title is missing', () => {
-      expect(
-        getPreviousDocumentFallbackTitle({
-          previousDocument: { documentType: 'Motion' },
-        }),
-      ).toBe('Motion');
-    });
-
-    it('should show the saved title when the parent ID is absent from the options', () => {
-      expect(
-        getPreviousDocumentFallbackTitle({
-          previousDocument: {
-            docketEntryId: 'lodged-parent-id',
-            documentTitle: 'Lodged motion',
-          },
-          previouslyFiledDocuments: [{ docketEntryId: 'other-id' }],
-        }),
-      ).toBe('Lodged motion');
-    });
-
-    it('should use the listed parent option when its ID is available', () => {
-      expect(
-        getPreviousDocumentFallbackTitle({
-          previousDocument: {
-            docketEntryId: 'parent-id',
-            documentTitle: 'Old title',
-          },
-          previouslyFiledDocuments: [{ docketEntryId: 'parent-id' }],
-        }),
-      ).toBeUndefined();
     });
   });
 });

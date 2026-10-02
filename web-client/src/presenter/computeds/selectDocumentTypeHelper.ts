@@ -4,47 +4,17 @@ import { getDocumentTitleWithAdditionalInfo } from '@shared/business/utilities/g
 import { getFormattedCaseDetail } from '@shared/business/utilities/getFormattedCaseDetail';
 import { applicationContext } from '@web-client/applicationContext';
 
-export const getPreviousDocumentFallbackTitle = ({
-  previousDocument,
-  previouslyFiledDocuments,
-}: {
-  previousDocument?: {
-    docketEntryId?: string;
-    documentTitle?: string;
-    documentType?: string;
-  };
-  previouslyFiledDocuments?: { docketEntryId: string }[];
-}): string | undefined => {
-  if (!previousDocument) return undefined;
-  if (
-    previouslyFiledDocuments?.some(
-      document => document.docketEntryId === previousDocument.docketEntryId,
-    )
-  ) {
-    return undefined;
-  }
-  return previousDocument.documentTitle || previousDocument.documentType;
-};
-
 export const getOptionsForCategory = ({
   caseDetail,
   categoryInformation,
-  previousDocument,
   selectedDocketEntryId,
   authorizedUser,
 }: {
   caseDetail: any;
   categoryInformation: any;
-  previousDocument?: RawDocketEntry['previousDocument'];
   selectedDocketEntryId: string;
   authorizedUser: AuthUser;
 }): {
-  selectedPreviousDocumentId?: string;
-  previousDocumentDefaultOption?: {
-    disabled: boolean;
-    label: string;
-    value: string;
-  };
   showNonstandardForm?: boolean;
   previousDocumentSelectLabel?: string;
   previouslyFiledDocuments?: any;
@@ -58,12 +28,6 @@ export const getOptionsForCategory = ({
   textInputLabel2?: string;
 } => {
   let options: {
-    selectedPreviousDocumentId?: string;
-    previousDocumentDefaultOption?: {
-      disabled: boolean;
-      label: string;
-      value: string;
-    };
     showNonstandardForm?: boolean;
     previousDocumentSelectLabel?: string;
     previouslyFiledDocuments?: any;
@@ -179,21 +143,6 @@ export const getOptionsForCategory = ({
       };
       break;
     }
-  }
-
-  if (options.previousDocumentSelectLabel) {
-    options.selectedPreviousDocumentId = previousDocument?.docketEntryId || '';
-    const savedPreviousDocumentTitle = getPreviousDocumentFallbackTitle({
-      previousDocument,
-      previouslyFiledDocuments: options.previouslyFiledDocuments,
-    });
-    options.previousDocumentDefaultOption = savedPreviousDocumentTitle
-      ? {
-          disabled: true,
-          label: savedPreviousDocumentTitle,
-          value: options.selectedPreviousDocumentId,
-        }
-      : { disabled: false, label: '- Select -', value: '' };
   }
 
   return options;

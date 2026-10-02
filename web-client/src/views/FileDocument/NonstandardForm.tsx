@@ -193,7 +193,11 @@ export const NonstandardForm: React.FC<NonstandardFormProps> = connect(
               id={`${namespace}previous-document`}
               data-testid={`${namespace}previous-document-search`}
               name={`${namespace}previousDocument`}
-              value={helper[level].selectedPreviousDocumentId}
+              value={get(
+                form,
+                `${namespace}previousDocument.docketEntryId`,
+                '',
+              )}
               onChange={e => {
                 updateSequence({
                   key: e.target.name,
@@ -202,12 +206,7 @@ export const NonstandardForm: React.FC<NonstandardFormProps> = connect(
                 validateSequence();
               }}
             >
-              <option
-                value={helper[level].previousDocumentDefaultOption.value}
-                disabled={helper[level].previousDocumentDefaultOption.disabled}
-              >
-                {helper[level].previousDocumentDefaultOption.label}
-              </option>
+              <option value="">- Select -</option>
               {helper[level].previouslyFiledDocuments.map(previousDocument => {
                 return (
                   <option
