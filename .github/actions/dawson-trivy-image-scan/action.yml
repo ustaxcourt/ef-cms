@@ -21,7 +21,9 @@ runs:
         scan-type: image
         image-ref: ${{ inputs.image_ref }}
         vuln-type: 'os,library'
-        severity: 'HIGH,CRITICAL'
+        severity: 'HIGH,CRITICAL,UNKNOWN'
+        # trivy-action drops the severity filter for SARIF unless this is set
+        limit-severities-for-sarif: true
         format: sarif
         output: ${{ inputs.report_path }}
         # Keep image scans non-blocking until the initial vulnerability baseline is triaged.

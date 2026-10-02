@@ -1,6 +1,12 @@
 name: DAWSON Container Images
 description: Build the DAWSON base and local container images in dependency order.
 
+inputs:
+  build_local:
+    description: Build the efcms-local image. Set false when only the base image is needed.
+    required: false
+    default: 'true'
+
 runs:
   using: composite
   steps:
@@ -9,5 +15,6 @@ runs:
       run: docker build --platform=linux/amd64 -t ef-cms-us-east-1 -f Dockerfile .
 
     - name: Build DAWSON local image
+      if: inputs.build_local == 'true'
       shell: bash
       run: docker build --platform=linux/amd64 -t efcms-local -f Dockerfile-local .
