@@ -23,7 +23,10 @@ import { unzipFile } from './cypress/helpers/file/unzip-file';
 import { waitForNoce } from './cypress/helpers/cypressTasks/postgres/wait-for-noce';
 import type { Page } from 'puppeteer-core';
 import { retry, setup } from '@cypress/puppeteer';
-import { toggleFeatureFlag } from './cypress/helpers/cypressTasks/postgres/featureFlagsCypress';
+import {
+  getRawFeatureFlagValue,
+  toggleFeatureFlag,
+} from './cypress/helpers/cypressTasks/postgres/featureFlagsCypress';
 import { assertCorrectNetworkData } from './cypress/helpers/cypressTasks/network/assertCorrectNetworkData';
 
 export default defineConfig({
@@ -90,6 +93,9 @@ export default defineConfig({
             docketNumber,
             eventCode,
           });
+        },
+        getRawFeatureFlagValue({ flag }) {
+          return getRawFeatureFlagValue({ flag });
         },
         getUserByEmail(email: string) {
           return getUserByEmail(email);
