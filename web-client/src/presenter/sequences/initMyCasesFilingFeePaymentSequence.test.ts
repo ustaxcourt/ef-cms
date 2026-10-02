@@ -47,7 +47,7 @@ describe('initMyCasesFilingFeePaymentSequence', () => {
     expect(cerebralTest.getState('paymentFilingFeeOrigin')).toBeNull();
   });
 
-  it('should set dashboard origin before init and clear overlay on success redirect', async () => {
+  it('should set dashboard origin before init and keep overlay on success redirect', async () => {
     applicationContext.getUseCases().initPaymentInteractor.mockResolvedValue({
       paymentRedirect: 'http://localhost:3366/pay',
     });
@@ -60,7 +60,9 @@ describe('initMyCasesFilingFeePaymentSequence', () => {
       waitingForResponse: true,
       waitingForResponseRequests: 1,
     });
-    expect(cerebralTest.getState('paymentFilingFeeOrigin')).toBeNull();
+    expect(cerebralTest.getState('paymentFilingFeeOrigin')).toEqual(
+      PAYMENT_FILING_FEE_ORIGIN.DASHBOARD,
+    );
     expect(
       applicationContext.getUseCases().initPaymentInteractor,
     ).toHaveBeenCalledWith(expect.anything(), {
