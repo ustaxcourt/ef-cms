@@ -7,6 +7,19 @@ export const exchangeAuthCodeAction = async ({
 }: ActionProps) => {
   const { authCode, state, error, errorDescription } = props;
 
+  const auth_state = applicationContext.getPersistenceGateway().getItem({
+    key: 'auth_state',
+  });
+
+  if (auth_state !== state) {
+    return path.error({
+      alertError: {
+        title: 'Bad State',
+        message: 'Stored state did not match returned state.',
+      },
+    });
+  }
+
   if (error) {
     return path.error({
       alertError: {
@@ -20,19 +33,6 @@ export const exchangeAuthCodeAction = async ({
   const code_verifier = applicationContext
     .getPersistenceGateway()
     .getItem({ key: 'code_verifier' });
-
-  const auth_state = applicationContext.getPersistenceGateway().getItem({
-    key: 'auth_state',
-  });
-
-  if (auth_state !== state) {
-    return path.error({
-      alertError: {
-        title: 'Bad State',
-        message: 'Stored state did not match returned state.',
-      },
-    });
-  }
 
   try {
     const { accessToken, idToken, refreshToken } = await authCodeInteractor(
