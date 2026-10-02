@@ -126,6 +126,10 @@ export const fileExternalDocument = async (
   if (supportingDocuments) {
     for (let i = 0; i < supportingDocuments.length; i++) {
       supportingDocuments[i].filedBy = primaryDocumentMetadata.filedBy;
+      supportingDocuments[i].previousDocument = {
+        ...supportingDocuments[i].previousDocument,
+        docketEntryId: documentMetadata.primaryDocumentId,
+      };
       documentsToAdd.push([
         supportingDocuments[i].docketEntryId,
         supportingDocuments[i],
@@ -146,6 +150,10 @@ export const fileExternalDocument = async (
 
   if (secondarySupportingDocuments) {
     for (let i = 0; i < secondarySupportingDocuments.length; i++) {
+      secondarySupportingDocuments[i].previousDocument = {
+        ...secondarySupportingDocuments[i].previousDocument,
+        docketEntryId: secondaryDocument.docketEntryId,
+      };
       documentsToAdd.push([
         secondarySupportingDocuments[i].docketEntryId,
         secondarySupportingDocuments[i],
