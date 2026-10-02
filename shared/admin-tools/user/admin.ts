@@ -83,10 +83,12 @@ export async function createOrUpdateUser(
     password,
     setPasswordAsPermanent,
     user,
+    linkFederatedAccount = true,
   }: {
     user: RawUser | RawPractitioner;
     password: string;
     setPasswordAsPermanent: boolean;
+    linkFederatedAccount?: boolean;
   },
 ): Promise<RawUser> {
   const userPoolId =
@@ -147,6 +149,7 @@ export async function createOrUpdateUser(
         userId,
       });
     if (
+      linkFederatedAccount &&
       cognitoUser &&
       featureFlags[ALLOWLIST_FEATURE_FLAGS.ALLOW_IDP_LOGIN.key] &&
       !!process.env.IDP_NAME &&

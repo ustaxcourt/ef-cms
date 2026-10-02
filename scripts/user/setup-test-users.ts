@@ -241,6 +241,7 @@ const setupPractitioners = (applicationContext: ServerApplicationContext) => {
             password,
             setPasswordAsPermanent: true,
             user,
+            linkFederatedAccount: false,
           }),
         ),
       );

@@ -296,6 +296,19 @@ describe('createOrUpdateUser', () => {
     ).not.toHaveBeenCalled();
   });
 
+  it('should not attempt to link a new user if called with argument indicating not to', async () => {
+    process.env = {};
+    await createOrUpdateUser(applicationContext, {
+      password,
+      setPasswordAsPermanent: false,
+      user: MOCK_INTERNAL_USER,
+      linkFederatedAccount: false,
+    });
+    expect(
+      applicationContext.getCognito().adminLinkProviderForUser,
+    ).not.toHaveBeenCalled();
+  });
+
   it('should disable access for a legacy judge user', async () => {
     await createOrUpdateUser(applicationContext, {
       password,
