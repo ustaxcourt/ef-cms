@@ -71,6 +71,7 @@ const createManyAccounts = (
           password,
           setPasswordAsPermanent: true,
           user,
+          linkFederatedAccount: false,
         }),
       ),
     );
