@@ -1,5 +1,5 @@
-import { externalUserCreatesElectronicCase } from '../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
-import { loginAsPrivatePractitioner } from '../../../../helpers/authentication/login-as-helpers';
+import { externalUserCreatesElectronicCase } from 'cypress/helpers/fileAPetition/petitioner-creates-electronic-case';
+import { loginAsPrivatePractitioner } from 'cypress/helpers/authentication/login-as-helpers';
 
 describe('Private practitioner views dashboard', () => {
   it('should display filing fee column', () => {
@@ -11,7 +11,7 @@ describe('Private practitioner views dashboard', () => {
       cy.get('[data-testid="filingFee-sortable-button"]');
       cy.get(`[data-testid="${docketNumber}"]`)
         .find('[data-testid="petition-payment-status"]')
-        .should('have.text', 'Not paid');
+        .should('have.text', 'Pay now');
     });
   });
 });
