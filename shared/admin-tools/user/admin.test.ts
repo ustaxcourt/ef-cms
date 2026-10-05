@@ -285,7 +285,6 @@ describe('createOrUpdateUser', () => {
   });
 
   it('should not attempt to link a new user if not using the main user pool', async () => {
-    process.env = {};
     await createOrUpdateUser(applicationContext, {
       password,
       setPasswordAsPermanent: false,
@@ -297,7 +296,6 @@ describe('createOrUpdateUser', () => {
   });
 
   it('should not attempt to link a new user if called with argument indicating not to', async () => {
-    process.env = {};
     await createOrUpdateUser(applicationContext, {
       password,
       setPasswordAsPermanent: false,
