@@ -10,13 +10,14 @@ export const createForceRefreshCallback = ({
   bootstrapState: BootstrapState;
   onAppUpdated: () => Promise<void>;
   reloadPage: () => void | Promise<void>;
-}): (() => Promise<void>) => {
-  return async (): Promise<void> => {
+}): (() => Promise<boolean>) => {
+  return async (): Promise<boolean> => {
     if (!bootstrapState.isReady) {
       await reloadPage();
-      return;
+      return true;
     }
 
     await onAppUpdated();
+    return false;
   };
 };
