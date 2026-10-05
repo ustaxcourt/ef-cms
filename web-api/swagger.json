@@ -8197,7 +8197,7 @@
             "headers": {
               "Set-Cookie": {
                 "type": "string",
-                "description": "the cookie that securly stores the refreshToken which can be used later when hitting the /auth/refresh endpoint"
+                "description": "the cookie that securely stores the refreshToken which can be used later when hitting the /auth/refresh endpoint"
               }
             }
           },

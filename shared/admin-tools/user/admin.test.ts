@@ -2,6 +2,7 @@ jest.mock('@web-api/persistence/postgres/users/upsertUsers');
 jest.mock('../util');
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import {
+  irsSuperuserUser,
   legacyJudgeUser,
   MOCK_INTERNAL_USERS,
   MOCK_PRACTITIONER,
@@ -36,6 +37,7 @@ const cognitoMock = mockClient(CognitoIdentityProvider);
 const password = 'pwd';
 const userId = 'a5546ed1-6f67-4001-a2f7-0cf25e0489bb';
 const MOCK_INTERNAL_USER = MOCK_INTERNAL_USERS[petitionsClerkUser.userId];
+const MOCK_IRS_SUPERUSER = MOCK_USERS[irsSuperuserUser.userId];
 const { userPoolId } = applicationContext.environment;
 const cognitoUserName = 'username';
 
@@ -276,6 +278,31 @@ describe('createOrUpdateUser', () => {
       password,
       setPasswordAsPermanent: false,
       user: MOCK_INTERNAL_USER,
+    });
+    expect(
+      applicationContext.getCognito().adminLinkProviderForUser,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should not attempt to link a new user if not using the main user pool', async () => {
+    process.env = {};
+    await createOrUpdateUser(applicationContext, {
+      password,
+      setPasswordAsPermanent: false,
+      user: MOCK_IRS_SUPERUSER,
+    });
+    expect(
+      applicationContext.getCognito().adminLinkProviderForUser,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should not attempt to link a new user if called with argument indicating not to', async () => {
+    process.env = {};
+    await createOrUpdateUser(applicationContext, {
+      password,
+      setPasswordAsPermanent: false,
+      user: MOCK_INTERNAL_USER,
+      linkFederatedAccount: false,
     });
     expect(
       applicationContext.getCognito().adminLinkProviderForUser,

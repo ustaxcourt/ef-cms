@@ -1,12 +1,13 @@
 import { createCookieString } from '@web-api/utilities/cookieFormatting';
 import { genericHandler } from '../../genericHandler';
 import { exchangeAuthCodeInteractor } from '@web-api/business/useCases/auth/exchangeAuthCodeInteractor';
+import { parseEventBody } from '@web-api/business/utilities/parseEventBody';
 
 export const exchangeAuthCodeLambda = event =>
   genericHandler(
     event,
     async ({ applicationContext }) => {
-      const { authCode, code_verifier } = JSON.parse(event.body);
+      const { authCode, code_verifier } = parseEventBody(event.body);
 
       const { accessToken, idToken, refreshToken, expiresAt } =
         await exchangeAuthCodeInteractor(
