@@ -43,5 +43,18 @@ describe('court user logs in with single sign-on', () => {
     );
 
     cy.get('[data-testid="inbox-tab-content"]').should('exist');
+
+    cy.location('origin').as('ORIGIN');
+    cy.get('@ORIGIN').then(origin => {
+      cy.getAllLocalStorage().then(storage => {
+        const localStorage = storage[origin];
+        if (localStorage) {
+          cy.wrap(localStorage['auth_state']).should('be.undefined');
+          cy.wrap(localStorage['code_verifier']).should('be.undefined');
+        } else {
+          cy.wrap(localStorage).should('be.undefined');
+        }
+      });
+    });
   });
 });
