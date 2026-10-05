@@ -35,28 +35,17 @@ For each runtime package (or group of related packages), document **affected app
 
 ### Runtime dependencies
 
-| Package | Version | Purpose | Used in | Possible areas of testing |
-|---|---:|---|---|----|
+| Package | Upgrade | Version Change | Purpose | Usage in DAWSON |
+|---|---|---|---|----|
 | | | | | |
 
 ### Development dependencies
 
 Verification of these is usually covered by CI (lint, unit, Cypress). Call out manual checks only when a tool change can affect local workflows (e.g. Cypress runner, local Postgres/OpenSearch images).
 
-| Package | Version | Purpose | Used in |
-|---|---:|---|---|
+| Package | Upgrade | Version Change | Purpose | Usage in DAWSON |
+|---|---|---|---|----|
 | | | | | |
-
-### Dependencies checklist
-
-- [ ] I have listed the updated packages, their purpose, where they are used, and the plain-language application areas to test (packages under `@aws-sdk` are optional to list for brevity).
-- [ ] **Mandatory manual testing:** I have exercised the affected application areas listed above:
-  - [ ] Locally
-  - [ ] In an experimental environment after deploying this branch
-- [ ] I have built and pushed a new Docker image from the Dockerfile to the experimental environment's ECR if needed, and updated CHANGES.md with the environment where it is deployed.
-- [ ] I have reviewed and updated caveats/hand-managed dependencies as needed.
-- [ ] I have successfully deployed the dependencies branch to an experimental environment.
-- [ ] I have created new Devex/Opex tickets addressing further issues for examination as needed.
 
 ## Manual Deployment Steps
 
