@@ -9,7 +9,7 @@ If SSO is needed in an environment, first set up a new application in Microsoft 
 ```bash
 . ./scripts/env/set-env.zsh {YOUR_ENV}
 ./scripts/secrets/update-secret.ts -k IDP_NAME -v ustc-entra
-./scripts/secrets/update-secret.ts -k OIDC_ISSUER_URL -v https://login.microsoftonline.com/{application id}/v2.0
+./scripts/secrets/update-secret.ts -k OIDC_ISSUER_URL -v https://login.microsoftonline.com/{tenant id}/v2.0
 ./scripts/secrets/update-secret.ts -k OIDC_CLIENT_ID -v {app client id}
 ./scripts/secrets/update-secret.ts -k OIDC_CLIENT_SECRET -v {app client secret}
 ```
@@ -30,6 +30,34 @@ Once everything is deployed, set the feature flag to show the SSO button on the 
 
 If this feature is not needed, no updates are required. The terraform updates will not take place if `IDP_NAME` is not set.
 </details>
+<details><summary>Dependency Updates - Week of 2026-09-28</summary>
+
+## Local
+
+#### Upgrade Terraform to `1.16.4`
+use either tfswitch or tfenv
+```bash
+tfswitch 1.16.4
+```
+```bash
+tfenv install 1.16.4
+tfenv use 1.16.4
+```
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Deploy Docker container `4.3.99`
+
+This script will prompt for an environment to pull the image from; choose `exp6`.
+
+```bash
+npm run ecr:check-version
+```
+
+</details>
+
 <details><summary>Dependency Updates - Week of 2026-09-22</summary>
 
 ## Local
@@ -100,6 +128,7 @@ Blocked Cases Report. Run the following to recompute those cases:
 ./scripts/run-once-scripts/fix-stale-automatic-blocks.ts
 ```
 </details>
+
 <details><summary>Dependency Updates - Week of 2026-09-08</summary>
 
 ## Local

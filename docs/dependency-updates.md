@@ -33,7 +33,7 @@ At the moment, the only task we rotate is updating dependencies. As an open-sour
    # web-api/terraform/modules/batch/docker-image/package.json
    (cd web-api/terraform/modules/batch/docker-image && node ../../../../../scripts/npm/upgrade-npm-packages.ts)
    ```
-   
+
 1. After running, ensure all three package.json files are updated.
 
 #### 1.1 Run `npm outdated`
@@ -82,9 +82,7 @@ When updating Node.js, keep in mind:
  1. Manually update the images in:
    - `./Dockerfile`
    - `./web-api/runtimes/puppeteer/Dockerfile`
- 1. Manually update the base image tags scanned in:
-   - `./.github/workflows/security-containers.yml`
-     - The `trivy-runtime-base` matrix and the `trivy-baseline` steps repeat the tags from the Dockerfiles above. Nothing fails if they are missed, the scans just keep reporting on an image we no longer use.
+   - `./web-api/terraform/modules/batch/docker-image/Dockerfile`
  1. Manually update the Node.js version defined for the `docker-image-zipper` step in:
    - `./.circleci/config.yml`
  1. Update the node version used by our lambdas.
@@ -674,6 +672,10 @@ The issue is with Jest. Jest doesn't work with mjs, so in our config we need to 
 **Installed Version: 2.0.1**
 
 - This package was successfully upgraded to version **2.0.1** and validated in `exp2`. Until we have set up payment portal integration in all experimental environments, we should be careful upgrading this package as it need to be tested in `exp2` before going to `test`. Once all environments have this integration, this caveat can be removed.
+
+### @opensearch-project/opensearch,
+**Installed Version: 3.6.0**
+- 10/2/26 - Tried to update to 3.9.0 but got tests throwing new type errors about the search request object. Upon further investigation in this version they updated type definitions of the packages to match newer versions of the opensearch API (dated 2026-09-23). The updates changed how terms are used in aggregations in search requests. I am unsure if this affects our current version of opensearch, or will be an issue in a future release, or if this is just an issue with test data. For context the current version of opensearch is 3.9.0, but AWS currently only supports up to 3.7.0. Reverting for now
 
 ## Troubleshooting
 

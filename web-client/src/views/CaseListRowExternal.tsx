@@ -6,14 +6,52 @@ import React from 'react';
 import classNames from 'classnames';
 import { Button } from '@web-client/ustc-ui/Button/Button';
 
+const FilingFeeStatus = ({
+  className,
+  dataLabel,
+  formattedCase,
+  initMyCasesFilingFeePaymentSequence,
+}: {
+  className?: string;
+  dataLabel?: string;
+  formattedCase: TAssociatedCaseFormatted;
+  initMyCasesFilingFeePaymentSequence: Function;
+}) => {
+  return (
+    <td
+      className={className}
+      data-label={dataLabel}
+      data-testid="petition-payment-status"
+    >
+      {formattedCase.showMyCasesPayFilingFeeButton ? (
+        <Button
+          link
+          data-testid="pay-filing-fee-button"
+          onClick={() => {
+            initMyCasesFilingFeePaymentSequence({
+              caseDetail: formattedCase,
+            });
+          }}
+        >
+          Pay now
+        </Button>
+      ) : (
+        formattedCase.petitionPaymentStatus
+      )}
+    </td>
+  );
+};
+
 export const CaseListRowExternal = ({
   formattedCase,
+  initMyCasesFilingFeePaymentSequence,
   isNestedCase,
   showFilingFee,
   showCaseStatusInfoSequence,
   showCaseStatus,
 }: {
   formattedCase: TAssociatedCaseFormatted;
+  initMyCasesFilingFeePaymentSequence: Function;
   isNestedCase: boolean;
   showFilingFee: boolean;
   showCaseStatusInfoSequence: any;
@@ -66,15 +104,21 @@ export const CaseListRowExternal = ({
               </td>
             )}
             {showFilingFee && (
-              <td data-testid="petition-payment-status">
-                {formattedCase.petitionPaymentStatus}
-              </td>
+              <FilingFeeStatus
+                formattedCase={formattedCase}
+                initMyCasesFilingFeePaymentSequence={
+                  initMyCasesFilingFeePaymentSequence
+                }
+              />
             )}
           </tr>
           {formattedCase.consolidatedCases &&
             formattedCase.consolidatedCases.map(consolidatedCase => {
               return (
                 <CaseListRowExternal
+                  initMyCasesFilingFeePaymentSequence={
+                    initMyCasesFilingFeePaymentSequence
+                  }
                   isNestedCase
                   formattedCase={consolidatedCase}
                   key={consolidatedCase.docketNumber}
@@ -154,23 +198,27 @@ export const CaseListRowExternal = ({
             </td>
           )}
           {showFilingFee && (
-            <td
+            <FilingFeeStatus
               className={classNames({
                 'consolidated-case-padding':
                   formattedCase.inConsolidatedGroup &&
                   !formattedCase.isLeadCase,
               })}
-              data-label="Filing Fee*"
-              data-testid="petition-payment-status"
-            >
-              {formattedCase.petitionPaymentStatus}
-            </td>
+              dataLabel="Filing Fee*"
+              formattedCase={formattedCase}
+              initMyCasesFilingFeePaymentSequence={
+                initMyCasesFilingFeePaymentSequence
+              }
+            />
           )}
         </tr>
         {formattedCase.consolidatedCases &&
           formattedCase.consolidatedCases.map(consolidatedCase => {
             return (
               <CaseListRowExternal
+                initMyCasesFilingFeePaymentSequence={
+                  initMyCasesFilingFeePaymentSequence
+                }
                 isNestedCase
                 formattedCase={consolidatedCase}
                 key={consolidatedCase.docketNumber}
