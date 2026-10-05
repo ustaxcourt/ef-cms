@@ -239,6 +239,33 @@ export const AddPetitionerToCase = connect(
                 }}
               />
             </FormGroup>
+            <FormGroup
+              errorMessageId="add-petitioner-contact-email-error"
+              errorText={validationErrors?.contactEmailAddress}
+            >
+              <label className="usa-label" htmlFor="contactEmailAddress">
+                Contact email address{' '}
+                <span className="usa-hint">(optional)</span>
+              </label>
+              <input
+                autoCapitalize="none"
+                className="usa-input"
+                data-testid="add-petitioner-contact-email"
+                id="contactEmailAddress"
+                name="contact.contactEmailAddress"
+                type="email"
+                value={form.contact.contactEmailAddress || ''}
+                onBlur={() => {
+                  validateAddPetitionerSequence();
+                }}
+                onChange={e => {
+                  updateFormValueSequence({
+                    key: e.target.name,
+                    value: e.target.value,
+                  });
+                }}
+              />
+            </FormGroup>
           </div>
 
           <h3>Login & Service Information</h3>
