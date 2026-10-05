@@ -1,22 +1,11 @@
 #!/usr/bin/env -S npx ts-node --transpile-only
 
-import {
-  type EventCodeReportDocketEntry,
-  getDocketEntriesByEventCodesAndYears,
-} from './event-codes-by-year-helpers';
+import { eventCodesByYearReport } from './event-codes-by-year-helpers';
 import {
   type ScriptConfig,
   parseArgsAndEnvVars,
 } from '../helpers/parseArgsAndEnvVars';
-import { generateCsv } from '../helpers/generate-csv';
 import { getNowObject } from '@shared/business/utilities/DateHandler';
-import { pick } from 'lodash';
-import {
-  formatCaseCaption,
-  formatDate,
-  formatDocketNumber,
-  formatJudgeName,
-} from '../helpers/formatters';
 
 const thisYear = getNowObject().year;
 const scriptConfig: ScriptConfig = {
@@ -74,65 +63,13 @@ const { count, distinct, eventCodes, fiscal, stricken, years } =
     years: number[];
   };
 
-const OUTPUT_DIR = `${process.env.HOME}/Documents`;
-
-const outputCsv = ({
-  docketEntries,
-}: {
-  docketEntries: EventCodeReportDocketEntry[];
-}) => {
-  const columns = [
-    { header: 'Docket Number', key: 'docketNumber' },
-    { header: 'Date Filed', key: 'filed' },
-    { header: 'Document Type', key: 'documentType' },
-    { header: 'Judge', key: 'judge' },
-    { header: 'Status', key: 'status' },
-    { header: 'Case Title', key: 'caption' },
-  ];
-  const filename =
-    `${OUTPUT_DIR}/${distinct ? 'distinct-' : ''}` +
-    `${eventCodes.map(ec => ec.toLowerCase()).join('-')}-filed-` +
-    `in-${fiscal ? 'fy-' : ''}${years.join('-')}.csv`;
-  const rows = docketEntries.map(de => ({
-    ...pick(de, ['documentType', 'status']),
-    caption: formatCaseCaption(de.caption),
-    docketNumber: formatDocketNumber(de.docketNumber, de.docketNumberSuffix),
-    filed: formatDate(de.receivedAt),
-    judge: formatJudgeName(de.associatedJudge),
-  }));
-  generateCsv({ columns, filename, rows });
-  console.log(`Generated ${filename}`);
-};
-
-// eslint-disable-next-line @typescript-eslint/no-floating-promises
-(async () => {
-  if (count) {
-    const docCount: number = (await getDocketEntriesByEventCodesAndYears({
-      count,
-      distinct,
-      eventCodes,
-      fiscal,
-      onlyNonStricken: !stricken,
-      years,
-    })) as number;
-    console.log(
-      `Found ${docCount} ${distinct ? 'distinct ' : ''}` +
-        `${stricken ? '' : 'non-stricken '} ${eventCodes.join(',')} ` +
-        `documents filed in ${fiscal ? 'fy ' : ''}${years.join(',')}`,
-    );
-    return;
-  }
-  const docketEntries = (await getDocketEntriesByEventCodesAndYears({
+void (async () => {
+  await eventCodesByYearReport({
+    count,
     distinct,
     eventCodes,
     fiscal,
-    onlyNonStricken: !stricken,
+    stricken,
     years,
-  })) as EventCodeReportDocketEntry[];
-  console.log(
-    `Found ${docketEntries.length} ${distinct ? 'distinct ' : ''}` +
-      `${stricken ? '' : 'non-stricken '}${eventCodes.join(',')} ` +
-      `documents filed in ${fiscal ? 'fy ' : ''}${years.join(',')}`,
-  );
-  outputCsv({ docketEntries });
+  });
 })();

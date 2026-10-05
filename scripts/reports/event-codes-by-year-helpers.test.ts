@@ -1,6 +1,9 @@
 jest.mock('@web-api/persistence/postgres/database', () => ({
   getDbReader: jest.fn(),
 }));
+jest.mock('../helpers/generate-csv', () => ({
+  generateCsv: jest.fn(),
+}));
 jest.mock('@shared/business/utilities/DateHandler', () => ({
   ...jest.requireActual('@shared/business/utilities/DateHandler'),
   getJsTimeframeForYear: jest.fn(),
@@ -8,11 +11,13 @@ jest.mock('@shared/business/utilities/DateHandler', () => ({
 
 import {
   EventCodeReportDocketEntry,
+  eventCodesByYearReport,
   getDocketEntriesByEventCodesAndYears,
 } from './event-codes-by-year-helpers';
 import { calculateDate } from '@shared/business/utilities/DateHandler';
 import { getDbReader as getDbReaderMock } from '@web-api/persistence/postgres/database';
 import { getJsTimeframeForYear as getJsTimeframeForYearMock } from '@shared/business/utilities/DateHandler';
+import { generateCsv as generateCsvMock } from '../helpers/generate-csv';
 
 type QueryCall = {
   args: unknown[];
@@ -52,6 +57,7 @@ type MockReader = {
 
 const getDbReader = jest.mocked(getDbReaderMock);
 const getJsTimeframeForYear = jest.mocked(getJsTimeframeForYearMock);
+const generateCsv = jest.mocked(generateCsvMock);
 
 const createQueryBuilder = ({
   calls,
@@ -195,6 +201,10 @@ describe('event-codes-by-year-helpers', () => {
     jest.clearAllMocks();
   });
 
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
   it('returns a non-distinct count and applies single-year and non-stricken filters', async () => {
     const expectedCount = 11;
     const { baseCalls, countAllAsMock, withMock } = setupReaderMock({
@@ -301,6 +311,7 @@ describe('event-codes-by-year-helpers', () => {
         caption: 'Test Petitioner',
         docketNumber: '101-25',
         documentType: 'Order',
+        numberOfPages: 5,
         receivedAt: calculateDate({
           dateString: '2025-04-01T00:00:00.000Z',
         }),
@@ -404,6 +415,7 @@ describe('event-codes-by-year-helpers', () => {
         caption: 'Another Petitioner',
         docketNumber: '102-25',
         documentType: 'Order to Show Cause',
+        numberOfPages: 2,
         receivedAt: calculateDate({
           dateString: '2025-05-01T00:00:00.000Z',
         }),
@@ -437,5 +449,206 @@ describe('event-codes-by-year-helpers', () => {
         },
       ]),
     );
+  });
+
+  it('logs a distinct count report with non-stricken and fiscal-year options', async () => {
+    const expectedCount = 7;
+    const { baseCalls } = setupReaderMock({
+      executeResult: [],
+      executeTakeFirstResult: { count: expectedCount },
+    });
+    const logSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
+
+    getJsTimeframeForYear.mockReturnValue({
+      begin: calculateDate({ dateString: '2024-01-01T00:00:00.000Z' }),
+      end: calculateDate({ dateString: '2025-01-01T00:00:00.000Z' }),
+    });
+
+    await eventCodesByYearReport({
+      count: true,
+      distinct: true,
+      eventCodes: ['O', 'ODJ'],
+      fiscal: true,
+      stricken: false,
+      years: [2024],
+    });
+
+    expect(baseCalls).toContainEqual({
+      args: ['de.isStricken', '!=', true],
+      method: 'where',
+    });
+    expect(logSpy).toHaveBeenCalledWith(
+      'Found 7 distinct non-stricken  O,ODJ documents filed in fy 2024',
+    );
+    expect(generateCsv).not.toHaveBeenCalled();
+  });
+
+  it('logs a count report for stricken entries in a calendar year', async () => {
+    const expectedCount = 11;
+    const { baseCalls } = setupReaderMock({
+      executeResult: [],
+      executeTakeFirstResult: { count: expectedCount },
+    });
+    const logSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
+
+    getJsTimeframeForYear.mockReturnValue({
+      begin: calculateDate({ dateString: '2024-01-01T00:00:00.000Z' }),
+      end: calculateDate({ dateString: '2025-01-01T00:00:00.000Z' }),
+    });
+
+    await eventCodesByYearReport({
+      count: true,
+      distinct: false,
+      eventCodes: ['O'],
+      fiscal: false,
+      stricken: true,
+      years: [2024],
+    });
+
+    expect(baseCalls).not.toContainEqual({
+      args: ['de.isStricken', '!=', true],
+      method: 'where',
+    });
+    expect(logSpy).toHaveBeenCalledWith('Found 11  O documents filed in 2024');
+    expect(generateCsv).not.toHaveBeenCalled();
+  });
+
+  it('writes a distinct CSV report with formatted docket entries', async () => {
+    const rows: EventCodeReportDocketEntry[] = [
+      {
+        associatedJudge: 'Chief Special Trial Judge Buch',
+        caption: 'Test Petitioner,\nPetitioner',
+        docketNumber: '101-25',
+        docketNumberSuffix: 'S',
+        documentType: 'Order',
+        numberOfPages: 5,
+        receivedAt: calculateDate({
+          dateString: '2025-04-01T05:00:00.000Z',
+        }),
+        status: 'New',
+      },
+    ];
+    const { baseCalls } = setupReaderMock({
+      executeResult: rows,
+      executeTakeFirstResult: { count: 0 },
+    });
+    const logSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
+
+    getJsTimeframeForYear.mockReturnValue({
+      begin: calculateDate({ dateString: '2025-01-01T00:00:00.000Z' }),
+      end: calculateDate({ dateString: '2026-01-01T00:00:00.000Z' }),
+    });
+
+    await eventCodesByYearReport({
+      count: false,
+      distinct: true,
+      eventCodes: ['O', 'ODJ'],
+      fiscal: true,
+      stricken: false,
+      years: [2025],
+    });
+
+    const filename = `${process.env.HOME}/Documents/distinct-o-odj-filed-in-fy-2025.csv`;
+    expect(baseCalls).toContainEqual({
+      args: ['de.isStricken', '!=', true],
+      method: 'where',
+    });
+    expect(logSpy).toHaveBeenNthCalledWith(
+      1,
+      'Found 1 distinct non-stricken O,ODJ documents filed in fy 2025',
+    );
+    expect(generateCsv).toHaveBeenCalledWith({
+      columns: [
+        { header: 'Docket Number', key: 'docketNumber' },
+        { header: 'Date Filed', key: 'filed' },
+        { header: 'Document Type', key: 'documentType' },
+        { header: 'Judge', key: 'judge' },
+        { header: 'Status', key: 'status' },
+        { header: 'Case Title', key: 'caption' },
+        { header: 'Number of Pages', key: 'numberOfPages' },
+      ],
+      filename,
+      rows: [
+        {
+          caption: 'Test Petitioner, Petitioner',
+          docketNumber: '101-25S',
+          documentType: 'Order',
+          filed: '2025-04-01',
+          judge: 'Buch',
+          numberOfPages: 5,
+          status: 'New',
+        },
+      ],
+    });
+    expect(logSpy).toHaveBeenNthCalledWith(2, `Generated ${filename}`);
+  });
+
+  it('writes a non-distinct CSV report for stricken entries in a calendar year', async () => {
+    const rows: EventCodeReportDocketEntry[] = [
+      {
+        associatedJudge: 'Judge Cohen',
+        caption: 'Another Petitioner',
+        docketNumber: '102-25',
+        documentType: 'Order to Show Cause',
+        numberOfPages: 2,
+        receivedAt: calculateDate({
+          dateString: '2025-05-01T05:00:00.000Z',
+        }),
+        status: 'Calendared',
+      },
+    ];
+    const { baseCalls } = setupReaderMock({
+      executeResult: rows,
+      executeTakeFirstResult: { count: 0 },
+    });
+    const logSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
+
+    getJsTimeframeForYear.mockReturnValue({
+      begin: calculateDate({ dateString: '2025-01-01T00:00:00.000Z' }),
+      end: calculateDate({ dateString: '2026-01-01T00:00:00.000Z' }),
+    });
+
+    await eventCodesByYearReport({
+      count: false,
+      distinct: false,
+      eventCodes: ['OSC'],
+      fiscal: false,
+      stricken: true,
+      years: [2025],
+    });
+
+    const filename = `${process.env.HOME}/Documents/osc-filed-in-2025.csv`;
+    expect(baseCalls).not.toContainEqual({
+      args: ['de.isStricken', '!=', true],
+      method: 'where',
+    });
+    expect(logSpy).toHaveBeenNthCalledWith(
+      1,
+      'Found 1 OSC documents filed in 2025',
+    );
+    expect(generateCsv).toHaveBeenCalledWith({
+      columns: [
+        { header: 'Docket Number', key: 'docketNumber' },
+        { header: 'Date Filed', key: 'filed' },
+        { header: 'Document Type', key: 'documentType' },
+        { header: 'Judge', key: 'judge' },
+        { header: 'Status', key: 'status' },
+        { header: 'Case Title', key: 'caption' },
+        { header: 'Number of Pages', key: 'numberOfPages' },
+      ],
+      filename,
+      rows: [
+        {
+          caption: 'Another Petitioner',
+          docketNumber: '102-25',
+          documentType: 'Order to Show Cause',
+          filed: '2025-05-01',
+          judge: 'Cohen',
+          numberOfPages: 2,
+          status: 'Calendared',
+        },
+      ],
+    });
+    expect(logSpy).toHaveBeenNthCalledWith(2, `Generated ${filename}`);
   });
 });
