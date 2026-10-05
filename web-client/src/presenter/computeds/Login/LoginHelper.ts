@@ -1,6 +1,6 @@
 import { ALLOWLIST_FEATURE_FLAGS } from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
-import { Get } from 'node_modules/cerebral';
+import { Get } from 'cerebral';
 
 type LoginHelperType = {
   showIdpLoginButton: boolean;
