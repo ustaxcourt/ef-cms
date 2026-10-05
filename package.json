@@ -328,7 +328,7 @@
     "eslint-plugin-jsx-a11y": "6.10.2",
     "eslint-plugin-react": "7.37.5",
     "husky": "9.1.7",
-    "inquirer": "14.2.2",
+    "inquirer": "14.2.3",
     "jest": "30.5.2",
     "jest-environment-jsdom": "30.5.2",
     "lint-staged": "17.6.0",
@@ -361,7 +361,7 @@
     "ts-node": "10.9.2",
     "tsconfig-paths": "4.2.0",
     "typescript": "npm:@typescript/typescript6@6.0.2",
-    "typescript-eslint": "8.71.0"
+    "typescript-eslint": "8.71.1"
   },
   "allowScripts": {
     "@parcel/watcher": false,
