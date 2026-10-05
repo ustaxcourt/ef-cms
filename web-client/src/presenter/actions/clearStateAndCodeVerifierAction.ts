@@ -1,6 +1,6 @@
 export const clearStateAndCodeVerifierAction = ({
   applicationContext,
-}: ActionProps) => {
+}: ActionProps): void => {
   applicationContext.getPersistenceGateway().removeItem({ key: 'auth_state' });
   applicationContext
     .getPersistenceGateway()
