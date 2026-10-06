@@ -13,7 +13,7 @@ import axios, {
 
 let axiosClient: AxiosInstance;
 let areInterceptorsRegistered = false;
-let currentForceRefreshCallback: (() => void) | undefined;
+let currentForceRefreshCallback: (() => Promise<boolean> | void) | undefined;
 
 const getStoredDeploymentTimestamp = (): string | undefined => {
   if (typeof window === 'undefined') return undefined;
@@ -37,7 +37,7 @@ const setStoredDeploymentTimestamp = (
 };
 
 export const getHttpClient = (
-  forceRefreshCallback: () => void,
+  forceRefreshCallback: () => Promise<boolean> | void,
   apiUrl: string,
 ): AxiosInstance => {
   axiosClient = axiosClient || axios.create();
@@ -81,7 +81,11 @@ export const getHttpClient = (
           getHeaderValue(error.response?.headers, X_FORCE_REFRESH) === 'true';
 
         if (shouldForceManualRefresh) {
-          await currentForceRefreshCallback?.();
+          const isReloadingPage = await currentForceRefreshCallback?.();
+
+          if (isReloadingPage) {
+            return new Promise(() => {});
+          }
         }
 
         const stackError = error.config?._stackError;
