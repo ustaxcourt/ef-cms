@@ -86,6 +86,13 @@ describe('Add Party - Contact Email Address', () => {
           'contain.text',
           'Enter email address in format: yourname@example.com',
         );
+        cy.get('[data-testid="add-petitioner-contact-email"]')
+          .should('have.attr', 'aria-invalid', 'true')
+          .and('have.attr', 'aria-describedby', 'contact-email-address-error');
+        cy.get('#contact-email-address-error').should(
+          'contain.text',
+          'Enter email address in format: yourname@example.com',
+        );
         checkA11y();
 
         cy.get('[data-testid="add-petitioner-contact-email"]').clear();
@@ -96,6 +103,9 @@ describe('Add Party - Contact Email Address', () => {
         cy.get('[data-testid="add-petitioner-contact-email-error"]').should(
           'not.exist',
         );
+        cy.get('[data-testid="add-petitioner-contact-email"]')
+          .should('have.attr', 'aria-invalid', 'false')
+          .and('not.have.attr', 'aria-describedby');
         checkA11y();
       });
 

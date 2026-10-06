@@ -240,6 +240,7 @@ export const AddPetitionerToCase = connect(
               />
             </FormGroup>
             <FormGroup
+              errorId="contact-email-address-error"
               errorMessageId="add-petitioner-contact-email-error"
               errorText={validationErrors?.contactEmailAddress}
             >
@@ -251,6 +252,12 @@ export const AddPetitionerToCase = connect(
                 autoCapitalize="none"
                 className="usa-input"
                 data-testid="add-petitioner-contact-email"
+                aria-describedby={
+                  validationErrors?.contactEmailAddress
+                    ? 'contact-email-address-error'
+                    : undefined
+                }
+                aria-invalid={!!validationErrors?.contactEmailAddress}
                 id="contactEmailAddress"
                 name="contact.contactEmailAddress"
                 type="email"
