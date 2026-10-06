@@ -43,6 +43,7 @@ const config: Config = {
     '!generate-uuid.ts',
     '!git/prod-release-pr-description.ts',
     '!git/wiki-deployment-summary.ts',
+    '!github-actions/compare-security-findings.ts',
     '!github-actions/compile-suite-coverage.ts',
     '!github-actions/download-historical-test-file-times.ts',
     '!github-actions/emit-coverage-summary.ts',

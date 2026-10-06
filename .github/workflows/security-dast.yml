@@ -3,7 +3,6 @@ name: Security - DAST
 on:
   pull_request:
     types: [opened, reopened, synchronize, ready_for_review]
-    branches: [staging]
     paths-ignore:
       - '**.md'
       - 'docs/**'
@@ -26,7 +25,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      security-events: write # needed for SARIF upload to Security tab
     timeout-minutes: 45
     env:
       CI: true
@@ -77,21 +75,17 @@ jobs:
           rules_file_name: '.zap/rules.tsv'
           cmd_options: '-z "-configfile /zap/wrk/options-${{ matrix.role }}.prop"'
 
+      # ZAP writes report_html.html, report_json.json and report_md.md.
       - name: Upload ZAP API report (${{ matrix.role }})
         if: always()
         uses: actions/upload-artifact@v7
         with:
           name: zap-api-report-${{ matrix.role }}
-          path: report_html
+          path: |
+            report_html.html
+            report_json.json
+            report_md.md
           retention-days: 30
-
-      - name: Upload SARIF to Security tab (${{ matrix.role }})
-        if: always()
-        uses: ./.github/actions/dawson-upload-sarif
-        with:
-          sarif_file: report_json
-          category: zap-api-${{ matrix.role }}
-        continue-on-error: true
 
       - name: ZAP Public API Baseline Scan
         if: matrix.role == 'petitioner'
@@ -102,13 +96,18 @@ jobs:
           rules_file_name: '.zap/rules.tsv'
           artifact_name: zap-public-api-report
 
-      - name: Upload SARIF to Security tab (public-api)
+      # No SARIF upload yet: ZAP JSON is not SARIF, the converter lands in #10412.
+      - name: Upload ZAP public API report
         if: always() && matrix.role == 'petitioner'
-        uses: ./.github/actions/dawson-upload-sarif
+        uses: actions/upload-artifact@v7
         with:
-          sarif_file: report_json
-          category: zap-public-api
-        continue-on-error: true
+          # Distinct from the action's own zap-public-api-report artifact.
+          name: zap-public-api-report-files
+          path: |
+            report_html.html
+            report_json.json
+            report_md.md
+          retention-days: 30
 
       - name: Upload DAWSON logs (${{ matrix.role }})
         if: always()
@@ -166,6 +165,15 @@ jobs:
           cmd_options: '-z "-configfile /zap/wrk/options-petitionsclerk.prop"'
           artifact_name: zap-web-private-report
 
+      # Each scan overwrites the previous one's reports, so move them aside first.
+      - name: Collect private client report
+        if: always()
+        run: |
+          mkdir -p zap-web-reports
+          for FILE in report_html.html report_json.json report_md.md; do
+            if [ -f "$FILE" ]; then mv "$FILE" "zap-web-reports/private-$FILE"; fi
+          done
+
       - name: ZAP Full Scan — Public Client
         continue-on-error: true
         uses: zaproxy/action-full-scan@3c58388149901b9a03b7718852c5ba889646c27c # v0.13.0
@@ -173,6 +181,23 @@ jobs:
           target: 'http://localhost:5678/'
           rules_file_name: '.zap/rules.tsv'
           artifact_name: zap-web-public-report
+
+      # Each scan overwrites the previous one's reports, so move them aside first.
+      - name: Collect public client report
+        if: always()
+        run: |
+          mkdir -p zap-web-reports
+          for FILE in report_html.html report_json.json report_md.md; do
+            if [ -f "$FILE" ]; then mv "$FILE" "zap-web-reports/public-$FILE"; fi
+          done
+
+      - name: Upload ZAP web reports
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: zap-web-reports
+          path: zap-web-reports
+          retention-days: 30
 
       - name: Upload DAWSON logs
         if: always()
