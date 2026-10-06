@@ -212,8 +212,8 @@ describe('httpClient', () => {
 
     const settled = jest.fn();
     errorInterceptor(error).then(settled, settled);
-    await Promise.resolve();
-    await Promise.resolve();
+
+    await new Promise(resolve => setTimeout(resolve, 0));
 
     expect(forceRefreshCallback).toHaveBeenCalled();
     expect(settled).not.toHaveBeenCalled();
