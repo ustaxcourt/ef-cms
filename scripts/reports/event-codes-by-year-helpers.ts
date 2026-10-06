@@ -16,7 +16,7 @@ export type EventCodeReportDocketEntry = {
   docketNumber: string;
   docketNumberSuffix?: string | null;
   documentType: string;
-  numberOfPages: number;
+  numberOfPages: number | null;
   receivedAt: Date;
   status: string;
 };
@@ -154,6 +154,7 @@ const outputCsv = ({
     docketNumber: formatDocketNumber(de.docketNumber, de.docketNumberSuffix),
     filed: formatDate(de.receivedAt),
     judge: formatJudgeName(de.associatedJudge),
+    numberOfPages: de.numberOfPages || 0,
   }));
   generateCsv({ columns, filename, rows });
   console.log(`Generated ${filename}`);

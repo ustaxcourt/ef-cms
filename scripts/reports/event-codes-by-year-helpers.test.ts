@@ -550,6 +550,10 @@ describe('event-codes-by-year-helpers', () => {
 
     const filename = `${process.env.HOME}/Documents/distinct-o-odj-filed-in-fy-2025.csv`;
     expect(baseCalls).toContainEqual({
+      args: [expect.arrayContaining(['de.numberOfPages'])],
+      method: 'select',
+    });
+    expect(baseCalls).toContainEqual({
       args: ['de.isStricken', '!=', true],
       method: 'where',
     });
@@ -590,7 +594,7 @@ describe('event-codes-by-year-helpers', () => {
         caption: 'Another Petitioner',
         docketNumber: '102-25',
         documentType: 'Order to Show Cause',
-        numberOfPages: 2,
+        numberOfPages: null,
         receivedAt: calculateDate({
           dateString: '2025-05-01T05:00:00.000Z',
         }),
@@ -618,6 +622,10 @@ describe('event-codes-by-year-helpers', () => {
     });
 
     const filename = `${process.env.HOME}/Documents/osc-filed-in-2025.csv`;
+    expect(baseCalls).toContainEqual({
+      args: [expect.arrayContaining(['de.numberOfPages'])],
+      method: 'select',
+    });
     expect(baseCalls).not.toContainEqual({
       args: ['de.isStricken', '!=', true],
       method: 'where',
@@ -644,7 +652,7 @@ describe('event-codes-by-year-helpers', () => {
           documentType: 'Order to Show Cause',
           filed: '2025-05-01',
           judge: 'Cohen',
-          numberOfPages: 2,
+          numberOfPages: 0,
           status: 'Calendared',
         },
       ],
