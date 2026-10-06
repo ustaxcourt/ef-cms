@@ -6,6 +6,7 @@ import {
   loginAsPetitioner,
   loginAsPetitionsClerk1,
 } from '../../../../../helpers/authentication/login-as-helpers';
+import { checkA11y } from '../../../../support/generalCommands/checkA11y';
 import { goToCase } from '../../../../../helpers/caseDetail/go-to-case';
 import { petitionsClerkServesPetition } from '../../../../../helpers/documentQC/petitionsclerk-serves-petition';
 import { externalUserCreatesElectronicCase } from '../../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
@@ -62,6 +63,8 @@ describe('Add Party - Contact Email Address', () => {
           .next('.usa-form-group')
           .find('[data-testid="add-petitioner-contact-email"]')
           .should('exist');
+
+        checkA11y();
       });
 
       it('should show a validation error on save for an invalid contact email address and clear it once corrected', () => {
@@ -83,6 +86,7 @@ describe('Add Party - Contact Email Address', () => {
           'contain.text',
           'Enter email address in format: yourname@example.com',
         );
+        checkA11y();
 
         cy.get('[data-testid="add-petitioner-contact-email"]').clear();
         cy.get('[data-testid="add-petitioner-contact-email"]').type(
@@ -92,6 +96,7 @@ describe('Add Party - Contact Email Address', () => {
         cy.get('[data-testid="add-petitioner-contact-email-error"]').should(
           'not.exist',
         );
+        checkA11y();
       });
 
       it('should save the contact email address and display it on the parties tab', () => {
