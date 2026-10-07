@@ -340,7 +340,7 @@
     "pdf2pic": "3.2.0",
     "pixelmatch": "7.2.0",
     "pngjs": "7.0.0",
-    "postcss": "8.5.28",
+    "postcss": "8.5.29",
     "postcss-preset-env": "11.5.4",
     "prettier": "3.9.9",
     "puppeteer": "25.11.0",
