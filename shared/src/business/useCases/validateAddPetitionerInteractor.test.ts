@@ -50,6 +50,25 @@ describe('validateAddPetitionerInteractor', () => {
     });
   });
 
+  it('should not return validation errors when a valid contact email address is provided', () => {
+    const errors = validateAddPetitionerInteractor({
+      contact: { ...mockContact, contactEmailAddress: 'party@example.com' },
+    });
+
+    expect(errors).toBeFalsy();
+  });
+
+  it('should return an error when the contact email address is not a valid email', () => {
+    const errors = validateAddPetitionerInteractor({
+      contact: { ...mockContact, contactEmailAddress: 'not-an-email' },
+    });
+
+    expect(errors).toEqual({
+      contactEmailAddress:
+        'Enter email address in format: yourname@example.com',
+    });
+  });
+
   it('should return an error when second intervenor is added', () => {
     mockContact = {
       ...mockContact,

@@ -7,6 +7,7 @@ export const FormGroup = forwardRef(
       children,
       className,
       confirmationText,
+      errorId,
       errorMessageId,
       errorText,
       grow,
@@ -16,6 +17,8 @@ export const FormGroup = forwardRef(
       children: React.ReactNode;
       className?: string;
       confirmationText?: string;
+      /** DOM id for a single error message, so inputs can reference it via aria-describedby. */
+      errorId?: string;
       errorText?: string | string[];
       errorMessageId?: string;
       id?: string;
@@ -52,7 +55,11 @@ export const FormGroup = forwardRef(
     const renderSingleError = () => {
       return (
         errorText && (
-          <span className="usa-error-message" data-testid={errorMessageId}>
+          <span
+            className="usa-error-message"
+            data-testid={errorMessageId}
+            id={errorId}
+          >
             {errorText}
           </span>
         )

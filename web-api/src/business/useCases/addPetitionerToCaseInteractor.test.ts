@@ -129,6 +129,29 @@ describe('addPetitionerToCaseInteractor', () => {
     expect(casePassedToUpdate.petitioners[1]).toMatchObject(mockContact);
   });
 
+  it('should persist the contact email address on the added petitioner', async () => {
+    const mockContactEmailAddress = 'party@example.com';
+
+    await addPetitionerToCaseInteractor(
+      applicationContext,
+      {
+        caseCaption: MOCK_CASE.caseCaption,
+        contact: {
+          ...mockContact,
+          contactEmailAddress: mockContactEmailAddress,
+        },
+        docketNumber: MOCK_CASE.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
+
+    const casePassedToUpdate =
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    expect(casePassedToUpdate.petitioners[1].contactEmailAddress).toEqual(
+      mockContactEmailAddress,
+    );
+  });
+
   it('should update the case caption', async () => {
     getCaseByDocketNumber.mockResolvedValue({
       ...MOCK_CASE,
