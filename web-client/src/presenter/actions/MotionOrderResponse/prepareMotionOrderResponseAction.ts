@@ -125,7 +125,7 @@ export const prepareMotionOrderResponseAction = ({
 
   if (hasStrickenFromTrialSessions) {
     orderSections.push(
-      `<p class="indent-paragraph">ORDERED ${isOnLeadCaseAndAllCases ? 'these cases are' : 'this case is'} stricken from the trial session. It is further</p> <p class="indent-paragraph">ORDERED that jurisdiction is retained by the undersigned.`,
+      `<p class="indent-paragraph">ORDERED that ${isOnLeadCaseAndAllCases ? 'these cases are' : 'this case is'} stricken from the trial session. It is further</p> <p class="indent-paragraph">ORDERED that jurisdiction is retained by the undersigned.`,
     );
   }
 
