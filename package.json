@@ -263,7 +263,7 @@
   "overrides": {
     "body-parser": "2.3.0",
     "brace-expansion": "5.0.12",
-    "shell-quote": "1.10.0",
+    "shell-quote": "1.11.0",
     "fast-xml-parser": "5.10.1",
     "axios": "$axios",
     "jsonwebtoken": "$jsonwebtoken",
