@@ -51,7 +51,7 @@ export const ModalDialog = ({
   title?: string;
   useRunConfirmSequence?: boolean;
   preventCancelOnBlur?: any;
-}) => {
+}): React.JSX.Element => {
   preventScrolling = preventScrolling !== undefined ? preventScrolling : true;
 
   const elRef = useRef<HTMLDivElement | null>(null);
@@ -176,7 +176,7 @@ export const ModalDialog = ({
                 {cancelLabel && (
                   <Button
                     secondary
-                    aria-label="Cancel"
+                    aria-label={cancelLabel}
                     className="modal-button-cancel"
                     data-testid="modal-button-cancel"
                     link={cancelLink}
@@ -188,7 +188,7 @@ export const ModalDialog = ({
                 {clearLabel && (
                   <Button
                     link
-                    aria-label="Clear"
+                    aria-label={clearLabel}
                     className="modal-button-clear"
                     data-testid="modal-button-clear"
                     onClick={runClearSequence}

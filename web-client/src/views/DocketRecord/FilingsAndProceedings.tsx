@@ -60,7 +60,7 @@ export const FilingsAndProceedings = connect<
     entry,
     openCaseDocumentDownloadUrlSequence,
     showDocketRecordDetailModalSequence,
-  }) {
+  }): React.JSX.Element {
     const renderDocumentLink = () => {
       return (
         <>
@@ -178,7 +178,7 @@ export const FilingsAndProceedings = connect<
             </Phone>
             <Button
               link
-              aria-label="View PDF"
+              aria-label={`View PDF: ${entry.descriptionDisplay}`}
               className={classNames(
                 'text-left',
                 entry.isStricken && 'stricken-docket-record',
@@ -262,7 +262,7 @@ const renderDispositionLinks = (
           link
           className={classNames('text-right', 'view-pdf-link')}
           data-testid={`related-document-viewer-link-${affectedEntry.docketEntryIndex}-${index}`}
-          aria-label={`View PDF for: ${affectedEntry.docketEntryIndex}`}
+          aria-label={`View PDF for ${affectedEntry.docketEntryIndex}: ${linkText}`}
           onClick={() =>
             affectedEntry.showDocumentViewerLink
               ? changeTabSequence({
