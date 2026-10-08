@@ -96,6 +96,35 @@ describe('prepareStatusReportOrderAction,', () => {
     expect(result.state.form.richText).toEqual(expectedFullText);
   });
 
+  it('appends stricken-from-trial clause referencing the trial date and location on a lead consolidated case with all cases', async () => {
+    const result = await runAction(prepareStatusReportOrderAction, {
+      modules: { presenter },
+      state: {
+        caseDetail: {
+          docketNumber: '123-45',
+          leadDocketNumber: '123-45',
+        },
+        form: {
+          additionalOrderTextArray: [],
+          dueDate,
+          strickenFromTrialSessions: true,
+        },
+        statusReportOrder: {
+          statusReportFilingDate,
+          statusReportIndex,
+        },
+        trialSession: {
+          sessionType: 'abc',
+        },
+      },
+    });
+
+    expect(result.state.form.richText).toContain(
+      'ORDERED that these cases are stricken from the September 15, 2026, Washington, DC trial session.',
+    );
+    expect(result.state.form.richText).toContain('It is further');
+  });
+
   it('chains multiple additional order text clauses with It is further', async () => {
     const result = await runAction(prepareStatusReportOrderAction, {
       modules: {
@@ -277,6 +306,38 @@ describe('prepareStatusReportOrderAction,', () => {
     });
     expect(result.state.form.richText).toContain(
       `This case is set for trial at the session of the Court commencing on ${trialDateFormatted}, in ${trialLocation}.`,
+    );
+  });
+
+  it('should list the time and place of the trial if it is calendared and not a motion/hearing on a lead consolidated case with all cases', async () => {
+    const result = await runAction(prepareStatusReportOrderAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: {
+          leadDocketNumber: '123-45',
+          docketNumber: '123-45',
+          status: CASE_STATUS_TYPES.calendared,
+          trialLocation,
+          trialDate,
+        },
+        form: {
+          docketEntryDescription: 'Order',
+          issueOrder:
+            STATUS_REPORT_ORDER_OPTIONS.issueOrderOptions.allCasesInGroup,
+        },
+        statusReportOrder: {
+          statusReportFilingDate,
+          statusReportIndex,
+        },
+        trialSession: {
+          sessionType: 'abc',
+        },
+      },
+    });
+    expect(result.state.form.richText).toContain(
+      `These consolidated cases are set for trial at the session of the Court commencing on ${trialDateFormatted}, in ${trialLocation}.`,
     );
   });
   it('should not list the time and place of the trial if it is calendared and a motion/hearing', async () => {
