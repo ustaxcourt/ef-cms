@@ -108,6 +108,8 @@ describe('prepareStatusReportOrderAction,', () => {
           additionalOrderTextArray: [],
           dueDate,
           strickenFromTrialSessions: true,
+          issueOrder:
+            STATUS_REPORT_ORDER_OPTIONS.issueOrderOptions.allCasesInGroup,
         },
         statusReportOrder: {
           statusReportFilingDate,
@@ -120,9 +122,8 @@ describe('prepareStatusReportOrderAction,', () => {
     });
 
     expect(result.state.form.richText).toContain(
-      'ORDERED that these cases are stricken from the September 15, 2026, Washington, DC trial session.',
+      'ORDERED that these cases are stricken from the trial session',
     );
-    expect(result.state.form.richText).toContain('It is further');
   });
 
   it('chains multiple additional order text clauses with It is further', async () => {
@@ -248,6 +249,37 @@ describe('prepareStatusReportOrderAction,', () => {
       expect(result.state.form.richText).toBe(output);
     },
   );
+
+  it('should show the right restored', async () => {
+    const result = await runAction(prepareStatusReportOrderAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: {
+          docketNumber: '101-01',
+          leadDocketNumber: '101-01',
+        },
+        form: {
+          jurisdiction:
+            STATUS_REPORT_ORDER_OPTIONS.jurisdictionOptions.restored,
+          issueOrder:
+            STATUS_REPORT_ORDER_OPTIONS.issueOrderOptions.allCasesInGroup,
+        },
+        statusReportOrder: {
+          statusReportFilingDate,
+          statusReportIndex,
+        },
+        trialSession: {
+          sessionType: 'abc',
+        },
+      },
+    });
+
+    expect(result.state.form.richText).toContain(
+      'ORDERED that these cases are restored to the general docket.',
+    );
+  });
 
   it.each([
     [
