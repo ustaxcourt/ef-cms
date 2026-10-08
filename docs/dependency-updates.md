@@ -516,8 +516,10 @@ If an update is available for DWT:
 - As of 9/17/2026: `@babel/core` **8.0.5** is available. Tracked in DevEx ticket [#10428](https://github.com/ustaxcourt/ef-cms/issues/10428). The plugin is ~50 lines (`babel.loadOptions` + `babel.transform`) used solely by `esbuildHelper.mjs`, so it could be inlined into the repo rather than republished to npm.
 
 ### @types/node
-**Installed Version: 24.13.6**
-The major version of this package should match our major version of Node. We should use a package that starts with 24. <b>However</b>, the current installed version is 24.13.6, which <b>does not match the current installed version of Node</b> (`24.21.0` in `.nvmrc`). It is a known issue and another attempt will be made at the next Node.js and @types/node update.
+**Installed Version: 24.19.1**
+The major version of this package should match our major version of Node. We should use a package that starts with 24.
+
+Use the latest compatible `@types/node` release within Node’s major version. Type definitions can lag Node releases, and their patch numbers are independent, so an exact version match is not required. Verify type checking after updates.
 
 - [Dependencies 03 09 2026](https://github.com/ustaxcourt/ef-cms/pull/9465/files), Node.js was `v24.14.0`, but `@types/node` could not be updated to `24.14.0`, so it stayed pinned at `24.12.0`.
 
