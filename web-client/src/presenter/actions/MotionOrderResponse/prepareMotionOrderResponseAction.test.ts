@@ -128,7 +128,12 @@ describe('prepareMotionOrderResponseAction', () => {
           status: CASE_STATUS_TYPES.calendared,
           trialDate: '2024-05-01',
           trialLocation: 'Houston, Texas',
-          consolidatedCases: [mockCaseDetail.docketNumber],
+          consolidatedCases: [
+            {
+              docketNumber: mockCaseDetail.docketNumber,
+              docketNumberWithSuffix: mockCaseDetail.docketNumber,
+            },
+          ],
         },
         docketEntryId: 'mock-motion-id',
         form: {
