@@ -36,6 +36,7 @@ import {
 import { canUserFileFirstIrsFiling } from '@shared/business/utilities/canUserFileFirstIrsFiling';
 import { canPractitionerFileEntryOfAppearance } from '@shared/business/utilities/canPractitionerFileEntryOfAppearance';
 import { verifyPendingCaseForUser } from '@web-api/persistence/postgres/cases/pendingCases/verifyPendingCaseForUser';
+import { isFiledByPractitionerName } from '@shared/business/entities/docketEntry/isFiledByPractitionerName';
 
 export const fileExternalDocument = async (
   applicationContext: ServerApplicationContext,
@@ -116,6 +117,15 @@ export const fileExternalDocument = async (
       DOCUMENT_RELATIONSHIPS.PRIMARY,
     ],
   ];
+
+  // every document in an M112/NOTW filing carries the filing practitioner's name,
+  // taken from the user record rather than the client-supplied filedBy
+  const practitionerFiledBy = isFiledByPractitionerName({
+    docketEntry: { ...primaryDocumentMetadata, secondaryDocument },
+    user: authorizedUser,
+  })
+    ? user.name
+    : undefined;
 
   if (secondarySupportingDocuments) {
     secondarySupportingDocuments.forEach(item => {
@@ -236,6 +246,9 @@ export const fileExternalDocument = async (
           );
 
           docketEntryEntity.setFiledBy(user);
+          if (practitionerFiledBy) {
+            docketEntryEntity.filedBy = practitionerFiledBy;
+          }
           docketEntryEntity.validate();
 
           const workItem = new WorkItem({
