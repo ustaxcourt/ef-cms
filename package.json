@@ -341,7 +341,7 @@
     "pixelmatch": "7.2.0",
     "pngjs": "7.0.0",
     "postcss": "8.5.29",
-    "postcss-preset-env": "11.5.4",
+    "postcss-preset-env": "11.6.1",
     "prettier": "3.9.9",
     "puppeteer": "25.11.0",
     "puppeteer-core": "25.11.0",
