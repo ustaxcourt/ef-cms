@@ -307,7 +307,7 @@
     "@ustaxcourt/payment-portal": "1.0.1",
     "autoprefixer": "10.6.1",
     "aws-sdk-client-mock": "4.1.0",
-    "axe-core": "4.13.0",
+    "axe-core": "4.14.0",
     "babel-jest": "30.5.2",
     "babel-plugin-cerebral": "1.0.2",
     "cognito-local": "5.3.0",
