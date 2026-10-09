@@ -36,7 +36,7 @@ export const Login = connect(
     alertError,
     alertHelper,
     dismissAlertSequence,
-  }) => {
+  }): React.JSX.Element => {
     return (
       <>
         <section className="tw:px-0 tw:xs:pb-12 tw:pb-8 tw:pt-0">
@@ -126,11 +126,7 @@ export const Login = connect(
                         </ButtonSmall>
                       </div>
                       <div className="tw:xs:my-4 tw:my-3">
-                        <Button
-                          aria-label="Login"
-                          data-testid="login-button"
-                          variant="primary"
-                        >
+                        <Button data-testid="login-button" variant="primary">
                           Log in
                         </Button>
                       </div>

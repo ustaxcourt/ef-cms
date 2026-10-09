@@ -492,7 +492,6 @@ If an update is available for DWT:
 **babel-jest: 30.5.2**
 
 - Upgrade `jest`, `babel-jest`, and `jest-environment-jsdom` together manually rather than via the upgrade script. `babel-jest` is also excluded by the upgrade script's `caveats` array. Verify the full unit test suites after any bump.
-- On June 26, 2025, newer versions of `jest` conflicted with `ts-jest` 29.x; we stayed on Jest 29 until `ts-jest` caught up.
 - On June 30, 2025, a `jest-environment-jsdom` bump caused failures in unit tests that use `Object.defineProperty` (for example, `getPdfJs.test.ts`). Re-test those specs before removing this pin.
 - On September 9, 2026, we were able to upgrade `jest`, `jest-environment-jsdom`, and `babel-jest` to **30.5.1** successfully
 - As of 9/22/2026: upgraded `jest`, `jest-environment-jsdom`, and `babel-jest` together to **30.5.2** (latest). Re-ran `shared/src/business/utilities/pdfs/getPdfJs.test.ts` successfully after the bump.
@@ -511,14 +510,16 @@ If an update is available for DWT:
 ### @babel/*
 **Current Installed Versions: 7.29.7** (`@babel/core`, `@babel/preset-env`, `@babel/preset-react`, `@babel/preset-typescript`)
 
-- Update on July 13, 2026: `@babel/core` v8.x is available, but upgrading is blocked by `esbuild-plugin-babel-cached@0.2.3` and `ts-jest@29.4.11`, which have versions below v8 listed as peer dependencies. `ts-jest` is likely to be updated, but `esbuild-plugin-babel` has been archived. `esbuild-plugin-babel-cached` appears to be a fork we developed, so we could update this ourselves to support `babel` v8, or find another solution that doesn't use this plugin.
+- Update on July 13, 2026: `@babel/core` v8.x is available, but upgrading is blocked by `esbuild-plugin-babel-cached@0.2.3`, which has versions below v8 listed as peer dependencies. `esbuild-plugin-babel` has been archived. `esbuild-plugin-babel-cached` appears to be a fork we developed, so we could update this ourselves to support `babel` v8, or find another solution that doesn't use this plugin.
 - As of July 27, 2026: `@babel/core` **v8.0.x** is available on npm. Still blocked by `esbuild-plugin-babel-cached@0.2.3`, which publishes peer `@babel/core@^7.0.0` only. The nested-override approach noted in prior rotations remains untested.
 - As of 8/10/2026: `@babel/core` **v8.x** is available on npm. Still blocked by `esbuild-plugin-babel-cached@0.2.3`, which publishes peer `@babel/core@^7.0.0` only.
-- As of 9/17/2026: `@babel/core` **8.0.5** is available. Tracked in DevEx ticket [#10428](https://github.com/ustaxcourt/ef-cms/issues/10428). There is a second blocker: `ts-jest@29.4.12` declares peer `@babel/core <8`, so replacing `esbuild-plugin-babel-cached` alone will not unblock the upgrade. The plugin is ~50 lines (`babel.loadOptions` + `babel.transform`) used solely by `esbuildHelper.mjs`, so it could be inlined into the repo rather than republished to npm.
+- As of 9/17/2026: `@babel/core` **8.0.5** is available. Tracked in DevEx ticket [#10428](https://github.com/ustaxcourt/ef-cms/issues/10428). The plugin is ~50 lines (`babel.loadOptions` + `babel.transform`) used solely by `esbuildHelper.mjs`, so it could be inlined into the repo rather than republished to npm.
 
 ### @types/node
-**Installed Version: 24.13.6**
-The major version of this package should match our major version of Node. We should use a package that starts with 24. <b>However</b>, the current installed version is 24.13.6, which <b>does not match the current installed version of Node</b> (`24.21.0` in `.nvmrc`). It is a known issue and another attempt will be made at the next Node.js and @types/node update.
+**Installed Version: 24.19.1**
+The major version of this package should match our major version of Node. We should use a package that starts with 24.
+
+Use the latest compatible `@types/node` release within Node’s major version. Type definitions can lag Node releases, and their patch numbers are independent, so an exact version match is not required. Verify type checking after updates.
 
 - [Dependencies 03 09 2026](https://github.com/ustaxcourt/ef-cms/pull/9465/files), Node.js was `v24.14.0`, but `@types/node` could not be updated to `24.14.0`, so it stayed pinned at `24.12.0`.
 

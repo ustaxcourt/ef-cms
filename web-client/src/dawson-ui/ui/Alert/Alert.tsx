@@ -85,7 +85,7 @@ function AlertHeader({
   variant,
   dataTestId,
   children,
-}: React.ComponentProps<'p'> & AlertHeaderType) {
+}: React.ComponentProps<'p'> & AlertHeaderType): React.JSX.Element {
   return (
     <div className="tw:flex">
       <div className="tw:xs:text-2xl tw:xs:leading-6 tw:h-5! tw:w-5! tw:xs:h-6! tw:xs:w-6!">
@@ -108,9 +108,7 @@ function AlertHeader({
       </div>
       {isDismissible && (
         <div className="tw:ml-auto">
-          <Button variant="terminatorButton" aria-label="Terminator Button">
-            Close
-          </Button>
+          <Button variant="terminatorButton">Close</Button>
         </div>
       )}
     </div>
