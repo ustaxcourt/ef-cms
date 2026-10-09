@@ -38,6 +38,11 @@ const scriptConfig: ScriptConfig = {
       short: 'f',
       type: 'boolean',
     },
+    pageCount: {
+      default: false,
+      short: 'p',
+      type: 'boolean',
+    },
     stricken: {
       default: false,
       short: 's',
@@ -53,12 +58,13 @@ const scriptConfig: ScriptConfig = {
   },
   requireActiveAwsSession: true,
 };
-const { count, distinct, eventCodes, fiscal, stricken, years } =
+const { count, distinct, eventCodes, fiscal, pageCount, stricken, years } =
   parseArgsAndEnvVars(scriptConfig) as {
     count: boolean;
     distinct: boolean;
     eventCodes: string[];
     fiscal: boolean;
+    pageCount: boolean;
     stricken: boolean;
     years: number[];
   };
@@ -69,6 +75,7 @@ void (async () => {
     distinct,
     eventCodes,
     fiscal,
+    pageCount,
     stricken,
     years,
   });

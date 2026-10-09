@@ -469,6 +469,7 @@ describe('event-codes-by-year-helpers', () => {
       distinct: true,
       eventCodes: ['O', 'ODJ'],
       fiscal: true,
+      pageCount: false,
       stricken: false,
       years: [2024],
     });
@@ -501,6 +502,7 @@ describe('event-codes-by-year-helpers', () => {
       distinct: false,
       eventCodes: ['O'],
       fiscal: false,
+      pageCount: false,
       stricken: true,
       years: [2024],
     });
@@ -516,7 +518,7 @@ describe('event-codes-by-year-helpers', () => {
   it('writes a distinct CSV report with formatted docket entries', async () => {
     const rows: EventCodeReportDocketEntry[] = [
       {
-        associatedJudge: 'Chief Special Trial Judge Buch',
+        associatedJudge: 'Chief Special Trial Judge Fried',
         caption: 'Test Petitioner,\nPetitioner',
         docketNumber: '101-25',
         docketNumberSuffix: 'S',
@@ -544,6 +546,7 @@ describe('event-codes-by-year-helpers', () => {
       distinct: true,
       eventCodes: ['O', 'ODJ'],
       fiscal: true,
+      pageCount: false,
       stricken: false,
       years: [2025],
     });
@@ -569,7 +572,6 @@ describe('event-codes-by-year-helpers', () => {
         { header: 'Judge', key: 'judge' },
         { header: 'Status', key: 'status' },
         { header: 'Case Title', key: 'caption' },
-        { header: 'Number of Pages', key: 'numberOfPages' },
       ],
       filename,
       rows: [
@@ -578,7 +580,7 @@ describe('event-codes-by-year-helpers', () => {
           docketNumber: '101-25S',
           documentType: 'Order',
           filed: '2025-04-01',
-          judge: 'Buch',
+          judge: 'Fried',
           numberOfPages: 5,
           status: 'New',
         },
@@ -617,6 +619,80 @@ describe('event-codes-by-year-helpers', () => {
       distinct: false,
       eventCodes: ['OSC'],
       fiscal: false,
+      pageCount: false,
+      stricken: true,
+      years: [2025],
+    });
+
+    const filename = `${process.env.HOME}/Documents/osc-filed-in-2025.csv`;
+    expect(baseCalls).toContainEqual({
+      args: [expect.arrayContaining(['de.numberOfPages'])],
+      method: 'select',
+    });
+    expect(baseCalls).not.toContainEqual({
+      args: ['de.isStricken', '!=', true],
+      method: 'where',
+    });
+    expect(logSpy).toHaveBeenNthCalledWith(
+      1,
+      'Found 1 OSC documents filed in 2025',
+    );
+    expect(generateCsv).toHaveBeenCalledWith({
+      columns: [
+        { header: 'Docket Number', key: 'docketNumber' },
+        { header: 'Date Filed', key: 'filed' },
+        { header: 'Document Type', key: 'documentType' },
+        { header: 'Judge', key: 'judge' },
+        { header: 'Status', key: 'status' },
+        { header: 'Case Title', key: 'caption' },
+      ],
+      filename,
+      rows: [
+        {
+          caption: 'Another Petitioner',
+          docketNumber: '102-25',
+          documentType: 'Order to Show Cause',
+          filed: '2025-05-01',
+          judge: 'Cohen',
+          numberOfPages: 0,
+          status: 'Calendared',
+        },
+      ],
+    });
+    expect(logSpy).toHaveBeenNthCalledWith(2, `Generated ${filename}`);
+  });
+
+  it('includes the number of pages in the CSV report when pageCount is true', async () => {
+    const rows: EventCodeReportDocketEntry[] = [
+      {
+        associatedJudge: 'Judge Cohen',
+        caption: 'Another Petitioner',
+        docketNumber: '102-25',
+        documentType: 'Order to Show Cause',
+        numberOfPages: 3,
+        receivedAt: calculateDate({
+          dateString: '2025-05-01T05:00:00.000Z',
+        }),
+        status: 'Calendared',
+      },
+    ];
+    const { baseCalls } = setupReaderMock({
+      executeResult: rows,
+      executeTakeFirstResult: { count: 0 },
+    });
+    const logSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
+
+    getJsTimeframeForYear.mockReturnValue({
+      begin: calculateDate({ dateString: '2025-01-01T00:00:00.000Z' }),
+      end: calculateDate({ dateString: '2026-01-01T00:00:00.000Z' }),
+    });
+
+    await eventCodesByYearReport({
+      count: false,
+      distinct: false,
+      eventCodes: ['OSC'],
+      fiscal: false,
+      pageCount: true,
       stricken: true,
       years: [2025],
     });
@@ -652,7 +728,7 @@ describe('event-codes-by-year-helpers', () => {
           documentType: 'Order to Show Cause',
           filed: '2025-05-01',
           judge: 'Cohen',
-          numberOfPages: 0,
+          numberOfPages: 3,
           status: 'Calendared',
         },
       ],

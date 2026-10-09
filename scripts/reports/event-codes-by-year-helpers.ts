@@ -127,12 +127,14 @@ const outputCsv = ({
   docketEntries,
   eventCodes,
   fiscal,
+  pageCount,
   years,
 }: {
   distinct: boolean;
   docketEntries: EventCodeReportDocketEntry[];
   eventCodes: string[];
   fiscal: boolean;
+  pageCount: boolean;
   years: number[];
 }) => {
   const columns = [
@@ -142,14 +144,16 @@ const outputCsv = ({
     { header: 'Judge', key: 'judge' },
     { header: 'Status', key: 'status' },
     { header: 'Case Title', key: 'caption' },
-    { header: 'Number of Pages', key: 'numberOfPages' },
   ];
+  if (pageCount) {
+    columns.push({ header: 'Number of Pages', key: 'numberOfPages' });
+  }
   const filename =
     `${OUTPUT_DIR}/${distinct ? 'distinct-' : ''}` +
     `${eventCodes.map(ec => ec.toLowerCase()).join('-')}-filed-` +
     `in-${fiscal ? 'fy-' : ''}${years.join('-')}.csv`;
   const rows = docketEntries.map(de => ({
-    ...pick(de, ['documentType', 'numberOfPages', 'status']),
+    ...pick(de, ['documentType', 'status']),
     caption: formatCaseCaption(de.caption),
     docketNumber: formatDocketNumber(de.docketNumber, de.docketNumberSuffix),
     filed: formatDate(de.receivedAt),
@@ -165,6 +169,7 @@ export const eventCodesByYearReport = async ({
   distinct,
   eventCodes,
   fiscal,
+  pageCount,
   stricken,
   years,
 }: {
@@ -172,6 +177,7 @@ export const eventCodesByYearReport = async ({
   distinct: boolean;
   eventCodes: string[];
   fiscal: boolean;
+  pageCount: boolean;
   stricken: boolean;
   years: number[];
 }) => {
@@ -203,5 +209,5 @@ export const eventCodesByYearReport = async ({
       `${stricken ? '' : 'non-stricken '}${eventCodes.join(',')} ` +
       `documents filed in ${fiscal ? 'fy ' : ''}${years.join(',')}`,
   );
-  outputCsv({ docketEntries, distinct, eventCodes, fiscal, years });
+  outputCsv({ docketEntries, distinct, eventCodes, fiscal, pageCount, years });
 };
