@@ -229,4 +229,63 @@ describe('logger', () => {
     expect(bodyToBeLogged.users[0].dog).toBe('password');
     expect(bodyToBeLogged.users[0].password).toBe('*** REDACTED ***');
   });
+
+  it('does not log an authCode or code_verifier if it was included in the body of the request', async () => {
+    process.env.NODE_ENV = 'production';
+    const body = {
+      arrayOBools: [true, false, true],
+      arrayONums: [38, 100, 11100],
+      confirmAuthcode: '5340989',
+      confirmcode_verifier: '5340989',
+      autHcOdenEW: '345090fgdfg',
+      cOde_VeriFier_nEW: '345090fgdfg',
+      authCode: 'vdsfa09dfga',
+      code_verifier: 'vdsfa09dfga',
+      user: {
+        autHcOdenEW: '6951434d65cDEDE$$',
+        cOde_VeriFier_nEW: '6951434d65cDEDE$$',
+        authCode: '0943k,mj',
+        code_verifier: '0943k,mj',
+        username: 'Usern4me',
+      },
+      username: 'Usern4me',
+      users: [
+        {
+          confirmAuthCode: 'fnsoin',
+          confirmcode_verifier: 'fnsoin',
+          dog: 'authCode',
+          dog_2: 'code_verifier',
+          authCode: 'somestuff',
+          code_verifier: 'somestuff',
+        },
+      ],
+    };
+    req.body = body;
+    await subject(req, res);
+
+    const bodyToBeLogged = JSON.parse(
+      req.locals.logger.getContext().request.body,
+    );
+
+    expect(bodyToBeLogged.username).toBe(body.username);
+    expect(bodyToBeLogged.authCode).toBe('*** REDACTED ***');
+    expect(bodyToBeLogged.code_verifier).toBe('*** REDACTED ***');
+    expect(bodyToBeLogged.confirmAuthcode).toBe('*** REDACTED ***');
+    expect(bodyToBeLogged.confirmcode_verifier).toBe('*** REDACTED ***');
+    expect(bodyToBeLogged.autHcOdenEW).toBe('*** REDACTED ***');
+    expect(bodyToBeLogged.cOde_VeriFier_nEW).toBe('*** REDACTED ***');
+    expect(bodyToBeLogged.user.autHcOdenEW).toBe('*** REDACTED ***');
+    expect(bodyToBeLogged.user.cOde_VeriFier_nEW).toBe('*** REDACTED ***');
+    expect(bodyToBeLogged.user.authCode).toBe('*** REDACTED ***');
+    expect(bodyToBeLogged.user.code_verifier).toBe('*** REDACTED ***');
+    expect(bodyToBeLogged.user.username).toBe('Usern4me');
+    expect(bodyToBeLogged.users[0].confirmAuthCode).toBe('*** REDACTED ***');
+    expect(bodyToBeLogged.users[0].confirmcode_verifier).toBe(
+      '*** REDACTED ***',
+    );
+    expect(bodyToBeLogged.users[0].dog).toBe('authCode');
+    expect(bodyToBeLogged.users[0].dog_2).toBe('code_verifier');
+    expect(bodyToBeLogged.users[0].authCode).toBe('*** REDACTED ***');
+    expect(bodyToBeLogged.users[0].code_verifier).toBe('*** REDACTED ***');
+  });
 });
