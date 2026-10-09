@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from 'fs';
+import { appendFileSync, existsSync, readFileSync } from 'fs';
 
 export type SarifResult = {
   locations?: {
@@ -205,3 +205,86 @@ export const renderFindings = (
       ].join('\n'),
     )
     .join('\n\n');
+
+export const USAGE =
+  'usage: compare-security-findings.ts <tool>:<branch.sarif>:<staging.sarif> ...';
+
+export type ComparisonSpec = {
+  branchReport: string;
+  stagingReport: string;
+  tool: string;
+};
+
+/** Reads a `<tool>:<branch.sarif>:<staging.sarif>` argument, or null when a part is missing. */
+export const parseComparisonSpec = (spec: string): ComparisonSpec | null => {
+  const [tool, branchReport, stagingReport] = spec.split(':');
+  if (!tool || !branchReport || !stagingReport) {
+    return null;
+  }
+  return { branchReport, stagingReport, tool };
+};
+
+/** Lists the comparison table, then new findings, then findings already on staging. */
+export const renderReport = (comparisons: ToolComparison[]): string =>
+  [
+    renderComparisonTable(comparisons),
+    renderFindings(comparisons, 'newFindings'),
+    renderFindings(comparisons, 'existingFindings'),
+  ]
+    .filter(Boolean)
+    .join('\n\n');
+
+/**
+ * Compares SARIF findings against staging one by one, and returns exit code 1 when this
+ * branch has a finding staging does not. Both sides are scanned in one job, so a newly
+ * published CVE against code already on staging appears on both sides and cannot fail a
+ * pull request.
+ */
+export const runCompareSecurityFindingsScript = ({
+  specs,
+  stepSummaryPath,
+}: {
+  specs: string[];
+  stepSummaryPath?: string;
+}): number => {
+  if (specs.length === 0) {
+    console.error(USAGE);
+    return 1;
+  }
+
+  const comparisons: ToolComparison[] = [];
+  for (const spec of specs) {
+    const parsed = parseComparisonSpec(spec);
+    if (!parsed) {
+      console.error(`Malformed argument: ${spec}`);
+      return 1;
+    }
+    comparisons.push(
+      compareToolFindings({
+        branchFindings: readSarifFindings(parsed.branchReport),
+        stagingFindings: readSarifFindings(parsed.stagingReport),
+        tool: parsed.tool,
+      }),
+    );
+  }
+
+  const report = renderReport(comparisons);
+  console.log(report);
+
+  if (stepSummaryPath) {
+    appendFileSync(
+      stepSummaryPath,
+      `### Security findings vs staging\n\n${report}\n\n`,
+    );
+  }
+
+  if (hasRegressions(comparisons)) {
+    console.error(
+      '\nERROR: this branch adds security findings that staging does not have.',
+    );
+    return 1;
+  }
+
+  console.log('\nNo security findings beyond those already on staging.');
+  return 0;
+};
