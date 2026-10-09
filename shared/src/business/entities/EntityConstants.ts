@@ -1149,13 +1149,24 @@ export const PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP = [
 export const PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES =
   PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP.map(d => d.documentType);
 
+export const PAY_GOV_METHOD = 'Pay.gov';
+
 export const PAYMENT_STATUS = {
   PAID: 'Paid',
   UNPAID: 'Not paid',
   WAIVED: 'Waived',
+  PENDING: 'Pending',
 };
 export type PaymentStatusTypes =
   (typeof PAYMENT_STATUS)[keyof typeof PAYMENT_STATUS];
+
+export const PAYMENT_FILING_FEE_ORIGIN = {
+  DASHBOARD: 'dashboard',
+  PETITION: 'petition',
+} as const;
+
+export type PaymentFilingFeeOrigin =
+  (typeof PAYMENT_FILING_FEE_ORIGIN)[keyof typeof PAYMENT_FILING_FEE_ORIGIN];
 
 export const PROCEDURE_TYPES_MAP = {
   regular: 'Regular',
