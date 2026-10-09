@@ -9,6 +9,8 @@ import {
 } from 'cypress/helpers/authentication/login-as-helpers';
 import { petitionsClerkServesPetition } from 'cypress/helpers/documentQC/petitionsclerk-serves-petition';
 import { selectTypeaheadInput } from 'cypress/helpers/components/typeAhead/select-typeahead-input';
+import { assertNoticeOfDocketChangeDoesNotExist } from 'cypress/helpers/caseDetail/docketRecord/assert-docket-entry-page-count';
+import { checkA11y } from 'cypress/local-only/support/generalCommands/checkA11y';
 
 describe(
   'Petitioner files an Exhibit in Support (EXS)',
@@ -148,7 +150,7 @@ describe(
       });
     });
 
-    it('should file a Motion with an Exhibit in Support, with Certificate of Service and Attachments, and reflect it on the Docket Record', () => {
+    it('should file a Motion with an Exhibit in Support and show the Motion on QC and Edit Docket Entry', () => {
       const primaryFilerName = 'John';
       const today = formatNow(FORMATS.MMDDYYYY);
       const todayShort = formatNow(FORMATS.MMDDYY);
@@ -295,6 +297,34 @@ describe(
 
         cy.get('#document-filter-by').select('Exhibits');
         cy.get('[data-testid="document-download-link-EXS"]').should('exist');
+
+        loginAsDocketClerk();
+        cy.task<{ docketEntryId: string }[]>(
+          'getDocketEntryIdsByDocketNumberAndEventCode',
+          { docketNumber, eventCode: 'EXS' },
+        ).then((entries: { docketEntryId: string }[]): void => {
+          expect(entries).to.have.length(1);
+          cy.visit(
+            `/case-detail/${docketNumber}/documents/${entries[0].docketEntryId}/edit`,
+          );
+        });
+        cy.get(
+          '[data-testid="previous-document-search"] option:selected',
+        ).should('contain.text', 'Motion for Continuance');
+        checkA11y();
+        cy.get('[data-testid="save-and-finish-document-qc"]').click();
+        cy.get('[data-testid="success-alert"]').should(
+          'contain',
+          'QC Completed',
+        );
+
+        goToCase(docketNumber);
+        assertNoticeOfDocketChangeDoesNotExist();
+        cy.get('[data-testid="edit-EXS"]').click();
+        cy.get(
+          '[data-testid="previous-document-search"] option:selected',
+        ).should('contain.text', 'Motion for Continuance');
+        checkA11y();
       });
     });
 

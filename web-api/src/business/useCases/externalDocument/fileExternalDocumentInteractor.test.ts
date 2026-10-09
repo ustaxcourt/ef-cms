@@ -557,6 +557,11 @@ describe('fileExternalDocumentInteractor', () => {
               eventCode: 'M135',
               filedBy: 'Test Petitioner',
               objections: OBJECTIONS_OPTIONS_MAP.NO,
+              previousDocument: {
+                docketEntryId: 'incorrect-parent-id',
+                documentTitle: 'Motion for Judgment on the Pleadings',
+                documentType: 'Motion for Judgment on the Pleadings',
+              },
             },
           ],
           supportingDocuments: [
@@ -593,6 +598,9 @@ describe('fileExternalDocumentInteractor', () => {
           isOnDocketRecord: true,
           // supporting document
           lodged: undefined,
+          previousDocument: expect.objectContaining({
+            docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          }),
         }),
         expect.objectContaining({
           eventCode: 'M121', //secondary document
@@ -603,6 +611,10 @@ describe('fileExternalDocumentInteractor', () => {
           eventCode: 'M135', // secondary supporting document
           isOnDocketRecord: true,
           lodged: true,
+          previousDocument: expect.objectContaining({
+            docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
+            documentTitle: 'Motion for Judgment on the Pleadings',
+          }),
         }),
       ]),
     );
