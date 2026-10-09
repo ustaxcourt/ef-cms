@@ -1,5 +1,13 @@
+import {
+  formatCaseCaption,
+  formatDate,
+  formatDocketNumber,
+  formatJudgeName,
+} from '../helpers/formatters';
+import { generateCsv } from '../helpers/generate-csv';
 import { getDbReader } from '@web-api/persistence/postgres/database';
 import { getJsTimeframeForYear } from '@shared/business/utilities/DateHandler';
+import { pick } from 'lodash';
 import { sql } from 'kysely';
 
 export type EventCodeReportDocketEntry = {
@@ -8,6 +16,7 @@ export type EventCodeReportDocketEntry = {
   docketNumber: string;
   docketNumberSuffix?: string | null;
   documentType: string;
+  numberOfPages: number | null;
   receivedAt: Date;
   status: string;
 };
@@ -80,6 +89,7 @@ export const getDocketEntriesByEventCodesAndYears = async ({
         .select([
           'de.docketNumber',
           'de.documentType',
+          'de.numberOfPages',
           'de.receivedAt',
           'c.associatedJudge',
           'c.caption',
@@ -108,4 +118,96 @@ export const getDocketEntriesByEventCodesAndYears = async ({
   return count
     ? (results as { count: number }).count
     : (results as EventCodeReportDocketEntry[]);
+};
+
+const OUTPUT_DIR = `${process.env.HOME}/Documents`;
+
+const outputCsv = ({
+  distinct,
+  docketEntries,
+  eventCodes,
+  fiscal,
+  pageCount,
+  years,
+}: {
+  distinct: boolean;
+  docketEntries: EventCodeReportDocketEntry[];
+  eventCodes: string[];
+  fiscal: boolean;
+  pageCount: boolean;
+  years: number[];
+}) => {
+  const columns = [
+    { header: 'Docket Number', key: 'docketNumber' },
+    { header: 'Date Filed', key: 'filed' },
+    { header: 'Document Type', key: 'documentType' },
+    { header: 'Judge', key: 'judge' },
+    { header: 'Status', key: 'status' },
+    { header: 'Case Title', key: 'caption' },
+  ];
+  if (pageCount) {
+    columns.push({ header: 'Number of Pages', key: 'numberOfPages' });
+  }
+  const filename =
+    `${OUTPUT_DIR}/${distinct ? 'distinct-' : ''}` +
+    `${eventCodes.map(ec => ec.toLowerCase()).join('-')}-filed-` +
+    `in-${fiscal ? 'fy-' : ''}${years.join('-')}.csv`;
+  const rows = docketEntries.map(de => ({
+    ...pick(de, ['documentType', 'status']),
+    caption: formatCaseCaption(de.caption),
+    docketNumber: formatDocketNumber(de.docketNumber, de.docketNumberSuffix),
+    filed: formatDate(de.receivedAt),
+    judge: formatJudgeName(de.associatedJudge),
+    numberOfPages: de.numberOfPages || 0,
+  }));
+  generateCsv({ columns, filename, rows });
+  console.log(`Generated ${filename}`);
+};
+
+export const eventCodesByYearReport = async ({
+  count,
+  distinct,
+  eventCodes,
+  fiscal,
+  pageCount,
+  stricken,
+  years,
+}: {
+  count: boolean;
+  distinct: boolean;
+  eventCodes: string[];
+  fiscal: boolean;
+  pageCount: boolean;
+  stricken: boolean;
+  years: number[];
+}) => {
+  if (count) {
+    const docCount: number = (await getDocketEntriesByEventCodesAndYears({
+      count,
+      distinct,
+      eventCodes,
+      fiscal,
+      onlyNonStricken: !stricken,
+      years,
+    })) as number;
+    console.log(
+      `Found ${docCount} ${distinct ? 'distinct ' : ''}` +
+        `${stricken ? '' : 'non-stricken '} ${eventCodes.join(',')} ` +
+        `documents filed in ${fiscal ? 'fy ' : ''}${years.join(',')}`,
+    );
+    return;
+  }
+  const docketEntries = (await getDocketEntriesByEventCodesAndYears({
+    distinct,
+    eventCodes,
+    fiscal,
+    onlyNonStricken: !stricken,
+    years,
+  })) as EventCodeReportDocketEntry[];
+  console.log(
+    `Found ${docketEntries.length} ${distinct ? 'distinct ' : ''}` +
+      `${stricken ? '' : 'non-stricken '}${eventCodes.join(',')} ` +
+      `documents filed in ${fiscal ? 'fy ' : ''}${years.join(',')}`,
+  );
+  outputCsv({ docketEntries, distinct, eventCodes, fiscal, pageCount, years });
 };
