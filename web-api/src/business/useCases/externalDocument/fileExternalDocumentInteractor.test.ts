@@ -608,6 +608,110 @@ describe('fileExternalDocumentInteractor', () => {
     );
   });
 
+  it('should set the logged-in practitioner as filedBy on every document when a practitioner files a Nonstandard H filing targeting an M112, ignoring the submitted filedBy', async () => {
+    await fileExternalDocumentInteractor(
+      applicationContext,
+      {
+        documentMetadata: {
+          docketNumber: caseRecord.docketNumber,
+          documentTitle:
+            'Motion for Leave to File Motion to Withdraw as Counsel',
+          documentType: 'Motion for Leave to File',
+          eventCode: 'M115',
+          filedBy: 'Some Other Practitioner',
+          objections: OBJECTIONS_OPTIONS_MAP.NO,
+          partyIrsPractitioner: true,
+          primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          scenario: 'Nonstandard H',
+          secondaryDocument: {
+            docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
+            documentTitle: 'Motion to Withdraw as Counsel',
+            documentType: 'Motion to Withdraw as Counsel',
+            eventCode: 'M112',
+            objections: OBJECTIONS_OPTIONS_MAP.NO,
+          },
+          secondarySupportingDocuments: [
+            {
+              docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bd',
+              documentTitle:
+                'Exhibit in Support of Motion to Withdraw as Counsel',
+              documentType: 'Exhibit in Support',
+              eventCode: 'EXS',
+              previousDocument: {
+                documentTitle: 'Motion to Withdraw as Counsel',
+                documentType: 'Motion to Withdraw as Counsel',
+              },
+            },
+          ],
+          supportingDocuments: [
+            {
+              docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335be',
+              documentTitle: 'Exhibit in Support of Motion for Leave to File',
+              documentType: 'Exhibit in Support',
+              eventCode: 'EXS',
+              previousDocument: {
+                documentTitle: 'Motion for Leave to File',
+                documentType: 'Motion for Leave to File',
+              },
+            },
+          ],
+        },
+      },
+      mockIrsPractitionerUser,
+    );
+
+    const savedCase = updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    const filedEntries = savedCase.docketEntries.filter(entry =>
+      [
+        'c54ba5a9-b37b-479d-9201-067ec6e335bc',
+        'c54ba5a9-b37b-479d-9201-067ec6e335bd',
+        'c54ba5a9-b37b-479d-9201-067ec6e335be',
+      ].includes(entry.docketEntryId),
+    );
+    const primaryEntry = savedCase.docketEntries.find(
+      entry => entry.eventCode === 'M115',
+    );
+
+    expect(filedEntries).toHaveLength(3);
+    [primaryEntry, ...filedEntries].forEach(entry => {
+      expect(entry.filedBy).toEqual(mockIrsPractitionerUser.name);
+    });
+  });
+
+  it('should generate filedBy from the filing parties when a practitioner files a Nonstandard H filing that does not target an M112', async () => {
+    await fileExternalDocumentInteractor(
+      applicationContext,
+      {
+        documentMetadata: {
+          docketNumber: caseRecord.docketNumber,
+          documentTitle: 'Motion for Leave to File',
+          documentType: 'Motion for Leave to File',
+          eventCode: 'M115',
+          filedBy: mockIrsPractitionerUser.name,
+          objections: OBJECTIONS_OPTIONS_MAP.NO,
+          partyIrsPractitioner: true,
+          primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          scenario: 'Nonstandard H',
+          secondaryDocument: {
+            docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
+            documentTitle: 'Motion for Judgment on the Pleadings',
+            documentType: 'Motion for Judgment on the Pleadings',
+            eventCode: 'M121',
+            objections: OBJECTIONS_OPTIONS_MAP.NO,
+          },
+        },
+      },
+      mockIrsPractitionerUser,
+    );
+
+    const savedCase = updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    const secondaryEntry = savedCase.docketEntries.find(
+      entry => entry.docketEntryId === 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
+    );
+
+    expect(secondaryEntry.filedBy).toEqual('Resp.');
+  });
+
   it('should add documents and workitems but NOT auto-serve Simultaneous documents on the parties', async () => {
     await fileExternalDocumentInteractor(
       applicationContext,
