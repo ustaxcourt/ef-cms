@@ -1,4 +1,10 @@
-import { ROLES } from '../EntityConstants';
+import {
+  MOTION_TO_WITHDRAW_AS_COUNSEL_DOCUMENT_TYPE,
+  MOTION_TO_WITHDRAW_AS_COUNSEL_EVENT_CODE,
+  NOTICE_OF_WITHDRAWAL_DOCUMENT_TYPE,
+  NOTICE_OF_WITHDRAWAL_EVENT_CODE,
+  ROLES,
+} from '../EntityConstants';
 
 /**
  * Whether a docket entry should display the filing practitioner's name as
@@ -18,14 +24,15 @@ export const isFiledByPractitionerName = ({
   user?: { role?: string };
 }): boolean => {
   const isNOTWRelated =
-    docketEntry.eventCode === 'NOTW' ||
+    docketEntry.eventCode === NOTICE_OF_WITHDRAWAL_EVENT_CODE ||
     docketEntry.previousDocument?.documentType ===
-      'Notice of Withdrawal as Counsel';
+      NOTICE_OF_WITHDRAWAL_DOCUMENT_TYPE;
   const isM112Related =
-    docketEntry.eventCode === 'M112' ||
-    docketEntry.secondaryDocument?.eventCode === 'M112' ||
+    docketEntry.eventCode === MOTION_TO_WITHDRAW_AS_COUNSEL_EVENT_CODE ||
+    docketEntry.secondaryDocument?.eventCode ===
+      MOTION_TO_WITHDRAW_AS_COUNSEL_EVENT_CODE ||
     docketEntry.previousDocument?.documentType ===
-      'Motion to Withdraw as Counsel';
+      MOTION_TO_WITHDRAW_AS_COUNSEL_DOCUMENT_TYPE;
   const isPractitioner =
     user?.role === ROLES.irsPractitioner ||
     user?.role === ROLES.privatePractitioner;

@@ -4,14 +4,15 @@ import { appendFileSync } from 'fs';
 import {
   compareToolFindings,
   hasRegressions,
-  readSarifCount,
+  readSarifFindings,
   renderComparisonTable,
+  renderFindings,
 } from './compare-security-findings.helpers';
 
 /*
- Compares SARIF finding counts against staging, like compareTypescriptErrors.ts does for
- type errors. Enforces no net increase, and scans both sides in one job so a newly
- published CVE cannot fail a pull request on its own.
+ Compares SARIF findings against staging one by one, and fails when this branch has a
+ finding staging does not. Both sides are scanned in one job, so a newly published CVE
+ against code already on staging appears on both sides and cannot fail a pull request.
 
  Usage: compare-security-findings.ts <tool>:<branch.sarif>:<staging.sarif> ...
 */
@@ -32,27 +33,33 @@ const comparisons = specs.map(spec => {
     process.exit(1);
   }
   return compareToolFindings({
-    branchCount: readSarifCount(branchReport),
-    stagingCount: readSarifCount(stagingReport),
+    branchFindings: readSarifFindings(branchReport),
+    stagingFindings: readSarifFindings(stagingReport),
     tool,
   });
 });
 
-const table = renderComparisonTable(comparisons);
-console.log(table);
+const report = [
+  renderComparisonTable(comparisons),
+  renderFindings(comparisons, 'newFindings'),
+  renderFindings(comparisons, 'existingFindings'),
+]
+  .filter(Boolean)
+  .join('\n\n');
+console.log(report);
 
 if (process.env.GITHUB_STEP_SUMMARY) {
   appendFileSync(
     process.env.GITHUB_STEP_SUMMARY,
-    `### Security findings vs staging\n\n${table}\n\n`,
+    `### Security findings vs staging\n\n${report}\n\n`,
   );
 }
 
 if (hasRegressions(comparisons)) {
   console.error(
-    '\nERROR: this branch reports more security findings than staging.',
+    '\nERROR: this branch adds security findings that staging does not have.',
   );
   process.exit(1);
 }
 
-console.log('\nNo increase in security findings compared with staging.');
+console.log('\nNo security findings beyond those already on staging.');
