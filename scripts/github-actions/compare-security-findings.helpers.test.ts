@@ -1,9 +1,10 @@
 jest.mock('fs', () => ({
+  appendFileSync: jest.fn(),
   existsSync: jest.fn(),
   readFileSync: jest.fn(),
 }));
 
-import { existsSync, readFileSync } from 'fs';
+import { appendFileSync, existsSync, readFileSync } from 'fs';
 import {
   COMPARISON_TABLE_DIVIDER,
   COMPARISON_TABLE_HEADER,
@@ -14,14 +15,18 @@ import {
   formatChange,
   formatFinding,
   hasRegressions,
+  parseComparisonSpec,
   readMessageField,
   readSarifFindings,
   FINDINGS_HEADINGS,
   renderComparisonTable,
   renderFindings,
+  renderReport,
+  runCompareSecurityFindingsScript,
   type SarifResult,
   toFinding,
   type ToolComparison,
+  USAGE,
 } from './compare-security-findings.helpers';
 
 const trivyResult = ({
@@ -393,6 +398,165 @@ describe('compare-security-findings.helpers', () => {
 
     it('returns an empty string when no tool has findings of that kind', () => {
       expect(renderFindings([comparison()], 'newFindings')).toBe('');
+    });
+  });
+
+  describe('parseComparisonSpec', () => {
+    it('reads the tool and both report paths', () => {
+      expect(
+        parseComparisonSpec('trivy-fs:branch.sarif:staging.sarif'),
+      ).toEqual({
+        branchReport: 'branch.sarif',
+        stagingReport: 'staging.sarif',
+        tool: 'trivy-fs',
+      });
+    });
+
+    it('returns null when a report path is missing', () => {
+      expect(parseComparisonSpec('trivy-fs:branch.sarif')).toBeNull();
+    });
+  });
+
+  describe('renderReport', () => {
+    it('lists the table, then new findings, then findings already on staging', () => {
+      const comparisons = [
+        comparison({
+          existingFindings: [finding()],
+          newFindings: [finding({ ruleId: 'CVE-NEW' })],
+        }),
+      ];
+      expect(renderReport(comparisons)).toBe(
+        [
+          renderComparisonTable(comparisons),
+          renderFindings(comparisons, 'newFindings'),
+          renderFindings(comparisons, 'existingFindings'),
+        ].join('\n\n'),
+      );
+    });
+
+    it('leaves out finding sections that are empty', () => {
+      expect(renderReport([comparison()])).toBe(
+        renderComparisonTable([comparison()]),
+      );
+    });
+  });
+
+  describe('runCompareSecurityFindingsScript', () => {
+    const braceExpansion = trivyResult();
+    const lodash = trivyResult({
+      packageName: 'lodash',
+      ruleId: 'CVE-2020-8203',
+    });
+    let errorSpy: jest.SpyInstance;
+    let logSpy: jest.SpyInstance;
+
+    /** Serves each report path from `reports`; a path not listed does not exist. */
+    const givenReports = (reports: Record<string, SarifResult[]>): void => {
+      (existsSync as jest.Mock).mockImplementation(
+        (path: string) => path in reports,
+      );
+      (readFileSync as jest.Mock).mockImplementation((path: string) =>
+        JSON.stringify({ runs: [{ results: reports[path] }] }),
+      );
+    };
+
+    beforeEach(() => {
+      errorSpy = jest.spyOn(console, 'error').mockImplementation();
+      logSpy = jest.spyOn(console, 'log').mockImplementation();
+    });
+
+    afterEach(() => {
+      errorSpy.mockRestore();
+      logSpy.mockRestore();
+    });
+
+    it('prints usage and returns 1 when given no arguments', () => {
+      expect(runCompareSecurityFindingsScript({ specs: [] })).toBe(1);
+      expect(errorSpy).toHaveBeenCalledWith(USAGE);
+    });
+
+    it('returns 1 on an argument missing a report path', () => {
+      expect(
+        runCompareSecurityFindingsScript({ specs: ['trivy-fs:branch.sarif'] }),
+      ).toBe(1);
+      expect(errorSpy).toHaveBeenCalledWith(
+        'Malformed argument: trivy-fs:branch.sarif',
+      );
+    });
+
+    it('returns 0 and lists a finding already on staging as not blocking', () => {
+      givenReports({
+        'branch.sarif': [braceExpansion],
+        'staging.sarif': [braceExpansion],
+      });
+
+      expect(
+        runCompareSecurityFindingsScript({
+          specs: ['trivy-fs:branch.sarif:staging.sarif'],
+        }),
+      ).toBe(0);
+      expect(logSpy.mock.calls[0][0]).toContain(
+        `**trivy-fs**: 1 ${FINDINGS_HEADINGS.existingFindings}`,
+      );
+      expect(logSpy).toHaveBeenLastCalledWith(
+        '\nNo security findings beyond those already on staging.',
+      );
+    });
+
+    it('returns 1 when the branch adds a finding staging does not have', () => {
+      givenReports({
+        'branch.sarif': [braceExpansion, lodash],
+        'staging.sarif': [braceExpansion],
+      });
+
+      expect(
+        runCompareSecurityFindingsScript({
+          specs: ['trivy-fs:branch.sarif:staging.sarif'],
+        }),
+      ).toBe(1);
+      expect(logSpy.mock.calls[0][0]).toContain(
+        `**trivy-fs**: 1 ${FINDINGS_HEADINGS.newFindings}`,
+      );
+      expect(errorSpy).toHaveBeenCalledWith(
+        '\nERROR: this branch adds security findings that staging does not have.',
+      );
+    });
+
+    it('appends the report to the job summary when a summary path is given', () => {
+      givenReports({ 'branch.sarif': [lodash], 'staging.sarif': [] });
+
+      runCompareSecurityFindingsScript({
+        specs: ['trivy-fs:branch.sarif:staging.sarif'],
+        stepSummaryPath: 'summary.md',
+      });
+
+      expect(appendFileSync).toHaveBeenCalledWith(
+        'summary.md',
+        `### Security findings vs staging\n\n${logSpy.mock.calls[0][0]}\n\n`,
+      );
+    });
+
+    it('does not write a job summary when no summary path is given', () => {
+      givenReports({ 'branch.sarif': [], 'staging.sarif': [] });
+
+      runCompareSecurityFindingsScript({
+        specs: ['trivy-fs:branch.sarif:staging.sarif'],
+      });
+
+      expect(appendFileSync).not.toHaveBeenCalled();
+    });
+
+    it('returns 0 with a note when the staging report is missing', () => {
+      givenReports({ 'branch.sarif': [lodash] });
+
+      expect(
+        runCompareSecurityFindingsScript({
+          specs: ['trivy-fs:branch.sarif:staging.sarif'],
+        }),
+      ).toBe(0);
+      expect(logSpy.mock.calls[0][0]).toContain(
+        'no staging baseline to compare against',
+      );
     });
   });
 });
