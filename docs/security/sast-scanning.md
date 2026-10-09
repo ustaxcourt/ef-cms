@@ -46,7 +46,7 @@ DAWSON-specific taint rules covering both Express (`$REQ.*`) and API Gateway Lam
 
 ## Checkov (IaC)
 
-Scans each Terraform applyable directory individually against its own `.checkov.baseline` file, so only **net-new** findings block.
+Scans each Terraform applyable directory individually against its own `.checkov.baseline` file, which hides findings already accepted there. The scan runs with `--soft-fail`, so only the four hard-fail checks below block a PR. Any other new finding is reported in the log and summary but does not fail the job.
 
 ### Scanned directories
 

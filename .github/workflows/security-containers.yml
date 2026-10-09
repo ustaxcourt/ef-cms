@@ -20,6 +20,9 @@ on:
       - '.github/actions/dawson-trivy-image-scan/**'
       - '.github/actions/dawson-upload-sarif/**'
       - '.github/actions/dawson-sarif-summary/**'
+  # New CVEs are published against images we have not changed, which no path filter sees.
+  schedule:
+    - cron: '0 6 * * 1' # Weekly Monday 06:00 UTC
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
@@ -167,14 +170,14 @@ jobs:
           category: trivy-image-${{ matrix.name }}
 
   # ─────────────────────────────────────────────────────────────────────────────
-  # Job 4: staging baseline (non-blocking). Runs on merges to staging that change image paths, and scans
-  # every distinct image, so the Security tab holds a complete picture of what's actually
-  # live. This is where we discover the full CVE set to triage into .trivyignore.
+  # Job 4: staging baseline (non-blocking). Runs on merges to staging that change image paths
+  # and weekly, and scans every distinct image, so the Security tab holds a complete picture
+  # of what's actually live. This is where we discover the full CVE set to triage into .trivyignore.
   # Mirrors the gitleaks-baseline pattern in the sibling workflows.
   # ─────────────────────────────────────────────────────────────────────────────
   trivy-baseline:
     name: Trivy Baseline (staging)
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' || github.event_name == 'schedule'
     runs-on: ubuntu-latest
     permissions:
       contents: read
