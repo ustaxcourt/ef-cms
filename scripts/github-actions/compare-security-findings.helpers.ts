@@ -1,13 +1,35 @@
-import { existsSync, readFileSync } from 'fs';
+import { appendFileSync, existsSync, readFileSync } from 'fs';
+
+export type SarifResult = {
+  locations?: {
+    physicalLocation?: {
+      artifactLocation?: { uri?: string };
+      region?: { startLine?: number };
+    };
+  }[];
+  message?: { text?: string };
+  ruleId?: string;
+};
 
 export type SarifDocument = {
   runs?: {
-    results?: unknown[];
+    results?: SarifResult[];
   }[];
+};
+
+export type Finding = {
+  installedVersion: string;
+  packageName: string;
+  ruleId: string;
+  severity: string;
+  uri: string;
 };
 
 export type ToolComparison = {
   branchCount: number | null;
+  existingFindings: Finding[];
+  fixedCount: number;
+  newFindings: Finding[];
   note?: string;
   regression: boolean;
   stagingCount: number | null;
@@ -18,8 +40,36 @@ export const COMPARISON_TABLE_HEADER =
   '| Tool | Staging | This branch | Change |';
 export const COMPARISON_TABLE_DIVIDER = '| --- | --- | --- | --- |';
 
-/** Counts results across every run in a SARIF document. */
-export const countSarifResults = (contents: string): number => {
+/** Reads a `Name: value` line from a Trivy result message, or '' when absent. */
+export const readMessageField = (message: string, field: string): string => {
+  const line = message
+    .split('\n')
+    .find(candidate => candidate.startsWith(`${field}:`));
+  return line ? line.slice(field.length + 1).trim() : '';
+};
+
+export const toFinding = (result: SarifResult): Finding => {
+  const message = result.message?.text ?? '';
+  return {
+    installedVersion: readMessageField(message, 'Installed Version'),
+    packageName: readMessageField(message, 'Package'),
+    ruleId: result.ruleId ?? '(none)',
+    severity: readMessageField(message, 'Severity'),
+    uri:
+      result.locations?.[0]?.physicalLocation?.artifactLocation?.uri ??
+      '(unknown location)',
+  };
+};
+
+/**
+ * Identifies a finding by what it is, not where it sits: line numbers move whenever a
+ * lockfile changes, and a version bump that leaves the same CVE open is not a new finding.
+ */
+export const findingKey = (finding: Finding): string =>
+  [finding.ruleId, finding.packageName, finding.uri].join('|');
+
+/** Lists the findings across every run in a SARIF document. */
+export const extractFindings = (contents: string): Finding[] => {
   let document: SarifDocument;
   try {
     document = JSON.parse(contents);
@@ -27,49 +77,73 @@ export const countSarifResults = (contents: string): number => {
     throw new Error('SARIF report is not valid JSON');
   }
   const runs = document.runs ?? [];
-  return runs.reduce((total, run) => total + (run.results ?? []).length, 0);
+  return runs.flatMap(run => (run.results ?? []).map(toFinding));
 };
 
 /** Returns null when the report is absent, so a missing scan is not read as zero findings. */
-export const readSarifCount = (filePath: string): number | null => {
+export const readSarifFindings = (filePath: string): Finding[] | null => {
   if (!existsSync(filePath)) {
     return null;
   }
-  return countSarifResults(readFileSync(filePath, 'utf-8'));
+  return extractFindings(readFileSync(filePath, 'utf-8'));
 };
 
+const uniqueByKey = (findings: Finding[]): Map<string, Finding> =>
+  new Map(findings.map(finding => [findingKey(finding), finding]));
+
 export const compareToolFindings = ({
-  branchCount,
-  stagingCount,
+  branchFindings,
+  stagingFindings,
   tool,
 }: {
-  branchCount: number | null;
-  stagingCount: number | null;
+  branchFindings: Finding[] | null;
+  stagingFindings: Finding[] | null;
   tool: string;
 }): ToolComparison => {
-  if (branchCount === null) {
+  const branch = branchFindings ? uniqueByKey(branchFindings) : null;
+  const staging = stagingFindings ? uniqueByKey(stagingFindings) : null;
+  const counts = {
+    branchCount: branch?.size ?? null,
+    stagingCount: staging?.size ?? null,
+    tool,
+  };
+
+  if (!branch) {
     return {
-      branchCount,
+      ...counts,
+      existingFindings: [],
+      fixedCount: 0,
+      newFindings: [],
       note: 'no report produced for this branch',
       regression: false,
-      stagingCount,
-      tool,
     };
   }
-  if (stagingCount === null) {
+  if (!staging) {
     return {
-      branchCount,
+      ...counts,
+      existingFindings: [],
+      fixedCount: 0,
+      newFindings: [],
       note: 'no staging baseline to compare against',
       regression: false,
-      stagingCount,
-      tool,
     };
   }
+
+  const branchEntries = [...branch.entries()];
+  const newFindings = branchEntries
+    .filter(([key]) => !staging.has(key))
+    .map(([, finding]) => finding);
+  const existingFindings = branchEntries
+    .filter(([key]) => staging.has(key))
+    .map(([, finding]) => finding);
+  const fixedCount = [...staging.keys()].filter(key => !branch.has(key)).length;
+
   return {
-    branchCount,
-    regression: branchCount > stagingCount,
-    stagingCount,
-    tool,
+    ...counts,
+    existingFindings,
+    fixedCount,
+    newFindings,
+    regression: newFindings.length > 0,
   };
 };
 
@@ -77,18 +151,15 @@ export const hasRegressions = (comparisons: ToolComparison[]): boolean =>
   comparisons.some(comparison => comparison.regression);
 
 export const formatChange = (comparison: ToolComparison): string => {
-  const { branchCount, note, regression, stagingCount } = comparison;
+  const { fixedCount, newFindings, note } = comparison;
   if (note) {
     return note;
   }
-  const delta = (branchCount as number) - (stagingCount as number);
-  if (regression) {
-    return `+${delta} new`;
-  }
-  if (delta === 0) {
-    return 'no change';
-  }
-  return `${delta} fewer`;
+  const parts = [
+    newFindings.length > 0 ? `${newFindings.length} new` : '',
+    fixedCount > 0 ? `${fixedCount} fixed` : '',
+  ].filter(Boolean);
+  return parts.length > 0 ? parts.join(', ') : 'no change';
 };
 
 export const renderComparisonTable = (
@@ -102,4 +173,118 @@ export const renderComparisonTable = (
   return [COMPARISON_TABLE_HEADER, COMPARISON_TABLE_DIVIDER, ...rows].join(
     '\n',
   );
+};
+
+export const formatFinding = (finding: Finding): string => {
+  const details = [
+    finding.packageName && `package \`${finding.packageName}\``,
+    finding.installedVersion && `installed ${finding.installedVersion}`,
+    finding.severity,
+  ].filter(Boolean);
+  const suffix = details.length > 0 ? ` (${details.join(', ')})` : '';
+  return `- \`${finding.ruleId}\` in \`${finding.uri}\`${suffix}`;
+};
+
+export const FINDINGS_HEADINGS = {
+  existingFindings: 'already on staging, does not block this pull request',
+  newFindings: 'new on this branch, not on staging, blocks this pull request',
+} as const;
+
+/** Lists each tool's new or already-on-staging findings, or '' when no tool has any. */
+export const renderFindings = (
+  comparisons: ToolComparison[],
+  kind: keyof typeof FINDINGS_HEADINGS,
+): string =>
+  comparisons
+    .filter(comparison => comparison[kind].length > 0)
+    .map(comparison =>
+      [
+        `**${comparison.tool}**: ${comparison[kind].length} ${FINDINGS_HEADINGS[kind]}`,
+        '',
+        ...comparison[kind].map(formatFinding),
+      ].join('\n'),
+    )
+    .join('\n\n');
+
+export const USAGE =
+  'usage: compare-security-findings.ts <tool>:<branch.sarif>:<staging.sarif> ...';
+
+export type ComparisonSpec = {
+  branchReport: string;
+  stagingReport: string;
+  tool: string;
+};
+
+/** Reads a `<tool>:<branch.sarif>:<staging.sarif>` argument, or null when a part is missing. */
+export const parseComparisonSpec = (spec: string): ComparisonSpec | null => {
+  const [tool, branchReport, stagingReport] = spec.split(':');
+  if (!tool || !branchReport || !stagingReport) {
+    return null;
+  }
+  return { branchReport, stagingReport, tool };
+};
+
+/** Lists the comparison table, then new findings, then findings already on staging. */
+export const renderReport = (comparisons: ToolComparison[]): string =>
+  [
+    renderComparisonTable(comparisons),
+    renderFindings(comparisons, 'newFindings'),
+    renderFindings(comparisons, 'existingFindings'),
+  ]
+    .filter(Boolean)
+    .join('\n\n');
+
+/**
+ * Compares SARIF findings against staging one by one, and returns exit code 1 when this
+ * branch has a finding staging does not. Both sides are scanned in one job, so a newly
+ * published CVE against code already on staging appears on both sides and cannot fail a
+ * pull request.
+ */
+export const runCompareSecurityFindingsScript = ({
+  specs,
+  stepSummaryPath,
+}: {
+  specs: string[];
+  stepSummaryPath?: string;
+}): number => {
+  if (specs.length === 0) {
+    console.error(USAGE);
+    return 1;
+  }
+
+  const comparisons: ToolComparison[] = [];
+  for (const spec of specs) {
+    const parsed = parseComparisonSpec(spec);
+    if (!parsed) {
+      console.error(`Malformed argument: ${spec}`);
+      return 1;
+    }
+    comparisons.push(
+      compareToolFindings({
+        branchFindings: readSarifFindings(parsed.branchReport),
+        stagingFindings: readSarifFindings(parsed.stagingReport),
+        tool: parsed.tool,
+      }),
+    );
+  }
+
+  const report = renderReport(comparisons);
+  console.log(report);
+
+  if (stepSummaryPath) {
+    appendFileSync(
+      stepSummaryPath,
+      `### Security findings vs staging\n\n${report}\n\n`,
+    );
+  }
+
+  if (hasRegressions(comparisons)) {
+    console.error(
+      '\nERROR: this branch adds security findings that staging does not have.',
+    );
+    return 1;
+  }
+
+  console.log('\nNo security findings beyond those already on staging.');
+  return 0;
 };

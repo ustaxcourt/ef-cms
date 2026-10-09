@@ -18,12 +18,13 @@ All scans currently use `exit-code: '0'` (warn-only).
 `dawson-trivy-image-scan`, `dawson-upload-sarif` and `dawson-sarif-summary` actions. Nothing else
 can change what the scanned images contain: `ef-cms-us-east-1` copies no application source or
 lockfile, and the two base images are pulled as published. The weekly run picks up CVEs published
-against images that have not changed.
+against images that have not changed. It uploads to the same `trivy-baseline-*` categories as
+staging pushes, so an alert still present stays one alert and only a new CVE opens a new one.
 
 On PRs that change no image paths, `containers-gate` still runs and passes, so it stays safe to
 require in branch protection.
 
-SARIF reaches the **Security tab** only from pushes to staging and from same-repository PRs targeting staging, under categories `trivy-config`, `trivy-image-base`, `trivy-image-puppeteer`, `trivy-image-batch` (PR and manual dispatch) and `trivy-baseline-base`, `trivy-baseline-puppeteer`, `trivy-baseline-batch` (staging). A PR targeting any other branch reports its findings in the workflow log and job summary instead. Both list every finding, most severe first, with its file, package, installed and fixed versions, and a link to the advisory (up to 100 per scan, with a by-rule count beyond that).
+SARIF reaches the **Security tab** only from pushes to staging, the weekly run, and manual dispatches, under categories `trivy-config`, `trivy-image-base`, `trivy-image-puppeteer`, `trivy-image-batch` (manual dispatch) and `trivy-baseline-base`, `trivy-baseline-puppeteer`, `trivy-baseline-batch` (staging and weekly). A PR, whatever branch it targets, reports its findings in the workflow log and job summary instead. Both list every finding, most severe first, with its file, package, installed and fixed versions, and a link to the advisory (up to 100 per scan, with a by-rule count beyond that).
 
 Removing a scan does not clear alerts it already reported. Existing alerts have to be dismissed in the Security tab, or their analyses deleted by a repo admin.
 
@@ -70,7 +71,7 @@ unsets the filter for SARIF output and uploads every severity, including LOW and
 
 ## Staging baseline
 
-The `trivy-baseline` job runs on every push to staging and scans all three of them. This populates the Security tab with the full vulnerability picture of what's deployed, separate from the per-PR delta.
+The `trivy-baseline` job runs on pushes to staging that change image paths and every Monday, and scans all three of them. This populates the Security tab with the full vulnerability picture of what's deployed, separate from the per-PR delta.
 
 To run the PR-style image scans manually after merging:
 
