@@ -162,6 +162,14 @@ describe(
         externalUserSearchesDocketNumber(docketNumber);
 
         cy.get('[data-testid="button-file-document"]').click();
+
+        cy.contains('h2', 'Before You File a Document').should('exist');
+        cy.contains('.caseItem', 'Gather All Documents')
+          .should('contain', 'Affidavits, exhibits, briefs, memoranda')
+          .and('contain', 'that is not specifically mentioned as a Supporting')
+          .find('a[href="https://ustaxcourt.gov/dawson-user-guides/"]')
+          .should('contain', 'DAWSON User Guides');
+        checkA11y();
         cy.get('[data-testid="ready-to-file"]').click();
 
         selectTypeaheadInput(
@@ -181,6 +189,25 @@ describe(
         );
 
         cy.get('[data-testid="primaryDocument-objections-No"]').click();
+
+        cy.get(
+          '[data-testid="primaryDocument-what-can-i-include-button"]',
+        ).click();
+        cy.get('.what-can-i-include')
+          .should('contain', 'Examples include affidavits, exhibits, briefs')
+          .and('contain', 'certificate of service is required because the IRS')
+          .find('a[href="https://ustaxcourt.gov/dawson-user-guides/"]')
+          .should('contain', 'DAWSON User Guides');
+        cy.get('.what-can-i-include .includeItem__icon').should('not.exist');
+        cy.get('.what-can-i-include svg[data-icon="check-circle"]').should(
+          'not.exist',
+        );
+        cy.get('.what-can-i-include svg[data-icon="times-circle"]').should(
+          'not.exist',
+        );
+        checkA11y();
+        cy.contains('.what-can-i-include button', 'Close').click();
+        cy.get('.what-can-i-include').should('not.exist');
 
         cy.get('#add-supporting-document-button').click();
         cy.contains('h2', 'Supporting Document 1').should('exist');

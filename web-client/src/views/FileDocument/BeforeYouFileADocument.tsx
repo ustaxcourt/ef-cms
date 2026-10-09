@@ -35,7 +35,7 @@ export const BeforeYouFileADocument = connect(
               <div className="tablet:grid-col-6">
                 <div className="caseItem" role="listitem">
                   <NonMobile>
-                    <div className="caseItem__icon" role="img">
+                    <div aria-hidden="true" className="caseItem__icon">
                       <FontAwesomeIcon icon={['far', 'copy']} />
                     </div>
                   </NonMobile>
@@ -95,7 +95,7 @@ export const BeforeYouFileADocument = connect(
               <div className="tablet:grid-col-6">
                 <div className="caseItem" role="listitem">
                   <NonMobile>
-                    <div className="caseItem__icon" role="img">
+                    <div aria-hidden="true" className="caseItem__icon">
                       <FontAwesomeIcon icon={'shield-alt'} />
                     </div>
                   </NonMobile>
