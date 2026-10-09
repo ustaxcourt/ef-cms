@@ -10,6 +10,11 @@ import { skipUnlessPaymentPortalIntegrationEnabled } from 'cypress/helpers/filin
 import {
   cancelTestPaymentOnPortal,
   completeTestPaymentOnPortal,
+  verifyFailedPayment,
+  verifyFilingFeeMinuteEntry,
+  verifyNoFilingFeeMinuteEntry,
+  verifyPendingPayment,
+  verifySuccessfulPayment,
 } from 'cypress/helpers/filingFee/dashboardFilingFeeHelpers';
 import {
   fillPetitionerInformation,
@@ -18,8 +23,9 @@ import {
   fillCaseProcedureInformation,
   fillStinInformation,
 } from 'cypress/local-only/tests/integration/fileAPetitionUpdated/petition-helper';
-import { petitionsClerkQcsAndServesElectronicCase } from '../../../helpers/documentQC/petitions-clerk-qcs-and-serves-electronic-case';
+import { petitionsClerkQcsAndServesElectronicCase } from 'cypress/helpers/documentQC/petitions-clerk-qcs-and-serves-electronic-case';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
+import { getCypressEnv } from 'cypress/helpers/env/cypressEnvironment';
 
 describe('Pay Filing Fee Through pay.gov', () => {
   const VALID_FILE = '../../helpers/file/sample.pdf';
@@ -27,68 +33,6 @@ describe('Pay Filing Fee Through pay.gov', () => {
   before(skipUnlessPaymentPortalIntegrationEnabled);
 
   const today = formatDateString(createISODateAtStartOfDayEST(), 'MMDDYY');
-
-  const verifySuccessfulPaymentOfUnservedCase = (
-    docketNumber: string,
-  ): void => {
-    cy.get('[data-testid="success-alert"]')
-      .should('contain.text', 'Filing fee payment successful')
-      .and(
-        'contain.text',
-        `An email was sent confirming the filing fee was paid for docket number(s): ${docketNumber}`,
-      );
-
-    cy.get(`[data-testid="${docketNumber}"]`)
-      .find('[data-testid="petition-payment-status"]')
-      .should('have.text', 'Paid');
-
-    cy.get(`[data-testid="${docketNumber}"]`)
-      .find('[data-testid="case-link"]')
-      .click();
-
-    cy.get('[data-testid="docket-record-table"] td')
-      .contains('FEE')
-      .should('not.exist');
-
-    cy.get('[data-testid="tab-case-information"]').click();
-
-    cy.get('[data-testid="case-filing-fee-information"]').should(
-      'have.text',
-      `Paid ${today} Pay.gov`,
-    );
-  };
-
-  const verifyFilingFeeMinuteEntry = (): void => {
-    cy.get('[data-testid="docket-record-table"] td')
-      .contains('FEE')
-      .parent()
-      .then(row => {
-        cy.wrap(row)
-          .find('[data-testid^="docket-entry-filedDate-"]')
-          .should('have.text', today);
-        cy.wrap(row)
-          .find('[data-testid^="docket-entry-eventCode-"]')
-          .should('have.text', 'FEE');
-        cy.wrap(row)
-          .find('[data-testid^="docket-entry-filingsAndProceedings-"]')
-          .should('contain.text', 'Filing Fee Paid');
-        cy.wrap(row)
-          .find('[data-testid^="docket-entry-numberOfPages-"]')
-          .should('have.text', 0);
-        cy.wrap(row)
-          .find('[data-testid="docket-entry-filedBy"]')
-          .should('have.text', '');
-        cy.wrap(row)
-          .find('[data-testid="docket-entry-action"]')
-          .should('have.text', '');
-        cy.wrap(row)
-          .find('[data-testid="docket-record-cell-not-served"]')
-          .should('have.text', '');
-        cy.wrap(row)
-          .find('[data-testid^="docket-entry-servedPartiesCode-"]')
-          .should('have.text', '');
-      });
-  };
 
   const payFeeSuccess = () => {
     cy.intercept('POST', '**/cases').as('postCase');
@@ -106,7 +50,16 @@ describe('Pay Filing Fee Through pay.gov', () => {
         paymentStatus: 'Success',
       });
 
-      verifySuccessfulPaymentOfUnservedCase(docketNumber);
+      cy.get('[data-testid="success-alert"]')
+        .should('contain.text', 'Filing fee payment successful')
+        .and(
+          'contain.text',
+          `An email was sent confirming the filing fee was paid for docket number(s): ${docketNumber}`,
+        );
+
+      verifySuccessfulPayment(docketNumber, today);
+
+      verifyNoFilingFeeMinuteEntry();
 
       // serving case should generate filing fee paid minute entry
       petitionsClerkQcsAndServesElectronicCase(docketNumber);
@@ -115,7 +68,7 @@ describe('Pay Filing Fee Through pay.gov', () => {
 
       cy.visit(`/case-detail/${docketNumber}`);
       cy.wait('@getDocketEntries').then(({ response }) => {
-        verifyFilingFeeMinuteEntry();
+        verifyFilingFeeMinuteEntry(today);
 
         // no draft order for filing fee should be generated
         const orderForFilingFee = response?.body.docketEntries.find(
@@ -150,21 +103,9 @@ describe('Pay Filing Fee Through pay.gov', () => {
           'Something went wrong when paying the filing fee. Please try again.',
         );
 
-      cy.get(`[data-testid="${docketNumber}"]`)
-        .find('[data-testid="petition-payment-status"]')
-        .should('have.text', 'Not paid');
+      verifyFailedPayment(docketNumber);
 
-      cy.get(`[data-testid="${docketNumber}"]`)
-        .find('[data-testid="case-link"]')
-        .click();
-
-      cy.get('[data-testid="docket-record-table"] td')
-        .contains('FEE')
-        .should('not.exist');
-
-      cy.get('[data-testid="tab-case-information"]').click();
-
-      cy.contains('[data-testid="case-filing-fee-information"]', 'Not paid');
+      verifyNoFilingFeeMinuteEntry();
 
       // serving case should not generate filing fee paid minute entry
       petitionsClerkQcsAndServesElectronicCase(docketNumber);
@@ -173,9 +114,7 @@ describe('Pay Filing Fee Through pay.gov', () => {
 
       cy.visit(`/case-detail/${docketNumber}`);
       cy.wait('@getDocketEntries').then(({ response }) => {
-        cy.get('[data-testid="docket-record-table"] td')
-          .contains('FEE')
-          .should('not.exist');
+        verifyNoFilingFeeMinuteEntry();
 
         // a draft order for filing fee should be generated
         const orderForFilingFee = response?.body.docketEntries.find(
@@ -210,21 +149,9 @@ describe('Pay Filing Fee Through pay.gov', () => {
           `Allow 24-48 hours for the payment status to update for docket number(s): ${docketNumber}`,
         );
 
-      cy.get(`[data-testid="${docketNumber}"]`)
-        .find('[data-testid="petition-payment-status"]')
-        .should('have.text', 'Pending');
+      verifyPendingPayment(docketNumber);
 
-      cy.get(`[data-testid="${docketNumber}"]`)
-        .find('[data-testid="case-link"]')
-        .click();
-
-      cy.get('[data-testid="docket-record-table"] td')
-        .contains('FEE')
-        .should('not.exist');
-
-      cy.get('[data-testid="tab-case-information"]').click();
-
-      cy.contains('[data-testid="case-filing-fee-information"]', 'Pending');
+      verifyNoFilingFeeMinuteEntry();
 
       // serving case should not generate filing fee paid minute entry
       petitionsClerkQcsAndServesElectronicCase(docketNumber);
@@ -270,7 +197,16 @@ describe('Pay Filing Fee Through pay.gov', () => {
         paymentStatus: 'Success',
       });
 
-      verifySuccessfulPaymentOfUnservedCase(docketNumber);
+      cy.get('[data-testid="success-alert"]')
+        .should('contain.text', 'Filing fee payment successful')
+        .and(
+          'contain.text',
+          `An email was sent confirming the filing fee was paid for docket number(s): ${docketNumber}`,
+        );
+
+      verifySuccessfulPayment(docketNumber, today);
+
+      verifyNoFilingFeeMinuteEntry();
     });
   };
 
@@ -300,21 +236,9 @@ describe('Pay Filing Fee Through pay.gov', () => {
           `Unable to verify payment status for ${docketNumber}. Contact dawson.support@ustaxcourt.gov.`,
         );
 
-      cy.get(`[data-testid="${docketNumber}"]`)
-        .find('[data-testid="petition-payment-status"]')
-        .should('have.text', 'Not paid');
+      verifyFailedPayment(docketNumber);
 
-      cy.get(`[data-testid="${docketNumber}"]`)
-        .find('[data-testid="case-link"]')
-        .click();
-
-      cy.get('[data-testid="docket-record-table"] td')
-        .contains('FEE')
-        .should('not.exist');
-
-      cy.get('[data-testid="tab-case-information"]').click();
-
-      cy.contains('[data-testid="case-filing-fee-information"]', 'Not paid');
+      verifyNoFilingFeeMinuteEntry();
     });
   };
 
@@ -362,21 +286,9 @@ describe('Pay Filing Fee Through pay.gov', () => {
 
       cy.get('[data-testid="my-cases-link"]').click();
 
-      cy.get(`[data-testid="${docketNumber}"]`)
-        .find('[data-testid="petition-payment-status"]')
-        .should('have.text', 'Not paid');
+      verifyFailedPayment(docketNumber);
 
-      cy.get(`[data-testid="${docketNumber}"]`)
-        .find('[data-testid="case-link"]')
-        .click();
-
-      cy.get('[data-testid="docket-record-table"] td')
-        .contains('FEE')
-        .should('not.exist');
-
-      cy.get('[data-testid="tab-case-information"]').click();
-
-      cy.contains('[data-testid="case-filing-fee-information"]', 'Not paid');
+      verifyNoFilingFeeMinuteEntry();
     });
   };
 
