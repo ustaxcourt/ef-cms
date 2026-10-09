@@ -411,7 +411,7 @@ describe('getCaseInteractor', () => {
         },
         mockPrivatePractitionerUser,
       );
-      expect(result.entityName).toEqual('RestrictedCaseDTO');
+      expect(result.entityName).toEqual('RestrictedCaseResponse');
       expect(result).toMatchObject({
         docketEntries: [],
         docketNumber: '101-18',

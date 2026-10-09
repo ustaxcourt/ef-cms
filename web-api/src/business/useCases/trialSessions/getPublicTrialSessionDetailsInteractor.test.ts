@@ -1,6 +1,6 @@
 import '@web-api/persistence/postgres/trialSessions/mocks.jest';
 import { getPublicTrialSessionDetailsInteractor } from '@web-api/business/useCases/trialSessions/getPublicTrialSessionDetailsInteractor';
-import { PublicCaseDTO } from '@shared/business/dto/cases/PublicCaseDTO';
+import { PublicCaseResponse } from '@shared/business/dto/cases/PublicCaseResponse';
 import type { RawPublicTrialSessionDetails } from '@shared/business/entities/trialSessions/PublicTrialSessionDetails';
 import { NotFoundError } from '@web-api/errors/errors';
 import {
@@ -113,7 +113,7 @@ describe('getPublicTrialSessionDetailsInteractor', () => {
 
     const getCaseDTOSpy = jest
       .spyOn(CaseFactory, 'getCaseDTO')
-      .mockReturnValue({} as PublicCaseDTO);
+      .mockReturnValue({} as PublicCaseResponse);
 
     const result = await getPublicTrialSessionDetailsInteractor({
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',

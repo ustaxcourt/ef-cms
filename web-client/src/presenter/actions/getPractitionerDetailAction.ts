@@ -12,8 +12,8 @@ import {
 } from '@web-client/presenter/state';
 import { RawPublicContact } from '@shared/business/entities/cases/PublicContact';
 import { state } from '@web-client/presenter/app.cerebral';
-import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Role } from '@shared/business/entities/EntityConstants';
+import type { ClientApplicationContext } from '@web-client/applicationContext';
+import type { Role } from '@shared/business/entities/EntityConstants';
 
 // getPractitionerByBarNumberInteractor returns different types depending on whether the user is logged in or not
 const isPractitionerForInternalUser = (

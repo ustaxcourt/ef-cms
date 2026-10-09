@@ -15,6 +15,7 @@ import { getDocumentDownloadUrlLambda } from './getDocumentDownloadUrlLambda';
 import { getDownloadPolicyUrl as getDownloadPolicyUrlMock } from '@web-api/persistence/s3/getDownloadPolicyUrl';
 import { getMaintenanceMode as getMaintenanceModeMock } from '@web-api/persistence/postgres/featureFlag/getMaintenanceMode';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
+import { FeatureFlagResponseDTO } from '@shared/business/dto/system/FeatureFlagResponseDTO';
 
 const REQUEST_EVENT = {
   body: {},
@@ -40,7 +41,9 @@ describe('getDocumentDownloadUrlLambda', () => {
   });
 
   beforeEach(() => {
-    getAllFeatureFlagsInteractor.mockResolvedValue({});
+    getAllFeatureFlagsInteractor.mockResolvedValue(
+      {} as FeatureFlagResponseDTO,
+    );
     getMaintenanceMode.mockResolvedValue({ current: false });
     getDownloadPolicyUrl.mockImplementation(({ key, useTempBucket }) => {
       return Promise.resolve({
