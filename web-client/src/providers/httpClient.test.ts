@@ -171,4 +171,32 @@ describe('httpClient', () => {
       window.localStorage.getItem(DEPLOYMENT_TIMESTAMP_STORAGE_KEY),
     ).toEqual('99999');
   });
+
+  it('never resolves the error when a reload is in flight, so callers never render an error screen', async () => {
+    const forceRefreshCallback = jest.fn().mockResolvedValue(true);
+
+    const { getHttpClient, responseUse } = await setupHttpClient();
+    getHttpClient(forceRefreshCallback, 'http://localhost:4000');
+
+    const errorInterceptor = responseUse.mock.calls[0][1];
+    const error = {
+      response: {
+        headers: {
+          get: (headerName: string) => {
+            if (headerName === X_MANUAL_REFRESH_REQUIRED) {
+              return 'true';
+            }
+          },
+        },
+      },
+    };
+
+    const settled = jest.fn();
+    errorInterceptor(error).then(settled, settled);
+
+    await new Promise(resolve => setTimeout(resolve, 0));
+
+    expect(forceRefreshCallback).toHaveBeenCalled();
+    expect(settled).not.toHaveBeenCalled();
+  });
 });

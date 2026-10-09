@@ -23,13 +23,19 @@ const revokeObjectURL = url => {
   return window.URL.revokeObjectURL(url);
 };
 
+type CerebralApp = {
+  getSequence: (name: string) => (...args: any[]) => any;
+};
+
 const router = {
-  initialize: app => {
+  initialize: (app: CerebralApp): Promise<void> => {
     window.document.title = 'U.S. Tax Court';
     // expose route function on window for use with cypress
 
     (window as Window & { __cy_route?: (path: string) => void }).__cy_route =
       path => route(path || '/');
+
+    let initialRoutePromise: Promise<void> = Promise.resolve();
 
     const trackedRoute = (
       pattern: string,
@@ -37,30 +43,33 @@ const router = {
     ): void => {
       route(pattern, (...args) => {
         recordRumPageView(getRumPageIdFromRoutePattern(pattern));
-        return handler(...args);
+        initialRoutePromise = Promise.resolve(handler(...args)).then(
+          () => undefined,
+        );
+        return initialRoutePromise;
       });
     };
 
     trackedRoute('/case-detail/*', docketNumber => {
       setPageTitle(`Docket ${docketNumber}`);
-      app.getSequence('gotoPublicCaseDetailSequence')({ docketNumber });
+      return app.getSequence('gotoPublicCaseDetailSequence')({ docketNumber });
     });
 
     trackedRoute('/case-detail/*/printable-docket-record', docketNumber => {
       setPageTitle(`Docket ${docketNumber}`);
-      app.getSequence('gotoPublicPrintableDocketRecordSequence')({
+      return app.getSequence('gotoPublicPrintableDocketRecordSequence')({
         docketNumber,
       });
     });
 
     trackedRoute('/todays-opinions', () => {
       setPageTitle('Today’s Opinions');
-      app.getSequence('gotoTodaysOpinionsSequence')();
+      return app.getSequence('gotoTodaysOpinionsSequence')();
     });
 
     trackedRoute('/todays-orders', () => {
       setPageTitle('Today’s Orders');
-      app.getSequence('gotoTodaysOrdersSequence')();
+      return app.getSequence('gotoTodaysOrdersSequence')();
     });
 
     trackedRoute('/health', () => {
@@ -70,7 +79,7 @@ const router = {
 
     trackedRoute('/', () => {
       setPageTitle('Dashboard');
-      app.getSequence('gotoPublicSearchSequence')();
+      return app.getSequence('gotoPublicSearchSequence')();
     });
 
     trackedRoute('/privacy', () => {
@@ -139,6 +148,8 @@ const router = {
     });
 
     route.start(true);
+
+    return initialRoutePromise;
   },
 };
 

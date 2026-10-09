@@ -363,7 +363,7 @@ const reduce = ImageBlobReduce({
 let user;
 let broadcastChannel: BroadcastChannel;
 
-let forceRefreshCallback: () => {};
+let forceRefreshCallback: () => Promise<boolean> | void;
 
 const allUseCases = {
   addCaseToTrialSessionInteractor,
