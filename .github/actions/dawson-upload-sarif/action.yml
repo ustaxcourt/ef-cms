@@ -1,5 +1,5 @@
 name: DAWSON SARIF Upload
-description: Summarize a SARIF report, and upload it only from staging pushes.
+description: Summarize a SARIF report, and upload it from any run that is not a pull request (staging pushes and manual dispatches).
 
 inputs:
   category:

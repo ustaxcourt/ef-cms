@@ -111,6 +111,12 @@ describe('compare-security-findings.helpers', () => {
       );
     });
 
+    it('distinguishes the same CVE in a different package', () => {
+      expect(findingKey(finding({ packageName: 'minimatch' }))).not.toBe(
+        findingKey(finding()),
+      );
+    });
+
     it('distinguishes the same CVE in a different file', () => {
       expect(
         findingKey(finding({ uri: 'web-client/package-lock.json' })),
@@ -239,6 +245,17 @@ describe('compare-security-findings.helpers', () => {
       });
       expect(result.regression).toBe(false);
       expect(result.fixedCount).toBe(1);
+    });
+
+    it('fails when the same CVE moves to a different package', () => {
+      const moved = finding({ packageName: 'minimatch' });
+      const result = compareToolFindings({
+        branchFindings: [moved],
+        stagingFindings: [finding()],
+        tool: 'trivy-fs',
+      });
+      expect(result.regression).toBe(true);
+      expect(result.newFindings).toEqual([moved]);
     });
 
     it('treats a version bump that leaves the same CVE open as not new', () => {
