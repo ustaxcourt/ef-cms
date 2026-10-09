@@ -1150,6 +1150,14 @@ export const PAYMENT_STATUS = {
 export type PaymentStatusTypes =
   (typeof PAYMENT_STATUS)[keyof typeof PAYMENT_STATUS];
 
+export const PAYMENT_FILING_FEE_ORIGIN = {
+  DASHBOARD: 'dashboard',
+  PETITION: 'petition',
+} as const;
+
+export type PaymentFilingFeeOrigin =
+  (typeof PAYMENT_FILING_FEE_ORIGIN)[keyof typeof PAYMENT_FILING_FEE_ORIGIN];
+
 export const PROCEDURE_TYPES_MAP = {
   regular: 'Regular',
   small: 'Small',
@@ -2383,6 +2391,8 @@ export const EVENT_CODES_WITH_NO_ORDER = [
   'SORI',
   'TCOP',
 ];
+
+export const PRACTITIONER_ONLY_EVENT_CODES = ['M112', 'NOTW'];
 
 export const PETITION_DUPLICATE_ERROR = 'PETITION_DUPLICATE_ERROR';
 

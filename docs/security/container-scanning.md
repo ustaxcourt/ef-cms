@@ -8,7 +8,7 @@ DAWSON uses [Trivy](https://trivy.dev/) to scan Dockerfiles and built container 
 |-----|--------------|---------|-----------|
 | `trivy-config` | Dockerfile misconfigurations (all Dockerfiles in repo) | PR or manual dispatch | No (warn-only) |
 | `trivy-image` | Built images: `ef-cms-us-east-1`, `efcms-local` | PR or manual dispatch | No (warn-only) |
-| `trivy-runtime-base` | Base images: `node:24.16.0-slim` (puppeteer), `node:24` (batch) | PR or manual dispatch | No (warn-only) |
+| `trivy-runtime-base` | Base images: `node:24.21.0-slim` (puppeteer), `node:24` (batch) | PR or manual dispatch | No (warn-only) |
 | `trivy-baseline` | All four images above (full baseline) | Push to staging | No (informational) |
 | `containers-gate` | Aggregates above three PR/manual jobs | PR or manual dispatch | Yes (infra failures only) |
 
@@ -20,7 +20,7 @@ All scans currently use `exit-code: '0'` (warn-only). Findings appear in the **S
 |-------|-----------|---------|
 | `ef-cms-us-east-1` | `Dockerfile` | Production Lambda base image |
 | `efcms-local` | `Dockerfile-local` (FROM ef-cms-us-east-1) | Local dev / CI test runner |
-| `node:24.16.0-slim` | Docker Hub | Puppeteer / PDF generation base |
+| `node:24.21.0-slim` | Docker Hub | Puppeteer / PDF generation base |
 | `node:24` | Docker Hub | Batch processing base |
 
 ## Scan types
