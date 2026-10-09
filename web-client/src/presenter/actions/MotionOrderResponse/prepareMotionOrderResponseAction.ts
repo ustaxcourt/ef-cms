@@ -83,10 +83,11 @@ export const prepareMotionOrderResponseAction = ({
   let createOrderSelectedCases = [] as any;
   let documentNumberText = `(doc. no. ${index}).`;
 
-  if (
+  const isOnLeadCaseAndAllCases =
     isOnLeadCase &&
-    issueOrderFor === MOTION_ORDER_RESPONSE_OPTIONS.issueOrderOptions.ALL_CASES
-  ) {
+    issueOrderFor === MOTION_ORDER_RESPONSE_OPTIONS.issueOrderOptions.ALL_CASES;
+
+  if (isOnLeadCaseAndAllCases) {
     const consolidatedCases = caseDetail.consolidatedCases.map(c => {
       return {
         docketNumber: c.docketNumber,
@@ -106,7 +107,7 @@ export const prepareMotionOrderResponseAction = ({
       trialDate,
       FORMATS.MONTH_DAY_YEAR,
     );
-    preamblePrepend = `This case is set for trial at the session of the Court commencing on ${formattedTrialDate}, in ${trialLocation}.`;
+    preamblePrepend = `${isOnLeadCaseAndAllCases ? 'These consolidated cases are' : 'This case is'} set for trial at the session of the Court commencing on ${formattedTrialDate}, in ${trialLocation}.`;
   }
 
   const orderVerbiage = `that by ${responseDateFormatted}, ${nonMovant} shall file a Response to the ${motionDocumentTitle}.`;
@@ -124,7 +125,7 @@ export const prepareMotionOrderResponseAction = ({
 
   if (hasStrickenFromTrialSessions) {
     orderSections.push(
-      '<p class="indent-paragraph">ORDERED that this case is stricken from the trial session. It is further</p> <p class="indent-paragraph">ORDERED that jurisdiction is retained by the undersigned.',
+      `<p class="indent-paragraph">ORDERED that ${isOnLeadCaseAndAllCases ? 'these cases are' : 'this case is'} stricken from the trial session. It is further</p> <p class="indent-paragraph">ORDERED that jurisdiction is retained by the undersigned.`,
     );
   }
 
