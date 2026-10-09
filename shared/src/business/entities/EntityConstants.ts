@@ -489,6 +489,16 @@ export const BENCH_OPINION_EVENT_CODE = 'OST';
 
 export const NOTICE_EVENT_CODE = 'NOT';
 
+export const NOTICE_OF_WITHDRAWAL_EVENT_CODE = 'NOTW';
+
+export const NOTICE_OF_WITHDRAWAL_DOCUMENT_TYPE =
+  'Notice of Withdrawal as Counsel';
+
+export const MOTION_TO_WITHDRAW_AS_COUNSEL_EVENT_CODE = 'M112';
+
+export const MOTION_TO_WITHDRAW_AS_COUNSEL_DOCUMENT_TYPE =
+  'Motion to Withdraw as Counsel';
+
 export const ADVANCED_SEARCH_OPINION_TYPES = {
   Bench: BENCH_OPINION_EVENT_CODE,
   Memorandum: 'MOP',

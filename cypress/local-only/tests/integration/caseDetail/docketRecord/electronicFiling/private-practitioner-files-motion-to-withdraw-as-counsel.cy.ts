@@ -1,19 +1,19 @@
-import { attachFile } from '../../../../../../helpers/file/upload-file';
-import { externalUserCreatesElectronicCase } from '../../../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
-import { externalUserSearchesDocketNumber } from '../../../../../../helpers/advancedSearch/external-user-searches-docket-number';
-import { goToCase } from '../../../../../../helpers/caseDetail/go-to-case';
+import { attachFile } from 'cypress/helpers/file/upload-file';
+import { externalUserCreatesElectronicCase } from 'cypress/helpers/fileAPetition/petitioner-creates-electronic-case';
+import { externalUserSearchesDocketNumber } from 'cypress/helpers/advancedSearch/external-user-searches-docket-number';
+import { goToCase } from 'cypress/helpers/caseDetail/go-to-case';
 import {
   loginAsDocketClerk,
   loginAsIrsPractitioner,
   loginAsPetitioner,
   loginAsPrivatePractitioner,
-} from '../../../../../../helpers/authentication/login-as-helpers';
-import { petitionsClerkAddsRespondentToCase } from '../../../../../../helpers/caseDetail/caseInformation/petitionsclerk-adds-respondent-to-case';
-import { petitionsClerkServesPetition } from '../../../../../../helpers/documentQC/petitionsclerk-serves-petition';
-import { selectTypeaheadInput } from '../../../../../../helpers/components/typeAhead/select-typeahead-input';
-import { checkA11y } from '../../../../../support/generalCommands/checkA11y';
+} from 'cypress/helpers/authentication/login-as-helpers';
+import { petitionsClerkAddsRespondentToCase } from 'cypress/helpers/caseDetail/caseInformation/petitionsclerk-adds-respondent-to-case';
+import { petitionsClerkServesPetition } from 'cypress/helpers/documentQC/petitionsclerk-serves-petition';
+import { selectTypeaheadInput } from 'cypress/helpers/components/typeAhead/select-typeahead-input';
+import { checkA11y } from 'cypress/local-only/support/generalCommands/checkA11y';
 
-describe('Private practitioner files a Motion to Withdraw as Counsel (M112)', () => {
+describe('Practitioner files a Motion to Withdraw as Counsel (M112)', () => {
   const primaryFilerName = 'John';
   const practitionerName = 'Test Private Practitioner';
   const irsPractitionerName = 'Test IRS Practitioner';
@@ -120,6 +120,20 @@ describe('Private practitioner files a Motion to Withdraw as Counsel (M112)', ()
     submitFiling(filingPartyTestId);
   };
 
+  const parsePrintReceipt = (): Cypress.Chainable<string> =>
+    cy
+      .get('[data-testid="success-alert"]')
+      .contains('a', 'Print receipt.')
+      .invoke('attr', 'href')
+      .then(receiptUrl => {
+        const filePath = 'cypress/downloads/filing-receipt.pdf';
+
+        return cy
+          .request({ encoding: 'binary', url: receiptUrl as string })
+          .then(({ body }) => cy.writeFile(filePath, body, 'binary'))
+          .then(() => cy.task<string>('parsePdf', { filePath }));
+      });
+
   const withdrawalRows = (): Cypress.Chainable<JQuery<HTMLElement>> =>
     cy
       .get('[data-testid="docket-record-table"] tr')
@@ -128,6 +142,10 @@ describe('Private practitioner files a Motion to Withdraw as Counsel (M112)', ()
   it('should display the practitioner as filed by on the M112 and its supporting document', () => {
     createCaseRepresentedByPractitioner().then(() => {
       fileMotionToWithdrawWithExhibit();
+
+      parsePrintReceipt().then(receiptText => {
+        expect(receiptText).to.include(practitionerName);
+      });
 
       withdrawalRows()
         .should('have.length', 2)
@@ -144,6 +162,10 @@ describe('Private practitioner files a Motion to Withdraw as Counsel (M112)', ()
   it('should display the IRS practitioner as filed by on the M112 and its supporting document', () => {
     createCaseRepresentedByIrsPractitioner().then(() => {
       fileMotionToWithdrawWithExhibit(respondentFilingParty);
+
+      parsePrintReceipt().then(receiptText => {
+        expect(receiptText).to.include(irsPractitionerName);
+      });
 
       withdrawalRows()
         .should('have.length', 2)
