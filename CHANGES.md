@@ -31,6 +31,37 @@ Once everything is deployed, set the feature flag to show the SSO button on the 
 If this feature is not needed, no updates are required. The terraform updates will not take place if `IDP_NAME` is not set.
 </details>
 
+<details><summary>Dependency Updates - Week of 2026-10-05</summary>
+
+## Local
+
+#### Upgrade Terraform to `1.16.5`
+
+Use either tfswitch or tfenv:
+
+```bash
+tfswitch 1.16.5
+```
+
+```bash
+tfenv install 1.16.5
+tfenv use 1.16.5
+```
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Deploy Docker container `4.3.100`
+
+This script will prompt for an environment to pull the image from; choose `exp8`.
+
+```bash
+npm run ecr:check-version
+```
+
+</details>
+
 <details><summary>Dependency Updates - Week of 2026-09-28</summary>
 
 ## Local
