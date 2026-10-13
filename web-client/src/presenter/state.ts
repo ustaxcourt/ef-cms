@@ -1182,6 +1182,9 @@ export type AlertError = {
   responseCode?: number;
   scrollToErrorNotification?: boolean;
   insertContactSupportClause?: boolean;
+  className?: string;
+  titleClass?: string;
+  messageClass?: string;
 };
 
 export type PracticeType = (typeof PRACTICE_TYPE)[keyof typeof PRACTICE_TYPE];
