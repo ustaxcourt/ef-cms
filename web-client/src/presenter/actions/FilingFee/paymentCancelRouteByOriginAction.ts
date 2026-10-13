@@ -5,7 +5,7 @@ import {
 export const paymentCancelRouteByOriginAction = ({
   path,
   props,
-}: ActionProps<{ origin?: PaymentFilingFeeOrigin }>) => {
+}: ActionProps<{ origin?: PaymentFilingFeeOrigin }>): unknown => {
   if (props.origin === PAYMENT_FILING_FEE_ORIGIN.DASHBOARD) {
     return path.dashboard();
   }
