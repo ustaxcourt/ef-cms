@@ -94,40 +94,45 @@ describe('My Cases pay.gov local-only scenarios', () => {
     });
   });
 
-  it('should return to open-cases page 2 after canceling pay.gov from page 2', () => {
-    loginAsPetitioner();
+  [
+    { login: loginAsPetitioner, role: 'petitioner' },
+    { login: loginAsPrivatePractitioner, role: 'private practitioner' },
+  ].forEach(({ login, role }) => {
+    it(`should return to open-cases page 2 after canceling pay.gov from page 2 as a ${role}`, () => {
+      login();
 
-    externalUserCreatesElectronicCase().then(docketNumber => {
-      startPaymentFromOpenCasesPageTwo(docketNumber);
+      externalUserCreatesElectronicCase().then(docketNumber => {
+        startPaymentFromOpenCasesPageTwo(docketNumber);
 
-      cancelTestPaymentOnPortal({
-        docketNumber,
-        origin: PAYMENT_FILING_FEE_ORIGIN.DASHBOARD,
+        cancelTestPaymentOnPortal({
+          docketNumber,
+          origin: PAYMENT_FILING_FEE_ORIGIN.DASHBOARD,
+        });
+
+        assertOpenCasesPaginatorActivePage(2);
+        cy.get(`[data-testid="${stripDocketSuffix(docketNumber)}"]`)
+          .find('[data-testid="pay-filing-fee-button"]')
+          .should('be.visible');
       });
-
-      assertOpenCasesPaginatorActivePage(2);
-      cy.get(`[data-testid="${stripDocketSuffix(docketNumber)}"]`)
-        .find('[data-testid="pay-filing-fee-button"]')
-        .should('be.visible');
     });
-  });
 
-  it('should return to open-cases page 2 after a successful pay.gov payment from page 2', () => {
-    loginAsPetitioner();
+    it(`should return to open-cases page 2 after a successful pay.gov payment from page 2 as a ${role}`, () => {
+      login();
 
-    externalUserCreatesElectronicCase().then(docketNumber => {
-      startPaymentFromOpenCasesPageTwo(docketNumber);
+      externalUserCreatesElectronicCase().then(docketNumber => {
+        startPaymentFromOpenCasesPageTwo(docketNumber);
 
-      completeTestPaymentOnPortal({
-        docketNumber,
-        paymentMethod: 'PAYPAL',
-        paymentStatus: 'Success',
+        completeTestPaymentOnPortal({
+          docketNumber,
+          paymentMethod: 'PAYPAL',
+          paymentStatus: 'Success',
+        });
+
+        cy.wait('@getDashboardCases');
+        assertMyCasesCaseListDashboard();
+        assertOpenCasesPaginatorActivePage(2);
+        cy.get('[data-testid="success-alert"]').should('be.visible');
       });
-
-      cy.wait('@getDashboardCases');
-      assertMyCasesCaseListDashboard();
-      assertOpenCasesPaginatorActivePage(2);
-      cy.get('[data-testid="success-alert"]').should('be.visible');
     });
   });
 });
