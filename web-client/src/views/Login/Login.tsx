@@ -36,7 +36,7 @@ export const Login = connect(
     alertError,
     alertHelper,
     dismissAlertSequence,
-  }) => {
+  }): React.JSX.Element => {
     return (
       <>
         <section className="tw:px-0 tw:xs:pb-12 tw:pb-8 tw:pt-0">
