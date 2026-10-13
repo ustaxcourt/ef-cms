@@ -32,6 +32,7 @@ jobs:
     name: Semgrep Scan
     if: >-
       github.event_name == 'push' ||
+      github.event_name == 'schedule' ||
       (github.event_name == 'pull_request' && !github.event.pull_request.draft)
     runs-on: ubuntu-latest
     permissions:
@@ -103,6 +104,7 @@ jobs:
     name: Checkov IaC Scan
     if: >-
       github.event_name == 'push' ||
+      github.event_name == 'schedule' ||
       (github.event_name == 'pull_request' && !github.event.pull_request.draft)
     runs-on: ubuntu-latest
     permissions:
@@ -193,6 +195,7 @@ jobs:
     name: CodeQL Deep Analysis
     if: >-
       github.event_name == 'push' ||
+      github.event_name == 'schedule' ||
       (github.event_name == 'pull_request' && !github.event.pull_request.draft)
     runs-on: ubuntu-latest
     permissions:
@@ -253,7 +256,7 @@ jobs:
 
   security-gate:
     name: Security Gate (SAST)
-    if: always() && github.event_name == 'pull_request' && !github.event.pull_request.draft
+    if: always() && (github.event_name == 'pull_request' && !github.event.pull_request.draft)
     needs: [semgrep, checkov, codeql, shellcheck]
     runs-on: ubuntu-latest
     permissions: {}
