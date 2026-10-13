@@ -5,9 +5,17 @@ import {
 } from 'cypress/helpers/authentication/login-as-helpers';
 import { getCypressEnv } from 'cypress/helpers/env/cypressEnvironment';
 import {
+  CASE_LIST_PAGE_SIZE,
+  CASE_STATUS_TYPES,
   PAYMENT_FILING_FEE_ORIGIN,
+  PAYMENT_STATUS,
   type PaymentFilingFeeOrigin,
 } from '@shared/business/entities/EntityConstants';
+import {
+  calculateISODate,
+  createISODateAtStartOfDayEST,
+} from '@shared/business/utilities/DateHandler';
+import type { TAssociatedCase } from '@shared/business/useCases/getCasesForUserInteractor';
 
 /** Smoketest splits may run filing-fee specs after other specs in one Cypress session. */
 export const filingFeeSmoketestLoginOptions: LoginAsOptions = {
@@ -59,6 +67,66 @@ export const clickDashboardPayNow = (docketNumber: string): void => {
     .find('[data-testid="pay-filing-fee-button"]')
     .should('be.visible')
     .click();
+};
+
+const buildMockDashboardOpenCase = (
+  index: number,
+  overrides: Partial<TAssociatedCase> = {},
+): TAssociatedCase => ({
+  caseCaption: `Pagination placeholder ${index}`,
+  createdAt: calculateISODate({ howMuch: -index, units: 'days' }),
+  docketNumber: `${9000 + index}-30`,
+  isRequestingUserAssociated: true,
+  petitionPaymentStatus: PAYMENT_STATUS.PAID,
+  status: CASE_STATUS_TYPES.generalDocket,
+  ...overrides,
+});
+
+export const buildOpenCaseListWithTargetOnSecondPage = ({
+  targetDocketNumber,
+}: {
+  targetDocketNumber: string;
+}): TAssociatedCase[] => {
+  const fillers = Array.from({ length: CASE_LIST_PAGE_SIZE }, (_, index) =>
+    buildMockDashboardOpenCase(index),
+  );
+
+  const targetCase = buildMockDashboardOpenCase(CASE_LIST_PAGE_SIZE, {
+    caseCaption: 'Target unpaid case for pagination',
+    createdAt: createISODateAtStartOfDayEST('2010-01-01'),
+    docketNumber: targetDocketNumber,
+    petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
+  });
+
+  return [...fillers, targetCase];
+};
+
+export const visitMyCasesDashboardWithMockOpenCases = (
+  openCaseList: TAssociatedCase[],
+): void => {
+  cy.intercept('GET', '**/cases', {
+    body: { closedCaseList: [], openCaseList },
+  }).as('getDashboardCases');
+  cy.visit('/');
+  cy.wait('@getDashboardCases');
+  assertMyCasesCaseListDashboard();
+};
+
+export const assertOpenCasesPaginatorActivePage = (
+  oneBasedPage: number,
+): void => {
+  cy.get('[data-testid="casePaginationTop"]')
+    .find(`[data-testid="paginator-page-${oneBasedPage}"]`)
+    .first()
+    .should('have.class', 'paginator-current');
+};
+
+export const goToOpenCasesDashboardPage = (oneBasedPage: number): void => {
+  cy.get('[data-testid="casePaginationTop"]')
+    .find(`[data-testid="paginator-page-${oneBasedPage}"]`)
+    .first()
+    .click();
+  assertOpenCasesPaginatorActivePage(oneBasedPage);
 };
 
 const getDeployedPaymentReturnUrl = ({
@@ -228,4 +296,91 @@ export const cancelTestPaymentOnPortal = ({
   if (returnsToMyCases) {
     assertReturnedToMyCasesWithoutWelcomePage();
   }
+};
+
+export const verifySuccessfulPayment = (
+  docketNumber: string,
+  today: string,
+): void => {
+  cy.get(`[data-testid="${docketNumber}"]`)
+    .find('[data-testid="petition-payment-status"]')
+    .should('have.text', 'Paid');
+
+  cy.get(`[data-testid="${docketNumber}"]`)
+    .find('[data-testid="case-link"]')
+    .click();
+
+  cy.get('[data-testid="tab-case-information"]').click();
+
+  cy.get('[data-testid="case-filing-fee-information"]').should(
+    'have.text',
+    `Paid ${today} Pay.gov`,
+  );
+};
+
+export const verifyFailedPayment = (docketNumber: string): void => {
+  cy.get(`[data-testid="${docketNumber}"]`)
+    .find('[data-testid="pay-filing-fee-button"]')
+    .should('be.visible');
+
+  cy.get(`[data-testid="${docketNumber}"]`)
+    .find('[data-testid="case-link"]')
+    .click();
+
+  cy.get('[data-testid="tab-case-information"]').click();
+
+  cy.contains('[data-testid="case-filing-fee-information"]', 'Not paid');
+};
+
+export const verifyPendingPayment = (docketNumber: string): void => {
+  cy.get(`[data-testid="${docketNumber}"]`)
+    .find('[data-testid="petition-payment-status"]')
+    .should('have.text', 'Pending');
+
+  cy.get(`[data-testid="${docketNumber}"]`)
+    .find('[data-testid="case-link"]')
+    .click();
+
+  cy.get('[data-testid="tab-case-information"]').click();
+
+  cy.contains('[data-testid="case-filing-fee-information"]', 'Pending');
+};
+
+export const verifyFilingFeeMinuteEntry = (today: string): void => {
+  cy.get('[data-testid="docket-record-table"] td')
+    .contains('FEE')
+    .parent()
+    .then(row => {
+      cy.wrap(row)
+        .find('[data-testid^="docket-entry-filedDate-"]')
+        .should('have.text', today);
+      cy.wrap(row)
+        .find('[data-testid^="docket-entry-eventCode-"]')
+        .should('have.text', 'FEE');
+      cy.wrap(row)
+        .find('[data-testid^="docket-entry-filingsAndProceedings-"]')
+        .should('contain.text', 'Filing Fee Paid');
+      cy.wrap(row)
+        .find('[data-testid^="docket-entry-numberOfPages-"]')
+        .should('have.text', 0);
+      cy.wrap(row)
+        .find('[data-testid="docket-entry-filedBy"]')
+        .should('have.text', '');
+      cy.wrap(row)
+        .find('[data-testid="docket-entry-action"]')
+        .should('have.text', '');
+      cy.wrap(row)
+        .find('[data-testid="docket-record-cell-not-served"]')
+        .should('have.text', '');
+      cy.wrap(row)
+        .find('[data-testid^="docket-entry-servedPartiesCode-"]')
+        .should('have.text', '');
+    });
+};
+
+export const verifyNoFilingFeeMinuteEntry = (): void => {
+  cy.get('[data-testid="tab-docket-record"]').click();
+  cy.get('[data-testid="docket-record-table"] td')
+    .contains('FEE')
+    .should('not.exist');
 };
