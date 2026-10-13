@@ -1,6 +1,8 @@
 name: Security - SAST
 
 on:
+  schedule:
+    - cron: '0 6 * * 1'
   pull_request:
     types: [opened, reopened, synchronize, ready_for_review]
     paths-ignore:
