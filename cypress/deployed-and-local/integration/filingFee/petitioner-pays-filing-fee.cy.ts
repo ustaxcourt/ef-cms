@@ -25,7 +25,6 @@ import {
 } from 'cypress/local-only/tests/integration/fileAPetitionUpdated/petition-helper';
 import { petitionsClerkQcsAndServesElectronicCase } from 'cypress/helpers/documentQC/petitions-clerk-qcs-and-serves-electronic-case';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
-import { getCypressEnv } from 'cypress/helpers/env/cypressEnvironment';
 
 describe('Pay Filing Fee Through pay.gov', () => {
   const VALID_FILE = '../../helpers/file/sample.pdf';
@@ -252,33 +251,7 @@ describe('Pay Filing Fee Through pay.gov', () => {
 
       cy.get('[data-testid="pay-filing-fee-button"]').click();
 
-      const { isLocal, efcmsDomain, deployingColor } = getCypressEnv();
-
-      cy.origin(
-        getCypressEnv().payGovOrigin,
-        { args: { isLocal, docketNumber, efcmsDomain, deployingColor } },
-        ({ isLocal, docketNumber, efcmsDomain, deployingColor }) => {
-          if (!isLocal) {
-            cy.contains('a', 'Cancel Payment').then(link => {
-              const redirectUrl = link.attr('href');
-
-              // workaround for the fact that these tests are run during deployments, first check
-              // the url pay.gov has is right, and then override it to go to the proper color
-              expect(redirectUrl).equal(
-                `https://app.${efcmsDomain}/payment-cancel/${docketNumber}`,
-              );
-
-              cy.contains('a', 'Cancel Payment').click();
-
-              cy.visit(
-                `https://app-${deployingColor}.${efcmsDomain}/payment-cancel/${docketNumber}`,
-              );
-            });
-          } else {
-            cy.contains('a', 'Cancel Payment').click();
-          }
-        },
-      );
+      cancelTestPaymentOnPortal({ docketNumber, origin: 'petition' });
 
       cy.get('[data-testid="step-indicator-current-step-7-icon"]').should(
         'exist',
