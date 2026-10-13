@@ -181,6 +181,74 @@ describe('fileExternalDocumentInteractor', () => {
     );
   });
 
+  it('should throw an invalid request error if supporting documents are filed without a valid primaryDocumentId', async () => {
+    await expect(
+      fileExternalDocumentInteractor(
+        applicationContext,
+        {
+          documentMetadata: {
+            docketNumber: caseRecord.docketNumber,
+            primaryDocumentId: 'not-a-uuid',
+            supportingDocuments: [{ docketEntryId: mockDocketEntryId }],
+          },
+        },
+        mockIrsPractitionerUser,
+      ),
+    ).rejects.toThrow(
+      'Supporting documents require a valid primary document docketEntryId',
+    );
+
+    expect(getCaseByDocketNumber).not.toHaveBeenCalled();
+    expect(updateCaseAndAssociations).not.toHaveBeenCalled();
+  });
+
+  it('should throw an invalid request error if secondary supporting documents are filed without a valid secondary document docketEntryId', async () => {
+    await expect(
+      fileExternalDocumentInteractor(
+        applicationContext,
+        {
+          documentMetadata: {
+            docketNumber: caseRecord.docketNumber,
+            primaryDocumentId: mockDocketEntryId,
+            secondaryDocument: { docketEntryId: 'not-a-uuid' },
+            secondarySupportingDocuments: [
+              { docketEntryId: mockDocketEntryId },
+            ],
+          },
+        },
+        mockIrsPractitionerUser,
+      ),
+    ).rejects.toThrow(
+      'Secondary supporting documents require a valid secondary document docketEntryId',
+    );
+
+    expect(getCaseByDocketNumber).not.toHaveBeenCalled();
+    expect(updateCaseAndAssociations).not.toHaveBeenCalled();
+  });
+
+  it('should throw an invalid request error if secondary supporting documents are filed without a secondary document', async () => {
+    await expect(
+      fileExternalDocumentInteractor(
+        applicationContext,
+        {
+          documentMetadata: {
+            docketNumber: caseRecord.docketNumber,
+            primaryDocumentId: mockDocketEntryId,
+            secondarySupportingDocuments: [
+              { docketEntryId: mockDocketEntryId },
+            ],
+          },
+        },
+        mockIrsPractitionerUser,
+      ),
+    ).rejects.toThrow(
+      'Secondary supporting documents require a valid secondary document docketEntryId',
+    );
+
+    expect(getCaseByDocketNumber).not.toHaveBeenCalled();
+    expect(updateCaseAndAssociations).not.toHaveBeenCalled();
+  });
+
   it('should validate docket entry entities before adding them to the case and not call service or persistence methods', async () => {
     await expect(
       fileExternalDocumentInteractor(
