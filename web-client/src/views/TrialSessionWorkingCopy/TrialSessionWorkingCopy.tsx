@@ -45,7 +45,7 @@ export const TrialSessionWorkingCopy = connect(
     trialSessionWorkingCopyHelper,
     updateUserCaseNoteOnWorkingCopySequence,
     printPublicSessionCopySequence,
-  }) {
+  }): React.JSX.Element {
     return (
       <>
         <TrialSessionDetailsHeader
@@ -71,7 +71,7 @@ export const TrialSessionWorkingCopy = connect(
                 <div className="padding-top-1 padding-left-5">
                   <Button
                     link
-                    aria-label="Print public session copy"
+                    aria-label="Print Public Copy for this session"
                     icon="print"
                     id="print-public-session-working-copy"
                     data-testid="print-public-session-working-copy"
@@ -104,7 +104,7 @@ export const TrialSessionWorkingCopy = connect(
                 <div className="padding-top-1 padding-left-5">
                   <Button
                     link
-                    aria-label="Download batch of documents in a trial session"
+                    aria-label="Download All Cases in this trial session"
                     data-testid="download-all-trial-session-cases-button"
                     onClick={() =>
                       batchDownloadTrialSessionSequence({
