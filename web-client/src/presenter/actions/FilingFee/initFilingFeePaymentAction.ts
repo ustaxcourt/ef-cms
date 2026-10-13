@@ -1,3 +1,4 @@
+import { AlertError } from '@web-client/presenter/state';
 import { PAYMENT_FILING_FEE_ORIGIN } from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 import { getOneBasedPageForFilingFeeReturn } from '@web-client/utilities/useClientSidePaginator';
@@ -6,7 +7,7 @@ export const initFilingFeePaymentAction = async ({
   get,
   applicationContext,
   path,
-}: ActionProps) => {
+}: ActionProps): Promise<{ alertError?: AlertError }> => {
   const caseDetail = get(state.caseDetail);
   const originDashboard =
     get(state.paymentFilingFeeOrigin) === PAYMENT_FILING_FEE_ORIGIN.DASHBOARD;
@@ -28,7 +29,7 @@ export const initFilingFeePaymentAction = async ({
     window.location.href = result.paymentRedirect;
     return path.success();
   } catch (e) {
-    const options = originDashboard
+    const options: AlertError = originDashboard
       ? {
           className: 'tw:max-w-[547px]!',
           titleClass: 'tw:font-bold tw:text-lg tw:leading-7',
