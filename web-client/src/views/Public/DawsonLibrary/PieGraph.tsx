@@ -36,7 +36,19 @@ const PieSector = (props: PieSectorShapeProps) => {
           );
       }}
     >
-      <Sector {...props} fill={fill} />
+      {Math.abs(props.endAngle - props.startAngle) >= 360 ? (
+        // a sector spanning the whole pie still strokes its edge from the center
+        <circle
+          cx={props.cx}
+          cy={props.cy}
+          fill={fill}
+          r={props.outerRadius}
+          stroke={props.stroke}
+          strokeWidth={props.strokeWidth}
+        />
+      ) : (
+        <Sector {...props} fill={fill} />
+      )}
     </g>
   );
 };
@@ -236,7 +248,8 @@ export const PieGraph = ({
             }
           />
           <Pie
-            data={data}
+            // zero-value slices still render their stroke as a line from the center
+            data={data.filter(d => d.value > 0)}
             labelLine={false}
             dataKey="value"
             nameKey="name"

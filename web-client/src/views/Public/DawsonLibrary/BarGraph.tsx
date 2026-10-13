@@ -7,6 +7,7 @@ import {
   RotatedTickX,
   SingleBarTickX,
   YAxisTick,
+  getRotatedTickAxisHeight,
   renderCustomLegend,
 } from './BarGraphHelpers';
 import {
@@ -72,6 +73,8 @@ export interface MultiBarGraphProps {
   showLabels?: boolean;
   /** Optional: totals to append to each dataset label in the legend (e.g. [4209, 1608]) */
   legendTotals?: number[];
+  /** Optional: leave zero-value datasets out of the tooltip, showing a total only when more than one remains */
+  hideZeroValuesInTooltip?: boolean;
 }
 
 const defaultColors = [GRAPH_COLORS.BLUE, GRAPH_COLORS.YELLOW];
@@ -315,6 +318,7 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
   columnTotals,
   showLabels = true,
   legendTotals,
+  hideZeroValuesInTooltip = false,
 }) => {
   const openHtmlTable = () => {
     const headerCells = [
@@ -391,7 +395,11 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
 
   const hasTwoLineTicks = stacked && columnTotals && columnTotals.length > 0;
   // Give rotated 45° labels enough vertical room (longest month name ~110px at 45°)
-  const xAxisHeight = hasTwoLineTicks ? 60 : xAngle !== 0 ? 80 : undefined;
+  const xAxisHeight = hasTwoLineTicks
+    ? 60
+    : xAngle !== 0
+      ? getRotatedTickAxisHeight(labels)
+      : undefined;
   const bottomMargin =
     xAxisLabel && showLabels
       ? 60
@@ -483,9 +491,20 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
               <Tooltip
                 content={({ active, payload, label }) => {
                   if (!active || !payload || payload.length === 0) return null;
+                  const nonZeroPayload = payload.filter(
+                    (p: any) => Number(p.value) > 0,
+                  );
+                  const tooltipPayload = hideZeroValuesInTooltip
+                    ? nonZeroPayload.length > 0
+                      ? nonZeroPayload
+                      : payload.slice(0, 1)
+                    : payload;
                   const labelIndex = labels.indexOf(label as string);
-                  const colTotal =
-                    stacked && labelIndex >= 0 ? colTotals[labelIndex] : null;
+                  const showColTotal =
+                    stacked &&
+                    labelIndex >= 0 &&
+                    (!hideZeroValuesInTooltip || tooltipPayload.length > 1);
+                  const colTotal = showColTotal ? colTotals[labelIndex] : null;
                   return (
                     <div
                       role="status"
@@ -493,7 +512,7 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
                       className="tw:bg-white tw:py-2 tw:px-3 tw:xs:text-xl tw:text-base tw:flex tw:flex-col tw:border-2 tw:rounded-lg tw:text-black tw:gap-1.5"
                     >
                       <div className="tw:font-bold">{label}</div>
-                      {payload.map((p: any) => (
+                      {tooltipPayload.map((p: any) => (
                         <div
                           key={p.dataKey}
                           className="tw:flex tw:items-center tw:gap-2"

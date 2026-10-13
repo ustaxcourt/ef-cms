@@ -2,6 +2,7 @@ import { withAppContextDecorator } from '@web-client/withAppContext';
 import { dashboardClerkOfTheCourtHelper as dashboardClerkOfTheCourtHelperComputed } from './dashboardClerkOfTheCourtHelper';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { runCompute } from '@web-client/presenter/test.cerebral';
+import { FORMATS, formatNow } from '@shared/business/utilities/DateHandler';
 
 const dashboardClerkOfTheCourtHelper = withAppContextDecorator(
   dashboardClerkOfTheCourtHelperComputed,
@@ -13,6 +14,7 @@ describe('dashboardClerkOfTheCourtHelper', () => {
   beforeEach(() => {
     baseState = {
       clerkOfCourtDashboardOptions: {
+        casesByYearIsFiscal: false,
         petitionsByYearIsFiscal: false,
       },
       clerkOfCourtDashboardStats: {
@@ -80,6 +82,47 @@ describe('dashboardClerkOfTheCourtHelper', () => {
             },
           ],
         },
+        openCasesByCaseType: [
+          { caseType: 'Deficiency', total: 1798 },
+          { caseType: 'Declaratory Judgment (Exempt Organization)', total: 51 },
+          { caseType: 'Declaratory Judgment (Retirement Plan)', total: 75 },
+          { caseType: 'Partnership (BBA Section 1101)', total: 26 },
+          { caseType: 'Partnership (Section 6226)', total: 48 },
+          { caseType: 'Partnership (Section 6228)', total: 75 },
+          { caseType: 'Passport', total: 0 },
+        ],
+        openCasesByProcedureType: [
+          { procedureType: 'Regular', total: 14216 },
+          { procedureType: 'Small', total: 5591 },
+        ],
+        calendarYearCaseStats: {
+          casesClosedByMonth: Array.from({ length: 12 }, (_, i) => ({
+            month: i + 1,
+            total: i < 4 ? 100 + i : 0,
+          })),
+          casesClosedByProcedureType: [
+            { procedureType: 'Regular', total: 300 },
+            { procedureType: 'Small', total: 106 },
+          ],
+          casesOnAppealByMonth: Array.from({ length: 12 }, (_, i) => ({
+            month: i + 1,
+            total: i === 1 ? 4 : i === 3 ? 2 : 0,
+          })),
+        },
+        fiscalYearCaseStats: {
+          casesClosedByMonth: Array.from({ length: 12 }, (_, i) => ({
+            month: i < 3 ? i + 10 : i - 2,
+            total: i < 7 ? 200 + i : 0,
+          })),
+          casesClosedByProcedureType: [
+            { procedureType: 'Regular', total: 1000 },
+            { procedureType: 'Small', total: 421 },
+          ],
+          casesOnAppealByMonth: Array.from({ length: 12 }, (_, i) => ({
+            month: i < 3 ? i + 10 : i - 2,
+            total: i < 7 ? 3 : 0,
+          })),
+        },
         year: '2026',
       },
     };
@@ -90,7 +133,7 @@ describe('dashboardClerkOfTheCourtHelper', () => {
       state: baseState,
     });
 
-    expect(result).toStrictEqual({
+    expect(result).toMatchObject({
       petitionsByMonthAndServiceTypeChartData: [
         {
           color: '#005EA2',
@@ -152,7 +195,7 @@ describe('dashboardClerkOfTheCourtHelper', () => {
       state: baseState,
     });
 
-    expect(result).toStrictEqual({
+    expect(result).toMatchObject({
       petitionsByMonthAndServiceTypeChartData: [
         {
           color: '#005EA2',
@@ -219,7 +262,7 @@ describe('dashboardClerkOfTheCourtHelper', () => {
       state: baseState,
     });
 
-    expect(result).toStrictEqual({
+    expect(result).toMatchObject({
       petitionsByMonthAndServiceTypeChartData: [
         {
           color: '#005EA2',
@@ -250,6 +293,236 @@ describe('dashboardClerkOfTheCourtHelper', () => {
         'December',
       ],
       year: '2026',
+    });
+  });
+  describe('cases', () => {
+    it('should set open cases pie data and total regardless of the year option', () => {
+      baseState.clerkOfCourtDashboardOptions.casesByYearIsFiscal = true;
+
+      const result = runCompute(dashboardClerkOfTheCourtHelper, {
+        state: baseState,
+      });
+
+      expect(result.openCasesPieData).toEqual([
+        { color: '#005EA2', name: 'Regular', value: 14216 },
+        { color: '#FFBE2E', name: 'Small', value: 5591 },
+      ]);
+      expect(result.totalOpenCases).toEqual('19,807');
+    });
+
+    it('should set computed cases results for calendar year to date', () => {
+      const result = runCompute(dashboardClerkOfTheCourtHelper, {
+        state: baseState,
+      });
+
+      expect(result).toMatchObject({
+        casesClosedAndOnAppealByMonthChartData: [
+          {
+            color: '#005EA2',
+            data: [100, 101, 102, 103, 0, 0, 0, 0, 0, 0, 0, 0],
+            label: 'Closed/Closed-Dismissed',
+          },
+          {
+            color: '#FFBE2E',
+            data: [0, 4, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0],
+            label: 'Changed to On Appeal',
+          },
+        ],
+        casesClosedAndOnAppealLegendTotals: [406, 6],
+        casesClosedPieData: [
+          { color: '#005EA2', name: 'Regular', value: 300 },
+          { color: '#FFBE2E', name: 'Small', value: 106 },
+        ],
+        casesMonths: [
+          'January',
+          'February',
+          'March',
+          'April',
+          'May',
+          'June',
+          'July',
+          'August',
+          'September',
+          'October',
+          'November',
+          'December',
+        ],
+        totalCasesClosed: '406',
+      });
+    });
+
+    it('should set computed cases results for fiscal year to date', () => {
+      baseState.clerkOfCourtDashboardOptions.casesByYearIsFiscal = true;
+
+      const result = runCompute(dashboardClerkOfTheCourtHelper, {
+        state: baseState,
+      });
+
+      expect(result).toMatchObject({
+        casesClosedAndOnAppealByMonthChartData: [
+          {
+            color: '#005EA2',
+            data: [200, 201, 202, 203, 204, 205, 206, 0, 0, 0, 0, 0],
+            label: 'Closed/Closed-Dismissed',
+          },
+          {
+            color: '#FFBE2E',
+            data: [3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0, 0],
+            label: 'Changed to On Appeal',
+          },
+        ],
+        casesClosedAndOnAppealLegendTotals: [1421, 21],
+        casesClosedPieData: [
+          { color: '#005EA2', name: 'Regular', value: 1000 },
+          { color: '#FFBE2E', name: 'Small', value: 421 },
+        ],
+        casesMonths: [
+          'October',
+          'November',
+          'December',
+          'January',
+          'February',
+          'March',
+          'April',
+          'May',
+          'June',
+          'July',
+          'August',
+          'September',
+        ],
+        totalCasesClosed: '1,421',
+      });
+    });
+
+    it('should not change petitions data when only the cases year option is fiscal', () => {
+      baseState.clerkOfCourtDashboardOptions.casesByYearIsFiscal = true;
+
+      const result = runCompute(dashboardClerkOfTheCourtHelper, {
+        state: baseState,
+      });
+
+      expect(result.totalPetitions).toEqual('13,800');
+      expect(result.months[0]).toEqual('January');
+    });
+
+    it('should set open cases by type labels in display order', () => {
+      const result = runCompute(dashboardClerkOfTheCourtHelper, {
+        state: baseState,
+      });
+
+      expect(result.openCasesByTypeLabels).toEqual([
+        'Deficiency',
+        'CDP (Lien/Levy)',
+        'Declaratory Judgment',
+        'Disclosure',
+        'Innocent Spouse',
+        'Interest Abatement',
+        'Other',
+        'Partnership',
+        'Passport',
+        'Whistleblower',
+        'Worker Classification',
+      ]);
+    });
+
+    it('should put single case types in one dataset and stack Declaratory Judgment and Partnership subtypes', () => {
+      const result = runCompute(dashboardClerkOfTheCourtHelper, {
+        state: baseState,
+      });
+
+      const datasetFor = (label: string) =>
+        result.openCasesByTypeChartData.find(d => d.label === label);
+      const declaratoryJudgmentIndex = 2;
+      const partnershipIndex = 7;
+
+      expect(result.openCasesByTypeChartData.map(d => d.label)).toEqual([
+        'Cases',
+        'Exempt Organization',
+        'Retirement Plan',
+        'BBA Section 1101',
+        'Section 6226',
+        'Section 6228',
+      ]);
+      expect(datasetFor('Cases')!.data).toEqual([
+        1798, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      ]);
+      expect(
+        datasetFor('Exempt Organization')!.data[declaratoryJudgmentIndex],
+      ).toEqual(51);
+      expect(
+        datasetFor('Retirement Plan')!.data[declaratoryJudgmentIndex],
+      ).toEqual(75);
+      expect(datasetFor('BBA Section 1101')!.data[partnershipIndex]).toEqual(
+        26,
+      );
+      expect(datasetFor('Section 6226')!.data[partnershipIndex]).toEqual(48);
+      expect(datasetFor('Section 6228')!.data[partnershipIndex]).toEqual(75);
+      // each subtype only has a value in its own category's column
+      result.openCasesByTypeChartData
+        .filter(d => d.label !== 'Cases')
+        .forEach(d => {
+          expect(d.data.filter(value => value > 0)).toHaveLength(1);
+        });
+    });
+
+    it('should not change open cases by type with the cases year option', () => {
+      const calendarResult = runCompute(dashboardClerkOfTheCourtHelper, {
+        state: baseState,
+      });
+      baseState.clerkOfCourtDashboardOptions.casesByYearIsFiscal = true;
+      const fiscalResult = runCompute(dashboardClerkOfTheCourtHelper, {
+        state: baseState,
+      });
+
+      expect(fiscalResult.openCasesByTypeChartData).toEqual(
+        calendarResult.openCasesByTypeChartData,
+      );
+    });
+
+    it('should zero open cases by type when there are no open cases', () => {
+      baseState.clerkOfCourtDashboardStats.openCasesByCaseType = [];
+
+      const result = runCompute(dashboardClerkOfTheCourtHelper, {
+        state: baseState,
+      });
+
+      result.openCasesByTypeChartData.forEach(d => {
+        expect(d.data.every(value => value === 0)).toBe(true);
+      });
+    });
+
+    it('should fall back to the current year before the stats have loaded', () => {
+      baseState.clerkOfCourtDashboardStats.year = '';
+
+      const result = runCompute(dashboardClerkOfTheCourtHelper, {
+        state: baseState,
+      });
+
+      expect(result.year).toEqual(formatNow(FORMATS.YEAR));
+    });
+
+    it('should return empty pie data when there are no cases', () => {
+      baseState.clerkOfCourtDashboardStats.openCasesByProcedureType = [
+        { procedureType: 'Regular', total: 0 },
+        { procedureType: 'Small', total: 0 },
+      ];
+      baseState.clerkOfCourtDashboardStats.calendarYearCaseStats = {
+        casesClosedByMonth: [],
+        casesClosedByProcedureType: [],
+        casesOnAppealByMonth: [],
+      };
+
+      const result = runCompute(dashboardClerkOfTheCourtHelper, {
+        state: baseState,
+      });
+
+      expect(result).toMatchObject({
+        casesClosedAndOnAppealLegendTotals: [0, 0],
+        casesClosedPieData: [],
+        openCasesPieData: [],
+        totalCasesClosed: '0',
+        totalOpenCases: '0',
+      });
     });
   });
 });

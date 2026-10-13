@@ -292,6 +292,113 @@ describe('Clerk of Court Dashboard', () => {
     });
   });
 
+  it('should display cases data', () => {
+    const closedTitle = 'Closed/Closed - Dismissed & Changed to On Appeal';
+    const openByTypeTitle = 'Total Open Cases by type';
+    const sumTotals = (entries: { total: number }[]) =>
+      entries.reduce((total, entry) => total + entry.total, 0);
+
+    cy.intercept('GET', '**/clerk-dashboard-stats').as('clerkDashboardStats');
+    loginAsClerkOfCourt();
+    cy.get('@clerkDashboardStats').then(clerkDashboardStats => {
+      const {
+        calendarYearCaseStats,
+        fiscalYearCaseStats,
+        openCasesByProcedureType,
+      } = clerkDashboardStats.response.body;
+      const openCasesTotal = formatPositiveNumber(
+        sumTotals(openCasesByProcedureType),
+      );
+
+      cy.get('#tabButton-cases').click();
+      cy.get('[data-testid="cases-data-div"]').should('exist');
+
+      cy.get('[data-testid="open-cases-header"]').should(
+        'have.text',
+        `Open Cases: ${openCasesTotal}`,
+      );
+      cy.get('[data-testid="cases-closed-header"]').should(
+        'have.text',
+        `Cases changed to Closed/Closed - Dismissed: ${formatPositiveNumber(
+          sumTotals(calendarYearCaseStats.casesClosedByProcedureType),
+        )}`,
+      );
+      cy.get(`[data-testid="${closedTitle}-bar-graph-div"]`).should('exist');
+      cy.get(`[data-testid="${closedTitle}-bar-graph-html-button"]`).should(
+        'exist',
+      );
+      cy.get(`[data-testid="${openByTypeTitle}-bar-graph-div"]`).should(
+        'exist',
+      );
+      cy.get(`[data-testid="${openByTypeTitle}-bar-graph-html-button"]`).should(
+        'exist',
+      );
+
+      cy.get('[data-testid="cases-fiscal-year-to-date"]').click();
+      cy.get('[data-testid="open-cases-header"]').should(
+        'have.text',
+        `Open Cases: ${openCasesTotal}`,
+      );
+      cy.get('[data-testid="cases-closed-header"]').should(
+        'have.text',
+        `Cases changed to Closed/Closed - Dismissed: ${formatPositiveNumber(
+          sumTotals(fiscalYearCaseStats.casesClosedByProcedureType),
+        )}`,
+      );
+      cy.get(
+        `[data-testid="Cases Changed to Closed/Closed - Dismissed in FYTD ${year}-pie-graph-legend"]`,
+      ).should('exist');
+
+      cy.get('#tabButton-petitions').click();
+      cy.get('[data-testid="calendar-year-to-date"]').should('be.checked');
+    });
+  });
+
+  it('should show a loading state on each chart until the stats arrive', () => {
+    cy.intercept('GET', '**/clerk-dashboard-stats', req => {
+      req.on('response', res => {
+        res.setDelay(3000);
+      });
+    }).as('clerkDashboardStats');
+    loginAsClerkOfCourt();
+
+    cy.get('[data-testid="petitions-data-div"]')
+      .find('[data-testid="chart-loading"]')
+      .should('have.length', 3);
+    cy.get('[data-testid="petitions-data-div"]').should(
+      'contain.text',
+      'Loading chart...',
+    );
+
+    cy.wait('@clerkDashboardStats');
+    cy.get('[data-testid="chart-loading"]').should('not.exist');
+    cy.get(
+      '[data-testid="Petitions: Total Petitions by Month-bar-graph-div"]',
+    ).should('exist');
+  });
+
+  it('should show an error state on each chart when the stats fail to load', () => {
+    cy.intercept('GET', '**/clerk-dashboard-stats', {
+      statusCode: 500,
+    }).as('clerkDashboardStats');
+    loginAsClerkOfCourt();
+    cy.wait('@clerkDashboardStats');
+
+    cy.get('[data-testid="petitions-data-div"]')
+      .find('[data-testid="chart-error"]')
+      .should('have.length', 3);
+    cy.get('[data-testid="petitions-data-div"]').should(
+      'contain.text',
+      'Something went wrong loading this chart, please refresh the page.',
+    );
+
+    cy.get('#tabButton-cases').click();
+    cy.get('[data-testid="cases-data-div"]')
+      .find('[data-testid="chart-error"]')
+      .should('have.length', 4);
+    cy.get('[data-testid="error-alert"]').should('not.exist');
+  });
+
   it('should display messages', () => {
     loginAsPetitionsClerk1();
     createAndServePaperPetition().then(({ docketNumber }) => {
@@ -384,5 +491,27 @@ describe('Clerk of Court Dashboard', () => {
 
     cy.get('[data-testid="calendar-year-to-date"]').should('exist');
     cy.get('[data-testid="fiscal-year-to-date"]').should('exist');
+  });
+
+  it('should display mobile view correctly for cases data', () => {
+    cy.viewport('iphone-x');
+    loginAsClerkOfCourt();
+    cy.get('[data-testid="dashboard-clerk-of-court-mobile-selector"]').select(
+      'cases',
+    );
+
+    cy.get('[data-testid="open-cases-header"]').should(
+      'contain.text',
+      'Open Cases:',
+    );
+    cy.get('[data-testid="cases-closed-header"]').should(
+      'contain.text',
+      'Cases changed to Closed/Closed - Dismissed:',
+    );
+    cy.get(
+      '[data-testid="Closed/Closed - Dismissed & Changed to On Appeal-bar-graph-div"]',
+    ).should('exist');
+    cy.get('[data-testid="cases-calendar-year-to-date"]').should('exist');
+    cy.get('[data-testid="cases-fiscal-year-to-date"]').should('exist');
   });
 });
