@@ -5,9 +5,17 @@ import {
 } from 'cypress/helpers/authentication/login-as-helpers';
 import { getCypressEnv } from 'cypress/helpers/env/cypressEnvironment';
 import {
+  CASE_LIST_PAGE_SIZE,
+  CASE_STATUS_TYPES,
   PAYMENT_FILING_FEE_ORIGIN,
+  PAYMENT_STATUS,
   type PaymentFilingFeeOrigin,
 } from '@shared/business/entities/EntityConstants';
+import {
+  calculateISODate,
+  createISODateAtStartOfDayEST,
+} from '@shared/business/utilities/DateHandler';
+import type { TAssociatedCase } from '@shared/business/useCases/getCasesForUserInteractor';
 
 /** Smoketest splits may run filing-fee specs after other specs in one Cypress session. */
 export const filingFeeSmoketestLoginOptions: LoginAsOptions = {
@@ -59,6 +67,66 @@ export const clickDashboardPayNow = (docketNumber: string): void => {
     .find('[data-testid="pay-filing-fee-button"]')
     .should('be.visible')
     .click();
+};
+
+const buildMockDashboardOpenCase = (
+  index: number,
+  overrides: Partial<TAssociatedCase> = {},
+): TAssociatedCase => ({
+  caseCaption: `Pagination placeholder ${index}`,
+  createdAt: calculateISODate({ howMuch: -index, units: 'days' }),
+  docketNumber: `${9000 + index}-30`,
+  isRequestingUserAssociated: true,
+  petitionPaymentStatus: PAYMENT_STATUS.PAID,
+  status: CASE_STATUS_TYPES.generalDocket,
+  ...overrides,
+});
+
+export const buildOpenCaseListWithTargetOnSecondPage = ({
+  targetDocketNumber,
+}: {
+  targetDocketNumber: string;
+}): TAssociatedCase[] => {
+  const fillers = Array.from({ length: CASE_LIST_PAGE_SIZE }, (_, index) =>
+    buildMockDashboardOpenCase(index),
+  );
+
+  const targetCase = buildMockDashboardOpenCase(CASE_LIST_PAGE_SIZE, {
+    caseCaption: 'Target unpaid case for pagination',
+    createdAt: createISODateAtStartOfDayEST('2010-01-01'),
+    docketNumber: targetDocketNumber,
+    petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
+  });
+
+  return [...fillers, targetCase];
+};
+
+export const visitMyCasesDashboardWithMockOpenCases = (
+  openCaseList: TAssociatedCase[],
+): void => {
+  cy.intercept('GET', '**/cases', {
+    body: { closedCaseList: [], openCaseList },
+  }).as('getDashboardCases');
+  cy.visit('/');
+  cy.wait('@getDashboardCases');
+  assertMyCasesCaseListDashboard();
+};
+
+export const assertOpenCasesPaginatorActivePage = (
+  oneBasedPage: number,
+): void => {
+  cy.get('[data-testid="casePaginationTop"]')
+    .find(`[data-testid="paginator-page-${oneBasedPage}"]`)
+    .first()
+    .should('have.class', 'paginator-current');
+};
+
+export const goToOpenCasesDashboardPage = (oneBasedPage: number): void => {
+  cy.get('[data-testid="casePaginationTop"]')
+    .find(`[data-testid="paginator-page-${oneBasedPage}"]`)
+    .first()
+    .click();
+  assertOpenCasesPaginatorActivePage(oneBasedPage);
 };
 
 const getDeployedPaymentReturnUrl = ({
