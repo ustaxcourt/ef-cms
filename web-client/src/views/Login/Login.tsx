@@ -130,18 +130,13 @@ export const Login = connect(
                         </ButtonSmall>
                       </div>
                       <div className="tw:xs:my-4 tw:my-3">
-                        <Button
-                          aria-label="Login"
-                          data-testid="login-button"
-                          variant="primary"
-                        >
+                        <Button data-testid="login-button" variant="primary">
                           Log in
                         </Button>
                       </div>
                     </form>
                     <div className="tw:xs:mb-4 tw:mb-3 tw:flex tw:w-full">
                       <Button
-                        aria-label="Forgot password"
                         variant="primaryTertiary"
                         data-testid="forgot-password-button"
                         className="tw:mr-auto tw:w-auto"
@@ -169,7 +164,6 @@ export const Login = connect(
                     {loginHelper.showIdpLoginButton && (
                       <div className="tw:flex tw:w-full">
                         <Button
-                          aria-label="Sign in with Microsoft"
                           variant="primaryTertiary"
                           data-testid="microsoft-login-button"
                           className="tw:mr-auto tw:w-auto"
