@@ -85,6 +85,29 @@ describe('addPetitionerToCaseAction', () => {
     expect(result.output.contactType).toBe(mockContact.contactType);
   });
 
+  it('returns the case with the new party appended to petitioners as props.caseDetail', async () => {
+    const existingPetitioner = { contactType: CONTACT_TYPES.primary };
+
+    const result = await runAction(addPetitionerToCaseAction, {
+      modules: { presenter },
+      state: {
+        ...baseState,
+        caseDetail: {
+          ...baseState.caseDetail,
+          petitioners: [existingPetitioner],
+        },
+        form: {
+          contact: mockContact,
+        },
+      },
+    });
+
+    expect(result.output.caseDetail).toEqual({
+      docketNumber: '999-99',
+      petitioners: [existingPetitioner, mockContact],
+    });
+  });
+
   it('calls addPetitionerToCaseInteractor with params from state.form', async () => {
     await runAction(addPetitionerToCaseAction, {
       modules: { presenter },

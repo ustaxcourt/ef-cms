@@ -14,12 +14,13 @@ import { externalUserCreatesElectronicCase } from '../../../../../helpers/fileAP
 const goToAddPartyAndFillRequiredFields = (
   docketNumber: string,
   partyName: string,
+  contactType: 'petitioner' | 'intervenor' | 'participant' = 'petitioner',
 ): void => {
   goToCase(docketNumber);
   cy.get('[data-testid="tab-case-information"]').click();
   cy.get('[data-testid="tab-parties"]').click();
   cy.get('[data-testid="button-add-party"]').click();
-  cy.get('[data-testid="add-petitioner-contact-type"]').select('petitioner');
+  cy.get('[data-testid="add-petitioner-contact-type"]').select(contactType);
   cy.get('[data-testid="add-petitioner-name"]').type(partyName);
   cy.get('[data-testid="contact.address1"]').type('123 Main St');
   cy.get('[data-testid="contact.city"]').type('Charlotte');
@@ -130,6 +131,34 @@ describe('Add Party - Contact Email Address', () => {
         ).should('exist');
       });
 
+      it('should save the contact email address and display it on the participant card', () => {
+        const partyName = faker.person.firstName();
+        const contactEmailAddress = faker.internet.email();
+
+        login();
+        goToAddPartyAndFillRequiredFields(
+          docketNumber,
+          partyName,
+          'participant',
+        );
+        cy.get('[data-testid="add-petitioner-contact-email"]').type(
+          contactEmailAddress,
+        );
+        cy.get('[data-testid="add-petitioner-submit-button"]').click();
+
+        cy.get('[data-testid="success-alert"]').should(
+          'contain.text',
+          `${partyName} has been added to the case.`,
+        );
+        cy.get('#participants-and-counsel')
+          .closest('button')
+          .should('have.class', 'active');
+        cy.contains(
+          '[data-testid="participant-contact-email"]',
+          contactEmailAddress,
+        ).should('exist');
+      });
+
       it('should allow adding a party without a contact email address', () => {
         const partyName = faker.person.firstName();
 
@@ -143,5 +172,29 @@ describe('Add Party - Contact Email Address', () => {
         );
       });
     });
+  });
+
+  it('should save the contact email address and display it on the intervenor card', () => {
+    const partyName = faker.person.firstName();
+    const contactEmailAddress = faker.internet.email();
+
+    loginAsDocketClerk1();
+    goToAddPartyAndFillRequiredFields(docketNumber, partyName, 'intervenor');
+    cy.get('[data-testid="add-petitioner-contact-email"]').type(
+      contactEmailAddress,
+    );
+    cy.get('[data-testid="add-petitioner-submit-button"]').click();
+
+    cy.get('[data-testid="success-alert"]').should(
+      'contain.text',
+      `${partyName} has been added to the case.`,
+    );
+    cy.get('#participants-and-counsel')
+      .closest('button')
+      .should('have.class', 'active');
+    cy.contains(
+      '[data-testid="participant-contact-email"]',
+      contactEmailAddress,
+    ).should('exist');
   });
 });
