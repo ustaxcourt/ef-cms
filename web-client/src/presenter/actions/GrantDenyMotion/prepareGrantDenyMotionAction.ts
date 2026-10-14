@@ -186,10 +186,11 @@ export const prepareGrantDenyMotionAction = ({ get, store }: ActionProps) => {
   >[] = [];
   let documentNumberText = `(doc. no. ${index})`;
 
-  if (
+  const isOnLeadCaseAndAllCases =
     isOnLeadCase &&
-    issueOrder === GRANT_DENY_MOTION_OPTIONS.issueOrderOptions.allCasesInGroup
-  ) {
+    issueOrder === GRANT_DENY_MOTION_OPTIONS.issueOrderOptions.allCasesInGroup;
+
+  if (isOnLeadCaseAndAllCases) {
     const consolidatedCases = caseDetail.consolidatedCases.map(c => ({
       docketNumber: c.docketNumber,
       docketNumberWithSuffix: c.docketNumberWithSuffix,
@@ -208,7 +209,7 @@ export const prepareGrantDenyMotionAction = ({ get, store }: ActionProps) => {
       FORMATS.MONTH_DAY_YEAR,
     );
     trialLocationText = caseDetail.trialLocation || '';
-    preamblePrepend = `This case is set for trial at the session of the Court commencing on ${formattedTrialDate}, in ${trialLocationText}. `;
+    preamblePrepend = `${isOnLeadCaseAndAllCases ? 'These consolidated cases are' : 'This case is'} set for trial at the session of the Court commencing on ${formattedTrialDate}, in ${trialLocationText}. `;
   }
 
   const preamble = buildPreamble({
@@ -234,13 +235,15 @@ export const prepareGrantDenyMotionAction = ({ get, store }: ActionProps) => {
 
   const strickenClause = strickenFromTrialSession
     ? wrap(
-        `ORDERED that this case is stricken from the ${formattedTrialDate}, ${trialLocationText} trial session.`,
+        `ORDERED that ${isOnLeadCaseAndAllCases ? 'these cases are' : 'this case is'} stricken from the ${formattedTrialDate}, ${trialLocationText} trial session.`,
       )
     : '';
 
   const restoredClause =
     jurisdiction === GRANT_DENY_MOTION_OPTIONS.jurisdictionOptions.restored
-      ? wrap('ORDERED that this case is restored to the general docket.')
+      ? wrap(
+          `ORDERED that ${isOnLeadCaseAndAllCases ? 'these cases are' : 'this case is'} restored to the general docket.`,
+        )
       : '';
 
   const retainedClause =

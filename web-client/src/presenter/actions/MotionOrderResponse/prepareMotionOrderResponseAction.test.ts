@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import {
   CASE_STATUS_TYPES,
   MOTION_ORDER_RESPONSE_OPTIONS,
@@ -118,6 +119,36 @@ describe('prepareMotionOrderResponseAction', () => {
     );
   });
 
+  it('should handle calendared case with trial session on lead consolidated with all cases', async () => {
+    const result = await runAction(prepareMotionOrderResponseAction, {
+      state: {
+        caseDetail: {
+          ...mockCaseDetail,
+          leadDocketNumber: mockCaseDetail.docketNumber,
+          status: CASE_STATUS_TYPES.calendared,
+          trialDate: '2024-05-01',
+          trialLocation: 'Houston, Texas',
+          consolidatedCases: [
+            {
+              docketNumber: mockCaseDetail.docketNumber,
+              docketNumberWithSuffix: mockCaseDetail.docketNumber,
+            },
+          ],
+        },
+        docketEntryId: 'mock-motion-id',
+        form: {
+          ...mockForm,
+          issueOrderFor:
+            MOTION_ORDER_RESPONSE_OPTIONS.issueOrderOptions.ALL_CASES,
+        },
+      },
+    });
+
+    expect(result.state.form.richText).toContain(
+      'These consolidated cases are set for trial at the session of the Court commencing on',
+    );
+  });
+
   it('normalizes additionalOrderTextArray by removing whitespace-only entries and updates form state', async () => {
     const result = await runAction(prepareMotionOrderResponseAction, {
       state: {
@@ -183,6 +214,29 @@ describe('prepareMotionOrderResponseAction', () => {
 
     expect(result.state.form.richText).toContain(
       'ORDERED that this case is stricken from the trial session',
+    );
+  });
+
+  it('should handle stricken from trial sessions on consolidated lead cases on all cases', async () => {
+    const result = await runAction(prepareMotionOrderResponseAction, {
+      state: {
+        caseDetail: {
+          ...mockCaseDetail,
+          leadDocketNumber: mockCaseDetail.docketNumber,
+          consolidatedCases: [mockCaseDetail.docketNumber],
+        },
+        docketEntryId: 'mock-motion-id',
+        form: {
+          ...mockForm,
+          issueOrderFor:
+            MOTION_ORDER_RESPONSE_OPTIONS.issueOrderOptions.ALL_CASES,
+          strickenFromTrialSession: true,
+        },
+      },
+    });
+
+    expect(result.state.form.richText).toContain(
+      'ORDERED that these cases are stricken from the trial session',
     );
   });
 
