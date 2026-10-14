@@ -10,7 +10,13 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const addPetitionerToCaseAction = async ({
   applicationContext,
   get,
-}: ActionProps) => {
+}: ActionProps): Promise<{
+  alertSuccess: { message: string };
+  caseDetail: RawCase;
+  contactType: string;
+  docketNumber: string;
+  tab: string;
+}> => {
   const { CONTACT_TYPE_TITLES } = applicationContext.getConstants();
   const caseDetail = get(state.caseDetail);
   const { docketNumber } = caseDetail;

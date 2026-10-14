@@ -157,6 +157,8 @@ describe('Add Party - Contact Email Address', () => {
           '[data-testid="participant-contact-email"]',
           contactEmailAddress,
         ).should('exist');
+
+        checkA11y();
       });
 
       it('should allow adding a party without a contact email address', () => {
@@ -196,5 +198,42 @@ describe('Add Party - Contact Email Address', () => {
       '[data-testid="participant-contact-email"]',
       contactEmailAddress,
     ).should('exist');
+
+    checkA11y();
+  });
+
+  it('should display the lock icon and sealed styling on the participant card when the contact information is sealed', () => {
+    const partyName = faker.person.fullName();
+    const contactEmailAddress = faker.internet.email();
+
+    loginAsDocketClerk1();
+    goToAddPartyAndFillRequiredFields(docketNumber, partyName, 'participant');
+    cy.get('[data-testid="add-petitioner-contact-email"]').type(
+      contactEmailAddress,
+    );
+    cy.get('[data-testid="add-petitioner-submit-button"]').click();
+    cy.get('[data-testid="success-alert"]').should(
+      'contain.text',
+      `${partyName} has been added to the case.`,
+    );
+
+    cy.contains('.petitioner-card', partyName)
+      .find('.edit-participant')
+      .click();
+    cy.get('[data-testid="seal-address-label"]').click();
+    cy.get('[data-testid="modal-confirm"]').click();
+    cy.get('#seal-address').should('be.checked');
+    cy.get('[data-testid="submit-edit-petitioner-information-button"]').click();
+    cy.get('[data-testid="success-alert"]').should('exist');
+
+    cy.get('#participants-and-counsel').click();
+    cy.contains('.petitioner-card', partyName)
+      .find('[data-testid="participant-contact-email"]')
+      .should('have.class', 'sealed-address')
+      .and('contain.text', contactEmailAddress)
+      .find('.sealed-contact-icon')
+      .should('exist');
+
+    checkA11y();
   });
 });
