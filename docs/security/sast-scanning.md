@@ -16,7 +16,7 @@ DAWSON uses four static analysis tools, all wired through `.github/workflows/sec
 - **PRs** (non-draft, any target branch): runs `semgrep`, `checkov`, `codeql`, `shellcheck`, and the `security-gate` job
 - **Push to staging**: runs `semgrep`, `checkov`, and `codeql`; Semgrep and Checkov populate the default-branch baseline
 
-SARIF is uploaded only from pushes to staging and from same-repository PRs targeting staging. Every other run reports its findings in the workflow log and job summary.
+SARIF is uploaded only from pushes to staging. Every PR run, whatever branch it targets, reports its findings in the workflow log and job summary instead.
 
 ## Semgrep
 
@@ -40,13 +40,13 @@ DAWSON-specific taint rules covering both Express (`$REQ.*`) and API Gateway Lam
 
 ### If your PR is blocked by Semgrep
 
-1. Open the workflow run's job summary, or the `Upload SARIF` step of the `Semgrep Scan` job. Every finding is listed with its severity, rule, file and line, message, and the offending line of code. The Security tab holds the same findings only for staging pushes and PRs into staging.
+1. Open the workflow run's job summary, or the `Upload SARIF` step of the `Semgrep Scan` job. Every finding is listed with its severity, rule, file and line, message, and the offending line of code. The Security tab holds the same findings only for staging pushes.
 2. Fix the taint flow (validate/sanitize input before it reaches the sink).
 3. If it's a false positive: add an inline `// nosemgrep: rule-id` comment with a one-line justification.
 
 ## Checkov (IaC)
 
-Scans each Terraform applyable directory individually against its own `.checkov.baseline` file, so only **net-new** findings block.
+Scans each Terraform applyable directory individually against its own `.checkov.baseline` file, which hides findings already accepted there. The scan runs with `--soft-fail`, so only the four hard-fail checks below block a PR. Any other new finding is reported in the log and summary but does not fail the job.
 
 ### Scanned directories
 

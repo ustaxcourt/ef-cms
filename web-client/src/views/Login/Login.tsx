@@ -40,7 +40,7 @@ export const Login = connect(
     dismissAlertSequence,
     loginHelper,
     idpLoginSequence,
-  }) => {
+  }): React.JSX.Element => {
     return (
       <>
         <section className="tw:px-0 tw:xs:pb-12 tw:pb-8 tw:pt-0">
@@ -164,6 +164,7 @@ export const Login = connect(
                     {loginHelper.showIdpLoginButton && (
                       <div className="tw:flex tw:w-full">
                         <Button
+                          aria-label="Court user sign in"
                           variant="primaryTertiary"
                           data-testid="microsoft-login-button"
                           className="tw:mr-auto tw:w-auto"
