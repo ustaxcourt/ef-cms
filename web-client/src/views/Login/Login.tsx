@@ -165,7 +165,7 @@ export const Login = connect(
                     {loginHelper.showIdpLoginButton && (
                       <div className="tw:flex tw:w-full">
                         <Button
-                          aria-label="Sign in with Microsoft"
+                          aria-label="Court user sign in"
                           variant="primaryTertiary"
                           data-testid="microsoft-login-button"
                           className="tw:mr-auto tw:w-auto"
