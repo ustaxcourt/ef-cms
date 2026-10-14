@@ -1,5 +1,6 @@
 import { BigHeader } from '../BigHeader';
 import { ClerkOfCourtChartStatus } from './ClerkOfCourtChartStatus';
+import { ClerkOfCourtHtmlView } from './ClerkOfCourtHtmlView';
 import { ClerkOfCourtTrialSessionsSummary } from '../TrialSessions/ClerkOfCourtTrialSessionsSummary';
 import {
   ClerkOfCourtDashboardStatsStatus,
@@ -123,8 +124,7 @@ const casesData = ({
     casesClosedAndOnAppealLegendTotals,
     casesClosedPieData,
     casesMonths,
-    openCasesByTypeChartData,
-    openCasesByTypeLabels,
+    openCasesByTypeTableRows,
     openCasesPieData,
     totalCasesClosed,
     totalOpenCases,
@@ -149,7 +149,7 @@ const casesData = ({
       <div className="tw:flex tw:flex-wrap tw:gap-x-12 tw:xs:gap-y-12 tw:gap-y-8">
         <div className={PIE_COLUMN_CLASS}>
           <h2
-            className="tw:xs:text-2xl tw:text-lg tw:xs:mb-[1.1875rem] tw:mb-2"
+            className="tw:xs:text-2xl tw:text-lg tw:xs:mb-4.75 tw:mb-2"
             data-testid="open-cases-header"
           >
             Open Cases:{isLoaded && ' '}
@@ -168,7 +168,7 @@ const casesData = ({
         </div>
         <div className={PIE_COLUMN_CLASS}>
           <h2
-            className="tw:xs:text-2xl tw:text-lg tw:xs:mb-[1.1875rem] tw:mb-2"
+            className="tw:xs:text-2xl tw:text-lg tw:xs:mb-4.75 tw:mb-2"
             data-testid="cases-closed-header"
           >
             Cases changed to Closed/Closed - Dismissed:{isLoaded && ' '}
@@ -191,17 +191,10 @@ const casesData = ({
           status={statsStatus}
           title={OPEN_CASES_BY_TYPE_TITLE}
         >
-          <MultiBarGraph
-            hideZeroValuesInTooltip
-            showLabels={false}
-            showLegend={false}
-            stacked
-            width={CHART_WIDTH}
-            datasets={openCasesByTypeChartData}
-            labels={openCasesByTypeLabels}
+          <ClerkOfCourtHtmlView
+            labelHeader="Type of Case"
+            rows={openCasesByTypeTableRows}
             title={OPEN_CASES_BY_TYPE_TITLE}
-            xLabelRotation={45}
-            xAxisLabel="Case Type"
           />
         </ClerkOfCourtChartStatus>
       </div>

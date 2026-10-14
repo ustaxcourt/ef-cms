@@ -192,45 +192,8 @@ export const MultiBarLabel = (props: any) => {
 
 // ─── MultiBarGraph rotated x-axis tick ───────────────────────────────────────
 
-const ROTATED_TICK_MAX_LINE_LENGTH = 14;
-const ROTATED_TICK_LINE_HEIGHT = 18;
-
-/** Splits a label into lines of whole words, each no longer than maxLength where possible */
-export const wrapTickLabel = (
-  label: string,
-  maxLength: number = ROTATED_TICK_MAX_LINE_LENGTH,
-): string[] =>
-  String(label)
-    .split(' ')
-    .reduce<string[]>((lines, word) => {
-      const lastLine = lines[lines.length - 1];
-      if (lastLine !== undefined && `${lastLine} ${word}`.length <= maxLength) {
-        lines[lines.length - 1] = `${lastLine} ${word}`;
-      } else {
-        lines.push(word);
-      }
-      return lines;
-    }, []);
-
-/** Height for an x-axis of 45° rotated ticks, so the longest wrapped label is not clipped */
-export const getRotatedTickAxisHeight = (labels: string[]): number => {
-  const wrappedLabels = labels.map(label => wrapTickLabel(label));
-  const longestLine = Math.max(
-    0,
-    ...wrappedLabels.flat().map(line => line.length),
-  );
-  const mostLines = Math.max(1, ...wrappedLabels.map(lines => lines.length));
-  return Math.max(
-    80,
-    Math.ceil(
-      longestLine * 7.5 + (mostLines - 1) * ROTATED_TICK_LINE_HEIGHT + 16,
-    ),
-  );
-};
-
 export const RotatedTickX = (props: any) => {
   const { x, y, payload } = props;
-  const lines = wrapTickLabel(payload.value);
   return (
     <g transform={`translate(${x},${y})`}>
       <text
@@ -243,11 +206,7 @@ export const RotatedTickX = (props: any) => {
         fontWeight="600"
         transform="rotate(-45)"
       >
-        {lines.map((line, i) => (
-          <tspan dy={i === 0 ? 0 : ROTATED_TICK_LINE_HEIGHT} key={line} x={0}>
-            {line}
-          </tspan>
-        ))}
+        {payload.value}
       </text>
     </g>
   );

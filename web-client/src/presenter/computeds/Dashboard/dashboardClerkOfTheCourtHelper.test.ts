@@ -405,64 +405,27 @@ describe('dashboardClerkOfTheCourtHelper', () => {
       expect(result.months[0]).toEqual('January');
     });
 
-    it('should set open cases by type labels in display order', () => {
+    it('should set open cases by type table rows for every case type, with Deficiency first', () => {
       const result = runCompute(dashboardClerkOfTheCourtHelper, {
         state: baseState,
       });
 
-      expect(result.openCasesByTypeLabels).toEqual([
-        'Deficiency',
-        'CDP (Lien/Levy)',
-        'Declaratory Judgment',
-        'Disclosure',
-        'Innocent Spouse',
-        'Interest Abatement',
-        'Other',
-        'Partnership',
-        'Passport',
-        'Whistleblower',
-        'Worker Classification',
+      expect(result.openCasesByTypeTableRows).toEqual([
+        { label: 'Deficiency', total: '1,798' },
+        { label: 'CDP (Lien/Levy)', total: '0' },
+        { label: 'Declaratory Judgment (Exempt Organization)', total: '51' },
+        { label: 'Declaratory Judgment (Retirement Plan)', total: '75' },
+        { label: 'Disclosure', total: '0' },
+        { label: 'Innocent Spouse', total: '0' },
+        { label: 'Interest Abatement', total: '0' },
+        { label: 'Other', total: '0' },
+        { label: 'Partnership (BBA Section 1101)', total: '26' },
+        { label: 'Partnership (Section 6226)', total: '48' },
+        { label: 'Partnership (Section 6228)', total: '75' },
+        { label: 'Passport', total: '0' },
+        { label: 'Whistleblower', total: '0' },
+        { label: 'Worker Classification', total: '0' },
       ]);
-    });
-
-    it('should put single case types in one dataset and stack Declaratory Judgment and Partnership subtypes', () => {
-      const result = runCompute(dashboardClerkOfTheCourtHelper, {
-        state: baseState,
-      });
-
-      const datasetFor = (label: string) =>
-        result.openCasesByTypeChartData.find(d => d.label === label);
-      const declaratoryJudgmentIndex = 2;
-      const partnershipIndex = 7;
-
-      expect(result.openCasesByTypeChartData.map(d => d.label)).toEqual([
-        'Cases',
-        'Exempt Organization',
-        'Retirement Plan',
-        'BBA Section 1101',
-        'Section 6226',
-        'Section 6228',
-      ]);
-      expect(datasetFor('Cases')!.data).toEqual([
-        1798, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-      ]);
-      expect(
-        datasetFor('Exempt Organization')!.data[declaratoryJudgmentIndex],
-      ).toEqual(51);
-      expect(
-        datasetFor('Retirement Plan')!.data[declaratoryJudgmentIndex],
-      ).toEqual(75);
-      expect(datasetFor('BBA Section 1101')!.data[partnershipIndex]).toEqual(
-        26,
-      );
-      expect(datasetFor('Section 6226')!.data[partnershipIndex]).toEqual(48);
-      expect(datasetFor('Section 6228')!.data[partnershipIndex]).toEqual(75);
-      // each subtype only has a value in its own category's column
-      result.openCasesByTypeChartData
-        .filter(d => d.label !== 'Cases')
-        .forEach(d => {
-          expect(d.data.filter(value => value > 0)).toHaveLength(1);
-        });
     });
 
     it('should not change open cases by type with the cases year option', () => {
@@ -474,8 +437,8 @@ describe('dashboardClerkOfTheCourtHelper', () => {
         state: baseState,
       });
 
-      expect(fiscalResult.openCasesByTypeChartData).toEqual(
-        calendarResult.openCasesByTypeChartData,
+      expect(fiscalResult.openCasesByTypeTableRows).toEqual(
+        calendarResult.openCasesByTypeTableRows,
       );
     });
 
@@ -486,8 +449,9 @@ describe('dashboardClerkOfTheCourtHelper', () => {
         state: baseState,
       });
 
-      result.openCasesByTypeChartData.forEach(d => {
-        expect(d.data.every(value => value === 0)).toBe(true);
+      expect(result.openCasesByTypeTableRows).toHaveLength(14);
+      result.openCasesByTypeTableRows.forEach(row => {
+        expect(row.total).toEqual('0');
       });
     });
 

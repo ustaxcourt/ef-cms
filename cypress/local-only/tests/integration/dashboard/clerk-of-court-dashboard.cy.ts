@@ -133,7 +133,7 @@ describe('Clerk of Court Dashboard', () => {
           'clerkDashboardStats',
         );
         loginAsClerkOfCourt();
-        cy.get('@clerkDashboardStats').then(clerkDashboardStats => {
+        cy.wait('@clerkDashboardStats').then(clerkDashboardStats => {
           const calendarYearTotal =
             clerkDashboardStats.response.body.calendarYearPetitionStats.petitionsByServiceType.reduce(
               (yearTotal: number, entry: any) => yearTotal + entry.total,
@@ -300,7 +300,7 @@ describe('Clerk of Court Dashboard', () => {
 
     cy.intercept('GET', '**/clerk-dashboard-stats').as('clerkDashboardStats');
     loginAsClerkOfCourt();
-    cy.get('@clerkDashboardStats').then(clerkDashboardStats => {
+    cy.wait('@clerkDashboardStats').then(clerkDashboardStats => {
       const {
         calendarYearCaseStats,
         fiscalYearCaseStats,
@@ -328,11 +328,17 @@ describe('Clerk of Court Dashboard', () => {
         'exist',
       );
       cy.get(`[data-testid="${openByTypeTitle}-bar-graph-div"]`).should(
-        'exist',
+        'not.exist',
       );
-      cy.get(`[data-testid="${openByTypeTitle}-bar-graph-html-button"]`).should(
-        'exist',
+      cy.get(`[data-testid="${openByTypeTitle}-html-view-div"]`).should(
+        'contain.text',
+        openByTypeTitle,
       );
+      cy.window().then(win => {
+        cy.stub(win, 'open').as('openHtmlView');
+      });
+      cy.get(`[data-testid="${openByTypeTitle}-html-view-button"]`).click();
+      cy.get('@openHtmlView').should('have.been.calledOnce');
 
       cy.get('[data-testid="cases-fiscal-year-to-date"]').click();
       cy.get('[data-testid="open-cases-header"]').should(
@@ -345,12 +351,21 @@ describe('Clerk of Court Dashboard', () => {
           sumTotals(fiscalYearCaseStats.casesClosedByProcedureType),
         )}`,
       );
-      cy.get(
-        `[data-testid="Cases Changed to Closed/Closed - Dismissed in FYTD ${year}-pie-graph-legend"]`,
-      ).should('exist');
+      // the pie only has a legend when cases were closed in the fiscal year
+      if (sumTotals(fiscalYearCaseStats.casesClosedByProcedureType) > 0) {
+        cy.get(
+          `[data-testid="Cases Changed to Closed/Closed - Dismissed in FYTD ${year}-pie-graph-legend"]`,
+        ).should('exist');
+      } else {
+        cy.get('[data-testid="cases-data-div"]').should(
+          'contain.text',
+          'No data available',
+        );
+      }
 
       cy.get('#tabButton-petitions').click();
-      cy.get('[data-testid="calendar-year-to-date"]').should('be.checked');
+      // the test id is on the label, so check the radio input itself
+      cy.get('#calendar-year-to-date').should('be.checked');
     });
   });
 

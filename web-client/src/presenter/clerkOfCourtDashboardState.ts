@@ -22,6 +22,11 @@ export type ClerkOfCourtPieChartData = {
   color?: string;
 };
 
+export type ClerkOfCourtTableRow = {
+  label: string;
+  total: string;
+};
+
 export type ClerkOfCourtDashboardStatsStatus = 'error' | 'loaded' | 'loading';
 
 export type DashboardClerkOfTheCourtHelper = {
@@ -43,8 +48,7 @@ export type DashboardClerkOfTheCourtHelper = {
   totalPetitions: string;
   months: string[];
   year: string;
-  openCasesByTypeChartData: ClerkOfCourtBarChartDataset[];
-  openCasesByTypeLabels: string[];
+  openCasesByTypeTableRows: ClerkOfCourtTableRow[];
   openCasesPieData: ClerkOfCourtPieChartData[];
   totalOpenCases: string;
   casesClosedPieData: ClerkOfCourtPieChartData[];

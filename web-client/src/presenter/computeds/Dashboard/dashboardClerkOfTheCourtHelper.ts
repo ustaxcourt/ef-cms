@@ -6,14 +6,15 @@ import {
   ClerkDashboardProcedureTypeTotal,
 } from '@web-api/business/useCases/reports/getClerkDashboardStatsInteractor';
 import {
-  ClerkOfCourtBarChartDataset,
   ClerkOfCourtPieChartData,
+  ClerkOfCourtTableRow,
   DashboardClerkOfTheCourtHelper,
 } from '@web-client/presenter/clerkOfCourtDashboardState';
 import { sum } from 'lodash';
 import { formatPositiveNumber } from '@web-client/business/utilities/formatPositiveNumber';
 import { FORMATS, formatNow } from '@shared/business/utilities/DateHandler';
 import {
+  CASE_TYPES,
   CASE_TYPES_MAP,
   FISCAL_MONTH_LABELS,
   GRAPH_COLORS,
@@ -37,78 +38,21 @@ const getProcedureTypePieData = (
       }))
     : [];
 
-// Case types are grouped into one bar per category; categories with several case
-// types are stacked by subtype, labelled with the subtype name in the tooltip.
-const OPEN_CASES_BY_TYPE_CATEGORIES: {
-  label: string;
-  subtypes?: { caseType: string; label: string }[];
-  caseType?: string;
-}[] = [
-  { caseType: CASE_TYPES_MAP.deficiency, label: 'Deficiency' },
-  { caseType: CASE_TYPES_MAP.cdp, label: 'CDP (Lien/Levy)' },
-  {
-    label: 'Declaratory Judgment',
-    subtypes: [
-      { caseType: CASE_TYPES_MAP.djExemptOrg, label: 'Exempt Organization' },
-      { caseType: CASE_TYPES_MAP.djRetirementPlan, label: 'Retirement Plan' },
-    ],
-  },
-  { caseType: CASE_TYPES_MAP.disclosure, label: 'Disclosure' },
-  { caseType: CASE_TYPES_MAP.innocentSpouse, label: 'Innocent Spouse' },
-  { caseType: CASE_TYPES_MAP.interestAbatement, label: 'Interest Abatement' },
-  { caseType: CASE_TYPES_MAP.other, label: 'Other' },
-  {
-    label: 'Partnership',
-    subtypes: [
-      {
-        caseType: CASE_TYPES_MAP.partnershipSection1101,
-        label: 'BBA Section 1101',
-      },
-      {
-        caseType: CASE_TYPES_MAP.partnershipSection6226,
-        label: 'Section 6226',
-      },
-      {
-        caseType: CASE_TYPES_MAP.partnershipSection6228,
-        label: 'Section 6228',
-      },
-    ],
-  },
-  { caseType: CASE_TYPES_MAP.passport, label: 'Passport' },
-  { caseType: CASE_TYPES_MAP.whistleblower, label: 'Whistleblower' },
-  {
-    caseType: CASE_TYPES_MAP.workerClassification,
-    label: 'Worker Classification',
-  },
+// the order of the open cases by type table: Deficiency first, then the other case types
+const OPEN_CASES_BY_TYPE_ORDER: string[] = [
+  CASE_TYPES_MAP.deficiency,
+  ...CASE_TYPES.filter(caseType => caseType !== CASE_TYPES_MAP.deficiency),
 ];
 
-const getOpenCasesByTypeChartData = (
+const getOpenCasesByTypeTableRows = (
   openCasesByCaseType: ClerkDashboardCaseTypeTotal[],
-): ClerkOfCourtBarChartDataset[] => {
-  const totalFor = (caseType: string): number =>
-    openCasesByCaseType.find(c => c.caseType === caseType)?.total ?? 0;
-
-  const singleTypeDataset: ClerkOfCourtBarChartDataset = {
-    color: GRAPH_COLORS.BLUE,
-    data: OPEN_CASES_BY_TYPE_CATEGORIES.map(category =>
-      category.caseType ? totalFor(category.caseType) : 0,
+): ClerkOfCourtTableRow[] =>
+  OPEN_CASES_BY_TYPE_ORDER.map(caseType => ({
+    label: caseType,
+    total: formatPositiveNumber(
+      openCasesByCaseType.find(c => c.caseType === caseType)?.total ?? 0,
     ),
-    label: 'Cases',
-  };
-
-  const subtypeDatasets = OPEN_CASES_BY_TYPE_CATEGORIES.flatMap(
-    (category, categoryIndex) =>
-      (category.subtypes ?? []).map(subtype => ({
-        color: GRAPH_COLORS.BLUE,
-        data: OPEN_CASES_BY_TYPE_CATEGORIES.map((_, i) =>
-          i === categoryIndex ? totalFor(subtype.caseType) : 0,
-        ),
-        label: subtype.label,
-      })),
-  );
-
-  return [singleTypeDataset, ...subtypeDatasets];
-};
+  }));
 
 export const dashboardClerkOfTheCourtHelper = (
   get: Get,
@@ -197,10 +141,9 @@ export const dashboardClerkOfTheCourtHelper = (
       caseStats.casesClosedByProcedureType,
     ),
     casesMonths: casesByYearIsFiscal ? FISCAL_MONTH_LABELS : MONTH_LABELS,
-    openCasesByTypeChartData: getOpenCasesByTypeChartData(
+    openCasesByTypeTableRows: getOpenCasesByTypeTableRows(
       stats.openCasesByCaseType,
     ),
-    openCasesByTypeLabels: OPEN_CASES_BY_TYPE_CATEGORIES.map(c => c.label),
     openCasesPieData: getProcedureTypePieData(stats.openCasesByProcedureType),
     totalCasesClosed: formatPositiveNumber(totalCasesClosed),
     totalOpenCases: formatPositiveNumber(
