@@ -5,14 +5,21 @@ import { state } from '@web-client/presenter/app.cerebral';
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.get the cerebral store used for getting state.form
- * @returns {object} alertSuccess, docketNumber, contactType, tab
+ * @returns {object} alertSuccess, caseDetail, docketNumber, contactType, tab
  */
 export const addPetitionerToCaseAction = async ({
   applicationContext,
   get,
-}: ActionProps) => {
+}: ActionProps): Promise<{
+  alertSuccess: { message: string };
+  caseDetail: RawCase;
+  contactType: string;
+  docketNumber: string;
+  tab: string;
+}> => {
   const { CONTACT_TYPE_TITLES } = applicationContext.getConstants();
-  const { docketNumber } = get(state.caseDetail);
+  const caseDetail = get(state.caseDetail);
+  const { docketNumber } = caseDetail;
   const { contact } = get(state.form);
 
   await applicationContext
@@ -27,6 +34,12 @@ export const addPetitionerToCaseAction = async ({
   return {
     alertSuccess: {
       message: `${contactTypeDisplay} ${contact.name} has been added to the case.`,
+    },
+    // the API does not return the updated case; include the new party so
+    // setPartyViewTabAfterUpdatingPetitionersAction can pick the right tab
+    caseDetail: {
+      ...caseDetail,
+      petitioners: [...(caseDetail.petitioners || []), contact],
     },
     contactType: contact.contactType,
     docketNumber,
