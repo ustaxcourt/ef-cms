@@ -369,7 +369,7 @@ describe('Clerk of Court Dashboard', () => {
     });
   });
 
-  it('should show a loading state on each chart until the stats arrive', () => {
+  it('should show one loading state for the tab until the stats arrive', () => {
     cy.intercept('GET', '**/clerk-dashboard-stats', req => {
       req.on('response', res => {
         res.setDelay(3000);
@@ -377,13 +377,10 @@ describe('Clerk of Court Dashboard', () => {
     }).as('clerkDashboardStats');
     loginAsClerkOfCourt();
 
-    cy.get('[data-testid="petitions-data-div"]')
-      .find('[data-testid="chart-loading"]')
-      .should('have.length', 3);
-    cy.get('[data-testid="petitions-data-div"]').should(
-      'contain.text',
-      'Loading chart...',
-    );
+    cy.get('[data-testid="chart-loading"]')
+      .should('have.length', 1)
+      .and('contain.text', 'Loading chart...');
+    cy.get('[data-testid="petitions-data-div"]').should('not.exist');
 
     cy.wait('@clerkDashboardStats');
     cy.get('[data-testid="chart-loading"]').should('not.exist');
@@ -392,25 +389,21 @@ describe('Clerk of Court Dashboard', () => {
     ).should('exist');
   });
 
-  it('should show an error state on each chart when the stats fail to load', () => {
+  it('should show one error state for the tab when the stats fail to load', () => {
     cy.intercept('GET', '**/clerk-dashboard-stats', {
       statusCode: 500,
     }).as('clerkDashboardStats');
     loginAsClerkOfCourt();
     cy.wait('@clerkDashboardStats');
 
-    cy.get('[data-testid="petitions-data-div"]')
-      .find('[data-testid="chart-error"]')
-      .should('have.length', 3);
-    cy.get('[data-testid="petitions-data-div"]').should(
-      'contain.text',
-      'Something went wrong loading this chart, please refresh the page.',
-    );
+    cy.get('[data-testid="chart-error"]')
+      .should('have.length', 1)
+      .and('contain.text', 'Something went wrong, please refresh the page.');
+    cy.get('[data-testid="petitions-data-div"]').should('not.exist');
 
     cy.get('#tabButton-cases').click();
-    cy.get('[data-testid="cases-data-div"]')
-      .find('[data-testid="chart-error"]')
-      .should('have.length', 4);
+    cy.get('[data-testid="chart-error"]').should('have.length', 1);
+    cy.get('[data-testid="cases-data-div"]').should('not.exist');
     cy.get('[data-testid="error-alert"]').should('not.exist');
   });
 
