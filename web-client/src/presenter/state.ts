@@ -184,6 +184,7 @@ import { dashboardClerkOfTheCourtHelper } from '@web-client/presenter/computeds/
 import { confirmPaperServiceModalHelper } from './computeds/confirmPaperServiceModalHelper';
 import { ProcessPaymentResponse } from '@ustaxcourt/payment-portal/dist';
 import { ClerkDashboardStats } from '@web-api/business/useCases/reports/getClerkDashboardStatsInteractor';
+import { ClerkOfCourtDashboardStatsStatus } from '@web-client/presenter/clerkOfCourtDashboardState';
 import { loginHelper } from '@web-client/presenter/computeds/Login/LoginHelper';
 
 const { ASCENDING, DOCKET_RECORD_FILTER_OPTIONS } = getConstants();
@@ -828,8 +829,23 @@ export const baseState = {
       petitionsByRepresentation: [],
       petitionsByServiceType: [],
     },
+    openCasesByCaseType: [],
+    openCasesByProcedureType: [],
+    calendarYearCaseStats: {
+      casesClosedByMonth: [],
+      casesClosedByProcedureType: [],
+      casesOnAppealByMonth: [],
+    },
+    fiscalYearCaseStats: {
+      casesClosedByMonth: [],
+      casesClosedByProcedureType: [],
+      casesOnAppealByMonth: [],
+    },
   } as ClerkDashboardStats,
+  clerkOfCourtDashboardStatsStatus:
+    'loading' as ClerkOfCourtDashboardStatsStatus,
   clerkOfCourtDashboardOptions: {
+    casesByYearIsFiscal: false,
     petitionsByYearIsFiscal: false,
   },
   docketEntryId: '',

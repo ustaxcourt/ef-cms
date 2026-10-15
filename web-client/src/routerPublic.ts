@@ -23,8 +23,12 @@ const revokeObjectURL = url => {
   return window.URL.revokeObjectURL(url);
 };
 
+type CerebralApp = {
+  getSequence: (name: string) => (...args: any[]) => any;
+};
+
 const router = {
-  initialize: (app): Promise<void> => {
+  initialize: (app: CerebralApp): Promise<void> => {
     window.document.title = 'U.S. Tax Court';
     // expose route function on window for use with cypress
 

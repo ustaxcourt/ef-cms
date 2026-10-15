@@ -69,11 +69,12 @@ export const gotoDashboardSequence = [
           fetchUserNotificationsSequence,
           resetClerkOfCourtDashboardOptionsAction,
           parallel([
-            setClerkOfCourtDashboardChartsAction,
             getMessages,
             [getTrialSessionsAction, setTrialSessionsAction],
           ]),
           setupCurrentPageAction('DashboardClerkOfCourt'),
+          // charts show their own loading state, so the page renders before their data arrives
+          setClerkOfCourtDashboardChartsAction,
         ],
         chambers: [
           fetchUserNotificationsSequence,
