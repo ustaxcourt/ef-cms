@@ -97,6 +97,9 @@ export default defineConfig({
             eventCode,
           });
         },
+        getRawFeatureFlagValue({ flag }) {
+          return getRawFeatureFlagValue({ flag });
+        },
         getUserByEmail(email: string) {
           return getUserByEmail(email);
         },
