@@ -660,6 +660,8 @@ import { initFilingFeePaymentSequence } from '@web-client/presenter/sequences/in
 import { paymentCancelSequence } from '@web-client/presenter/sequences/paymentCancelSequence';
 import { paymentSuccessSequence } from '@web-client/presenter/sequences/paymentSuccessSequence';
 import { setClerkOfCourtDashboardOptionsSequence } from '@web-client/presenter/sequences/setClerkOfCourtDashboardOptionSequence';
+import { authCodeSequence } from '@web-client/presenter/sequences/authCodeSequence';
+import { idpLoginSequence } from '@web-client/presenter/sequences/Login/idpLoginSequence';
 
 export const presenterSequences = {
   addAnotherIrsNoticeToFormSequence,
@@ -1027,6 +1029,7 @@ export const presenterSequences = {
   gotoWorkQueueSequence: gotoWorkQueueSequence as unknown as Function,
   gotoRecentFilingsSequence: gotoRecentFilingsSequence as unknown as Function,
   handleAppHasUpdatedSequence,
+  idpLoginSequence: idpLoginSequence as unknown as Function,
   initAppSequence,
   initFilingFeePaymentSequence:
     initFilingFeePaymentSequence as unknown as Function,
@@ -1392,6 +1395,7 @@ export const presenterSequences = {
   sortTableSequence,
   startRefreshIntervalSequence:
     startRefreshIntervalSequence as unknown as Function,
+  authCodeSequence: authCodeSequence as unknown as Function,
   startScanSequence: startScanSequence as unknown as Function,
   statusReportOrderPdfPreviewSequence,
   strikeDocketEntrySequence: strikeDocketEntrySequence as unknown as Function,
