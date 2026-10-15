@@ -24,7 +24,7 @@ import { waitForNoce } from './cypress/helpers/cypressTasks/postgres/wait-for-no
 import type { Page } from 'puppeteer-core';
 import { retry, setup } from '@cypress/puppeteer';
 import {
-  getRawFeatureFlagValue,
+  getRawFeatureFlagValue as getRawFeatureFlagValueFunc,
   toggleFeatureFlag,
 } from './cypress/helpers/cypressTasks/postgres/featureFlagsCypress';
 import { assertCorrectNetworkData } from './cypress/helpers/cypressTasks/network/assertCorrectNetworkData';
@@ -59,7 +59,7 @@ export default defineConfig({
           return getEmailVerificationToken({ email });
         },
         getRawFeatureFlagValue({ flag }) {
-          return getRawFeatureFlagValue({ flag });
+          return getRawFeatureFlagValueFunc({ flag });
         },
         getNewAccountVerificationCode({ email }) {
           return getNewAccountVerificationCode({ email });
