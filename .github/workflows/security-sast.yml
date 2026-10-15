@@ -256,7 +256,7 @@ jobs:
 
   security-gate:
     name: Security Gate (SAST)
-    if: always() && (github.event_name == 'pull_request' && !github.event.pull_request.draft)
+    if: always() && github.event_name == 'pull_request' && !github.event.pull_request.draft
     needs: [semgrep, checkov, codeql, shellcheck]
     runs-on: ubuntu-latest
     permissions: {}

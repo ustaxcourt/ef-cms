@@ -2,7 +2,7 @@ name: Security - Supply Chain
 
 on:
   schedule:
-    - cron: '0 6 * * 1' # Every Monday at 06:00 AM
+    - cron: '0 6 * * 1' # Every Monday at 06:00 AM UTC
   pull_request:
     types: [opened, reopened, synchronize, ready_for_review]
     paths-ignore:
@@ -69,7 +69,7 @@ jobs:
 
   npm-audit:
     name: npm audit (production deps)
-    if: (github.event_name == 'pull_request' && !github.event.pull_request.draft) || github.event_name == 'schedule'
+    if: github.event_name == 'pull_request' && !github.event.pull_request.draft
     runs-on: ubuntu-latest
     permissions:
       contents: read
