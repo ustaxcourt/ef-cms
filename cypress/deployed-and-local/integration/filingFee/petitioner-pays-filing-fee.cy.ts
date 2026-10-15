@@ -251,7 +251,7 @@ describe('Pay Filing Fee Through pay.gov', () => {
 
       cy.get('[data-testid="pay-filing-fee-button"]').click();
 
-      cancelTestPaymentOnPortal({ docketNumber, origin: 'petition' });
+      cancelTestPaymentOnPortal({ docketNumber });
 
       cy.get('[data-testid="step-indicator-current-step-7-icon"]').should(
         'exist',
