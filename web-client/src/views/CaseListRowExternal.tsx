@@ -16,7 +16,7 @@ const FilingFeeStatus = ({
   dataLabel?: string;
   formattedCase: TAssociatedCaseFormatted;
   initMyCasesFilingFeePaymentSequence: Function;
-}) => {
+}): React.JSX.Element => {
   return (
     <td
       className={className}
@@ -56,7 +56,7 @@ export const CaseListRowExternal = ({
   showFilingFee: boolean;
   showCaseStatusInfoSequence: any;
   showCaseStatus: boolean;
-}) => {
+}): React.JSX.Element => {
   return (
     <>
       <NonPhone>

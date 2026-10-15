@@ -21,8 +21,7 @@ jest.mock('../ustc-ui/Button/Button', () => ({
   }: {
     children?: React.ReactNode;
     onClick?: () => void;
-    [key: string]: unknown;
-  }) => {
+  } & Record<string, unknown>) => {
     if (children === 'Close') {
       capturedCloseHandler = onClick;
     }
@@ -224,7 +223,7 @@ describe('ErrorNotification', () => {
     });
 
     expect(capturedCloseHandler).toBeDefined();
-    capturedCloseHandler!();
+    capturedCloseHandler?.();
 
     expect(dismissAlertSequence).toHaveBeenCalledTimes(1);
   });

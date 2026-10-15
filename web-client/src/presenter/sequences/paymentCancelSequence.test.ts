@@ -92,5 +92,18 @@ describe('paymentCancelSequence', () => {
 
       expect(cerebralTest.getState('paymentFilingFeeOrigin')).toBeNull();
     });
+
+    it('should restore dashboard open-cases pagination from the page query', async () => {
+      await cerebralTest.runSequence('paymentCancelSequence', {
+        docketNumber: '101-20',
+        origin: PAYMENT_FILING_FEE_ORIGIN.DASHBOARD,
+        page: '2',
+      });
+
+      expect(cerebralTest.getState('dashboardCaseListPageIndex')).toEqual(1);
+      expect(cerebralTest.getState('currentPage')).toEqual(
+        'DashboardExternalUser',
+      );
+    });
   });
 });

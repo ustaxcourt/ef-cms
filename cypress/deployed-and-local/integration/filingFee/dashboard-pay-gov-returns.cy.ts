@@ -11,8 +11,19 @@ import {
   stripDocketSuffix,
   TestPaymentMethod,
   TestPaymentStatus,
+  verifyFailedPayment,
+  verifyFilingFeeMinuteEntry,
+  verifyNoFilingFeeMinuteEntry,
+  verifyPendingPayment,
+  verifySuccessfulPayment,
 } from 'cypress/helpers/filingFee/dashboardFilingFeeHelpers';
 import { PAYMENT_FILING_FEE_ORIGIN } from '@shared/business/entities/EntityConstants';
+import { petitionsClerkQcsAndServesElectronicCase } from 'cypress/helpers/documentQC/petitions-clerk-qcs-and-serves-electronic-case';
+import { logout } from '../../../helpers/authentication/logout';
+import {
+  formatDateString,
+  createISODateAtStartOfDayEST,
+} from '@shared/business/utilities/DateHandler';
 
 type LoginFn = () => void;
 
@@ -22,7 +33,10 @@ type DashboardPaymentReturnScenario = {
   paymentMethod: TestPaymentMethod;
   paymentStatus: TestPaymentStatus;
   title: string;
+  serveCaseBeforePayment: boolean;
 };
+
+const today = formatDateString(createISODateAtStartOfDayEST(), 'MMDDYY');
 
 const assertReturnedToMyCasesDashboard = (): void => {
   cy.url().should('not.include', '/file-a-petition');
@@ -51,6 +65,12 @@ const runDashboardPaymentReturnScenario = (
 ): void => {
   login();
   externalUserCreatesElectronicCase().then(docketNumber => {
+    if (scenario.serveCaseBeforePayment) {
+      logout();
+      petitionsClerkQcsAndServesElectronicCase(docketNumber);
+      login();
+    }
+
     clickDashboardPayNow(docketNumber);
     completeTestPaymentOnPortal({
       docketNumber,
@@ -58,6 +78,25 @@ const runDashboardPaymentReturnScenario = (
       paymentStatus: scenario.paymentStatus,
     });
     assertDashboardPaymentReturnBanner(scenario, docketNumber);
+
+    if (scenario.paymentMethod === 'ACH') {
+      verifyPendingPayment(docketNumber);
+    } else if (scenario.paymentStatus === 'Success') {
+      verifySuccessfulPayment(docketNumber, today);
+    } else {
+      verifyFailedPayment(docketNumber);
+    }
+
+    // on a served case, paying the fee should generate a minute entry
+    cy.visit(`/case-detail/${docketNumber}`);
+    if (
+      scenario.serveCaseBeforePayment &&
+      scenario.paymentStatus === 'Success'
+    ) {
+      verifyFilingFeeMinuteEntry(today);
+    } else {
+      verifyNoFilingFeeMinuteEntry();
+    }
   });
 };
 
@@ -87,6 +126,7 @@ const dashboardPaymentReturnScenarios: DashboardPaymentReturnScenario[] = [
     paymentMethod: 'PAYPAL',
     paymentStatus: 'Success',
     title: 'PayPal success',
+    serveCaseBeforePayment: false,
   },
   {
     alertTestId: 'error-alert',
@@ -97,6 +137,7 @@ const dashboardPaymentReturnScenarios: DashboardPaymentReturnScenario[] = [
     paymentMethod: 'PAYPAL',
     paymentStatus: 'Failed',
     title: 'PayPal failed',
+    serveCaseBeforePayment: false,
   },
   {
     alertTestId: 'warning-alert',
@@ -107,6 +148,7 @@ const dashboardPaymentReturnScenarios: DashboardPaymentReturnScenario[] = [
     paymentMethod: 'ACH',
     paymentStatus: 'Success',
     title: 'ACH success',
+    serveCaseBeforePayment: false,
   },
   {
     alertTestId: 'warning-alert',
@@ -117,6 +159,7 @@ const dashboardPaymentReturnScenarios: DashboardPaymentReturnScenario[] = [
     paymentMethod: 'ACH',
     paymentStatus: 'Failed',
     title: 'ACH failed',
+    serveCaseBeforePayment: true,
   },
   {
     alertTestId: 'error-alert',
@@ -127,6 +170,7 @@ const dashboardPaymentReturnScenarios: DashboardPaymentReturnScenario[] = [
     paymentMethod: 'PLASTIC_CARD',
     paymentStatus: 'Failed',
     title: 'credit card failed',
+    serveCaseBeforePayment: true,
   },
   {
     alertTestId: 'success-alert',
@@ -134,6 +178,7 @@ const dashboardPaymentReturnScenarios: DashboardPaymentReturnScenario[] = [
     paymentMethod: 'PLASTIC_CARD',
     paymentStatus: 'Success',
     title: 'credit card success',
+    serveCaseBeforePayment: true,
   },
 ];
 
