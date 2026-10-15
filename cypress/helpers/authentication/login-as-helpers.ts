@@ -1,6 +1,13 @@
 import { getCypressEnv } from '../env/cypressEnvironment';
 import { mockDynamsoftLibrary } from './dynamsoft';
 
+export type LoginAsOptions = {
+  /** Clears cookies, localStorage, and sessionStorage (for specs bundled after others in CI). */
+  clearSessionData?: boolean;
+  /** Waits for POST /auth/login before asserting the header account menu. */
+  waitForAuthLogin?: boolean;
+};
+
 export function loginAsTestAdmissionsClerk() {
   login({ email: 'testAdmissionsClerk@example.com' });
   cy.get('#inbox-tab-content').should('exist');
@@ -32,8 +39,9 @@ export function loginAsDojPractitioner(
 
 export function loginAsPrivatePractitioner(
   practitionerUser: string = 'privatePractitioner1@example.com',
+  loginOptions?: LoginAsOptions,
 ) {
-  login({ email: practitionerUser });
+  login({ email: practitionerUser, ...loginOptions });
   cy.get('[data-testid="file-a-petition"]').should('exist');
   cy.get('[data-testid="search-for-a-case-card"]').should('exist');
 }
@@ -61,8 +69,9 @@ export function loginAsIrsPractitioner2() {
 
 export function loginAsPetitioner(
   petitionerUser: string = 'petitioner1@example.com',
+  loginOptions?: LoginAsOptions,
 ) {
-  login({ email: petitionerUser });
+  login({ email: petitionerUser, ...loginOptions });
   cy.get('[data-testid="file-a-petition"]').should('exist');
 }
 
@@ -155,19 +164,44 @@ export function loginAsPractitionerWithManyCases(email: string) {
   cy.get('[data-testid="closed-cases-count"]').contains('Closed Cases');
 }
 
+type LoginParams = {
+  email: string;
+  clearSessionData?: boolean;
+  waitForAuthLogin?: boolean;
+};
+
 // Try to use the above account specific logins as they wait for specific content.
-function login({ email }: { email: string }) {
-  cy.clearAllCookies();
+function login({
+  email,
+  clearSessionData = false,
+  waitForAuthLogin = false,
+}: LoginParams) {
+  if (clearSessionData) {
+    cy.then(() => Cypress.session.clearCurrentSessionData());
+  } else {
+    cy.clearAllCookies();
+  }
   cy.visit('/login');
+  cy.get('[data-testid="email-input"]').clear();
   cy.get('[data-testid="email-input"]').type(email);
+  cy.get('[data-testid="password-input"]').clear();
   cy.get('[data-testid="password-input"]').type(
     getCypressEnv().defaultAccountPass,
   );
+  if (waitForAuthLogin) {
+    cy.intercept('POST', '**/auth/login').as('authLogin');
+  }
   cy.get('[data-testid="login-button"]').click();
+  if (waitForAuthLogin) {
+    cy.wait('@authLogin').its('response.statusCode').should('eq', 200);
+    cy.get('[data-testid^="error-alert"]').should('not.exist');
+  }
   cy.window().then(win => {
     win.localStorage.setItem('__cypressOrderInSameTab', 'true');
     win.localStorage.setItem('__cypressMinuteSheetInSameTab', 'true');
   });
-  cy.get('.ustc-account').should('exist');
+  cy.get(
+    '[data-testid="account-menu-button"], [data-testid="account-menu-button-mobile"]',
+  ).should('exist');
   mockDynamsoftLibrary();
 }
