@@ -1,6 +1,8 @@
 name: Security - Supply Chain
 
 on:
+  schedule:
+    - cron: '0 6 * * 1' # Every Monday at 06:00 AM UTC
   pull_request:
     types: [opened, reopened, synchronize, ready_for_review]
     paths-ignore:
@@ -13,6 +15,7 @@ on:
     # The coverage badge bot pushes immediately after each merge; badges cannot change results.
     paths-ignore:
       - 'docs/badges/**'
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
@@ -92,6 +95,8 @@ jobs:
     # Also runs on merges to staging so the tab reflects staging, matching the other baselines.
     if: >-
       github.event_name == 'push' ||
+      github.event_name == 'schedule' ||
+      github.event_name == 'workflow_dispatch' ||
       (github.event_name == 'pull_request' && !github.event.pull_request.draft)
     runs-on: ubuntu-latest
     permissions:
