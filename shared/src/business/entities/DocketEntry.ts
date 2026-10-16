@@ -735,11 +735,13 @@ export class DocketEntry extends JoiValidationEntity {
       rawCase,
       user,
       visibilityChangeDate,
+      motionVisibilityChangeDate,
     }: {
       rawCase: RawCase | RawPublicCase;
       user: AuthUser;
       isTerminalUser: boolean;
       visibilityChangeDate: string;
+      motionVisibilityChangeDate: string;
     },
   ): boolean => {
     if (!entry.isFileAttached) return false;
@@ -777,6 +779,7 @@ export class DocketEntry extends JoiValidationEntity {
       caseIsSealed: isSealedCase(rawCase),
       rootDocument: DocketEntry.fetchRootDocument(entry, rawCase.docketEntries),
       visibilityChangeDate,
+      motionVisibilityChangeDate,
     });
 
     if (!userHasAccessToCase || isPublicDocument) return !!isPublicDocument;

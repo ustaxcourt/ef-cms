@@ -20,6 +20,7 @@ import { getPetitionDocketEntry } from './cases/Case';
 let baseDocketEntry: RawDocketEntry;
 let rawCase: RawCase;
 const visibilityChangeDate = '2018-11-21T20:49:28.192Z';
+const motionVisibilityChangeDate = '2027-01-01T00:00:00.000Z';
 
 describe('isDownloadable', () => {
   const isPublic = jest.spyOn(DocketEntry, 'isPublic');
@@ -39,6 +40,7 @@ describe('isDownloadable', () => {
         rawCase,
         user: docketClerk1User,
         visibilityChangeDate,
+        motionVisibilityChangeDate,
       };
     });
 
@@ -75,6 +77,7 @@ describe('isDownloadable', () => {
         rawCase,
         user: petitionerUser,
         visibilityChangeDate,
+        motionVisibilityChangeDate,
       };
     });
 
@@ -103,6 +106,24 @@ describe('isDownloadable', () => {
         false,
       );
     });
+
+    it('should pass proper options to isPublic', () => {
+      const entry = {
+        ...baseDocketEntry,
+        isFileAttached: true,
+      };
+      DocketEntry.isDownloadable(entry, options);
+
+      expect(isPublic).toHaveBeenLastCalledWith(entry, {
+        caseIsSealed: false,
+        rootDocument: DocketEntry.fetchRootDocument(
+          baseDocketEntry,
+          rawCase.docketEntries,
+        ),
+        visibilityChangeDate,
+        motionVisibilityChangeDate,
+      });
+    });
   });
 
   describe('External user with access to the case', () => {
@@ -118,6 +139,7 @@ describe('isDownloadable', () => {
           userId: casePetitioner.contactId,
         },
         visibilityChangeDate,
+        motionVisibilityChangeDate,
       };
 
       rawCase.petitioners = [casePetitioner];
@@ -381,6 +403,7 @@ describe('isDownloadable', () => {
           userId: '',
         },
         visibilityChangeDate,
+        motionVisibilityChangeDate,
       };
     });
 
@@ -433,6 +456,7 @@ describe('isDownloadable', () => {
         rawCase,
         user: irsSuperuserUser,
         visibilityChangeDate,
+        motionVisibilityChangeDate,
       };
     });
 
@@ -487,6 +511,7 @@ describe('isDownloadable', () => {
         rawCase,
         user: caseServicesSupervisorUser,
         visibilityChangeDate,
+        motionVisibilityChangeDate,
       };
     });
 

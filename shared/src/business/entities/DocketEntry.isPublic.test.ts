@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import {
   ALL_EVENT_CODES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
@@ -396,35 +397,71 @@ describe('DocketEntry isPublic', () => {
 
   describe('Motion Visibility', () => {
     describe('Before motion visibility change date', () => {
-      // do it each for IRS
-      it('should return false for motions filed by a private practitioner', () => {
-        const role = ROLES.privatePractitioner;
-        it(`should return true for motions filed by a ${role}`, () => {
-          const isPublic = DocketEntry.isPublic(
-            {
-              ...baseDocketEntry,
-              eventCode: 'M006',
-              filingDate: beforeMotionVisibilityChangeDate,
-              filedByRole: role,
-            },
-            {
-              visibilityChangeDate,
-              motionVisibilityChangeDate,
-            },
-          );
+      describe.each([ROLES.privatePractitioner, ROLES.irsPractitioner])(
+        'Practitioners file motions and supporting documents',
+        role => {
+          it(`should return false for motions filed by a ${role}`, () => {
+            const isPublic = DocketEntry.isPublic(
+              {
+                ...baseDocketEntry,
+                eventCode: 'M006',
+                filingDate: beforeMotionVisibilityChangeDate,
+                filedByRole: role,
+              },
+              {
+                visibilityChangeDate,
+                motionVisibilityChangeDate,
+              },
+            );
 
-          expect(isPublic).toBe(true);
-        });
-      });
-      it('should return false for briefs in support of a motion filed by a practitioner at the same time as the motion', () => {});
-      it('should return false for memoranda in support of a motion filed by a practitioner at the same time as the motion', () => {});
-      it('should return false for briefs in support of a motion filed by a practitioner after the motion', () => {});
-      it('should return false for memoranda in support of a motion filed by a practitioner after the motion', () => {});
-      //maybe others too?
-      // end it each
-      it('should return false for motions filed by a petitioner', () => {});
-      it('should return false for briefs in support of a motion filed by a petitioner at the same time as the motion', () => {});
-      it('should return false for memoranda in support of a motion filed by a petitioner at the same time as the motion', () => {});
+            expect(isPublic).toBe(false);
+          });
+          it(`should return false for briefs in support of a motion filed by a ${role} at the same time as the motion`, () => {
+            const isPublic = DocketEntry.isPublic(
+              {
+                ...baseDocketEntry,
+                eventCode: 'BRF',
+                filingDate: beforeMotionVisibilityChangeDate,
+                filedByRole: role,
+              },
+              {
+                rootDocument: {
+                  ...baseDocketEntry,
+                  eventCode: 'M006',
+                  filingDate: beforeMotionVisibilityChangeDate,
+                  filedByRole: role,
+                },
+                visibilityChangeDate,
+                motionVisibilityChangeDate,
+              },
+            );
+
+            expect(isPublic).toBe(false);
+          });
+          it(`should return false for memoranda in support of a motion filed by a ${role} at the same time as the motion`, () => {
+            const isPublic = DocketEntry.isPublic(
+              {
+                ...baseDocketEntry,
+                eventCode: 'MISP',
+                filingDate: beforeMotionVisibilityChangeDate,
+                filedByRole: role,
+              },
+              {
+                rootDocument: {
+                  ...baseDocketEntry,
+                  eventCode: 'M006',
+                  filingDate: beforeMotionVisibilityChangeDate,
+                  filedByRole: role,
+                },
+                visibilityChangeDate,
+                motionVisibilityChangeDate,
+              },
+            );
+
+            expect(isPublic).toBe(false);
+          });
+        },
+      );
     });
     describe('After motion visibility change date', () => {
       describe.each([ROLES.privatePractitioner, ROLES.irsPractitioner])(

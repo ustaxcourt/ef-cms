@@ -74,12 +74,18 @@ export const getDownloadPolicyUrlInteractor = async (
         ALLOWLIST_FEATURE_FLAGS.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.key
       ];
 
+    const motionVisibilityChangeDate =
+      featureFlags[
+        ALLOWLIST_FEATURE_FLAGS.MOTION_VISIBILTY_POLICY_CHANGE_DATE.key
+      ];
+
     if (
       !DocketEntry.isDownloadable(docketEntryEntity, {
         isTerminalUser: false,
         rawCase: caseData,
         user: authorizedUser,
         visibilityChangeDate: documentVisibilityChangeDate,
+        motionVisibilityChangeDate,
       })
     ) {
       throw new UnauthorizedError(UNAUTHORIZED_DOCUMENT_MESSAGE);

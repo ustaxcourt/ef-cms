@@ -25,6 +25,7 @@ const getRelatedDocketEntryDetails = (
   targetDocketEntryId: string,
   visibilityPolicyDate: any,
   isTerminalUser: boolean,
+  motionVisibilityPolicyDate: string,
 ) => {
   const relatedOrder = rawCase.docketEntries.find(
     entry => entry.docketEntryId === targetDocketEntryId,
@@ -48,6 +49,7 @@ const getRelatedDocketEntryDetails = (
       name: '',
     },
     visibilityChangeDate: visibilityPolicyDate,
+    motionVisibilityChangeDate: motionVisibilityPolicyDate,
   });
   const showDownloadLink = isDownloadable;
   return {
@@ -63,11 +65,13 @@ export const formatDocketEntryOnDocketRecord = (
     isTerminalUser,
     rawCase,
     visibilityPolicyDate,
+    motionVisibilityPolicyDate,
   }: {
     entry: any & { rootDocument: any };
     isTerminalUser: boolean;
     rawCase: RawPublicCase;
     visibilityPolicyDate: string; // ISO Date String
+    motionVisibilityPolicyDate: string;
   },
 ) => {
   const isServed =
@@ -124,6 +128,7 @@ export const formatDocketEntryOnDocketRecord = (
         affectedEntry.docketEntryId,
         visibilityPolicyDate,
         isTerminalUser,
+        motionVisibilityPolicyDate,
       );
 
       const dispositionLinkText = MOTION_DISPOSITION_VERBIAGE[
@@ -149,6 +154,7 @@ export const formatDocketEntryOnDocketRecord = (
           affectedEntry.docketEntryId,
           visibilityPolicyDate,
           isTerminalUser,
+          motionVisibilityPolicyDate,
         );
 
         const dispositionLinkText = MOTION_DISPOSITION_VERBIAGE[
@@ -177,6 +183,7 @@ export const formatDocketEntryOnDocketRecord = (
       name: '',
     },
     visibilityChangeDate: visibilityPolicyDate,
+    motionVisibilityChangeDate: motionVisibilityPolicyDate,
   });
 
   const canTerminalUserSeeLink =
@@ -300,12 +307,19 @@ export const publicCaseDetailHelper = (
     ],
   );
 
+  const motionVisibilityPolicyDate = get(
+    state.featureFlags[
+      ALLOWLIST_FEATURE_FLAGS.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.key
+    ],
+  );
+
   const formattedDocketEntriesOnDocketRecord = docketEntries?.map(entry => {
     return formatDocketEntryOnDocketRecord(applicationContext, {
       entry,
       isTerminalUser,
       rawCase,
       visibilityPolicyDate,
+      motionVisibilityPolicyDate,
     });
   });
 
