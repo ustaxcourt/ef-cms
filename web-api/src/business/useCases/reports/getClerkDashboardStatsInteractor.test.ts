@@ -806,6 +806,19 @@ describe('getClerkDashboardStatsInteractor', () => {
       ).toEqual('2025-10-01T04:00:00.000Z');
     });
 
+    it('should reject with a case query error even while the petition queries are pending', async () => {
+      (petitionsDataByYear as jest.Mock).mockImplementation(
+        () => new Promise(resolve => setTimeout(() => resolve([]), 50)),
+      );
+      (caseStatusChangesByYear as jest.Mock).mockRejectedValue(
+        new Error('case query failed'),
+      );
+
+      await expect(
+        getClerkDashboardStatsInteractor(mockDocketClerkUser),
+      ).rejects.toThrow('case query failed');
+    });
+
     it('should use the fiscal year ending this year through September 30 Eastern time', async () => {
       // 11:59 PM on September 30 in Eastern time
       (createISODateString as jest.Mock).mockReturnValue(

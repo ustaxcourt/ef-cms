@@ -238,41 +238,31 @@ export const getClerkDashboardStatsInteractor = async (
     year: fiscalYear,
   });
 
-  const calendarYearPetitionStats = getPetitionsDataByYear(
-    false,
-    calendarYearbegin,
-    calendarYearEnd,
-  );
-
-  const fiscalYearPetitionStats = getPetitionsDataByYear(
-    true,
-    fiscalYearBegin,
-    fiscalYearEnd,
-  );
-
-  const openCasesByType = getOpenCasesByCaseType();
-  const openCases = getOpenCasesByProcedureType();
-
-  const calendarYearCaseStats = getCasesDataByYear(
-    false,
-    calendarYearbegin,
-    calendarYearEnd,
-  );
-
-  const fiscalYearCaseStats = getCasesDataByYear(
-    true,
-    fiscalYearBegin,
-    fiscalYearEnd,
-  );
+  // run the queries together; Promise.all observes every rejection, so none goes unhandled
+  const [
+    calendarYearPetitionStats,
+    fiscalYearPetitionStats,
+    openCasesByCaseType,
+    openCasesByProcedureType,
+    calendarYearCaseStats,
+    fiscalYearCaseStats,
+  ] = await Promise.all([
+    getPetitionsDataByYear(false, calendarYearbegin, calendarYearEnd),
+    getPetitionsDataByYear(true, fiscalYearBegin, fiscalYearEnd),
+    getOpenCasesByCaseType(),
+    getOpenCasesByProcedureType(),
+    getCasesDataByYear(false, calendarYearbegin, calendarYearEnd),
+    getCasesDataByYear(true, fiscalYearBegin, fiscalYearEnd),
+  ]);
 
   return {
     year,
     fiscalYear,
-    calendarYearPetitionStats: await calendarYearPetitionStats,
-    fiscalYearPetitionStats: await fiscalYearPetitionStats,
-    openCasesByCaseType: await openCasesByType,
-    openCasesByProcedureType: await openCases,
-    calendarYearCaseStats: await calendarYearCaseStats,
-    fiscalYearCaseStats: await fiscalYearCaseStats,
+    calendarYearPetitionStats,
+    fiscalYearPetitionStats,
+    openCasesByCaseType,
+    openCasesByProcedureType,
+    calendarYearCaseStats,
+    fiscalYearCaseStats,
   };
 };
