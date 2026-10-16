@@ -206,9 +206,6 @@ export const renderFindings = (
     )
     .join('\n\n');
 
-export const USAGE =
-  'usage: compare-security-findings.ts <tool>:<branch.sarif>:<staging.sarif> ...';
-
 export type ComparisonSpec = {
   branchReport: string;
   stagingReport: string;
@@ -247,11 +244,6 @@ export const runCompareSecurityFindingsScript = ({
   specs: string[];
   stepSummaryPath?: string;
 }): number => {
-  if (specs.length === 0) {
-    console.error(USAGE);
-    return 1;
-  }
-
   const comparisons: ToolComparison[] = [];
   for (const spec of specs) {
     const parsed = parseComparisonSpec(spec);

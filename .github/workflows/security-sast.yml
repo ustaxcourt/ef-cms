@@ -212,13 +212,15 @@ jobs:
           queries: +security-extended,security-and-quality
           config-file: .github/codeql/codeql-config.yml
 
-      # CodeQL uploads its own SARIF, so it needs the same push-only rule as dawson-upload-sarif.
+      # CodeQL is the one exception to the push-only upload rule. The staging ruleset's
+      # code-scanning rule needs a CodeQL analysis for each staging PR, or the PR cannot merge.
+      # GitHub keeps PR analyses on the PR ref, so they do not add alerts to staging.
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v4
         with:
           category: '/language:${{ matrix.language }}'
           output: codeql-results
-          upload: ${{ github.event_name != 'pull_request' && 'always' || 'never' }}
+          upload: ${{ (github.event_name != 'pull_request' || (github.event.pull_request.base.ref == 'staging' && github.event.pull_request.head.repo.full_name == github.event.pull_request.base.repo.full_name)) && 'always' || 'never' }}
 
       - name: Summarize CodeQL findings
         if: always()

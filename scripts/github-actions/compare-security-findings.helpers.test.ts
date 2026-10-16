@@ -26,7 +26,6 @@ import {
   type SarifResult,
   toFinding,
   type ToolComparison,
-  USAGE,
 } from './compare-security-findings.helpers';
 
 const trivyResult = ({
@@ -468,11 +467,6 @@ describe('compare-security-findings.helpers', () => {
     afterEach(() => {
       errorSpy.mockRestore();
       logSpy.mockRestore();
-    });
-
-    it('prints usage and returns 1 when given no arguments', () => {
-      expect(runCompareSecurityFindingsScript({ specs: [] })).toBe(1);
-      expect(errorSpy).toHaveBeenCalledWith(USAGE);
     });
 
     it('returns 1 on an argument missing a report path', () => {
