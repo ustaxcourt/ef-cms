@@ -48,7 +48,11 @@ export function externalUserCreatesElectronicCase(
     .should('be.visible')
     .invoke('text')
     .then(docketNumberWithSuffix => {
+      cy.intercept('GET', '**/cases').as('getDashboardCasesAfterFiling');
       cy.get('[data-testid="button-back-to-dashboard"]').click();
+      cy.wait('@getDashboardCasesAfterFiling');
+      cy.get('[data-testid="case-list-table"]').should('be.visible');
+      cy.get('[data-testid="petition-welcome-text"]').should('not.exist');
       return cy.wrap<string>(docketNumberWithSuffix);
     });
 }

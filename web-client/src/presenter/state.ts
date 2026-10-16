@@ -12,6 +12,7 @@ import {
   PRACTICE_TYPE,
   SERVICE_INDICATOR_TYPES,
   STATE_KEYS,
+  type PaymentFilingFeeOrigin,
 } from '@shared/business/entities/EntityConstants';
 import {
   PreviousTerm,
@@ -24,6 +25,7 @@ import { TAssociatedCase } from '@shared/business/useCases/getCasesForUserIntera
 import { RecentFiling } from '@shared/business/useCases/getRecentFilingsForUserInteractor';
 import { TrialSessionLocationInfo } from '@shared/business/entities/trialSessions/TrialSession';
 import { TroubleshootingLinkInfo } from '@web-client/presenter/sequences/showFileUploadErrorModalSequence';
+import type { AllFeatureFlags } from '@web-api/business/useCases/featureFlag/getAllFeatureFlagsInteractor';
 import { addCourtIssuedDocketEntryHelper } from './computeds/addCourtIssuedDocketEntryHelper';
 import { addCourtIssuedDocketEntryNonstandardHelper } from './computeds/addCourtIssuedDocketEntryNonstandardHelper';
 import { addDocketEntryHelper } from './computeds/addDocketEntryHelper';
@@ -712,6 +714,8 @@ export const baseState = {
   },
   caseDeadlines: [] as RawCaseDeadline[],
   caseDetail: {} as RawCase & { messages?: RawMessage[] },
+  paymentFilingFeeOrigin: null as PaymentFilingFeeOrigin | null,
+  dashboardCaseListPageIndex: undefined as number | undefined,
   caseInventoryReportData: {
     foundCasesForCurrentPage: [] as FormattedCaseInventoryReportEntry[],
     foundCasesTotalCount: 0,
@@ -865,7 +869,7 @@ export const baseState = {
   },
   draftDocumentViewerDocketEntryId: null,
   editDocumentEntryPoint: 'CaseDetail' as 'CaseDetail' | 'DocumentDetail',
-  featureFlags: undefined as unknown as { [key: string]: string },
+  featureFlags: undefined as unknown as AllFeatureFlags,
   fileUploadProgress: {
     isHavingSystemIssues: false,
     isUploading: false,
@@ -1193,9 +1197,13 @@ export type AlertError = {
   title?: string;
   message?: string;
   messages?: string[];
+  filingFeePaymentStatusDocketNumber?: string;
   responseCode?: number;
   scrollToErrorNotification?: boolean;
   insertContactSupportClause?: boolean;
+  className?: string;
+  titleClass?: string;
+  messageClass?: string;
 };
 
 export type PracticeType = (typeof PRACTICE_TYPE)[keyof typeof PRACTICE_TYPE];
