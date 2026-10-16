@@ -12,10 +12,11 @@ describe('createForceRefreshCallback', () => {
       reloadPage,
     });
 
-    await callback();
+    const isReloadingPage = await callback();
 
     expect(reloadPage).toHaveBeenCalled();
     expect(onAppUpdated).not.toHaveBeenCalled();
+    expect(isReloadingPage).toBe(true);
   });
 
   it('opens the app updated flow when app bootstrap is complete', async () => {
@@ -29,9 +30,10 @@ describe('createForceRefreshCallback', () => {
       reloadPage,
     });
 
-    await callback();
+    const isReloadingPage = await callback();
 
     expect(onAppUpdated).toHaveBeenCalled();
     expect(reloadPage).not.toHaveBeenCalled();
+    expect(isReloadingPage).toBe(false);
   });
 });
