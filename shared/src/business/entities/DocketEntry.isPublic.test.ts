@@ -19,6 +19,18 @@ describe('DocketEntry isPublic', () => {
     '2024-08-01',
     'yyyy-MM-dd',
   );
+  const motionVisibilityChangeDate = createISODateString(
+    '2027-01-01',
+    'yyyy-MM-dd',
+  );
+  const beforeMotionVisibilityChangeDate = createISODateString(
+    '2026-10-01',
+    'yyyy-MM-dd',
+  );
+  const afterMotionVisibilityChangeDate = createISODateString(
+    '2027-02-01',
+    'yyyy-MM-dd',
+  );
   const amendmentEventCodes = ['AMAT', 'ADMT', 'REDC', 'SPML', 'SUPM'];
   const baseDocketEntry: RawDocketEntry = {
     createdAt: '2018-11-21T20:49:28.192Z',
@@ -56,6 +68,7 @@ describe('DocketEntry isPublic', () => {
           },
           {
             visibilityChangeDate,
+            motionVisibilityChangeDate,
           },
         );
 
@@ -70,7 +83,7 @@ describe('DocketEntry isPublic', () => {
           eventCode,
           isOnDocketRecord: false,
         },
-        { visibilityChangeDate },
+        { visibilityChangeDate, motionVisibilityChangeDate },
       );
 
       expect(isPublic).toEqual(false);
@@ -85,6 +98,7 @@ describe('DocketEntry isPublic', () => {
         },
         {
           visibilityChangeDate,
+          motionVisibilityChangeDate,
         },
       );
 
@@ -98,7 +112,7 @@ describe('DocketEntry isPublic', () => {
           eventCode,
           isStricken: true,
         },
-        { visibilityChangeDate },
+        { visibilityChangeDate, motionVisibilityChangeDate },
       );
 
       expect(isPublic).toEqual(false);
@@ -118,6 +132,7 @@ describe('DocketEntry isPublic', () => {
             },
             {
               visibilityChangeDate,
+              motionVisibilityChangeDate,
             },
           );
           expect(isPublic).toEqual(false);
@@ -155,6 +170,7 @@ describe('DocketEntry isPublic', () => {
               },
               {
                 visibilityChangeDate,
+                motionVisibilityChangeDate,
               },
             );
 
@@ -168,6 +184,7 @@ describe('DocketEntry isPublic', () => {
                 { ...baseDocketEntry, eventCode, filedByRole, filingDate },
                 {
                   visibilityChangeDate,
+                  motionVisibilityChangeDate,
                 },
               );
 
@@ -182,6 +199,7 @@ describe('DocketEntry isPublic', () => {
                 { ...baseDocketEntry, eventCode, filedByRole, filingDate },
                 {
                   visibilityChangeDate,
+                  motionVisibilityChangeDate,
                 },
               );
 
@@ -200,6 +218,7 @@ describe('DocketEntry isPublic', () => {
               },
               {
                 visibilityChangeDate,
+                motionVisibilityChangeDate,
               },
             );
 
@@ -225,6 +244,7 @@ describe('DocketEntry isPublic', () => {
               },
               {
                 visibilityChangeDate,
+                motionVisibilityChangeDate,
               },
             );
 
@@ -250,6 +270,7 @@ describe('DocketEntry isPublic', () => {
                     isPaper: false,
                   },
                   visibilityChangeDate,
+                  motionVisibilityChangeDate,
                 },
               );
 
@@ -275,6 +296,7 @@ describe('DocketEntry isPublic', () => {
                 },
 
                 visibilityChangeDate,
+                motionVisibilityChangeDate,
               },
             );
 
@@ -295,6 +317,7 @@ describe('DocketEntry isPublic', () => {
                     isPaper: false,
                   },
                   visibilityChangeDate,
+                  motionVisibilityChangeDate,
                 },
               );
 
@@ -313,6 +336,7 @@ describe('DocketEntry isPublic', () => {
               {
                 rootDocument: undefined,
                 visibilityChangeDate,
+                motionVisibilityChangeDate,
               },
             );
 
@@ -331,7 +355,7 @@ describe('DocketEntry isPublic', () => {
                 eventCode,
                 filingDate,
               },
-              { visibilityChangeDate },
+              { visibilityChangeDate, motionVisibilityChangeDate },
             );
 
             expect(isPublic).toEqual(true);
@@ -362,11 +386,346 @@ describe('DocketEntry isPublic', () => {
             eventCode,
             filingDate,
           },
-          { visibilityChangeDate },
+          { visibilityChangeDate, motionVisibilityChangeDate },
         );
 
         expect(isPublic).toEqual(false);
       },
     );
+  });
+
+  describe('Motion Visibility', () => {
+    describe('Before motion visibility change date', () => {
+      // do it each for IRS
+      it('should return false for motions filed by a private practitioner', () => {
+        const role = ROLES.privatePractitioner;
+        it(`should return true for motions filed by a ${role}`, () => {
+          const isPublic = DocketEntry.isPublic(
+            {
+              ...baseDocketEntry,
+              eventCode: 'M006',
+              filingDate: beforeMotionVisibilityChangeDate,
+              filedByRole: role,
+            },
+            {
+              visibilityChangeDate,
+              motionVisibilityChangeDate,
+            },
+          );
+
+          expect(isPublic).toBe(true);
+        });
+      });
+      it('should return false for briefs in support of a motion filed by a practitioner at the same time as the motion', () => {});
+      it('should return false for memoranda in support of a motion filed by a practitioner at the same time as the motion', () => {});
+      it('should return false for briefs in support of a motion filed by a practitioner after the motion', () => {});
+      it('should return false for memoranda in support of a motion filed by a practitioner after the motion', () => {});
+      //maybe others too?
+      // end it each
+      it('should return false for motions filed by a petitioner', () => {});
+      it('should return false for briefs in support of a motion filed by a petitioner at the same time as the motion', () => {});
+      it('should return false for memoranda in support of a motion filed by a petitioner at the same time as the motion', () => {});
+    });
+    describe('After motion visibility change date', () => {
+      describe.each([ROLES.privatePractitioner, ROLES.irsPractitioner])(
+        'Practitioners file motions and supporting documents',
+        role => {
+          it(`should return true for motions filed by a ${role}`, () => {
+            const isPublic = DocketEntry.isPublic(
+              {
+                ...baseDocketEntry,
+                eventCode: 'M006',
+                filingDate: afterMotionVisibilityChangeDate,
+                filedByRole: role,
+              },
+              {
+                visibilityChangeDate,
+                motionVisibilityChangeDate,
+              },
+            );
+
+            expect(isPublic).toBe(true);
+          });
+          it(`should return true for briefs in support of a motion filed by a ${role} at the same time as the motion`, () => {
+            const isPublic = DocketEntry.isPublic(
+              {
+                ...baseDocketEntry,
+                eventCode: 'BRF',
+                filingDate: afterMotionVisibilityChangeDate,
+                filedByRole: role,
+              },
+              {
+                rootDocument: {
+                  ...baseDocketEntry,
+                  eventCode: 'M006',
+                  filingDate: afterMotionVisibilityChangeDate,
+                  filedByRole: role,
+                },
+                visibilityChangeDate,
+                motionVisibilityChangeDate,
+              },
+            );
+
+            expect(isPublic).toBe(true);
+          });
+          it(`should return true for memoranda in support of a motion filed by a ${role} at the same time as the motion`, () => {
+            const isPublic = DocketEntry.isPublic(
+              {
+                ...baseDocketEntry,
+                eventCode: 'MISP',
+                filingDate: afterMotionVisibilityChangeDate,
+                filedByRole: role,
+              },
+              {
+                rootDocument: {
+                  ...baseDocketEntry,
+                  eventCode: 'M006',
+                  filingDate: afterMotionVisibilityChangeDate,
+                  filedByRole: role,
+                },
+                visibilityChangeDate,
+                motionVisibilityChangeDate,
+              },
+            );
+
+            expect(isPublic).toBe(true);
+          });
+          it(`should return false for briefs in support of a motion filed by a ${role} after the motion`, () => {
+            const isPublic = DocketEntry.isPublic(
+              {
+                ...baseDocketEntry,
+                eventCode: 'BRF',
+                filingDate: createISODateString('2027-03-01', 'yyyy-MM-dd'),
+                filedByRole: role,
+              },
+              {
+                rootDocument: {
+                  ...baseDocketEntry,
+                  eventCode: 'M006',
+                  filingDate: afterMotionVisibilityChangeDate,
+                  filedByRole: role,
+                },
+                visibilityChangeDate,
+                motionVisibilityChangeDate,
+              },
+            );
+
+            expect(isPublic).toBe(false);
+          });
+          it(`should return false for memoranda in support of a motion filed by a ${role} after the motion`, () => {
+            const isPublic = DocketEntry.isPublic(
+              {
+                ...baseDocketEntry,
+                eventCode: 'MISP',
+                filingDate: createISODateString('2027-03-01', 'yyyy-MM-dd'),
+                filedByRole: role,
+              },
+              {
+                rootDocument: {
+                  ...baseDocketEntry,
+                  eventCode: 'M006',
+                  filingDate: afterMotionVisibilityChangeDate,
+                  filedByRole: role,
+                },
+                visibilityChangeDate,
+                motionVisibilityChangeDate,
+              },
+            );
+
+            expect(isPublic).toBe(false);
+          });
+          it('should return false for briefs in support of document that is not a motion', () => {
+            const isPublic = DocketEntry.isPublic(
+              {
+                ...baseDocketEntry,
+                eventCode: 'BRF',
+                filingDate: afterMotionVisibilityChangeDate,
+                filedByRole: role,
+              },
+              {
+                rootDocument: {
+                  ...baseDocketEntry,
+                  eventCode: 'A',
+                  filingDate: afterMotionVisibilityChangeDate,
+                  filedByRole: role,
+                },
+                visibilityChangeDate,
+                motionVisibilityChangeDate,
+              },
+            );
+
+            expect(isPublic).toBe(false);
+          });
+          it('should return false for memoranda in support of document that is not a motion', () => {
+            const isPublic = DocketEntry.isPublic(
+              {
+                ...baseDocketEntry,
+                eventCode: 'MISP',
+                filingDate: afterMotionVisibilityChangeDate,
+                filedByRole: role,
+              },
+              {
+                rootDocument: {
+                  ...baseDocketEntry,
+                  eventCode: 'A',
+                  filingDate: afterMotionVisibilityChangeDate,
+                  filedByRole: role,
+                },
+                visibilityChangeDate,
+                motionVisibilityChangeDate,
+              },
+            );
+
+            expect(isPublic).toBe(false);
+          });
+          it(`should return false for other supporting documents of a motion filed by a ${role} at the same time as the motion`, () => {
+            const isPublic = DocketEntry.isPublic(
+              {
+                ...baseDocketEntry,
+                eventCode: 'AFF',
+                filingDate: afterMotionVisibilityChangeDate,
+                filedByRole: role,
+              },
+              {
+                rootDocument: {
+                  ...baseDocketEntry,
+                  eventCode: 'M006',
+                  filingDate: afterMotionVisibilityChangeDate,
+                  filedByRole: role,
+                },
+                visibilityChangeDate,
+                motionVisibilityChangeDate,
+              },
+            );
+
+            expect(isPublic).toBe(false);
+          });
+          it('should return false for motions that are paper filed', () => {
+            const isPublic = DocketEntry.isPublic(
+              {
+                ...baseDocketEntry,
+                eventCode: 'M006',
+                filingDate: afterMotionVisibilityChangeDate,
+                filedByRole: role,
+                isPaper: true,
+              },
+              {
+                visibilityChangeDate,
+                motionVisibilityChangeDate,
+              },
+            );
+
+            expect(isPublic).toBe(false);
+          });
+          it('should return false for briefs filed in support that are paper filed', () => {
+            const isPublic = DocketEntry.isPublic(
+              {
+                ...baseDocketEntry,
+                eventCode: 'BRF',
+                filingDate: afterMotionVisibilityChangeDate,
+                filedByRole: role,
+                isPaper: true,
+              },
+              {
+                rootDocument: {
+                  ...baseDocketEntry,
+                  eventCode: 'M006',
+                  filingDate: afterMotionVisibilityChangeDate,
+                  filedByRole: role,
+                },
+                visibilityChangeDate,
+                motionVisibilityChangeDate,
+              },
+            );
+
+            expect(isPublic).toBe(false);
+          });
+          it('should return false for memoranda filed in support that are paper filed', () => {
+            const isPublic = DocketEntry.isPublic(
+              {
+                ...baseDocketEntry,
+                eventCode: 'MISP',
+                filingDate: afterMotionVisibilityChangeDate,
+                filedByRole: role,
+                isPaper: true,
+              },
+              {
+                rootDocument: {
+                  ...baseDocketEntry,
+                  eventCode: 'M006',
+                  filingDate: afterMotionVisibilityChangeDate,
+                  filedByRole: role,
+                },
+                visibilityChangeDate,
+                motionVisibilityChangeDate,
+              },
+            );
+
+            expect(isPublic).toBe(false);
+          });
+        },
+      );
+      // end it each
+      it('should return false for motions filed by a petitioner', () => {
+        const isPublic = DocketEntry.isPublic(
+          {
+            ...baseDocketEntry,
+            eventCode: 'M006',
+            filingDate: afterMotionVisibilityChangeDate,
+            filedByRole: ROLES.petitioner,
+          },
+          {
+            visibilityChangeDate,
+            motionVisibilityChangeDate,
+          },
+        );
+
+        expect(isPublic).toBe(false);
+      });
+      it('should return false for briefs in support of a motion filed by a petitioner at the same time as the motion', () => {
+        const isPublic = DocketEntry.isPublic(
+          {
+            ...baseDocketEntry,
+            eventCode: 'BRF',
+            filingDate: afterMotionVisibilityChangeDate,
+            filedByRole: ROLES.petitioner,
+          },
+          {
+            rootDocument: {
+              ...baseDocketEntry,
+              eventCode: 'M006',
+              filingDate: afterMotionVisibilityChangeDate,
+              filedByRole: ROLES.petitioner,
+            },
+            visibilityChangeDate,
+            motionVisibilityChangeDate,
+          },
+        );
+
+        expect(isPublic).toBe(false);
+      });
+      it('should return false for memoranda in support of a motion filed by a petitioner at the same time as the motion', () => {
+        const isPublic = DocketEntry.isPublic(
+          {
+            ...baseDocketEntry,
+            eventCode: 'MISP',
+            filingDate: afterMotionVisibilityChangeDate,
+            filedByRole: ROLES.petitioner,
+          },
+          {
+            rootDocument: {
+              ...baseDocketEntry,
+              eventCode: 'M006',
+              filingDate: afterMotionVisibilityChangeDate,
+              filedByRole: ROLES.petitioner,
+            },
+            visibilityChangeDate,
+            motionVisibilityChangeDate,
+          },
+        );
+
+        expect(isPublic).toBe(false);
+      });
+    });
   });
 });

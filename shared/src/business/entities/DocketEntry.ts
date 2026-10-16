@@ -537,10 +537,12 @@ export class DocketEntry extends JoiValidationEntity {
       caseIsSealed = false,
       rootDocument,
       visibilityChangeDate,
+      motionVisibilityChangeDate,
     }: {
       caseIsSealed?: boolean;
       rootDocument?: RawDocketEntry;
       visibilityChangeDate: string;
+      motionVisibilityChangeDate: string;
     },
   ): boolean {
     if (
@@ -565,6 +567,18 @@ export class DocketEntry extends JoiValidationEntity {
       !POLICY_DATE_IMPACTED_EVENTCODES.includes(entry.eventCode) ||
       entry.filingDate < visibilityChangeDate
     ) {
+      if (
+        entry.filingDate >= motionVisibilityChangeDate &&
+        !entry.isPaper &&
+        (DocketEntry.isMotion(entry.eventCode) ||
+          (DocketEntry.isMotion(rootDocument?.eventCode ?? '') &&
+            ['MISP', 'BRF'].includes(entry.eventCode) && // constant obv
+            entry.filingDate === rootDocument?.filingDate)) &&
+        DocketEntry.isFiledByPractitioner(entry.filedByRole)
+      ) {
+        return true;
+      }
+
       return false;
     }
     if ([AMICUS_BRIEF_EVENT_CODE, 'SDEC'].includes(entry.eventCode)) {

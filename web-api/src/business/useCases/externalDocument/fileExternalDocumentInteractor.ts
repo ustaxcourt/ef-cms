@@ -37,6 +37,7 @@ import { canUserFileFirstIrsFiling } from '@shared/business/utilities/canUserFil
 import { canPractitionerFileEntryOfAppearance } from '@shared/business/utilities/canPractitionerFileEntryOfAppearance';
 import { verifyPendingCaseForUser } from '@web-api/persistence/postgres/cases/pendingCases/verifyPendingCaseForUser';
 import { isFiledByPractitionerName } from '@shared/business/entities/docketEntry/isFiledByPractitionerName';
+import { createISODateString } from '@shared/business/utilities/DateHandler';
 
 export const fileExternalDocument = async (
   applicationContext: ServerApplicationContext,
@@ -218,6 +219,7 @@ export const fileExternalDocument = async (
   }
 
   await withTransaction(async () => {
+    const filingDate = createISODateString();
     const consolidatedCaseEntities = casesToUpdate.map(async caseToUpdate => {
       let caseEntity = new Case(caseToUpdate, { authorizedUser });
 
@@ -238,6 +240,7 @@ export const fileExternalDocument = async (
               isOnDocketRecord: true,
               relationship,
               numberOfPages,
+              filingDate,
             },
             {
               authorizedUser,
