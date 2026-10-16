@@ -28,6 +28,10 @@ import {
   toggleFeatureFlag,
 } from './cypress/helpers/cypressTasks/postgres/featureFlagsCypress';
 import { assertCorrectNetworkData } from './cypress/helpers/cypressTasks/network/assertCorrectNetworkData';
+import {
+  deleteCasesByDocketNumbers,
+  insertCasesWithStatusHistory,
+} from './cypress/helpers/cypressTasks/postgres/caseStatusHistoryCypress';
 
 export default defineConfig({
   chromeWebSecurity: true,
@@ -46,6 +50,9 @@ export default defineConfig({
         deleteAllCypressTestAccounts() {
           return deleteAllCypressTestAccounts();
         },
+        deleteCasesByDocketNumbers({ docketNumbers }) {
+          return deleteCasesByDocketNumbers({ docketNumbers });
+        },
         deleteAllFilesInFolder(dir) {
           return deleteAllFilesInFolder(dir);
         },
@@ -57,6 +64,9 @@ export default defineConfig({
         },
         getEmailVerificationToken({ email }) {
           return getEmailVerificationToken({ email });
+        },
+        getRawFeatureFlagValue({ flag }) {
+          return getRawFeatureFlagValue({ flag });
         },
         getNewAccountVerificationCode({ email }) {
           return getNewAccountVerificationCode({ email });
@@ -96,6 +106,9 @@ export default defineConfig({
         },
         getUserByEmail(email: string) {
           return getUserByEmail(email);
+        },
+        insertCasesWithStatusHistory({ cases }) {
+          return insertCasesWithStatusHistory({ cases });
         },
         parsePdf({ filePath }) {
           return parsePdf({ filePath });
