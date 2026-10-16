@@ -26,6 +26,35 @@ import { petitionsClerkServesPetition } from '../../../../helpers/documentQC/pet
 import { externalUserCreatesElectronicCase } from '../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { formatPositiveNumber } from '@web-client/business/utilities/formatPositiveNumber';
 
+// HTML views open their table in a new tab from a Blob URL; stub window.open and read that document
+const stubWindowOpen = () =>
+  cy.window().then(win => {
+    cy.stub(win, 'open').as('openHtmlView');
+  });
+
+const readOpenedHtmlView = () =>
+  cy
+    .get('@openHtmlView')
+    .should((stub: any) => {
+      expect(stub.lastCall?.args[0]).to.match(/^blob:/);
+      expect(stub.lastCall.args[1]).to.equal('_blank');
+    })
+    .then((stub: any) =>
+      cy
+        .window()
+        .then(win =>
+          win.fetch(stub.lastCall.args[0]).then(response => response.text()),
+        ),
+    )
+    .then(html =>
+      new DOMParser().parseFromString(html as unknown as string, 'text/html'),
+    );
+
+const getTableRows = (doc: Document): string[][] =>
+  Array.from(doc.querySelectorAll('tbody tr')).map(row =>
+    Array.from(row.querySelectorAll('td')).map(cell => cell.textContent ?? ''),
+  );
+
 describe('Clerk of Court Dashboard', () => {
   const { year } = deconstructDate(createISODateString());
 
@@ -134,13 +163,14 @@ describe('Clerk of Court Dashboard', () => {
         );
         loginAsClerkOfCourt();
         cy.wait('@clerkDashboardStats').then(clerkDashboardStats => {
+          const { fiscalYear } = clerkDashboardStats.response!.body;
           const calendarYearTotal =
-            clerkDashboardStats.response.body.calendarYearPetitionStats.petitionsByServiceType.reduce(
+            clerkDashboardStats.response!.body.calendarYearPetitionStats.petitionsByServiceType.reduce(
               (yearTotal: number, entry: any) => yearTotal + entry.total,
               0,
             );
           const fiscalYearTotal =
-            clerkDashboardStats.response.body.fiscalYearPetitionStats.petitionsByServiceType.reduce(
+            clerkDashboardStats.response!.body.fiscalYearPetitionStats.petitionsByServiceType.reduce(
               (yearTotal: number, entry: any) => yearTotal + entry.total,
               0,
             );
@@ -195,37 +225,37 @@ describe('Clerk of Court Dashboard', () => {
           cy.get('[data-testid="fiscal-year-to-date"]').click();
           cy.get('[data-testid="petitions-data-header"]').should(
             'contain.text',
-            `Total petitions created in FYTD ${year}: ${formatPositiveNumber(fiscalYearTotal)}`,
+            `Total petitions created in FYTD ${fiscalYear}: ${formatPositiveNumber(fiscalYearTotal)}`,
           );
 
           cy.get(
-            `[data-testid="Petitions Created in FYTD ${year}-pie-graph-div"]`,
+            `[data-testid="Petitions Created in FYTD ${fiscalYear}-pie-graph-div"]`,
           )
             .eq(0)
             .should('exist');
           cy.get(
-            `[data-testid="Petitions Created in FYTD ${year}-pie-graph-legend"]`,
+            `[data-testid="Petitions Created in FYTD ${fiscalYear}-pie-graph-legend"]`,
           )
             .eq(0)
             .should('exist');
           cy.get(
-            `[data-testid="Petitions Created in FYTD ${year}-pie-graph-html-button"]`,
+            `[data-testid="Petitions Created in FYTD ${fiscalYear}-pie-graph-html-button"]`,
           )
             .eq(0)
             .should('exist');
 
           cy.get(
-            `[data-testid="Petitions Created in FYTD ${year}-pie-graph-div"]`,
+            `[data-testid="Petitions Created in FYTD ${fiscalYear}-pie-graph-div"]`,
           )
             .eq(1)
             .should('exist');
           cy.get(
-            `[data-testid="Petitions Created in FYTD ${year}-pie-graph-legend"]`,
+            `[data-testid="Petitions Created in FYTD ${fiscalYear}-pie-graph-legend"]`,
           )
             .eq(1)
             .should('exist');
           cy.get(
-            `[data-testid="Petitions Created in FYTD ${year}-pie-graph-html-button"]`,
+            `[data-testid="Petitions Created in FYTD ${fiscalYear}-pie-graph-html-button"]`,
           )
             .eq(1)
             .should('exist');
@@ -303,9 +333,12 @@ describe('Clerk of Court Dashboard', () => {
     cy.wait('@clerkDashboardStats').then(clerkDashboardStats => {
       const {
         calendarYearCaseStats,
+        fiscalYear,
         fiscalYearCaseStats,
+        openCasesByCaseType,
         openCasesByProcedureType,
-      } = clerkDashboardStats.response.body;
+        year: statsYear,
+      } = clerkDashboardStats.response!.body;
       const openCasesTotal = formatPositiveNumber(
         sumTotals(openCasesByProcedureType),
       );
@@ -334,11 +367,32 @@ describe('Clerk of Court Dashboard', () => {
         'contain.text',
         openByTypeTitle,
       );
-      cy.window().then(win => {
-        cy.stub(win, 'open').as('openHtmlView');
-      });
+      stubWindowOpen();
       cy.get(`[data-testid="${openByTypeTitle}-html-view-button"]`).click();
-      cy.get('@openHtmlView').should('have.been.calledOnce');
+      readOpenedHtmlView().then(doc => {
+        expect(doc.title).to.equal(
+          `Total Open Cases by Type in YTD ${statsYear}`,
+        );
+        const rows = getTableRows(doc);
+        expect(rows).to.have.length(14);
+        const totals = rows.map(([, total]) => Number(total.replace(/,/g, '')));
+        expect(totals).to.deep.equal([...totals].sort((a, b) => b - a));
+        openCasesByCaseType.forEach(
+          ({ caseType, total }: { caseType: string; total: number }) => {
+            expect(rows).to.deep.include([
+              caseType,
+              formatPositiveNumber(total),
+            ]);
+          },
+        );
+      });
+
+      cy.get(`[data-testid="${closedTitle}-bar-graph-html-button"]`).click();
+      readOpenedHtmlView().then(doc => {
+        expect(doc.querySelector('h2')!.textContent).to.equal(
+          `${closedTitle} in YTD ${statsYear}`,
+        );
+      });
 
       cy.get('[data-testid="cases-fiscal-year-to-date"]').click();
       cy.get('[data-testid="open-cases-header"]').should(
@@ -354,7 +408,7 @@ describe('Clerk of Court Dashboard', () => {
       // the pie only has a legend when cases were closed in the fiscal year
       if (sumTotals(fiscalYearCaseStats.casesClosedByProcedureType) > 0) {
         cy.get(
-          `[data-testid="Cases Changed to Closed/Closed - Dismissed in FYTD ${year}-pie-graph-legend"]`,
+          `[data-testid="Cases Changed to Closed/Closed - Dismissed in FYTD ${fiscalYear}-pie-graph-legend"]`,
         ).should('exist');
       } else {
         cy.get('[data-testid="cases-data-div"]').should(
@@ -366,6 +420,74 @@ describe('Clerk of Court Dashboard', () => {
       cy.get('#tabButton-petitions').click();
       // the test id is on the label, so check the radio input itself
       cy.get('#calendar-year-to-date').should('be.checked');
+    });
+  });
+
+  it('should draw a single non-zero slice as a full circle and keep zero slices in the legend and HTML view', () => {
+    const emptyPetitionStats = {
+      petitionFullElectronicMonths: [],
+      petitionFullPaperMonths: [],
+      petitionsByRepresentation: [],
+      petitionsByServiceType: [],
+    };
+    const emptyCaseStats = {
+      casesClosedByMonth: [],
+      casesClosedByProcedureType: [],
+      casesOnAppealByMonth: [],
+    };
+    cy.intercept('GET', '**/clerk-dashboard-stats', {
+      body: {
+        calendarYearCaseStats: {
+          ...emptyCaseStats,
+          // two non-zero slices draw as sectors, not a circle
+          casesClosedByProcedureType: [
+            { procedureType: 'Regular', total: 3 },
+            { procedureType: 'Small', total: 2 },
+          ],
+        },
+        calendarYearPetitionStats: emptyPetitionStats,
+        fiscalYear: '2026',
+        fiscalYearCaseStats: emptyCaseStats,
+        fiscalYearPetitionStats: emptyPetitionStats,
+        openCasesByCaseType: [],
+        // one non-zero slice and one zero slice
+        openCasesByProcedureType: [
+          { procedureType: 'Regular', total: 7 },
+          { procedureType: 'Small', total: 0 },
+        ],
+        year: '2026',
+      },
+      statusCode: 200,
+    }).as('clerkDashboardStats');
+    loginAsClerkOfCourt();
+    cy.wait('@clerkDashboardStats');
+    cy.get('#tabButton-cases').click();
+
+    const openCasesPie = 'Open Cases in YTD 2026';
+    cy.get(`[data-testid="${openCasesPie}-pie-graph-div"] svg circle`).should(
+      'have.length',
+      1,
+    );
+    cy.get(`[data-testid="${openCasesPie}-pie-graph-legend"]`)
+      .should('contain.text', 'Regular')
+      .and('contain.text', 'Small');
+
+    const closedPie = 'Cases Changed to Closed/Closed - Dismissed in YTD 2026';
+    cy.get(`[data-testid="${closedPie}-pie-graph-div"] svg circle`).should(
+      'not.exist',
+    );
+    cy.get(
+      `[data-testid="${closedPie}-pie-graph-div"] .recharts-pie-sector`,
+    ).should('have.length', 2);
+
+    stubWindowOpen();
+    cy.get(`[data-testid="${openCasesPie}-pie-graph-html-button"]`).click();
+    readOpenedHtmlView().then(doc => {
+      expect(doc.title).to.equal(openCasesPie);
+      expect(getTableRows(doc)).to.deep.equal([
+        ['Regular', '7', '100.0%'],
+        ['Small', '0', '0.0%'],
+      ]);
     });
   });
 

@@ -38,27 +38,37 @@ const getProcedureTypePieData = (
       }))
     : [];
 
-// the order of the open cases by type table: Deficiency first, then the other case types
+// the order of case types with the same total: Deficiency first, then the other case types
 const OPEN_CASES_BY_TYPE_ORDER: string[] = [
   CASE_TYPES_MAP.deficiency,
   ...CASE_TYPES.filter(caseType => caseType !== CASE_TYPES_MAP.deficiency),
 ];
 
+// largest total first; sort is stable, so equal totals keep OPEN_CASES_BY_TYPE_ORDER
 const getOpenCasesByTypeTableRows = (
   openCasesByCaseType: ClerkDashboardCaseTypeTotal[],
 ): ClerkOfCourtTableRow[] =>
   OPEN_CASES_BY_TYPE_ORDER.map(caseType => ({
-    label: caseType,
-    total: formatPositiveNumber(
-      openCasesByCaseType.find(c => c.caseType === caseType)?.total ?? 0,
-    ),
-  }));
+    caseType,
+    total: openCasesByCaseType.find(c => c.caseType === caseType)?.total ?? 0,
+  }))
+    .sort((a, b) => b.total - a.total)
+    .map(({ caseType, total }) => ({
+      label: caseType,
+      total: formatPositiveNumber(total),
+    }));
 
 export const dashboardClerkOfTheCourtHelper = (
   get: Get,
   _applicationContext: ClientApplicationContext,
 ): DashboardClerkOfTheCourtHelper => {
   const stats = get(state.clerkOfCourtDashboardStats);
+
+  // the stats carry the court's current years; until they load, fall back to the browser's
+  const year = stats.year || formatNow(FORMATS.YEAR);
+  const fiscalYear = stats.fiscalYear || year;
+  const getYearLabel = (isFiscal: boolean): string =>
+    isFiscal ? `FYTD ${fiscalYear}` : `YTD ${year}`;
 
   const petitionsByYearIsFiscal = get(
     state.clerkOfCourtDashboardOptions.petitionsByYearIsFiscal,
@@ -154,7 +164,7 @@ export const dashboardClerkOfTheCourtHelper = (
     petitionsByServiceTypePieData,
     totalPetitions: formatPositiveNumber(totalPetitions),
     months: petitionsByYearIsFiscal ? FISCAL_MONTH_LABELS : MONTH_LABELS,
-    // the stats carry the court's current year; until they load, fall back to the browser's
-    year: stats.year || formatNow(FORMATS.YEAR),
+    casesYearLabel: getYearLabel(casesByYearIsFiscal),
+    petitionsYearLabel: getYearLabel(petitionsByYearIsFiscal),
   };
 };

@@ -818,6 +818,7 @@ export const baseState = {
   customCaseReport: cloneDeep(initialCustomCaseReportState),
   clerkOfCourtDashboardStats: {
     year: '',
+    fiscalYear: '',
     calendarYearPetitionStats: {
       petitionFullPaperMonths: [],
       petitionFullElectronicMonths: [],

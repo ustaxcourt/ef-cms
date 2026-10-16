@@ -145,7 +145,7 @@ export const PieGraph = ({
         return `<tr><td>${d.name}</td><td>${d.value}</td><td>${pct}%</td></tr>`;
       })
       .join('');
-    const html = `<html><body><h2>${title}</h2><table border="1" cellpadding="4" cellspacing="0"><thead><tr><th>Name</th><th>Value</th><th>Percentage</th></tr></thead><tbody>${rows}</tbody></table></body></html>`;
+    const html = `<html lang="en"><head><title>${title ?? 'Chart data'}</title></head><body><h2>${title}</h2><table border="1" cellpadding="4" cellspacing="0"><thead><tr><th>Name</th><th>Value</th><th>Percentage</th></tr></thead><tbody>${rows}</tbody></table></body></html>`;
     const blob = new Blob([html], { type: 'text/html' });
     window.open(URL.createObjectURL(blob), '_blank', 'noopener, noreferrer');
   };

@@ -137,6 +137,7 @@ describe('getClerkDashboardStatsInteractor', () => {
 
     expect(result).toMatchObject({
       year: '2026',
+      fiscalYear: '2026',
       calendarYearPetitionStats: {
         petitionFullPaperMonths: [
           {
@@ -803,6 +804,44 @@ describe('getClerkDashboardStatsInteractor', () => {
       expect(
         (caseStatusChangesByYear as jest.Mock).mock.calls[1][0].toISOString(),
       ).toEqual('2025-10-01T04:00:00.000Z');
+    });
+
+    it('should use the fiscal year ending this year through September 30 Eastern time', async () => {
+      // 11:59 PM on September 30 in Eastern time
+      (createISODateString as jest.Mock).mockReturnValue(
+        '2026-10-01T03:59:00.000Z',
+      );
+
+      const result =
+        await getClerkDashboardStatsInteractor(mockDocketClerkUser);
+
+      expect(result.year).toEqual('2026');
+      expect(result.fiscalYear).toEqual('2026');
+      const [fiscalBegin, fiscalEnd] = (caseStatusChangesByYear as jest.Mock)
+        .mock.calls[1];
+      expect(fiscalBegin.toISOString()).toEqual('2025-10-01T04:00:00.000Z');
+      expect(fiscalEnd.toISOString()).toEqual('2026-10-01T04:00:00.000Z');
+    });
+
+    it('should use the fiscal year ending next year from October 1 Eastern time', async () => {
+      // 12:01 AM on October 1 in Eastern time
+      (createISODateString as jest.Mock).mockReturnValue(
+        '2026-10-01T04:01:00.000Z',
+      );
+
+      const result =
+        await getClerkDashboardStatsInteractor(mockDocketClerkUser);
+
+      expect(result.year).toEqual('2026');
+      expect(result.fiscalYear).toEqual('2027');
+      const [fiscalBegin, fiscalEnd] = (caseStatusChangesByYear as jest.Mock)
+        .mock.calls[1];
+      expect(fiscalBegin.toISOString()).toEqual('2026-10-01T04:00:00.000Z');
+      expect(fiscalEnd.toISOString()).toEqual('2027-10-01T04:00:00.000Z');
+      // the petitions stats use the same fiscal year
+      expect(
+        (petitionsDataByYear as jest.Mock).mock.calls[1][0].toISOString(),
+      ).toEqual('2026-10-01T04:00:00.000Z');
     });
 
     it('should return cases closed and on appeal by month and closed cases by procedure type', async () => {

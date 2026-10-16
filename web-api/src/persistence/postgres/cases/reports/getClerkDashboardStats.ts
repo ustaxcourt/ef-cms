@@ -73,6 +73,15 @@ export const caseStatusChangesByYear = async (
                     ),
                   ])
                   .where(sql`jsonb_typeof(case_status_history)`, '=', 'array')
+                  // only expand the histories of cases with a status change in the timeframe;
+                  // their full history is still expanded, so LAG sees the change before it
+                  .where(
+                    sql<boolean>`EXISTS (
+                      SELECT 1 FROM jsonb_array_elements(case_status_history) AS change
+                      WHERE (change->>'date')::timestamptz >= ${yearStart}
+                        AND (change->>'date')::timestamptz < ${yearEnd}
+                    )`,
+                  )
                   .as('statusChanges'),
               )
               .select([

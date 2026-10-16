@@ -31,6 +31,7 @@ describe('setClerkOfCourtDashboardChartsAction', () => {
       casesOnAppealByMonth: [],
     },
     year: '2026',
+    fiscalYear: '2027',
   };
 
   beforeEach(() => {
@@ -92,6 +93,7 @@ describe('setClerkOfCourtDashboardChartsAction', () => {
       state: {
         clerkOfCourtDashboardStats: {
           year: '',
+          fiscalYear: '',
           calendarYearPetitionStats: {
             petitionFullPaperMonths: [],
             petitionFullElectronicMonths: [],
@@ -116,6 +118,7 @@ describe('setClerkOfCourtDashboardChartsAction', () => {
     expect(state.alertError).toBeUndefined();
     expect(state.clerkOfCourtDashboardStats).toEqual({
       year: '',
+      fiscalYear: '',
       calendarYearPetitionStats: {
         petitionFullPaperMonths: [],
         petitionFullElectronicMonths: [],
