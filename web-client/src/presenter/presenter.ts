@@ -662,9 +662,9 @@ import { initMyCasesFilingFeePaymentSequence } from '@web-client/presenter/seque
 import { paymentCancelSequence } from '@web-client/presenter/sequences/paymentCancelSequence';
 import { paymentSuccessSequence } from '@web-client/presenter/sequences/paymentSuccessSequence';
 import { setClerkOfCourtDashboardOptionsSequence } from '@web-client/presenter/sequences/setClerkOfCourtDashboardOptionSequence';
+import { setDashboardCaseListPageSequence } from '@web-client/presenter/sequences/setDashboardCaseListPageSequence';
 import { authCodeSequence } from '@web-client/presenter/sequences/authCodeSequence';
 import { idpLoginSequence } from '@web-client/presenter/sequences/Login/idpLoginSequence';
-import { setDashboardCaseListPageSequence } from '@web-client/presenter/sequences/setDashboardCaseListPageSequence';
 
 export const presenterSequences = {
   addAnotherIrsNoticeToFormSequence,

@@ -58,9 +58,6 @@ export default defineConfig({
         getEmailVerificationToken({ email }) {
           return getEmailVerificationToken({ email });
         },
-        getRawFeatureFlagValue({ flag }) {
-          return getRawFeatureFlagValue({ flag });
-        },
         getNewAccountVerificationCode({ email }) {
           return getNewAccountVerificationCode({ email });
         },

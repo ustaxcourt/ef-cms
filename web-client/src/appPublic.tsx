@@ -8,6 +8,7 @@ import { Container } from '@cerebral/react';
 import { ErrorBoundary } from './views/ErrorBoundary';
 import { createForceRefreshCallback } from '@web-client/presenter/utilities/createForceRefreshCallback';
 import { initializeRealUserMonitoring } from '@web-client/providers/realUserMonitoring';
+import type { ClientPublicApplicationContext } from './applicationContextPublic';
 import {
   back,
   createObjectURL,
@@ -63,7 +64,10 @@ import { faHandPaper } from '@fortawesome/free-solid-svg-icons';
  * Instantiates the Cerebral app with React
  */
 const appPublic = {
-  initialize: async (applicationContext, debugTools) => {
+  initialize: async (
+    applicationContext: ClientPublicApplicationContext,
+    debugTools: Record<string, unknown>,
+  ): Promise<void> => {
     initializeRealUserMonitoring();
     const withAppContextDecorator = (f, context) => {
       return get => f(get, context || applicationContext);
