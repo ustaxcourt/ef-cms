@@ -663,9 +663,9 @@ import { paymentCancelSequence } from '@web-client/presenter/sequences/paymentCa
 import { paymentSuccessSequence } from '@web-client/presenter/sequences/paymentSuccessSequence';
 import { setClerkOfCourtDashboardOptionsSequence } from '@web-client/presenter/sequences/setClerkOfCourtDashboardOptionSequence';
 import { loadClerkOfCourtDashboardChartsSequence } from '@web-client/presenter/sequences/loadClerkOfCourtDashboardChartsSequence';
+import { setDashboardCaseListPageSequence } from '@web-client/presenter/sequences/setDashboardCaseListPageSequence';
 import { authCodeSequence } from '@web-client/presenter/sequences/authCodeSequence';
 import { idpLoginSequence } from '@web-client/presenter/sequences/Login/idpLoginSequence';
-import { setDashboardCaseListPageSequence } from '@web-client/presenter/sequences/setDashboardCaseListPageSequence';
 
 export const presenterSequences = {
   addAnotherIrsNoticeToFormSequence,
