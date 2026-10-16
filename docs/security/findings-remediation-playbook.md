@@ -5,6 +5,8 @@ DAWSON: who owns it, how severe it is, how fast it gets fixed, and how a decisio
 accept it is recorded. How each scanner works is covered in its own doc under `docs/security/`;
 this doc is the process that sits on top of them.
 
+On triage this week? Start at [Weekly triage](#weekly-triage).
+
 ## Purpose and scope
 
 - **Audience:** the DAWSON team.
@@ -126,7 +128,8 @@ Last verified against `staging` on 2026-10-16. Re-check this table whenever a
 | ShellCheck | `security-sast.yml` / `shellcheck` | PR | Errors only (`-S error`) | Job log | Yes |
 | Gitleaks | `security-secrets.yml` / `gitleaks` | PR, commits in the PR only | Secrets | Security tab: `gitleaks` | Yes |
 | Gitleaks baseline | `security-secrets.yml` / `gitleaks-baseline` | Push to staging | Secrets | Security tab: `gitleaks-baseline` | No |
-| OWASP ZAP | `security-dast.yml` / `dast-api`, `dast-web` | PR, weekly, manual | Runtime web and API issues | Run artifacts only (14–30 days); never the Security tab | No |
+| OWASP ZAP API | `security-dast.yml` / `dast-api` | PR | API issues, per user role | Run artifacts only (14–30 days); not the Security tab until #10496 | No |
+| OWASP ZAP web | `security-dast.yml` / `dast-web` | Weekly, manual | Web app issues | Run artifact `zap-web-reports` (30 days); not the Security tab until #10496 | No |
 | Findings vs staging | `security-compare.yml` / `compare` | PR | Trivy filesystem count, HIGH, CRITICAL, UNKNOWN | Job summary | Yes, if the PR has more findings than staging |
 
 Things to know when reading this table:
@@ -314,3 +317,179 @@ missed SLA is never left open silently; it appears in the weekly report until it
 
 The SLAs apply to findings that already exist. New code is held to a stricter standard: it must
 not add medium- or high-severity findings at all ([Code Review](../code-review.md)).
+
+## Weekly triage
+
+Every Monday, after the 06:00 UTC scheduled runs, the triager works through this list. Run the
+commands from a clone of the repository with the `gh` CLI signed in. None of them change your
+working tree.
+
+1. **Start a fresh container scan.** `trivy-config` runs only on PRs and manual runs, so its
+   results on `staging` go stale unless someone runs it. The run takes several minutes, so start
+   it first and let it finish while you do steps 2 to 4.
+
+   ```sh
+   gh workflow run security-containers.yml --ref staging
+   sleep 10
+   RUN_ID=$(gh run list --workflow security-containers.yml --event workflow_dispatch \
+     --user "$(gh api user -q .login)" --limit 1 --json databaseId -q '.[0].databaseId')
+   ```
+
+2. **Check that the scheduled runs worked.** A failed run shows up as no new findings, which
+   looks the same as a good week.
+
+   ```sh
+   gh run list --workflow security-containers.yml --event schedule --limit 1
+   gh run list --workflow security-dast.yml --event schedule --limit 1
+   ```
+
+   If either one failed, rerun its failed jobs with `gh run rerun <run-id> --failed`, and note in
+   the weekly report that its results are missing until the rerun passes.
+
+3. **Read the ZAP web report** from the latest scheduled run. ZAP results do not reach the
+   Security tab yet; [#10496](https://github.com/ustaxcourt/ef-cms/issues/10496) adds that.
+   Until it lands, this manual review is how ZAP findings get triaged. Afterwards, drop this step
+   and add the new `zap-*` categories to [Which categories to triage](#which-categories-to-triage).
+
+   ```sh
+   ZAP_RUN=$(gh run list --workflow security-dast.yml --event schedule --limit 1 \
+     --json databaseId -q '.[0].databaseId')
+   gh run download "$ZAP_RUN" -n zap-web-reports -D "$(mktemp -d)"
+   ```
+
+4. **Audit the npm lockfiles on `staging`.** In CI, npm audit runs only on PRs and only checks the
+   root lockfile. This checks all three lockfiles that ship, from a temporary directory:
+
+   ```sh
+   git fetch -q origin staging
+   AUDIT_DIR=$(mktemp -d)
+   for p in . web-api/runtimes/puppeteer web-api/terraform/modules/batch/docker-image; do
+     mkdir -p "$AUDIT_DIR/$p"
+     git show "origin/staging:$p/package.json" > "$AUDIT_DIR/$p/package.json"
+     git show "origin/staging:$p/package-lock.json" > "$AUDIT_DIR/$p/package-lock.json"
+     echo "== $p" && (cd "$AUDIT_DIR/$p" && npm audit --omit=dev --audit-level=high)
+   done
+   ```
+
+   A finding that is already tracked, such as the moderate `quill` advisory, needs no new record.
+
+5. **Wait for the container scan from step 1 to finish:**
+
+   ```sh
+   gh run watch "$RUN_ID" --exit-status
+   ```
+
+6. **List the Security-tab alerts opened since the last triage.** Set `SINCE` to the date of the
+   last completed triage, not last Monday, so a skipped week is not lost. The query keeps only
+   the categories that are triaged:
+
+   ```sh
+   SINCE=2026-10-12
+   gh api --paginate \
+     "repos/ustaxcourt/ef-cms/code-scanning/alerts?state=open&ref=refs/heads/staging&per_page=100" \
+     --jq '.[] | select(.created_at >= "'"$SINCE"'")
+           | select(.most_recent_instance.category
+               | test("^(trivy-baseline-(base|puppeteer|batch)|trivy|trivy-config|semgrep|checkov|/language:.*|gitleaks-baseline)$"))
+           | [.created_at[:10], .most_recent_instance.category, .rule.id, .html_url] | @tsv'
+   ```
+
+7. **Triage each new finding:** dedupe it, assign a tier, work out its severity
+   ([Severity rubric](#severity-rubric)), and open or update its tracking record
+   ([Where findings are tracked](#where-findings-are-tracked)).
+8. **Check what is due.** List open security findings and raise any due within 14 days, or
+   already past due, with the approver (see [Missing an SLA](#missing-an-sla)):
+
+   ```sh
+   gh issue list --repo ustaxcourt/ef-cms --state open --search 'in:title "Security finding"' \
+     --limit 200
+   ```
+
+9. **Record the date** of this triage in the weekly report. It is the next triage's `SINCE`.
+
+### Which categories to triage
+
+On `staging`, some Security-tab categories hold current results and some only hold old or
+duplicate ones. The query in step 6 already applies this table.
+
+| Category | Updated on `staging` by | Triage? |
+| --- | --- | --- |
+| `trivy-baseline-base`, `trivy-baseline-puppeteer`, `trivy-baseline-batch` | Weekly run, and pushes that change image paths | Yes |
+| `trivy` | Every push | Yes |
+| `semgrep`, `checkov`, `/language:javascript-typescript` | Every push | Yes |
+| `gitleaks-baseline` | Every push | Yes, the same day (see [Same-day triage](#same-day-triage)) |
+| `trivy-config` | Manual runs (step 1) | Yes |
+| `trivy-image-base`, `trivy-image-puppeteer`, `trivy-image-batch` | Manual runs (step 1) | No: duplicates by design. They scan the same images as `trivy-baseline-*`, and step 1 refreshes them every week, so they stay open. Leave them out of every count, report and SLA. |
+| `trivy-baseline-local`, `trivy-image-local` | Nothing. The `efcms-local` scan was removed. | No. Retire them (see [Backlog clean-up](#backlog-clean-up)). |
+
+This table decides the size of the backlog. On 2026-10-16, 12,292 of the open alerts on
+`staging` came from Trivy, but only 1,084 of those were in triaged categories. The rest were
+7,002 `trivy-image-*` duplicates and 4,206 alerts in the retired `efcms-local` categories.
+
+### Same-day triage
+
+Do not wait for Monday when any of these happens. Tell the approver directly the same business
+day. The approver opens a draft security advisory (see
+[Where findings are tracked](#where-findings-are-tracked)).
+
+- **A possible secret.** Gitleaks blocks a PR, `gitleaks-baseline` opens an alert, or anyone
+  spots a credential in the code, a log or an issue. Treat it as exposed until proven otherwise.
+  A secret is exposed the moment it is pushed to any branch of this public repository, whether
+  or not the PR is ever merged, so rotation comes first, before the history is cleaned up.
+- **A KEV-listed or publicly exploited vulnerability in T1 or T2**, however it comes to light: a
+  scan, an advisory, or the news.
+- **A finding reported by a person.**
+
+### Findings reported by people
+
+Pen-test results, ISSO reports and outside reports go straight to the approver, who opens a draft
+security advisory and adds the reporter's details there, never in a public issue. The SLA clock
+starts on the date of the report. They go through the same rubric as scanner findings, with the
+reporter's evidence in place of a scan result.
+
+The repository has no `SECURITY.md`, so an outside reporter has no published way to reach the
+team. Anyone who receives a report informally forwards it to the approver.
+
+### Backlog clean-up
+
+The approver owns the 30-day clean-up window that starts on the adoption date (see
+[When the clock starts](#when-the-clock-starts)) and makes sure both of these are done before it
+ends.
+
+**Retire what no longer means anything.** This needs write access to the repository.
+
+- **The `efcms-local` categories.** `scripts/run-once-scripts/dismiss-duplicate-local-alerts.sh`
+  dismisses the alerts that repeat the CI image's CVEs. Run it without arguments first to see
+  what it would dismiss, then with `--apply`. It deliberately leaves alerts under real file paths,
+  which come from that image's `npm ci` layer and appear in no other category. Triage those like
+  any other finding.
+- **Categories retired later.** Either dismiss their alerts, or have a repository admin
+  [delete the category's analyses](https://docs.github.com/en/rest/code-scanning/code-scanning#delete-a-code-scanning-analysis-from-a-repository).
+  Removing a scan never closes the alerts it already reported.
+
+Dismissing an alert hides it for good, so dismiss only confirmed duplicates and alerts from scans
+that no longer run. Everything else goes through the rubric.
+
+**Triage the open alerts in triaged categories.** The weekly routine only picks up new alerts, so
+the existing ones need one pass of their own. Run the step 6 query with `SINCE=2000-01-01`, then
+group the results by the fix that would close them, not by CVE. Nearly all of the 1,084 Trivy
+alerts come from three base images, so they collapse into a handful of base-image upgrades. Open one
+tracking record per group. Their SLA clocks start in the two waves described in
+[When the clock starts](#when-the-clock-starts).
+
+### Ownership
+
+- **One issue per fix, not per alert.** A base-image upgrade that closes 40 CVEs is one issue
+  that lists them, not 40 issues.
+- **A fixed title format**, so every open finding can be listed with one search (step 8):
+  - routine: `Security finding: <what to fix> (due 2026-11-15)`
+  - sensitive: `Security finding: GHSA-xxxx-xxxx-xxxx (due 2026-11-15)`
+
+  The first line of the body gives the severity and when the clock started, for example
+  `High, 30 days from 2026-10-16`. Sensitive issues leave that line out.
+- **No bug-severity labels.** The `Critical Severity`, `High Severity` and similar labels measure
+  impact on court users, as set by the product owner ([Story Life Cycle](../story-life-cycle.md)).
+  They are a different scale from the security severity in this playbook.
+- **Who picks it up.** The approver assigns Critical and High findings in T1 or T2 the same day.
+  The triager raises everything else with the product owner, who schedules it like other work.
+  If it cannot be scheduled before its due date, it goes to the approver as described in
+  [Missing an SLA](#missing-an-sla).
