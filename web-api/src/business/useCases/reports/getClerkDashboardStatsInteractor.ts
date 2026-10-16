@@ -81,6 +81,7 @@ export type ClerkDashboardCasesStats = {
 
 export type ClerkDashboardStats = {
   year: string;
+  fiscalYear: string;
   calendarYearPetitionStats: ClerkDashboardPetitionsStats;
   fiscalYearPetitionStats: ClerkDashboardPetitionsStats;
   openCasesByCaseType: ClerkDashboardCaseTypeTotal[];
@@ -88,6 +89,8 @@ export type ClerkDashboardStats = {
   calendarYearCaseStats: ClerkDashboardCasesStats;
   fiscalYearCaseStats: ClerkDashboardCasesStats;
 };
+
+const FISCAL_YEAR_START_MONTH = 10;
 
 const getMonthOrderCallback = (isFiscal: boolean) =>
   isFiscal
@@ -218,7 +221,11 @@ export const getClerkDashboardStatsInteractor = async (
     throw new UnauthorizedError('Unauthorized for clerk dashboard stats');
   }
 
-  const { year } = deconstructDate(createISODateString());
+  const { month, year } = deconstructDate(createISODateString());
+
+  // the fiscal year starts on October 1 (Eastern time) and is named for the year it ends
+  const fiscalYear =
+    Number(month) >= FISCAL_YEAR_START_MONTH ? `${Number(year) + 1}` : year;
 
   const { begin: calendarYearbegin, end: calendarYearEnd } =
     getJsTimeframeForYear({
@@ -228,7 +235,7 @@ export const getClerkDashboardStatsInteractor = async (
 
   const { begin: fiscalYearBegin, end: fiscalYearEnd } = getJsTimeframeForYear({
     fiscal: true,
-    year,
+    year: fiscalYear,
   });
 
   const calendarYearPetitionStats = getPetitionsDataByYear(
@@ -260,6 +267,7 @@ export const getClerkDashboardStatsInteractor = async (
 
   return {
     year,
+    fiscalYear,
     calendarYearPetitionStats: await calendarYearPetitionStats,
     fiscalYearPetitionStats: await fiscalYearPetitionStats,
     openCasesByCaseType: await openCasesByType,

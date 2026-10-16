@@ -128,9 +128,8 @@ const casesData = ({
     openCasesPieData,
     totalCasesClosed,
     totalOpenCases,
-    year,
+    casesYearLabel,
   } = dashboardClerkOfTheCourtHelper;
-  const yearLabel = `${casesByYearIsFiscal ? 'FYTD' : 'YTD'} ${year}`;
 
   return (
     <ClerkOfCourtChartStatus status={statsStatus}>
@@ -157,7 +156,7 @@ const casesData = ({
             </h2>
             <PieGraph
               data={openCasesPieData}
-              title="Open Cases"
+              title={`Open Cases in ${casesYearLabel}`}
               showTitle={false}
               tooltipTitle="Open Cases"
             />
@@ -172,7 +171,7 @@ const casesData = ({
             </h2>
             <PieGraph
               data={casesClosedPieData}
-              title={`Cases Changed to Closed/Closed - Dismissed in ${yearLabel}`}
+              title={`Cases Changed to Closed/Closed - Dismissed in ${casesYearLabel}`}
               showTitle={false}
               tooltipTitle="Cases Changed"
             />
@@ -180,6 +179,7 @@ const casesData = ({
         </div>
         <div className="tw:xs:mt-12 tw:mt-8">
           <ClerkOfCourtHtmlView
+            htmlTitle={`Total Open Cases by Type in ${casesYearLabel}`}
             labelHeader="Type of Case"
             rows={openCasesByTypeTableRows}
             title={OPEN_CASES_BY_TYPE_TITLE}
@@ -192,6 +192,7 @@ const casesData = ({
             datasets={casesClosedAndOnAppealByMonthChartData}
             labels={casesMonths}
             legendTotals={casesClosedAndOnAppealLegendTotals}
+            htmlTitle={`${CASES_CLOSED_AND_ON_APPEAL_TITLE} in ${casesYearLabel}`}
             title={CASES_CLOSED_AND_ON_APPEAL_TITLE}
             xLabelRotation={45}
             xAxisLabel="Months"
@@ -227,7 +228,7 @@ export const DashboardClerkOfCourt = connect(
       petitionsByServiceTypePieData,
       totalPetitions,
       months,
-      year,
+      petitionsYearLabel,
     } = dashboardClerkOfTheCourtHelper;
 
     const [mobileSection, setMobileSection] = useState('petitions');
@@ -255,20 +256,19 @@ export const DashboardClerkOfCourt = connect(
                         className="tw:xs:text-2xl tw:text-lg tw:mb-5"
                         data-testid="petitions-data-header"
                       >
-                        Total petitions created in{' '}
-                        {petitionsByYearIsFiscal ? 'FYTD' : 'YTD'} {year}:{' '}
+                        Total petitions created in {petitionsYearLabel}:{' '}
                         <span className="tw:font-normal">{totalPetitions}</span>
                       </h2>
                       <div className="tw:flex tw:flex-wrap tw:gap-12">
                         <PieGraph
                           data={petitionsByServiceTypePieData}
-                          title={`Petitions Created in ${petitionsByYearIsFiscal ? 'FYTD' : 'YTD'} ${year}`}
+                          title={`Petitions Created in ${petitionsYearLabel}`}
                           showTitle={false}
                           tooltipTitle="Petitions Created"
                         />
                         <PieGraph
                           data={petitionsByRepresentationPieData}
-                          title={`Petitions Created in ${petitionsByYearIsFiscal ? 'FYTD' : 'YTD'} ${year}`}
+                          title={`Petitions Created in ${petitionsYearLabel}`}
                           showTitle={false}
                           tooltipTitle="Petitions Created"
                         />
@@ -341,14 +341,13 @@ export const DashboardClerkOfCourt = connect(
                       className="tw:xs:text-2xl tw:text-lg tw:mb-2"
                       data-testid="petitions-data-header"
                     >
-                      Total petitions created in{' '}
-                      {petitionsByYearIsFiscal ? 'FYTD' : 'YTD'} {year}:{' '}
+                      Total petitions created in {petitionsYearLabel}:{' '}
                       <span className="tw:font-normal">{totalPetitions}</span>
                     </h2>
                     <div className="tw:mb-8">
                       <PieGraph
                         data={petitionsByServiceTypePieData}
-                        title={`Petitions Created in ${petitionsByYearIsFiscal ? 'FYTD' : 'YTD'} ${year}`}
+                        title={`Petitions Created in ${petitionsYearLabel}`}
                         showTitle={false}
                         tooltipTitle="Petitions Created"
                       />
@@ -356,7 +355,7 @@ export const DashboardClerkOfCourt = connect(
                     <div className="tw:mb-6">
                       <PieGraph
                         data={petitionsByRepresentationPieData}
-                        title={`Petitions Created in ${petitionsByYearIsFiscal ? 'FYTD' : 'YTD'} ${year}`}
+                        title={`Petitions Created in ${petitionsYearLabel}`}
                         showTitle={false}
                         tooltipTitle="Petitions Created"
                       />

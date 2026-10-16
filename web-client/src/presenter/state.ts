@@ -25,6 +25,7 @@ import { TAssociatedCase } from '@shared/business/useCases/getCasesForUserIntera
 import { RecentFiling } from '@shared/business/useCases/getRecentFilingsForUserInteractor';
 import { TrialSessionLocationInfo } from '@shared/business/entities/trialSessions/TrialSession';
 import { TroubleshootingLinkInfo } from '@web-client/presenter/sequences/showFileUploadErrorModalSequence';
+import type { AllFeatureFlags } from '@web-api/business/useCases/featureFlag/getAllFeatureFlagsInteractor';
 import { addCourtIssuedDocketEntryHelper } from './computeds/addCourtIssuedDocketEntryHelper';
 import { addCourtIssuedDocketEntryNonstandardHelper } from './computeds/addCourtIssuedDocketEntryNonstandardHelper';
 import { addDocketEntryHelper } from './computeds/addDocketEntryHelper';
@@ -817,6 +818,7 @@ export const baseState = {
   customCaseReport: cloneDeep(initialCustomCaseReportState),
   clerkOfCourtDashboardStats: {
     year: '',
+    fiscalYear: '',
     calendarYearPetitionStats: {
       petitionFullPaperMonths: [],
       petitionFullElectronicMonths: [],
@@ -868,7 +870,7 @@ export const baseState = {
   },
   draftDocumentViewerDocketEntryId: null,
   editDocumentEntryPoint: 'CaseDetail' as 'CaseDetail' | 'DocumentDetail',
-  featureFlags: undefined as unknown as { [key: string]: any },
+  featureFlags: undefined as unknown as AllFeatureFlags,
   fileUploadProgress: {
     isHavingSystemIssues: false,
     isUploading: false,

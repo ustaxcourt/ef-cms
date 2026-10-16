@@ -123,6 +123,7 @@ describe('dashboardClerkOfTheCourtHelper', () => {
             total: i < 7 ? 3 : 0,
           })),
         },
+        fiscalYear: '2027',
         year: '2026',
       },
     };
@@ -185,7 +186,7 @@ describe('dashboardClerkOfTheCourtHelper', () => {
         'November',
         'December',
       ],
-      year: '2026',
+      petitionsYearLabel: 'YTD 2026',
     });
   });
 
@@ -247,7 +248,7 @@ describe('dashboardClerkOfTheCourtHelper', () => {
         'August',
         'September',
       ],
-      year: '2026',
+      petitionsYearLabel: 'FYTD 2027',
     });
   });
 
@@ -292,7 +293,7 @@ describe('dashboardClerkOfTheCourtHelper', () => {
         'November',
         'December',
       ],
-      year: '2026',
+      petitionsYearLabel: 'YTD 2026',
     });
   });
   describe('cases', () => {
@@ -405,27 +406,60 @@ describe('dashboardClerkOfTheCourtHelper', () => {
       expect(result.months[0]).toEqual('January');
     });
 
-    it('should set open cases by type table rows for every case type, with Deficiency first', () => {
+    it('should set open cases by type table rows for every case type, largest total first', () => {
       const result = runCompute(dashboardClerkOfTheCourtHelper, {
         state: baseState,
       });
 
+      // equal totals keep the Deficiency-first case type order
       expect(result.openCasesByTypeTableRows).toEqual([
         { label: 'Deficiency', total: '1,798' },
-        { label: 'CDP (Lien/Levy)', total: '0' },
-        { label: 'Declaratory Judgment (Exempt Organization)', total: '51' },
         { label: 'Declaratory Judgment (Retirement Plan)', total: '75' },
+        { label: 'Partnership (Section 6228)', total: '75' },
+        { label: 'Declaratory Judgment (Exempt Organization)', total: '51' },
+        { label: 'Partnership (Section 6226)', total: '48' },
+        { label: 'Partnership (BBA Section 1101)', total: '26' },
+        { label: 'CDP (Lien/Levy)', total: '0' },
         { label: 'Disclosure', total: '0' },
         { label: 'Innocent Spouse', total: '0' },
         { label: 'Interest Abatement', total: '0' },
         { label: 'Other', total: '0' },
-        { label: 'Partnership (BBA Section 1101)', total: '26' },
-        { label: 'Partnership (Section 6226)', total: '48' },
-        { label: 'Partnership (Section 6228)', total: '75' },
         { label: 'Passport', total: '0' },
         { label: 'Whistleblower', total: '0' },
         { label: 'Worker Classification', total: '0' },
       ]);
+    });
+
+    it('should sort open cases by type by the numeric total, not the formatted text', () => {
+      baseState.clerkOfCourtDashboardStats.openCasesByCaseType = [
+        { caseType: 'Other', total: 9 },
+        { caseType: 'Passport', total: 1000 },
+        { caseType: 'Disclosure', total: 100 },
+      ];
+
+      const result = runCompute(dashboardClerkOfTheCourtHelper, {
+        state: baseState,
+      });
+
+      expect(
+        result.openCasesByTypeTableRows.slice(0, 3).map(row => row.label),
+      ).toEqual(['Passport', 'Disclosure', 'Other']);
+    });
+
+    it('should label the cases year by the cases year option', () => {
+      expect(
+        runCompute(dashboardClerkOfTheCourtHelper, { state: baseState })
+          .casesYearLabel,
+      ).toEqual('YTD 2026');
+
+      baseState.clerkOfCourtDashboardOptions.casesByYearIsFiscal = true;
+
+      const result = runCompute(dashboardClerkOfTheCourtHelper, {
+        state: baseState,
+      });
+      expect(result.casesYearLabel).toEqual('FYTD 2027');
+      // the petitions label follows its own option
+      expect(result.petitionsYearLabel).toEqual('YTD 2026');
     });
 
     it('should not change open cases by type with the cases year option', () => {
@@ -457,12 +491,17 @@ describe('dashboardClerkOfTheCourtHelper', () => {
 
     it('should fall back to the current year before the stats have loaded', () => {
       baseState.clerkOfCourtDashboardStats.year = '';
+      baseState.clerkOfCourtDashboardStats.fiscalYear = '';
+      baseState.clerkOfCourtDashboardOptions.petitionsByYearIsFiscal = true;
 
       const result = runCompute(dashboardClerkOfTheCourtHelper, {
         state: baseState,
       });
 
-      expect(result.year).toEqual(formatNow(FORMATS.YEAR));
+      expect(result.casesYearLabel).toEqual(`YTD ${formatNow(FORMATS.YEAR)}`);
+      expect(result.petitionsYearLabel).toEqual(
+        `FYTD ${formatNow(FORMATS.YEAR)}`,
+      );
     });
 
     it('should return empty pie data when there are no cases', () => {
