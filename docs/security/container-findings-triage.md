@@ -59,11 +59,15 @@ Useful commands include:
 # Check installed Debian packages
 docker run --rm <image> dpkg -l
 
-# Check Node.js dependencies
-docker run --rm <image> npm ls --all
+# Check Node.js dependencies, from the npm project directory in the built image
+# (Puppeteer layer: /home/build/nodejs; Batch: /usr/src/app)
+docker run --rm --workdir <project-directory> <image> npm ls --all
 
-# Generate a software inventory (SBOM)
-syft <image>
+# List detected packages, versions, and locations. Use grep to filter by package.
+trivy image --list-all-pkgs --format json --quiet <image> \
+  | jq -r '.Results[] | .Target as $t | .Packages[]?
+      | "\(.Name)\t\(if .Epoch then "\(.Epoch):" else "" end)\(.Version)\(if .Release then "-\(.Release)" else "" end)\t\($t)"'
+
 ```
 
 For Debian packages, consult the [Debian Security Tracker](https://security-tracker.debian.org/tracker/) to verify whether fixes have been backported.
