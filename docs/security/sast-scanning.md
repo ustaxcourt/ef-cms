@@ -18,6 +18,8 @@ DAWSON uses four static analysis tools, all wired through `.github/workflows/sec
 
 SARIF is uploaded only from pushes to staging. Every PR run, whatever branch it targets, reports its findings in the workflow log and job summary instead.
 
+CodeQL is the one exception. It also uploads from same-repository PRs to staging, because the staging code-scanning ruleset needs a CodeQL analysis before a PR can merge. GitHub keeps these analyses on the PR ref, so they do not add alerts to staging.
+
 ## Semgrep
 
 Runs diff-scoped analysis (`--baseline-commit`) so only **new** findings in the PR are flagged.
