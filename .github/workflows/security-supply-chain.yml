@@ -15,6 +15,7 @@ on:
     # The coverage badge bot pushes immediately after each merge; badges cannot change results.
     paths-ignore:
       - 'docs/badges/**'
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
