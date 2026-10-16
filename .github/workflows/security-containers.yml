@@ -170,9 +170,9 @@ jobs:
           category: trivy-image-${{ matrix.name }}
 
   # ─────────────────────────────────────────────────────────────────────────────
-  # Job 4: staging baseline (non-blocking). Runs on merge to staging and weekly, and scans
-  # every distinct image, so the Security tab holds a complete picture of what's actually
-  # live. This is where we discover the full CVE set to triage into .trivyignore.
+  # Job 4: staging baseline (non-blocking). Runs on merges to staging that change image paths
+  # and weekly, and scans every distinct image, so the Security tab holds a complete picture
+  # of what's actually live. This is where we discover the full CVE set to triage into .trivyignore.
   # Mirrors the gitleaks-baseline pattern in the sibling workflows.
   # ─────────────────────────────────────────────────────────────────────────────
   trivy-baseline:
