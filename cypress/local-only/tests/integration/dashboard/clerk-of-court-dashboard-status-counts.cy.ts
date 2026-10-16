@@ -5,18 +5,24 @@ import {
 import {
   FORMATS,
   calculateISODate,
+  createISODateString,
+  deconstructDate,
   prepareDateFromEST,
   prepareDateFromString,
 } from '@shared/business/utilities/DateHandler';
-import { loginAsClerkOfCourt } from 'cypress/helpers/authentication/login-as-helpers';
-
-type StatusGroup = 'closed' | 'onAppeal';
+import { createAndServePaperPetition } from 'cypress/helpers/fileAPetition/create-and-serve-paper-petition';
+import { goToCase } from 'cypress/helpers/caseDetail/go-to-case';
+import {
+  loginAsClerkOfCourt,
+  loginAsDocketClerk1,
+} from 'cypress/helpers/authentication/login-as-helpers';
+import { updateCaseStatus } from 'cypress/helpers/caseDetail/caseInformation/update-case-status';
 
 type CountedChange = {
   date: string;
   month: number;
   procedureType: string;
-  statusGroup: StatusGroup;
+  statusGroup: 'closed' | 'onAppeal';
 };
 
 type StatsWindow = { begin: string; end: string };
@@ -29,13 +35,16 @@ type CaseStats = {
   casesOnAppealByMonth: MonthTotal[];
 };
 
-const { closed, closedDismissed, generalDocket, onAppeal } = CASE_STATUS_TYPES;
+type ClerkDashboardStats = {
+  calendarYearCaseStats: CaseStats;
+  fiscalYear: string;
+  fiscalYearCaseStats: CaseStats;
+  year: string;
+};
+
+const { closed, closedDismissed, generalDocketReadyForTrial, onAppeal } =
+  CASE_STATUS_TYPES;
 const { regular, small } = PROCEDURE_TYPES_MAP;
-
-const docketNumbers = ['9101-97', '9102-97', '9103-97', '9104-97', '9105-97'];
-
-// received long before any dashboard timeframe, matching the task's receivedAt
-const RECEIVED_AT = '1997-06-16T16:00:00.000Z';
 
 const toMillis = (isoDate: string) =>
   prepareDateFromString(isoDate, FORMATS.ISO).toMillis();
@@ -43,6 +52,29 @@ const toMillis = (isoDate: string) =>
 // midnight Eastern on the given date, as a UTC ISO string
 const startOfDayEastern = (date: string) =>
   prepareDateFromEST(date, FORMATS.YYYYMMDD)!;
+
+const getStatsWindows = (stats: ClerkDashboardStats) => {
+  const year = Number(stats.year);
+  const fiscalYear = Number(stats.fiscalYear);
+  return {
+    calendarYear: {
+      begin: startOfDayEastern(`${year}-01-01`),
+      end: startOfDayEastern(`${year + 1}-01-01`),
+    },
+    fiscalYear: {
+      begin: startOfDayEastern(`${fiscalYear - 1}-10-01`),
+      end: startOfDayEastern(`${fiscalYear}-10-01`),
+    },
+  };
+};
+
+const getClerkDashboardStats = () => {
+  cy.intercept('GET', '**/clerk-dashboard-stats').as('clerkDashboardStats');
+  loginAsClerkOfCourt();
+  return cy
+    .wait('@clerkDashboardStats')
+    .then(({ response }) => response!.body as ClerkDashboardStats);
+};
 
 const totalFor = <T extends { total: number }>(
   entries: T[],
@@ -104,165 +136,130 @@ const expectIncrease = (
   }
 };
 
+const expectIncreaseInBothTimeframes = (
+  before: ClerkDashboardStats,
+  after: ClerkDashboardStats,
+  countedChanges: CountedChange[],
+) => {
+  const windows = getStatsWindows(before);
+  expectIncrease(
+    'FYTD',
+    before.fiscalYearCaseStats,
+    after.fiscalYearCaseStats,
+    getExpectedIncrease(countedChanges, windows.fiscalYear),
+  );
+  expectIncrease(
+    'YTD',
+    before.calendarYearCaseStats,
+    after.calendarYearCaseStats,
+    getExpectedIncrease(countedChanges, windows.calendarYear),
+  );
+};
+
 describe('Clerk of Court Dashboard - case status change counts', () => {
-  const deleteStatusHistoryCases = () =>
-    cy.task('deleteCasesByDocketNumbers', { docketNumbers });
+  it('should count each change to Closed or On Appeal made in DAWSON, including when a reopened case closes again', () => {
+    const changeStatuses = (docketNumber: string, statuses: string[]) => {
+      loginAsDocketClerk1();
+      goToCase(docketNumber);
+      statuses.forEach(status => updateCaseStatus(status));
+    };
 
-  before(deleteStatusHistoryCases);
-  after(deleteStatusHistoryCases);
+    getClerkDashboardStats().then(before => {
+      createAndServePaperPetition().then(({ docketNumber }) => {
+        // closed, reopened, closed again: both closures count
+        changeStatuses(docketNumber, [
+          closed,
+          generalDocketReadyForTrial,
+          closed,
+        ]);
+      });
+      createAndServePaperPetition().then(({ docketNumber }) => {
+        // Closed then Closed - Dismissed: only the first change counts
+        changeStatuses(docketNumber, [closed, closedDismissed]);
+      });
+      createAndServePaperPetition().then(({ docketNumber }) => {
+        // Closed then On Appeal: one closure and one change to On Appeal
+        changeStatuses(docketNumber, [closed, onAppeal]);
+      });
 
-  it('should count each change to Closed or On Appeal in the timeframe it happened, including after a reopen and at the fiscal-year boundary', () => {
-    cy.intercept('GET', '**/clerk-dashboard-stats').as('clerkDashboardStats');
-    loginAsClerkOfCourt();
-
-    cy.wait('@clerkDashboardStats').then(({ response: beforeResponse }) => {
-      const before = beforeResponse!.body;
-      const year = Number(before.year);
-      const fiscalYear = Number(before.fiscalYear);
-
-      const calendarYearWindow: StatsWindow = {
-        begin: startOfDayEastern(`${year}-01-01`),
-        end: startOfDayEastern(`${year + 1}-01-01`),
-      };
-      const fiscalYearWindow: StatsWindow = {
-        begin: startOfDayEastern(`${fiscalYear - 1}-10-01`),
-        end: startOfDayEastern(`${fiscalYear}-10-01`),
-      };
-
-      // a time relative to the start of the fiscal year (October 1, midnight Eastern)
-      const fromFiscalStart = (
-        howMuch: number,
-        units: 'days' | 'minutes',
-      ): string =>
-        calculateISODate({
-          dateString: fiscalYearWindow.begin,
-          howMuch,
-          units,
+      getClerkDashboardStats().then(after => {
+        // every change above happened now, so each falls in the current month
+        const now = createISODateString();
+        const month = Number(deconstructDate(now).month);
+        const change = (statusGroup: CountedChange['statusGroup']) => ({
+          date: now,
+          month,
+          procedureType: regular,
+          statusGroup,
         });
 
-      const oneDayIn = fromFiscalStart(1, 'days');
-      const threeDaysIn = fromFiscalStart(3, 'days');
-      const fourDaysIn = fromFiscalStart(4, 'days');
-      const fiveDaysIn = fromFiscalStart(5, 'days');
-      const oneMinuteBefore = fromFiscalStart(-1, 'minutes');
-      const oneMinuteIn = fromFiscalStart(1, 'minutes');
-      const longBefore = fromFiscalStart(-400, 'days');
+        expectIncreaseInBothTimeframes(before, after, [
+          change('closed'),
+          change('closed'),
+          change('closed'),
+          change('closed'),
+          change('onAppeal'),
+        ]);
+      });
+    });
+  });
 
-      const statusHistory = (changes: [string, string][]) => [
-        { date: RECEIVED_AT, updatedCaseStatus: CASE_STATUS_TYPES.new },
-        ...changes.map(([date, updatedCaseStatus]) => ({
-          date,
-          updatedCaseStatus,
-        })),
-      ];
+  describe('fiscal-year boundary', () => {
+    // DAWSON records each status change at the current time, so these cases are written to
+    // Postgres directly to place a change on either side of October 1
+    const docketNumbers = ['9101-97', '9102-97'];
+    const RECEIVED_AT = '1997-06-16T16:00:00.000Z';
+    const deleteBoundaryCases = () =>
+      cy.task('deleteCasesByDocketNumbers', { docketNumbers });
 
-      const cases = [
-        {
-          // closed, reopened, closed again: both closures count
-          docketNumber: docketNumbers[0],
-          procedureType: regular,
-          statusChanges: statusHistory([
-            [oneDayIn, closed],
-            [fromFiscalStart(2, 'days'), generalDocket],
-            [threeDaysIn, closed],
-          ]),
-        },
-        {
-          // closed one minute before the fiscal year starts (September 30, Eastern)
-          docketNumber: docketNumbers[1],
-          procedureType: regular,
-          statusChanges: statusHistory([[oneMinuteBefore, closed]]),
-        },
-        {
-          // closed one minute after the fiscal year starts (October 1, Eastern)
-          docketNumber: docketNumbers[2],
-          procedureType: regular,
-          statusChanges: statusHistory([[oneMinuteIn, closed]]),
-        },
-        {
-          // Closed then Closed - Dismissed: only the first change counts
-          docketNumber: docketNumbers[3],
-          procedureType: small,
-          statusChanges: statusHistory([
-            [fiveDaysIn, closed],
-            [fromFiscalStart(6, 'days'), closedDismissed],
-          ]),
-        },
-        {
-          // closed long before both timeframes, then changed to On Appeal
-          docketNumber: docketNumbers[4],
-          procedureType: regular,
-          statusChanges: statusHistory([
-            [longBefore, closed],
-            [fourDaysIn, onAppeal],
-          ]),
-        },
-      ];
+    before(deleteBoundaryCases);
+    after(deleteBoundaryCases);
 
-      // the changes the dashboard should count, with their month in Eastern time
-      const countedChanges: CountedChange[] = [
-        {
-          date: oneDayIn,
-          month: 10,
+    it('should count a change one minute before October 1 (Eastern) in the previous fiscal year, and one minute after in the current fiscal year', () => {
+      getClerkDashboardStats().then(before => {
+        const fiscalYearStart = getStatsWindows(before).fiscalYear.begin;
+        const oneMinuteBefore = calculateISODate({
+          dateString: fiscalYearStart,
+          howMuch: -1,
+          units: 'minutes',
+        });
+        const oneMinuteAfter = calculateISODate({
+          dateString: fiscalYearStart,
+          howMuch: 1,
+          units: 'minutes',
+        });
+        const closedAt = (docketNumber: string, date: string) => ({
+          docketNumber,
           procedureType: regular,
-          statusGroup: 'closed',
-        },
-        {
-          date: threeDaysIn,
-          month: 10,
-          procedureType: regular,
-          statusGroup: 'closed',
-        },
-        {
-          date: oneMinuteBefore,
-          month: 9,
-          procedureType: regular,
-          statusGroup: 'closed',
-        },
-        {
-          date: oneMinuteIn,
-          month: 10,
-          procedureType: regular,
-          statusGroup: 'closed',
-        },
-        {
-          date: fiveDaysIn,
-          month: 10,
-          procedureType: small,
-          statusGroup: 'closed',
-        },
-        {
-          date: longBefore,
-          month: 0,
-          procedureType: regular,
-          statusGroup: 'closed',
-        },
-        {
-          date: fourDaysIn,
-          month: 10,
-          procedureType: regular,
-          statusGroup: 'onAppeal',
-        },
-      ];
+          statusChanges: [
+            { date: RECEIVED_AT, updatedCaseStatus: CASE_STATUS_TYPES.new },
+            { date, updatedCaseStatus: closed },
+          ],
+        });
 
-      cy.task('insertCasesWithStatusHistory', { cases });
-      cy.reload();
+        cy.task('insertCasesWithStatusHistory', {
+          cases: [
+            closedAt(docketNumbers[0], oneMinuteBefore),
+            closedAt(docketNumbers[1], oneMinuteAfter),
+          ],
+        });
 
-      cy.wait('@clerkDashboardStats').then(({ response: afterResponse }) => {
-        const after = afterResponse!.body;
-
-        expectIncrease(
-          'FYTD',
-          before.fiscalYearCaseStats,
-          after.fiscalYearCaseStats,
-          getExpectedIncrease(countedChanges, fiscalYearWindow),
-        );
-        expectIncrease(
-          'YTD',
-          before.calendarYearCaseStats,
-          after.calendarYearCaseStats,
-          getExpectedIncrease(countedChanges, calendarYearWindow),
-        );
+        getClerkDashboardStats().then(after => {
+          expectIncreaseInBothTimeframes(before, after, [
+            {
+              date: oneMinuteBefore,
+              month: 9,
+              procedureType: regular,
+              statusGroup: 'closed',
+            },
+            {
+              date: oneMinuteAfter,
+              month: 10,
+              procedureType: regular,
+              statusGroup: 'closed',
+            },
+          ]);
+        });
       });
     });
   });
