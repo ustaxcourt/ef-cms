@@ -16,6 +16,7 @@ on:
     # The coverage badge bot pushes immediately after each merge; badges cannot change results.
     paths-ignore:
       - 'docs/badges/**'
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
@@ -33,6 +34,7 @@ jobs:
     if: >-
       github.event_name == 'push' ||
       github.event_name == 'schedule' ||
+      github.event_name == 'workflow_dispatch' ||
       (github.event_name == 'pull_request' && !github.event.pull_request.draft)
     runs-on: ubuntu-latest
     permissions:
@@ -105,6 +107,7 @@ jobs:
     if: >-
       github.event_name == 'push' ||
       github.event_name == 'schedule' ||
+      github.event_name == 'workflow_dispatch' ||
       (github.event_name == 'pull_request' && !github.event.pull_request.draft)
     runs-on: ubuntu-latest
     permissions:
@@ -196,6 +199,7 @@ jobs:
     if: >-
       github.event_name == 'push' ||
       github.event_name == 'schedule' ||
+      github.event_name == 'workflow_dispatch' ||
       (github.event_name == 'pull_request' && !github.event.pull_request.draft)
     runs-on: ubuntu-latest
     permissions:
