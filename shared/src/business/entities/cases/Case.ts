@@ -73,6 +73,11 @@ import { UnprocessableEntityError } from '../../../../../web-api/src/errors/erro
 import { User } from '../User';
 import { clone, compact, includes, startCase } from 'lodash';
 import { compareStrings } from '../../utilities/sortFunctions';
+import {
+  StjEligibilityInputs,
+  calculateStjEligibility,
+} from '@shared/business/utilities/calculateStjEligibility';
+import { shouldRecalculateStjEligibility } from '@shared/business/utilities/shouldRecalculateStjEligibility';
 import { getDocketNumberSuffix } from '../../utilities/getDocketNumberSuffix';
 import { shouldGenerateDocketRecordIndex } from '../../utilities/shouldGenerateDocketRecordIndex';
 import joi from 'joi';
@@ -148,6 +153,7 @@ export class Case extends JoiValidationEntity {
   public initialCaption?: string;
   public irsPractitioners?: any[];
   public statistics?: RawStatistic[];
+  public stjEligible?: boolean | null;
   public correspondence: RawCorrespondence[];
   public archivedCorrespondences?: RawCorrespondence[];
   public hasPendingItems?: boolean;
@@ -216,6 +222,8 @@ export class Case extends JoiValidationEntity {
         changedBy,
         updatedCaseStatus: rawCase.status || CASE_STATUS_TYPES.new,
       });
+
+      this.stjEligible = calculateStjEligibility(this);
     }
   }
 
@@ -416,6 +424,7 @@ export class Case extends JoiValidationEntity {
     this.orderToShowCause = rawCase.orderToShowCause || false;
     this.remoteTrialGranted = rawCase.remoteTrialGranted;
     this.remoteTrialGrantedDate = rawCase.remoteTrialGrantedDate;
+    this.stjEligible = rawCase.stjEligible;
 
     this.assignArchivedDocketEntries({
       authorizedUser,
@@ -758,6 +767,14 @@ export class Case extends JoiValidationEntity {
       })
       .description('List of Statistic Entities for the case.'),
     status: CASE_STATUS_RULE,
+    stjEligible: joi
+      .boolean()
+      .optional()
+      .allow(null)
+      .description(
+        'Whether the case is eligible to be heard by a Special Trial Judge. Null means it has not been evaluated.',
+      )
+      .meta({ tags: ['Restricted'] }),
     trialDate: joi
       .alternatives()
       .conditional('trialSessionId', {
@@ -2040,6 +2057,16 @@ export class Case extends JoiValidationEntity {
       Object.assign(foundCorrespondence, correspondenceEntity);
 
     return this;
+  }
+
+  /**
+   * recalculates STJ eligibility when case type, procedure or IRS amounts differ from the previous case
+   * @param {StjEligibilityInputs} previousCase the case before the edit
+   */
+  updateStjEligibility(previousCase: StjEligibilityInputs): void {
+    if (shouldRecalculateStjEligibility(previousCase, this)) {
+      this.stjEligible = calculateStjEligibility(this);
+    }
   }
 
   /**

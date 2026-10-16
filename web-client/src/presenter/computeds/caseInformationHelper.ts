@@ -68,6 +68,7 @@ export const caseInformationHelper = (
     showEditIrsPractitioners: showEditIrsPractitionersButton,
     showEditPrivatePractitioners: showEditPrivatePractitionersButton,
     showEditRemoteTrialPermission,
+    showEditStjEligibility: permissions.EDIT_STJ_ELIGIBILITY,
     showHearingsTable,
     showSealAddressLink,
     showSealCaseButton,

@@ -17,5 +17,6 @@ export const setupEditPetitionDetailFormAction = ({
     preferredTrialCity: caseDetail.preferredTrialCity,
     procedureType: caseDetail.procedureType,
     statistics: caseDetail.statistics,
+    stjEligible: caseDetail.stjEligible,
   });
 };

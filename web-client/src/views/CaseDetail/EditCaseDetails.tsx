@@ -14,6 +14,7 @@ import React from 'react';
 export const EditCaseDetails = connect(
   {
     CASE_TYPES: state.constants.CASE_TYPES,
+    caseInformationHelper: state.caseInformationHelper,
     docketNumber: state.caseDetail.docketNumber,
     form: state.form,
     updateCaseDetailsSequence: sequences.updateCaseDetailsSequence,
@@ -22,6 +23,7 @@ export const EditCaseDetails = connect(
     validationErrors: state.validationErrors,
   },
   function EditCaseDetails({
+    caseInformationHelper,
     docketNumber,
     form,
     updateCaseDetailsSequence,
@@ -83,6 +85,59 @@ export const EditCaseDetails = connect(
                   <TrialCityOptions procedureType="All" />
                 </select>
               </FormGroup>
+
+              {caseInformationHelper.showEditStjEligibility && (
+                <fieldset
+                  className="usa-fieldset margin-bottom-0"
+                  data-testid="stj-eligibility-radios"
+                >
+                  <legend className="usa-legend">STJ Eligibility</legend>
+                  <div className="usa-radio usa-radio__inline">
+                    <input
+                      checked={form.stjEligible === true}
+                      className="usa-radio__input"
+                      id="stj-eligible-yes"
+                      name="stjEligible"
+                      type="radio"
+                      onChange={() => {
+                        updateFormValueSequence({
+                          key: 'stjEligible',
+                          value: true,
+                        });
+                      }}
+                    />
+                    <label
+                      className="usa-radio__label"
+                      data-testid="stj-eligible-yes-radio"
+                      htmlFor="stj-eligible-yes"
+                    >
+                      Eligible
+                    </label>
+                  </div>
+                  <div className="usa-radio usa-radio__inline">
+                    <input
+                      checked={form.stjEligible === false}
+                      className="usa-radio__input"
+                      id="stj-eligible-no"
+                      name="stjEligible"
+                      type="radio"
+                      onChange={() => {
+                        updateFormValueSequence({
+                          key: 'stjEligible',
+                          value: false,
+                        });
+                      }}
+                    />
+                    <label
+                      className="usa-radio__label"
+                      data-testid="stj-eligible-no-radio"
+                      htmlFor="stj-eligible-no"
+                    >
+                      Not eligible
+                    </label>
+                  </div>
+                </fieldset>
+              )}
             </div>
 
             <PetitionPaymentForm

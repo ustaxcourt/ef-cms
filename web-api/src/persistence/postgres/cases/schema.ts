@@ -68,6 +68,7 @@ export const caseTableDefinition = {
   sortableDocketNumber: 0 as number,
   statistics: DEFAULT as ColumnType<RawStatistic[], string, string>,
   status: DEFAULT as string,
+  stjEligible: DEFAULT as boolean | null,
   trialDate: DEFAULT as Date | null,
   trialLocation: DEFAULT as string | null,
   trialSessionId: DEFAULT as string | null,

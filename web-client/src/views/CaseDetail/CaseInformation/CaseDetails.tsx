@@ -28,6 +28,7 @@ export const CaseDetails: React.FC<CaseDetailsProps> = connect(
       irsNoticeDateFormatted: string;
       filingFee: string;
       formattedPreferredTrialCity: string;
+      formattedStjEligibility: string;
     };
     caseInformationHelper: {
       showSealCaseButton: boolean;
@@ -68,8 +69,16 @@ export const CaseDetails: React.FC<CaseDetailsProps> = connect(
               {caseDetail.formattedPreferredTrialCity}
             </p>
           </div>
+          <div className="grid-col-6">
+            <p className="label">STJ Eligibility</p>
+            <p className="margin-bottom-0" data-testid="stj-eligibility">
+              {caseDetail.formattedStjEligibility}
+            </p>
+          </div>
+        </div>
+        <div className="grid-row">
           {caseInformationHelper.showSealCaseButton && (
-            <div className="grid-col-6">
+            <div className="grid-col-6 margin-top-2">
               <Button
                 link
                 className="red-warning"
@@ -87,7 +96,7 @@ export const CaseDetails: React.FC<CaseDetailsProps> = connect(
           )}
 
           {caseInformationHelper.showUnsealCaseButton && (
-            <div className="grid-col-6">
+            <div className="grid-col-6 margin-top-2">
               <Button
                 link
                 className="red-warning"
