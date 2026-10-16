@@ -11,6 +11,9 @@ inputs:
   report_path:
     description: Path for the SARIF report.
     default: gitleaks.sarif
+  source:
+    description: Directory to scan.
+    default: '.'
   version:
     description: Gitleaks release version.
     default: 8.30.1
@@ -33,10 +36,12 @@ runs:
         EXIT_CODE: ${{ inputs.exit_code }}
         LOG_OPTS: ${{ inputs.log_opts }}
         REPORT_PATH: ${{ inputs.report_path }}
+        SOURCE: ${{ inputs.source }}
       run: |
         GITLEAKS_ARGS=(
           detect
-          --config .gitleaks.toml
+          --source "$SOURCE"
+          --config "$SOURCE/.gitleaks.toml"
           --redact
           --report-format sarif
           --report-path "$REPORT_PATH"
