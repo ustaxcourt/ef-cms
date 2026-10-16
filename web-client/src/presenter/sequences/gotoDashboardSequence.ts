@@ -1,4 +1,3 @@
-import { setClerkOfCourtDashboardChartsAction } from '../actions/Dashboard/setClerkOfCourtDashboardChartsAction';
 import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { clearSelectedWorkItemsAction } from '../actions/clearSelectedWorkItemsAction';
 import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
@@ -72,9 +71,9 @@ export const gotoDashboardSequence = [
             getMessages,
             [getTrialSessionsAction, setTrialSessionsAction],
           ]),
+          // the view loads the chart stats itself (loadClerkOfCourtDashboardChartsSequence),
+          // so navigation away from the dashboard does not wait for that request
           setupCurrentPageAction('DashboardClerkOfCourt'),
-          // charts show their own loading state, so the page renders before their data arrives
-          setClerkOfCourtDashboardChartsAction,
         ],
         chambers: [
           fetchUserNotificationsSequence,

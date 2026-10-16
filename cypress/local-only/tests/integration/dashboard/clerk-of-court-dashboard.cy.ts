@@ -511,6 +511,24 @@ describe('Clerk of Court Dashboard', () => {
     ).should('exist');
   });
 
+  it('should navigate away from the dashboard while the stats are still loading', () => {
+    // hold the stats response well past the navigation timeouts below
+    cy.intercept('GET', '**/clerk-dashboard-stats', req => {
+      req.on('response', res => {
+        res.setDelay(10000);
+      });
+    }).as('clerkDashboardStats');
+    loginAsClerkOfCourt();
+    cy.get('[data-testid="chart-loading"]').should('exist');
+
+    cy.get('[data-testid="trial-session-link"]').click();
+
+    cy.url({ timeout: 5000 }).should('include', '/trial-sessions');
+    cy.get('[data-testid="add-trial-session-button"]', {
+      timeout: 5000,
+    }).should('exist');
+  });
+
   it('should show one error state for the tab when the stats fail to load', () => {
     cy.intercept('GET', '**/clerk-dashboard-stats', {
       statusCode: 500,

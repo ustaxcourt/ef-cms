@@ -15,7 +15,7 @@ import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '@web-client/ustc-ui/Tabs/Tabs';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
 
 const CHART_WIDTH = 1300;
@@ -208,6 +208,8 @@ export const DashboardClerkOfCourt = connect(
     dashboardClerkOfTheCourtHelper: state.dashboardClerkOfTheCourtHelper,
     user: state.user,
     casesByYearIsFiscal: state.clerkOfCourtDashboardOptions.casesByYearIsFiscal,
+    loadClerkOfCourtDashboardChartsSequence:
+      sequences.loadClerkOfCourtDashboardChartsSequence,
     petitionsByYearIsFiscal:
       state.clerkOfCourtDashboardOptions.petitionsByYearIsFiscal,
     setClerkOfCourtDashboardOptionsSequence:
@@ -217,11 +219,17 @@ export const DashboardClerkOfCourt = connect(
   function DashboardClerkOfCourt({
     casesByYearIsFiscal,
     dashboardClerkOfTheCourtHelper,
+    loadClerkOfCourtDashboardChartsSequence,
     user,
     petitionsByYearIsFiscal,
     setClerkOfCourtDashboardOptionsSequence,
     statsStatus,
   }) {
+    // load the chart stats outside the route's sequence, so navigation never waits for them
+    useEffect(() => {
+      loadClerkOfCourtDashboardChartsSequence();
+    }, []);
+
     const {
       petitionsByMonthAndServiceTypeChartData,
       petitionsByRepresentationPieData,
