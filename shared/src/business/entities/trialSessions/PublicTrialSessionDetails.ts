@@ -1,10 +1,10 @@
 import { JoiValidationConstants } from '@shared/business/entities/JoiValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
-import type { PublicCaseDTO } from '@shared/business/dto/cases/PublicCaseDTO';
-import type { RestrictedCaseDTO } from '@shared/business/dto/cases/RestrictedCaseDTO';
+import type { PublicCaseResponse } from '@shared/business/dto/cases/PublicCaseResponse';
+import type { RestrictedCaseResponse } from '@shared/business/dto/cases/RestrictedCaseResponse';
 import joi from 'joi';
 
-type PublicCalendaredCase = PublicCaseDTO | RestrictedCaseDTO;
+type PublicCalendaredCase = PublicCaseResponse | RestrictedCaseResponse;
 
 export class PublicTrialSessionDetails extends JoiValidationEntity {
   public address1?: string;

@@ -1,6 +1,7 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { PARTY_TYPES } from '@shared/business/entities/EntityConstants';
+import { findUnauthorizedPublicFields } from '@shared/business/utilities/publicDataValidation';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getContactPrimary } from '@shared/business/entities/cases/Case';
 import { getPublicCaseDocketEntriesInteractor } from './getPublicCaseDocketEntriesInteractor';
@@ -51,6 +52,33 @@ describe('getPublicCaseDocketEntriesInteractor', () => {
     expect(result.pageSize).toEqual(1000);
     expect(result.totalCount).toBeGreaterThanOrEqual(0);
     expect(Array.isArray(result.docketEntries)).toBe(true);
+  });
+
+  it('should return validated PublicDocketEntry entities', async () => {
+    const result = await getPublicCaseDocketEntriesInteractor({
+      docketNumber: mockCase.docketNumber,
+      page: 0,
+    });
+
+    expect(result.docketEntries.length).toBeGreaterThan(0);
+    result.docketEntries.forEach(docketEntry => {
+      expect(docketEntry.entityName).toEqual('PublicDocketEntry');
+      expect((docketEntry as any).isValidated).toBe(true);
+    });
+  });
+
+  it('should return no unauthorized public fields', async () => {
+    const result = await getPublicCaseDocketEntriesInteractor({
+      docketNumber: mockCase.docketNumber,
+      page: 0,
+    });
+
+    const findings = findUnauthorizedPublicFields({
+      data: result,
+      url: `http://localhost:4001/public-api/cases/${mockCase.docketNumber}/docket-entries`,
+    });
+
+    expect(findings).toEqual([]);
   });
 
   it('should default page to 0 when not provided', async () => {
