@@ -64,6 +64,14 @@ export const updateCaseDetails = async (
     'statistics',
   ];
 
+  const canEditStjEligibility = isAuthorized(
+    authorizedUser,
+    ROLE_PERMISSIONS.EDIT_STJ_ELIGIBILITY,
+  );
+  if (canEditStjEligibility) {
+    allowedFields.push('stjEligible');
+  }
+
   const editableFields = Object.fromEntries(
     Object.entries(caseDetails).filter(
       ([key, value]) => allowedFields.includes(key) && value !== undefined,
@@ -98,6 +106,13 @@ export const updateCaseDetails = async (
     },
     { authorizedUser },
   );
+
+  const stjEligibilityEditedManually =
+    'stjEligible' in editableFields &&
+    editableFields.stjEligible !== oldCase.stjEligible;
+  if (!stjEligibilityEditedManually) {
+    newCaseEntity.updateStjEligibility(oldCaseClone);
+  }
 
   if (
     oldCase.petitionPaymentStatus === PAYMENT_STATUS.UNPAID ||

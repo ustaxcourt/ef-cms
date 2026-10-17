@@ -25,6 +25,7 @@ export const deleteDeficiencyStatistic = async (
 
   const newCase = new Case(oldCase, { authorizedUser });
   newCase.deleteStatistic(statisticId);
+  newCase.updateStjEligibility(oldCase);
   const validRawCase = newCase.validate().toRawObject();
 
   await upsertCases([validRawCase]);

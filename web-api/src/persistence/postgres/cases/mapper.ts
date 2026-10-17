@@ -96,6 +96,7 @@ export function toKyselyNewCase(rawCase: RawCase): NewCaseKysely {
     sortableDocketNumber: rawCase.sortableDocketNumber,
     statistics: JSON.stringify(rawCase.statistics),
     status: rawCase.status,
+    stjEligible: rawCase.stjEligible,
     trialDate: rawCase.trialDate
       ? calculateDate({ dateString: rawCase.trialDate })
       : null,

@@ -1257,6 +1257,18 @@ export const CASE_TYPES_MAP = {
 export const CASE_TYPES = Object.values(CASE_TYPES_MAP);
 export type CaseType = (typeof CASE_TYPES_MAP)[keyof typeof CASE_TYPES_MAP];
 
+export const STJ_IRS_AMOUNT_LIMIT = 50000;
+
+export const STJ_ALWAYS_ELIGIBLE_CASE_TYPES: string[] = [
+  CASE_TYPES_MAP.cdp,
+  CASE_TYPES_MAP.disclosure,
+  CASE_TYPES_MAP.djExemptOrg,
+  CASE_TYPES_MAP.djRetirementPlan,
+  CASE_TYPES_MAP.interestAbatement,
+  CASE_TYPES_MAP.other,
+  CASE_TYPES_MAP.whistleblower,
+];
+
 export const CASE_TYPE_DESCRIPTIONS_WITH_IRS_NOTICE = {
   [CASE_TYPES_MAP.deficiency]: 'Notice of Deficiency',
   [CASE_TYPES_MAP.cdp]: 'Notice of Determination Concerning Collection Action',

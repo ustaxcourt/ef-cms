@@ -58,6 +58,7 @@
 "dw_case","sortable_docket_number","string","The docket number in a sortable format. Example 3167-25 would be 2025003167"
 "dw_case","trial_session_id","string","The ID of the scheduled trial session"
 "dw_case","trial_time","string","The Start time of the scheduled trial session"
+"dw_case","stj_eligible","boolean","TRUE if the case is eligible to be heard by a Special Trial Judge, FALSE if it is not. NULL if it has not been evaluated (for example, cases that were closed or on appeal when the field was backfilled). Recalculated when the case type, case procedure or IRS-proposed statistics change, and editable by a Case Services Supervisor."
 "dw_case","use_same_as_primary","boolean","This field is set to true ONLY when a Court User is inputting a paper petition and they check the box to use the same address as the primary petitioner. If this box is not checked the field remains NULL.","This field needs follow-up. This is currently NOT getting set to TRUE when an electronic petitioner checks the box to use the same mailing address as above. I assume it should be getting set to True for this workflow as well? In the future should this be stored with secondary petitioner instead of here?"
 "dw_case_status_update","status_update_id","string","A unique identifier of the case status."
 "dw_case_status_update","changed_by","string","The entitiy that triggered the update. This could be the system (when an automated process updates the case status) or a specific user of DAWSON (submitting a case; manually updating the case status; etc.)."
