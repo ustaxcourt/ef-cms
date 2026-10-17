@@ -85,7 +85,7 @@ gh run watch "$RUN_ID" --exit-status
 The shared `.github/actions/dawson-trivy-image-scan/action.yml` action has the `ROLLOUT GUARD`
 marking image scans as warn-only. To make image scans blocking:
 
-1. Triage existing findings — either fix them or add to `.trivyignore` (see [container-findings-triage.md](container-findings-triage.md))
+1. Triage existing findings — either fix them or record them as VEX statements in `.vex/ef-cms.openvex.json` (see [container-findings-triage.md](container-findings-triage.md)), and pass that file to the scans with Trivy's `--vex` option
 2. Change `exit-code: '0'` to `exit-code: '1'` in `dawson-trivy-image-scan/action.yml`
 3. The `containers-gate` job will then fail PRs that introduce new vulnerabilities
 

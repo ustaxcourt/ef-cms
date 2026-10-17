@@ -10,17 +10,7 @@ This is a documentation-only effort. No vulnerabilities will be remediated as pa
 
 For details on how scans are performed, see [container-scanning.md](container-scanning.md).
 
-## 1. Current Findings
-
-As of October 15, 2026, DAWSON had **13,376 open code-scanning alerts** on `staging`, with 12,292 (92%) originating from Trivy image scans.
-
-However, many alerts are associated with older scans or repeated CVEs across related packages. Only **1,072 findings** came from the currently running weekly baseline scans.
-
-The goal is to prioritize findings based on actual risk rather than treating every reported vulnerability as equally urgent.
-
-Current findings can be reviewed in GitHub's Security tab using the relevant Trivy scan categories.
-
-## 2. DAWSON Container Image Inventory
+## 1. DAWSON Container Image Inventory
 
 Understanding where each image is used is the first step in evaluating its findings.
 
@@ -31,16 +21,17 @@ Understanding where each image is used is the first step in evaluating its findi
 | Puppeteer image | Temporary environment for packaging dependencies into a Lambda layer | The Docker image is not deployed; the generated ZIP is |
 | `efcms-local` | Local development and CI testing | Runs on developer machines and in testing workflows |
 
-**Important scanning limitation:** Current Trivy scans for the batch and Puppeteer images examine their Node.js base images rather than the fully built images. Packages subsequently installed through `apt-get` or `npm ci` may therefore be missing from those scan results.
+**Scanning coverage:** Trivy image scans for the batch and Puppeteer images examine their Node.js base images, not the built images. npm dependencies installed by `npm ci` come from each image's `package-lock.json`, which the full-tree Trivy scan in `.github/workflows/security-supply-chain.yml` covers (Security tab category `trivy`). Not covered by any scan: `awscli` (installed by `apt-get`) and the global `ts-node`/`typescript` installs in the batch image, and `zip` in the Puppeteer build image.
 
-## 3. Evaluating Container Findings
+## 2. Evaluating Container Findings
 
-Each finding should follow four steps:
+Each finding should follow five steps:
 
 1. Confirm the vulnerable package is present.
 2. Classify the dependency.
 3. Evaluate the actual security risk.
 4. Determine whether to fix, accept, or escalate.
+5. Record the decision as a VEX statement.
 
 ### Step 1: Confirm the Vulnerable Package Is Present
 
@@ -49,6 +40,7 @@ Before investigating exploitability, verify that the affected package and vulner
 Consider the following:
 
 - **Correct artifact:** Is the scanner examining the actual deployed image, a base image, or a temporary build image?
+  - For `ef-cms-us-east-1`, Trivy scans an image built from the current `Dockerfile`, while CircleCI uses the version pinned in `.circleci/config.yml`. These may differ, so verify findings against the image CircleCI actually uses.
 - **Package presence:** Is the affected package installed in the relevant image or included in the deployed artifact?
 - **Package version:** Is the installed version vulnerable, or has the distribution already applied a security patch?
 - **Build output:** Does the vulnerable package remain in the final image, or is it excluded after the build process?
@@ -68,6 +60,11 @@ trivy image --list-all-pkgs --format json --quiet <image> \
   | jq -r '.Results[] | .Target as $t | .Packages[]?
       | "\(.Name)\t\(if .Epoch then "\(.Epoch):" else "" end)\(.Version)\(if .Release then "-\(.Release)" else "" end)\t\($t)"'
 
+# Scan the ECR image used by CircleCI
+aws ecr get-login-password --region us-east-1 \
+  | docker login --username AWS --password-stdin "${AWS_ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com"
+TAG=$(grep -m1 'docker-image:' .circleci/config.yml | awk -F':' '{print $3}')
+trivy image "${AWS_ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:${TAG}"
 ```
 
 For Debian packages, consult the [Debian Security Tracker](https://security-tracker.debian.org/tracker/) to verify whether fixes have been backported.
@@ -109,7 +106,7 @@ Inherited vulnerabilities are commonly addressed by updating the base image. Add
 
 Classification depends on actual usage.
 
-For example, TypeScript is typically a build-time dependency when an application compiles `.ts` files into JavaScript before deployment. However, if production executes TypeScript through `ts-node`, those tools may also be required at runtime.
+For example, `ts-node` and `typescript` are devDependencies in the root `package.json`, where they are build and test tools. The batch image is different: its Dockerfile installs both globally and starts the job with `CMD ["ts-node", "src/docketEntryBatchDownloader.ts"]`. In that image they are runtime dependencies, because the production job cannot run without them. The same package can be build-time in one place and runtime in another, so classify it by how the image uses it, not by how it is declared elsewhere.
 
 Likewise, a dependency used by CircleCI may be essential while a CI/CD job executes, even if it is not part of the production application.
 
@@ -159,13 +156,74 @@ After evaluating the risk, classify the finding into one of four outcomes.
 | **Escalate** | Significant impact, active exploitation, insufficient mitigation, or a required security exception | Notify the security team or ISSO for further review |
 | **False positive** | The scanner incorrectly identifies an affected component, version, or vulnerability | Document supporting evidence and dismiss appropriately |
 
-Where applicable, accepted findings may be documented using `.trivyignore` with an explanation and expiration date, following team-approved procedures.
+Every decision is recorded as a VEX statement in Step 5.
 
 Risk acceptance should not be based solely on the absence of an available patch. Vulnerabilities without fixes may require compensating controls or escalation.
 
 Remediation timelines and approval requirements should follow the organization's security policies.
 
-## 4. DAWSON Worked Examples
+### Step 5: Record a VEX Statement
+
+A [VEX (Vulnerability Exploitability eXchange)](https://openvex.dev/) statement is a machine-readable record of whether a CVE affects a product and why. Unlike `.trivyignore`, which only hides a CVE, a VEX statement carries a standard status and justification that reviewers, auditors, and Trivy can all read.
+
+DAWSON's statements live in a single [OpenVEX](https://github.com/openvex/spec) file, `.vex/ef-cms.openvex.json`. The first statement added creates the file.
+
+**Map the Step 4 decision to a VEX status:**
+
+| Decision | VEX `status` | VEX `justification` (required for `not_affected`) |
+|---|---|---|
+| False positive | `not_affected` | `component_not_present` or `vulnerable_code_not_present` |
+| Accept | `not_affected` | `vulnerable_code_not_in_execute_path`, `vulnerable_code_cannot_be_controlled_by_adversary`, or `inline_mitigations_already_exist` |
+| Fix | `affected`, with an `action_statement` naming the remediation ticket; change to `fixed` once the fix ships | — |
+| Escalate | `under_investigation` until the security team or ISSO decides | — |
+
+**To add a statement:**
+
+1. Add an entry to `statements` in `.vex/ef-cms.openvex.json`:
+   - `vulnerability.name`: the CVE ID.
+   - `products`: the image as a package URL (purl), with the affected packages as `subcomponents`. Take each package's purl from Trivy's JSON output (`.PkgIdentifier.PURL`). Drop the version and qualifiers when the justification holds for every version, as in the example below. Keep the version when it does not.
+   - `status` and `justification` from the table above.
+   - `impact_statement`: one or two sentences of evidence, with a link to the source. For an accepted finding, include the review date.
+2. Update the file's top-level `timestamp` and increment its `version`.
+3. Confirm that Trivy applies the statement. A `not_affected` or `fixed` finding should move from the results to the suppressed list:
+   ```bash
+   trivy image --vex .vex/ef-cms.openvex.json --show-suppressed <image>
+   ```
+4. Open a PR with the VEX change and the triage record (see [Recording Triage Decisions](#4-recording-triage-decisions)), then dismiss the GitHub alert with a link to the PR.
+
+The CI scans in `security-containers.yml` do not pass this file to Trivy yet, so the Security tab still shows `not_affected` findings until their alerts are dismissed.
+
+**Example:** the statement for [Example 1](#example-1-zlib-in-the-batch-base-image). Tested with Trivy 0.76 against `node:24.21.0`: both zlib findings moved to the suppressed list, and every other finding was still reported.
+
+```json
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "https://github.com/ustaxcourt/ef-cms/blob/staging/.vex/ef-cms.openvex.json",
+  "author": "U.S. Tax Court DAWSON team",
+  "timestamp": "2026-10-17T00:00:00Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": { "name": "CVE-2023-45853" },
+      "products": [
+        {
+          "@id": "pkg:oci/node?repository_url=index.docker.io%2Flibrary%2Fnode",
+          "subcomponents": [
+            { "@id": "pkg:deb/debian/zlib1g" },
+            { "@id": "pkg:deb/debian/zlib1g-dev" }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_present",
+      "impact_statement": "The vulnerability is in MiniZip. Debian bookworm's zlib does not build MiniZip (https://security-tracker.debian.org/tracker/CVE-2023-45853).",
+      "timestamp": "2026-10-17T00:00:00Z"
+    }
+  ]
+}
+```
+
+## 3. DAWSON Worked Examples
 
 The following examples demonstrate how a finding's actual risk may differ from its reported severity.
 
@@ -178,6 +236,7 @@ The following examples demonstrate how a finding's actual risk may differ from i
 - **Evidence:** Debian's security tracker indicates that the affected MiniZip functionality is not built into the relevant Bookworm zlib package.
 - **Assessment:** The vulnerable functionality is absent despite the reported package version.
 - **Recommended decision:** Classify as not affected, with supporting vendor evidence.
+- **VEX statement:** `not_affected` with `vulnerable_code_not_present` (see the [Step 5 example](#step-5-record-a-vex-statement)).
 
 ### Example 2: Perl Archive::Tar in the Puppeteer Build Image
 
@@ -211,7 +270,7 @@ The following examples demonstrate how a finding's actual risk may differ from i
 
 These examples also highlight a potential improvement: using `node:24.21.0-slim` instead of the full Node.js image for the batch workload could reduce unnecessary OS packages and associated findings, subject to compatibility testing.
 
-## 5. Recording Triage Decisions
+## 4. Recording Triage Decisions
 
 Each reviewed finding should include sufficient information for another engineer or security reviewer to understand the conclusion.
 
@@ -246,9 +305,13 @@ Use the following template:
 - Justification:
 - Owner:
 - Remediation or review date:
+
+**5. VEX Statement**
+- Status / justification:
+- PR adding the statement:
 ```
 
-## 6. Review and Maintenance
+## 5. Review and Maintenance
 
 Vulnerability assessments should be revisited when relevant conditions change, including:
 
@@ -259,6 +322,8 @@ Vulnerability assessments should be revisited when relevant conditions change, i
 - Changes to AWS permissions, network access, or deployment configuration.
 
 Accepted findings should include a review date and supporting justification to prevent outdated risk assessments from remaining indefinitely.
+
+When a reassessment changes a decision, update its VEX statement in `.vex/ef-cms.openvex.json` in the same PR: change the `status`, refresh the statement's `timestamp`, and increment the file's `version`. A `fixed` statement can be removed once the affected package no longer appears in any scanned image.
 
 ## Summary
 
