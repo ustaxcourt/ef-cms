@@ -164,64 +164,29 @@ Remediation timelines and approval requirements should follow the organization's
 
 ### Step 5: Record a VEX Statement
 
-A [VEX (Vulnerability Exploitability eXchange)](https://openvex.dev/) statement is a machine-readable record of whether a CVE affects a product and why. Unlike `.trivyignore`, which only hides a CVE, a VEX statement carries a standard status and justification that reviewers, auditors, and Trivy can all read.
+[VEX (Vulnerability Exploitability eXchange)](https://openvex.dev/) provides a standardized way to document whether a vulnerability affects a specific image or artifact and why.
 
-DAWSON's statements live in a single [OpenVEX](https://github.com/openvex/spec) file, `.vex/ef-cms.openvex.json`. The first statement added creates the file.
+After completing the triage assessment, record the outcome in an OpenVEX file (proposed location: `.vex/ef-cms.openvex.json`).
 
-**Map the Step 4 decision to a VEX status:**
+Each statement should include:
 
-| Decision | VEX `status` | VEX `justification` (required for `not_affected`) |
-|---|---|---|
-| False positive | `not_affected` | `component_not_present` or `vulnerable_code_not_present` |
-| Accept | `not_affected` | `vulnerable_code_not_in_execute_path`, `vulnerable_code_cannot_be_controlled_by_adversary`, or `inline_mitigations_already_exist` |
-| Fix | `affected`, with an `action_statement` naming the remediation ticket; change to `fixed` once the fix ships | — |
-| Escalate | `under_investigation` until the security team or ISSO decides | — |
+- **Vulnerability:** The CVE being evaluated.
+- **Product:** The affected image or artifact, using an appropriate identifier.
+- **Status:** `affected`, `not_affected`, `fixed`, or `under_investigation`.
+- **Justification:** Why a finding is `not_affected`, when applicable.
+- **Supporting evidence:** A brief explanation and references supporting the assessment.
 
-**To add a statement:**
+VEX status should reflect whether the vulnerability affects the product, not simply whether the team has accepted the risk.
 
-1. Add an entry to `statements` in `.vex/ef-cms.openvex.json`:
-   - `vulnerability.name`: the CVE ID.
-   - `products`: the image as a package URL (purl), with the affected packages as `subcomponents`. Take each package's purl from Trivy's JSON output (`.PkgIdentifier.PURL`). Drop the version and qualifiers when the justification holds for every version, as in the example below. Keep the version when it does not.
-   - `status` and `justification` from the table above.
-   - `impact_statement`: one or two sentences of evidence, with a link to the source. For an accepted finding, include the review date.
-2. Update the file's top-level `timestamp` and increment its `version`.
-3. Confirm that Trivy applies the statement. A `not_affected` or `fixed` finding should move from the results to the suppressed list:
-   ```bash
-   trivy image --vex .vex/ef-cms.openvex.json --show-suppressed <image>
-   ```
-4. Open a PR with the VEX change and the triage record (see [Recording Triage Decisions](#4-recording-triage-decisions)), then dismiss the GitHub alert with a link to the PR.
+To verify a statement against an image:
 
-The CI scans in `security-containers.yml` do not pass this file to Trivy yet, so the Security tab still shows `not_affected` findings until their alerts are dismissed.
-
-**Example:** the statement for [Example 1](#example-1-zlib-in-the-batch-base-image). Tested with Trivy 0.76 against `node:24.21.0`: both zlib findings moved to the suppressed list, and every other finding was still reported.
-
-```json
-{
-  "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "https://github.com/ustaxcourt/ef-cms/blob/staging/.vex/ef-cms.openvex.json",
-  "author": "U.S. Tax Court DAWSON team",
-  "timestamp": "2026-10-17T00:00:00Z",
-  "version": 1,
-  "statements": [
-    {
-      "vulnerability": { "name": "CVE-2023-45853" },
-      "products": [
-        {
-          "@id": "pkg:oci/node?repository_url=index.docker.io%2Flibrary%2Fnode",
-          "subcomponents": [
-            { "@id": "pkg:deb/debian/zlib1g" },
-            { "@id": "pkg:deb/debian/zlib1g-dev" }
-          ]
-        }
-      ],
-      "status": "not_affected",
-      "justification": "vulnerable_code_not_present",
-      "impact_statement": "The vulnerability is in MiniZip. Debian bookworm's zlib does not build MiniZip (https://security-tracker.debian.org/tracker/CVE-2023-45853).",
-      "timestamp": "2026-10-17T00:00:00Z"
-    }
-  ]
-}
+```bash
+trivy image --vex .vex/ef-cms.openvex.json --show-suppressed <image>
 ```
+
+Review the results to confirm that only the intended findings are suppressed.
+
+**Note:** DAWSON's existing container scans do not currently consume this VEX file. Integrating VEX into the CI/CD scanning workflow would require a separate change.
 
 ## 3. DAWSON Worked Examples
 
