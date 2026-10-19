@@ -3,11 +3,51 @@ import { dashboardClerkOfTheCourtHelper as dashboardClerkOfTheCourtHelperCompute
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { FORMATS, formatNow } from '@shared/business/utilities/DateHandler';
+import {
+  CASE_TYPES,
+  FISCAL_MONTH_LABELS,
+  GRAPH_COLORS,
+  MONTH_LABELS,
+} from '@shared/business/entities/EntityConstants';
+import { Month } from '@web-api/business/useCases/reports/getClerkDashboardStatsInteractor';
+import { sum } from 'lodash';
 
 const dashboardClerkOfTheCourtHelper = withAppContextDecorator(
   dashboardClerkOfTheCourtHelperComputed,
   { ...applicationContext },
 );
+
+const toMonths = (labels: string[]): Month[] =>
+  labels.map(label => Month[label as keyof typeof Month]);
+const CALENDAR_MONTHS = toMonths(MONTH_LABELS);
+const FISCAL_MONTHS = toMonths(FISCAL_MONTH_LABELS);
+
+// totals are in chart order: January first for YTD, October first for FYTD
+const toMonthTotals = (months: Month[], totals: number[]) =>
+  months.map((month, i) => ({ month, total: totals[i] }));
+
+const CALENDAR_PETITIONS_ELECTRONIC_BY_MONTH = [
+  50, 150, 250, 350, 450, 550, 650, 750, 850, 950, 1050, 1150,
+];
+const CALENDAR_PETITIONS_PAPER_BY_MONTH = [
+  0, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100,
+];
+const FISCAL_PETITIONS_ELECTRONIC_BY_MONTH = [
+  1550, 1650, 1750, 150, 250, 350, 450, 550, 650, 750, 850, 950,
+];
+const FISCAL_PETITIONS_PAPER_BY_MONTH = [
+  1500, 1600, 1700, 100, 200, 300, 400, 500, 600, 700, 800, 900,
+];
+
+const OPEN_CASES = { regular: 14216, small: 5591 };
+const CALENDAR_CLOSED_CASES = { regular: 300, small: 106 };
+const FISCAL_CLOSED_CASES = { regular: 1000, small: 421 };
+const CALENDAR_CLOSED_BY_MONTH = [100, 101, 102, 103, 0, 0, 0, 0, 0, 0, 0, 0];
+const CALENDAR_ON_APPEAL_BY_MONTH = [0, 4, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0];
+const FISCAL_CLOSED_BY_MONTH = [
+  200, 201, 202, 203, 204, 205, 206, 0, 0, 0, 0, 0,
+];
+const FISCAL_ON_APPEAL_BY_MONTH = [3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0, 0];
 
 describe('dashboardClerkOfTheCourtHelper', () => {
   let baseState;
@@ -19,16 +59,14 @@ describe('dashboardClerkOfTheCourtHelper', () => {
       },
       clerkOfCourtDashboardStats: {
         calendarYearPetitionStats: {
-          petitionFullPaperMonths: Array.from({ length: 12 }, (_, i) => ({
-            month: i + 1,
-            isPaper: true,
-            total: i * 100,
-          })),
-          petitionFullElectronicMonths: Array.from({ length: 12 }, (_, i) => ({
-            month: i + 1,
-            isPaper: false,
-            total: i * 100 + 50,
-          })),
+          petitionFullPaperMonths: toMonthTotals(
+            CALENDAR_MONTHS,
+            CALENDAR_PETITIONS_PAPER_BY_MONTH,
+          ).map(monthTotal => ({ ...monthTotal, isPaper: true })),
+          petitionFullElectronicMonths: toMonthTotals(
+            CALENDAR_MONTHS,
+            CALENDAR_PETITIONS_ELECTRONIC_BY_MONTH,
+          ).map(monthTotal => ({ ...monthTotal, isPaper: false })),
           petitionsByServiceType: [
             {
               total: 7200,
@@ -51,16 +89,14 @@ describe('dashboardClerkOfTheCourtHelper', () => {
           ],
         },
         fiscalYearPetitionStats: {
-          petitionFullPaperMonths: Array.from({ length: 12 }, (_, i) => ({
-            month: i < 3 ? i + 10 : i - 2,
-            isPaper: true,
-            total: i < 3 ? i * 100 + 1500 : (i - 2) * 100,
-          })),
-          petitionFullElectronicMonths: Array.from({ length: 12 }, (_, i) => ({
-            month: i < 3 ? i + 10 : i - 2,
-            isPaper: false,
-            total: i < 3 ? i * 100 + 1550 : (i - 2) * 100 + 50,
-          })),
+          petitionFullPaperMonths: toMonthTotals(
+            FISCAL_MONTHS,
+            FISCAL_PETITIONS_PAPER_BY_MONTH,
+          ).map(monthTotal => ({ ...monthTotal, isPaper: true })),
+          petitionFullElectronicMonths: toMonthTotals(
+            FISCAL_MONTHS,
+            FISCAL_PETITIONS_ELECTRONIC_BY_MONTH,
+          ).map(monthTotal => ({ ...monthTotal, isPaper: false })),
           petitionsByServiceType: [
             {
               total: 9900,
@@ -92,36 +128,36 @@ describe('dashboardClerkOfTheCourtHelper', () => {
           { caseType: 'Passport', total: 0 },
         ],
         openCasesByProcedureType: [
-          { procedureType: 'Regular', total: 14216 },
-          { procedureType: 'Small', total: 5591 },
+          { procedureType: 'Regular', total: OPEN_CASES.regular },
+          { procedureType: 'Small', total: OPEN_CASES.small },
         ],
         calendarYearCaseStats: {
-          casesClosedByMonth: Array.from({ length: 12 }, (_, i) => ({
-            month: i + 1,
-            total: i < 4 ? 100 + i : 0,
-          })),
+          casesClosedByMonth: toMonthTotals(
+            CALENDAR_MONTHS,
+            CALENDAR_CLOSED_BY_MONTH,
+          ),
           casesClosedByProcedureType: [
-            { procedureType: 'Regular', total: 300 },
-            { procedureType: 'Small', total: 106 },
+            { procedureType: 'Regular', total: CALENDAR_CLOSED_CASES.regular },
+            { procedureType: 'Small', total: CALENDAR_CLOSED_CASES.small },
           ],
-          casesOnAppealByMonth: Array.from({ length: 12 }, (_, i) => ({
-            month: i + 1,
-            total: i === 1 ? 4 : i === 3 ? 2 : 0,
-          })),
+          casesOnAppealByMonth: toMonthTotals(
+            CALENDAR_MONTHS,
+            CALENDAR_ON_APPEAL_BY_MONTH,
+          ),
         },
         fiscalYearCaseStats: {
-          casesClosedByMonth: Array.from({ length: 12 }, (_, i) => ({
-            month: i < 3 ? i + 10 : i - 2,
-            total: i < 7 ? 200 + i : 0,
-          })),
+          casesClosedByMonth: toMonthTotals(
+            FISCAL_MONTHS,
+            FISCAL_CLOSED_BY_MONTH,
+          ),
           casesClosedByProcedureType: [
-            { procedureType: 'Regular', total: 1000 },
-            { procedureType: 'Small', total: 421 },
+            { procedureType: 'Regular', total: FISCAL_CLOSED_CASES.regular },
+            { procedureType: 'Small', total: FISCAL_CLOSED_CASES.small },
           ],
-          casesOnAppealByMonth: Array.from({ length: 12 }, (_, i) => ({
-            month: i < 3 ? i + 10 : i - 2,
-            total: i < 7 ? 3 : 0,
-          })),
+          casesOnAppealByMonth: toMonthTotals(
+            FISCAL_MONTHS,
+            FISCAL_ON_APPEAL_BY_MONTH,
+          ),
         },
         fiscalYear: '2027',
         year: '2026',
@@ -137,36 +173,36 @@ describe('dashboardClerkOfTheCourtHelper', () => {
     expect(result).toMatchObject({
       petitionsByMonthAndServiceTypeChartData: [
         {
-          color: '#005EA2',
-          data: [50, 150, 250, 350, 450, 550, 650, 750, 850, 950, 1050, 1150],
+          color: GRAPH_COLORS.BLUE,
+          data: CALENDAR_PETITIONS_ELECTRONIC_BY_MONTH,
           label: 'Electronic',
         },
         {
-          color: '#FFBE2E',
-          data: [0, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100],
+          color: GRAPH_COLORS.YELLOW,
+          data: CALENDAR_PETITIONS_PAPER_BY_MONTH,
           label: 'Paper',
         },
       ],
       petitionsByRepresentationPieData: [
         {
-          color: '#005EA2',
+          color: GRAPH_COLORS.BLUE,
           name: 'Pro Se',
           value: 6800,
         },
         {
-          color: '#FFBE2E',
+          color: GRAPH_COLORS.YELLOW,
           name: 'Represented',
           value: 7000,
         },
       ],
       petitionsByServiceTypePieData: [
         {
-          color: '#005EA2',
+          color: GRAPH_COLORS.BLUE,
           name: 'Electronic',
           value: 7200,
         },
         {
-          color: '#FFBE2E',
+          color: GRAPH_COLORS.YELLOW,
           name: 'Paper',
           value: 6600,
         },
@@ -199,36 +235,36 @@ describe('dashboardClerkOfTheCourtHelper', () => {
     expect(result).toMatchObject({
       petitionsByMonthAndServiceTypeChartData: [
         {
-          color: '#005EA2',
-          data: [1550, 1650, 1750, 150, 250, 350, 450, 550, 650, 750, 850, 950],
+          color: GRAPH_COLORS.BLUE,
+          data: FISCAL_PETITIONS_ELECTRONIC_BY_MONTH,
           label: 'Electronic',
         },
         {
-          color: '#FFBE2E',
-          data: [1500, 1600, 1700, 100, 200, 300, 400, 500, 600, 700, 800, 900],
+          color: GRAPH_COLORS.YELLOW,
+          data: FISCAL_PETITIONS_PAPER_BY_MONTH,
           label: 'Paper',
         },
       ],
       petitionsByRepresentationPieData: [
         {
-          color: '#005EA2',
+          color: GRAPH_COLORS.BLUE,
           name: 'Pro Se',
           value: 11200,
         },
         {
-          color: '#FFBE2E',
+          color: GRAPH_COLORS.YELLOW,
           name: 'Represented',
           value: 8000,
         },
       ],
       petitionsByServiceTypePieData: [
         {
-          color: '#005EA2',
+          color: GRAPH_COLORS.BLUE,
           name: 'Electronic',
           value: 9900,
         },
         {
-          color: '#FFBE2E',
+          color: GRAPH_COLORS.YELLOW,
           name: 'Paper',
           value: 9300,
         },
@@ -266,12 +302,12 @@ describe('dashboardClerkOfTheCourtHelper', () => {
     expect(result).toMatchObject({
       petitionsByMonthAndServiceTypeChartData: [
         {
-          color: '#005EA2',
+          color: GRAPH_COLORS.BLUE,
           data: [],
           label: 'Electronic',
         },
         {
-          color: '#FFBE2E',
+          color: GRAPH_COLORS.YELLOW,
           data: [],
           label: 'Paper',
         },
@@ -305,8 +341,12 @@ describe('dashboardClerkOfTheCourtHelper', () => {
       });
 
       expect(result.openCasesPieData).toEqual([
-        { color: '#005EA2', name: 'Regular', value: 14216 },
-        { color: '#FFBE2E', name: 'Small', value: 5591 },
+        {
+          color: GRAPH_COLORS.BLUE,
+          name: 'Regular',
+          value: OPEN_CASES.regular,
+        },
+        { color: GRAPH_COLORS.YELLOW, name: 'Small', value: OPEN_CASES.small },
       ]);
       expect(result.totalOpenCases).toEqual('19,807');
     });
@@ -319,20 +359,31 @@ describe('dashboardClerkOfTheCourtHelper', () => {
       expect(result).toMatchObject({
         casesClosedAndOnAppealByMonthChartData: [
           {
-            color: '#005EA2',
-            data: [100, 101, 102, 103, 0, 0, 0, 0, 0, 0, 0, 0],
+            color: GRAPH_COLORS.BLUE,
+            data: CALENDAR_CLOSED_BY_MONTH,
             label: 'Closed/Closed-Dismissed',
           },
           {
-            color: '#FFBE2E',
-            data: [0, 4, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0],
+            color: GRAPH_COLORS.YELLOW,
+            data: CALENDAR_ON_APPEAL_BY_MONTH,
             label: 'Changed to On Appeal',
           },
         ],
-        casesClosedAndOnAppealLegendTotals: [406, 6],
+        casesClosedAndOnAppealLegendTotals: [
+          CALENDAR_CLOSED_CASES.regular + CALENDAR_CLOSED_CASES.small,
+          sum(CALENDAR_ON_APPEAL_BY_MONTH),
+        ],
         casesClosedPieData: [
-          { color: '#005EA2', name: 'Regular', value: 300 },
-          { color: '#FFBE2E', name: 'Small', value: 106 },
+          {
+            color: GRAPH_COLORS.BLUE,
+            name: 'Regular',
+            value: CALENDAR_CLOSED_CASES.regular,
+          },
+          {
+            color: GRAPH_COLORS.YELLOW,
+            name: 'Small',
+            value: CALENDAR_CLOSED_CASES.small,
+          },
         ],
         casesMonths: [
           'January',
@@ -362,20 +413,31 @@ describe('dashboardClerkOfTheCourtHelper', () => {
       expect(result).toMatchObject({
         casesClosedAndOnAppealByMonthChartData: [
           {
-            color: '#005EA2',
-            data: [200, 201, 202, 203, 204, 205, 206, 0, 0, 0, 0, 0],
+            color: GRAPH_COLORS.BLUE,
+            data: FISCAL_CLOSED_BY_MONTH,
             label: 'Closed/Closed-Dismissed',
           },
           {
-            color: '#FFBE2E',
-            data: [3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0, 0],
+            color: GRAPH_COLORS.YELLOW,
+            data: FISCAL_ON_APPEAL_BY_MONTH,
             label: 'Changed to On Appeal',
           },
         ],
-        casesClosedAndOnAppealLegendTotals: [1421, 21],
+        casesClosedAndOnAppealLegendTotals: [
+          FISCAL_CLOSED_CASES.regular + FISCAL_CLOSED_CASES.small,
+          sum(FISCAL_ON_APPEAL_BY_MONTH),
+        ],
         casesClosedPieData: [
-          { color: '#005EA2', name: 'Regular', value: 1000 },
-          { color: '#FFBE2E', name: 'Small', value: 421 },
+          {
+            color: GRAPH_COLORS.BLUE,
+            name: 'Regular',
+            value: FISCAL_CLOSED_CASES.regular,
+          },
+          {
+            color: GRAPH_COLORS.YELLOW,
+            name: 'Small',
+            value: FISCAL_CLOSED_CASES.small,
+          },
         ],
         casesMonths: [
           'October',
@@ -483,7 +545,7 @@ describe('dashboardClerkOfTheCourtHelper', () => {
         state: baseState,
       });
 
-      expect(result.openCasesByTypeTableRows).toHaveLength(14);
+      expect(result.openCasesByTypeTableRows).toHaveLength(CASE_TYPES.length);
       result.openCasesByTypeTableRows.forEach(row => {
         expect(row.total).toEqual('0');
       });

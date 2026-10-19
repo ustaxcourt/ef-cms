@@ -19,6 +19,7 @@ import { orderBy } from 'lodash';
 import {
   CASE_TYPES,
   FISCAL_MONTH_PRIORITY,
+  MONTH_LABELS,
   PROCEDURE_TYPES_MAP,
 } from '@shared/business/entities/EntityConstants';
 
@@ -90,7 +91,7 @@ export type ClerkDashboardStats = {
   fiscalYearCaseStats: ClerkDashboardCasesStats;
 };
 
-const FISCAL_YEAR_START_MONTH = 10;
+const FISCAL_YEAR_START_MONTH = Month.October;
 
 const getMonthOrderCallback = (isFiscal: boolean) =>
   isFiscal
@@ -137,7 +138,7 @@ const getCasesDataByYear = async (
     const monthRows = statusChanges.filter(
       row => row.statusGroup === statusGroup && row.month,
     );
-    const fullMonths = Array.from({ length: 12 }, (_, i) => {
+    const fullMonths = Array.from({ length: MONTH_LABELS.length }, (_, i) => {
       const row = monthRows.find(r => Number(r.month) === i + 1);
       return {
         month: (i + 1) as Month,
@@ -172,23 +173,29 @@ const getPetitionsDataByYear = async (
     pet => !pet.isPaper && pet.isPaper != null && pet.month,
   );
 
-  const petitionFullPaperMonths = Array.from({ length: 12 }, (_, i) => {
-    const row = petitonPaperMonths.find(r => Number(r.month) === i + 1);
-    return {
-      month: (i + 1) as Month,
-      isPaper: row && row.isPaper !== null ? row.isPaper : true,
-      total: row ? Number(row.total) : 0,
-    };
-  });
+  const petitionFullPaperMonths = Array.from(
+    { length: MONTH_LABELS.length },
+    (_, i) => {
+      const row = petitonPaperMonths.find(r => Number(r.month) === i + 1);
+      return {
+        month: (i + 1) as Month,
+        isPaper: row && row.isPaper !== null ? row.isPaper : true,
+        total: row ? Number(row.total) : 0,
+      };
+    },
+  );
 
-  const petitionFullElectronicMonths = Array.from({ length: 12 }, (_, i) => {
-    const row = petitonElectronicMonths.find(r => Number(r.month) === i + 1);
-    return {
-      month: (i + 1) as Month,
-      isPaper: row && row.isPaper !== null ? row.isPaper : false,
-      total: row ? Number(row.total) : 0,
-    };
-  });
+  const petitionFullElectronicMonths = Array.from(
+    { length: MONTH_LABELS.length },
+    (_, i) => {
+      const row = petitonElectronicMonths.find(r => Number(r.month) === i + 1);
+      return {
+        month: (i + 1) as Month,
+        isPaper: row && row.isPaper !== null ? row.isPaper : false,
+        total: row ? Number(row.total) : 0,
+      };
+    },
+  );
 
   const petitionsByServiceType = petitionData
     .filter(pet => pet.isPaper != null && !pet.month)

@@ -86,10 +86,9 @@ describe('Dashboard - Clerk of Court Accessibility', () => {
   describe('Cases tab', () => {
     it('should be free of a11y issues when viewing cases data', () => {
       // mock the call with minimal cases data so we can guarentee the charts render
-      const months = Array.from({ length: 12 }, (_, i) => ({
-        month: i + 1,
-        total: i < 3 ? 10 : 0,
-      }));
+      const months = [10, 10, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0].map(
+        (total, i) => ({ month: i + 1, total }),
+      );
       cy.intercept('GET', '**/clerk-dashboard-stats', {
         statusCode: 200,
         body: {

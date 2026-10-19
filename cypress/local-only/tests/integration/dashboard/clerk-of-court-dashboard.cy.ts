@@ -6,7 +6,10 @@ import {
   formatDateString,
   prepareDateFromString,
 } from '@shared/business/utilities/DateHandler';
-import { SESSION_TYPES } from '@shared/business/entities/EntityConstants';
+import {
+  CASE_TYPES,
+  SESSION_TYPES,
+} from '@shared/business/entities/EntityConstants';
 import {
   loginAsClerkOfCourt,
   loginAsPetitionsClerk1,
@@ -25,6 +28,12 @@ import { logout } from '../../../../helpers/authentication/logout';
 import { petitionsClerkServesPetition } from '../../../../helpers/documentQC/petitionsclerk-serves-petition';
 import { externalUserCreatesElectronicCase } from '../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { formatPositiveNumber } from '@web-client/business/utilities/formatPositiveNumber';
+
+// long enough to see the loading state before the stats arrive
+const STATS_LOADING_DELAY_MS = 3000;
+// holds the stats response well past NAVIGATION_TIMEOUT_MS
+const STATS_HELD_DELAY_MS = 10000;
+const NAVIGATION_TIMEOUT_MS = 5000;
 
 // HTML views open their table in a new tab from a Blob URL; stub window.open and read that document
 const stubWindowOpen = () =>
@@ -374,7 +383,7 @@ describe('Clerk of Court Dashboard', () => {
           `Total Open Cases by Type in YTD ${statsYear}`,
         );
         const rows = getTableRows(doc);
-        expect(rows).to.have.length(14);
+        expect(rows).to.have.length(CASE_TYPES.length);
         const totals = rows.map(([, total]) => Number(total.replace(/,/g, '')));
         expect(totals).to.deep.equal([...totals].sort((a, b) => b - a));
         openCasesByCaseType.forEach(
@@ -494,7 +503,7 @@ describe('Clerk of Court Dashboard', () => {
   it('should show one loading state for the tab until the stats arrive', () => {
     cy.intercept('GET', '**/clerk-dashboard-stats', req => {
       req.on('response', res => {
-        res.setDelay(3000);
+        res.setDelay(STATS_LOADING_DELAY_MS);
       });
     }).as('clerkDashboardStats');
     loginAsClerkOfCourt();
@@ -512,10 +521,9 @@ describe('Clerk of Court Dashboard', () => {
   });
 
   it('should navigate away from the dashboard while the stats are still loading', () => {
-    // hold the stats response well past the navigation timeouts below
     cy.intercept('GET', '**/clerk-dashboard-stats', req => {
       req.on('response', res => {
-        res.setDelay(10000);
+        res.setDelay(STATS_HELD_DELAY_MS);
       });
     }).as('clerkDashboardStats');
     loginAsClerkOfCourt();
@@ -523,9 +531,12 @@ describe('Clerk of Court Dashboard', () => {
 
     cy.get('[data-testid="trial-session-link"]').click();
 
-    cy.url({ timeout: 5000 }).should('include', '/trial-sessions');
+    cy.url({ timeout: NAVIGATION_TIMEOUT_MS }).should(
+      'include',
+      '/trial-sessions',
+    );
     cy.get('[data-testid="add-trial-session-button"]', {
-      timeout: 5000,
+      timeout: NAVIGATION_TIMEOUT_MS,
     }).should('exist');
   });
 

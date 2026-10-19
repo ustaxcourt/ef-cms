@@ -1,5 +1,8 @@
 /* eslint-disable max-lines */
-import { getClerkDashboardStatsInteractor } from './getClerkDashboardStatsInteractor';
+import {
+  Month,
+  getClerkDashboardStatsInteractor,
+} from './getClerkDashboardStatsInteractor';
 import {
   mockDocketClerkUser,
   mockPetitionerUser,
@@ -27,7 +30,16 @@ import {
   petitionsDataByYear,
 } from '@web-api/persistence/postgres/cases/reports/getClerkDashboardStats';
 import { createISODateString } from '@shared/business/utilities/DateHandler';
-import { CASE_TYPES } from '@shared/business/entities/EntityConstants';
+import {
+  CASE_TYPES,
+  FISCAL_MONTH_LABELS,
+  MONTH_LABELS,
+} from '@shared/business/entities/EntityConstants';
+
+const toMonths = (labels: string[]): Month[] =>
+  labels.map(label => Month[label as keyof typeof Month]);
+const CALENDAR_MONTHS = toMonths(MONTH_LABELS);
+const FISCAL_MONTHS = toMonths(FISCAL_MONTH_LABELS);
 
 describe('getClerkDashboardStatsInteractor', () => {
   const mockStats = [
@@ -910,27 +922,26 @@ describe('getClerkDashboardStatsInteractor', () => {
 
       expect(result.calendarYearCaseStats).toEqual({
         casesClosedByMonth: [130, 113, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0].map(
-          (total, i) => ({ month: i + 1, total }),
+          (total, i) => ({ month: CALENDAR_MONTHS[i], total }),
         ),
         casesClosedByProcedureType: [
           { procedureType: 'Regular', total: 200 },
           { procedureType: 'Small', total: 50 },
         ],
         casesOnAppealByMonth: [0, 4, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0].map(
-          (total, i) => ({ month: i + 1, total }),
+          (total, i) => ({ month: CALENDAR_MONTHS[i], total }),
         ),
       });
 
-      const fiscalMonths = [10, 11, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9];
       expect(result.fiscalYearCaseStats.casesClosedByMonth).toEqual(
         [0, 7, 0, 130, 113, 0, 0, 0, 0, 0, 0, 0].map((total, i) => ({
-          month: fiscalMonths[i],
+          month: FISCAL_MONTHS[i],
           total,
         })),
       );
       expect(result.fiscalYearCaseStats.casesOnAppealByMonth).toEqual(
         [1, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0].map((total, i) => ({
-          month: fiscalMonths[i],
+          month: FISCAL_MONTHS[i],
           total,
         })),
       );
@@ -941,16 +952,13 @@ describe('getClerkDashboardStatsInteractor', () => {
         await getClerkDashboardStatsInteractor(mockDocketClerkUser);
 
       expect(result.calendarYearCaseStats).toEqual({
-        casesClosedByMonth: Array.from({ length: 12 }, (_, i) => ({
-          month: i + 1,
-          total: 0,
-        })),
+        casesClosedByMonth: CALENDAR_MONTHS.map(month => ({ month, total: 0 })),
         casesClosedByProcedureType: [
           { procedureType: 'Regular', total: 0 },
           { procedureType: 'Small', total: 0 },
         ],
-        casesOnAppealByMonth: Array.from({ length: 12 }, (_, i) => ({
-          month: i + 1,
+        casesOnAppealByMonth: CALENDAR_MONTHS.map(month => ({
+          month,
           total: 0,
         })),
       });

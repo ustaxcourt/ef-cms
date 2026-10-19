@@ -15,6 +15,8 @@ export interface PieGraphData {
   color?: string;
 }
 
+const FULL_CIRCLE_DEGREES = 360;
+
 const PieSector = (props: PieSectorShapeProps) => {
   // recharts spreads each data entry into the shape props, so color is available directly.
   const fill = (props as unknown as PieGraphData).color;
@@ -36,7 +38,7 @@ const PieSector = (props: PieSectorShapeProps) => {
           );
       }}
     >
-      {Math.abs(props.endAngle - props.startAngle) >= 360 ? (
+      {Math.abs(props.endAngle - props.startAngle) >= FULL_CIRCLE_DEGREES ? (
         // a sector spanning the whole pie still strokes its edge from the center
         <circle
           cx={props.cx}
