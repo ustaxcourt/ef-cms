@@ -29,6 +29,7 @@ import {
   TRACKED_DOCUMENT_TYPES_EVENT_CODES,
   TRANSCRIPT_EVENT_CODE,
   UNSERVABLE_EVENT_CODES,
+  PUBLIC_SUPPORTING_EVENT_CODES_FOR_MOTIONS,
 } from './EntityConstants';
 import {
   Case,
@@ -572,7 +573,9 @@ export class DocketEntry extends JoiValidationEntity {
         !entry.isPaper &&
         (DocketEntry.isMotion(entry.eventCode) ||
           (DocketEntry.isMotion(rootDocument?.eventCode ?? '') &&
-            ['MISP', 'BRF'].includes(entry.eventCode) && // constant obv
+            PUBLIC_SUPPORTING_EVENT_CODES_FOR_MOTIONS.includes(
+              entry.eventCode,
+            ) &&
             entry.filingDate === rootDocument?.filingDate)) &&
         DocketEntry.isFiledByPractitioner(entry.filedByRole)
       ) {

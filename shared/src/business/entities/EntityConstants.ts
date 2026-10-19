@@ -699,6 +699,8 @@ export const POLICY_DATE_IMPACTED_EVENTCODES = [
   'SUPM',
 ];
 
+export const PUBLIC_SUPPORTING_EVENT_CODES_FOR_MOTIONS = ['BRF', 'MISP'];
+
 export const SCENARIOS = [
   'Standard',
   'Nonstandard A',
