@@ -5,13 +5,14 @@ DAWSON: who owns it, how severe it is, how fast it gets fixed, and how a decisio
 accept it is recorded. How each scanner works is covered in its own doc under `docs/security/`;
 this doc is the process that sits on top of them.
 
-On triage this week? Start at [Weekly triage](#weekly-triage).
+On triage this week? Use the [weekly triage runbook](weekly-triage.md). For scanner details,
+suppression mechanisms and image rebuilds, see the [scanner reference](scanner-reference.md).
 
 ## Purpose and scope
 
 - **Audience:** the DAWSON team.
 - **Status:** the severity rubric and remediation SLAs in this doc are a team agreement.
-- **Covers:** every finding from the scanners listed under [Scanner inventory](#scanner-inventory),
+- **Covers:** every finding from the scanners listed under [Scanner inventory](scanner-reference.md#scanner-inventory),
   plus findings reported by people (pen tests, the ISSO, outside reports).
 - **Does not cover:** how to configure or run a scanner. Where a scanner doc and this playbook
   disagree on process (who approves, how long a fix may take, how an exception is recorded), this
@@ -20,7 +21,7 @@ On triage this week? Start at [Weekly triage](#weekly-triage).
 ## Where findings are tracked
 
 The repository and its GitHub Issues are public. Every finding is tracked as a GitHub issue on
-the [ZenHub](../zenhub.md) board, so all security work shows up in one place with an assignee and
+the [ZenHub](../../zenhub.md) board, so all security work shows up in one place with an assignee and
 a due date. What the issue is allowed to say depends on whether the finding is sensitive.
 
 | Finding | Tracking | What the public issue contains |
@@ -43,7 +44,7 @@ if the team decides to.
 
 | Role | Who | Responsibilities |
 | --- | --- | --- |
-| Triager | The engineer on the weekly rotation (see [Dependency Updates](../dependency-updates.md)) | Reviews new findings each Monday, dedupes them, sets severity, opens or updates tracking records |
+| Triager | The engineer on the weekly rotation (see [Dependency Updates](../../dependency-updates.md)) | Reviews new findings each Monday, dedupes them, sets severity, opens or updates tracking records |
 | Finding owner | The assignee of the tracking record | Fixes, suppresses or proposes accepting the finding, and validates the result |
 | Approver | The tech lead, or a delegate the tech lead has named in advance | Approves every suppression and risk acceptance, at every severity |
 | Team | Everyone on DAWSON | Kept informed through the weekly report; consulted on escalations |
@@ -105,50 +106,7 @@ Never deployed, and holds no deploy credentials.
   is, for deploys from a developer machine. The deployed layer is built by `build.sh` instead.
 - **devDependencies** of the root project, and Cypress.
 - **ZAP findings that only exist locally**, such as the local stack accepting unsigned JWTs
-  (see [DAST Scanning](./dast-scanning.md)).
-
-## Scanner inventory
-
-Last verified against `staging` on 2026-10-16. Re-check this table whenever a
-`.github/workflows/security-*.yml` file changes.
-
-| Tool | Workflow and job | Runs on | Reports | Findings land in | Blocks a PR? |
-| --- | --- | --- | --- | --- | --- |
-| Trivy config | `security-containers.yml` / `trivy-config` | PR, manual | MEDIUM, HIGH, CRITICAL, UNKNOWN | Security tab: `trivy-config` | No |
-| Trivy image (CI image) | `security-containers.yml` / `trivy-image` | PR that changes image paths, manual | HIGH, CRITICAL, UNKNOWN (OS and library) | Security tab: `trivy-image-base` | No |
-| Trivy image (base images) | `security-containers.yml` / `trivy-runtime-base` | PR that changes image paths, manual | HIGH, CRITICAL, UNKNOWN | Security tab: `trivy-image-puppeteer`, `trivy-image-batch` | No |
-| Trivy baseline | `security-containers.yml` / `trivy-baseline` | Push to staging that changes image paths, weekly | HIGH, CRITICAL, UNKNOWN | Security tab: `trivy-baseline-base`, `trivy-baseline-puppeteer`, `trivy-baseline-batch` | No |
-| Trivy filesystem | `security-supply-chain.yml` / `trivy` | PR, push to staging | HIGH, CRITICAL, UNKNOWN | Security tab: `trivy` | No |
-| npm audit | `security-supply-chain.yml` / `npm-audit` | PR | HIGH and above, production dependencies only | Job log | No |
-| Dependency review | `security-supply-chain.yml` / `dependency-review` | PR | HIGH and above, changed dependencies only | Job log | No (`warn-only`) |
-| Lockfile lint | `security-supply-chain.yml` / `lockfile-lint` | PR | Lockfile integrity | Job log | No |
-| Semgrep | `security-sast.yml` / `semgrep` | PR, push to staging | Registry rule packs and `.semgrep/` rules | Security tab: `semgrep` | Yes, for findings the PR introduces |
-| Checkov | `security-sast.yml` / `checkov` | PR, push to staging | Terraform misconfigurations | Security tab: `checkov` | Only for the checks listed in `--hard-fail-on` |
-| CodeQL | `security-sast.yml` / `codeql` | PR, push to staging | Code-level vulnerabilities | Security tab: `/language:<language>` | No; fails only if the analysis itself fails |
-| ShellCheck | `security-sast.yml` / `shellcheck` | PR | Errors only (`-S error`) | Job log | Yes |
-| Gitleaks | `security-secrets.yml` / `gitleaks` | PR, commits in the PR only | Secrets | Security tab: `gitleaks` | Yes |
-| Gitleaks baseline | `security-secrets.yml` / `gitleaks-baseline` | Push to staging | Secrets | Security tab: `gitleaks-baseline` | No |
-| OWASP ZAP API | `security-dast.yml` / `dast-api` | PR | API issues, per user role | Run artifacts only (14–30 days); not the Security tab until #10496 | No |
-| OWASP ZAP web | `security-dast.yml` / `dast-web` | Weekly, manual | Web app issues | Run artifact `zap-web-reports` (30 days); not the Security tab until #10496 | No |
-| Findings vs staging | `security-compare.yml` / `compare` | PR | Trivy filesystem count, HIGH, CRITICAL, UNKNOWN | Job summary | Yes, if the PR has more findings than staging |
-
-Things to know when reading this table:
-
-- **SARIF reaches the Security tab** from every run except PRs, plus same-repository PRs into
-  staging (`.github/actions/dawson-upload-sarif/action.yml`). Other PRs report findings only in
-  the job log and summary.
-- **Base-image scans see only the base.** The Puppeteer and batch scans check the image named in
-  each Dockerfile's `FROM` line, not the built image. For batch, that means `awscli`, the global
-  `ts-node` and `typescript`, and its npm packages are not covered by the container scan.
-- **No scanner checks npm devDependencies.** npm audit runs with `--omit=dev`, and Trivy
-  ["doesn't report development dependencies"](https://trivy.dev/latest/docs/coverage/language/nodejs/)
-  unless `--include-dev-deps` is set, which no DAWSON workflow does. T3 npm packages, Cypress
-  included, are therefore not reported today.
-- **The weekly Monday 06:00 UTC run** (`cron: '0 6 * * 1'`) is currently set only on
-  `security-containers.yml` and `security-dast.yml`. The other workflows refresh the Security tab
-  on every push to staging.
-- **CI never forces a fix of an existing finding.** The blocking checks above stop new problems
-  from merging; everything already in the Security tab is driven by the SLAs in this playbook.
+  (see [DAST Scanning](../dast-scanning.md)).
 
 ## Severity rubric
 
@@ -263,7 +221,7 @@ On 2026-10-16 this showed `deb12u4` in Debian's `bookworm-security` repository, 
 `node:24.21.0-slim` and the newest `node:24-slim` both still shipped `deb12u3`. So the fix is
 to bump the `FROM` tag once a `node` slim image includes `deb12u4`. Adding `apt-get upgrade` to
 the Dockerfile would not clear the alert, because this scan reads the image on the `FROM` line,
-not the built image (see [Scanner inventory](#scanner-inventory)). If no such tag ships before the
+not the built image (see [Scanner inventory](scanner-reference.md#scanner-inventory)). If no such tag ships before the
 due date, the finding goes to the approver as a wait-for-upstream exception.
 
 Had there been no fix at all, the affected check would have looked at each CVE's vulnerable code.
@@ -316,114 +274,12 @@ approver either agrees a new date with the finding owner, or the owner raises an
 missed SLA is never left open silently; it appears in the weekly report until it is resolved.
 
 The SLAs apply to findings that already exist. New code is held to a stricter standard: it must
-not add medium- or high-severity findings at all ([Code Review](../code-review.md)).
+not add medium- or high-severity findings at all ([Code Review](../../code-review.md)).
 
-## Weekly triage
+## Intake and ownership
 
-Every Monday, after the 06:00 UTC scheduled runs, the triager works through this list. Run the
-commands from a clone of the repository with the `gh` CLI signed in. None of them change your
-working tree.
-
-1. **Start a fresh container scan.** `trivy-config` runs only on PRs and manual runs, so its
-   results on `staging` go stale unless someone runs it. The run takes several minutes, so start
-   it first and let it finish while you do steps 2 to 4.
-
-   ```sh
-   gh workflow run security-containers.yml --ref staging
-   sleep 10
-   RUN_ID=$(gh run list --workflow security-containers.yml --event workflow_dispatch \
-     --user "$(gh api user -q .login)" --limit 1 --json databaseId -q '.[0].databaseId')
-   ```
-
-2. **Check that the scheduled runs worked.** A failed run shows up as no new findings, which
-   looks the same as a good week.
-
-   ```sh
-   gh run list --workflow security-containers.yml --event schedule --limit 1
-   gh run list --workflow security-dast.yml --event schedule --limit 1
-   ```
-
-   If either one failed, rerun its failed jobs with `gh run rerun <run-id> --failed`, and note in
-   the weekly report that its results are missing until the rerun passes.
-
-3. **Read the ZAP web report** from the latest scheduled run. ZAP results do not reach the
-   Security tab yet; [#10496](https://github.com/ustaxcourt/ef-cms/issues/10496) adds that.
-   Until it lands, this manual review is how ZAP findings get triaged. Afterwards, drop this step
-   and add the new `zap-*` categories to [Which categories to triage](#which-categories-to-triage).
-
-   ```sh
-   ZAP_RUN=$(gh run list --workflow security-dast.yml --event schedule --limit 1 \
-     --json databaseId -q '.[0].databaseId')
-   gh run download "$ZAP_RUN" -n zap-web-reports -D "$(mktemp -d)"
-   ```
-
-4. **Audit the npm lockfiles on `staging`.** In CI, npm audit runs only on PRs and only checks the
-   root lockfile. This checks all three lockfiles that ship, from a temporary directory:
-
-   ```sh
-   git fetch -q origin staging
-   AUDIT_DIR=$(mktemp -d)
-   for p in . web-api/runtimes/puppeteer web-api/terraform/modules/batch/docker-image; do
-     mkdir -p "$AUDIT_DIR/$p"
-     git show "origin/staging:$p/package.json" > "$AUDIT_DIR/$p/package.json"
-     git show "origin/staging:$p/package-lock.json" > "$AUDIT_DIR/$p/package-lock.json"
-     echo "== $p" && (cd "$AUDIT_DIR/$p" && npm audit --omit=dev --audit-level=high)
-   done
-   ```
-
-   A finding that is already tracked, such as the moderate `quill` advisory, needs no new record.
-
-5. **Wait for the container scan from step 1 to finish:**
-
-   ```sh
-   gh run watch "$RUN_ID" --exit-status
-   ```
-
-6. **List the Security-tab alerts opened since the last triage.** Set `SINCE` to the date of the
-   last completed triage, not last Monday, so a skipped week is not lost. The query keeps only
-   the categories that are triaged:
-
-   ```sh
-   SINCE=2026-10-12
-   gh api --paginate \
-     "repos/ustaxcourt/ef-cms/code-scanning/alerts?state=open&ref=refs/heads/staging&per_page=100" \
-     --jq '.[] | select(.created_at >= "'"$SINCE"'")
-           | select(.most_recent_instance.category
-               | test("^(trivy-baseline-(base|puppeteer|batch)|trivy|trivy-config|semgrep|checkov|/language:.*|gitleaks-baseline)$"))
-           | [.created_at[:10], .most_recent_instance.category, .rule.id, .html_url] | @tsv'
-   ```
-
-7. **Triage each new finding:** dedupe it, assign a tier, work out its severity
-   ([Severity rubric](#severity-rubric)), and open or update its tracking record
-   ([Where findings are tracked](#where-findings-are-tracked)).
-8. **Check what is due.** List open security findings and raise any due within 14 days, or
-   already past due, with the approver (see [Missing an SLA](#missing-an-sla)):
-
-   ```sh
-   gh issue list --repo ustaxcourt/ef-cms --state open --search 'in:title "Security finding"' \
-     --limit 200
-   ```
-
-9. **Record the date** of this triage in the weekly report. It is the next triage's `SINCE`.
-
-### Which categories to triage
-
-On `staging`, some Security-tab categories hold current results and some only hold old or
-duplicate ones. The query in step 6 already applies this table.
-
-| Category | Updated on `staging` by | Triage? |
-| --- | --- | --- |
-| `trivy-baseline-base`, `trivy-baseline-puppeteer`, `trivy-baseline-batch` | Weekly run, and pushes that change image paths | Yes |
-| `trivy` | Every push | Yes |
-| `semgrep`, `checkov`, `/language:javascript-typescript` | Every push | Yes |
-| `gitleaks-baseline` | Every push | Yes, the same day (see [Same-day triage](#same-day-triage)) |
-| `trivy-config` | Manual runs (step 1) | Yes |
-| `trivy-image-base`, `trivy-image-puppeteer`, `trivy-image-batch` | Manual runs (step 1) | No: duplicates by design. They scan the same images as `trivy-baseline-*`, and step 1 refreshes them every week, so they stay open. Leave them out of every count, report and SLA. |
-| `trivy-baseline-local`, `trivy-image-local` | Nothing. The `efcms-local` scan was removed. | No. Retire them (see [Backlog clean-up](#backlog-clean-up)). |
-
-This table decides the size of the backlog. On 2026-10-16, 12,292 of the open alerts on
-`staging` came from Trivy, but only 1,084 of those were in triaged categories. The rest were
-7,002 `trivy-image-*` duplicates and 4,206 alerts in the retired `efcms-local` categories.
+Most findings arrive through the [weekly triage](weekly-triage.md). These rules cover what does
+not wait for it, and who owns a finding once it is tracked.
 
 ### Same-day triage
 
@@ -449,33 +305,6 @@ reporter's evidence in place of a scan result.
 The repository has no `SECURITY.md`, so an outside reporter has no published way to reach the
 team. Anyone who receives a report informally forwards it to the approver.
 
-### Backlog clean-up
-
-The approver owns the 30-day clean-up window that starts on the adoption date (see
-[When the clock starts](#when-the-clock-starts)) and makes sure both of these are done before it
-ends.
-
-**Retire what no longer means anything.** This needs write access to the repository.
-
-- **The `efcms-local` categories.** `scripts/run-once-scripts/dismiss-duplicate-local-alerts.sh`
-  dismisses the alerts that repeat the CI image's CVEs. Run it without arguments first to see
-  what it would dismiss, then with `--apply`. It deliberately leaves alerts under real file paths,
-  which come from that image's `npm ci` layer and appear in no other category. Triage those like
-  any other finding.
-- **Categories retired later.** Either dismiss their alerts, or have a repository admin
-  [delete the category's analyses](https://docs.github.com/en/rest/code-scanning/code-scanning#delete-a-code-scanning-analysis-from-a-repository).
-  Removing a scan never closes the alerts it already reported.
-
-Dismissing an alert hides it for good, so dismiss only confirmed duplicates and alerts from scans
-that no longer run. Everything else goes through the rubric.
-
-**Triage the open alerts in triaged categories.** The weekly routine only picks up new alerts, so
-the existing ones need one pass of their own. Run the step 6 query with `SINCE=2000-01-01`, then
-group the results by the fix that would close them, not by CVE. Nearly all of the 1,084 Trivy
-alerts come from three base images, so they collapse into a handful of base-image upgrades. Open one
-tracking record per group. Their SLA clocks start in the two waves described in
-[When the clock starts](#when-the-clock-starts).
-
 ### Ownership
 
 - **One issue per fix, not per alert.** A base-image upgrade that closes 40 CVEs is one issue
@@ -487,7 +316,7 @@ tracking record per group. Their SLA clocks start in the two waves described in
   The first line of the body gives the severity and when the clock started, for example
   `High, 30 days from 2026-10-16`. Sensitive issues leave that line out.
 - **No bug-severity labels.** The `Critical Severity`, `High Severity` and similar labels measure
-  impact on court users, as set by the product owner ([Story Life Cycle](../story-life-cycle.md)).
+  impact on court users, as set by the product owner ([Story Life Cycle](../../story-life-cycle.md)).
   They are a different scale from the security severity in this playbook.
 - **Who picks it up.** The approver assigns Critical and High findings in T1 or T2 the same day.
   The triager raises everything else with the product owner, who schedules it like other work.
@@ -531,7 +360,7 @@ A fix in one does not reach the others. Patch the project the finding is in.
   `package.json`, as the root project already does for `shell-quote`. An override stays until
   someone removes it, so note in the PR when it can go (usually when the parent catches up).
 
-Check the fix with the npm audit commands in [Weekly triage](#weekly-triage) step 4.
+Check the fix with the npm audit commands in [Weekly triage](weekly-triage.md) step 4.
 
 ### Suppressing a finding
 
@@ -542,9 +371,9 @@ Every suppression needs:
   dismisses the alert.
 - **A justification that names the tracking record.** Write the reason and the issue number or
   GHSA ID next to the suppression, so a reader can find the evidence.
-- **A review date in the tracking record.** None of the mechanisms below expires on its own.
+- **A review date in the tracking record.** None of the suppression mechanisms expires on its own.
 
-Suppression text is public: every file below is in this public repository, and a comment such as
+Suppression text is public: every suppression file is in this public repository, and a comment such as
 "not encrypted because..." tells an attacker where to look. For a sensitive finding, the
 suppression's justification is only the GHSA ID, for example
 `#checkov:skip=CKV_AWS_18:See GHSA-xxxx-xxxx-xxxx`. The reasoning goes in the advisory.
@@ -556,68 +385,8 @@ Suppressions that existed before this playbook, such as the inline Checkov skips
 tracking record. They stay as they are. Whoever next changes the file they are in checks that each
 one still applies, and adds a tracking record or removes it.
 
-How to suppress depends on the scanner:
-
-| Scanner | Mechanism | Scope | Notes |
-| --- | --- | --- | --- |
-| Semgrep | `// nosemgrep: <rule-id>` comment on the flagged line | One line | Always name the rule; a bare `nosemgrep` hides every rule on that line. Not used anywhere in the code today. |
-| Checkov | `#checkov:skip=<CHECK_ID>:<reason>` comment inside the Terraform resource | One resource | The normal way to suppress Checkov. There are about 180 in the Terraform today, for example in `terraform-state-backend.tf`. |
-| Checkov | `.checkov.baseline` in the applyable directory | Existing findings in one directory | For findings that existed before the scan. Two of the nine directories have entries. Prefer an inline skip for anything new. |
-| Checkov | `--skip-check` in `security-sast.yml` | The check, everywhere | Only for a check that can never apply to DAWSON. It needs a workflow change. |
-| CodeQL | Dismissal in the Security tab | One alert | Whole directories are excluded through `paths-ignore` in `.github/codeql/codeql-config.yml`. |
-| Trivy (all scans) | Dismissal in the Security tab | One alert | The only mechanism. There is no `.trivyignore`. |
-| Gitleaks | `.gitleaksignore` entry (`<commit-sha>:<fingerprint>`) | One finding | For a confirmed false positive, or a real secret only after it has been rotated and the old value is confirmed revoked. The file's header explains how to get the fingerprint. |
-| Gitleaks | `allowlist` in `.gitleaks.toml` | A path or pattern, everywhere | For a pattern that is never a secret, such as a known placeholder. |
-| Dependency review | `allow-ghsas` in `security-supply-chain.yml` | One advisory | A comma-separated list of GHSA IDs. Matters only once the job stops being `warn-only`. |
-| npm audit | None | — | Patch or accept. The job does not block PRs. |
-| OWASP ZAP | `IGNORE` line in `.zap/rules.tsv` (`<rule-id>`, tab, `IGNORE`, tab, reason) | The rule, in every ZAP scan | All four ZAP scans read this file. Today it has three `WARN` lines and no `IGNORE`. |
-
-**Dismissing in the Security tab.** Pick the reason that matches, and write a comment in this
-format. GitHub limits the comment to 280 characters.
-
-| Reason | Use it for |
-| --- | --- |
-| `false positive` | Not affected, or the scanner is wrong |
-| `won't fix` | An accepted risk |
-| `used in tests` | Code that only runs in tests, when the approver agrees it needs no fix |
-
-```text
-not_affected: vulnerable_code_not_present. Evidence and review date in #<issue>. Approved: @<approver>
-```
-
-For a sensitive finding, use the GHSA ID in place of the issue number, and leave the evidence out
-of the comment; it belongs in the advisory.
-
-Dismissed alerts stay dismissed when a later scan reports them again, so a dismissal outlives the
-reason for it unless someone reviews it. That is why the review date is required.
-
-### Rebuilding images
-
-A fix in an image reaches its users differently for each image, and the scan clears on a
-different event.
-
-| Image | To take a fix | When it reaches its users | When the alert clears |
-| --- | --- | --- | --- |
-| `ef-cms-us-east-1` (T2) | Change `FROM` in `Dockerfile`, increase the `efcms-docker-image` tag in `.circleci/config.yml`, then publish the image with `npm run deploy:ci-image`. See [Dependency Updates](../dependency-updates.md), "Publish new ECR docker image". | When CircleCI starts using the new tag, once it is published to each environment's ECR. Publishing needs AWS credentials, so a person does it. | After the next `trivy-baseline-base` run on `staging`. The scan builds from `Dockerfile`, so it can clear before CircleCI uses the new image; keep the record open until the tag is published. |
-| Batch `docket-entry-zipper` (T1) | Change `FROM` in `web-api/terraform/modules/batch/docker-image/Dockerfile` | On the next deploy; CircleCI's `docker-image-zipper` job rebuilds it with `--no-cache` every time | After the next `trivy-baseline-batch` run |
-| Puppeteer layer (T1) | Patch `web-api/runtimes/puppeteer/package-lock.json` | On the next deploy; CircleCI's deploy job rebuilds the layer every time | After the next `trivy` run on `staging`. The filesystem scan reads all three lockfiles, this one included. |
-| Puppeteer `Dockerfile` (T3) | Change `FROM` in `web-api/runtimes/puppeteer/Dockerfile` | The next time someone builds the layer locally | After the next `trivy-baseline-puppeteer` run |
-
-Things to know:
-
-- **Base-image scans clear only when `FROM` changes.** They scan the image named on the `FROM`
-  line, not the image DAWSON builds. A fix added inside a Dockerfile, such as
-  `apt-get install --only-upgrade <package>`, protects the built image but leaves the alert open.
-  That is still worth doing for a T1 Critical finding while waiting for a new base image: dismiss
-  the alert as `won't fix` with a comment pointing to the PR. The dismissal hides the alert, so
-  nothing will show when the base image catches up. Keep the tracking record open, check for a new
-  base image at each weekly triage, and remove the extra line when the `FROM` bump lands.
-- **Keep Node versions in step.** All three Dockerfiles use Node base images. When a `FROM` change
-  moves to a new Node version, follow the "To update Node.js" list in
-  [Dependency Updates](../dependency-updates.md), so the Lambda runtime and the images stay on the
-  same version.
-- **Check where the fix is before opening a PR.** See the `apt-cache policy` example in
-  [Worked examples](#worked-examples): a fix can be in Debian without being in any image yet.
+How to suppress in each scanner, and how to dismiss an alert in the Security tab, is in
+[Suppression mechanisms](scanner-reference.md#suppression-mechanisms).
 
 ### No upstream fix
 
