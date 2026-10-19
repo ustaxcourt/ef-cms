@@ -6,8 +6,6 @@ This document defines how DAWSON evaluates container vulnerabilities to distingu
 
 Scanner severity alone does not determine priority. Findings must also be evaluated based on where the affected software is used, whether the vulnerable functionality is reachable, and the potential impact of exploitation.
 
-This is a documentation-only effort. No vulnerabilities will be remediated as part of this story.
-
 For details on how scans are performed, see [container-scanning.md](container-scanning.md).
 
 ## 1. DAWSON Container Image Inventory
@@ -69,7 +67,7 @@ trivy image "${AWS_ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:
 
 For Debian packages, consult the [Debian Security Tracker](https://security-tracker.debian.org/tracker/) to verify whether fixes have been backported.
 
-**DAWSON example:** The Puppeteer Docker image is used to create `puppeteer_lambda_layer.zip`. Its Linux packages are not automatically included in the Lambda layer. Findings affecting those packages should be evaluated as build-environment risks, while packages inside the ZIP should be assessed for Lambda runtime exposure.
+**DAWSON example:** **DAWSON example:** The batch image's Trivy scan currently examines the Node.js base image rather than the fully built production image. As a result, packages installed later in the Dockerfile, such as `awscli` and globally installed `ts-node`/`typescript`, may not appear in the scan results. When evaluating a finding, verify package presence against the fully built image rather than relying solely on the base-image scan.
 
 **Outcome:**
 - Package absent or vulnerability already patched: document the evidence and classify the finding accordingly.
@@ -153,7 +151,7 @@ After evaluating the risk, classify the finding into one of four outcomes.
 |---|---|---|
 | **Fix** | A vulnerability presents a credible risk and an appropriate remediation is available | Create a remediation ticket, apply the fix, and rescan |
 | **Accept** | Evidence supports low or non-applicable risk, with residual risk approved | Document the justification and establish a review date |
-| **Escalate** | Significant impact, active exploitation, insufficient mitigation, or a required security exception | Notify the security team or ISSO for further review |
+| **Escalate** | Significant impact, active exploitation, insufficient mitigation, or a required security exception | Notify the cyber-security team for further review |
 | **False positive** | The scanner incorrectly identifies an affected component, version, or vulnerability | Document supporting evidence and dismiss appropriately |
 
 Every decision is recorded as a VEX statement in Step 5.
