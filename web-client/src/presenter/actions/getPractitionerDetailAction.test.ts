@@ -26,7 +26,7 @@ describe('getPractitionerDetailAction', () => {
       });
   });
 
-  it('calls the correct interactors for an external user when practitionerDetail from state does not match the given bar number', async () => {
+  it('should call the correct interactors for an external user when practitionerDetail from state does not match the given bar number', async () => {
     const result = await runAction(getPractitionerDetailAction, {
       modules: {
         presenter,
@@ -59,7 +59,7 @@ describe('getPractitionerDetailAction', () => {
     ).toEqual(0);
   });
 
-  it('calls the correct interactors for an internal user when practitionerDetail from state does not match the given bar number', async () => {
+  it('should call the correct interactors for an internal user when practitionerDetail from state does not match the given bar number', async () => {
     const result = await runAction(getPractitionerDetailAction, {
       modules: {
         presenter,
@@ -100,7 +100,7 @@ describe('getPractitionerDetailAction', () => {
     ).toEqual(1);
   });
 
-  it('returns first array result for public users', async () => {
+  it('should return first array result for public users', async () => {
     applicationContext
       .getUseCases()
       .getPractitionerByBarNumberInteractor.mockImplementationOnce(() => [
@@ -130,5 +130,31 @@ describe('getPractitionerDetailAction', () => {
         name: 'Test Practitioner',
       },
     });
+  });
+
+  it('should return undefined practitionerDetail and not fetch cases for an internal user when the API returns an empty body', async () => {
+    applicationContext.getUseCases().getPractitionerCasesInteractor.mockClear();
+    applicationContext
+      .getUseCases()
+      .getPractitionerByBarNumberInteractor.mockImplementationOnce(() => '');
+
+    const result = await runAction(getPractitionerDetailAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        barNumber: 'PT9999',
+      },
+      state: {
+        user: {
+          role: ROLES.docketClerk,
+        },
+      },
+    });
+
+    expect(result.output).toEqual({ practitionerDetail: undefined });
+    expect(
+      applicationContext.getUseCases().getPractitionerCasesInteractor,
+    ).not.toHaveBeenCalled();
   });
 });
