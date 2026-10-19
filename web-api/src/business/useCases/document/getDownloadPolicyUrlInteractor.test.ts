@@ -318,7 +318,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       ).rejects.toThrow('Unauthorized to view document at this time');
     });
 
-    it('should return the policy url when the doucument requested is an available document', async () => {
+    it('should return the policy url when the document requested is an available document', async () => {
       const url = await getDownloadPolicyUrlInteractor(
         applicationContext,
         {
@@ -353,7 +353,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       expect(url).toEqual('localhost');
     });
 
-    it('should return the policy url when the doucument requested is an Answer that has been sealed to the public', async () => {
+    it('should return the policy url when the document requested is an Answer that has been sealed to the public', async () => {
       applicationContext
         .getPersistenceGateway()
         .verifyCaseForUser.mockReturnValue(true);
@@ -415,7 +415,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       );
     });
 
-    it('should throw a not found error when the case the document belonds to is not found', async () => {
+    it('should throw a not found error when the case the document belongs to is not found', async () => {
       getCaseByDocketNumber.mockResolvedValue({ docketEntries: [] });
 
       await expect(
