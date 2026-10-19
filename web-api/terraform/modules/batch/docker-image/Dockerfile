@@ -1,10 +1,10 @@
 ARG TARGETARCH=amd64
-FROM node:24.21.0
+FROM node:24.21.0@sha256:9af606de2e947cfb3f276633b7c5130c4cd22365aa10f5a647b7675d5cfce0c0
 
 RUN apt-get update && \
-	apt-get install -y awscli && \
-	apt-get clean
-
+    apt-get install -y --no-install-recommends awscli && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 ARG AWS_REGION
 ARG WEBSOCKET_API_GATEWAY_ID
