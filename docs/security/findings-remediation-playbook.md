@@ -493,3 +493,157 @@ tracking record per group. Their SLA clocks start in the two waves described in
   The triager raises everything else with the product owner, who schedules it like other work.
   If it cannot be scheduled before its due date, it goes to the approver as described in
   [Missing an SLA](#missing-an-sla).
+
+## Choosing an action
+
+Work down this list and take the first action that applies. Removing comes first because a
+package DAWSON does not ship can never be vulnerable again. Suppressing and accepting are last,
+because they leave the vulnerable code in place.
+
+| Action | Use it when | How |
+| --- | --- | --- |
+| **Remove** | DAWSON does not need the package, or a slimmer base image would drop it | Delete the dependency or change the base image |
+| **Patch** | A fixed version is within the range DAWSON already allows | [Patching npm dependencies](#patching-npm-dependencies), or a newer tag of the same base image |
+| **Upgrade** | The fix needs a bigger change: a new major version, or a different base image | A normal PR, tested like any other dependency change |
+| **Suppress** | DAWSON is not affected, or the finding is a false positive, with evidence ([Severity rubric](#severity-rubric)) | [Suppressing a finding](#suppressing-a-finding) |
+| **Accept** | DAWSON is affected, and there is no fix or the fix cannot be done before the due date | Approver sign-off with a review date; see [No upstream fix](#no-upstream-fix) |
+
+For findings in DAWSON's own code or configuration (Semgrep, CodeQL, Checkov, Trivy config and
+ZAP), "patch" means changing that code or Terraform. The package and image guidance below is for
+third-party dependencies.
+
+Whatever the action, the finding is resolved only as described in
+[What counts as resolved](#what-counts-as-resolved).
+
+### Patching npm dependencies
+
+DAWSON ships three separate npm projects, each with its own `package.json` and lockfile:
+
+- the root project (Lambdas, API, web client)
+- `web-api/runtimes/puppeteer` (the Puppeteer Lambda layer)
+- `web-api/terraform/modules/batch/docker-image` (the batch job)
+
+A fix in one does not reach the others. Patch the project the finding is in.
+
+- **Direct dependency:** bump it in that project's `package.json`.
+- **Transitive dependency:** if the parent package has a release that pulls in the fixed
+  version, bump the parent. Otherwise, pin the fixed version under `overrides` in that project's
+  `package.json`, as the root project already does for `shell-quote`. An override stays until
+  someone removes it, so note in the PR when it can go (usually when the parent catches up).
+
+Check the fix with the npm audit commands in [Weekly triage](#weekly-triage) step 4.
+
+### Suppressing a finding
+
+Every suppression needs:
+
+- **Approval.** For a suppression in a file, the approver approves the PR that adds it. For a
+  dismissal in the Security tab, the approver agrees on the tracking record before anyone
+  dismisses the alert.
+- **A justification that names the tracking record.** Write the reason and the issue number or
+  GHSA ID next to the suppression, so a reader can find the evidence.
+- **A review date in the tracking record.** None of the mechanisms below expires on its own.
+
+Suppression text is public: every file below is in this public repository, and a comment such as
+"not encrypted because..." tells an attacker where to look. For a sensitive finding, the
+suppression's justification is only the GHSA ID, for example
+`#checkov:skip=CKV_AWS_18:See GHSA-xxxx-xxxx-xxxx`. The reasoning goes in the advisory.
+
+Nothing enforces the approval yet: the repository has no `CODEOWNERS` file. Any reviewer who sees
+a new suppression in a PR asks for the approver's review before approving it.
+
+Suppressions that existed before this playbook, such as the inline Checkov skips, do not name a
+tracking record. They stay as they are. Whoever next changes the file they are in checks that each
+one still applies, and adds a tracking record or removes it.
+
+How to suppress depends on the scanner:
+
+| Scanner | Mechanism | Scope | Notes |
+| --- | --- | --- | --- |
+| Semgrep | `// nosemgrep: <rule-id>` comment on the flagged line | One line | Always name the rule; a bare `nosemgrep` hides every rule on that line. Not used anywhere in the code today. |
+| Checkov | `#checkov:skip=<CHECK_ID>:<reason>` comment inside the Terraform resource | One resource | The normal way to suppress Checkov. There are about 180 in the Terraform today, for example in `terraform-state-backend.tf`. |
+| Checkov | `.checkov.baseline` in the applyable directory | Existing findings in one directory | For findings that existed before the scan. Two of the nine directories have entries. Prefer an inline skip for anything new. |
+| Checkov | `--skip-check` in `security-sast.yml` | The check, everywhere | Only for a check that can never apply to DAWSON. It needs a workflow change. |
+| CodeQL | Dismissal in the Security tab | One alert | Whole directories are excluded through `paths-ignore` in `.github/codeql/codeql-config.yml`. |
+| Trivy (all scans) | Dismissal in the Security tab | One alert | The only mechanism. There is no `.trivyignore`. |
+| Gitleaks | `.gitleaksignore` entry (`<commit-sha>:<fingerprint>`) | One finding | For a confirmed false positive, or a real secret only after it has been rotated and the old value is confirmed revoked. The file's header explains how to get the fingerprint. |
+| Gitleaks | `allowlist` in `.gitleaks.toml` | A path or pattern, everywhere | For a pattern that is never a secret, such as a known placeholder. |
+| Dependency review | `allow-ghsas` in `security-supply-chain.yml` | One advisory | A comma-separated list of GHSA IDs. Matters only once the job stops being `warn-only`. |
+| npm audit | None | — | Patch or accept. The job does not block PRs. |
+| OWASP ZAP | `IGNORE` line in `.zap/rules.tsv` (`<rule-id>`, tab, `IGNORE`, tab, reason) | The rule, in every ZAP scan | All four ZAP scans read this file. Today it has three `WARN` lines and no `IGNORE`. |
+
+**Dismissing in the Security tab.** Pick the reason that matches, and write a comment in this
+format. GitHub limits the comment to 280 characters.
+
+| Reason | Use it for |
+| --- | --- |
+| `false positive` | Not affected, or the scanner is wrong |
+| `won't fix` | An accepted risk |
+| `used in tests` | Code that only runs in tests, when the approver agrees it needs no fix |
+
+```text
+not_affected: vulnerable_code_not_present. Evidence and review date in #<issue>. Approved: @<approver>
+```
+
+For a sensitive finding, use the GHSA ID in place of the issue number, and leave the evidence out
+of the comment; it belongs in the advisory.
+
+Dismissed alerts stay dismissed when a later scan reports them again, so a dismissal outlives the
+reason for it unless someone reviews it. That is why the review date is required.
+
+### Rebuilding images
+
+A fix in an image reaches its users differently for each image, and the scan clears on a
+different event.
+
+| Image | To take a fix | When it reaches its users | When the alert clears |
+| --- | --- | --- | --- |
+| `ef-cms-us-east-1` (T2) | Change `FROM` in `Dockerfile`, increase the `efcms-docker-image` tag in `.circleci/config.yml`, then publish the image with `npm run deploy:ci-image`. See [Dependency Updates](../dependency-updates.md), "Publish new ECR docker image". | When CircleCI starts using the new tag, once it is published to each environment's ECR. Publishing needs AWS credentials, so a person does it. | After the next `trivy-baseline-base` run on `staging`. The scan builds from `Dockerfile`, so it can clear before CircleCI uses the new image; keep the record open until the tag is published. |
+| Batch `docket-entry-zipper` (T1) | Change `FROM` in `web-api/terraform/modules/batch/docker-image/Dockerfile` | On the next deploy; CircleCI's `docker-image-zipper` job rebuilds it with `--no-cache` every time | After the next `trivy-baseline-batch` run |
+| Puppeteer layer (T1) | Patch `web-api/runtimes/puppeteer/package-lock.json` | On the next deploy; CircleCI's deploy job rebuilds the layer every time | After the next `trivy` run on `staging`. The filesystem scan reads all three lockfiles, this one included. |
+| Puppeteer `Dockerfile` (T3) | Change `FROM` in `web-api/runtimes/puppeteer/Dockerfile` | The next time someone builds the layer locally | After the next `trivy-baseline-puppeteer` run |
+
+Things to know:
+
+- **Base-image scans clear only when `FROM` changes.** They scan the image named on the `FROM`
+  line, not the image DAWSON builds. A fix added inside a Dockerfile, such as
+  `apt-get install --only-upgrade <package>`, protects the built image but leaves the alert open.
+  That is still worth doing for a T1 Critical finding while waiting for a new base image: dismiss
+  the alert as `won't fix` with a comment pointing to the PR. The dismissal hides the alert, so
+  nothing will show when the base image catches up. Keep the tracking record open, check for a new
+  base image at each weekly triage, and remove the extra line when the `FROM` bump lands.
+- **Keep Node versions in step.** All three Dockerfiles use Node base images. When a `FROM` change
+  moves to a new Node version, follow the "To update Node.js" list in
+  [Dependency Updates](../dependency-updates.md), so the Lambda runtime and the images stay on the
+  same version.
+- **Check where the fix is before opening a PR.** See the `apt-cache policy` example in
+  [Worked examples](#worked-examples): a fix can be in Debian without being in any image yet.
+
+### No upstream fix
+
+When there is no fix to take, work through these in order and record the outcome in the tracking
+record:
+
+1. **Confirm there really is no fix.** Check the
+   [Debian security tracker](https://security-tracker.debian.org/tracker/) for OS packages, or the
+   advisory's patched versions for npm packages. Check `apt-cache policy <package>` inside the
+   image, and whether a newer tag or the `-slim` variant of the base image has the fix.
+2. **Remove the package if DAWSON does not need it.** Full Node images include many packages a
+   slim image leaves out. For example, the batch image's `zlib1g-dev` and `libmagickwand-dev`
+   come from the full `node:24.21.0` base, and
+   [#10495](https://github.com/ustaxcourt/ef-cms/issues/10495) moves it to a slim base.
+3. **Check whether DAWSON is affected,** using step 2 of the [Severity rubric](#severity-rubric).
+   A finding that does not apply is suppressed, not accepted.
+4. **Look for a compensating control** that blocks the attack without a fix: network rules,
+   input validation, or turning off the vulnerable feature. A control that exists already makes
+   the finding `inline_mitigations_already_exist`. One added for this finding is recorded with the
+   acceptance.
+5. **Accept the risk** with the approver's sign-off and a review date: no more than 90 days away
+   for Critical or High, 180 days for Medium or Low, and sooner if a fix is expected. A Critical
+   finding in T1 is also raised with the whole team.
+
+Never accept a finding only because there is no patch. "No fix exists" is the reason to work
+through this list, not the end of it.
+
+For container findings, the full method for deciding whether a package is present and reachable
+in an image is in the container findings triage guide (PR #10521).
