@@ -143,7 +143,7 @@ describe('getPractitionerDetailAction', () => {
         presenter,
       },
       props: {
-        barNumber: 'PT9999',
+        barNumber: 'PT0000',
       },
       state: {
         user: {
