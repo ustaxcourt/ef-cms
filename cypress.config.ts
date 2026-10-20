@@ -55,9 +55,6 @@ export default defineConfig({
         expireUserConfirmationCode(email: string) {
           return expireUserConfirmationCode(email);
         },
-        getRawFeatureFlagValue({ flag }) {
-          return getRawFeatureFlagValue({ flag });
-        },
         getEmailVerificationToken({ email }) {
           return getEmailVerificationToken({ email });
         },
@@ -96,6 +93,9 @@ export default defineConfig({
             docketNumber,
             eventCode,
           });
+        },
+        getRawFeatureFlagValue({ flag }) {
+          return getRawFeatureFlagValue({ flag });
         },
         getUserByEmail(email: string) {
           return getUserByEmail(email);
