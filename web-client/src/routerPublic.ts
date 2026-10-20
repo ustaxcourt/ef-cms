@@ -37,7 +37,7 @@ const router = {
     const trackedRoute = (
       pattern: string,
       // riot-route passes each wildcard in the pattern as a string
-      handler: (...args: string[]) => unknown,
+      handler: (...args: string[]) => void | Promise<void>,
     ): void => {
       route(pattern, (...args) => {
         recordRumPageView(getRumPageIdFromRoutePattern(pattern));
