@@ -8,6 +8,18 @@ nvm install
 nvm use
 nvm alias default "$(cat .nvmrc)"
 ```
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Deploy Docker container `4.3.102`
+
+This script will prompt for an environment to pull the image from; choose `exp5`.
+
+```bash
+npm run ecr:check-version
+```
 </details>
 
 <details><summary>Dependency Updates - Week of 2026-10-12</summary>
