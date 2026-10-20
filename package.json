@@ -318,7 +318,7 @@
     "cypress-file-upload": "5.0.8",
     "esbuild": "0.28.2",
     "esbuild-plugin-babel-cached": "0.2.3",
-    "esbuild-plugin-clean": "0.0.1",
+    "esbuild-plugin-clean": "1.0.1",
     "esbuild-plugin-copy": "2.1.1",
     "esbuild-plugin-resolve": "2.0.0",
     "esbuild-sass-plugin": "3.7.0",
