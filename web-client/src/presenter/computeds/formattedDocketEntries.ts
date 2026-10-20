@@ -220,12 +220,14 @@ const buildRelatedDocketEntries = ({
   isExternalUser,
   user,
   visibilityPolicyDateFormatted,
+  motionVisibilityPolicyDateFormatted,
 }: {
   entry: FormattedCaseDetailDocketEntry;
   rawCase: RawCase;
   isExternalUser: boolean;
   user: RawUser;
   visibilityPolicyDateFormatted: string;
+  motionVisibilityPolicyDateFormatted: string;
 }): RelatedDocketEntry[] => {
   const relatedDocketEntries: RelatedDocketEntry[] = [];
 
@@ -243,6 +245,7 @@ const buildRelatedDocketEntries = ({
           isExternalUser,
           user,
           visibilityPolicyDateFormatted,
+          motionVisibilityPolicyDateFormatted,
         );
 
       const dispositionLinkText = MOTION_DISPOSITION_VERBIAGE[
@@ -348,6 +351,7 @@ export const getFormattedDocketEntry = ({
     isExternalUser,
     user,
     visibilityPolicyDateFormatted,
+    motionVisibilityPolicyDateFormatted,
   });
 
   const showDocumentLinks = DocketEntry.isDownloadable(entry, {
