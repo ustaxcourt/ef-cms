@@ -59,7 +59,7 @@ Things to know when reading this table:
 | Checkov | `--skip-check` in `security-sast.yml` | The check, everywhere | Only for a check that can never apply to DAWSON. It needs a workflow change. |
 | CodeQL | Dismissal in the Security tab | One alert | Whole directories are excluded through `paths-ignore` in `.github/codeql/codeql-config.yml`. |
 | Trivy (all scans) | Dismissal in the Security tab | One alert | The only mechanism. There is no `.trivyignore`. |
-| Gitleaks | `.gitleaksignore` entry (`<commit-sha>:<fingerprint>`) | One finding | For a confirmed false positive, or a real secret only after it has been rotated and the old value is confirmed revoked. The file's header explains how to get the fingerprint. |
+| Gitleaks | `.gitleaksignore` entry: the finding's `Fingerprint` from the Gitleaks JSON report, pasted as is | One finding | For a confirmed false positive, or a real secret only after it has been rotated and the old value is confirmed revoked. In a history scan the `Fingerprint` already starts with the commit (`<commit-sha>:<file>:<rule-id>:<line>`). Do not add the SHA again, even though the file's header shows the format as `<commit-sha>:<fingerprint>`. |
 | Gitleaks | `allowlist` in `.gitleaks.toml` | A path or pattern, everywhere | For a pattern that is never a secret, such as a known placeholder. |
 | Dependency review | `allow-ghsas` in `security-supply-chain.yml` | One advisory | A comma-separated list of GHSA IDs. Matters only once the job stops being `warn-only`. |
 | npm audit | None | — | Patch or accept. The job does not block PRs. |

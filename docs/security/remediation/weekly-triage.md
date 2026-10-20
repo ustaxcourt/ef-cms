@@ -26,11 +26,16 @@ SLAs, who approves); this runbook is the commands. It also covers the one-time
    it first and let it finish while you do steps 2 to 4.
 
    ```sh
+   latest_run() {
+     gh run list --workflow security-containers.yml --event workflow_dispatch \
+       --user "$(gh api user -q .login)" --limit 1 --json databaseId -q '.[0].databaseId'
+   }
+   LAST_ID=$(latest_run)
    gh workflow run security-containers.yml --ref staging
-   sleep 10
-   RUN_ID=$(gh run list --workflow security-containers.yml --event workflow_dispatch \
-     --user "$(gh api user -q .login)" --limit 1 --json databaseId -q '.[0].databaseId')
+   until RUN_ID=$(latest_run) && [ -n "$RUN_ID" ] && [ "$RUN_ID" != "$LAST_ID" ]; do sleep 5; done
    ```
+
+   The loop waits until the new run is listed, so `RUN_ID` is never last week's run.
 
 2. **Check that the scheduled runs worked.** A failed run shows up as no new findings, which
    looks the same as a good week.
@@ -51,7 +56,9 @@ SLAs, who approves); this runbook is the commands. It also covers the one-time
    ```sh
    ZAP_RUN=$(gh run list --workflow security-dast.yml --event schedule --limit 1 \
      --json databaseId -q '.[0].databaseId')
-   gh run download "$ZAP_RUN" -n zap-web-reports -D "$(mktemp -d)"
+   ZAP_DIR=$(mktemp -d)
+   gh run download "$ZAP_RUN" -n zap-web-reports -D "$ZAP_DIR"
+   echo "$ZAP_DIR"
    ```
 
 4. **Audit the npm lockfiles on `staging`.** In CI, npm audit runs only on PRs and only checks the
@@ -78,13 +85,15 @@ SLAs, who approves); this runbook is the commands. It also covers the one-time
 
 6. **List the Security-tab alerts opened since the last triage.** Set `SINCE` to the date of the
    last completed triage, not last Monday, so a skipped week is not lost. The query keeps only
-   the categories that are triaged:
+   the categories that are triaged, and drops CodeQL code-quality alerts, which have no security
+severity (see [Severity rubric](playbook.md#severity-rubric)):
 
    ```sh
    SINCE=2026-10-12
    gh api --paginate \
      "repos/ustaxcourt/ef-cms/code-scanning/alerts?state=open&ref=refs/heads/staging&per_page=100" \
      --jq '.[] | select(.created_at >= "'"$SINCE"'")
+           | select(.tool.name != "CodeQL" or .rule.security_severity_level != null)
            | select(.most_recent_instance.category
                | test("^(trivy-baseline-(base|puppeteer|batch)|trivy|trivy-config|semgrep|checkov|/language:.*|gitleaks-baseline)$"))
            | [.created_at[:10], .most_recent_instance.category, .rule.id, .html_url] | @tsv'
@@ -123,8 +132,8 @@ duplicate ones. The query in step 6 already applies this table.
 This table decides the size of the backlog. On 2026-10-16, 12,292 of the open alerts on
 `staging` came from Trivy, but only 1,084 of those were in triaged categories. The rest were
 7,002 `trivy-image-*` duplicates and 4,206 alerts in the retired `efcms-local` categories. The
-other large group is `gitleaks-baseline`: 916 open alerts on 2026-10-20, 874 of them from its first
-scan on 2026-09-03.
+other large group is `gitleaks-baseline`, most of it from the scan's first run over the whole
+history.
 
 ## Backlog clean-up
 
@@ -137,7 +146,15 @@ starts](playbook.md#when-the-clock-starts)) and makes sure both of these are don
 
 - **The `efcms-local` categories.** `scripts/run-once-scripts/dismiss-duplicate-local-alerts.sh`
   dismisses the alerts that repeat the CI image's CVEs. Run it without arguments first to see
-  what it would dismiss, then with `--apply`. It deliberately leaves alerts under real file paths,
+  what it would dismiss, then with `--apply`. Its default dismissal comment is longer than
+  GitHub's 280-character limit, so set a shorter one for the `--apply` run:
+
+  ```sh
+  DISMISS_COMMENT="Duplicate scan target. efcms-local is FROM ef-cms-us-east-1 and installs no OS packages, so these repeat the base image's CVEs, still tracked under trivy-baseline-base and trivy-image-base. The efcms-local scan was removed in #10412." \
+    scripts/run-once-scripts/dismiss-duplicate-local-alerts.sh --apply
+  ```
+
+  It deliberately leaves alerts under real file paths,
   which come from that image's `npm ci` layer and appear in no other category. Triage those like
   any other finding.
 - **Categories retired later.** Either dismiss their alerts, or have a repository admin [delete the
@@ -156,11 +173,12 @@ tracking record per group. Their SLA clocks start in the two waves described in
 [When the clock starts](playbook.md#when-the-clock-starts).
 
 **Triage the existing `gitleaks-baseline` alerts as a batch.** Most of them were found when the
-scan first ran over the whole tree, and most look like test values. Of the 916 open on 2026-10-20,
-522 were `generic-api-key` and 348 were `jwt`, many under test and local-development paths. They
-cannot each go through [Secrets](playbook.md#secrets) on the day, so:
+scan first ran over the whole tree, and most look like test values: mostly `generic-api-key` and
+`jwt` matches under test and local-development paths. Exact counts go in the private weekly
+report, not here (see [Reporting](playbook.md#reporting)). The alerts cannot each go through
+[Secrets](playbook.md#secrets) on the day, so:
 
-1. **Start with `aws-access-token` alerts** (32 on 2026-10-20), within the first few days of the
+1. **Start with `aws-access-token` alerts**, within the first few days of the
    window. For each key ID, `aws iam get-access-key-last-used --access-key-id <id>` shows whether
    it belongs to a DAWSON account and whether it has been used. Any real key goes through
    [Secrets](playbook.md#secrets) straight away.

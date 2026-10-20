@@ -27,11 +27,13 @@ a due date. What the issue is allowed to say depends on whether the finding is s
 
 | Finding | Tracking | What the public issue contains |
 | --- | --- | --- |
-| **Routine:** dependency and base-image upgrades, T3 findings, false positives, findings marked not affected | GitHub issue only | The full details |
-| **Sensitive:** an unfixed finding that affects T1 or T2, any exposed secret, any finding reported by a person | Draft security advisory for the details, plus a GitHub issue that points to it | Only "Private security finding", the advisory's GHSA ID, the assignee and the due date. No component, severity or CVE. |
+| **Routine:** an upgrade to a published fix for a public advisory, in any tier; T3 findings; false positives; findings marked not affected | GitHub issue only | The full details |
+| **Sensitive:** any other finding that affects T1 or T2, such as one in DAWSON's own code or configuration (CodeQL, Semgrep, Checkov, ZAP) or a public CVE with no fixed version; any exposed secret; any finding reported by a person | Draft security advisory for the details, plus a GitHub issue that points to it | Only "Private security finding", the advisory's GHSA ID, the assignee and the due date. No component, severity or CVE. |
 
-When in doubt, treat a finding as sensitive. Never put details of an unfixed T1 or T2
-vulnerability in a public issue, PR description or commit message.
+A dependency or base-image upgrade for a public advisory is routine even in T1 or T2: the advisory
+is already public, and the upgrade PR names the package anyway. When in doubt, treat a finding as
+sensitive. Never put details of a sensitive finding in a public issue, PR description or commit
+message.
 
 **Draft security advisories** live under Security → Advisories. Only repository owners, admins and
 security managers can create one; everyone else can see and edit it only after being added to it as
@@ -65,6 +67,11 @@ Code and packages that run in a deployed DAWSON environment.
 - **Lambda functions and their production npm dependencies.** Lambdas run on the AWS-managed
   `nodejs24.x` runtime (`web-api/terraform/modules/lambda/lambda.tf`), not on a DAWSON container
   image, so OS packages in DAWSON's images do not reach Lambda.
+- **The web client and the public site.** They are bundled from the root project's
+  `dependencies` (`build:client` and `build:public` in `package.json`), stored in S3 and served
+  through CloudFront (`web-api/terraform/modules/ui/frontend.tf` and `frontend-public.tf`). Client
+  libraries such as `react` and `quill` run in every user's browser, so they are production
+  runtime even though no server runs them.
 - **The Puppeteer Lambda layer.** CircleCI builds it by running
   `web-api/runtimes/puppeteer/build.sh`, which runs `npm ci --production` and zips the result.
   Its contents are the production dependencies in `web-api/runtimes/puppeteer/package.json`
@@ -94,6 +101,9 @@ Anything that runs with access to AWS credentials or repository secrets.
   (`efcms-docker-image`). It builds, tests and deploys DAWSON; it is not a Lambda base image.
   The container scans build a fresh image from `Dockerfile`, so a scan result can differ from the
   pinned tag CI actually runs. Check the tag before acting on a finding.
+- **`cimg/node:24.21.0`**, the image the `docker-image-zipper` CircleCI job runs on to build and
+  push the batch image with AWS credentials (`.circleci/config.yml`). No scan covers it, so
+  findings in it only come from outside reports. Keep its tag current.
 - **GitHub Actions workflows** in `.github/workflows` and `.github/actions`.
 - **Secrets** of any kind.
 
@@ -119,7 +129,7 @@ severity, not on the scanner's. Work it out in three steps.
 | Scanner | Base severity |
 | --- | --- |
 | Trivy, npm audit, dependency review | The severity the scanner reports (CVSS or GitHub advisory rating). UNKNOWN counts as High until someone rates it. |
-| CodeQL | The alert's security severity: 9.0 and above Critical, 7.0–8.9 High, 4.0–6.9 Medium, below 4.0 Low |
+| CodeQL | The alert's security severity: 9.0 and above Critical, 7.0–8.9 High, 4.0–6.9 Medium, below 4.0 Low. Alerts with no security severity come from the `security-and-quality` query suite's code-quality checks; they are not security findings and are not tracked here. |
 | Semgrep | ERROR is High, WARNING is Medium, INFO is Low |
 | Checkov | Checkov does not report a severity. Checks in `--hard-fail-on` are High; every other check is Medium. |
 | Gitleaks | Critical, until the finding is confirmed to be a false positive |
@@ -377,7 +387,8 @@ Every suppression needs:
   dismisses the alert.
 - **A justification that names the tracking record.** Write the reason and the issue number or
   GHSA ID next to the suppression, so a reader can find the evidence.
-- **A review date in the tracking record.** None of the suppression mechanisms expires on its own.
+- **A review date in the tracking record**, except for a plain false positive (see
+  [Exceptions](#exceptions)). None of the suppression mechanisms expires on its own.
 
 Suppression text is public: every suppression file is in this public repository, and a comment such
 as "not encrypted because..." tells an attacker where to look. For a sensitive finding, the
@@ -598,14 +609,15 @@ that used the exposed value.
 
 | Secret | Where DAWSON keeps it | How to rotate |
 | --- | --- | --- |
-| `USTC_ADMIN_PASS`, `USTC_ZENDESK_PASS`, `DEFAULT_ACCOUNT_PASS` | `[env]_deploy` in AWS Secrets Manager | `npm run secrets:rotate-environment`, once per environment. It sets new passwords on the admin and Zendesk Cognito users and saves all three in `[env]_deploy`. It also updates `[env]/ZendeskDawson`, and the password copy in the Vault account when `VAULT_ACCOUNT_ID` is set. In development environments `DEFAULT_ACCOUNT_PASS` is a fixed test value that the script does not change. |
+| `USTC_ADMIN_PASS`, `USTC_ZENDESK_PASS`, `DEFAULT_ACCOUNT_PASS` | `[env]_deploy` in AWS Secrets Manager | `CI=true npm run secrets:rotate-environment`, once per environment. Without `CI` set, the script prints all three new passwords. It sets new passwords on the admin and Zendesk Cognito users and saves all three in `[env]_deploy`. It also updates `[env]/ZendeskDawson`, and the password copy in the Vault account when `VAULT_ACCOUNT_ID` is set. In development environments `DEFAULT_ACCOUNT_PASS` is a fixed test value that the script does not change. |
 | CircleCI's AWS access key | IAM user `CircleCI`, and each environment's CircleCI context (`efcms-<branch>`) | `npm run secrets:rotate-circleci`, once per environment with `ENV` set. It deletes the old keys before creating the new one, so CircleCI jobs fail until the context is updated; the script does that last. |
 | Any other value in `[env]_deploy`, such as a third-party API credential | `[env]_deploy` in AWS Secrets Manager | Issue a new credential with the provider and revoke the old one, then store it with `update-secret.ts`, as shown below this table. |
 | A GitHub Actions secret | Repository or organization settings | Issue a new value with the provider, revoke the old one, then `gh secret set <NAME>`. Needs a repository admin. |
 | A personal credential, such as a developer's AWS key or token | The developer's account | The owner revokes it in the provider's console straight away. |
 
-To store a new value without leaving it in your shell history or on the command line, read it
-into a variable first:
+To keep a new value out of your shell history, read it into a variable first. The script still
+receives it as an argument, so other users on the same machine could see it in the process list
+while the script runs.
 
 ```sh
 read -rs NEW_VALUE
