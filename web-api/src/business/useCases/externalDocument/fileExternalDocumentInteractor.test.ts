@@ -434,6 +434,79 @@ describe('fileExternalDocumentInteractor', () => {
       });
     });
 
+    it('should set the same filling date for all documents to add', async () => {
+      const consolidatedCasesToFileAcross = [
+        {
+          docketNumber: caseRecord.docketNumber,
+          leadDocketNumber: caseRecord.docketNumber,
+        },
+        {
+          docketNumber: consolidatedCase.docketNumber,
+          leadDocketNumber: caseRecord.docketNumber,
+        },
+      ];
+
+      getCaseByDocketNumber.mockResolvedValueOnce({
+        ...caseRecord,
+        consolidatedCases: consolidatedCasesToFileAcross,
+      });
+      getCasesByDocketNumbers.mockResolvedValueOnce([
+        caseRecord,
+        consolidatedCase as any,
+      ]);
+      const secondaryDocument = {
+        docketNumber: caseRecord.docketNumber,
+        documentTitle: 'Motion for Continuance 2',
+        documentType: 'Motion for Continuance',
+        eventCode: 'M006',
+        filedBy: 'Test Petitioner',
+        primaryDocumentId: mockDocketEntryId,
+        docketEntryId: applicationContext.getUniqueId(),
+      };
+      const supportingDocument = {
+        docketNumber: caseRecord.docketNumber,
+        documentTitle: 'Motion for Continuance Support',
+        documentType: 'Motion for Continuance',
+        eventCode: 'M006',
+        filedBy: 'Test Petitioner',
+        primaryDocumentId: mockDocketEntryId,
+        docketEntryId: applicationContext.getUniqueId(),
+      };
+
+      const documentMetadata = {
+        consolidatedCasesToFileAcross,
+        docketNumber: caseRecord.docketNumber,
+        documentTitle: 'Motion for Continuance',
+        documentType: 'Motion for Continuance',
+        eventCode: 'M006',
+        filedBy: 'Test Petitioner',
+        primaryDocumentId: mockDocketEntryId,
+        docketEntryId: applicationContext.getUniqueId(),
+        secondaryDocument,
+        supportingDocuments: [supportingDocument],
+      };
+
+      await fileExternalDocumentInteractor(
+        applicationContext,
+        {
+          documentMetadata,
+        },
+        mockIrsPractitionerUser,
+      );
+
+      const secondary =
+        updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
+          d => d.docketEntryId === secondaryDocument.docketEntryId,
+        );
+
+      const supporting =
+        updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
+          d => d.docketEntryId === supportingDocument.docketEntryId,
+        );
+
+      expect(secondary.filingDate).toBe(supporting.filingDate);
+    });
+
     it('should recompute cases that are consolidated with current case to prevent injection of cases from request', async () => {
       const consolidatedCasesToFileAcross = [
         {
