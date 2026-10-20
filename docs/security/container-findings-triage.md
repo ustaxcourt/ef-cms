@@ -150,7 +150,7 @@ After evaluating the risk, classify the finding into one of four outcomes.
 | Decision | Criteria | Action |
 |---|---|---|
 | **Fix** | A vulnerability presents a credible risk and an appropriate remediation is available | Create a remediation ticket, apply the fix, and rescan |
-| **Accept** | Evidence supports low or non-applicable risk | Document the justification and establish a review date |
+| **Accept** | Evidence supports low or non-applicable risk, with approval from the team’s tech lead | Document the justification and establish a review date |
 | **Escalate** | Significant impact, active exploitation, insufficient mitigation, or a required security exception | Escalate to the team's tech lead for further review |
 | **False positive** | The scanner incorrectly identifies an affected component, version, or vulnerability | Document supporting evidence and dismiss appropriately |
 

@@ -118,7 +118,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
 
-      # efcms-local is not scanned: it is FROM ef-c ms-us-east-1 and adds no OS packages,
+      # efcms-local is not scanned: it is FROM ef-cms-us-east-1 and adds no OS packages,
       # so Trivy reports the same CVEs under a second image name.
       - name: Build DAWSON container images
         uses: ./.github/actions/dawson-container-images
