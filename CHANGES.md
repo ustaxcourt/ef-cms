@@ -1,4 +1,4 @@
-<details><summary>Install trivy</summary>
+<details><summary>DAW-8 - Install trivy</summary>
 
 ## Local
 

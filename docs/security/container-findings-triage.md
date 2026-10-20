@@ -67,7 +67,7 @@ trivy image "${AWS_ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:
 
 For Debian packages, consult the [Debian Security Tracker](https://security-tracker.debian.org/tracker/) to verify whether fixes have been backported.
 
-**DAWSON example:** **DAWSON example:** The batch image's Trivy scan currently examines the Node.js base image rather than the fully built production image. As a result, packages installed later in the Dockerfile, such as `awscli` and globally installed `ts-node`/`typescript`, may not appear in the scan results. When evaluating a finding, verify package presence against the fully built image rather than relying solely on the base-image scan.
+**DAWSON example:** For the batch and Puppeteer images, check presence against the image built from the Dockerfile, not only the base-image scan, which misses the packages those Dockerfiles add (see **Scanning coverage** in [section 1](#1-dawson-container-image-inventory)).
 
 **Outcome:**
 - Package absent or vulnerability already patched: document the evidence and classify the finding accordingly.
@@ -150,8 +150,8 @@ After evaluating the risk, classify the finding into one of four outcomes.
 | Decision | Criteria | Action |
 |---|---|---|
 | **Fix** | A vulnerability presents a credible risk and an appropriate remediation is available | Create a remediation ticket, apply the fix, and rescan |
-| **Accept** | Evidence supports low or non-applicable risk, with residual risk approved | Document the justification and establish a review date |
-| **Escalate** | Significant impact, active exploitation, insufficient mitigation, or a required security exception | Notify the cyber-security team for further review |
+| **Accept** | Evidence supports low or non-applicable risk | Document the justification and establish a review date |
+| **Escalate** | Significant impact, active exploitation, insufficient mitigation, or a required security exception | Escalate to the team's tech lead for further review |
 | **False positive** | The scanner incorrectly identifies an affected component, version, or vulnerability | Document supporting evidence and dismiss appropriately |
 
 Every decision is recorded as a VEX statement in Step 5.
@@ -184,6 +184,37 @@ trivy image --vex .vex/ef-cms.openvex.json --show-suppressed <image>
 
 Review the results to confirm that only the intended findings are suppressed.
 
+**Example:** a minimal statement for [Example 1](#example-1-zlib-in-the-batch-base-image). Tested with Trivy 0.76 against `node:24.21.0`: both zlib findings were suppressed and every other finding was still reported.
+
+```json
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "https://github.com/ustaxcourt/ef-cms/blob/staging/.vex/ef-cms.openvex.json",
+  "author": "U.S. Tax Court DAWSON team",
+  "timestamp": "2026-10-20T00:00:00Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": { "name": "CVE-2023-45853" },
+      "products": [
+        {
+          "@id": "pkg:oci/node?repository_url=index.docker.io%2Flibrary%2Fnode",
+          "subcomponents": [
+            { "@id": "pkg:deb/debian/zlib1g" },
+            { "@id": "pkg:deb/debian/zlib1g-dev" }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_present",
+      "impact_statement": "The vulnerability is in MiniZip. Debian bookworm's zlib does not build MiniZip (https://security-tracker.debian.org/tracker/CVE-2023-45853)."
+    }
+  ]
+}
+```
+
+The product is the image as a package URL (purl), with the affected packages as `subcomponents`. Take each package's purl from Trivy's JSON output (`.PkgIdentifier.PURL`). Omit the version, as above, only when the justification holds for every version.
+
 **Note:** DAWSON's existing container scans do not currently consume this VEX file. Integrating VEX into the CI/CD scanning workflow would require a separate change.
 
 ## 3. DAWSON Worked Examples
@@ -205,11 +236,16 @@ The following examples demonstrate how a finding's actual risk may differ from i
 
 **Finding:** CVE-2026-42496 — Perl Archive::Tar path traversal
 
-- **Presence:** The affected Perl package is present in the Puppeteer base image.
-- **Classification:** Inherited OS dependency used in a build-only image.
-- **Exposure:** The image creates the Lambda layer ZIP and is not deployed as the Lambda runtime.
-- **Assessment:** No identified DAWSON execution path uses the vulnerable Archive::Tar functionality. A patched version is available.
-- **Recommended decision:** Deprioritize the runtime concern, document the build-environment assessment, and address the package through a base image update.
+- **Why it was reported:** Debian tracks the CVE against its `perl` source package, so Trivy flags every package built from that source. In `node:24.21.0-slim`, that is `perl-base`.
+- **Presence:** `perl-base` is the only Perl package in the image. Archive::Tar ships in `perl-modules-5.36`, which is not installed, and the image contains no `Archive/Tar.pm`:
+  ```bash
+  docker run --rm node:24.21.0-slim sh -c 'dpkg -l | grep perl; find / -name Tar.pm 2>/dev/null'
+  ```
+- **Assessment:** The vulnerable code is not in the image, so the finding does not apply, whatever the image is used for.
+- **Recommended decision:** False positive.
+- **VEX statement:** `not_affected` with `vulnerable_code_not_present`.
+
+This is also why Step 1 checks the affected component, not just the package name in the alert.
 
 ### Example 3: Linux Kernel Headers in the Batch Image
 
@@ -231,7 +267,7 @@ The following examples demonstrate how a finding's actual risk may differ from i
 - **Assessment:** The reported vulnerability appears unlikely to be reachable through the batch workload, pending confirmation of indirect usage.
 - **Recommended decision:** Document the limited exposure and consider removing unnecessary packages through a smaller base image.
 
-These examples also highlight a potential improvement: using `node:24.21.0-slim` instead of the full Node.js image for the batch workload could reduce unnecessary OS packages and associated findings, subject to compatibility testing.
+These examples also highlight a potential improvement: using the `-slim` variant of the current Node tag instead of the full Node.js image for the batch workload could reduce unnecessary OS packages and associated findings, subject to compatibility testing.
 
 ## 4. Recording Triage Decisions
 
