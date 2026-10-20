@@ -3,6 +3,7 @@ import {
   PARTY_TYPES,
   PAYMENT_STATUS,
 } from '@shared/business/entities/EntityConstants';
+import { Case } from '@shared/business/entities/cases/Case';
 import { getJsDateFromIso } from '@shared/business/utilities/DateHandler';
 import { getCypressPostgresDb } from 'cypress/helpers/cypressTasks/postgres/getCypressPostgresDb';
 
@@ -19,12 +20,6 @@ export type CypressCaseWithStatusHistory = {
 
 // received long before any dashboard timeframe, so the petitions charts do not change
 const RECEIVED_AT = getJsDateFromIso('1997-06-16T16:00:00.000Z');
-
-// matches Case.getSortableDocketNumber for docket years before 2000
-const getSortableDocketNumber = (docketNumber: string): number => {
-  const [sequentialNumber, yearFiled] = docketNumber.split('-');
-  return parseInt(`19${yearFiled}${sequentialNumber.padStart(6, '0')}`);
-};
 
 export const deleteCasesByDocketNumbers = async ({
   docketNumbers,
@@ -61,7 +56,7 @@ export const insertCasesWithStatusHistory = async ({
         petitioners: JSON.stringify([]),
         procedureType,
         receivedAt: RECEIVED_AT,
-        sortableDocketNumber: getSortableDocketNumber(docketNumber),
+        sortableDocketNumber: Case.getSortableDocketNumber(docketNumber)!,
         statistics: JSON.stringify([]),
         status: statusChanges[statusChanges.length - 1].updatedCaseStatus,
       })),

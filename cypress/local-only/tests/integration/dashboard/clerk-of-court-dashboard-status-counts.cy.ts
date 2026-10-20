@@ -1,14 +1,14 @@
 import {
   CASE_STATUS_TYPES,
+  MONTH_LABELS,
   PROCEDURE_TYPES_MAP,
 } from '@shared/business/entities/EntityConstants';
 import {
-  FORMATS,
   calculateISODate,
   createISODateString,
   deconstructDate,
-  prepareDateFromEST,
-  prepareDateFromString,
+  getTimeframeForYear,
+  isDateWithinGivenInterval,
 } from '@shared/business/utilities/DateHandler';
 import { createAndServePaperPetition } from 'cypress/helpers/fileAPetition/create-and-serve-paper-petition';
 import { goToCase } from 'cypress/helpers/caseDetail/go-to-case';
@@ -46,27 +46,14 @@ const { closed, closedDismissed, generalDocketReadyForTrial, onAppeal } =
   CASE_STATUS_TYPES;
 const { regular, small } = PROCEDURE_TYPES_MAP;
 
-const toMillis = (isoDate: string) =>
-  prepareDateFromString(isoDate, FORMATS.ISO).toMillis();
+// the same Eastern-time windows the API counts in
+const getStatsWindows = (stats: ClerkDashboardStats) => ({
+  calendarYear: getTimeframeForYear({ fiscal: false, year: stats.year }),
+  fiscalYear: getTimeframeForYear({ fiscal: true, year: stats.fiscalYear }),
+});
 
-// midnight Eastern on the given date, as a UTC ISO string
-const startOfDayEastern = (date: string) =>
-  prepareDateFromEST(date, FORMATS.YYYYMMDD)!;
-
-const getStatsWindows = (stats: ClerkDashboardStats) => {
-  const year = Number(stats.year);
-  const fiscalYear = Number(stats.fiscalYear);
-  return {
-    calendarYear: {
-      begin: startOfDayEastern(`${year}-01-01`),
-      end: startOfDayEastern(`${year + 1}-01-01`),
-    },
-    fiscalYear: {
-      begin: startOfDayEastern(`${fiscalYear - 1}-10-01`),
-      end: startOfDayEastern(`${fiscalYear}-10-01`),
-    },
-  };
-};
+// the month of the date in Eastern time
+const getMonth = (isoDate: string) => Number(deconstructDate(isoDate).month);
 
 const getClerkDashboardStats = () => {
   cy.intercept('GET', '**/clerk-dashboard-stats').as('clerkDashboardStats');
@@ -86,9 +73,12 @@ const getExpectedIncrease = (
   countedChanges: CountedChange[],
   { begin, end }: StatsWindow,
 ) => {
-  const inWindow = countedChanges.filter(
-    ({ date }) =>
-      toMillis(date) >= toMillis(begin) && toMillis(date) < toMillis(end),
+  const inWindow = countedChanges.filter(({ date }) =>
+    isDateWithinGivenInterval({
+      date,
+      intervalEndDate: end,
+      intervalStartDate: begin,
+    }),
   );
   const count = (match: (change: CountedChange) => boolean) =>
     inWindow.filter(match).length;
@@ -121,7 +111,8 @@ const expectIncrease = (
     ).to.equal(expected.closedByProcedureType(procedureType));
   });
 
-  for (let month = 1; month <= 12; month++) {
+  MONTH_LABELS.forEach((_, index) => {
+    const month = index + 1;
     const match = (entry: MonthTotal) => entry.month === month;
     expect(
       totalFor(after.casesClosedByMonth, match) -
@@ -133,7 +124,7 @@ const expectIncrease = (
         totalFor(before.casesOnAppealByMonth, match),
       `${label}: changed to On Appeal in month ${month}`,
     ).to.equal(expected.onAppealByMonth(month));
-  }
+  });
 };
 
 const expectIncreaseInBothTimeframes = (
@@ -185,10 +176,9 @@ describe('Clerk of Court Dashboard - case status change counts', () => {
       getClerkDashboardStats().then(after => {
         // every change above happened now, so each falls in the current month
         const now = createISODateString();
-        const month = Number(deconstructDate(now).month);
         const change = (statusGroup: CountedChange['statusGroup']) => ({
           date: now,
-          month,
+          month: getMonth(now),
           procedureType: regular,
           statusGroup,
         });
@@ -248,13 +238,13 @@ describe('Clerk of Court Dashboard - case status change counts', () => {
           expectIncreaseInBothTimeframes(before, after, [
             {
               date: oneMinuteBefore,
-              month: 9,
+              month: getMonth(oneMinuteBefore),
               procedureType: regular,
               statusGroup: 'closed',
             },
             {
               date: oneMinuteAfter,
-              month: 10,
+              month: getMonth(oneMinuteAfter),
               procedureType: regular,
               statusGroup: 'closed',
             },
