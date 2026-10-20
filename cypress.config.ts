@@ -94,6 +94,9 @@ export default defineConfig({
             eventCode,
           });
         },
+        getRawFeatureFlagValue({ flag }) {
+          return getRawFeatureFlagValue({ flag });
+        },
         getUserByEmail(email: string) {
           return getUserByEmail(email);
         },
@@ -121,7 +124,7 @@ export default defineConfig({
         onMessage: {
           async closeTab(browser: any, url: string) {
             const desiredPage = await retry<Promise<Page>>(async () => {
-              const pages = await browser.pages();
+              const pages: Page[] = await browser.pages();
               const page = pages.find(p => p.url().includes(url));
               if (!page) throw new Error('Could not find page');
               return page;
