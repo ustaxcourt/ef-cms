@@ -125,7 +125,7 @@ export default defineConfig({
           async closeTab(browser: any, url: string) {
             const desiredPage = await retry<Promise<Page>>(async () => {
               const pages: Page[] = await browser.pages();
-              const page = pages.find((p: Page) => p.url().includes(url));
+              const page = pages.find(p => p.url().includes(url));
               if (!page) throw new Error('Could not find page');
               return page;
             });
