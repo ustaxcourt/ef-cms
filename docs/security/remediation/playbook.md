@@ -292,7 +292,8 @@ day. The approver opens a draft security advisory (see
 - **A possible secret.** Gitleaks blocks a PR, `gitleaks-baseline` opens an alert, or anyone
   spots a credential in the code, a log or an issue. Treat it as exposed until proven otherwise.
   A secret is exposed the moment it is pushed to any branch of this public repository, whether
-  or not the PR is ever merged, so rotation comes first, before the history is cleaned up.
+  or not the PR is ever merged, so rotation comes first, before the history is cleaned up. Follow
+  [Secrets](#secrets).
 - **A KEV-listed or publicly exploited vulnerability in T1 or T2**, however it comes to light: a
   scan, an advisory, or the news.
 - **A finding reported by a person.**
@@ -566,3 +567,126 @@ changes, and the statement has to be checked again like any other not-affected d
 anyone. `not_affected` and `fixed` statements give nothing away. An `affected` statement for a T1
 or T2 component tells an attacker where DAWSON is still vulnerable, so it stays in the draft
 advisory until the fix ships, like any other detail of a sensitive finding.
+
+## Secrets
+
+A possible secret is Critical from the moment anyone sees it, and it is handled the same day (see
+[Same-day triage](#same-day-triage)). The order matters: **contain, rotate, verify, clean up,
+record.** Rotation is the fix. Removing the secret from the code does not make it safe again,
+because the repository is public and the value has already been readable.
+
+### 1. Contain
+
+- Tell the approver, who opens a draft security advisory.
+- Never copy the secret's value anywhere: not into the advisory, an issue, chat or a terminal
+  others can see. Refer to it by file, line and commit.
+- If it is on an unmerged branch, stop work on that branch until the secret is rotated.
+- Find out now who can rotate it. For `test` and `prod`, the people with access may be court
+  engineers rather than the development team, so contact them at once instead of on the day the
+  rotation is due.
+
+### 2. Rotate, within 1 business day at the latest
+
+Automated tools scan public GitHub repositories for credentials around the clock, so one business
+day is the limit, not the target. **Revoke an AWS key or a GitHub token as soon as it is spotted,
+on any day.** Other secrets are rotated as soon as someone with access can do it.
+
+Rotate at the source first, so the exposed value stops working, then update wherever DAWSON stores
+the new value. All of these need access to the deployed environment, so a person with that access
+does them. A value in an `[env]_deploy` secret is per environment: rotate it in every environment
+that used the exposed value.
+
+| Secret | Where DAWSON keeps it | How to rotate |
+| --- | --- | --- |
+| `USTC_ADMIN_PASS`, `USTC_ZENDESK_PASS`, `DEFAULT_ACCOUNT_PASS` | `[env]_deploy` in AWS Secrets Manager | `npm run secrets:rotate-environment`, once per environment. It sets new passwords on the admin and Zendesk Cognito users and saves all three in `[env]_deploy`. It also updates `[env]/ZendeskDawson`, and the password copy in the Vault account when `VAULT_ACCOUNT_ID` is set. In development environments `DEFAULT_ACCOUNT_PASS` is a fixed test value that the script does not change. |
+| CircleCI's AWS access key | IAM user `CircleCI`, and each environment's CircleCI context (`efcms-<branch>`) | `npm run secrets:rotate-circleci`, once per environment with `ENV` set. It deletes the old keys before creating the new one, so CircleCI jobs fail until the context is updated; the script does that last. |
+| Any other value in `[env]_deploy`, such as a third-party API credential | `[env]_deploy` in AWS Secrets Manager | Issue a new credential with the provider and revoke the old one, then store it with `update-secret.ts`, as shown below this table. |
+| A GitHub Actions secret | Repository or organization settings | Issue a new value with the provider, revoke the old one, then `gh secret set <NAME>`. Needs a repository admin. |
+| A personal credential, such as a developer's AWS key or token | The developer's account | The owner revokes it in the provider's console straight away. |
+
+To store a new value without leaving it in your shell history or on the command line, read it
+into a variable first:
+
+```sh
+read -rs NEW_VALUE
+scripts/secrets/update-secret.ts --key <KEY> --value "$NEW_VALUE"
+unset NEW_VALUE
+```
+
+The script prints the value it sets, so run it where nobody else can see the output.
+
+If a secret is not in this table, find who issued it and ask them to revoke it. The finding is
+not resolved until the exposed value is revoked.
+
+### 3. Verify
+
+- **Whose it is, and whether it was used.** For an AWS access key, start with:
+
+  ```sh
+  aws iam get-access-key-last-used --access-key-id <old-key-id>
+  ```
+
+  It shows the IAM user the key belongs to, and when, where and for which service it was last
+  used. Run it before revoking, if that can be done quickly, because it identifies the owner.
+- **The old value no longer works.** Try it, or check that the provider shows it as revoked. For
+  an AWS access key, `aws iam list-access-keys --user-name <user>` no longer lists the old key ID.
+- **Nobody used it while it was exposed.** For an AWS key, search CloudTrail from the time it was
+  first pushed, in **both** of DAWSON's regions. `lookup-events` searches one region at a time,
+  and IAM and STS calls are recorded in `us-east-1`:
+
+  ```sh
+  for region in us-east-1 us-west-1; do
+    aws cloudtrail lookup-events --region "$region" \
+      --lookup-attributes AttributeKey=AccessKeyId,AttributeValue=<old-key-id> \
+      --start-time <first-pushed-time>
+  done
+  ```
+
+  `lookup-events` only covers the last 90 days. If the key was exposed for longer, the earlier
+  activity has to come from the CloudTrail logs stored in S3; ask whoever manages the AWS
+  accounts. For other credentials, check the provider's access logs.
+- **If anyone else used it,** this is a security incident, not just a finding. The approver
+  escalates it beyond the team the same day.
+
+### 4. Clean up
+
+- **Remove the secret from the code,** and load the value from Secrets Manager or an environment
+  variable instead.
+- **If it was pasted into an issue or PR comment,** editing the comment is not enough: anyone who
+  can read the repository can see a comment's edit history. Delete the comment, or delete the
+  revision that holds the secret from the edit history (the comment's author or anyone with write
+  access can; see
+  [tracking changes in a comment](https://docs.github.com/en/communities/moderating-comments-and-conversations/tracking-changes-in-a-comment)).
+- **Do not rewrite `staging` history.** It would break every clone, and it does not remove the
+  secret from GitHub anyway. GitHub's guide to
+  [removing sensitive data](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/removing-sensitive-data-from-a-repository)
+  explains that forks, clones, cached views and pull request references keep the old commits, and
+  that GitHub Support only helps when rotating cannot remove the risk. On an unmerged branch, a
+  force-push removes the commit from the branch, but it stays reachable by its SHA.
+- **Silence the alert** once the old value is revoked: add its fingerprint to `.gitleaksignore`,
+  with the GHSA ID as the justification (see
+  [Suppression mechanisms](scanner-reference.md#suppression-mechanisms)).
+
+### 5. Record
+
+In the advisory, record:
+
+- what the secret was, where it was exposed (file, commit, branch) and when it was first pushed
+- when it was revoked, and who rotated it
+- how the revocation was verified, and whether the logs showed any use
+- the PR that removed it from the code
+
+### False positives
+
+If the match is not a secret, such as a placeholder or a made-up test value, record it like any
+false positive (see [Exceptions](#exceptions)). Silence it with a `.gitleaksignore` entry for that
+one finding, or an `allowlist` pattern in `.gitleaks.toml` if the same harmless pattern will keep
+appearing.
+
+### Prevention
+
+- The Husky pre-commit hook runs `gitleaks protect --staged` when Gitleaks is installed, and skips
+  it with a warning when it is not. Install it (see [Secrets Scanning](../secrets-scanning.md)).
+- GitHub's push protection blocks known secret formats before they reach GitHub. It is turned on
+  by an organization admin; whether it is on for this repository can only be checked with admin
+  access.
