@@ -12,8 +12,9 @@ suppression mechanisms and image rebuilds, see the [scanner reference](scanner-r
 
 - **Audience:** the DAWSON team.
 - **Status:** the severity rubric and remediation SLAs in this doc are a team agreement.
-- **Covers:** every finding from the scanners listed under [Scanner inventory](scanner-reference.md#scanner-inventory),
-  plus findings reported by people (pen tests, the ISSO, outside reports).
+- **Covers:** every finding from the scanners listed under [Scanner
+  inventory](scanner-reference.md#scanner-inventory), plus findings reported by people (pen tests,
+  the ISSO, outside reports).
 - **Does not cover:** how to configure or run a scanner. Where a scanner doc and this playbook
   disagree on process (who approves, how long a fix may take, how an exception is recorded), this
   playbook wins.
@@ -33,12 +34,12 @@ When in doubt, treat a finding as sensitive. Never put details of an unfixed T1 
 vulnerability in a public issue, PR description or commit message.
 
 **Draft security advisories** live under Security → Advisories. Only repository owners, admins and
-security managers can create one; everyone else can see and edit it only after being added to it
-as a collaborator
-([permission levels](https://docs.github.com/en/code-security/security-advisories/working-with-repository-security-advisories/permission-levels-for-repository-security-advisories)).
+security managers can create one; everyone else can see and edit it only after being added to it as
+a collaborator ([permission
+levels](https://docs.github.com/en/code-security/security-advisories/working-with-repository-security-advisories/permission-levels-for-repository-security-advisories)).
 If the triager does not have one of those roles, the approver creates the advisory and adds the
-triager and the finding owner. Once the fix is in production, close the advisory, or publish it
-if the team decides to.
+triager and the finding owner. Once the fix is in production, close the advisory, or publish it if
+the team decides to.
 
 ## Roles
 
@@ -161,11 +162,11 @@ the container findings triage guide (PR #10521).
 
 Apply these in order to anything that is affected:
 
-1. **Raise to Critical** if the vulnerability is on the
-   [CISA Known Exploited Vulnerabilities catalog](https://www.cisa.gov/known-exploited-vulnerabilities-catalog),
-   or has a public exploit, and the component is in T1 or T2. A public exploit means the CVE's
-   GitHub advisory or NVD entry links to working exploit code or a proof of concept. A
-   theoretical description of the attack does not count.
+1. **Raise to Critical** if the vulnerability is on the [CISA Known Exploited Vulnerabilities
+   catalog](https://www.cisa.gov/known-exploited-vulnerabilities-catalog), or has a public exploit,
+   and the component is in T1 or T2. A public exploit means the CVE's GitHub advisory or NVD entry
+   links to working exploit code or a proof of concept. A theoretical description of the attack does
+   not count.
 2. **Any exposed secret is Critical.** No modifier lowers it.
 3. **Lower one level for T3** (dev and test only), with Low as the floor.
 
@@ -218,11 +219,11 @@ docker run --rm --platform linux/amd64 node:24.21.0-slim \
 ```
 
 On 2026-10-16 this showed `deb12u4` in Debian's `bookworm-security` repository, while
-`node:24.21.0-slim` and the newest `node:24-slim` both still shipped `deb12u3`. So the fix is
-to bump the `FROM` tag once a `node` slim image includes `deb12u4`. Adding `apt-get upgrade` to
-the Dockerfile would not clear the alert, because this scan reads the image on the `FROM` line,
-not the built image (see [Scanner inventory](scanner-reference.md#scanner-inventory)). If no such tag ships before the
-due date, the finding goes to the approver as a wait-for-upstream exception.
+`node:24.21.0-slim` and the newest `node:24-slim` both still shipped `deb12u3`. So the fix is to
+bump the `FROM` tag once a `node` slim image includes `deb12u4`. Adding `apt-get upgrade` to the
+Dockerfile would not clear the alert, because this scan reads the image on the `FROM` line, not the
+built image (see [Scanner inventory](scanner-reference.md#scanner-inventory)). If no such tag ships
+before the due date, the finding goes to the approver as a wait-for-upstream exception.
 
 Had there been no fix at all, the affected check would have looked at each CVE's vulnerable code.
 The slim image ships `perl-base` but not `perl-modules-5.36`, so a CVE in a module from that
@@ -270,8 +271,9 @@ deploy.
 ### Missing an SLA
 
 A finding that is about to miss its SLA goes to the approver before the due date, not after. The
-approver either agrees a new date with the finding owner, or the owner raises an exception. A
-missed SLA is never left open silently; it appears in the weekly report until it is resolved.
+approver either agrees a new due date with the finding owner, or the owner proposes accepting the
+risk. Both are recorded as [exceptions](#exceptions). A missed SLA is never left open silently;
+it appears in the weekly report until it is resolved.
 
 The SLAs apply to findings that already exist. New code is held to a stricter standard: it must
 not add medium- or high-severity findings at all ([Code Review](../../code-review.md)).
@@ -312,12 +314,15 @@ team. Anyone who receives a report informally forwards it to the approver.
 - **A fixed title format**, so every open finding can be listed with one search (step 8):
   - routine: `Security finding: <what to fix> (due 2026-11-15)`
   - sensitive: `Security finding: GHSA-xxxx-xxxx-xxxx (due 2026-11-15)`
+  - after an [exception](#exceptions): the same title with `(review 2027-01-15)` in place of the
+    due date
 
   The first line of the body gives the severity and when the clock started, for example
   `High, 30 days from 2026-10-16`. Sensitive issues leave that line out.
 - **No bug-severity labels.** The `Critical Severity`, `High Severity` and similar labels measure
-  impact on court users, as set by the product owner ([Story Life Cycle](../../story-life-cycle.md)).
-  They are a different scale from the security severity in this playbook.
+  impact on court users, as set by the product owner ([Story Life
+  Cycle](../../story-life-cycle.md)). They are a different scale from the security severity in this
+  playbook.
 - **Who picks it up.** The approver assigns Critical and High findings in T1 or T2 the same day.
   The triager raises everything else with the product owner, who schedules it like other work.
   If it cannot be scheduled before its due date, it goes to the approver as described in
@@ -373,10 +378,10 @@ Every suppression needs:
   GHSA ID next to the suppression, so a reader can find the evidence.
 - **A review date in the tracking record.** None of the suppression mechanisms expires on its own.
 
-Suppression text is public: every suppression file is in this public repository, and a comment such as
-"not encrypted because..." tells an attacker where to look. For a sensitive finding, the
-suppression's justification is only the GHSA ID, for example
-`#checkov:skip=CKV_AWS_18:See GHSA-xxxx-xxxx-xxxx`. The reasoning goes in the advisory.
+Suppression text is public: every suppression file is in this public repository, and a comment such
+as "not encrypted because..." tells an attacker where to look. For a sensitive finding, the
+suppression's justification is only the GHSA ID, for example `#checkov:skip=CKV_AWS_18:See
+GHSA-xxxx-xxxx-xxxx`. The reasoning goes in the advisory.
 
 Nothing enforces the approval yet: the repository has no `CODEOWNERS` file. Any reviewer who sees
 a new suppression in a PR asks for the approver's review before approving it.
@@ -416,3 +421,148 @@ through this list, not the end of it.
 
 For container findings, the full method for deciding whether a package is present and reachable
 in an image is in the container findings triage guide (PR #10521).
+
+## Exceptions
+
+An exception is any decision that leaves a finding unfixed past its due date, or for good. There
+are three kinds, and all three need the approver:
+
+| Exception | When | VEX status |
+| --- | --- | --- |
+| **New due date** | The fix is known but cannot land before the due date | `affected` |
+| **Accepted risk** | DAWSON is affected and there is no fix, or the fix is not worth doing yet ([No upstream fix](#no-upstream-fix)) | `affected` |
+| **Not affected** | Evidence shows the finding does not apply ([Severity rubric](#severity-rubric), step 2) | `not_affected` |
+
+Not affected counts as an exception because the alert stops being visible while the decision is
+still a judgment that can go stale. A plain **false positive**, where the scanner is wrong about
+the facts (for example a Gitleaks match on a made-up value in one commit), is different: it cannot
+go stale, so it is recorded the same way but needs no review date.
+
+### The exception record
+
+Write the record in the finding's tracking record: the issue body for a routine finding, the draft
+advisory for a sensitive one. Copy this template and fill in every line:
+
+```markdown
+### Exception
+- Findings: <alert links, or CVE IDs and Security-tab categories>
+- Component and tier: <package or image, and T1, T2 or T3>
+- Severity: <DAWSON severity, from the rubric>
+- Decision: <new due date | accepted risk | not affected>
+- VEX: <status, and justification for not_affected>
+- Evidence, or reason and plan: <for not affected, the check a reviewer can re-run; otherwise why it is not fixed and what will fix it>
+- Compensating control: <what limits the risk meanwhile, or "none">
+- Approved by: <approver> on <YYYY-MM-DD>
+- Review by: <YYYY-MM-DD>
+```
+
+An approved accepted risk or not-affected decision meets the SLA (see
+[What counts as resolved](#what-counts-as-resolved)), but its issue stays open while the
+exception is in force, only to carry the review date. Its title shows `(review <date>)` (see
+[Ownership](#ownership)), so the weekly triage lists it alongside findings that are due. Keep these
+issues out of active work on the board. A false positive's issue is closed once it is recorded.
+
+### Review dates
+
+Every exception ends on its review date. The longest each kind may run:
+
+| Exception | Longest review date |
+| --- | --- |
+| New due date | One SLA period from the original due date, granted once. A second extension is an accepted risk. |
+| Accepted risk, Critical or High | 90 days |
+| Accepted risk, Medium or Low | 180 days |
+| Not affected | 12 months, or sooner when the component changes, such as a base-image bump or a new version of the package |
+
+Set an earlier date when a fix is expected sooner. A not-affected decision is about a specific
+version: when that version changes, the evidence has to be checked again, even if the scan does
+not report anything new. A dismissed alert stays dismissed after the code under it changes.
+
+### On the review date
+
+What happens depends on the kind of exception.
+
+**New due date.** The review date is the new due date. If the fix has not landed, the finding has
+missed its SLA a second time and goes straight to the approver as an accepted-risk decision (see
+[Missing an SLA](#missing-an-sla)). It never gets a second new due date.
+
+**Accepted risk.** The finding owner checks whether a fix now exists, then either:
+
+- **fixes it:** the finding goes back on an SLA, counted from the review date, or
+- **renews it:** the approver signs off on a new review date, within the limits above, and the
+  record gets the new date and the reason the risk still stands. A second renewal of a Critical or
+  High finding is also raised with the whole team, so a 90-day acceptance does not quietly become
+  permanent.
+
+**Not affected.** The finding owner re-runs the evidence, then either:
+
+- **renews it:** the evidence still holds, and the record gets the new review date, or
+- **ends it:** the evidence no longer holds. Reopen the alert in the Security tab, or remove the
+  suppression from its file, and the finding goes back on an SLA, counted from the review date.
+
+An exception nobody reviews ends on its own. On the day after its review date it is treated as
+ended, the finding is back on an SLA counted from the review date, and it shows as overdue in the
+weekly report until someone acts.
+
+## VEX statements
+
+VEX (Vulnerability Exploitability eXchange) is a standard way to say, for one CVE in one product,
+whether DAWSON is affected and why. CISA's [VEX use
+cases](https://www.cisa.gov/sites/default/files/publications/VEX_Use_Cases_Document_508c.pdf)
+explain it. This playbook uses VEX's words for its decisions, so every exception record can be
+turned into a VEX statement later without redoing the analysis.
+
+**Nothing is published as VEX yet.** DAWSON has no VEX file, and no scanner reads one. Publishing
+VEX and wiring it into Trivy is a separate piece of work.
+
+### How decisions map to VEX
+
+| VEX status | In this playbook | Statement must also include |
+| --- | --- | --- |
+| `not_affected` | A not-affected exception | `justification`, one of the five in [Severity rubric](#severity-rubric) step 2 |
+| `affected` | An open finding, a new due date, or an accepted risk | `action_statement`: the fix planned, or the compensating control |
+| `fixed` | Resolved by a fix that is in the shipped component | — |
+| `under_investigation` | Triaged, with the affected check still in progress | — |
+
+### Example
+
+The not-affected decision from the [worked examples](#worked-examples) (CVE-2023-45853 in the
+batch image's zlib) as an [OpenVEX](https://github.com/openvex/spec) statement. The document `@id`
+is an identifier, not a link, and the one here is made up:
+
+```json
+{
+  "@context": "https://openvex.dev/ns/v0.2.0",
+  "@id": "urn:dawson:vex:example-2026-001",
+  "author": "DAWSON team",
+  "timestamp": "2026-10-20T00:00:00Z",
+  "version": 1,
+  "statements": [
+    {
+      "vulnerability": { "name": "CVE-2023-45853" },
+      "products": [
+        {
+          "@id": "pkg:oci/node@sha256:3d27e5c11e5786e309ec3e03f93ae536eb36e6e5eb3714d5eb3300a36157add0?arch=amd64&repository_url=index.docker.io%2Flibrary%2Fnode",
+          "subcomponents": [
+            { "@id": "pkg:deb/debian/zlib1g@1.2.13.dfsg-1?arch=amd64&distro=debian-12.15&epoch=1" },
+            { "@id": "pkg:deb/debian/zlib1g-dev@1.2.13.dfsg-1?arch=amd64&distro=debian-12.15&epoch=1" }
+          ]
+        }
+      ],
+      "status": "not_affected",
+      "justification": "vulnerable_code_not_present",
+      "status_notes": "MiniZip is not part of Debian's zlib1g or zlib1g-dev packages; dpkg -L lists no MiniZip files."
+    }
+  ]
+}
+```
+
+Every identifier is the one Trivy reports for the `linux/amd64` image, checked on 2026-10-20 with
+`trivy image --platform linux/amd64 --image-src remote --format cyclonedx node:24.21.0`. The
+product is the `node:24.21.0` base image rather than the built batch image, because that is what
+the base-image scan reads. When the base image changes, its digest
+changes, and the statement has to be checked again like any other not-affected decision.
+
+**Only publish what is safe to publish.** A VEX file in this public repository is readable by
+anyone. `not_affected` and `fixed` statements give nothing away. An `affected` statement for a T1
+or T2 component tells an attacker where DAWSON is still vulnerable, so it stays in the draft
+advisory until the fix ships, like any other detail of a sensitive finding.

@@ -39,10 +39,10 @@ Things to know when reading this table:
 - **Base-image scans see only the base.** The Puppeteer and batch scans check the image named in
   each Dockerfile's `FROM` line, not the built image. For batch, that means `awscli`, the global
   `ts-node` and `typescript`, and its npm packages are not covered by the container scan.
-- **No scanner checks npm devDependencies.** npm audit runs with `--omit=dev`, and Trivy
-  ["doesn't report development dependencies"](https://trivy.dev/latest/docs/coverage/language/nodejs/)
-  unless `--include-dev-deps` is set, which no DAWSON workflow does. T3 npm packages, Cypress
-  included, are therefore not reported today.
+- **No scanner checks npm devDependencies.** npm audit runs with `--omit=dev`, and Trivy ["doesn't
+  report development dependencies"](https://trivy.dev/latest/docs/coverage/language/nodejs/) unless
+  `--include-dev-deps` is set, which no DAWSON workflow does. T3 npm packages, Cypress included, are
+  therefore not reported today.
 - **The weekly Monday 06:00 UTC run** (`cron: '0 6 * * 1'`) is currently set only on
   `security-containers.yml` and `security-dast.yml`. The other workflows refresh the Security tab
   on every push to staging.
@@ -106,8 +106,8 @@ Things to know:
   nothing will show when the base image catches up. Keep the tracking record open, check for a new
   base image at each weekly triage, and remove the extra line when the `FROM` bump lands.
 - **Keep Node versions in step.** All three Dockerfiles use Node base images. When a `FROM` change
-  moves to a new Node version, follow the "To update Node.js" list in
-  [Dependency Updates](../../dependency-updates.md), so the Lambda runtime and the images stay on the
-  same version.
-- **Check where the fix is before opening a PR.** See the `apt-cache policy` example in
-  [Worked examples](playbook.md#worked-examples): a fix can be in Debian without being in any image yet.
+  moves to a new Node version, follow the "To update Node.js" list in [Dependency
+  Updates](../../dependency-updates.md), so the Lambda runtime and the images stay on the same
+  version.
+- **Check where the fix is before opening a PR.** See the `apt-cache policy` example in [Worked
+  examples](playbook.md#worked-examples): a fix can be in Debian without being in any image yet.

@@ -93,8 +93,10 @@ SLAs, who approves); this runbook is the commands. It also covers the one-time
 7. **Triage each new finding:** dedupe it, assign a tier, work out its severity
    ([Severity rubric](playbook.md#severity-rubric)), and open or update its tracking record
    ([Where findings are tracked](playbook.md#where-findings-are-tracked)).
-8. **Check what is due.** List open security findings and raise any due within 14 days, or
-   already past due, with the approver (see [Missing an SLA](playbook.md#missing-an-sla)):
+8. **Check what is due.** List open security findings and raise with the approver any whose due
+   date or review date is within 14 days or already past (see
+   [Missing an SLA](playbook.md#missing-an-sla) and
+   [On the review date](playbook.md#on-the-review-date)):
 
    ```sh
    gh issue list --repo ustaxcourt/ef-cms --state open --search 'in:title "Security finding"' \
@@ -126,9 +128,8 @@ This table decides the size of the backlog. On 2026-10-16, 12,292 of the open al
 
 This is done once, during the 30-day clean-up window after the playbook is adopted.
 
-The approver owns the 30-day clean-up window that starts on the adoption date (see
-[When the clock starts](playbook.md#when-the-clock-starts)) and makes sure both of these are done before it
-ends.
+The approver owns the 30-day clean-up window that starts on the adoption date (see [When the clock
+starts](playbook.md#when-the-clock-starts)) and makes sure both of these are done before it ends.
 
 **Retire what no longer means anything.** This needs write access to the repository.
 
@@ -137,8 +138,9 @@ ends.
   what it would dismiss, then with `--apply`. It deliberately leaves alerts under real file paths,
   which come from that image's `npm ci` layer and appear in no other category. Triage those like
   any other finding.
-- **Categories retired later.** Either dismiss their alerts, or have a repository admin
-  [delete the category's analyses](https://docs.github.com/en/rest/code-scanning/code-scanning#delete-a-code-scanning-analysis-from-a-repository).
+- **Categories retired later.** Either dismiss their alerts, or have a repository admin [delete the
+  category's
+  analyses](https://docs.github.com/en/rest/code-scanning/code-scanning#delete-a-code-scanning-analysis-from-a-repository).
   Removing a scan never closes the alerts it already reported.
 
 Dismissing an alert hides it for good, so dismiss only confirmed duplicates and alerts from scans
