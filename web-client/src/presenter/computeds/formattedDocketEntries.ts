@@ -445,7 +445,7 @@ export const formattedDocketEntries = (
 
   const MOTION_VISIBILITY_POLICY_CHANGE_DATE = get(
     state.featureFlags[
-      ALLOWLIST_FEATURE_FLAGS.MOTION_VISIBILTY_POLICY_CHANGE_DATE.key
+      ALLOWLIST_FEATURE_FLAGS.MOTION_VISIBILITY_POLICY_CHANGE_DATE.key
     ],
   );
 

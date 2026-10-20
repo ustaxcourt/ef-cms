@@ -177,7 +177,7 @@ export const ALLOWLIST_FEATURE_FLAGS = {
   ENABLE_PAYMENT_PORTAL_INTEGRATION: {
     key: 'enable-payment-portal-integration',
   },
-  MOTION_VISIBILTY_POLICY_CHANGE_DATE: {
+  MOTION_VISIBILITY_POLICY_CHANGE_DATE: {
     key: 'motion-visibility-policy-change-date',
   },
   NEW_TRIAL_CITIES: {

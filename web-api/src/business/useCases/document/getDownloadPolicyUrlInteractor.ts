@@ -76,7 +76,7 @@ export const getDownloadPolicyUrlInteractor = async (
 
     const motionVisibilityChangeDate =
       featureFlags[
-        ALLOWLIST_FEATURE_FLAGS.MOTION_VISIBILTY_POLICY_CHANGE_DATE.key
+        ALLOWLIST_FEATURE_FLAGS.MOTION_VISIBILITY_POLICY_CHANGE_DATE.key
       ];
 
     if (

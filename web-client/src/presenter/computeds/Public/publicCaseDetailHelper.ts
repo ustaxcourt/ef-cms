@@ -309,7 +309,7 @@ export const publicCaseDetailHelper = (
 
   const motionVisibilityPolicyDate = get(
     state.featureFlags[
-      ALLOWLIST_FEATURE_FLAGS.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.key
+      ALLOWLIST_FEATURE_FLAGS.MOTION_VISIBILITY_POLICY_CHANGE_DATE.key
     ],
   );
 
