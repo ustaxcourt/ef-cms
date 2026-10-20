@@ -111,3 +111,24 @@ Things to know:
   version.
 - **Check where the fix is before opening a PR.** See the `apt-cache policy` example in [Worked
   examples](playbook.md#worked-examples): a fix can be in Debian without being in any image yet.
+
+## Known errors in other security docs
+
+The scanner docs in `docs/security/` and some workflow comments disagree with the code. Until
+they are corrected, which needs its own ticket, trust this table. Each entry was checked against
+`staging` on 2026-10-20.
+
+| Where | What it says | What is true |
+| --- | --- | --- |
+| `container-scanning.md`, "Images scanned" | `ef-cms-us-east-1` is the "Production Lambda base image" | It is the CircleCI image. Lambdas run on the AWS-managed `nodejs24.x` runtime. |
+| `container-scanning.md`, "Images scanned" | The Puppeteer Dockerfile is the "Puppeteer / PDF generation base" | It is only used to build the layer on a developer machine. The deployed layer is built by `build.sh`. |
+| `container-scanning.md`, introduction | SARIF reaches the Security tab only from staging pushes and same-repository PRs | It also comes from scheduled and manual runs (`dawson-upload-sarif`). |
+| `container-scanning.md`, and a comment in `security-containers.yml` | Triage findings into `.trivyignore` | There is no `.trivyignore`, and nothing reads one. Trivy findings are dismissed in the Security tab ([Suppression mechanisms](#suppression-mechanisms)). |
+| `container-scanning.md` ("team lead"), and a comment in `security-containers.yml` ("CONFIRM WITH JIM") | Who decides on making image scans blocking | The approver in the [playbook](playbook.md#roles), named by role. |
+| `dast-scanning.md`, local false positives | Mark them in the Security tab | ZAP results never reach the Security tab until [#10496](https://github.com/ustaxcourt/ef-cms/issues/10496). |
+| `supply-chain-scanning.md`, and the npm audit comment in `security-supply-chain.yml` | `shell-quote@1.8.3` and `form-data@4.0.5` are open findings | Both are fixed: `shell-quote` is overridden to 1.11.0 and `form-data` is 4.0.6. The `continue-on-error` that was to be removed once they were fixed is still set. |
+| `secrets-scanning.md`, PR gate | For a real secret: rotate, remove it from the branch, force-push | The order is right, but a force-push does not remove the commit from GitHub. Follow [Secrets](playbook.md#secrets). |
+| `sast-scanning.md`, Checkov | Add an accepted risk to the directory's `.checkov.baseline` | The usual mechanism is an inline `#checkov:skip` comment (about 180 today); the baseline is for findings that predate the scan. |
+| `docs/security/` as a whole | — | `security-compare.yml` ("Findings vs staging", which can fail a PR) is not documented anywhere except the [Scanner inventory](#scanner-inventory). |
+
+When one of these docs is corrected, remove its row here.

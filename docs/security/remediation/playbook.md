@@ -48,7 +48,7 @@ the team decides to.
 | Triager | The engineer on the weekly rotation (see [Dependency Updates](../../dependency-updates.md)) | Reviews new findings each Monday, dedupes them, sets severity, opens or updates tracking records |
 | Finding owner | The assignee of the tracking record | Fixes, suppresses or proposes accepting the finding, and validates the result |
 | Approver | The tech lead, or a delegate the tech lead has named in advance | Approves every suppression and risk acceptance, at every severity |
-| Team | Everyone on DAWSON | Kept informed through the weekly report; consulted on escalations |
+| Team | Everyone on DAWSON | Kept informed through the [weekly report](#reporting); consulted on escalations |
 
 When a delegate approves, the tracking record names the delegate, and the tech lead re-confirms
 the decision on return.
@@ -690,3 +690,73 @@ appearing.
 - GitHub's push protection blocks known secret formats before they reach GitHub. It is turned on
   by an organization admin; whether it is on for this repository can only be checked with admin
   access.
+
+## Validation and closure
+
+### Validation
+
+A finding is not fixed until something other than the person who fixed it shows that it is gone.
+
+| Resolved by | Validated when | How to check |
+| --- | --- | --- |
+| A fix, for a Security-tab finding | The next scan of the same category on `staging` no longer reports it, and GitHub marks the alert `fixed` | `gh api repos/ustaxcourt/ef-cms/code-scanning/alerts/<number> --jq '.state, .fixed_at'`. Which run clears which category is in [Rebuilding images](scanner-reference.md#rebuilding-images); code and Terraform categories update on every push to `staging`. |
+| A fix, for a ZAP finding | The next weekly `zap-web-reports` artifact no longer lists the alert | [Weekly triage](weekly-triage.md) step 3, until [#10496](https://github.com/ustaxcourt/ef-cms/issues/10496) puts ZAP in the Security tab |
+| A fix, for an npm audit finding | `npm audit` on `staging` no longer reports it | [Weekly triage](weekly-triage.md) step 4 |
+| A fix, for a finding reported by a person | The reporter, or the approver, repeats the original test and the attack no longer works | The method in the report |
+| Not affected, accepted risk, new due date | The approver has signed off on the [exception record](#the-exception-record) | The record in the issue or advisory |
+| A rotated secret | The checks in [Secrets](#secrets), step 3 | — |
+
+**Check that the scan still covers it.** GitHub marks an alert `fixed` whenever an analysis of
+its category no longer reports it. That also happens when the scan stops looking, for example if
+a path is excluded or a lockfile moves. Before closing, check that the fixing change did not
+narrow what the scan covers.
+
+**T1 Critical and High findings need production.** As set out in
+[What counts as resolved](#what-counts-as-resolved), they stay open until the fix is in
+production. The `prod` branch is what runs in production, so this shows whether a fix has
+shipped:
+
+```sh
+git fetch -q origin prod
+git merge-base --is-ancestor <fix-commit> origin/prod && echo "in production"
+```
+
+### Closure
+
+When a finding is validated:
+
+1. **Close the issue** with a comment that links the PR that fixed it and the evidence: the alert
+   showing `fixed`, the scan run, or the exception record. For T1 Critical and High findings,
+   include the date the fix reached production.
+2. **For a sensitive finding,** close the public issue with only "Fixed" and a link to the PR.
+   Then close the draft advisory, or publish it if the team decides to. Publish only after the fix
+   is in production.
+3. **Remove what was temporary:** a Dockerfile `--only-upgrade` line once the base image has
+   caught up, an `overrides` entry the parent package no longer needs, and any suppression for a
+   finding that is now fixed.
+4. **If a VEX statement was drafted,** update its status to `fixed`.
+
+If the finding comes back, whether as the same alert reopening or as a new alert for the same
+problem, reopen the issue with its original severity. The SLA clock starts again from the date it
+came back.
+
+## Reporting
+
+After each Monday triage, the triager posts a weekly report to the team. The template and the
+commands that fill it in are in [Weekly triage](weekly-triage.md#weekly-report).
+
+**Post it in the team's private chat channel, never in a public issue.** Counts of open Critical
+findings by tier tell an attacker where to look, just as the details of a finding do.
+
+The report always covers:
+
+- the triage date, and whether every scheduled scan ran
+- new findings since the last triage, by DAWSON severity and tier
+- findings closed since the last triage
+- findings overdue, or due within 14 days
+- exceptions whose review date is within 14 days, or past
+- the backlog: open alerts in the triaged categories, compared with last week
+- anything the approver or the product owner needs to decide
+
+The approver reads every report. An overdue finding, or an exception past its review date, is
+raised with the approver the same day it appears.
