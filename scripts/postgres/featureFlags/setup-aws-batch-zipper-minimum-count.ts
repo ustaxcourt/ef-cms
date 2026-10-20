@@ -3,7 +3,7 @@
 import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgInsertInto';
 
 async function setupAwsBatchZipperMinimumCount() {
-  const VALUE = 50;
+  const VALUE = 1;
 
   await pgInsertInto({
     table: 'dwFeatureFlag',

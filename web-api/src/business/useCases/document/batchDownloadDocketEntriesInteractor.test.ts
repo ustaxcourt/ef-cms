@@ -295,4 +295,70 @@ describe('batchDownloadDocketEntriesInteractor', () => {
       applicationContext.getNotificationGateway().sendNotificationToUser,
     ).toHaveBeenCalled();
   });
+
+  describe('AWS Batch minimum count', () => {
+    const originalStage = applicationContext.environment.stage;
+
+    const setAwsBatchMinimumCount = (minimumCount: number): void => {
+      applicationContext
+        .getUseCases()
+        .getAllFeatureFlagsInteractor.mockResolvedValueOnce({
+          [ALLOWLIST_FEATURE_FLAGS.AWS_BATCH_ZIPPER_MINIMUM_COUNT.key]:
+            minimumCount,
+        });
+    };
+
+    beforeEach(() => {
+      applicationContext.environment.stage = 'not-local';
+      applicationContext
+        .getDispatchers()
+        .sendZipperBatchJob.mockResolvedValue({ jobId: '123' });
+      pollAWSBatchProgress.mockResolvedValue({
+        jobDefinition: 'testjobdef',
+        jobId: 'jobid',
+        jobName: 'testjob',
+        jobQueue: '1234',
+        startedAt: 0,
+        status: 'SUCCEEDED',
+      });
+    });
+
+    afterEach(() => {
+      applicationContext.environment.stage = originalStage;
+    });
+
+    it('should use AWS Batch when the number of documents equals the minimum count', async () => {
+      setAwsBatchMinimumCount(mockDocumentsSelectedForDownload.length);
+
+      await batchDownloadDocketEntriesInteractor(
+        applicationContext,
+        requestParams,
+        mockDocketClerkUser,
+      );
+
+      expect(
+        applicationContext.getDispatchers().sendZipperBatchJob,
+      ).toHaveBeenCalledTimes(1);
+      expect(
+        applicationContext.getPersistenceGateway().zipDocuments,
+      ).not.toHaveBeenCalled();
+    });
+
+    it('should zip the documents without AWS Batch when the number of documents is below the minimum count', async () => {
+      setAwsBatchMinimumCount(mockDocumentsSelectedForDownload.length + 1);
+
+      await batchDownloadDocketEntriesInteractor(
+        applicationContext,
+        requestParams,
+        mockDocketClerkUser,
+      );
+
+      expect(
+        applicationContext.getDispatchers().sendZipperBatchJob,
+      ).not.toHaveBeenCalled();
+      expect(
+        applicationContext.getPersistenceGateway().zipDocuments,
+      ).toHaveBeenCalledTimes(1);
+    });
+  });
 });

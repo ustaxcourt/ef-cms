@@ -428,4 +428,83 @@ describe('batchDownloadTrialSessionInteractor', () => {
       ),
     ).rejects.toThrow(`Error starting AWS batch job: Error: ${err}`);
   });
+
+  describe('AWS Batch minimum count', () => {
+    const originalStage = applicationContext.environment.stage;
+
+    // The interactor reports how many documents it will zip right before it
+    // reads the feature flags, so the minimum count can be set relative to it.
+    const setAwsBatchMinimumCountRelativeToDocumentCount = (
+      offset: number,
+    ): void => {
+      applicationContext
+        .getUseCases()
+        .getAllFeatureFlagsInteractor.mockImplementationOnce(() => {
+          const [{ message }] = mockSendNotificationToUser.mock.calls.find(
+            ([{ message: m }]) =>
+              m.action === 'batch_download_progress' && m.filesCompleted === 0,
+          );
+
+          return Promise.resolve({
+            [ALLOWLIST_FEATURE_FLAGS.AWS_BATCH_ZIPPER_MINIMUM_COUNT.key]:
+              message.totalFiles + offset,
+          });
+        });
+    };
+
+    beforeEach(() => {
+      applicationContext.environment.stage = 'not-local';
+      applicationContext.getPersistenceGateway().uploadDocument = jest.fn();
+      applicationContext.getPersistenceGateway().zipDocuments = jest.fn();
+      applicationContext.getDispatchers().sendZipperBatchJob = jest
+        .fn()
+        .mockResolvedValue({ jobId: '123' });
+      pollAWSBatchProgress.mockResolvedValue({
+        jobDefinition: 'testjobdef',
+        jobId: 'jobid',
+        jobName: 'testjob',
+        jobQueue: '1234',
+        startedAt: 0,
+        status: 'SUCCEEDED',
+      });
+    });
+
+    afterEach(() => {
+      applicationContext.environment.stage = originalStage;
+    });
+
+    it('should use AWS Batch when the number of documents equals the minimum count', async () => {
+      setAwsBatchMinimumCountRelativeToDocumentCount(0);
+
+      await batchDownloadTrialSessionInteractorHelper(
+        applicationContext,
+        { clientConnectionId: 'abc-123', trialSessionId: 'test-123' },
+        mockJudgeUser,
+      );
+
+      expect(
+        applicationContext.getDispatchers().sendZipperBatchJob,
+      ).toHaveBeenCalledTimes(1);
+      expect(
+        applicationContext.getPersistenceGateway().zipDocuments,
+      ).not.toHaveBeenCalled();
+    });
+
+    it('should zip the documents without AWS Batch when the number of documents is below the minimum count', async () => {
+      setAwsBatchMinimumCountRelativeToDocumentCount(1);
+
+      await batchDownloadTrialSessionInteractorHelper(
+        applicationContext,
+        { clientConnectionId: 'abc-123', trialSessionId: 'test-123' },
+        mockJudgeUser,
+      );
+
+      expect(
+        applicationContext.getDispatchers().sendZipperBatchJob,
+      ).not.toHaveBeenCalled();
+      expect(
+        applicationContext.getPersistenceGateway().zipDocuments,
+      ).toHaveBeenCalledTimes(1);
+    });
+  });
 });

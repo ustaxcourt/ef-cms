@@ -214,7 +214,7 @@ export const batchDownloadTrialSessionInteractorHelper = async (
   const useAwsBatchMechanism =
     applicationContext.environment.stage !== 'local' &&
     !!awsBatchMinimumCount &&
-    documentsToZip.length > awsBatchMinimumCount;
+    documentsToZip.length >= awsBatchMinimumCount;
 
   try {
     if (useAwsBatchMechanism) {

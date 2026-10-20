@@ -1,6 +1,6 @@
 import { createAndServePaperPetition } from '../../../../helpers/fileAPetition/create-and-serve-paper-petition';
 import { goToCase } from '../../../../helpers/caseDetail/go-to-case';
-import { loginAsDocketClerk } from '../../../../helpers/authentication/login-as-helpers';
+import { loginAsDocketClerk1 } from '../../../../helpers/authentication/login-as-helpers';
 import { v4 as uuidv4 } from 'uuid';
 
 function generateMockDocketEntries(docketNumber: string, count: number) {
@@ -68,7 +68,7 @@ function setupMockCase(entryCount: number): void {
     );
   });
 
-  loginAsDocketClerk();
+  loginAsDocketClerk1();
 }
 
 describe('DocumentViewer - virtualized index nav (>1000 docket entries)', () => {
