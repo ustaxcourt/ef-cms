@@ -99,6 +99,22 @@ describe('reviewSavedPetitionHelper', () => {
     });
   });
 
+  it('should format petitionPaymentStatusFormatted as "Pending" when petitionPaymentStatus is pending', () => {
+    const result = runCompute(reviewSavedPetitionHelper, {
+      state: {
+        form: {
+          contactPrimary: { hasConsentedToElectronicService: true },
+          contactSecondary: { hasConsentedToElectronicService: true },
+          petitionPaymentStatus: PAYMENT_STATUS.PENDING,
+        },
+      },
+    });
+
+    expect(result).toMatchObject({
+      petitionPaymentStatusFormatted: PAYMENT_STATUS.PENDING,
+    });
+  });
+
   it('returns an undefined requestForPlaceOfTrialFile if the RQT docket entry is a minute entry', () => {
     const result = runCompute(reviewSavedPetitionHelper, {
       state: {
