@@ -20,6 +20,7 @@ import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { invalidateUserContactGeocode } from '@web-api/persistence/postgres/userContacts/invalidateUserContactGeocode';
 import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 import { canUserUpdatePetitionerContact } from '@shared/business/utilities/canUserUpdatePetitionerContact';
+import { checkEmailExists } from '@web-api/persistence/postgres/users/checkEmailExists';
 
 const assertEmailAvailableForPetitioner = async ({
   applicationContext,
@@ -63,19 +64,17 @@ const assertEmailAvailableForPetitioner = async ({
 
     if (currentMatchesUpdated) {
       throw new Error(
-        `Email ${updatedPetitionerData.updatedEmail} is already in use by another petitioner`,
+        `Email ${updatedEmail} is already in use by another petitioner`,
       );
     }
 
-    const practitoinerMatchesUpdated = (
-      petitionerCaseRaw.privatePractitioners || []
-    )
-      .map(p => (p.email || '').toLowerCase())
-      .includes((updatedEmail || '').toLowerCase());
+    const practitoinerMatchesUpdated = await checkEmailExists({
+      email: updatedEmail,
+    });
 
     if (practitoinerMatchesUpdated) {
       throw new Error(
-        `Email ${updatedPetitionerData.updatedEmail} is already in use by another practitioner`,
+        `Email ${updatedEmail} is already in use by another practitioner`,
       );
     }
   }
