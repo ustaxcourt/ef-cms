@@ -758,7 +758,7 @@ describe('getClerkDashboardStatsInteractor', () => {
       const result =
         await getClerkDashboardStatsInteractor(mockDocketClerkUser);
 
-      expect(result.calendarYearCaseStats.openCasesByProcedureType).toEqual([
+      expect(result.openCasesByProcedureType).toEqual([
         { procedureType: 'Regular', total: 14216 },
         { procedureType: 'Small', total: 5591 },
       ]);
@@ -772,7 +772,7 @@ describe('getClerkDashboardStatsInteractor', () => {
       const result =
         await getClerkDashboardStatsInteractor(mockDocketClerkUser);
 
-      expect(result.calendarYearCaseStats.openCasesByProcedureType).toEqual([
+      expect(result.openCasesByProcedureType).toEqual([
         { procedureType: 'Regular', total: 12 },
         { procedureType: 'Small', total: 0 },
       ]);
@@ -787,10 +787,8 @@ describe('getClerkDashboardStatsInteractor', () => {
       const result =
         await getClerkDashboardStatsInteractor(mockDocketClerkUser);
 
-      expect(result.calendarYearCaseStats.openCasesByCaseType).toHaveLength(
-        CASE_TYPES.length,
-      );
-      expect(result.calendarYearCaseStats.openCasesByCaseType).toEqual(
+      expect(result.openCasesByCaseType).toHaveLength(CASE_TYPES.length);
+      expect(result.openCasesByCaseType).toEqual(
         expect.arrayContaining([
           { caseType: 'Deficiency', total: 1798 },
           { caseType: 'Partnership (Section 6226)', total: 48 },
@@ -803,48 +801,9 @@ describe('getClerkDashboardStatsInteractor', () => {
       const result =
         await getClerkDashboardStatsInteractor(mockDocketClerkUser);
 
-      expect(
-        result.calendarYearCaseStats.openCasesByCaseType.map(c => c.caseType),
-      ).toEqual(CASE_TYPES);
-    });
-
-    it('should query open cases received in the calendar and fiscal year, and return each year separately', async () => {
-      (openCasesByProcedureType as jest.Mock)
-        .mockResolvedValueOnce([{ procedureType: 'Regular', total: '30' }])
-        .mockResolvedValueOnce([{ procedureType: 'Regular', total: '12' }]);
-      (openCasesByCaseType as jest.Mock)
-        .mockResolvedValueOnce([{ caseType: 'Deficiency', total: '30' }])
-        .mockResolvedValueOnce([{ caseType: 'Deficiency', total: '12' }]);
-
-      const result =
-        await getClerkDashboardStatsInteractor(mockDocketClerkUser);
-
-      [openCasesByProcedureType, openCasesByCaseType].forEach(query => {
-        const { calls } = (query as jest.Mock).mock;
-        expect(calls).toHaveLength(2);
-        expect(
-          calls.map(([begin, end]) => [begin.toISOString(), end.toISOString()]),
-        ).toEqual([
-          ['2026-01-01T05:00:00.000Z', '2027-01-01T05:00:00.000Z'],
-          ['2025-10-01T04:00:00.000Z', '2026-10-01T04:00:00.000Z'],
-        ]);
-      });
-      expect(result.calendarYearCaseStats.openCasesByProcedureType).toEqual([
-        { procedureType: 'Regular', total: 30 },
-        { procedureType: 'Small', total: 0 },
-      ]);
-      expect(result.fiscalYearCaseStats.openCasesByProcedureType).toEqual([
-        { procedureType: 'Regular', total: 12 },
-        { procedureType: 'Small', total: 0 },
-      ]);
-      expect(result.calendarYearCaseStats.openCasesByCaseType).toContainEqual({
-        caseType: 'Deficiency',
-        total: 30,
-      });
-      expect(result.fiscalYearCaseStats.openCasesByCaseType).toContainEqual({
-        caseType: 'Deficiency',
-        total: 12,
-      });
+      expect(result.openCasesByCaseType.map(c => c.caseType)).toEqual(
+        CASE_TYPES,
+      );
     });
 
     it('should query case status changes for the calendar and fiscal year', async () => {
@@ -961,7 +920,7 @@ describe('getClerkDashboardStatsInteractor', () => {
       const result =
         await getClerkDashboardStatsInteractor(mockDocketClerkUser);
 
-      expect(result.calendarYearCaseStats).toMatchObject({
+      expect(result.calendarYearCaseStats).toEqual({
         casesClosedByMonth: [130, 113, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0].map(
           (total, i) => ({ month: CALENDAR_MONTHS[i], total }),
         ),
@@ -992,7 +951,7 @@ describe('getClerkDashboardStatsInteractor', () => {
       const result =
         await getClerkDashboardStatsInteractor(mockDocketClerkUser);
 
-      expect(result.calendarYearCaseStats).toMatchObject({
+      expect(result.calendarYearCaseStats).toEqual({
         casesClosedByMonth: CALENDAR_MONTHS.map(month => ({ month, total: 0 })),
         casesClosedByProcedureType: [
           { procedureType: 'Regular', total: 0 },

@@ -99,11 +99,15 @@ const calendarAndFiscalYearSelectors = ({
 const CASES_CLOSED_AND_ON_APPEAL_TITLE =
   'Closed/Closed - Dismissed & Changed to On Appeal';
 
-const OPEN_CASES_BY_TYPE_TITLE = 'Total Open Cases by type';
+const ALL_OPEN_CASES_TITLE = 'All Open Cases';
+
+const ALL_OPEN_CASES_BY_TYPE_TITLE = 'All Open Cases by type';
+
+const ALL_OPEN_CASES_BY_TYPE_HTML_TITLE = 'All Open Cases by Type';
 
 const PETITIONS_BY_MONTH_TITLE = 'Petitions: Total Petitions by Month';
 
-// pie chart columns, so the two cases pies sit side by side on wide screens
+// columns, so the open cases pie and its by-type HTML view sit side by side on wide screens
 const PIE_COLUMN_CLASS = 'tw:w-162 tw:max-w-full';
 
 const casesData = ({
@@ -137,30 +141,48 @@ const casesData = ({
         className={isMobile ? undefined : 'tw:mt-4'}
         data-testid="cases-data-div"
       >
-        {calendarAndFiscalYearSelectors({
-          idPrefix: 'cases-',
-          isFiscal: casesByYearIsFiscal,
-          isMobile,
-          optionKey: 'casesByYearIsFiscal',
-          setClerkOfCourtDashboardOptionsSequence,
-        })}
-        {/* heading margins account for the PieGraph's built-in top padding so the heading-to-legend gap is 2rem */}
-        <div className="tw:flex tw:flex-wrap tw:gap-x-12 tw:xs:gap-y-12 tw:gap-y-8">
+        {/* open cases are the cases open now, so the year toggle does not apply to them */}
+        <div
+          className="tw:flex tw:flex-wrap tw:gap-x-12 tw:xs:gap-y-12 tw:gap-y-8"
+          data-testid="open-cases-section"
+        >
+          {/* heading margins account for the PieGraph's built-in top padding so the heading-to-legend gap is 2rem */}
           <div className={PIE_COLUMN_CLASS}>
             <h2
               className="tw:xs:text-2xl tw:text-lg tw:xs:mb-4.75 tw:mb-2"
               data-testid="open-cases-header"
             >
-              Open Cases:{' '}
+              {ALL_OPEN_CASES_TITLE}:{' '}
               <span className="tw:font-normal">{totalOpenCases}</span>
             </h2>
             <PieGraph
               data={openCasesPieData}
-              title={`Open Cases in ${casesYearLabel}`}
+              title={ALL_OPEN_CASES_TITLE}
               showTitle={false}
-              tooltipTitle="Open Cases"
+              tooltipTitle={ALL_OPEN_CASES_TITLE}
             />
           </div>
+          <div className={PIE_COLUMN_CLASS}>
+            <ClerkOfCourtHtmlView
+              htmlTitle={ALL_OPEN_CASES_BY_TYPE_HTML_TITLE}
+              labelHeader="Type of Case"
+              rows={openCasesByTypeTableRows}
+              title={ALL_OPEN_CASES_BY_TYPE_TITLE}
+            />
+          </div>
+        </div>
+        {/* the year toggle applies only to the case status changes below it */}
+        <div
+          className="tw:xs:mt-12 tw:mt-8"
+          data-testid="cases-status-changes-section"
+        >
+          {calendarAndFiscalYearSelectors({
+            idPrefix: 'cases-',
+            isFiscal: casesByYearIsFiscal,
+            isMobile,
+            optionKey: 'casesByYearIsFiscal',
+            setClerkOfCourtDashboardOptionsSequence,
+          })}
           <div className={PIE_COLUMN_CLASS}>
             <h2
               className="tw:xs:text-2xl tw:text-lg tw:xs:mb-4.75 tw:mb-2"
@@ -176,27 +198,19 @@ const casesData = ({
               tooltipTitle="Cases Changed"
             />
           </div>
-        </div>
-        <div className="tw:xs:mt-12 tw:mt-8">
-          <ClerkOfCourtHtmlView
-            htmlTitle={`Total Open Cases by Type in ${casesYearLabel}`}
-            labelHeader="Type of Case"
-            rows={openCasesByTypeTableRows}
-            title={OPEN_CASES_BY_TYPE_TITLE}
-          />
-        </div>
-        <div className="tw:xs:mt-12 tw:mt-8">
-          <MultiBarGraph
-            showLabels={false}
-            width={CHART_WIDTH}
-            datasets={casesClosedAndOnAppealByMonthChartData}
-            labels={casesMonths}
-            legendTotals={casesClosedAndOnAppealLegendTotals}
-            htmlTitle={`${CASES_CLOSED_AND_ON_APPEAL_TITLE} in ${casesYearLabel}`}
-            title={CASES_CLOSED_AND_ON_APPEAL_TITLE}
-            xLabelRotation={45}
-            xAxisLabel="Months"
-          />
+          <div className="tw:xs:mt-12 tw:mt-8">
+            <MultiBarGraph
+              showLabels={false}
+              width={CHART_WIDTH}
+              datasets={casesClosedAndOnAppealByMonthChartData}
+              labels={casesMonths}
+              legendTotals={casesClosedAndOnAppealLegendTotals}
+              htmlTitle={`${CASES_CLOSED_AND_ON_APPEAL_TITLE} in ${casesYearLabel}`}
+              title={CASES_CLOSED_AND_ON_APPEAL_TITLE}
+              xLabelRotation={45}
+              xAxisLabel="Months"
+            />
+          </div>
         </div>
       </div>
     </ClerkOfCourtChartStatus>

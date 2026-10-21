@@ -78,8 +78,6 @@ export type ClerkDashboardCasesStats = {
   casesClosedByMonth: ClerkDashboardMonthTotal[];
   casesClosedByProcedureType: ClerkDashboardProcedureTypeTotal[];
   casesOnAppealByMonth: ClerkDashboardMonthTotal[];
-  openCasesByCaseType: ClerkDashboardCaseTypeTotal[];
-  openCasesByProcedureType: ClerkDashboardProcedureTypeTotal[];
 };
 
 export type ClerkDashboardStats = {
@@ -87,6 +85,8 @@ export type ClerkDashboardStats = {
   fiscalYear: string;
   calendarYearPetitionStats: ClerkDashboardPetitionsStats;
   fiscalYearPetitionStats: ClerkDashboardPetitionsStats;
+  openCasesByCaseType: ClerkDashboardCaseTypeTotal[];
+  openCasesByProcedureType: ClerkDashboardProcedureTypeTotal[];
   calendarYearCaseStats: ClerkDashboardCasesStats;
   fiscalYearCaseStats: ClerkDashboardCasesStats;
 };
@@ -108,19 +108,17 @@ const toProcedureTypeTotals = (
     ),
   }));
 
-const getOpenCasesByProcedureType = async (
-  yearStart: Date,
-  yearEnd: Date,
-): Promise<ClerkDashboardProcedureTypeTotal[]> => {
-  const openCases = await openCasesByProcedureType(yearStart, yearEnd);
+const getOpenCasesByProcedureType = async (): Promise<
+  ClerkDashboardProcedureTypeTotal[]
+> => {
+  const openCases = await openCasesByProcedureType();
   return toProcedureTypeTotals(openCases);
 };
 
-const getOpenCasesByCaseType = async (
-  yearStart: Date,
-  yearEnd: Date,
-): Promise<ClerkDashboardCaseTypeTotal[]> => {
-  const openCases = await openCasesByCaseType(yearStart, yearEnd);
+const getOpenCasesByCaseType = async (): Promise<
+  ClerkDashboardCaseTypeTotal[]
+> => {
+  const openCases = await openCasesByCaseType();
   return CASE_TYPES.map(caseType => ({
     caseType,
     total: Number(openCases.find(row => row.caseType === caseType)?.total ?? 0),
@@ -132,15 +130,7 @@ const getCasesDataByYear = async (
   yearStart: Date,
   yearEnd: Date,
 ): Promise<ClerkDashboardCasesStats> => {
-  const [
-    statusChanges,
-    openCasesByCaseTypeTotals,
-    openCasesByProcedureTypeTotals,
-  ] = await Promise.all([
-    caseStatusChangesByYear(yearStart, yearEnd),
-    getOpenCasesByCaseType(yearStart, yearEnd),
-    getOpenCasesByProcedureType(yearStart, yearEnd),
-  ]);
+  const statusChanges = await caseStatusChangesByYear(yearStart, yearEnd);
 
   const getFullMonths = (
     statusGroup: 'closed' | 'onAppeal',
@@ -166,8 +156,6 @@ const getCasesDataByYear = async (
       ),
     ),
     casesOnAppealByMonth: getFullMonths('onAppeal'),
-    openCasesByCaseType: openCasesByCaseTypeTotals,
-    openCasesByProcedureType: openCasesByProcedureTypeTotals,
   };
 };
 
@@ -261,11 +249,15 @@ export const getClerkDashboardStatsInteractor = async (
   const [
     calendarYearPetitionStats,
     fiscalYearPetitionStats,
+    openCasesByCaseType,
+    openCasesByProcedureType,
     calendarYearCaseStats,
     fiscalYearCaseStats,
   ] = await Promise.all([
     getPetitionsDataByYear(false, calendarYearbegin, calendarYearEnd),
     getPetitionsDataByYear(true, fiscalYearBegin, fiscalYearEnd),
+    getOpenCasesByCaseType(),
+    getOpenCasesByProcedureType(),
     getCasesDataByYear(false, calendarYearbegin, calendarYearEnd),
     getCasesDataByYear(true, fiscalYearBegin, fiscalYearEnd),
   ]);
@@ -275,6 +267,8 @@ export const getClerkDashboardStatsInteractor = async (
     fiscalYear,
     calendarYearPetitionStats,
     fiscalYearPetitionStats,
+    openCasesByCaseType,
+    openCasesByProcedureType,
     calendarYearCaseStats,
     fiscalYearCaseStats,
   };
