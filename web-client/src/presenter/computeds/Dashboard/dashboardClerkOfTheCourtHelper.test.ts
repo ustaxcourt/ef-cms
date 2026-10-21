@@ -39,7 +39,8 @@ const FISCAL_PETITIONS_PAPER_BY_MONTH = [
   1500, 1600, 1700, 100, 200, 300, 400, 500, 600, 700, 800, 900,
 ];
 
-const OPEN_CASES = { regular: 14216, small: 5591 };
+const CALENDAR_OPEN_CASES = { regular: 14216, small: 5591 };
+const FISCAL_OPEN_CASES = { regular: 4100, small: 1200 };
 const CALENDAR_CLOSED_CASES = { regular: 300, small: 106 };
 const FISCAL_CLOSED_CASES = { regular: 1000, small: 421 };
 const CALENDAR_CLOSED_BY_MONTH = [100, 101, 102, 103, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -118,19 +119,6 @@ describe('dashboardClerkOfTheCourtHelper', () => {
             },
           ],
         },
-        openCasesByCaseType: [
-          { caseType: 'Deficiency', total: 1798 },
-          { caseType: 'Declaratory Judgment (Exempt Organization)', total: 51 },
-          { caseType: 'Declaratory Judgment (Retirement Plan)', total: 75 },
-          { caseType: 'Partnership (BBA Section 1101)', total: 26 },
-          { caseType: 'Partnership (Section 6226)', total: 48 },
-          { caseType: 'Partnership (Section 6228)', total: 75 },
-          { caseType: 'Passport', total: 0 },
-        ],
-        openCasesByProcedureType: [
-          { procedureType: 'Regular', total: OPEN_CASES.regular },
-          { procedureType: 'Small', total: OPEN_CASES.small },
-        ],
         calendarYearCaseStats: {
           casesClosedByMonth: toMonthTotals(
             CALENDAR_MONTHS,
@@ -144,6 +132,22 @@ describe('dashboardClerkOfTheCourtHelper', () => {
             CALENDAR_MONTHS,
             CALENDAR_ON_APPEAL_BY_MONTH,
           ),
+          openCasesByCaseType: [
+            { caseType: 'Deficiency', total: 1798 },
+            {
+              caseType: 'Declaratory Judgment (Exempt Organization)',
+              total: 51,
+            },
+            { caseType: 'Declaratory Judgment (Retirement Plan)', total: 75 },
+            { caseType: 'Partnership (BBA Section 1101)', total: 26 },
+            { caseType: 'Partnership (Section 6226)', total: 48 },
+            { caseType: 'Partnership (Section 6228)', total: 75 },
+            { caseType: 'Passport', total: 0 },
+          ],
+          openCasesByProcedureType: [
+            { procedureType: 'Regular', total: CALENDAR_OPEN_CASES.regular },
+            { procedureType: 'Small', total: CALENDAR_OPEN_CASES.small },
+          ],
         },
         fiscalYearCaseStats: {
           casesClosedByMonth: toMonthTotals(
@@ -158,6 +162,14 @@ describe('dashboardClerkOfTheCourtHelper', () => {
             FISCAL_MONTHS,
             FISCAL_ON_APPEAL_BY_MONTH,
           ),
+          openCasesByCaseType: [
+            { caseType: 'Deficiency', total: 400 },
+            { caseType: 'Passport', total: 9 },
+          ],
+          openCasesByProcedureType: [
+            { procedureType: 'Regular', total: FISCAL_OPEN_CASES.regular },
+            { procedureType: 'Small', total: FISCAL_OPEN_CASES.small },
+          ],
         },
         fiscalYear: '2027',
         year: '2026',
@@ -333,7 +345,27 @@ describe('dashboardClerkOfTheCourtHelper', () => {
     });
   });
   describe('cases', () => {
-    it('should set open cases pie data and total regardless of the year option', () => {
+    it('should set open cases pie data and total for calendar year to date', () => {
+      const result = runCompute(dashboardClerkOfTheCourtHelper, {
+        state: baseState,
+      });
+
+      expect(result.openCasesPieData).toEqual([
+        {
+          color: GRAPH_COLORS.BLUE,
+          name: 'Regular',
+          value: CALENDAR_OPEN_CASES.regular,
+        },
+        {
+          color: GRAPH_COLORS.YELLOW,
+          name: 'Small',
+          value: CALENDAR_OPEN_CASES.small,
+        },
+      ]);
+      expect(result.totalOpenCases).toEqual('19,807');
+    });
+
+    it('should set open cases pie data and total for fiscal year to date', () => {
       baseState.clerkOfCourtDashboardOptions.casesByYearIsFiscal = true;
 
       const result = runCompute(dashboardClerkOfTheCourtHelper, {
@@ -344,11 +376,15 @@ describe('dashboardClerkOfTheCourtHelper', () => {
         {
           color: GRAPH_COLORS.BLUE,
           name: 'Regular',
-          value: OPEN_CASES.regular,
+          value: FISCAL_OPEN_CASES.regular,
         },
-        { color: GRAPH_COLORS.YELLOW, name: 'Small', value: OPEN_CASES.small },
+        {
+          color: GRAPH_COLORS.YELLOW,
+          name: 'Small',
+          value: FISCAL_OPEN_CASES.small,
+        },
       ]);
-      expect(result.totalOpenCases).toEqual('19,807');
+      expect(result.totalOpenCases).toEqual('5,300');
     });
 
     it('should set computed cases results for calendar year to date', () => {
@@ -493,11 +529,12 @@ describe('dashboardClerkOfTheCourtHelper', () => {
     });
 
     it('should sort open cases by type by the numeric total, not the formatted text', () => {
-      baseState.clerkOfCourtDashboardStats.openCasesByCaseType = [
-        { caseType: 'Other', total: 9 },
-        { caseType: 'Passport', total: 1000 },
-        { caseType: 'Disclosure', total: 100 },
-      ];
+      baseState.clerkOfCourtDashboardStats.calendarYearCaseStats.openCasesByCaseType =
+        [
+          { caseType: 'Other', total: 9 },
+          { caseType: 'Passport', total: 1000 },
+          { caseType: 'Disclosure', total: 100 },
+        ];
 
       const result = runCompute(dashboardClerkOfTheCourtHelper, {
         state: baseState,
@@ -524,22 +561,23 @@ describe('dashboardClerkOfTheCourtHelper', () => {
       expect(result.petitionsYearLabel).toEqual('YTD 2026');
     });
 
-    it('should not change open cases by type with the cases year option', () => {
-      const calendarResult = runCompute(dashboardClerkOfTheCourtHelper, {
-        state: baseState,
-      });
+    it('should set open cases by type from the fiscal year stats when the cases year option is fiscal', () => {
       baseState.clerkOfCourtDashboardOptions.casesByYearIsFiscal = true;
-      const fiscalResult = runCompute(dashboardClerkOfTheCourtHelper, {
+
+      const result = runCompute(dashboardClerkOfTheCourtHelper, {
         state: baseState,
       });
 
-      expect(fiscalResult.openCasesByTypeTableRows).toEqual(
-        calendarResult.openCasesByTypeTableRows,
-      );
+      expect(result.openCasesByTypeTableRows.slice(0, 3)).toEqual([
+        { label: 'Deficiency', total: '400' },
+        { label: 'Passport', total: '9' },
+        { label: 'CDP (Lien/Levy)', total: '0' },
+      ]);
     });
 
     it('should zero open cases by type when there are no open cases', () => {
-      baseState.clerkOfCourtDashboardStats.openCasesByCaseType = [];
+      baseState.clerkOfCourtDashboardStats.calendarYearCaseStats.openCasesByCaseType =
+        [];
 
       const result = runCompute(dashboardClerkOfTheCourtHelper, {
         state: baseState,
@@ -567,14 +605,15 @@ describe('dashboardClerkOfTheCourtHelper', () => {
     });
 
     it('should return empty pie data when there are no cases', () => {
-      baseState.clerkOfCourtDashboardStats.openCasesByProcedureType = [
-        { procedureType: 'Regular', total: 0 },
-        { procedureType: 'Small', total: 0 },
-      ];
       baseState.clerkOfCourtDashboardStats.calendarYearCaseStats = {
         casesClosedByMonth: [],
         casesClosedByProcedureType: [],
         casesOnAppealByMonth: [],
+        openCasesByCaseType: [],
+        openCasesByProcedureType: [
+          { procedureType: 'Regular', total: 0 },
+          { procedureType: 'Small', total: 0 },
+        ],
       };
 
       const result = runCompute(dashboardClerkOfTheCourtHelper, {

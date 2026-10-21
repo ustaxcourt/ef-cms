@@ -152,12 +152,14 @@ export const dashboardClerkOfTheCourtHelper = (
     ),
     casesMonths: casesByYearIsFiscal ? FISCAL_MONTH_LABELS : MONTH_LABELS,
     openCasesByTypeTableRows: getOpenCasesByTypeTableRows(
-      stats.openCasesByCaseType,
+      caseStats.openCasesByCaseType,
     ),
-    openCasesPieData: getProcedureTypePieData(stats.openCasesByProcedureType),
+    openCasesPieData: getProcedureTypePieData(
+      caseStats.openCasesByProcedureType,
+    ),
     totalCasesClosed: formatPositiveNumber(totalCasesClosed),
     totalOpenCases: formatPositiveNumber(
-      sum(stats.openCasesByProcedureType.map(p => p.total)),
+      sum(caseStats.openCasesByProcedureType.map(p => p.total)),
     ),
     petitionsByMonthAndServiceTypeChartData,
     petitionsByRepresentationPieData,

@@ -1,19 +1,17 @@
 import { checkA11y } from '../../../support/generalCommands/checkA11y';
 import { loginAsClerkOfCourt } from '../../../../helpers/authentication/login-as-helpers';
 
-const emptyCaseStats = {
-  calendarYearCaseStats: {
-    casesClosedByMonth: [],
-    casesClosedByProcedureType: [],
-    casesOnAppealByMonth: [],
-  },
-  fiscalYearCaseStats: {
-    casesClosedByMonth: [],
-    casesClosedByProcedureType: [],
-    casesOnAppealByMonth: [],
-  },
+const emptyYearCaseStats = {
+  casesClosedByMonth: [],
+  casesClosedByProcedureType: [],
+  casesOnAppealByMonth: [],
   openCasesByCaseType: [],
   openCasesByProcedureType: [],
+};
+
+const emptyCaseStats = {
+  calendarYearCaseStats: emptyYearCaseStats,
+  fiscalYearCaseStats: emptyYearCaseStats,
 };
 
 const emptyPetitionStats = {
@@ -100,21 +98,21 @@ describe('Dashboard - Clerk of Court Accessibility', () => {
               { procedureType: 'Small', total: 10 },
             ],
             casesOnAppealByMonth: months,
+            openCasesByCaseType: [
+              { caseType: 'Deficiency', total: 60 },
+              {
+                caseType: 'Declaratory Judgment (Exempt Organization)',
+                total: 15,
+              },
+              { caseType: 'Partnership (Section 6226)', total: 25 },
+            ],
+            openCasesByProcedureType: [
+              { procedureType: 'Regular', total: 70 },
+              { procedureType: 'Small', total: 30 },
+            ],
           },
           calendarYearPetitionStats: emptyPetitionStats,
           fiscalYearPetitionStats: emptyPetitionStats,
-          openCasesByCaseType: [
-            { caseType: 'Deficiency', total: 60 },
-            {
-              caseType: 'Declaratory Judgment (Exempt Organization)',
-              total: 15,
-            },
-            { caseType: 'Partnership (Section 6226)', total: 25 },
-          ],
-          openCasesByProcedureType: [
-            { procedureType: 'Regular', total: 70 },
-            { procedureType: 'Small', total: 30 },
-          ],
           year: '2026',
         },
       }).as('mockStats');

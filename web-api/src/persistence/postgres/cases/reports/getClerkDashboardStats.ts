@@ -7,7 +7,11 @@ import { sql } from 'kysely';
 
 export type CaseStatusChangeGroup = 'closed' | 'onAppeal';
 
-export const openCasesByProcedureType = async (): Promise<
+/** Counts the cases that are open now and were received within the given timeframe */
+export const openCasesByProcedureType = async (
+  yearStart: Date,
+  yearEnd: Date,
+): Promise<
   {
     procedureType: string;
     total: number;
@@ -18,12 +22,18 @@ export const openCasesByProcedureType = async (): Promise<
       .selectFrom('dwCase')
       .select(['procedureType', sql<number>`count(1)`.as('total')])
       .where('status', 'not in', CLOSED_CASE_STATUSES)
+      .where('receivedAt', '>=', yearStart)
+      .where('receivedAt', '<', yearEnd)
       .groupBy('procedureType')
       .execute();
   });
 };
 
-export const openCasesByCaseType = async (): Promise<
+/** Counts the cases that are open now and were received within the given timeframe */
+export const openCasesByCaseType = async (
+  yearStart: Date,
+  yearEnd: Date,
+): Promise<
   {
     caseType: string;
     total: number;
@@ -34,6 +44,8 @@ export const openCasesByCaseType = async (): Promise<
       .selectFrom('dwCase')
       .select(['caseType', sql<number>`count(1)`.as('total')])
       .where('status', 'not in', CLOSED_CASE_STATUSES)
+      .where('receivedAt', '>=', yearStart)
+      .where('receivedAt', '<', yearEnd)
       .groupBy('caseType')
       .execute();
   });
