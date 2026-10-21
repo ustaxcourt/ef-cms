@@ -56,14 +56,28 @@ const assertEmailAvailableForPetitioner = async ({
     throw new Error(`Email ${updatedEmail} is pending for another petitioner`);
   }
 
-  const currentMatchesUpdated = petitionerCaseRaw.petitioners
-    .map(p => (p.email || '').toLowerCase())
-    .includes((updatedEmail || '').toLowerCase());
+  if (updatedEmail) {
+    const currentMatchesUpdated = petitionerCaseRaw.petitioners
+      .map(p => (p.email || '').toLowerCase())
+      .includes((updatedEmail || '').toLowerCase());
 
-  if (updatedEmail && currentMatchesUpdated) {
-    throw new Error(
-      `Email ${updatedPetitionerData.updatedEmail} is already in use by another petitioner`,
-    );
+    if (currentMatchesUpdated) {
+      throw new Error(
+        `Email ${updatedPetitionerData.updatedEmail} is already in use by another petitioner`,
+      );
+    }
+
+    const practitoinerMatchesUpdated = (
+      petitionerCaseRaw.privatePractitioners || []
+    )
+      .map(p => (p.email || '').toLowerCase())
+      .includes((updatedEmail || '').toLowerCase());
+
+    if (practitoinerMatchesUpdated) {
+      throw new Error(
+        `Email ${updatedPetitionerData.updatedEmail} is already in use by another practitioner`,
+      );
+    }
   }
 };
 
