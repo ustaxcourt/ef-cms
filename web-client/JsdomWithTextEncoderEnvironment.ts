@@ -1,7 +1,7 @@
 import JSDOMEnvironment from 'jest-environment-jsdom';
 
 /**
- * A custom JSDOM environment to set the TextEncoder
+ * A custom JSDOM environment to set Node globals that JSDOM does not provide (TextEncoder, setImmediate, structuredClone, etc.)
  */
 export default class JsdomWithTextEncoderEnvironment extends JSDOMEnvironment {
   async setup() {
@@ -13,6 +13,13 @@ export default class JsdomWithTextEncoderEnvironment extends JSDOMEnvironment {
     if (typeof this.global.TextDecoder === 'undefined') {
       const { TextDecoder } = await import('util');
       this.global.TextDecoder = TextDecoder as any;
+    }
+    if (typeof this.global.setImmediate === 'undefined') {
+      this.global.setImmediate = setImmediate;
+      this.global.clearImmediate = clearImmediate;
+    }
+    if (typeof this.global.structuredClone === 'undefined') {
+      this.global.structuredClone = structuredClone;
     }
     if (typeof this.global.MessageChannel === 'undefined') {
       this.global.MessageChannel = (() => {
