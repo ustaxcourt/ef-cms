@@ -116,7 +116,9 @@ describe('setFilingFeeAlertsAction', () => {
     });
 
     expect(state.alertError).toEqual({
-      message: 'Unable to verify payment status.',
+      className: 'usa-alert--filing-fee-status-unknown',
+      filingFeePaymentStatusDocketNumber: '101-20',
+      message: 'Unable to verify payment status for',
       title: 'Filing fee status unknown',
       overwritable: true,
       insertContactSupportClause: true,

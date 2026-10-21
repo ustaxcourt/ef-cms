@@ -236,6 +236,63 @@ describe('updateCaseDetailsInteractor', () => {
     expect(paidDocument).toBeTruthy();
   });
 
+  it('should create a docket entry when the petition payment status was changed from pending to waived', async () => {
+    getCaseByDocketNumber.mockResolvedValue({
+      ...mockCase,
+      petitionPaymentStatus: PAYMENT_STATUS.PENDING,
+    });
+
+    await updateCaseDetailsInteractor(
+      applicationContext,
+      {
+        caseDetails: {
+          ...mockCase,
+          petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
+          petitionPaymentWaivedDate: '2019-11-30T09:10:11.000Z',
+        },
+        docketNumber: mockCase.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
+
+    const updatedCase = updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    const waivedDocument = updatedCase.docketEntries.find(
+      entry =>
+        entry.documentType === MINUTE_ENTRIES_MAP.filingFeeWaived.documentType,
+    );
+
+    expect(waivedDocument).toBeTruthy();
+  });
+
+  it('should create a docket entry the petition payment status was changed from pending to paid', async () => {
+    getCaseByDocketNumber.mockResolvedValue({
+      ...MOCK_CASE,
+      petitionPaymentStatus: PAYMENT_STATUS.PENDING,
+    });
+
+    await updateCaseDetailsInteractor(
+      applicationContext,
+      {
+        caseDetails: {
+          ...mockCase,
+          petitionPaymentDate: '2019-11-30T09:10:11.000Z',
+          petitionPaymentMethod: 'check',
+          petitionPaymentStatus: PAYMENT_STATUS.PAID,
+        },
+        docketNumber: mockCase.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
+
+    const updatedCase = updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    const paidDocument = updatedCase.docketEntries.find(
+      entry =>
+        entry.documentType === MINUTE_ENTRIES_MAP.filingFeePaid.documentType,
+    );
+
+    expect(paidDocument).toBeTruthy();
+  });
+
   it('should NOT create a docket entry the petition payment status was NOT changed from unpaid', async () => {
     getCaseByDocketNumber.mockResolvedValue({
       ...MOCK_CASE,
