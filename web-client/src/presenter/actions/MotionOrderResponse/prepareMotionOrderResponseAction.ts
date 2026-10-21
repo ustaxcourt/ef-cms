@@ -9,6 +9,7 @@ import {
   isValidDateString,
   TimeFormats,
 } from '@shared/business/utilities/DateHandler';
+import { ConsolidatedCasesWithCheckboxInfoType } from '@web-client/presenter/actions/CaseConsolidation/setMultiDocketingCheckboxesAction';
 import { determineMovantAndNonMovant } from '@web-client/presenter/actions/utilities/determineMovantAndNonMovant';
 import { state } from '@web-client/presenter/app.cerebral';
 import { formatAdditionalOrderClauseForRichText } from '@web-client/utilities/formatAdditionalOrderClauseForRichText';
@@ -20,7 +21,7 @@ import {
 export const prepareMotionOrderResponseAction = ({
   get,
   store,
-}: ActionProps) => {
+}: ActionProps): void => {
   const {
     additionalOrderTextArray,
     dueDate,
@@ -80,7 +81,10 @@ export const prepareMotionOrderResponseAction = ({
     ? formatDateString(responseDate, FORMATS.MONTH_DAY_YEAR)
     : '';
 
-  let createOrderSelectedCases = [] as any;
+  let createOrderSelectedCases: Pick<
+    ConsolidatedCasesWithCheckboxInfoType,
+    'checked' | 'docketNumber' | 'docketNumberWithSuffix'
+  >[] = [];
   let documentNumberText = `(doc. no. ${index}).`;
 
   const isOnLeadCaseAndAllCases =

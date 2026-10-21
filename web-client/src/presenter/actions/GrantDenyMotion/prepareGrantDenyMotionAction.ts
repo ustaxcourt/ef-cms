@@ -135,7 +135,10 @@ const joinWithItIsFurther = (clauses: string[]): string =>
     )
     .join('');
 
-export const prepareGrantDenyMotionAction = ({ get, store }: ActionProps) => {
+export const prepareGrantDenyMotionAction = ({
+  get,
+  store,
+}: ActionProps): void => {
   const {
     additionalOrderTextArray,
     deniedAsMoot,

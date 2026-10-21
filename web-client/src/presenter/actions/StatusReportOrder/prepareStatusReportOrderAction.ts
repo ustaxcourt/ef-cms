@@ -16,7 +16,7 @@ export const prepareStatusReportOrderAction = ({
   applicationContext,
   get,
   store,
-}: ActionProps) => {
+}: ActionProps): void => {
   const {
     additionalOrderTextArray,
     dueDate,
