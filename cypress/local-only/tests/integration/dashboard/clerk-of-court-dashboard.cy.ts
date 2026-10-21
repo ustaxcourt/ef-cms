@@ -344,20 +344,18 @@ describe('Clerk of Court Dashboard', () => {
         calendarYearCaseStats,
         fiscalYear,
         fiscalYearCaseStats,
-        openCasesByCaseType,
-        openCasesByProcedureType,
         year: statsYear,
       } = clerkDashboardStats.response!.body;
-      const openCasesTotal = formatPositiveNumber(
-        sumTotals(openCasesByProcedureType),
-      );
+      const openCasesTotal = (caseStats: {
+        openCasesByProcedureType: { total: number }[];
+      }) => formatPositiveNumber(sumTotals(caseStats.openCasesByProcedureType));
 
       cy.get('#tabButton-cases').click();
       cy.get('[data-testid="cases-data-div"]').should('exist');
 
       cy.get('[data-testid="open-cases-header"]').should(
         'have.text',
-        `Open Cases: ${openCasesTotal}`,
+        `Open Cases: ${openCasesTotal(calendarYearCaseStats)}`,
       );
       cy.get('[data-testid="cases-closed-header"]').should(
         'have.text',
@@ -386,7 +384,7 @@ describe('Clerk of Court Dashboard', () => {
         expect(rows).to.have.length(CASE_TYPES.length);
         const totals = rows.map(([, total]) => Number(total.replace(/,/g, '')));
         expect(totals).to.deep.equal([...totals].sort((a, b) => b - a));
-        openCasesByCaseType.forEach(
+        calendarYearCaseStats.openCasesByCaseType.forEach(
           ({ caseType, total }: { caseType: string; total: number }) => {
             expect(rows).to.deep.include([
               caseType,
@@ -406,7 +404,7 @@ describe('Clerk of Court Dashboard', () => {
       cy.get('[data-testid="cases-fiscal-year-to-date"]').click();
       cy.get('[data-testid="open-cases-header"]').should(
         'have.text',
-        `Open Cases: ${openCasesTotal}`,
+        `Open Cases: ${openCasesTotal(fiscalYearCaseStats)}`,
       );
       cy.get('[data-testid="cases-closed-header"]').should(
         'have.text',
@@ -443,6 +441,8 @@ describe('Clerk of Court Dashboard', () => {
       casesClosedByMonth: [],
       casesClosedByProcedureType: [],
       casesOnAppealByMonth: [],
+      openCasesByCaseType: [],
+      openCasesByProcedureType: [],
     };
     cy.intercept('GET', '**/clerk-dashboard-stats', {
       body: {
@@ -453,17 +453,16 @@ describe('Clerk of Court Dashboard', () => {
             { procedureType: 'Regular', total: 3 },
             { procedureType: 'Small', total: 2 },
           ],
+          // one non-zero slice and one zero slice
+          openCasesByProcedureType: [
+            { procedureType: 'Regular', total: 7 },
+            { procedureType: 'Small', total: 0 },
+          ],
         },
         calendarYearPetitionStats: emptyPetitionStats,
         fiscalYear: '2026',
         fiscalYearCaseStats: emptyCaseStats,
         fiscalYearPetitionStats: emptyPetitionStats,
-        openCasesByCaseType: [],
-        // one non-zero slice and one zero slice
-        openCasesByProcedureType: [
-          { procedureType: 'Regular', total: 7 },
-          { procedureType: 'Small', total: 0 },
-        ],
         year: '2026',
       },
       statusCode: 200,

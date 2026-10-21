@@ -831,17 +831,19 @@ export const baseState = {
       petitionsByRepresentation: [],
       petitionsByServiceType: [],
     },
-    openCasesByCaseType: [],
-    openCasesByProcedureType: [],
     calendarYearCaseStats: {
       casesClosedByMonth: [],
       casesClosedByProcedureType: [],
       casesOnAppealByMonth: [],
+      openCasesByCaseType: [],
+      openCasesByProcedureType: [],
     },
     fiscalYearCaseStats: {
       casesClosedByMonth: [],
       casesClosedByProcedureType: [],
       casesOnAppealByMonth: [],
+      openCasesByCaseType: [],
+      openCasesByProcedureType: [],
     },
   } as ClerkDashboardStats,
   clerkOfCourtDashboardStatsStatus:
