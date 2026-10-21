@@ -135,4 +135,72 @@ describe('setClerkOfCourtDashboardChartsAction', () => {
       },
     });
   });
+
+  describe('when a newer load starts before an older one completes', () => {
+    const newerStats = { ...mockStats, year: '2027' };
+
+    const deferred = <T>() => {
+      let resolve!: (value: T) => void;
+      let reject!: (reason: unknown) => void;
+      const promise = new Promise<T>((res, rej) => {
+        resolve = res;
+        reject = rej;
+      });
+      return { promise, reject, resolve };
+    };
+
+    const startTwoLoads = () => {
+      const older = deferred<ClerkDashboardStats>();
+      const newer = deferred<ClerkDashboardStats>();
+      const getClerkDashboardStatsInteractor = jest
+        .fn()
+        .mockReturnValueOnce(older.promise)
+        .mockReturnValueOnce(newer.promise);
+      applicationContext.getUseCases = () =>
+        ({ getClerkDashboardStatsInteractor }) as unknown as ReturnType<
+          typeof applicationContext.getUseCases
+        >;
+
+      const run = () =>
+        runAction(setClerkOfCourtDashboardChartsAction, {
+          modules: { presenter },
+          state: { clerkOfCourtDashboardStatsStatus: 'loaded' },
+        });
+      // the older load starts first, so the newer one is the latest
+      const olderRun = run();
+      const newerRun = run();
+      return { newer, newerRun, older, olderRun };
+    };
+
+    it('should ignore the older success when the newer load completes first', async () => {
+      const { newer, newerRun, older, olderRun } = startTwoLoads();
+
+      newer.resolve(newerStats);
+      const { state: newerState } = await newerRun;
+      older.resolve(mockStats);
+      const { state: olderState } = await olderRun;
+
+      expect(newerState.clerkOfCourtDashboardStats).toEqual(newerStats);
+      expect(newerState.clerkOfCourtDashboardStatsStatus).toEqual('loaded');
+      expect(olderState.clerkOfCourtDashboardStats).toBeUndefined();
+      expect(olderState.clerkOfCourtDashboardStatsStatus).toEqual('loading');
+    });
+
+    it('should ignore the older failure when the newer load completes first', async () => {
+      const consoleErrorSpy = jest
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+      const { newer, newerRun, older, olderRun } = startTwoLoads();
+
+      newer.resolve(newerStats);
+      const { state: newerState } = await newerRun;
+      older.reject('Failed getting stats');
+      const { state: olderState } = await olderRun;
+
+      expect(newerState.clerkOfCourtDashboardStatsStatus).toEqual('loaded');
+      expect(olderState.clerkOfCourtDashboardStatsStatus).toEqual('loading');
+      expect(consoleErrorSpy).not.toHaveBeenCalled();
+      consoleErrorSpy.mockRestore();
+    });
+  });
 });
