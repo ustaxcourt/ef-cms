@@ -1,3 +1,4 @@
+import { clearStateAndCodeVerifierAction } from '@web-client/presenter/actions/clearStateAndCodeVerifierAction';
 import { exchangeAuthCodeAction } from '@web-client/presenter/actions/exchangeAuthCodeAction';
 import { getUserAction } from '@web-client/presenter/actions/getUserAction';
 import { clearAuthStateAction } from '@web-client/presenter/actions/Login/clearAuthStateAction';
@@ -13,6 +14,7 @@ export const authCodeSequence = [
   {
     success: [
       clearAuthStateAction,
+      clearStateAndCodeVerifierAction,
       setTokenAction,
       getUserAction,
       setUserAction,

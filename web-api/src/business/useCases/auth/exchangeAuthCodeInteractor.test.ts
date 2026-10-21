@@ -146,4 +146,31 @@ describe('exchangeAuthCodeInteractor', () => {
       new UnauthorizedError('Code exchange failed: Unauthorized'),
     );
   });
+
+  it('should throw an error if token does not include DB user id', async () => {
+    const mockUser = {
+      'custom:role': ROLES.privatePractitioner,
+      name: 'Test Practitioner',
+    };
+    const authToken = jwt.sign(mockUser, 'secret');
+    const invalidUserMockResult = {
+      data: {
+        ...mockResult.data,
+        id_token: authToken,
+      },
+    };
+
+    appContext.getHttpClient().post.mockResolvedValue(invalidUserMockResult);
+
+    const callPromise = exchangeAuthCodeInteractor(
+      appContext as ServerApplicationContext,
+      {
+        authCode: '1234abcd',
+        code_verifier: '1234',
+      },
+    );
+    await expect(callPromise).rejects.toThrow(
+      new UnauthorizedError('User Missing DB user ID'),
+    );
+  });
 });

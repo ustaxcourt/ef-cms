@@ -489,6 +489,16 @@ export const BENCH_OPINION_EVENT_CODE = 'OST';
 
 export const NOTICE_EVENT_CODE = 'NOT';
 
+export const NOTICE_OF_WITHDRAWAL_EVENT_CODE = 'NOTW';
+
+export const NOTICE_OF_WITHDRAWAL_DOCUMENT_TYPE =
+  'Notice of Withdrawal as Counsel';
+
+export const MOTION_TO_WITHDRAW_AS_COUNSEL_EVENT_CODE = 'M112';
+
+export const MOTION_TO_WITHDRAW_AS_COUNSEL_DOCUMENT_TYPE =
+  'Motion to Withdraw as Counsel';
+
 export const ADVANCED_SEARCH_OPINION_TYPES = {
   Bench: BENCH_OPINION_EVENT_CODE,
   Memorandum: 'MOP',
@@ -1142,13 +1152,24 @@ export const PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP = [
 export const PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES =
   PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP.map(d => d.documentType);
 
+export const PAY_GOV_METHOD = 'Pay.gov';
+
 export const PAYMENT_STATUS = {
   PAID: 'Paid',
   UNPAID: 'Not paid',
   WAIVED: 'Waived',
+  PENDING: 'Pending',
 };
 export type PaymentStatusTypes =
   (typeof PAYMENT_STATUS)[keyof typeof PAYMENT_STATUS];
+
+export const PAYMENT_FILING_FEE_ORIGIN = {
+  DASHBOARD: 'dashboard',
+  PETITION: 'petition',
+} as const;
+
+export type PaymentFilingFeeOrigin =
+  (typeof PAYMENT_FILING_FEE_ORIGIN)[keyof typeof PAYMENT_FILING_FEE_ORIGIN];
 
 export const PROCEDURE_TYPES_MAP = {
   regular: 'Regular',

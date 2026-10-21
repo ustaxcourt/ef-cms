@@ -84,6 +84,7 @@ describe('exchangeAuthCodeAction', () => {
       props: {
         error: 'Bad Request',
         errorDescription: 'Auth code expired.',
+        state: '5678efgh',
       },
     });
 
@@ -152,6 +153,29 @@ describe('exchangeAuthCodeAction', () => {
       },
       props: {
         authCode: '1234abc',
+        state: 'other string',
+      },
+    });
+
+    expect(mockauthCodeInteractor).not.toHaveBeenCalled();
+    expect(pathErrorStub).toHaveBeenCalledTimes(1);
+    expect(pathErrorStub).toHaveBeenCalledWith({
+      alertError: {
+        title: 'Bad State',
+        message: 'Stored state did not match returned state.',
+      },
+    });
+    expect(pathSuccessStub).not.toHaveBeenCalled();
+  });
+
+  it('should throw bad state error before error in redirect', async () => {
+    await runAction(exchangeAuthCodeAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        error: 'Bad Request',
+        errorDescription: 'Auth code expired.',
         state: 'other string',
       },
     });

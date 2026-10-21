@@ -81,6 +81,7 @@ resource "aws_iam_policy" "ci_cd_policy" {
         "cognito-idp:SetUserPoolMfaConfig",
         "cognito-idp:UpdateUserPool",
         "cognito-idp:UpdateUserPoolClient",
+        "cognito-idp:ListUsers",
         "cognito-idp:CreateIdentityProvider",
         "cognito-idp:DeleteIdentityProvider",
         "cognito-idp:DescribeIdentityProvider",
