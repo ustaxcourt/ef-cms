@@ -57,19 +57,24 @@ jobs:
       - name: Send Teams notification
         if: steps.alerts.outputs.count != '0'
         env:
+          WORKFLOW_NAME: ${{ inputs.workflow_name }}
+          SCANNER: ${{ inputs.scanner }}
+          FINDING_COUNT: ${{ steps.alerts.outputs.count }}
+          RUN_URL: ${{ inputs.run_url }}
           TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL }}
+
         run: |
           payload=$(cat <<EOF
           {
             "text": "🚨 New Security Findings
 
-          Workflow: ${{ inputs.workflow_name }}
-          Scanner: ${{ inputs.scanner }}
+          Workflow: ${WORKFLOW_NAME}
+          Scanner: ${SCANNER}
 
-          New Findings: ${{ steps.alerts.outputs.count }}
+          New Findings: ${FINDING_COUNT}
 
           Run:
-          ${{ inputs.run_url }}"
+          ${RUN_URL}"
           }
           EOF
           )
