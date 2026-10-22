@@ -4,7 +4,6 @@ import { applicationContextForClient as applicationContext } from '@web-client/t
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { FORMATS, formatNow } from '@shared/business/utilities/DateHandler';
 import {
-  CASE_TYPES,
   FISCAL_MONTH_LABELS,
   GRAPH_COLORS,
   MONTH_LABELS,
@@ -468,46 +467,6 @@ describe('dashboardClerkOfTheCourtHelper', () => {
       expect(result.months[0]).toEqual('January');
     });
 
-    it('should set open cases by type table rows for every case type, largest total first', () => {
-      const result = runCompute(dashboardClerkOfTheCourtHelper, {
-        state: baseState,
-      });
-
-      // equal totals keep the Deficiency-first case type order
-      expect(result.openCasesByTypeTableRows).toEqual([
-        { label: 'Deficiency', total: '1,798' },
-        { label: 'Declaratory Judgment (Retirement Plan)', total: '75' },
-        { label: 'Partnership (Section 6228)', total: '75' },
-        { label: 'Declaratory Judgment (Exempt Organization)', total: '51' },
-        { label: 'Partnership (Section 6226)', total: '48' },
-        { label: 'Partnership (BBA Section 1101)', total: '26' },
-        { label: 'CDP (Lien/Levy)', total: '0' },
-        { label: 'Disclosure', total: '0' },
-        { label: 'Innocent Spouse', total: '0' },
-        { label: 'Interest Abatement', total: '0' },
-        { label: 'Other', total: '0' },
-        { label: 'Passport', total: '0' },
-        { label: 'Whistleblower', total: '0' },
-        { label: 'Worker Classification', total: '0' },
-      ]);
-    });
-
-    it('should sort open cases by type by the numeric total, not the formatted text', () => {
-      baseState.clerkOfCourtDashboardStats.openCasesByCaseType = [
-        { caseType: 'Other', total: 9 },
-        { caseType: 'Passport', total: 1000 },
-        { caseType: 'Disclosure', total: 100 },
-      ];
-
-      const result = runCompute(dashboardClerkOfTheCourtHelper, {
-        state: baseState,
-      });
-
-      expect(
-        result.openCasesByTypeTableRows.slice(0, 3).map(row => row.label),
-      ).toEqual(['Passport', 'Disclosure', 'Other']);
-    });
-
     it('should label the cases year by the cases year option', () => {
       expect(
         runCompute(dashboardClerkOfTheCourtHelper, { state: baseState })
@@ -522,33 +481,6 @@ describe('dashboardClerkOfTheCourtHelper', () => {
       expect(result.casesYearLabel).toEqual('FYTD 2027');
       // the petitions label follows its own option
       expect(result.petitionsYearLabel).toEqual('YTD 2026');
-    });
-
-    it('should not change open cases by type with the cases year option', () => {
-      const calendarResult = runCompute(dashboardClerkOfTheCourtHelper, {
-        state: baseState,
-      });
-      baseState.clerkOfCourtDashboardOptions.casesByYearIsFiscal = true;
-      const fiscalResult = runCompute(dashboardClerkOfTheCourtHelper, {
-        state: baseState,
-      });
-
-      expect(fiscalResult.openCasesByTypeTableRows).toEqual(
-        calendarResult.openCasesByTypeTableRows,
-      );
-    });
-
-    it('should zero open cases by type when there are no open cases', () => {
-      baseState.clerkOfCourtDashboardStats.openCasesByCaseType = [];
-
-      const result = runCompute(dashboardClerkOfTheCourtHelper, {
-        state: baseState,
-      });
-
-      expect(result.openCasesByTypeTableRows).toHaveLength(CASE_TYPES.length);
-      result.openCasesByTypeTableRows.forEach(row => {
-        expect(row.total).toEqual('0');
-      });
     });
 
     it('should fall back to the current year before the stats have loaded', () => {

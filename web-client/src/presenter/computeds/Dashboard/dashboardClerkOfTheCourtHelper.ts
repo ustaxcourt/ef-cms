@@ -1,21 +1,15 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-import {
-  ClerkDashboardCaseTypeTotal,
-  ClerkDashboardProcedureTypeTotal,
-} from '@web-api/business/useCases/reports/getClerkDashboardStatsInteractor';
+import { ClerkDashboardProcedureTypeTotal } from '@web-api/business/useCases/reports/getClerkDashboardStatsInteractor';
 import {
   ClerkOfCourtPieChartData,
-  ClerkOfCourtTableRow,
   DashboardClerkOfTheCourtHelper,
 } from '@web-client/presenter/clerkOfCourtDashboardState';
 import { sum } from 'lodash';
 import { formatPositiveNumber } from '@web-client/business/utilities/formatPositiveNumber';
 import { FORMATS, formatNow } from '@shared/business/utilities/DateHandler';
 import {
-  CASE_TYPES,
-  CASE_TYPES_MAP,
   FISCAL_MONTH_LABELS,
   GRAPH_COLORS,
   MONTH_LABELS,
@@ -37,26 +31,6 @@ const getProcedureTypePieData = (
         value: total,
       }))
     : [];
-
-// the order of case types with the same total: Deficiency first, then the other case types
-const OPEN_CASES_BY_TYPE_ORDER: string[] = [
-  CASE_TYPES_MAP.deficiency,
-  ...CASE_TYPES.filter(caseType => caseType !== CASE_TYPES_MAP.deficiency),
-];
-
-// largest total first; sort is stable, so equal totals keep OPEN_CASES_BY_TYPE_ORDER
-const getOpenCasesByTypeTableRows = (
-  openCasesByCaseType: ClerkDashboardCaseTypeTotal[],
-): ClerkOfCourtTableRow[] =>
-  OPEN_CASES_BY_TYPE_ORDER.map(caseType => ({
-    caseType,
-    total: openCasesByCaseType.find(c => c.caseType === caseType)?.total ?? 0,
-  }))
-    .sort((a, b) => b.total - a.total)
-    .map(({ caseType, total }) => ({
-      label: caseType,
-      total: formatPositiveNumber(total),
-    }));
 
 export const dashboardClerkOfTheCourtHelper = (
   get: Get,
@@ -151,9 +125,6 @@ export const dashboardClerkOfTheCourtHelper = (
       caseStats.casesClosedByProcedureType,
     ),
     casesMonths: casesByYearIsFiscal ? FISCAL_MONTH_LABELS : MONTH_LABELS,
-    openCasesByTypeTableRows: getOpenCasesByTypeTableRows(
-      stats.openCasesByCaseType,
-    ),
     openCasesPieData: getProcedureTypePieData(stats.openCasesByProcedureType),
     totalCasesClosed: formatPositiveNumber(totalCasesClosed),
     totalOpenCases: formatPositiveNumber(

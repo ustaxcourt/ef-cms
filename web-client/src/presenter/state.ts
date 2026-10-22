@@ -182,6 +182,7 @@ import { BlockedCaseData } from '@web-api/persistence/postgres/cases/reports/get
 import { RawGenerateSuggestedTermForm } from '@shared/business/entities/trialSessions/GenerateSuggestedTermForm';
 import { RawWorkItemWithCaseAndDocketEntryInfo } from '@web-api/persistence/postgres/workitems/schema';
 import { dashboardClerkOfTheCourtHelper } from '@web-client/presenter/computeds/Dashboard/dashboardClerkOfTheCourtHelper';
+import { buildHtmlTableDocumentHelper } from '@web-client/presenter/computeds/Dashboard/buildHtmlTableDocumentHelper';
 import { confirmPaperServiceModalHelper } from './computeds/confirmPaperServiceModalHelper';
 import { ProcessPaymentResponse } from '@ustaxcourt/payment-portal/dist';
 import { ClerkDashboardStats } from '@web-api/business/useCases/reports/getClerkDashboardStatsInteractor';
@@ -239,6 +240,10 @@ export const computeds = {
   blockedCasesReportHelper: blockedCasesReportHelper as unknown as ReturnType<
     typeof blockedCasesReportHelper
   >,
+  buildHtmlTableDocumentHelper:
+    buildHtmlTableDocumentHelper as unknown as ReturnType<
+      typeof buildHtmlTableDocumentHelper
+    >,
   caseAssociationRequestHelper:
     caseAssociationRequestHelper as unknown as ReturnType<
       typeof caseAssociationRequestHelper
