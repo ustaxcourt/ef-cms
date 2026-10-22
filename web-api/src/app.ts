@@ -226,6 +226,7 @@ import { initPaymentLambda } from '@web-api/lambdas/paymentPortal/initPaymentLam
 import { processPaymentLambda } from '@web-api/lambdas/paymentPortal/processPaymentLambda';
 import { getTransactionDetailsLambda } from '@web-api/lambdas/paymentPortal/getTransactionDetailsLambda';
 import { exchangeAuthCodeLambda } from '@web-api/lambdas/auth/exchangeAuthCodeLambda';
+import { checkEmailIsPractitionerLambda } from '@web-api/lambdas/users/checkEmailIsPractitionerLambda';
 
 export const app = express();
 
@@ -1136,6 +1137,10 @@ app.delete(
   app.get(
     '/users/email-availability',
     lambdaWrapper(checkEmailAvailabilityLambda),
+  );
+  app.post(
+    '/users/email-practitioner-check',
+    lambdaWrapper(checkEmailIsPractitionerLambda),
   );
   app.get(
     '/users/privatePractitioners/search',

@@ -43,7 +43,9 @@ import { invalidateUserContactGeocode as invalidateUserContactGeocodeMock } from
 
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { checkEmailIsPractitioner as checkEmailExistsMock } from '@web-api/persistence/postgres/users/checkEmailIsPractitioner';
 import { DbUser } from '@web-api/persistence/postgres/users/mapper';
+import { MOCK_PRACTITIONER } from '@shared/test/mockUsers';
 
 describe('updatePetitionerInformationInteractor', () => {
   let mockCase;
@@ -55,6 +57,7 @@ describe('updatePetitionerInformationInteractor', () => {
     invalidateUserContactGeocodeMock,
   );
   const getUserById = jest.mocked(getUserByIdMock);
+  const checkEmailExists = jest.mocked(checkEmailExistsMock);
   const updateCaseAndAssociations = jest
     .mocked(updateCaseAndAssociationsMock)
     .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
@@ -97,6 +100,7 @@ describe('updatePetitionerInformationInteractor', () => {
       .getUseCaseHelpers()
       .createUserForContact.mockResolvedValue(mockCase);
 
+    checkEmailExists.mockResolvedValue(0);
     getCaseByDocketNumber.mockImplementation(() => mockCase);
     generateAndServeDocketEntry.mockResolvedValue({
       url: mockUrl,
@@ -668,6 +672,45 @@ describe('updatePetitionerInformationInteractor', () => {
       applicationContext
         .getUseCaseHelpers()
         .addExistingUserToCase.mockImplementation(addExistingUserToCase); // the real implementation, but inside, it is using the mocks above
+    });
+
+    it('should not allow a duplicate email address (petitioner duplicate)', async () => {
+      await expect(
+        updatePetitionerInformationInteractor(
+          applicationContext,
+          {
+            docketNumber: MOCK_CASE.docketNumber,
+            updatedPetitionerData: {
+              ...mockPetitioners[0],
+              updatedEmail: 'petitioner@example.com',
+            },
+          },
+          mockAdmissionsClerkUser,
+        ),
+      ).rejects.toThrow(
+        'Email petitioner@example.com is already in use by another petitioner',
+      );
+    });
+
+    it('should not allow a duplicate email address (practitioner duplicate)', async () => {
+      checkEmailExists.mockResolvedValue(1);
+
+      mockCase.privatePractitioners = [MOCK_PRACTITIONER];
+      await expect(
+        updatePetitionerInformationInteractor(
+          applicationContext,
+          {
+            docketNumber: MOCK_CASE.docketNumber,
+            updatedPetitionerData: {
+              ...mockPetitioners[0],
+              updatedEmail: MOCK_PRACTITIONER.email,
+            },
+          },
+          mockAdmissionsClerkUser,
+        ),
+      ).rejects.toThrow(
+        'Email ab@example.com is already in use by another practitioner',
+      );
     });
 
     it('should call the update addExistingUserToCase use case helper when the petitioner is adding an email address', async () => {
