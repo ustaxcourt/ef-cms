@@ -370,6 +370,36 @@ describe('advancedDocumentSearchHelper', () => {
     ]);
   });
 
+  it('sets formattedJudgeName from the judge field (not signedJudgeName) for a Standing Scheduling Order', () => {
+    const result = runCompute(advancedDocumentSearchHelper, {
+      state: {
+        ...getBaseState(globalUser),
+        advancedSearchForm: {},
+        advancedSearchTab:
+          applicationContext.getConstants().ADVANCED_SEARCH_TABS.ORDER,
+        searchResults: {
+          order: [
+            {
+              caseCaption: 'Test Petitioner, Petitioner',
+              docketNumber: '101-19',
+              documentContents: 'Test Petitioner, Petitioner',
+              eventCode: 'SSO',
+              filingDate: '2019-03-01T05:00:00.000Z',
+              judge: 'Cohen',
+              signedJudgeName: undefined,
+            },
+          ],
+        },
+      },
+    });
+
+    expect(result.formattedSearchResults).toMatchObject([
+      {
+        formattedJudgeName: 'Cohen',
+      },
+    ]);
+  });
+
   it('formats search results for an opinion search', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {

@@ -1,0 +1,107 @@
+rules:
+  - id: dawson-ssrf-user-input-to-request
+    mode: taint
+    pattern-sources:
+      - pattern: $REQ.query
+      - pattern: $REQ.params
+      - pattern: $REQ.body
+      - pattern: $EVENT.pathParameters
+      - pattern: $EVENT.queryStringParameters
+      - pattern: $EVENT.body
+      - pattern: JSON.parse($EVENT.body)
+      - pattern: JSON.parse($EVENT.body || '{}')
+    pattern-sinks:
+      - pattern: axios.$M(...)
+      - pattern: axios(...)
+      - pattern: $HTTP.get(...)
+      - pattern: $HTTP.request(...)
+      - pattern: fetch(...)
+      - pattern: got(...)
+      - pattern: got.$M(...)
+    message: >
+      Potential SSRF: user-controlled request data flows into an outbound HTTP
+      request. Validate/allowlist the destination host before making the call.
+    severity: ERROR
+    languages: [typescript, javascript]
+    metadata:
+      category: security
+      cwe: CWE-918
+
+  - id: dawson-command-injection-user-input
+    mode: taint
+    pattern-sources:
+      - pattern: $REQ.query
+      - pattern: $REQ.params
+      - pattern: $REQ.body
+      - pattern: $EVENT.pathParameters
+      - pattern: $EVENT.queryStringParameters
+      - pattern: $EVENT.body
+      - pattern: JSON.parse($EVENT.body)
+      - pattern: JSON.parse($EVENT.body || '{}')
+    pattern-sinks:
+      - pattern: $CP.exec(...)
+      - pattern: $CP.execSync(...)
+      - pattern: $CP.spawn(...)
+      - pattern: $CP.spawnSync(...)
+    message: >
+      Potential command injection: user-controlled request data flows into a
+      child_process call. Avoid passing untrusted input to a shell; use an
+      argument array and validate input.
+    severity: ERROR
+    languages: [typescript, javascript]
+    metadata:
+      category: security
+      cwe: CWE-78
+
+  - id: dawson-path-traversal-user-input
+    mode: taint
+    pattern-sources:
+      - pattern: $REQ.query
+      - pattern: $REQ.params
+      - pattern: $REQ.body
+      - pattern: $EVENT.pathParameters
+      - pattern: $EVENT.queryStringParameters
+      - pattern: $EVENT.body
+      - pattern: JSON.parse($EVENT.body)
+      - pattern: JSON.parse($EVENT.body || '{}')
+    pattern-sinks:
+      - pattern: fs.readFile($PATH, ...)
+      - pattern: fs.readFileSync($PATH, ...)
+      - pattern: fs.writeFile($PATH, ...)
+      - pattern: fs.writeFileSync($PATH, ...)
+      - pattern: fs.createReadStream($PATH, ...)
+      - pattern: path.join(..., $PATH, ...)
+      - pattern: path.resolve(..., $PATH, ...)
+    message: >
+      Potential path traversal: user-controlled input flows into a file-system
+      path. Validate and sanitize the path; use path.resolve() and verify the
+      result starts with the expected base directory before opening the file.
+    severity: ERROR
+    languages: [typescript, javascript]
+    metadata:
+      category: security
+      cwe: CWE-22
+
+  - id: dawson-unsafe-json-parse-user-input
+    mode: taint
+    pattern-sources:
+      - pattern: $REQ.query
+      - pattern: $REQ.params
+      - pattern: $REQ.body
+      - pattern: $EVENT.pathParameters
+      - pattern: $EVENT.queryStringParameters
+      - pattern: $EVENT.body
+      - pattern: JSON.parse($EVENT.body)
+      - pattern: JSON.parse($EVENT.body || '{}')
+    pattern-sinks:
+      - pattern: JSON.parse($INPUT)
+    message: >
+      User-controlled input flows directly into JSON.parse(). While safe from
+      code injection, this can be a vector for prototype pollution. Validate the
+      input shape with a schema validator (e.g. Joi) before parsing, or use
+      Object.create(null) and Object.assign to avoid prototype chain pollution.
+    severity: WARNING
+    languages: [typescript, javascript]
+    metadata:
+      category: security
+      cwe: CWE-915

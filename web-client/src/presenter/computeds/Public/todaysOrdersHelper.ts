@@ -2,7 +2,7 @@ import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
 import {
   DESCENDING,
-  STANDING_PRETRIAL_EVENT_CODES,
+  STANDING_ORDER_EVENT_CODES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app-public.cerebral';
 import { Case } from '@shared/business/entities/cases/Case';
@@ -32,7 +32,7 @@ export const todaysOrdersHelper = (
     .formatDateString(currentDate, 'MONTH_DAY_YEAR');
 
   const formattedOrders = todaysOrders.map(order => {
-    const judgeName = STANDING_PRETRIAL_EVENT_CODES.includes(order.eventCode)
+    const judgeName = STANDING_ORDER_EVENT_CODES.includes(order.eventCode)
       ? order.judge
       : order.signedJudgeName;
 

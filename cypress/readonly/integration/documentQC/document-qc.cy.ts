@@ -1,8 +1,8 @@
 import { isValidRequest } from '../../support/helpers';
 import { loginAsAdmissionsClerk } from '../../../helpers/authentication/login-as-helpers';
 
-const EFCMS_DOMAIN = Cypress.env('EFCMS_DOMAIN');
-const DEPLOYING_COLOR = Cypress.env('DEPLOYING_COLOR');
+const EFCMS_DOMAIN = Cypress.expose('EFCMS_DOMAIN');
+const DEPLOYING_COLOR = Cypress.expose('DEPLOYING_COLOR');
 
 describe('Document QC UI Smoketests', () => {
   describe('login and view the document QC page', () => {

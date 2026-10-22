@@ -55,11 +55,14 @@ resource "aws_iam_role_policy_attachment" "es_cognito_auth" {
 }
 
 resource "aws_cloudwatch_log_group" "elasticsearch_kibana_logs" {
+  #checkov:skip=CKV_AWS_158: CloudWatch log group CMK not configured — AWS default server-side encryption is adequate for Kibana operational logs; CMK adds key management overhead with no security benefit for log data
   count = var.es_logs_instance_count > 0 ? 1 : 0
   name  = "/aws/aes/kibana"
 }
 
 resource "aws_opensearch_domain" "efcms-logs" {
+  #checkov:skip=CKV_AWS_5:encrypt_at_rest block not declared — AWS enforces encryption at rest by default for OpenSearch Service domains; omitting the Terraform block does not disable it
+  #checkov:skip=CKV_AWS_247:AWS-managed encryption key is sufficient — only 3 court employees have prod access; CMK would add key management overhead without meaningful security benefit
   count          = var.es_logs_instance_count > 0 ? 1 : 0
   domain_name    = "info"
   engine_version = var.es_logs_engine_version
@@ -309,6 +312,7 @@ module "logs_to_es" {
 }
 
 resource "aws_cloudwatch_log_group" "logs_to_elasticsearch" {
+  #checkov:skip=CKV_AWS_158: CloudWatch log group CMK not configured — AWS default server-side encryption is adequate for Lambda log shipper logs; CMK adds key management overhead with no security benefit for log data
   count             = local.logs_to_es_count
   name              = "/aws/lambda/${module.logs_to_es[0].function_name}"
   retention_in_days = 14
@@ -320,6 +324,7 @@ resource "terraform_data" "logs_to_es_last_modified" {
 }
 
 resource "aws_lambda_permission" "allow_cloudwatch" {
+  #checkov:skip=CKV_AWS_364: Lambda permission not scoped to specific source ARN — CloudWatch Logs service principal invokes this function dynamically from multiple log groups; scoping to a single ARN would require a permission update every time a new log group is added
   count         = local.logs_to_es_count
   statement_id  = "AllowExecutionFromCloudWatch"
   action        = "lambda:InvokeFunction"

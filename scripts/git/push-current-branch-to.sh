@@ -9,6 +9,7 @@ PROTECTED_BRANCHES="develop prod staging test"
 # shellcheck disable=SC2076
 [[ " $PROTECTED_BRANCHES " =~ " $TARGET " ]] && echo "Unable to force push to ${TARGET}" && exit 1
 [[ -n $(git diff) ]] && echo "Stash or commit local changes first" && exit 1
+[[ -n $(git diff --cached) ]] && echo "Stash or commit staged local changes first" && exit 1
 
 # convert expN to experimentalN
 [[ "${#TARGET}" -eq 4 ]] && [[ "${TARGET:0:3}" == "exp" ]] && TARGET="experimental${TARGET:3:4}"

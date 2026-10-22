@@ -4,7 +4,8 @@ import { faker } from '@faker-js/faker';
 
 export function externalUserCreatesElectronicCase(
   primaryFilerName: string = faker.person.firstName(),
-) {
+  preferredTrialCity: string = 'Mobile, Alabama',
+): Cypress.Chainable<string> {
   cy.get('[data-testid="file-a-petition"]').click();
   cy.get('[data-testid="go-to-step-1"]').click();
 
@@ -31,7 +32,7 @@ export function externalUserCreatesElectronicCase(
   cy.get(
     `[data-testid="procedure-type-${PROCEDURE_TYPES_MAP.regular}-radio"]`,
   ).click();
-  cy.get('[data-testid="preferred-trial-city"]').select('Mobile, Alabama');
+  cy.get('[data-testid="preferred-trial-city"]').select(preferredTrialCity);
   cy.get('[data-testid="step-4-next-button"]').click();
 
   attachSamplePdfFile('stin-file');
@@ -47,7 +48,11 @@ export function externalUserCreatesElectronicCase(
     .should('be.visible')
     .invoke('text')
     .then(docketNumberWithSuffix => {
+      cy.intercept('GET', '**/cases').as('getDashboardCasesAfterFiling');
       cy.get('[data-testid="button-back-to-dashboard"]').click();
+      cy.wait('@getDashboardCasesAfterFiling');
+      cy.get('[data-testid="case-list-table"]').should('be.visible');
+      cy.get('[data-testid="petition-welcome-text"]').should('not.exist');
       return cy.wrap<string>(docketNumberWithSuffix);
     });
 }

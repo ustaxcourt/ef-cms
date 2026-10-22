@@ -13,10 +13,13 @@ export const setDocketEntryMetaTypeAction = ({
   get,
   store,
 }: ActionProps) => {
-  const { docketEntryId, eventCode } = get(state.form);
+  const { docketEntryId, eventCode, scenario } = get(state.form);
 
-  const { COURT_ISSUED_EVENT_CODES, SYSTEM_GENERATED_DOCUMENT_TYPES } =
-    applicationContext.getConstants();
+  const {
+    COURT_ISSUED_EVENT_CODES,
+    INTERNAL_DOCUMENTS_ARRAY,
+    SYSTEM_GENERATED_DOCUMENT_TYPES,
+  } = applicationContext.getConstants();
   const COURT_ISSUED_EVENT_CODES_LIST = COURT_ISSUED_EVENT_CODES.map(
     courtIssuedEvent => courtIssuedEvent.eventCode,
   );
@@ -25,10 +28,18 @@ export const setDocketEntryMetaTypeAction = ({
     SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfDocketChange.eventCode,
   );
 
+  const isInternalFilingEvent = INTERNAL_DOCUMENTS_ARRAY.some(
+    internalFilingEvent =>
+      internalFilingEvent.eventCode === eventCode &&
+      internalFilingEvent.scenario === scenario,
+  );
+
   const hasDocument = !DocketEntry.isMinuteEntry({ eventCode });
 
   const isCourtIssuedDocument =
-    hasDocument && COURT_ISSUED_EVENT_CODES_LIST.includes(eventCode);
+    hasDocument &&
+    COURT_ISSUED_EVENT_CODES_LIST.includes(eventCode) &&
+    !isInternalFilingEvent;
 
   let editType;
 

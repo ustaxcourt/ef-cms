@@ -123,4 +123,23 @@ describe('setDefaultCaseDetailTabAction', () => {
       primaryTab: 'caseInformation',
     });
   });
+
+  it('should set currentViewMetadata.caseDetail.primaryTab to docketRecord if currentViewMetadata.caseDetail.frozen is true but primaryTab is not set', async () => {
+    const { state } = await runAction(setDefaultCaseDetailTabAction, {
+      modules: { presenter },
+      props: {},
+      state: {
+        currentViewMetadata: {
+          caseDetail: {
+            frozen: true,
+          },
+        },
+      },
+    });
+
+    expect(state.currentViewMetadata.caseDetail).toMatchObject({
+      frozen: true,
+      primaryTab: 'docketRecord',
+    });
+  });
 });

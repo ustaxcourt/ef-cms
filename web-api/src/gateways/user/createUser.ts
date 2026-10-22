@@ -3,6 +3,7 @@ import {
   AttributeType,
   DeliveryMediumType,
   MessageActionType,
+  UserType,
 } from '@aws-sdk/client-cognito-identity-provider';
 import { Role } from '@shared/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
@@ -26,7 +27,7 @@ export async function createUser(
     temporaryPassword?: string;
     sendWelcomeEmail: boolean;
   },
-): Promise<void> {
+): Promise<UserType> {
   const formattedAttributes: AttributeType[] = [
     {
       Name: 'custom:userId',
@@ -68,5 +69,13 @@ export async function createUser(
     Username: email.toLowerCase(),
   };
 
-  await applicationContext.getCognito().adminCreateUser(createUserArgs);
+  const result = await applicationContext
+    .getCognito()
+    .adminCreateUser(createUserArgs);
+
+  if (!result.User) {
+    throw new Error('No user returned');
+  }
+
+  return result.User;
 }

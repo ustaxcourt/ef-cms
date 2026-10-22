@@ -1,3 +1,280 @@
+<details><summary>Dependency Updates - Week of 2026-10-12</summary>
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Deploy Docker container `4.3.101`
+
+This script will prompt for an environment to pull the image from; choose `exp8`.
+
+```bash
+npm run ecr:check-version
+```
+
+</details>
+
+<details><summary>Single Sign-on Updates</summary>
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+If SSO is needed in an environment, first set up a new application in Microsoft Entra for this environment, then set the following secrets. Those prefixed with `OIDC_` will be found on the Microsoft side
+
+```bash
+. ./scripts/env/set-env.zsh {YOUR_ENV}
+./scripts/secrets/update-secret.ts -k IDP_NAME -v ustc-entra
+./scripts/secrets/update-secret.ts -k OIDC_ISSUER_URL -v https://login.microsoftonline.com/{tenant id}/v2.0
+./scripts/secrets/update-secret.ts -k OIDC_CLIENT_ID -v {app client id}
+./scripts/secrets/update-secret.ts -k OIDC_CLIENT_SECRET -v {app client secret}
+```
+
+An account specific deployment will then be required for new roles that will be created
+```bash
+npm run deploy:account-specific
+```
+
+### After Deployment
+
+Once everything is deployed, set the feature flag to show the SSO button on the login page
+```bash
+./scripts/postgres/featureFlags/setup-idp-login.ts
+```
+
+### Notes
+
+If this feature is not needed, no updates are required. The terraform updates will not take place if `IDP_NAME` is not set.
+</details>
+
+<details><summary>Dependency Updates - Week of 2026-10-05</summary>
+
+## Local
+
+#### Upgrade Terraform to `1.16.5`
+
+Use either tfswitch or tfenv:
+
+```bash
+tfswitch 1.16.5
+```
+
+```bash
+tfenv install 1.16.5
+tfenv use 1.16.5
+```
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Deploy Docker container `4.3.100`
+
+This script will prompt for an environment to pull the image from; choose `exp8`.
+
+```bash
+npm run ecr:check-version
+```
+
+</details>
+
+<details><summary>Dependency Updates - Week of 2026-09-28</summary>
+
+## Local
+
+#### Upgrade Terraform to `1.16.4`
+use either tfswitch or tfenv
+```bash
+tfswitch 1.16.4
+```
+```bash
+tfenv install 1.16.4
+tfenv use 1.16.4
+```
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Deploy Docker container `4.3.99`
+
+This script will prompt for an environment to pull the image from; choose `exp6`.
+
+```bash
+npm run ecr:check-version
+```
+
+</details>
+
+<details><summary>Dependency Updates - Week of 2026-09-22</summary>
+
+## Local
+
+#### Upgrade NodeJS to `24.21.0`
+```bash
+nvm install
+nvm use
+nvm alias default "$(cat .nvmrc)"
+```
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Deploy Docker container `4.3.98`
+
+This script will prompt for an environment to pull the image from; choose `exp7`.
+
+```bash
+npm run ecr:check-version
+```
+
+</details>
+<details><summary>Dependency Updates - Week of 2026-09-14</summary>
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+## Local
+
+#### Upgrade Terraform to `1.16.3`
+use either tfswitch or tfenv
+```bash
+tfswitch 1.16.3
+```
+```bash
+tfenv install 1.16.3
+tfenv use 1.16.3
+```
+
+#### Deploy Docker container `4.3.97`
+
+This script will prompt for an environment to pull the image from; choose `exp8`.
+
+```bash
+npm run ecr:check-version
+```
+
+</details>
+<details><summary>Fix stale automaticBlocked on cases set for trial</summary>
+
+## Manual Deployment Steps
+
+### After Deployment
+
+Cases that were automatically blocked before being set for trial kept a stale
+`automaticBlocked` flag, because the recompute was skipped whenever the case had
+a trial date. This excluded them from trial eligibility and left them on the
+Blocked Cases Report. Run the following to recompute those cases:
+
+```bash
+# Preview the cases that will be updated
+./scripts/run-once-scripts/fix-stale-automatic-blocks.ts --dry-run
+
+# Apply the fix
+./scripts/run-once-scripts/fix-stale-automatic-blocks.ts
+```
+</details>
+<details><summary>Dependency Updates - Week of 2026-09-08</summary>
+
+## Local
+
+#### Upgrade Terraform to `1.16.2`
+use either tfswitch or tfenv
+```bash
+tfswitch 1.16.2
+```
+```bash
+tfenv install 1.16.2
+tfenv use 1.16.2
+```
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Deploy Docker container `4.3.96`
+
+This script will prompt for an environment to pull the image from; choose `exp2`.
+
+```bash
+npm run ecr:check-version
+```
+
+</details>
+<details><summary>Dependency Updates - Week of 2026-08-31</summary>
+
+## Local
+
+#### Upgrade NodeJS to `24.20.0`
+```bash
+nvm install
+nvm use
+nvm alias default "$(cat .nvmrc)"
+```
+
+#### Upgrade Terraform to `1.16.1`
+use either tfswitch or tfenv
+```bash
+tfswitch 1.16.1
+```
+```bash
+tfenv install 1.16.1
+tfenv use 1.16.1
+```
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Deploy Docker container `4.3.95`
+
+This script will prompt for an environment to pull the image from; choose `exp8`.
+
+```bash
+npm run ecr:check-version
+```
+
+</details>
+<details><summary>10266 - Restrict frontend S3 buckets to CloudFront-only access</summary>
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Deploy account-specific Terraform
+
+```bash
+npm run deploy:account-specific
+```
+</details>
+<details><summary>Dependency Updates - Week of 2026-08-24</summary>
+
+## Local
+
+#### Upgrade Terraform to `1.15.9`
+use either tfswitch or tfenv
+```bash
+tfswitch 1.15.9
+```
+```bash
+tfenv install 1.15.9
+tfenv use 1.15.9
+```
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Deploy Docker container `4.3.94`
+
+This script will prompt for an environment to pull the image from; choose `exp5`.
+
+```bash
+npm run ecr:check-version
+```
+</details>
 <details><summary>Revert @joi/date 3.0.0 upgrade</summary>
 
 ## Local
@@ -170,6 +447,26 @@ This script will prompt for an environment to pull the image from; choose `exp3`
 
 ```bash
 npm run ecr:check-version
+```
+</details>
+<details><summary>Install gitleaks</summary>
+
+## Local
+
+#### Install gitleaks (secrets scanning) for the pre-commit hook
+```bash
+brew update && brew install gitleaks
+```
+</details>
+<details><summary>Updating batch job roles/permissions</summary>
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Run an `account-specific` terraform deployment
+```bash
+npm run deploy:account-specific
 ```
 </details>
 <details><summary>Dependency Updates - Week of 2026-07-13</summary>

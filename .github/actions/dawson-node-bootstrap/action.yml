@@ -31,13 +31,13 @@ runs:
   using: composite
   steps:
     - if: ${{ inputs.setup-node == 'true' }}
-      uses: actions/setup-node@v6
+      uses: actions/setup-node@v7
       with:
         node-version-file: ${{ inputs.node-version-file }}
 
     - if: ${{ inputs.restore-cache == 'true' }}
       id: cache-dependencies
-      uses: actions/cache/restore@v5
+      uses: actions/cache/restore@v6
       with:
         path: ${{ inputs.cache-paths }}
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
@@ -49,7 +49,7 @@ runs:
       run: npm ci
 
     - if: ${{ inputs.save-cache == 'true' && inputs.install-dependencies == 'true' && steps.npm-clean-install.outcome == 'success' }}
-      uses: actions/cache/save@v5
+      uses: actions/cache/save@v6
       with:
         path: ${{ inputs.cache-paths }}
         key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}

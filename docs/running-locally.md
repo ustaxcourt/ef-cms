@@ -55,7 +55,8 @@ To run a DAWSON development environment, we will need to install the following C
      circleci \
      oath-toolkit \
      libpq \
-     gh
+     gh \
+     gitleaks
    ```
 1. Several of the installed packages will output some post-installation steps. Follow those instructions to complete the installation.
 1. ⚠️ Apple Silicon Macs Only ⚠️

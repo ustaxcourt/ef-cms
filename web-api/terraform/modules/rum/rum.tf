@@ -1,4 +1,5 @@
 resource "aws_cognito_identity_pool" "rum_identity_pool" {
+  #checkov:skip=CKV_AWS_366:Unauthenticated access intentionally enabled — this identity pool is for CloudWatch RUM browser-side metric reporting; AWS-documented pattern requiring unauthenticated identities
   identity_pool_name               = "${var.environment}-rum-identity-pool"
   allow_unauthenticated_identities = true
 }

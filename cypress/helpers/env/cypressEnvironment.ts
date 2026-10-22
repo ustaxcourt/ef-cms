@@ -1,7 +1,8 @@
 const getEnvValue = (key: string, defaultValue?: any) => {
-  // If window is defined, use Cypress.env; otherwise, use process.env with the CYPRESS prefix.
+  // If window is defined, use Cypress.expose (Cypress 16 removed Cypress.env);
+  // otherwise, use process.env with the CYPRESS prefix.
   if (typeof window === 'object') {
-    return Cypress.env(key) || defaultValue;
+    return Cypress.expose(key) || defaultValue;
   }
   return process.env[`CYPRESS_${key}`] || defaultValue;
 };
@@ -18,6 +19,7 @@ export const getCypressEnv = () => {
     efcmsDomain: getEnvValue('EFCMS_DOMAIN'),
     env,
     isLocal,
+    managedLoginOrigin: `https://ef-cms-${env}.auth.us-east-1.amazoncognito.com`,
     payGovOrigin:
       env === 'local' ? 'http://localhost:3366' : getEnvValue('PAY_GOV_ORIGIN'),
     publicSiteUrl:

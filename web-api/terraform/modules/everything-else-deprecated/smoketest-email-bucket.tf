@@ -25,6 +25,10 @@ resource "aws_s3_bucket_policy" "allow_access_for_email_smoketests" {
 }
 
 resource "aws_s3_bucket" "smoketest_email_inbox" {
+  #checkov:skip=CKV_AWS_21: ephemeral smoke-test inbox bucket — non-prod only, messages are transient, versioning adds cost with no recovery value
+  #checkov:skip=CKV_AWS_18: non-prod smoke-test bucket only — no sensitive data; access logging not warranted
+  #checkov:skip=CKV_AWS_145: non-prod smoke-test bucket — no sensitive data; CMK adds key management overhead without security benefit for a transient test inbox
+  #checkov:skip=CKV2_AWS_6: no public access block resource needed — SES delivery only, no public bucket policy; account-level S3 Block Public Access covers this
   count    = var.environment == "prod" ? 0 : 1
   bucket   = "${var.dns_domain}-email-inbox-${var.environment}-us-east-1"
 

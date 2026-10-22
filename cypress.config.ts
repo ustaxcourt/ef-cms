@@ -4,6 +4,7 @@ import {
   getUserByEmail,
 } from './cypress/helpers/cypressTasks/cognito/cognito-helpers';
 import { defineConfig } from 'cypress';
+import { getExposedCypressEnv } from './cypress/helpers/env/exposedCypressEnv';
 import {
   deleteAllFilesInFolder,
   ensureFolderExists,
@@ -22,7 +23,10 @@ import { unzipFile } from './cypress/helpers/file/unzip-file';
 import { waitForNoce } from './cypress/helpers/cypressTasks/postgres/wait-for-noce';
 import type { Page } from 'puppeteer-core';
 import { retry, setup } from '@cypress/puppeteer';
-import { toggleFeatureFlag } from './cypress/helpers/cypressTasks/postgres/featureFlagsCypress';
+import {
+  getRawFeatureFlagValue,
+  toggleFeatureFlag,
+} from './cypress/helpers/cypressTasks/postgres/featureFlagsCypress';
 import { assertCorrectNetworkData } from './cypress/helpers/cypressTasks/network/assertCorrectNetworkData';
 
 export default defineConfig({
@@ -89,6 +93,9 @@ export default defineConfig({
             docketNumber,
             eventCode,
           });
+        },
+        getRawFeatureFlagValue({ flag }) {
+          return getRawFeatureFlagValue({ flag });
         },
         getUserByEmail(email: string) {
           return getUserByEmail(email);
@@ -177,6 +184,7 @@ export default defineConfig({
     supportFile: 'cypress/local-only/support/index.ts',
     testIsolation: false,
   },
+  expose: getExposedCypressEnv(),
   fixturesFolder: 'cypress/local-only/fixtures',
   reporter: 'spec',
   reporterOptions: {

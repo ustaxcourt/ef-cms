@@ -77,7 +77,7 @@ When an admin runs the `npm run deploy:account-specific` command, these permissi
 
 ## Github Actions
 
-All of our actions are defined in [.github/workflows](https://github.com/ustaxcourt/ef-cms/tree/staging/.github/workflows).  There is a separate .yml file for each individual action, as well as some reusable jobs prefixed with `job_` and reusable workflows prefixed with `template_`.  Similar to CircleCi, an action is defined in a yml file and is broken down into various `steps`.  You can specify when the job runs (such as on pull_requests), which version of node to test on, which docker image (ubuntu-latest), and also run community run actions if needed.
+Our workflows are defined in [.github/workflows](https://github.com/ustaxcourt/ef-cms/tree/staging/.github/workflows). There are reusable composite actions in `.github/actions`, reusable jobs prefixed with `job_`, and reusable workflows prefixed with `template_`. Similar to CircleCi, an action is defined in a yml file and is broken down into various `steps`. You can specify when the job runs (such as on pull_requests), which version of node to test on, which docker image (ubuntu-latest), and also run community run actions if needed.
 
 The four reusable workflow templates are:
 

@@ -1,0 +1,34 @@
+name: DAWSON SARIF Upload
+description: Summarize a SARIF report, and upload it from any run that is not a pull request (staging pushes, scheduled runs and manual dispatches).
+
+inputs:
+  category:
+    description: Code scanning category for the SARIF report.
+    required: true
+  sarif_file:
+    description: Path to the SARIF report.
+    required: true
+
+runs:
+  using: composite
+  steps:
+    # Always summarized, uploaded only where the condition below allows.
+    - name: Summarize SARIF
+      if: always()
+      uses: ./.github/actions/dawson-sarif-summary
+      with:
+        sarif_file: ${{ inputs.sarif_file }}
+        title: ${{ inputs.category }}
+
+    # Uploads from staging pushes, scheduled runs and manual dispatches only. PRs, into
+    # staging or any other branch, report their findings in the workflow output instead.
+    - name: Upload SARIF
+      if: >-
+        always() &&
+        hashFiles(inputs.sarif_file) != '' &&
+        github.event_name != 'pull_request' &&
+        github.event_name != 'pull_request_target'
+      uses: github/codeql-action/upload-sarif@v4
+      with:
+        sarif_file: ${{ inputs.sarif_file }}
+        category: ${{ inputs.category }}

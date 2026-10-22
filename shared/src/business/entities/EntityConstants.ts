@@ -73,11 +73,19 @@ export const MAX_PREFERRED_COMMUNICATION_METHOD_CHARACTERS = 20;
 
 export const MAX_MESSAGE_SUBJECT_CHARACTERS = 250;
 
-export const EXHIBIT_EVENT_CODES = ['EXH', 'PTE', 'HE', 'TE', 'M123', 'STIP'];
+export const EXHIBIT_EVENT_CODES = [
+  'EXH',
+  'EXS',
+  'PTE',
+  'HE',
+  'TE',
+  'M123',
+  'STIP',
+];
 
 export const AMENDMENT_EVENT_CODES = ['AMAT', 'ADMT'];
 
-export const STANDING_PRETRIAL_EVENT_CODES = ['SPOS', 'SPTO'];
+export const STANDING_ORDER_EVENT_CODES = ['SPOS', 'SPTO', 'SSO'];
 
 export const CLERK_OF_THE_COURT_CONFIGURATION = 'clerk-of-court-configuration';
 
@@ -179,6 +187,9 @@ export const ALLOWLIST_FEATURE_FLAGS = {
     disabledMessage:
       'A flag to know when to use the change of address lambda for processing.',
     key: 'use-change-of-address-lambda',
+  },
+  ALLOW_IDP_LOGIN: {
+    key: 'allow-idp-login',
   },
 };
 
@@ -478,6 +489,16 @@ export const BENCH_OPINION_EVENT_CODE = 'OST';
 
 export const NOTICE_EVENT_CODE = 'NOT';
 
+export const NOTICE_OF_WITHDRAWAL_EVENT_CODE = 'NOTW';
+
+export const NOTICE_OF_WITHDRAWAL_DOCUMENT_TYPE =
+  'Notice of Withdrawal as Counsel';
+
+export const MOTION_TO_WITHDRAW_AS_COUNSEL_EVENT_CODE = 'M112';
+
+export const MOTION_TO_WITHDRAW_AS_COUNSEL_DOCUMENT_TYPE =
+  'Motion to Withdraw as Counsel';
+
 export const ADVANCED_SEARCH_OPINION_TYPES = {
   Bench: BENCH_OPINION_EVENT_CODE,
   Memorandum: 'MOP',
@@ -576,7 +597,11 @@ export const EVENT_CODES_REQUIRING_JUDGE_SIGNATURE = without(
 
 export const JUDGE_ACTIVITY_REPORT_ORDER_EVENT_CODES = ORDER_EVENT_CODES.filter(
   eventCode => {
-    const excludedOrderEventCodes = ['OAJ', 'SPOS', 'SPTO', 'OST'];
+    const excludedOrderEventCodes = [
+      'OAJ',
+      ...STANDING_ORDER_EVENT_CODES,
+      'OST',
+    ];
     return !excludedOrderEventCodes.includes(eventCode);
   },
 );
@@ -1127,13 +1152,24 @@ export const PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP = [
 export const PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES =
   PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP.map(d => d.documentType);
 
+export const PAY_GOV_METHOD = 'Pay.gov';
+
 export const PAYMENT_STATUS = {
   PAID: 'Paid',
   UNPAID: 'Not paid',
   WAIVED: 'Waived',
+  PENDING: 'Pending',
 };
 export type PaymentStatusTypes =
   (typeof PAYMENT_STATUS)[keyof typeof PAYMENT_STATUS];
+
+export const PAYMENT_FILING_FEE_ORIGIN = {
+  DASHBOARD: 'dashboard',
+  PETITION: 'petition',
+} as const;
+
+export type PaymentFilingFeeOrigin =
+  (typeof PAYMENT_FILING_FEE_ORIGIN)[keyof typeof PAYMENT_FILING_FEE_ORIGIN];
 
 export const PROCEDURE_TYPES_MAP = {
   regular: 'Regular',
@@ -2075,7 +2111,7 @@ export const MAX_STATUS_REPORT_ORDER_TEXT_CHARACTERS = 256;
 export const TROUBLESHOOTING_INFO = {
   APP_SUPPORT_EMAIL: 'dawson.support@ustaxcourt.gov',
   FILE_UPLOAD_TROUBLESHOOTING_LINK:
-    'https://ustaxcourt.gov/dawson_faqs_case_management.html#FileUpload',
+    'https://ustaxcourt.gov/dawson_faqs_case_management.html#FAQS6',
 };
 
 export const MINUTE_SHEET_FORM_SECTION_MAP = {
@@ -2267,7 +2303,7 @@ export const MOTION_ORDER_RESPONSE_OPTIONS = {
   orderType: 'motionOrderResponse',
 };
 
-export const MAX_ORDER_RESPONSE_TEXT_CHARACTERS = 240;
+export const MAX_ORDER_RESPONSE_TEXT_CHARACTERS = 256;
 
 export const GRANT_DENY_MOTION_OPTIONS = {
   issueOrderOptions: {
@@ -2316,8 +2352,7 @@ export const ALLOWED_EVENT_CODES = [
   'NOT',
   'NOTR',
   'NTD',
-  'SPOS',
-  'SPTO',
+  ...STANDING_ORDER_EVENT_CODES,
   'TCRP',
   'NORP',
   'NOIP',
@@ -2369,6 +2404,8 @@ export const EVENT_CODES_WITH_NO_ORDER = [
   'SORI',
   'TCOP',
 ];
+
+export const PRACTITIONER_ONLY_EVENT_CODES = ['M112', 'NOTW'];
 
 export const PETITION_DUPLICATE_ERROR = 'PETITION_DUPLICATE_ERROR';
 

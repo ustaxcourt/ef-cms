@@ -16,6 +16,7 @@ export const setDefaultCaseDetailTabAction = ({
 }: ActionProps) => {
   const { PARTY_VIEW_TABS } = applicationContext.getConstants();
   const frozen = get(state.currentViewMetadata.caseDetail.frozen);
+  const primaryTab = get(state.currentViewMetadata.caseDetail.primaryTab);
 
   // TODO: what is a better name for this; we are not sure what frozen means
   if (!frozen) {
@@ -42,6 +43,13 @@ export const setDefaultCaseDetailTabAction = ({
         state.currentViewMetadata.caseDetail.partyViewTab,
         PARTY_VIEW_TABS[props.partiesTab] ||
           PARTY_VIEW_TABS.petitionersAndCounsel,
+      );
+    }
+  } else {
+    if (!primaryTab) {
+      store.set(
+        state.currentViewMetadata.caseDetail.primaryTab,
+        'docketRecord',
       );
     }
   }

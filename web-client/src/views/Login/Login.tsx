@@ -24,6 +24,8 @@ export const Login = connect(
     alertError: state.alertError,
     alertHelper: state.alertHelper,
     dismissAlertSequence: sequences.dismissAlertSequence,
+    loginHelper: state.loginHelper,
+    idpLoginSequence: sequences.idpLoginSequence,
   },
   ({
     alertInfo,
@@ -36,7 +38,9 @@ export const Login = connect(
     alertError,
     alertHelper,
     dismissAlertSequence,
-  }) => {
+    loginHelper,
+    idpLoginSequence,
+  }): React.JSX.Element => {
     return (
       <>
         <section className="tw:px-0 tw:xs:pb-12 tw:pb-8 tw:pt-0">
@@ -126,11 +130,7 @@ export const Login = connect(
                         </ButtonSmall>
                       </div>
                       <div className="tw:xs:my-4 tw:my-3">
-                        <Button
-                          aria-label="Login"
-                          data-testid="login-button"
-                          variant="primary"
-                        >
+                        <Button data-testid="login-button" variant="primary">
                           Log in
                         </Button>
                       </div>
@@ -162,6 +162,19 @@ export const Login = connect(
                         Create your account now.
                       </Button>
                     </div>
+                    {loginHelper.showIdpLoginButton && (
+                      <div className="tw:flex tw:w-full">
+                        <Button
+                          aria-label="Court user sign in"
+                          variant="primaryTertiary"
+                          data-testid="microsoft-login-button"
+                          className="tw:mr-auto tw:w-auto"
+                          onClick={() => idpLoginSequence()}
+                        >
+                          Court user sign in
+                        </Button>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

@@ -1,8 +1,14 @@
 import {
   DOCKET_SECTION,
   DOCUMENT_RELATIONSHIPS,
+  PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP,
+  ROLES,
 } from '@shared/business/entities/EntityConstants';
-import { Case } from '@shared/business/entities/cases/Case';
+import {
+  canDojPractitionersRepresentPartyForCase,
+  Case,
+  userIsDirectlyAssociated,
+} from '@shared/business/entities/cases/Case';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
@@ -27,6 +33,10 @@ import {
   onTransactionCommit,
   withTransaction,
 } from '@web-api/persistence/postgres/utils/transactions';
+import { canUserFileFirstIrsFiling } from '@shared/business/utilities/canUserFileFirstIrsFiling';
+import { canPractitionerFileEntryOfAppearance } from '@shared/business/utilities/canPractitionerFileEntryOfAppearance';
+import { verifyPendingCaseForUser } from '@web-api/persistence/postgres/cases/pendingCases/verifyPendingCaseForUser';
+import { isFiledByPractitionerName } from '@shared/business/entities/docketEntry/isFiledByPractitionerName';
 
 export const fileExternalDocument = async (
   applicationContext: ServerApplicationContext,
@@ -54,6 +64,38 @@ export const fileExternalDocument = async (
 
   const currentCaseEntity = new Case(currentCase, { authorizedUser });
 
+  let hasPendingAssociation = false;
+  if (user.role === ROLES.privatePractitioner) {
+    hasPendingAssociation = await verifyPendingCaseForUser({
+      docketNumber,
+      userId: user.userId,
+    });
+  }
+
+  const isFilingEntryOfAppearance =
+    canPractitionerFileEntryOfAppearance({
+      user,
+      caseDetail: currentCaseEntity,
+      canDojPractitionersRepresentParty:
+        canDojPractitionersRepresentPartyForCase(currentCaseEntity),
+      hasPendingAssociation,
+    }) &&
+    PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP.some(
+      event => event.eventCode === documentMetadata.eventCode,
+    );
+  if (
+    !userIsDirectlyAssociated({
+      aCase: currentCaseEntity,
+      userId: authorizedUser.userId,
+    }) &&
+    !canUserFileFirstIrsFiling(user, currentCaseEntity) &&
+    !isFilingEntryOfAppearance
+  ) {
+    throw new UnauthorizedError(
+      `User is not associated with case: ${docketNumber}`,
+    );
+  }
+
   const {
     consolidatedCasesToFileAcross,
     secondaryDocument,
@@ -75,6 +117,15 @@ export const fileExternalDocument = async (
       DOCUMENT_RELATIONSHIPS.PRIMARY,
     ],
   ];
+
+  // every document in an M112/NOTW filing carries the filing practitioner's name,
+  // taken from the user record rather than the client-supplied filedBy
+  const practitionerFiledBy = isFiledByPractitionerName({
+    docketEntry: { ...primaryDocumentMetadata, secondaryDocument },
+    user: authorizedUser,
+  })
+    ? user.name
+    : undefined;
 
   if (secondarySupportingDocuments) {
     secondarySupportingDocuments.forEach(item => {
@@ -118,10 +169,17 @@ export const fileExternalDocument = async (
     consolidatedCasesToFileAcross &&
     consolidatedCasesToFileAcross.length > 0
   ) {
-    for (let index = 0; index < consolidatedCasesToFileAcross.length; index++) {
+    const consolidatedCasesToFileAcrossRecomputed =
+      currentCaseEntity.consolidatedCases;
+    for (
+      let index = 0;
+      index < consolidatedCasesToFileAcrossRecomputed.length;
+      index++
+    ) {
       documentMetadataForConsolidatedCases.push({
         ...documentMetadata,
-        docketNumber: consolidatedCasesToFileAcross[index].docketNumber,
+        docketNumber:
+          consolidatedCasesToFileAcrossRecomputed[index].docketNumber,
       });
     }
   } else {
@@ -188,6 +246,9 @@ export const fileExternalDocument = async (
           );
 
           docketEntryEntity.setFiledBy(user);
+          if (practitionerFiledBy) {
+            docketEntryEntity.filedBy = practitionerFiledBy;
+          }
           docketEntryEntity.validate();
 
           const workItem = new WorkItem({

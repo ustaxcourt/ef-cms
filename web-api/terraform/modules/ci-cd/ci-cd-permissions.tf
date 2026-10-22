@@ -81,7 +81,17 @@ resource "aws_iam_policy" "ci_cd_policy" {
         "cognito-idp:SetUserPoolMfaConfig",
         "cognito-idp:UpdateUserPool",
         "cognito-idp:UpdateUserPoolClient",
-        "cognito-idp:ListUsers"
+        "cognito-idp:ListUsers",
+        "cognito-idp:CreateIdentityProvider",
+        "cognito-idp:DeleteIdentityProvider",
+        "cognito-idp:DescribeIdentityProvider",
+        "cognito-idp:ListIdentityProviders",
+        "cognito-idp:UpdateIdentityProvider",
+        "cognito-idp:CreateManagedLoginBranding",
+        "cognito-idp:DeleteManagedLoginBranding",
+        "cognito-idp:DescribeManagedLoginBranding",
+        "cognito-idp:DescribeManagedLoginBrandingByClient",
+        "cognito-idp:UpdateManagedLoginBranding"
       ],
       "Resource": "*"
     },
@@ -156,6 +166,8 @@ resource "aws_iam_policy" "ci_cd_policy" {
         "cloudfront:DeleteDistribution",
         "cloudfront:GetPublicKey",
         "cloudfront:GetOriginAccessControl",
+        "cloudfront:CreateOriginAccessControl",
+        "cloudfront:UpdateOriginAccessControl",
         "cloudfront:GetKeyGroup",
         "cloudfront:DeleteOriginAccessControl",
         "cloudfront:DeleteKeyGroup",
@@ -346,6 +358,8 @@ resource "aws_iam_user_policy_attachment" "ci_cd_route53_policy_attachment" {
 }
 
 resource "aws_iam_policy" "ci_cd_route53_policy" {
+  #checkov:skip=CKV_AWS_290: Route53 actions on Resource:* — hosted zone IDs are environment-specific; accepted as-is, resolved when CI/CD migrates to OIDC (we have a ticket for this)
+  #checkov:skip=CKV_AWS_355: same reason as CKV_AWS_290 — wildcard resource on Route53 policy is known tech debt tracked in a github issue
   name = "circle_ci_route53_policy"
 
   policy = <<EOF
@@ -427,6 +441,8 @@ resource "aws_iam_policy" "ci_cd_iam_policy" {
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/aws-service-role/rum.amazonaws.com/AWSServiceRoleForCloudWatchRUM",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/batch_instance_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/batch_role_*",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/batch_service_role_*",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/batch_job_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/clamav_s3_download_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/dawson_dev",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/efcms_remote_user_*",
@@ -438,6 +454,8 @@ resource "aws_iam_policy" "ci_cd_iam_policy" {
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/log_viewers_auth_role",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/pdf_generator_role_*",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/pre_signup_lambda_role_*",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/inbound_federation_lambda_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/reindex_status_lambda_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/restore_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/rum_unauthenticated_role_*",

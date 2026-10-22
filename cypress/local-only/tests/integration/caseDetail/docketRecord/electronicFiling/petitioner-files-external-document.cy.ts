@@ -38,5 +38,30 @@ describe(
         'Motion for Leave to File Answer (No Objection)',
       );
     });
+    it('should not let petitioner not associated with case file a document on it', () => {
+      loginAsPetitioner();
+      externalUserCreatesElectronicCase().then(docketNumber => {
+        petitionsClerkServesPetition(docketNumber);
+        loginAsPetitioner('petitioner2@example.com');
+        cy.visit(
+          `/case-detail/${docketNumber}/before-you-file-a-document`,
+        ).then(() => {
+          cy.url().should('include', '/404');
+        });
+        cy.visit(`/case-detail/${docketNumber}/file-a-document`).then(() => {
+          cy.url().should('include', '/404');
+        });
+        cy.visit(`/case-detail/${docketNumber}/file-a-document/details`).then(
+          () => {
+            cy.url().should('include', '/404');
+          },
+        );
+        cy.visit(`/case-detail/${docketNumber}/file-a-document/review`).then(
+          () => {
+            cy.url().should('include', '/404');
+          },
+        );
+      });
+    });
   },
 );

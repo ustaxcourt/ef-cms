@@ -10239,7 +10239,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
       dueDate: '2024-07-11',
       jurisdiction: 'retained',
       richText:
-        '<p class="indent-paragraph">On June 28, 2024, a status report was filed in this case (Document no. 5). For cause, it is</p><p class="indent-paragraph">ORDERED that the parties shall file a further status report by July 11, 2024. It is further</p><p class="indent-paragraph">ORDERED that this case is stricken from the trial session. It is further</p><p class="indent-paragraph">ORDERED that jurisdiction is retained by the undersigned. It is further</p><p class="indent-paragraph">ORDERED that Test</p>',
+        '<p class="indent-paragraph">On June 28, 2024, a status report was filed in this case (doc. no. 5). For cause, it is</p><p class="indent-paragraph">ORDERED that the parties shall file a further status report by July 11, 2024. It is further</p><p class="indent-paragraph">ORDERED that this case is stricken from the trial session. It is further</p><p class="indent-paragraph">ORDERED that jurisdiction is retained by the undersigned. It is further</p><p class="indent-paragraph">ORDERED that Test</p>',
       issueOrder: 'allCasesInGroup',
       eventCode: 'O',
       additionalOrderTextArray: ['Test'],
@@ -10314,7 +10314,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
       dueDate: '2024-07-11',
       jurisdiction: 'retained',
       richText:
-        '<p class="indent-paragraph">On June 28, 2024, a status report was filed in this case (Document no. 5). For cause, it is</p><p class="indent-paragraph">ORDERED that the parties shall file a further status report by July 11, 2024. It is further</p><p class="indent-paragraph">ORDERED that this case is stricken from the trial session. It is further</p><p class="indent-paragraph">ORDERED that jurisdiction is retained by the undersigned. It is further</p><p class="indent-paragraph">ORDERED that Test</p>',
+        '<p class="indent-paragraph">On June 28, 2024, a status report was filed in this case (doc. no. 5). For cause, it is</p><p class="indent-paragraph">ORDERED that the parties shall file a further status report by July 11, 2024. It is further</p><p class="indent-paragraph">ORDERED that this case is stricken from the trial session. It is further</p><p class="indent-paragraph">ORDERED that jurisdiction is retained by the undersigned. It is further</p><p class="indent-paragraph">ORDERED that Test</p>',
       issueOrder: 'allCasesInGroup',
       eventCode: 'O',
       additionalOrderTextArray: ['Test'],

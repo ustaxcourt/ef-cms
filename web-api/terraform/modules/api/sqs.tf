@@ -1,4 +1,5 @@
 resource "aws_sqs_queue" "calendar_trial_session_queue" {
+  #checkov:skip=CKV_AWS_27:AWS-managed SSE encryption is sufficient — only 3 court employees have prod access; CMK would add key management overhead without meaningful security benefit
   name                       = "calendar_trial_session_queue_${var.environment}_${var.current_color}"
   visibility_timeout_seconds = "30"
 
@@ -9,11 +10,13 @@ resource "aws_sqs_queue" "calendar_trial_session_queue" {
 }
 
 resource "aws_sqs_queue" "calendar_trial_session_dl_queue" {
+  #checkov:skip=CKV_AWS_27:AWS-managed SSE encryption is sufficient — only 3 court employees have prod access; CMK would add key management overhead without meaningful security benefit
   name = "calendar_trial_session_dl_queue${var.environment}_${var.current_color}"
 }
 
 
 resource "aws_sqs_queue" "send_emails_queue" {
+  #checkov:skip=CKV_AWS_27:AWS-managed SSE encryption is sufficient — only 3 court employees have prod access; CMK would add key management overhead without meaningful security benefit
   name                        = "send_emails_queue_${var.environment}_${var.current_color}.fifo"
   fifo_queue                  = true
   content_based_deduplication = true
@@ -26,6 +29,7 @@ resource "aws_sqs_queue" "send_emails_queue" {
 }
 
 resource "aws_sqs_queue" "send_emails_dl_queue" {
+  #checkov:skip=CKV_AWS_27:AWS-managed SSE encryption is sufficient — only 3 court employees have prod access; CMK would add key management overhead without meaningful security benefit
   name       = "send_emails_dl_queue_${var.environment}_${var.current_color}.fifo"
   fifo_queue = true
 }

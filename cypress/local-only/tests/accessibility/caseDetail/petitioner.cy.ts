@@ -15,7 +15,7 @@ describe('Case Detail Page - Petitioner Accessibility', () => {
   });
 
   it('should be free of a11y issues when editing contact details', () => {
-    loginAsPetitioner();
+    loginAsPetitioner('petitioner@example.com');
     cy.visit(
       '/case-detail/108-19/contacts/7805d1ab-18d0-43ec-bafb-654e83405416/edit',
     );

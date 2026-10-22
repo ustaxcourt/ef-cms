@@ -102,6 +102,37 @@ describe('removeCasePendingItemInteractor', () => {
     });
   });
 
+  it('should clear a stale automatic block when the last pending item is removed from a case already set for trial', async () => {
+    getCaseDeadlinesByDocketNumber.mockReturnValue([]);
+    getCaseByDocketNumber.mockReturnValue(
+      Promise.resolve({
+        ...MOCK_CASE,
+        automaticBlocked: true,
+        automaticBlockedDate: '2019-03-01T21:42:29.073Z',
+        automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pending,
+        trialDate: '2025-03-01T00:00:00.000Z',
+        trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      }),
+    );
+
+    await removeCasePendingItemInteractor(
+      applicationContext,
+      {
+        docketEntryId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859', // docketEntries[3] from MOCK_CASE
+        docketNumber: MOCK_CASE.docketNumber,
+      },
+      mockPetitionsClerkUser,
+    );
+
+    expect(
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate,
+    ).toMatchObject({
+      automaticBlocked: false,
+      automaticBlockedDate: undefined,
+      automaticBlockedReason: undefined,
+    });
+  });
+
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
     tryGetLocks.mockResolvedValueOnce([
       { successfullyLocked: false, identifier: 'abc' },

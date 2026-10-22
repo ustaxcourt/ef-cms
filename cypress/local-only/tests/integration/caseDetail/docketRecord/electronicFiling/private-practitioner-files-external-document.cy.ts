@@ -47,5 +47,30 @@ describe('Private practitioner files document on case they are already associate
         cy.get('[data-testid="success-alert"]').should('be.visible');
       });
     });
+    it('should not let private practitioner not associated with case file a document on it', () => {
+      loginAsPetitioner();
+      externalUserCreatesElectronicCase().then(docketNumber => {
+        petitionsClerkServesPetition(docketNumber);
+        loginAsPrivatePractitioner();
+        cy.visit(
+          `/case-detail/${docketNumber}/before-you-file-a-document`,
+        ).then(() => {
+          cy.url().should('include', '/404');
+        });
+        cy.visit(`/case-detail/${docketNumber}/file-a-document`).then(() => {
+          cy.url().should('include', '/404');
+        });
+        cy.visit(`/case-detail/${docketNumber}/file-a-document/details`).then(
+          () => {
+            cy.url().should('include', '/404');
+          },
+        );
+        cy.visit(`/case-detail/${docketNumber}/file-a-document/review`).then(
+          () => {
+            cy.url().should('include', '/404');
+          },
+        );
+      });
+    });
   });
 });

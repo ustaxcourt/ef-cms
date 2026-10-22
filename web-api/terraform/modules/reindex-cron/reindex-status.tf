@@ -21,6 +21,9 @@ EOF
 }
 
 resource "aws_iam_role_policy" "reindex_status_policy" {
+  #checkov:skip=CKV_AWS_289: es:* includes permissions-management-equivalent index admin actions (CreateIndex, DeleteIndex) required for reindex — no finer-grained action set covers the full reindex workflow
+  #checkov:skip=CKV_AWS_290: es:* on Resource:* — OpenSearch domain ARNs contain environment-specific IDs; overly broad but consistent with module isolation pattern
+  #checkov:skip=CKV_AWS_355: same reason as CKV_AWS_290 — wildcard resource on reindex role
   name = "reindex_status_policy_${var.environment}"
   role = aws_iam_role.reindex_status_role.id
 

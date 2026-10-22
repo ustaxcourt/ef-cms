@@ -68,10 +68,13 @@ describe('file motion response order', () => {
     });
   };
 
-  const openOrderResponseFromDocumentView = (docketNumber: string): void => {
-    cy.visit(`/case-detail/${docketNumber}`);
-    cy.get('#tab-document-view').click();
-    cy.contains(motionType).click();
+  const openOrderResponseFromDocumentView = ({
+    docketNumber,
+    motionDocketEntryId,
+  }: MotionCaseFixture): void => {
+    cy.visit(
+      `/case-detail/${docketNumber}/document-view?docketEntryId=${motionDocketEntryId}`,
+    );
     cy.get('[data-testid="order-response-button"]').click();
   };
 
@@ -157,52 +160,55 @@ describe('file motion response order', () => {
     cy.get('[data-testid="order-response-button"]').click();
   };
 
-  it('should allow a judge to create a simple motion response order from document view on a fresh case', () => {
-    const expectedContents = [
-      formattedToday,
-      `petitioner filed a ${motionType}`,
-    ];
+  describe('from document view', () => {
+    // One shared case: creating a served petition per test times out in CI.
+    let motionCase: MotionCaseFixture;
 
-    createMotionCaseForJudge().then(fixture => {
-      openOrderResponseFromDocumentView(fixture.docketNumber);
+    before(() => {
+      createMotionCaseForJudge().then(fixture => {
+        motionCase = fixture;
+      });
+    });
+
+    beforeEach(() => {
+      openOrderResponseFromDocumentView(motionCase);
+    });
+
+    it('should allow a judge to create a simple motion response order', () => {
+      const expectedContents = [
+        formattedToday,
+        `petitioner filed a ${motionType}`,
+      ];
+
       enterResponseDate(today);
       saveDraftAndAssertContents(expectedContents);
       cy.contains('Apply Signature').should('exist');
       cy.get('[data-testid="skip-signature-button"]').click();
-      cy.url().should('contain', `/case-detail/${fixture.docketNumber}`);
+      cy.url().should('contain', `/case-detail/${motionCase.docketNumber}`);
     });
-  });
 
-  it('should allow a judge to save a signed draft motion response order from document view on a fresh case', () => {
-    createMotionCaseForJudge().then(fixture => {
-      openOrderResponseFromDocumentView(fixture.docketNumber);
+    it('should allow a judge to save a signed draft motion response order', () => {
       enterResponseDate(today);
       saveDraftAndAssertContents([`On ${formattedToday}`]);
       cy.contains('Apply Signature').should('exist');
       signDraftOrder();
-      cy.url().should('contain', `/case-detail/${fixture.docketNumber}`);
+      cy.url().should('contain', `/case-detail/${motionCase.docketNumber}`);
     });
-  });
 
-  it('should allow a judge to save an unsigned draft motion response order from document view on a fresh case', () => {
-    createMotionCaseForJudge().then(fixture => {
-      openOrderResponseFromDocumentView(fixture.docketNumber);
+    it('should allow a judge to save an unsigned draft motion response order', () => {
       enterResponseDate(today);
       saveDraftAndAssertContents([`On ${formattedToday}`]);
       cy.contains('Apply Signature').should('exist');
       cy.contains('Skip Signature').click();
-      cy.url().should('contain', `/case-detail/${fixture.docketNumber}`);
+      cy.url().should('contain', `/case-detail/${motionCase.docketNumber}`);
     });
-  });
 
-  it('should allow a judge to preview and cancel a motion response order from document view on a fresh case', () => {
-    const unexpectedContents = [
-      'ORDERED that by Invalid DateTime, respondent shall file a Response',
-      'ORDERED that by Invalid DateTime, petitioner may file a Reply',
-    ];
+    it('should allow a judge to preview and cancel a motion response order', () => {
+      const unexpectedContents = [
+        'ORDERED that by Invalid DateTime, respondent shall file a Response',
+        'ORDERED that by Invalid DateTime, petitioner may file a Reply',
+      ];
 
-    createMotionCaseForJudge().then(fixture => {
-      openOrderResponseFromDocumentView(fixture.docketNumber);
       enterResponseDate(today);
       cy.get('[data-testid="preview-pdf-button"]').click();
 
@@ -215,7 +221,7 @@ describe('file motion response order', () => {
         });
       });
 
-      openOrderResponseFromDocumentView(fixture.docketNumber);
+      openOrderResponseFromDocumentView(motionCase);
       enterResponseDate('randomstring');
       cy.get('#motion-order-reply').check({ force: true });
       cy.get('#due-date-input-motionOrderResponseDueDate-picker').type(
@@ -224,7 +230,7 @@ describe('file motion response order', () => {
       enterAdditionalOrderText(0, 'Test additional text box');
       previewOrderAndAssertContentsAreMissing(unexpectedContents);
 
-      openOrderResponseFromDocumentView(fixture.docketNumber);
+      openOrderResponseFromDocumentView(motionCase);
       enterResponseDate(today);
       cy.get('[data-testid="preview-pdf-button"]').click();
       cy.get('#motion-order-reply').check({ force: true });
@@ -232,30 +238,24 @@ describe('file motion response order', () => {
       enterAdditionalOrderText(0, 'Test additional text box');
       cy.get('[data-testid="preview-pdf-button"]').click();
       cy.get('[data-testid="cancel-button"]').click();
-      cy.url().should('contain', `/case-detail/${fixture.docketNumber}`);
+      cy.url().should('contain', `/case-detail/${motionCase.docketNumber}`);
     });
-  });
 
-  it('should allow a judge to save a customized motion response order with all options selected on a fresh case', () => {
-    const allOptionsExpectedContents = [
-      'respondent shall file a Response to the Motion for a New Trial',
-      `by ${formattedToday}, petitioner may file a Reply. It is further`,
-      'Test additional text box',
-    ];
+    it('should allow a judge to save a customized motion response order with all options selected', () => {
+      const allOptionsExpectedContents = [
+        'respondent shall file a Response to the Motion for a New Trial',
+        `by ${formattedToday}, petitioner may file a Reply. It is further`,
+        'Test additional text box',
+      ];
 
-    createMotionCaseForJudge().then(fixture => {
-      openOrderResponseFromDocumentView(fixture.docketNumber);
       enterResponseDate(today);
       cy.get('#motion-order-reply').check({ force: true });
       cy.get('#due-date-input-motionOrderResponseDueDate-picker').type(today);
       enterAdditionalOrderText(0, 'Test additional text box');
       saveDraftAndAssertContents(allOptionsExpectedContents);
     });
-  });
 
-  it('shows a validation error when response date is invalid and user saves draft', () => {
-    createMotionCaseForJudge().then(fixture => {
-      openOrderResponseFromDocumentView(fixture.docketNumber);
+    it('shows a validation error when response date is invalid and user saves draft', () => {
       enterResponseDate('invalid date');
       cy.get('[data-testid="save-draft-button"]').click();
 
@@ -267,11 +267,8 @@ describe('file motion response order', () => {
         '#response-date-input-orderResponseResponseDate-form-group',
       ).should('contain.text', 'Enter a valid date');
     });
-  });
 
-  it('lets a judge remove optional additional order text rows', () => {
-    createMotionCaseForJudge().then(fixture => {
-      openOrderResponseFromDocumentView(fixture.docketNumber);
+    it('lets a judge remove optional additional order text rows', () => {
       enterResponseDate(today);
       assertAdditionalOrderTextAreaCount(1);
 
@@ -287,11 +284,8 @@ describe('file motion response order', () => {
         .find('#additional-order-text-array-1')
         .should('not.exist');
     });
-  });
 
-  it('lets a judge clear all selected and added data', () => {
-    createMotionCaseForJudge().then(fixture => {
-      openOrderResponseFromDocumentView(fixture.docketNumber);
+    it('lets a judge clear all selected and added data', () => {
       enterResponseDate(today);
       cy.get('#motion-order-reply').check({ force: true });
       cy.get('#due-date-input-motionOrderResponseDueDate-picker').type(today);
@@ -315,18 +309,12 @@ describe('file motion response order', () => {
         .find('#additional-order-text-array-0')
         .should('have.value', '');
     });
-  });
 
-  it('opens the order response form with the expected title from document preview', () => {
-    createMotionCaseForJudge().then(fixture => {
-      openOrderResponseFromDocumentView(fixture.docketNumber);
+    it('opens the order response form with the expected title from document preview', () => {
       cy.get('#page-title').should('contain.text', 'Order Response to Motion');
     });
-  });
 
-  it('always shows the first additional order text field and drops optional rows that are only whitespace after preview', () => {
-    createMotionCaseForJudge().then(fixture => {
-      openOrderResponseFromDocumentView(fixture.docketNumber);
+    it('always shows the first additional order text field and drops optional rows that are only whitespace after preview', () => {
       enterResponseDate(today);
       assertAdditionalOrderTextAreaCount(1);
       cy.contains('button', 'Add additional order text').click();
@@ -346,11 +334,8 @@ describe('file motion response order', () => {
         .find('#additional-order-text-array-0')
         .should('have.value', '');
     });
-  });
 
-  it('keeps optional additional order text rows with substantive content after preview', () => {
-    createMotionCaseForJudge().then(fixture => {
-      openOrderResponseFromDocumentView(fixture.docketNumber);
+    it('keeps optional additional order text rows with substantive content after preview', () => {
       enterResponseDate(today);
       cy.contains('button', 'Add additional order text').click();
       enterAdditionalOrderText(1, 'Second clause for Cypress.');
@@ -362,11 +347,8 @@ describe('file motion response order', () => {
         .find('#additional-order-text-array-0')
         .should('have.value', 'Second clause for Cypress.');
     });
-  });
 
-  it('should save a motion response order with multiple additional order text clauses', () => {
-    createMotionCaseForJudge().then(fixture => {
-      openOrderResponseFromDocumentView(fixture.docketNumber);
+    it('should save a motion response order with multiple additional order text clauses', () => {
       enterResponseDate(today);
       enterAdditionalOrderText(0, 'First added clause');
       cy.contains('button', 'Add additional order text').click();
@@ -393,16 +375,19 @@ describe('file motion response order', () => {
       createAndServePaperFiling({
         dateReceived: today,
         documentType: motionType,
+      }).then(({ docketEntryId }) => {
+        loginAsColvin();
+        openOrderResponseFromDocumentView({
+          docketNumber: leadDocketNumber,
+          motionDocketEntryId: docketEntryId,
+        });
+        enterResponseDate(today);
+
+        cy.get(`input[type="radio"][value="${allCasesLabel}"]`).should(
+          'be.checked',
+        );
+        saveDraftAndAssertContents(expectedContents);
       });
-
-      loginAsColvin();
-      openOrderResponseFromDocumentView(leadDocketNumber);
-      enterResponseDate(today);
-
-      cy.get(`input[type="radio"][value="${allCasesLabel}"]`).should(
-        'be.checked',
-      );
-      saveDraftAndAssertContents(expectedContents);
     });
   });
 
@@ -429,19 +414,23 @@ describe('file motion response order', () => {
         createAndServePaperFiling({
           dateReceived: today,
           documentType: motionType,
-        });
-        cy.get('[data-testid="tab-case-information"]').click();
-        cy.get('[data-testid="add-to-trial-session-btn"]').click();
-        cy.get('#show-all-locations-true').click({ force: true });
-        cy.get('[data-testid="trial-session-select"]').select(trialSessionId);
-        cy.contains('Add Case').click();
+        }).then(({ docketEntryId }) => {
+          cy.get('[data-testid="tab-case-information"]').click();
+          cy.get('[data-testid="add-to-trial-session-btn"]').click();
+          cy.get('#show-all-locations-true').click({ force: true });
+          cy.get('[data-testid="trial-session-select"]').select(trialSessionId);
+          cy.contains('Add Case').click();
 
-        loginAsColvin();
-        openOrderResponseFromDocumentView(docketNumber);
-        enterResponseDate(today);
-        cy.get('#case-is-stricken-from-trial-session').check({ force: true });
-        cy.get('#case-is-stricken-from-trial-session').should('be.checked');
-        saveDraftAndAssertContents(expectedContents);
+          loginAsColvin();
+          openOrderResponseFromDocumentView({
+            docketNumber,
+            motionDocketEntryId: docketEntryId,
+          });
+          enterResponseDate(today);
+          cy.get('#case-is-stricken-from-trial-session').check({ force: true });
+          cy.get('#case-is-stricken-from-trial-session').should('be.checked');
+          saveDraftAndAssertContents(expectedContents);
+        });
       });
     });
   });
