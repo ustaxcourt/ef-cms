@@ -29,7 +29,7 @@ Last verified against `staging` on 2026-10-16. Re-check this table whenever a
 | Gitleaks baseline | `security-secrets.yml` / `gitleaks-baseline` | Push to staging | Secrets | Security tab: `gitleaks-baseline` | No |
 | OWASP ZAP API | `security-dast.yml` / `dast-api` | PR | API issues, per user role | Run artifacts only (14–30 days); not the Security tab until #10496 | No |
 | OWASP ZAP web | `security-dast.yml` / `dast-web` | Weekly, manual | Web app issues | Run artifact `zap-web-reports` (30 days); not the Security tab until #10496 | No |
-| Findings vs staging | `security-compare.yml` / `compare` | PR | Trivy filesystem count, HIGH, CRITICAL, UNKNOWN | Job summary | Yes, if the PR has more findings than staging |
+| Findings vs staging | `security-compare.yml` / `compare` | PR | Trivy filesystem count, HIGH, CRITICAL, UNKNOWN | Job summary | No. The check fails if the PR has more findings than staging, but it is not a required check. |
 
 Things to know when reading this table:
 
@@ -129,6 +129,6 @@ they are corrected, which needs its own ticket, trust this table. Each entry was
 | `supply-chain-scanning.md`, and the npm audit comment in `security-supply-chain.yml` | `shell-quote@1.8.3` and `form-data@4.0.5` are open findings | Both are fixed: `shell-quote` is overridden to 1.11.0 and `form-data` is 4.0.6. The `continue-on-error` that was to be removed once they were fixed is still set. |
 | `secrets-scanning.md`, PR gate | For a real secret: rotate, remove it from the branch, force-push | The order is right, but a force-push does not remove the commit from GitHub. Follow [Secrets](playbook.md#secrets). |
 | `sast-scanning.md`, Checkov | Add an accepted risk to the directory's `.checkov.baseline` | The usual mechanism is an inline `#checkov:skip` comment (about 180 today); the baseline is for findings that predate the scan. |
-| `docs/security/` as a whole | — | `security-compare.yml` ("Findings vs staging", which can fail a PR) is not documented anywhere except the [Scanner inventory](#scanner-inventory). |
+| `docs/security/` as a whole | — | `security-compare.yml` ("Findings vs staging", a check that fails when a PR adds Trivy findings) is not documented anywhere except the [Scanner inventory](#scanner-inventory). |
 
 When one of these docs is corrected, remove its row here.

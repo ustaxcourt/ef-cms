@@ -134,7 +134,8 @@ severity, not on the scanner's. Work it out in three steps.
 | Checkov | Checkov does not report a severity. Checks in `--hard-fail-on` are High; every other check is Medium. |
 | Gitleaks | Critical, until the finding is confirmed to be a false positive |
 | OWASP ZAP | High, Medium and Low map directly. Informational alerts are not tracked. |
-| ShellCheck, lockfile lint | Not tracked. They block the PR that introduces them and are fixed there. |
+| ShellCheck | Not tracked. It blocks the PR that introduces an error, through the required `Security Gate (SAST)` check, and the error is fixed there. |
+| Lockfile lint | Not tracked, and it does not block: the step is `continue-on-error: true` and is not part of a required check. It fails when a package in `package-lock.json` is not from the npm registry, not over HTTPS, or has no integrity hash. That can mean a dependency is coming from somewhere unexpected, so the PR author fixes a failure before merging, and a reviewer who sees the failed step asks why. |
 
 Treat findings that share a CVE and a cause as one finding. For example, one CVE reported against
 both `zlib1g` and `zlib1g-dev`, or against the same base image under several categories, is a
