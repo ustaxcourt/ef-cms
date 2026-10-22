@@ -3,7 +3,7 @@ import { applicationContextForClient as applicationContext } from '@web-client/t
 import { presenter } from '../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { validatePetitionerAction } from './validatePetitionerAction';
-import { checkEmailExistsInteractor } from '@web-client/proxies/users/checkEmailExistsProxy';
+import { checkEmailIsPractitionerInteractor } from '@web-client/proxies/users/checkEmailIsPractitionerProxy';
 
 describe('validatePetitionerAction', () => {
   let successStub;
@@ -20,7 +20,7 @@ describe('validatePetitionerAction', () => {
       success: successStub,
     };
     presenter.providers.applicationContext = applicationContext;
-    (checkEmailExistsInteractor as jest.Mock).mockResolvedValue(false);
+    (checkEmailIsPractitionerInteractor as jest.Mock).mockResolvedValue(false);
   });
 
   it('runs validation on the contact with a successful result', async () => {
@@ -118,7 +118,7 @@ describe('validatePetitionerAction', () => {
     applicationContext
       .getUseCases()
       .validatePetitionerInteractor.mockReturnValue(null);
-    (checkEmailExistsInteractor as jest.Mock).mockResolvedValue(true);
+    (checkEmailIsPractitionerInteractor as jest.Mock).mockResolvedValue(true);
 
     await runAction(validatePetitionerAction, {
       modules: {

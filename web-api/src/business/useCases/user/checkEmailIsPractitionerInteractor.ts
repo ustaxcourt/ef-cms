@@ -4,9 +4,9 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { checkEmailExists } from '@web-api/persistence/postgres/users/checkEmailExists';
+import { checkEmailIsPractitioner } from '@web-api/persistence/postgres/users/checkEmailIsPractitioner';
 
-export const checkEmailExistsInteractor = async (
+export const checkEmailIsPetitionerInteractor = async (
   { email }: { email: string },
   authorizedUser: UnknownAuthUser,
 ): Promise<boolean> => {
@@ -14,7 +14,7 @@ export const checkEmailExistsInteractor = async (
     throw new UnauthorizedError('Unauthorized to get user emails');
   }
 
-  const matchingEmails = await checkEmailExists({ email });
+  const matchingEmails = await checkEmailIsPractitioner({ email });
 
   return matchingEmails > 0;
 };

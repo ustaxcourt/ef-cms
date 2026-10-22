@@ -42,7 +42,7 @@ import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web
 import { invalidateUserContactGeocode as invalidateUserContactGeocodeMock } from '@web-api/persistence/postgres/userContacts/invalidateUserContactGeocode';
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
-import { checkEmailExists as checkEmailExistsMock } from '@web-api/persistence/postgres/users/checkEmailExists';
+import { checkEmailIsPractitioner as checkEmailExistsMock } from '@web-api/persistence/postgres/users/checkEmailIsPractitioner';
 import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 import { MOCK_PRACTITIONER } from '@shared/test/mockUsers';
 

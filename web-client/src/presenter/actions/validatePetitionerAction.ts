@@ -1,6 +1,6 @@
 import { isEmpty } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
-import { checkEmailExistsInteractor } from '@web-client/proxies/users/checkEmailExistsProxy';
+import { checkEmailIsPractitionerInteractor } from '@web-client/proxies/users/checkEmailIsPractitionerProxy';
 
 const MATCHING_PETITIONER_ERROR =
   'This email is already associated with another petitioner on this case. Please use a different email address.';
@@ -65,7 +65,7 @@ export const validatePetitionerAction = async ({
     }: { lastEmailCheck?: { email: string; value: boolean } } = get(state.form);
 
     if (!lastEmailCheck || lastEmailCheck.email !== confirmEmail) {
-      const isPractitionerEmail = await checkEmailExistsInteractor(
+      const isPractitionerEmail = await checkEmailIsPractitionerInteractor(
         applicationContext,
         {
           email: confirmEmail,

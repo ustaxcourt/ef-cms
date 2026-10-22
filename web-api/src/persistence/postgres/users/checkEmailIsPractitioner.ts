@@ -1,6 +1,6 @@
 import { getDbReader } from '@web-api/persistence/postgres/database';
 
-export const checkEmailExists = async ({
+export const checkEmailIsPractitioner = async ({
   email,
 }: {
   email: string;

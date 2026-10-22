@@ -20,7 +20,7 @@ import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { invalidateUserContactGeocode } from '@web-api/persistence/postgres/userContacts/invalidateUserContactGeocode';
 import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 import { canUserUpdatePetitionerContact } from '@shared/business/utilities/canUserUpdatePetitionerContact';
-import { checkEmailExists } from '@web-api/persistence/postgres/users/checkEmailExists';
+import { checkEmailIsPractitioner } from '@web-api/persistence/postgres/users/checkEmailIsPractitioner';
 
 const assertEmailAvailableForPetitioner = async ({
   applicationContext,
@@ -68,7 +68,7 @@ const assertEmailAvailableForPetitioner = async ({
       );
     }
 
-    const practitoinerMatchesUpdated = await checkEmailExists({
+    const practitoinerMatchesUpdated = await checkEmailIsPractitioner({
       email: updatedEmail,
     });
 

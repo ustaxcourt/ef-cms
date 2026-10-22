@@ -1,7 +1,7 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { post } from '../requests';
 
-export const checkEmailExistsInteractor = (
+export const checkEmailIsPractitionerInteractor = (
   applicationContext: ClientApplicationContext,
   { email }: { email: string },
 ): Promise<boolean> => {
