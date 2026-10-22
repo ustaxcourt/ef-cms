@@ -361,6 +361,16 @@ describe('Clerk of Court Dashboard', () => {
       cy.get(
         '[data-testid="open-cases-section"] #cases-calendar-year-to-date',
       ).should('not.exist');
+      // the open cases by type HTML view sits under the closed pie and above the monthly chart
+      cy.get(
+        '[data-testid="cases-closed-header"], [data-testid$="-html-view-div"], [data-testid$="-bar-graph-div"]',
+      ).then($sections => {
+        expect($sections.toArray().map(el => el.dataset.testid)).to.deep.equal([
+          'cases-closed-header',
+          `${openByTypeTitle}-html-view-div`,
+          `${closedTitle}-bar-graph-div`,
+        ]);
+      });
 
       cy.get('[data-testid="open-cases-header"]').should(
         'have.text',

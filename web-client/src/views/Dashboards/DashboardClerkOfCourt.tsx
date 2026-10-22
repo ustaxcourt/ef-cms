@@ -107,7 +107,7 @@ const ALL_OPEN_CASES_BY_TYPE_HTML_TITLE = 'All Open Cases by Type';
 
 const PETITIONS_BY_MONTH_TITLE = 'Petitions: Total Petitions by Month';
 
-// columns, so the open cases pie and its by-type HTML view sit side by side on wide screens
+// pie chart columns, wide enough for the legend and the HTML view button
 const PIE_COLUMN_CLASS = 'tw:w-162 tw:max-w-full';
 
 const casesData = ({
@@ -162,16 +162,8 @@ const casesData = ({
               tooltipTitle={ALL_OPEN_CASES_TITLE}
             />
           </div>
-          <div className={PIE_COLUMN_CLASS}>
-            <ClerkOfCourtHtmlView
-              htmlTitle={ALL_OPEN_CASES_BY_TYPE_HTML_TITLE}
-              labelHeader="Type of Case"
-              rows={openCasesByTypeTableRows}
-              title={ALL_OPEN_CASES_BY_TYPE_TITLE}
-            />
-          </div>
         </div>
-        {/* the year toggle applies only to the case status changes below it */}
+        {/* the year toggle applies only to the case status change charts below it */}
         <div
           className="tw:xs:mt-12 tw:mt-8"
           data-testid="cases-status-changes-section"
@@ -196,6 +188,15 @@ const casesData = ({
               title={`Cases Changed to Closed/Closed - Dismissed in ${casesYearLabel}`}
               showTitle={false}
               tooltipTitle="Cases Changed"
+            />
+          </div>
+          {/* open cases by type has no chart, only an HTML view of all open cases */}
+          <div className="tw:xs:mt-12 tw:mt-8">
+            <ClerkOfCourtHtmlView
+              htmlTitle={ALL_OPEN_CASES_BY_TYPE_HTML_TITLE}
+              labelHeader="Type of Case"
+              rows={openCasesByTypeTableRows}
+              title={ALL_OPEN_CASES_BY_TYPE_TITLE}
             />
           </div>
           <div className="tw:xs:mt-12 tw:mt-8">
