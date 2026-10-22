@@ -95,6 +95,11 @@ jobs:
             exit "$status"
           }
 
+      - name: Show Semgrep findings
+        if: always()
+        run: |
+          grep -nE 'ruleId|message|artifactLocation' semgrep-results.sarif || true
+
       - name: Upload SARIF
         if: always()
         uses: ./.github/actions/dawson-upload-sarif
