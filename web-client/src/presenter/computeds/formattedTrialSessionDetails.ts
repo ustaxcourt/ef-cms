@@ -118,11 +118,11 @@ export const formattedTrialSessionDetails = (
     }
 
     if (user.role === USER_ROLES.docketClerk && editPermissions === 'all') {
-      editPermissions = docketClerkCanEditCheck(
-        formattedTrialSession.sessionType,
-      )
-        ? 'all'
-        : 'none';
+      editPermissions =
+        docketClerkCanEditCheck(formattedTrialSession.sessionType) ||
+        formattedTrialSession.isReportingSession
+          ? 'all'
+          : 'none';
     }
 
     if (user.role === USER_ROLES.caseServicesSupervisor && !trialDateInFuture) {

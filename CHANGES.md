@@ -1,3 +1,19 @@
+<details><summary>#10444 — Reporting trial sessions feature flag</summary>
+
+Reporting session creation is disabled when the `reporting-calendars` flag is absent or false. After deployment, an operator can enable it in the intended environment with:
+
+```sql
+INSERT INTO dw_feature_flag (name, value)
+VALUES ('reporting-calendars', '{"current":true}'::jsonb)
+ON CONFLICT (name) DO UPDATE SET value = EXCLUDED.value;
+```
+
+Existing Reporting sessions remain viewable and editable if the flag is disabled. Ordinary trial calendars cannot be set for Reporting sessions; reporting calendaring will be delivered by #10217. No schema migration is required.
+
+The API caches the feature-flag list per runner. Set the flag before starting the new deployment's runners, or recycle existing runners after changing it. Restart the local API when changing this flag locally, then sign in again to refresh client state.
+
+</details>
+
 <details><summary>Dependency Updates - Week of 2026-10-12</summary>
 
 ## Manual Deployment Steps

@@ -1,4 +1,5 @@
 import '@web-api/persistence/postgres/trialSessions/mocks.jest';
+import '@web-api/persistence/postgres/utils/mocks.jest';
 import { MOCK_TRIAL_REGULAR } from '@shared/test/mockTrial';
 import {
   SESSION_TYPES,
@@ -14,6 +15,62 @@ import { getTrialSessionById as getTrialSessionByIdMock } from '@web-api/persist
 import { updateTrialSession as updateTrialSessionMock } from '@web-api/persistence/postgres/trialSessions/updateTrialSession';
 
 describe('associateSwingTrialSessions', () => {
+  it('rejects a missing swing partner before writing', async () => {
+    jest.mocked(getTrialSessionByIdMock).mockResolvedValue(undefined);
+    await expect(
+      associateSwingTrialSessions(
+        {
+          swingSessionId: MOCK_TRIAL_REGULAR.trialSessionId,
+          trialSessionEntity: new TrialSession(MOCK_TRIAL_REGULAR),
+        },
+        mockPetitionsClerkUser,
+      ),
+    ).rejects.toThrow(
+      `Trial session ${MOCK_TRIAL_REGULAR.trialSessionId} was not found.`,
+    );
+    expect(updateTrialSessionMock).not.toHaveBeenCalled();
+  });
+
+  it('validates the current session before updating its swing partner', async () => {
+    await expect(
+      associateSwingTrialSessions(
+        {
+          swingSessionId: MOCK_TRIAL_REGULAR.trialSessionId,
+          trialSessionEntity: new TrialSession({
+            ...MOCK_TRIAL_REGULAR,
+            maxCases: -1,
+          }),
+        },
+        mockPetitionsClerkUser,
+      ),
+    ).rejects.toThrow();
+    expect(updateTrialSessionMock).not.toHaveBeenCalled();
+  });
+  it.each([true, false])(
+    'rejects a Reporting session on either side of a swing association (%s)',
+    async reportingSource => {
+      const source = new TrialSession({
+        ...MOCK_TRIAL_REGULAR,
+        proceedingType: reportingSource ? 'Reporting' : 'In Person',
+      });
+      jest.mocked(getTrialSessionByIdMock).mockResolvedValue({
+        ...MOCK_TRIAL_REGULAR,
+        proceedingType: reportingSource ? 'In Person' : 'Reporting',
+      });
+      await expect(
+        associateSwingTrialSessions(
+          {
+            swingSessionId: MOCK_TRIAL_REGULAR.trialSessionId,
+            trialSessionEntity: source,
+          },
+          mockPetitionsClerkUser,
+        ),
+      ).rejects.toThrow(
+        'Reporting sessions cannot be linked as swing sessions.',
+      );
+      expect(updateTrialSessionMock).not.toHaveBeenCalled();
+    },
+  );
   let mockCurrentTrialSessionEntity;
 
   const getTrialSessionById = jest.mocked(getTrialSessionByIdMock);

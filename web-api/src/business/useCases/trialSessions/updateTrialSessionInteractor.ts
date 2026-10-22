@@ -35,7 +35,12 @@ import {
   formatNow,
   FORMATS,
 } from '@shared/business/utilities/DateHandler';
-import { ROLES } from '@shared/business/entities/EntityConstants';
+import {
+  ALLOWLIST_FEATURE_FLAGS,
+  ROLES,
+  TRIAL_SESSION_PROCEEDING_TYPES,
+} from '@shared/business/entities/EntityConstants';
+import { getFeatureFlagValue } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValue';
 import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 import { Case } from '@shared/business/entities/cases/Case';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
@@ -182,6 +187,26 @@ export const updateTrialSession = async (
     ...editableFields,
   });
 
+  updatedTrialSessionEntity.validate();
+  if (
+    updatedTrialSessionEntity.isReporting() &&
+    !new TrialSession(currentTrialSession).isReporting() &&
+    currentTrialSession.isCalendared
+  ) {
+    throw new Error(
+      'A session with a trial calendar cannot be changed to Reporting.',
+    );
+  }
+  if (
+    updatedTrialSessionEntity.isReporting() &&
+    !new TrialSession(currentTrialSession).isReporting() &&
+    !(await getFeatureFlagValue<boolean>(
+      ALLOWLIST_FEATURE_FLAGS.REPORTING_CALENDARS.key,
+    ))
+  ) {
+    throw new Error('Reporting calendars are not enabled.');
+  }
+
   let hasPaper: boolean | undefined;
   let pdfUrl: string | undefined;
   let fileId: string | undefined;
@@ -260,6 +285,27 @@ export const updateTrialSession = async (
   }
 
   await withTransaction(async () => {
+    if (
+      updatedTrialSessionEntity.isReporting() &&
+      currentTrialSession.swingSessionId
+    ) {
+      const linkedSession = await getTrialSessionById({
+        trialSessionId: currentTrialSession.swingSessionId,
+      });
+      if (
+        linkedSession?.swingSessionId ===
+        updatedTrialSessionEntity.trialSessionId
+      ) {
+        const unlinkedSession = new TrialSession({
+          ...linkedSession,
+          swingSession: false,
+          swingSessionId: undefined,
+        }).validate();
+        await updateTrialSessionPersistence({
+          trialSessionToUpdate: unlinkedSession.toRawObject(),
+        });
+      }
+    }
     const createWorkingCopyForNewJudge = shouldCreateWorkingCopyForNewJudge(
       currentTrialSession,
       updatedTrialSessionEntity,
@@ -349,6 +395,12 @@ export const determineEntitiesToLock = async (
   const { caseOrder } = currentTrialSession;
 
   const entitiesToLock = [`trial-session|${trialSession.trialSessionId}`];
+  if (
+    trialSession.proceedingType === TRIAL_SESSION_PROCEEDING_TYPES.reporting &&
+    currentTrialSession.swingSessionId
+  ) {
+    entitiesToLock.push(`trial-session|${currentTrialSession.swingSessionId}`);
+  }
 
   caseOrder?.forEach(({ docketNumber }) =>
     entitiesToLock.push(`case|${docketNumber}`),

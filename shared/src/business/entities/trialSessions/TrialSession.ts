@@ -30,6 +30,24 @@ import { getUniqueId } from '@shared/sharedAppContext';
 import { isEmpty, isEqual } from 'lodash';
 import joi from 'joi';
 
+export const REPORTING_SESSION_EXCLUDED_FIELDS = [
+  'address1',
+  'address2',
+  'city',
+  'state',
+  'postalCode',
+  'courthouseName',
+  'joinPhoneNumber',
+  'meetingId',
+  'password',
+  'startTime',
+  'trialClerk',
+  'trialClerkId',
+  'alternateTrialClerkName',
+  'courtReporter',
+  'swingSessionId',
+] as const;
+
 const stringRequiredForRemoteProceedings = JoiValidationConstants.STRING.max(
   100,
 ).when('isCalendared', {
@@ -115,6 +133,7 @@ export class TrialSession extends JoiValidationEntity {
   public static PAPER_SERVICE_PDF_TTL = 60 * 60 * 24 * 3; // 3 days
 
   static PROPERTIES_REQUIRED_FOR_CALENDARING = {
+    [TRIAL_SESSION_PROCEEDING_TYPES.reporting]: [],
     [TRIAL_SESSION_PROCEEDING_TYPES.inPerson]: [
       'address1',
       'city',
@@ -171,7 +190,11 @@ export class TrialSession extends JoiValidationEntity {
       rawSession.sessionScope || TRIAL_SESSION_SCOPE_TYPES.locationBased;
     this.sessionType = rawSession.sessionType;
     this.startDate = rawSession.startDate;
-    if (this.isStandaloneRemote()) {
+    if (
+      rawSession.proceedingType === TRIAL_SESSION_PROCEEDING_TYPES.reporting
+    ) {
+      this.startTime = rawSession.startTime;
+    } else if (this.isStandaloneRemote()) {
       this.startTime = '13:00';
     } else {
       this.startTime = rawSession.startTime || '10:00';
@@ -185,9 +208,11 @@ export class TrialSession extends JoiValidationEntity {
     this.trialLocation = this.isStandaloneRemote()
       ? TRIAL_SESSION_SCOPE_TYPES.standaloneRemote
       : rawSession.trialLocation;
-    this.proceedingType = this.isStandaloneRemote()
-      ? TRIAL_SESSION_PROCEEDING_TYPES.remote
-      : rawSession.proceedingType;
+    this.proceedingType =
+      this.isStandaloneRemote() &&
+      rawSession.proceedingType !== TRIAL_SESSION_PROCEEDING_TYPES.reporting
+        ? TRIAL_SESSION_PROCEEDING_TYPES.remote
+        : rawSession.proceedingType;
     this.trialSessionId = rawSession.trialSessionId || getUniqueId();
     this.paperServicePdfs = rawSession.paperServicePdfs || [];
 
@@ -392,6 +417,7 @@ export class TrialSession extends JoiValidationEntity {
   getValidationRules() {
     return {
       ...TrialSession.validationRules.COMMON,
+      ...this.getReportingValidationRules(),
       caseOrder: joi.array().items(
         joi.object().keys({
           calendarNotes: JoiValidationConstants.STRING.optional().allow(
@@ -423,6 +449,51 @@ export class TrialSession extends JoiValidationEntity {
         }),
       ),
     } as object;
+  }
+
+  getReportingValidationRules(): Record<string, joi.Schema> {
+    if (!this.isReporting()) return {};
+
+    return {
+      ...Object.fromEntries(
+        REPORTING_SESSION_EXCLUDED_FIELDS.map((field: string) => [
+          field,
+          joi.forbidden(),
+        ]),
+      ),
+      chambersPhoneNumber: JoiValidationConstants.STRING.max(100)
+        .allow('')
+        .optional(),
+      estimatedEndDate: JoiValidationConstants.ISO_DATE.min(
+        joi.ref('startDate'),
+      )
+        .max(joi.ref('startDate'))
+        .required()
+        .messages({
+          '*': 'End date must be the same as start date for a reporting session',
+        }),
+      sessionScope: joi
+        .valid(TRIAL_SESSION_SCOPE_TYPES.locationBased)
+        .required(),
+      sessionType: JoiValidationConstants.STRING.valid(
+        ...Object.values(SESSION_TYPES).filter(
+          (type: string) =>
+            type !== SESSION_TYPES.special &&
+            type !== SESSION_TYPES.motionHearing,
+        ),
+      )
+        .required()
+        .messages({
+          '*': 'Select a session type available for reporting sessions',
+        }),
+      swingSession: joi.valid(false).optional(),
+      trialLocation:
+        TrialSession.validationRules.COMMON.trialLocation.invalid(null),
+    };
+  }
+
+  isReporting(): boolean {
+    return this.proceedingType === TRIAL_SESSION_PROCEEDING_TYPES.reporting;
   }
 
   setAsSwingSession(swingSessionId) {
@@ -542,7 +613,7 @@ export class TrialSession extends JoiValidationEntity {
    * if one field is empty (via lodash.isEmpty), the method returns false
    */
   canSetAsCalendared() {
-    return isEmpty(this.getEmptyFields());
+    return !this.isReporting() && isEmpty(this.getEmptyFields());
   }
 
   isRemote() {

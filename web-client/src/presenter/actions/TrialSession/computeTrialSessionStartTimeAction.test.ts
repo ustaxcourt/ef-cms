@@ -2,6 +2,12 @@ import { computeTrialSessionStartTimeAction } from './computeTrialSessionStartTi
 import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('computeTrialSessionStartTimeAction', () => {
+  it('supports Reporting sessions without a start time', async () => {
+    const result = await runAction(computeTrialSessionStartTimeAction, {
+      props: { trialSession: { proceedingType: 'Reporting' } },
+    });
+    expect(result.output).toEqual({});
+  });
   it('should return a midnight start time in 12hr format', async () => {
     const result = await runAction(computeTrialSessionStartTimeAction, {
       props: {

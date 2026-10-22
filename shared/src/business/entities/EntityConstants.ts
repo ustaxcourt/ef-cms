@@ -108,6 +108,7 @@ export const MULTI_SELECT_PLACEHOLDER = '- Select one or more -';
 export const TRIAL_SESSION_PROCEEDING_TYPES = {
   inPerson: 'In Person',
   remote: 'Remote',
+  reporting: 'Reporting',
 } as const;
 export type TrialSessionProceedingType =
   (typeof TRIAL_SESSION_PROCEEDING_TYPES)[keyof typeof TRIAL_SESSION_PROCEEDING_TYPES];
@@ -162,6 +163,9 @@ export const PARTY_VIEW_TABS = {
 };
 
 export const ALLOWLIST_FEATURE_FLAGS = {
+  REPORTING_CALENDARS: {
+    key: 'reporting-calendars',
+  },
   AWS_BATCH_ZIPPER_MINIMUM_COUNT: {
     key: 'aws-batch-zipper-minimum-count',
   },

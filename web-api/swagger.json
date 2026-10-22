@@ -8640,6 +8640,15 @@
     "trialSession": {
       "type": "object",
       "properties": {
+        "proceedingType": {
+          "type": "string",
+          "enum": ["In Person", "Remote", "Reporting"],
+          "description": "Reporting creation requires the reporting-calendars feature flag. Reporting sessions must be location-based, have matching start and end dates, and cannot be Special, Motion/Hearing, or swing sessions."
+        },
+        "estimatedEndDate": {
+          "type": "string",
+          "description": "End date; required and equal to startDate for Reporting sessions."
+        },
         "createdAt": {
           "type": "string",
           "description": "date trial session created"
@@ -8658,7 +8667,7 @@
         },
         "startTime": {
           "type": "string",
-          "description": "start time of the session"
+          "description": "Start time of the session; omitted for Reporting sessions."
         },
         "trialLocation": {
           "type": "string",

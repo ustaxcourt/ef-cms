@@ -231,6 +231,17 @@ export const TrialSessionInformation = connect(
             </div>
             <div className="grid-row grid-gap">
               <div className="grid-col-6">
+                {formattedTrialSessionDetails.isReportingSession && (
+                  <div className="card trial-session-card height-full">
+                    <div className="content-wrapper">
+                      <h3 className="underlined">Location Information</h3>
+                      <p className="label">Proceeding type</p>
+                      <p>Reporting</p>
+                      <p className="label">Trial location</p>
+                      <p>{formattedTrialSessionDetails.trialLocation}</p>
+                    </div>
+                  </div>
+                )}
                 {formattedTrialSessionDetails.proceedingType ===
                   TRIAL_SESSION_PROCEEDING_TYPES.inPerson &&
                   InPersonProceedingInformation({

@@ -14,6 +14,22 @@ import {
 } from '@shared/test/mockAuthUsers';
 
 describe('getFormattedTrialSessionDetails', () => {
+  it('formats a Reporting session without inventing a time', () => {
+    const result = getFormattedTrialSessionDetails({
+      applicationContext,
+      currentUser: mockPetitionsClerkUser,
+      trialSession: {
+        ...MOCK_TRIAL_REGULAR,
+        proceedingType: 'Reporting',
+        startTime: undefined,
+        calendaredCases: [],
+        eligibleCases: [],
+      },
+    });
+    expect(result.isReportingSession).toBe(true);
+    expect(result.formattedStartTime).toBe('');
+    expect(result.formattedStartDate).toBeDefined();
+  });
   let TRIAL_SESSION: TrialSessionState;
   let mockCase: RawCase & {
     removedFromTrialDate?: string;
