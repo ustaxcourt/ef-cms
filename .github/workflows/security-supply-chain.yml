@@ -23,7 +23,9 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 permissions:
+  actions: read
   contents: read
+  security-events: write
 
 jobs:
   capture-start-time:
