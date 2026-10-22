@@ -354,18 +354,15 @@ describe('Clerk of Court Dashboard', () => {
 
       cy.get('#tabButton-cases').click();
       cy.get('[data-testid="cases-data-div"]').should('exist');
-      // the year toggle sits with the status-change charts, not with the open cases
+      // the year toggle sits above the pie charts, the open cases by type HTML view sits under them, and the monthly chart is last
       cy.get(
-        '[data-testid="cases-status-changes-section"] #cases-calendar-year-to-date',
-      ).should('exist');
-      cy.get(
-        '[data-testid="open-cases-section"] #cases-calendar-year-to-date',
-      ).should('not.exist');
-      // the open cases by type HTML view sits under the closed pie and above the monthly chart
-      cy.get(
-        '[data-testid="cases-closed-header"], [data-testid$="-html-view-div"], [data-testid$="-bar-graph-div"]',
+        '#cases-calendar-year-to-date, [data-testid="open-cases-header"], [data-testid="cases-closed-header"], [data-testid$="-html-view-div"], [data-testid$="-bar-graph-div"]',
       ).then($sections => {
-        expect($sections.toArray().map(el => el.dataset.testid)).to.deep.equal([
+        expect(
+          $sections.toArray().map(el => el.dataset.testid || el.id),
+        ).to.deep.equal([
+          'cases-calendar-year-to-date',
+          'open-cases-header',
           'cases-closed-header',
           `${openByTypeTitle}-html-view-div`,
           `${closedTitle}-bar-graph-div`,
