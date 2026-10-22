@@ -1,4 +1,4 @@
-import { buildHtmlTableDocument } from './ClerkOfCourtHtmlView';
+import { buildHtmlTableDocument } from './buildHtmlTableDocument';
 
 describe('buildHtmlTableDocument', () => {
   const parse = (html: string) =>
@@ -12,15 +12,15 @@ describe('buildHtmlTableDocument', () => {
           { label: 'Deficiency', total: '2,058' },
           { label: 'CDP (Lien/Levy)', total: '87' },
         ],
-        title: 'Total Open Cases by Type in YTD 2026',
+        title: 'All Open Cases by Type',
         totalHeader: 'Total',
       }),
     );
 
     expect(doc.documentElement.lang).toEqual('en');
-    expect(doc.title).toEqual('Total Open Cases by Type in YTD 2026');
+    expect(doc.title).toEqual('All Open Cases by Type');
     expect(doc.querySelector('h2')!.textContent).toEqual(
-      'Total Open Cases by Type in YTD 2026',
+      'All Open Cases by Type',
     );
     expect(
       Array.from(doc.querySelectorAll('th')).map(th => th.textContent),

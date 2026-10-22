@@ -55,9 +55,7 @@ const readOpenedHtmlView = () =>
           win.fetch(stub.lastCall.args[0]).then(response => response.text()),
         ),
     )
-    .then(html =>
-      new DOMParser().parseFromString(html as unknown as string, 'text/html'),
-    );
+    .then(html => new DOMParser().parseFromString(html, 'text/html'));
 
 const getTableRows = (doc: Document): string[][] =>
   Array.from(doc.querySelectorAll('tbody tr')).map(row =>
