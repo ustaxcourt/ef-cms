@@ -1,0 +1,81 @@
+name: Notify Teams
+
+on:
+  workflow_call:
+    inputs:
+      workflow_start:
+        required: true
+        type: string
+
+      scanner:
+        required: true
+        type: string
+
+      workflow_name:
+        required: true
+        type: string
+
+      run_url:
+        required: true
+        type: string
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+
+    permissions:
+      security-events: read
+      contents: read
+
+    steps:
+      - name: Wait for GitHub Security processing
+        run: sleep 30
+
+      - name: Check for new alerts
+        id: alerts
+        env:
+          START_TIME: ${{ inputs.workflow_start }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          COUNT=$(gh api \
+            --paginate \
+            repos/$GITHUB_REPOSITORY/code-scanning/alerts \
+            --jq "map(
+              select(
+                .created_at > \"$START_TIME\" and
+                (
+                  .tool.name == \"Semgrep\" or
+                  .tool.name == \"CodeQL\" or
+                  .tool.name == \"Checkov\"
+                )
+              )
+            ) | length")
+
+          echo "Found $COUNT new security findings"
+          echo "count=$COUNT" >> "$GITHUB_OUTPUT"
+
+      - name: Send Teams notification
+        if: steps.alerts.outputs.count != '0'
+        env:
+          TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL }}
+        run: |
+          payload=$(cat <<EOF
+          {
+            "text": "🚨 New Security Findings
+
+          Workflow: ${{ inputs.workflow_name }}
+          Scanner: ${{ inputs.scanner }}
+
+          New Findings: ${{ steps.alerts.outputs.count }}
+
+          Run:
+          ${{ inputs.run_url }}"
+          }
+          EOF
+          )
+
+          curl -sS \
+            -X POST \
+            "$TEAMS_WEBHOOK_URL" \
+            -H "Content-Type: application/json" \
+            -d "$payload"
