@@ -1,5 +1,7 @@
 import { PublicDocketEntry } from '@shared/business/entities/cases/PublicDocketEntry';
 import {
+  loginAsDojPractitioner,
+  loginAsIrsPractitioner,
   loginAsPetitioner,
   loginAsPrivatePractitioner,
 } from '../../../../helpers/authentication/login-as-helpers';
@@ -26,7 +28,10 @@ const verifyDocumentCanBeViewed = (docketEntryId: string) => {
   });
 };
 
-const verifyDocumentCannotBeViewed = (docketEntryId: string) => {
+const verifyDocumentCannotBeViewed = (
+  docketNumber: string,
+  docketEntryId: string,
+) => {
   cy.get(`[data-testid="${docketEntryId}"]`).then(row => {
     cy.wrap(row)
       .find('[data-testid^="document-download-link-"]')
@@ -35,7 +40,7 @@ const verifyDocumentCannotBeViewed = (docketEntryId: string) => {
       .find('[data-testid^="docket-entry-filingsAndProceedings-"]')
       .should('exist');
     cy.request({
-      url: `http://localhost:4000/case-documents/102-26/${docketEntryId}/document-download-url`,
+      url: `http://localhost:4000/case-documents/${docketNumber}/${docketEntryId}/document-download-url`,
       failOnStatusCode: false,
     }).then(response => {
       expect(response.status).to.eq(403);
@@ -100,7 +105,7 @@ const verifyDocumentCannotBeViewedPublic = (
 
 const fileAMotionAndSupportingDocuments = (
   docketNumber: string,
-  primaryFilerName: string,
+  filingPartySelector: string,
 ) => {
   cy.visit(`case-detail/${docketNumber}`);
   cy.get('[data-testid="button-file-document"]').click();
@@ -129,7 +134,7 @@ const fileAMotionAndSupportingDocuments = (
       '[data-testid="upload-file-success-supporting-document-file-0"]',
   });
 
-  cy.get(`[data-testid="filingParty-${primaryFilerName}, Petitioner"]`).click();
+  cy.get(filingPartySelector).click();
   cy.get('[data-testid="file-document-submit-document"]').click();
 
   cy.get('[data-testid="redaction-acknowledgement-label"]').click();
@@ -175,7 +180,10 @@ describe('Testing motion visibility after policy change date', () => {
         logout();
         petitionsClerkQcsAndServesElectronicCase(docketNumber);
         loginAsPrivatePractitioner();
-        fileAMotionAndSupportingDocuments(docketNumber, primaryFilerName);
+        fileAMotionAndSupportingDocuments(
+          docketNumber,
+          `[data-testid="filingParty-${primaryFilerName}, Petitioner"]`,
+        );
         cy.visit(`case-detail/${docketNumber}`);
         cy.intercept('GET', '**/docket-entries**').as('getDocketEntries');
         cy.wait('@getDocketEntries').then(({ response }) => {
@@ -203,12 +211,34 @@ describe('Testing motion visibility after policy change date', () => {
       // );
     });
 
-    it('should let motion and supporting documents be downloadable by petitioner not on case', () => {
-      loginAsPetitioner();
-      cy.visit(`case-detail/${caseDocketNumber}`);
-      verifyDocumentCanBeViewed(docketEntries.motionDocketEntry.docketEntryId);
-      // this won't work until the fix from 10399 is in
-      // verifyDocumentCanBeViewed(docketEntries.briefDocketEntry.docketEntryId);
+    [
+      {
+        login: () => loginAsPetitioner(),
+        role: 'petitioner not on case',
+      },
+      {
+        login: () =>
+          loginAsPrivatePractitioner('privatePractitioner2@example.com'),
+        role: 'private practitioner not on case',
+      },
+      {
+        login: () => loginAsIrsPractitioner(),
+        role: 'IRS practitioner not on case',
+      },
+      {
+        login: () => loginAsDojPractitioner(),
+        role: 'DOJ practitioner not on case',
+      },
+    ].forEach(({ login, role }) => {
+      it(`should let motion be downloadable by ${role}`, () => {
+        login();
+        cy.visit(`case-detail/${caseDocketNumber}`);
+        verifyDocumentCanBeViewed(
+          docketEntries.motionDocketEntry.docketEntryId,
+        );
+        // this won't work until the fix from 10399 is in
+        // verifyDocumentCanBeViewed(docketEntries.briefDocketEntry.docketEntryId);
+      });
     });
   });
 
@@ -230,8 +260,14 @@ describe('Testing motion visibility after policy change date', () => {
       verifyDocumentCanBeViewed(motionDocketEntry?.docketEntryId!);
       verifyDocumentCanBeViewed(briefDocketEntries[0]?.docketEntryId!);
 
-      verifyDocumentCannotBeViewed(memorandumDocketEntry?.docketEntryId!);
-      verifyDocumentCannotBeViewed(briefDocketEntries[1]?.docketEntryId!);
+      verifyDocumentCannotBeViewed(
+        '102-26',
+        memorandumDocketEntry?.docketEntryId!,
+      );
+      verifyDocumentCannotBeViewed(
+        '102-26',
+        briefDocketEntries[1]?.docketEntryId!,
+      );
 
       verifyDocumentCanBeViewedPublic('102-26', motionDocketEntry?.index!);
       verifyDocumentCanBeViewedPublic('102-26', briefDocketEntries[0]?.index!);
