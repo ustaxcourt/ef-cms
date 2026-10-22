@@ -2,6 +2,7 @@ import { PublicDocketEntry } from '@shared/business/entities/cases/PublicDocketE
 import {
   loginAsDojPractitioner,
   loginAsIrsPractitioner,
+  loginAsIrsPractitioner1,
   loginAsPetitioner,
   loginAsPrivatePractitioner,
 } from '../../../../helpers/authentication/login-as-helpers';
@@ -15,6 +16,8 @@ import { externalUserCreatesElectronicCase } from '../../../../helpers/fileAPeti
 import { selectTypeaheadInput } from '../../../../helpers/components/typeAhead/select-typeahead-input';
 import { attachFile } from '../../../../helpers/file/upload-file';
 import { petitionsClerkQcsAndServesElectronicCase } from '../../../../helpers/documentQC/petitions-clerk-qcs-and-serves-electronic-case';
+import { petitionsClerkServesPetition } from '../../../../helpers/documentQC/petitionsclerk-serves-petition';
+import { goToCase } from '../../../../helpers/caseDetail/go-to-case';
 import { logout } from '../../../../helpers/authentication/logout';
 
 const verifyDocumentCanBeViewed = (docketEntryId: string) => {
@@ -107,7 +110,7 @@ const fileAMotionAndSupportingDocuments = (
   docketNumber: string,
   filingPartySelector: string,
 ) => {
-  cy.visit(`case-detail/${docketNumber}`);
+  goToCase(docketNumber);
   cy.get('[data-testid="button-file-document"]').click();
   cy.get('[data-testid="ready-to-file"]').click();
 
@@ -184,8 +187,8 @@ describe('Testing motion visibility after policy change date', () => {
           docketNumber,
           `[data-testid="filingParty-${primaryFilerName}, Petitioner"]`,
         );
-        cy.visit(`case-detail/${docketNumber}`);
         cy.intercept('GET', '**/docket-entries**').as('getDocketEntries');
+        goToCase(docketNumber);
         cy.wait('@getDocketEntries').then(({ response }) => {
           const docketEntryList: PublicDocketEntry[] =
             response?.body.docketEntries;
@@ -211,7 +214,7 @@ describe('Testing motion visibility after policy change date', () => {
       // );
     });
 
-    [
+    const roles = [
       {
         login: () => loginAsPetitioner(),
         role: 'petitioner not on case',
@@ -229,10 +232,101 @@ describe('Testing motion visibility after policy change date', () => {
         login: () => loginAsDojPractitioner(),
         role: 'DOJ practitioner not on case',
       },
-    ].forEach(({ login, role }) => {
+    ];
+
+    roles.forEach(({ login, role }) => {
       it(`should let motion be downloadable by ${role}`, () => {
         login();
-        cy.visit(`case-detail/${caseDocketNumber}`);
+        goToCase(caseDocketNumber);
+        verifyDocumentCanBeViewed(
+          docketEntries.motionDocketEntry.docketEntryId,
+        );
+        // this won't work until the fix from 10399 is in
+        // verifyDocumentCanBeViewed(docketEntries.briefDocketEntry.docketEntryId);
+      });
+    });
+  });
+
+  describe('Motion visibility for documents filed by an IRS practitioner', () => {
+    let caseDocketNumber: string;
+    const docketEntries: any = {};
+
+    before(() => {
+      loginAsPetitioner();
+      externalUserCreatesElectronicCase().then(docketNumber => {
+        caseDocketNumber = docketNumber;
+        petitionsClerkServesPetition(docketNumber);
+
+        loginAsIrsPractitioner();
+        goToCase(docketNumber);
+        cy.get('[data-testid="button-first-irs-document"]').click();
+        selectTypeaheadInput('complete-doc-document-type-search', 'Answer');
+        cy.get('[data-testid="submit-document"]').click();
+        attachFile({
+          filePath: '../../helpers/file/sample.pdf',
+          selector: '[data-testid="primary-document"]',
+          selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
+        });
+        cy.get('[data-testid="file-document-submit-document"]').click();
+        cy.get('[data-testid="redaction-acknowledgement-label"]').click();
+        cy.get('[data-testid="file-document-review-submit-document"]').click();
+        cy.get('[data-testid="loading-overlay"]').should('not.exist');
+
+        loginAsIrsPractitioner();
+        fileAMotionAndSupportingDocuments(
+          docketNumber,
+          '[data-testid="party-irs-practitioner-label"]',
+        );
+        cy.intercept('GET', '**/docket-entries**').as('getDocketEntries');
+        goToCase(docketNumber);
+        cy.wait('@getDocketEntries').then(({ response }) => {
+          const docketEntryList: PublicDocketEntry[] =
+            response?.body.docketEntries;
+          docketEntries.motionDocketEntry = docketEntryList.find(
+            (entry: PublicDocketEntry) => entry.eventCode === 'M006',
+          );
+          docketEntries.briefDocketEntry = docketEntryList.find(
+            (entry: PublicDocketEntry) => entry.eventCode === 'BRF',
+          );
+        });
+      });
+    });
+
+    it('should let motion and supporting documents be downloadable from public site', () => {
+      verifyDocumentCanBeViewedPublic(
+        caseDocketNumber,
+        docketEntries.motionDocketEntry.index,
+      );
+      // this won't work until the fix from 10399 is in
+      // verifyDocumentCanBeViewedPublic(
+      //   caseDocketNumber,
+      //   docketEntries.briefDocketEntry.index,
+      // );
+    });
+
+    const roles = [
+      {
+        login: () => loginAsPetitioner('petitioner2@example.com'),
+        role: 'petitioner not on case',
+      },
+      {
+        login: () => loginAsPrivatePractitioner(),
+        role: 'private practitioner not on case',
+      },
+      {
+        login: () => loginAsIrsPractitioner1(),
+        role: 'IRS practitioner not on case',
+      },
+      {
+        login: () => loginAsDojPractitioner(),
+        role: 'DOJ practitioner not on case',
+      },
+    ];
+
+    roles.forEach(({ login, role }) => {
+      it(`should let motion be downloadable by ${role}`, () => {
+        login();
+        goToCase(caseDocketNumber);
         verifyDocumentCanBeViewed(
           docketEntries.motionDocketEntry.docketEntryId,
         );
