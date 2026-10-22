@@ -39,6 +39,7 @@ type ClerkDashboardStats = {
   calendarYearCaseStats: CaseStats;
   fiscalYear: string;
   fiscalYearCaseStats: CaseStats;
+  openCasesByProcedureType: { procedureType: string; total: number }[];
   year: string;
 };
 
@@ -190,6 +191,45 @@ describe('Clerk of Court Dashboard - case status change counts', () => {
           change('closed'),
           change('onAppeal'),
         ]);
+      });
+    });
+  });
+
+  describe('open cases', () => {
+    // received in 1997, long before the current calendar and fiscal years
+    const docketNumbers = ['9103-97'];
+    const deleteOldOpenCase = () =>
+      cy.task('deleteCasesByDocketNumbers', { docketNumbers });
+
+    before(deleteOldOpenCase);
+    after(deleteOldOpenCase);
+
+    it('should count a case that is open now, even when it was received before the current year', () => {
+      const openRegular = (stats: ClerkDashboardStats) =>
+        totalFor(
+          stats.openCasesByProcedureType,
+          entry => entry.procedureType === regular,
+        );
+
+      getClerkDashboardStats().then(before => {
+        cy.task('insertCasesWithStatusHistory', {
+          cases: [
+            {
+              docketNumber: docketNumbers[0],
+              procedureType: regular,
+              statusChanges: [
+                {
+                  date: '1997-06-16T16:00:00.000Z',
+                  updatedCaseStatus: generalDocketReadyForTrial,
+                },
+              ],
+            },
+          ],
+        });
+
+        getClerkDashboardStats().then(after => {
+          expect(openRegular(after) - openRegular(before)).to.equal(1);
+        });
       });
     });
   });

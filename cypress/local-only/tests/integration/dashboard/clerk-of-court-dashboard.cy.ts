@@ -333,7 +333,7 @@ describe('Clerk of Court Dashboard', () => {
 
   it('should display cases data', () => {
     const closedTitle = 'Closed/Closed - Dismissed & Changed to On Appeal';
-    const openByTypeTitle = 'Total Open Cases by type';
+    const openByTypeTitle = 'All Open Cases by type';
     const sumTotals = (entries: { total: number }[]) =>
       entries.reduce((total, entry) => total + entry.total, 0);
 
@@ -344,18 +344,37 @@ describe('Clerk of Court Dashboard', () => {
         calendarYearCaseStats,
         fiscalYear,
         fiscalYearCaseStats,
+        openCasesByCaseType,
+        openCasesByProcedureType,
         year: statsYear,
       } = clerkDashboardStats.response!.body;
-      const openCasesTotal = (caseStats: {
-        openCasesByProcedureType: { total: number }[];
-      }) => formatPositiveNumber(sumTotals(caseStats.openCasesByProcedureType));
+      const openCasesTotal = formatPositiveNumber(
+        sumTotals(openCasesByProcedureType),
+      );
 
       cy.get('#tabButton-cases').click();
       cy.get('[data-testid="cases-data-div"]').should('exist');
+      // the year toggle sits with the status-change charts, not with the open cases
+      cy.get(
+        '[data-testid="cases-status-changes-section"] #cases-calendar-year-to-date',
+      ).should('exist');
+      cy.get(
+        '[data-testid="open-cases-section"] #cases-calendar-year-to-date',
+      ).should('not.exist');
+      // the open cases by type HTML view sits under the closed pie and above the monthly chart
+      cy.get(
+        '[data-testid="cases-closed-header"], [data-testid$="-html-view-div"], [data-testid$="-bar-graph-div"]',
+      ).then($sections => {
+        expect($sections.toArray().map(el => el.dataset.testid)).to.deep.equal([
+          'cases-closed-header',
+          `${openByTypeTitle}-html-view-div`,
+          `${closedTitle}-bar-graph-div`,
+        ]);
+      });
 
       cy.get('[data-testid="open-cases-header"]').should(
         'have.text',
-        `Open Cases: ${openCasesTotal(calendarYearCaseStats)}`,
+        `All Open Cases: ${openCasesTotal}`,
       );
       cy.get('[data-testid="cases-closed-header"]').should(
         'have.text',
@@ -377,14 +396,13 @@ describe('Clerk of Court Dashboard', () => {
       stubWindowOpen();
       cy.get(`[data-testid="${openByTypeTitle}-html-view-button"]`).click();
       readOpenedHtmlView().then(doc => {
-        expect(doc.title).to.equal(
-          `Total Open Cases by Type in YTD ${statsYear}`,
-        );
+        // open cases are the cases open now, so the title has no year
+        expect(doc.title).to.equal('All Open Cases by Type');
         const rows = getTableRows(doc);
         expect(rows).to.have.length(CASE_TYPES.length);
         const totals = rows.map(([, total]) => Number(total.replace(/,/g, '')));
         expect(totals).to.deep.equal([...totals].sort((a, b) => b - a));
-        calendarYearCaseStats.openCasesByCaseType.forEach(
+        openCasesByCaseType.forEach(
           ({ caseType, total }: { caseType: string; total: number }) => {
             expect(rows).to.deep.include([
               caseType,
@@ -404,7 +422,7 @@ describe('Clerk of Court Dashboard', () => {
       cy.get('[data-testid="cases-fiscal-year-to-date"]').click();
       cy.get('[data-testid="open-cases-header"]').should(
         'have.text',
-        `Open Cases: ${openCasesTotal(fiscalYearCaseStats)}`,
+        `All Open Cases: ${openCasesTotal}`,
       );
       cy.get('[data-testid="cases-closed-header"]').should(
         'have.text',
@@ -441,8 +459,6 @@ describe('Clerk of Court Dashboard', () => {
       casesClosedByMonth: [],
       casesClosedByProcedureType: [],
       casesOnAppealByMonth: [],
-      openCasesByCaseType: [],
-      openCasesByProcedureType: [],
     };
     cy.intercept('GET', '**/clerk-dashboard-stats', {
       body: {
@@ -453,16 +469,17 @@ describe('Clerk of Court Dashboard', () => {
             { procedureType: 'Regular', total: 3 },
             { procedureType: 'Small', total: 2 },
           ],
-          // one non-zero slice and one zero slice
-          openCasesByProcedureType: [
-            { procedureType: 'Regular', total: 7 },
-            { procedureType: 'Small', total: 0 },
-          ],
         },
         calendarYearPetitionStats: emptyPetitionStats,
         fiscalYear: '2026',
         fiscalYearCaseStats: emptyCaseStats,
         fiscalYearPetitionStats: emptyPetitionStats,
+        openCasesByCaseType: [],
+        // one non-zero slice and one zero slice
+        openCasesByProcedureType: [
+          { procedureType: 'Regular', total: 7 },
+          { procedureType: 'Small', total: 0 },
+        ],
         year: '2026',
       },
       statusCode: 200,
@@ -471,7 +488,7 @@ describe('Clerk of Court Dashboard', () => {
     cy.wait('@clerkDashboardStats');
     cy.get('#tabButton-cases').click();
 
-    const openCasesPie = 'Open Cases in YTD 2026';
+    const openCasesPie = 'All Open Cases';
     cy.get(`[data-testid="${openCasesPie}-pie-graph-div"] svg circle`).should(
       'have.length',
       1,
@@ -660,7 +677,7 @@ describe('Clerk of Court Dashboard', () => {
 
     cy.get('[data-testid="open-cases-header"]').should(
       'contain.text',
-      'Open Cases:',
+      'All Open Cases:',
     );
     cy.get('[data-testid="cases-closed-header"]').should(
       'contain.text',
