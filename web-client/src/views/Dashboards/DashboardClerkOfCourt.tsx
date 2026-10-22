@@ -103,8 +103,6 @@ const ALL_OPEN_CASES_TITLE = 'All Open Cases';
 
 const ALL_OPEN_CASES_BY_TYPE_TITLE = 'All Open Cases by type';
 
-const ALL_OPEN_CASES_BY_TYPE_HTML_TITLE = 'All Open Cases by Type';
-
 const PETITIONS_BY_MONTH_TITLE = 'Petitions: Total Petitions by Month';
 
 // pie chart columns, wide enough for the legend and the HTML view button
@@ -128,7 +126,6 @@ const casesData = ({
     casesClosedAndOnAppealLegendTotals,
     casesClosedPieData,
     casesMonths,
-    openCasesByTypeTableRows,
     openCasesPieData,
     totalCasesClosed,
     totalOpenCases,
@@ -184,12 +181,7 @@ const casesData = ({
         </div>
         {/* open cases by type has no chart, only an HTML view of all open cases */}
         <div className="tw:xs:mt-12 tw:mt-8">
-          <ClerkOfCourtHtmlView
-            htmlTitle={ALL_OPEN_CASES_BY_TYPE_HTML_TITLE}
-            labelHeader="Type of Case"
-            rows={openCasesByTypeTableRows}
-            title={ALL_OPEN_CASES_BY_TYPE_TITLE}
-          />
+          <ClerkOfCourtHtmlView title={ALL_OPEN_CASES_BY_TYPE_TITLE} />
         </div>
         <div className="tw:xs:mt-12 tw:mt-8">
           <MultiBarGraph

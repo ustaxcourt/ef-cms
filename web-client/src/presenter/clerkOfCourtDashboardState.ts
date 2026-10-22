@@ -49,7 +49,6 @@ export type DashboardClerkOfTheCourtHelper = {
   months: string[];
   casesYearLabel: string;
   petitionsYearLabel: string;
-  openCasesByTypeTableRows: ClerkOfCourtTableRow[];
   openCasesPieData: ClerkOfCourtPieChartData[];
   totalOpenCases: string;
   casesClosedPieData: ClerkOfCourtPieChartData[];
