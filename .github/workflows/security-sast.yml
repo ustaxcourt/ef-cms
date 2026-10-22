@@ -29,8 +29,21 @@ permissions:
   security-events: write
 
 jobs:
+  capture-start-time:
+    runs-on: ubuntu-latest
+
+    outputs:
+      workflow_start: ${{ steps.time.outputs.timestamp }}
+
+    steps:
+      - name: Capture workflow start
+        id: time
+        run: |
+          echo "timestamp=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$GITHUB_OUTPUT"
+
   semgrep:
     name: Semgrep Scan
+    needs: capture-start-time
     if: >-
       github.event_name == 'push' ||
       github.event_name == 'schedule' ||
@@ -95,11 +108,6 @@ jobs:
             exit "$status"
           }
 
-      - name: Show Semgrep findings
-        if: always()
-        run: |
-          grep -nE 'ruleId|message|artifactLocation' semgrep-results.sarif || true
-
       - name: Upload SARIF
         if: always()
         uses: ./.github/actions/dawson-upload-sarif
@@ -109,6 +117,7 @@ jobs:
 
   checkov:
     name: Checkov IaC Scan
+    needs: capture-start-time
     if: >-
       github.event_name == 'push' ||
       github.event_name == 'schedule' ||
@@ -201,6 +210,7 @@ jobs:
 
   codeql:
     name: CodeQL Deep Analysis
+    needs: capture-start-time
     if: >-
       github.event_name == 'push' ||
       github.event_name == 'schedule' ||
@@ -296,3 +306,27 @@ jobs:
             exit 1
           fi
           echo "SAST gate passed"
+
+  notify-teams:
+    needs:
+      - capture-start-time
+      - semgrep
+      - checkov
+      - codeql
+
+    if: >
+      always() &&
+      (
+        github.event_name == 'schedule' ||
+        github.event_name == 'workflow_dispatch'
+      )
+
+    uses: ./.github/workflows/notify-teams.yml
+
+    with:
+      workflow_start: ${{ needs.capture-start-time.outputs.workflow_start }}
+      scanner: SAST
+      workflow_name: Security - SAST
+      run_url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+    secrets: inherit
