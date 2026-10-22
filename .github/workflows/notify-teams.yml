@@ -38,22 +38,22 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           COUNT=$(gh api \
-            --paginate \
             repos/$GITHUB_REPOSITORY/code-scanning/alerts \
             --jq '
-              select(
-                .created_at > "'"$START_TIME"'" and
-                (
-                  .tool.name == "Semgrep" or
-                  .tool.name == "CodeQL" or
-                  .tool.name == "Checkov"
+              map(
+                select(
+                  .created_at > "'"$START_TIME"'" and
+                  (
+                    .tool.name == "Semgrep" or
+                    .tool.name == "CodeQL" or
+                    .tool.name == "Checkov" or
+                    .tool.name == "Gitleaks"
+                  )
                 )
-              )
-            ' | wc -l)
+              ) | length')
 
           echo "Found $COUNT new security findings"
-          echo "Raw count:"
-          printf '%s\n' "$COUNT"
+          echo "count=$COUNT" >> "$GITHUB_OUTPUT"
 
       - name: Send Teams notification
         if: steps.alerts.outputs.count != '0'
