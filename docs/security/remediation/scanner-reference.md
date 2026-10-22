@@ -115,8 +115,8 @@ Things to know:
 ## Known errors in other security docs
 
 The scanner docs in `docs/security/` and some workflow comments disagree with the code. Until
-they are corrected, which needs its own ticket, trust this table. Each entry was checked against
-`staging` on 2026-10-20.
+they are corrected in [#10537](https://github.com/ustaxcourt/ef-cms/issues/10537), trust this
+table. Each entry was checked against `staging` on 2026-10-20.
 
 | Where | What it says | What is true |
 | --- | --- | --- |

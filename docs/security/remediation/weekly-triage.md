@@ -89,7 +89,7 @@ SLAs, who approves); this runbook is the commands. It also covers the one-time
 severity (see [Severity rubric](playbook.md#severity-rubric)):
 
    ```sh
-   SINCE=2026-10-12
+   export SINCE=2026-10-12  # date of the last completed triage
    gh api --paginate \
      "repos/ustaxcourt/ef-cms/code-scanning/alerts?state=open&ref=refs/heads/staging&per_page=100" \
      --jq '.[] | select(.created_at >= "'"$SINCE"'")
@@ -214,9 +214,11 @@ Backlog: <open alerts in triaged categories> (last week: <n>)
 Decisions needed: <for the approver or product owner, or "none">
 ```
 
-The counts come from the Security tab. Set `SINCE` to the last triage date, as in step 6:
+The counts come from the Security tab. The block sets `SINCE` itself, so it works on its own; change
+the date to the last triage date, as in step 6:
 
 ```sh
+export SINCE=2026-10-12  # date of the last completed triage
 CATS='^(trivy-baseline-(base|puppeteer|batch)|trivy|trivy-config|semgrep|checkov|/language:.*|gitleaks-baseline)$'
 
 # Open alerts in triaged categories, by category and GitHub severity (the backlog line)

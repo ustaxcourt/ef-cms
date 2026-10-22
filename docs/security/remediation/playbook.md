@@ -167,7 +167,7 @@ unreachable. Showing only that a package is present, or that DAWSON uses a diffe
 is not enough. "It's probably fine" is not evidence.
 
 For container findings, the method for deciding whether a package is present and reachable is in
-the container findings triage guide (PR #10521).
+the [container findings triage guide](../container-findings-triage.md#2-evaluating-container-findings).
 
 ### 3. Apply the modifiers
 
@@ -433,7 +433,7 @@ Never accept a finding only because there is no patch. "No fix exists" is the re
 through this list, not the end of it.
 
 For container findings, the full method for deciding whether a package is present and reachable
-in an image is in the container findings triage guide (PR #10521).
+in an image is in the [container findings triage guide](../container-findings-triage.md#2-evaluating-container-findings).
 
 ## Exceptions
 
@@ -521,11 +521,15 @@ weekly report until someone acts.
 VEX (Vulnerability Exploitability eXchange) is a standard way to say, for one CVE in one product,
 whether DAWSON is affected and why. CISA's [VEX use
 cases](https://www.cisa.gov/sites/default/files/publications/VEX_Use_Cases_Document_508c.pdf)
-explain it. This playbook uses VEX's words for its decisions, so every exception record can be
-turned into a VEX statement later without redoing the analysis.
+explain it. This playbook uses VEX's words for its decisions, so every exception record maps
+directly to a VEX statement.
 
-**Nothing is published as VEX yet.** DAWSON has no VEX file, and no scanner reads one. Publishing
-VEX and wiring it into Trivy is a separate piece of work.
+**How to write and test a statement** is in the container findings triage guide,
+[Step 5: Record a VEX Statement](../container-findings-triage.md#step-5-record-a-vex-statement):
+the OpenVEX file (proposed location `.vex/ef-cms.openvex.json`), the fields each statement needs, a
+worked example for the zlib finding above, and the `trivy image --vex` command that checks a
+statement suppresses only what it should. This section covers when a statement is written and what may be
+published. DAWSON's CI scans do not read the VEX file yet; wiring it in is a separate change.
 
 ### How decisions map to VEX
 
@@ -536,49 +540,17 @@ VEX and wiring it into Trivy is a separate piece of work.
 | `fixed` | Resolved by a fix that is in the shipped component | — |
 | `under_investigation` | Triaged, with the affected check still in progress | — |
 
-### Example
+A `not_affected` statement is an exception like any other: it follows the
+[review dates](#review-dates), including a fresh check when the component changes. That holds even
+for a statement written without a package version, which keeps matching after an upgrade.
 
-The not-affected decision from the [worked examples](#worked-examples) (CVE-2023-45853 in the
-batch image's zlib) as an [OpenVEX](https://github.com/openvex/spec) statement. The document `@id`
-is an identifier, not a link, and the one here is made up:
+### What may be published
 
-```json
-{
-  "@context": "https://openvex.dev/ns/v0.2.0",
-  "@id": "urn:dawson:vex:example-2026-001",
-  "author": "DAWSON team",
-  "timestamp": "2026-10-20T00:00:00Z",
-  "version": 1,
-  "statements": [
-    {
-      "vulnerability": { "name": "CVE-2023-45853" },
-      "products": [
-        {
-          "@id": "pkg:oci/node@sha256:3d27e5c11e5786e309ec3e03f93ae536eb36e6e5eb3714d5eb3300a36157add0?arch=amd64&repository_url=index.docker.io%2Flibrary%2Fnode",
-          "subcomponents": [
-            { "@id": "pkg:deb/debian/zlib1g@1.2.13.dfsg-1?arch=amd64&distro=debian-12.15&epoch=1" },
-            { "@id": "pkg:deb/debian/zlib1g-dev@1.2.13.dfsg-1?arch=amd64&distro=debian-12.15&epoch=1" }
-          ]
-        }
-      ],
-      "status": "not_affected",
-      "justification": "vulnerable_code_not_present",
-      "status_notes": "MiniZip is not part of Debian's zlib1g or zlib1g-dev packages; dpkg -L lists no MiniZip files."
-    }
-  ]
-}
-```
-
-Every identifier is the one Trivy reports for the `linux/amd64` image, checked on 2026-10-20 with
-`trivy image --platform linux/amd64 --image-src remote --format cyclonedx node:24.21.0`. The
-product is the `node:24.21.0` base image rather than the built batch image, because that is what
-the base-image scan reads. When the base image changes, its digest
-changes, and the statement has to be checked again like any other not-affected decision.
-
-**Only publish what is safe to publish.** A VEX file in this public repository is readable by
-anyone. `not_affected` and `fixed` statements give nothing away. An `affected` statement for a T1
-or T2 component tells an attacker where DAWSON is still vulnerable, so it stays in the draft
-advisory until the fix ships, like any other detail of a sensitive finding.
+The VEX file lives in this public repository, so anyone can read it. `not_affected` and `fixed`
+statements give nothing away, and go in the file once the approver has signed off on the
+exception. An `affected` statement for a T1 or T2 component tells an attacker where DAWSON is still
+vulnerable, so it stays in the draft security advisory until the fix ships, like any other detail
+of a sensitive finding. After the fix ships, it goes in the file as `fixed`.
 
 ## Secrets
 
