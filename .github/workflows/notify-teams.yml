@@ -40,19 +40,20 @@ jobs:
           COUNT=$(gh api \
             --paginate \
             repos/$GITHUB_REPOSITORY/code-scanning/alerts \
-            --jq "map(
+            --jq '
               select(
-                .created_at > \"$START_TIME\" and
+                .created_at > "'"$START_TIME"'" and
                 (
-                  .tool.name == \"Semgrep\" or
-                  .tool.name == \"CodeQL\" or
-                  .tool.name == \"Checkov\"
+                  .tool.name == "Semgrep" or
+                  .tool.name == "CodeQL" or
+                  .tool.name == "Checkov"
                 )
               )
-            ) | length")
+            ' | wc -l)
 
           echo "Found $COUNT new security findings"
-          echo "count=$COUNT" >> "$GITHUB_OUTPUT"
+          echo "Raw count:"
+          printf '%s\n' "$COUNT"
 
       - name: Send Teams notification
         if: steps.alerts.outputs.count != '0'
