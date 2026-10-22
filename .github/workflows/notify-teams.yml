@@ -47,7 +47,8 @@ jobs:
                     .tool.name == "Semgrep" or
                     .tool.name == "CodeQL" or
                     .tool.name == "Checkov" or
-                    .tool.name == "Gitleaks"
+                    .tool.name == "Gitleaks" or
+                    .tool.name == "Trivy"
                   )
                 )
               ) | length')
