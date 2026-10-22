@@ -13,6 +13,7 @@ import {
 import { ConsolidatedCasesWithCheckboxInfoType } from '@web-client/presenter/actions/CaseConsolidation/setMultiDocketingCheckboxesAction';
 import { determineMovantAndNonMovant } from '@web-client/presenter/actions/utilities/determineMovantAndNonMovant';
 import { state } from '@web-client/presenter/app.cerebral';
+import { getConsolidatedCasesWording } from '@web-client/utilities/getConsolidatedCasesWording';
 import {
   additionalOrderTextArrayWithRequiredFirstField,
   normalizeAdditionalOrderTextArray,
@@ -135,7 +136,10 @@ const joinWithItIsFurther = (clauses: string[]): string =>
     )
     .join('');
 
-export const prepareGrantDenyMotionAction = ({ get, store }: ActionProps) => {
+export const prepareGrantDenyMotionAction = ({
+  get,
+  store,
+}: ActionProps): void => {
   const {
     additionalOrderTextArray,
     deniedAsMoot,
@@ -190,6 +194,10 @@ export const prepareGrantDenyMotionAction = ({ get, store }: ActionProps) => {
     isOnLeadCase &&
     issueOrder === GRANT_DENY_MOTION_OPTIONS.issueOrderOptions.allCasesInGroup;
 
+  const consolidatedCasesWording = getConsolidatedCasesWording(
+    isOnLeadCaseAndAllCases,
+  );
+
   if (isOnLeadCaseAndAllCases) {
     const consolidatedCases = caseDetail.consolidatedCases.map(c => ({
       docketNumber: c.docketNumber,
@@ -209,7 +217,7 @@ export const prepareGrantDenyMotionAction = ({ get, store }: ActionProps) => {
       FORMATS.MONTH_DAY_YEAR,
     );
     trialLocationText = caseDetail.trialLocation || '';
-    preamblePrepend = `${isOnLeadCaseAndAllCases ? 'These consolidated cases are' : 'This case is'} set for trial at the session of the Court commencing on ${formattedTrialDate}, in ${trialLocationText}. `;
+    preamblePrepend = `${consolidatedCasesWording.calendaredPreamble} set for trial at the session of the Court commencing on ${formattedTrialDate}, in ${trialLocationText}. `;
   }
 
   const preamble = buildPreamble({
@@ -235,14 +243,14 @@ export const prepareGrantDenyMotionAction = ({ get, store }: ActionProps) => {
 
   const strickenClause = strickenFromTrialSession
     ? wrap(
-        `ORDERED that ${isOnLeadCaseAndAllCases ? 'these cases are' : 'this case is'} stricken from the ${formattedTrialDate}, ${trialLocationText} trial session.`,
+        `ORDERED that ${consolidatedCasesWording.orderedSubject} stricken from the ${formattedTrialDate}, ${trialLocationText} trial session.`,
       )
     : '';
 
   const restoredClause =
     jurisdiction === GRANT_DENY_MOTION_OPTIONS.jurisdictionOptions.restored
       ? wrap(
-          `ORDERED that ${isOnLeadCaseAndAllCases ? 'these cases are' : 'this case is'} restored to the general docket.`,
+          `ORDERED that ${consolidatedCasesWording.orderedSubject} restored to the general docket.`,
         )
       : '';
 
