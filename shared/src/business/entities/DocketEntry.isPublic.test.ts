@@ -759,6 +759,304 @@ describe('DocketEntry isPublic', () => {
               expect(isPublic).toBe(false);
             },
           );
+          it(`should return false for lodged motions filed by a ${role}`, () => {
+            const isPublic = DocketEntry.isPublic(
+              {
+                ...baseDocketEntry,
+                eventCode: motionEventCode,
+                filingDate: afterMotionVisibilityChangeDate,
+                filedByRole: role,
+                isPaper: false,
+                lodged: true,
+              },
+              {
+                visibilityChangeDate,
+                motionVisibilityChangeDate,
+              },
+            );
+
+            expect(isPublic).toBe(false);
+          });
+          it.each(PUBLIC_SUPPORTING_EVENT_CODES_FOR_MOTIONS)(
+            `should return false for briefs or memoranda in support of a lodged motion filed by a ${role} at the same time as the motion`,
+            supportingEventCode => {
+              const isPublic = DocketEntry.isPublic(
+                {
+                  ...baseDocketEntry,
+                  eventCode: supportingEventCode,
+                  filingDate: afterMotionVisibilityChangeDate,
+                  filedByRole: role,
+                  isPaper: false,
+                },
+                {
+                  rootDocument: {
+                    ...baseDocketEntry,
+                    eventCode: motionEventCode,
+                    filingDate: afterMotionVisibilityChangeDate,
+                    filedByRole: role,
+                    isPaper: false,
+                    lodged: true,
+                  },
+                  visibilityChangeDate,
+                  motionVisibilityChangeDate,
+                },
+              );
+
+              expect(isPublic).toBe(false);
+            },
+          );
+          it.each(PUBLIC_SUPPORTING_EVENT_CODES_FOR_MOTIONS)(
+            `should return false for lodged briefs or memoranda in support of a motion filed by a ${role} at the same time as the motion`,
+            supportingEventCode => {
+              const isPublic = DocketEntry.isPublic(
+                {
+                  ...baseDocketEntry,
+                  eventCode: supportingEventCode,
+                  filingDate: afterMotionVisibilityChangeDate,
+                  filedByRole: role,
+                  isPaper: false,
+                  lodged: true,
+                },
+                {
+                  rootDocument: {
+                    ...baseDocketEntry,
+                    eventCode: motionEventCode,
+                    filingDate: afterMotionVisibilityChangeDate,
+                    filedByRole: role,
+                    isPaper: false,
+                  },
+                  visibilityChangeDate,
+                  motionVisibilityChangeDate,
+                },
+              );
+
+              expect(isPublic).toBe(false);
+            },
+          );
+          it(`should return false for other supporting documents of a lodged motion filed by a ${role} at the same time as the motion`, () => {
+            const isPublic = DocketEntry.isPublic(
+              {
+                ...baseDocketEntry,
+                eventCode: 'EXH',
+                filingDate: afterMotionVisibilityChangeDate,
+                filedByRole: role,
+                isPaper: false,
+              },
+              {
+                rootDocument: {
+                  ...baseDocketEntry,
+                  eventCode: motionEventCode,
+                  filingDate: afterMotionVisibilityChangeDate,
+                  filedByRole: role,
+                  isPaper: false,
+                  lodged: true,
+                },
+                visibilityChangeDate,
+                motionVisibilityChangeDate,
+              },
+            );
+
+            expect(isPublic).toBe(false);
+          });
+          it(`should return false for stricken motions filed by a ${role}`, () => {
+            const isPublic = DocketEntry.isPublic(
+              {
+                ...baseDocketEntry,
+                eventCode: motionEventCode,
+                filingDate: afterMotionVisibilityChangeDate,
+                filedByRole: role,
+                isPaper: false,
+                isStricken: true,
+              },
+              {
+                visibilityChangeDate,
+                motionVisibilityChangeDate,
+              },
+            );
+
+            expect(isPublic).toBe(false);
+          });
+          it.each(PUBLIC_SUPPORTING_EVENT_CODES_FOR_MOTIONS)(
+            `should return false for stricken briefs or memoranda in support of a motion filed by a ${role} at the same time as the motion`,
+            supportingEventCode => {
+              const isPublic = DocketEntry.isPublic(
+                {
+                  ...baseDocketEntry,
+                  eventCode: supportingEventCode,
+                  filingDate: afterMotionVisibilityChangeDate,
+                  filedByRole: role,
+                  isPaper: false,
+                  isStricken: true,
+                },
+                {
+                  rootDocument: {
+                    ...baseDocketEntry,
+                    eventCode: motionEventCode,
+                    filingDate: afterMotionVisibilityChangeDate,
+                    filedByRole: role,
+                    isPaper: false,
+                  },
+                  visibilityChangeDate,
+                  motionVisibilityChangeDate,
+                },
+              );
+
+              expect(isPublic).toBe(false);
+            },
+          );
+          it(`should return false for sealed motions filed by a ${role}`, () => {
+            const isPublic = DocketEntry.isPublic(
+              {
+                ...baseDocketEntry,
+                eventCode: motionEventCode,
+                filingDate: afterMotionVisibilityChangeDate,
+                filedByRole: role,
+                isPaper: false,
+                isSealed: true,
+              },
+              {
+                visibilityChangeDate,
+                motionVisibilityChangeDate,
+              },
+            );
+
+            expect(isPublic).toBe(false);
+          });
+          it(`should return false for legacy sealed motions filed by a ${role}`, () => {
+            const isPublic = DocketEntry.isPublic(
+              {
+                ...baseDocketEntry,
+                eventCode: motionEventCode,
+                filingDate: afterMotionVisibilityChangeDate,
+                filedByRole: role,
+                isPaper: false,
+                isLegacySealed: true,
+              },
+              {
+                visibilityChangeDate,
+                motionVisibilityChangeDate,
+              },
+            );
+
+            expect(isPublic).toBe(false);
+          });
+          it.each(PUBLIC_SUPPORTING_EVENT_CODES_FOR_MOTIONS)(
+            `should return false for sealed briefs or memoranda in support of a motion filed by a ${role} at the same time as the motion`,
+            supportingEventCode => {
+              const isPublic = DocketEntry.isPublic(
+                {
+                  ...baseDocketEntry,
+                  eventCode: supportingEventCode,
+                  filingDate: afterMotionVisibilityChangeDate,
+                  filedByRole: role,
+                  isPaper: false,
+                  isSealed: true,
+                },
+                {
+                  rootDocument: {
+                    ...baseDocketEntry,
+                    eventCode: motionEventCode,
+                    filingDate: afterMotionVisibilityChangeDate,
+                    filedByRole: role,
+                    isPaper: false,
+                  },
+                  visibilityChangeDate,
+                  motionVisibilityChangeDate,
+                },
+              );
+
+              expect(isPublic).toBe(false);
+            },
+          );
+          it(`should return false for motions filed by a ${role} when the case is sealed`, () => {
+            const isPublic = DocketEntry.isPublic(
+              {
+                ...baseDocketEntry,
+                eventCode: motionEventCode,
+                filingDate: afterMotionVisibilityChangeDate,
+                filedByRole: role,
+                isPaper: false,
+              },
+              {
+                caseIsSealed: true,
+                visibilityChangeDate,
+                motionVisibilityChangeDate,
+              },
+            );
+
+            expect(isPublic).toBe(false);
+          });
+          it.each(PUBLIC_SUPPORTING_EVENT_CODES_FOR_MOTIONS)(
+            `should return false for briefs or memoranda in support of a motion filed by a ${role} at the same time as the motion when the case is sealed`,
+            supportingEventCode => {
+              const isPublic = DocketEntry.isPublic(
+                {
+                  ...baseDocketEntry,
+                  eventCode: supportingEventCode,
+                  filingDate: afterMotionVisibilityChangeDate,
+                  filedByRole: role,
+                  isPaper: false,
+                },
+                {
+                  caseIsSealed: true,
+                  rootDocument: {
+                    ...baseDocketEntry,
+                    eventCode: motionEventCode,
+                    filingDate: afterMotionVisibilityChangeDate,
+                    filedByRole: role,
+                    isPaper: false,
+                  },
+                  visibilityChangeDate,
+                  motionVisibilityChangeDate,
+                },
+              );
+
+              expect(isPublic).toBe(false);
+            },
+          );
+          it(`should return false for unserved motions filed by a ${role}`, () => {
+            const isPublic = DocketEntry.isPublic(
+              {
+                ...baseDocketEntry,
+                eventCode: motionEventCode,
+                filingDate: afterMotionVisibilityChangeDate,
+                filedByRole: role,
+                isPaper: false,
+                servedAt: undefined,
+              },
+              {
+                visibilityChangeDate,
+                motionVisibilityChangeDate,
+              },
+            );
+
+            expect(isPublic).toBe(false);
+          });
+          it(`should return false for unserved briefs in support of a motion filed by a ${role} at the same time as the motion`, () => {
+            const isPublic = DocketEntry.isPublic(
+              {
+                ...baseDocketEntry,
+                eventCode: 'BRF',
+                filingDate: afterMotionVisibilityChangeDate,
+                filedByRole: role,
+                isPaper: false,
+                servedAt: undefined,
+              },
+              {
+                rootDocument: {
+                  ...baseDocketEntry,
+                  eventCode: motionEventCode,
+                  filingDate: afterMotionVisibilityChangeDate,
+                  filedByRole: role,
+                  isPaper: false,
+                },
+                visibilityChangeDate,
+                motionVisibilityChangeDate,
+              },
+            );
+
+            expect(isPublic).toBe(false);
+          });
         },
       );
       it('should return false for motions filed by a petitioner', () => {
@@ -802,6 +1100,35 @@ describe('DocketEntry isPublic', () => {
           expect(isPublic).toBe(false);
         },
       );
+    });
+  });
+
+  describe('Lodged root: motion filings vs non-motion filings', () => {
+    it('when the lodged root is a practitioner brief, not a motion, related entries keep their usual public visibility', () => {
+      const isPublic = DocketEntry.isPublic(
+        {
+          ...baseDocketEntry,
+          eventCode: 'AMAT',
+          filedByRole: ROLES.privatePractitioner,
+          filingDate: afterVisibilityChangeDate,
+          isPaper: false,
+        },
+        {
+          rootDocument: {
+            ...baseDocketEntry,
+            docketEntryId: '2a389787-91d2-41ba-9c6e-2a13440a928b',
+            documentType: 'Seriatim Answering Brief',
+            filedByRole: ROLES.privatePractitioner,
+            filingDate: afterVisibilityChangeDate,
+            isPaper: false,
+            lodged: true,
+          },
+          visibilityChangeDate,
+          motionVisibilityChangeDate,
+        },
+      );
+
+      expect(isPublic).toBe(true);
     });
   });
 });

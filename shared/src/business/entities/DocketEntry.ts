@@ -560,7 +560,13 @@ export class DocketEntry extends JoiValidationEntity {
     if (DocketEntry.isPublicEventCode(entry.eventCode)) {
       return true;
     }
-    if (entry.lodged) {
+    if (
+      entry.lodged ||
+      (rootDocument?.lodged &&
+        DocketEntry.isMotion(rootDocument.eventCode) &&
+        PUBLIC_SUPPORTING_EVENT_CODES_FOR_MOTIONS.includes(entry.eventCode) &&
+        entry.filingDate === rootDocument.filingDate)
+    ) {
       return false;
     }
 
