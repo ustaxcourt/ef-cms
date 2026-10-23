@@ -11,6 +11,7 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 import { updateTrialSession } from '@web-api/persistence/postgres/trialSessions/updateTrialSession';
+import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 
 export const associateSwingTrialSessions = async (
   {
@@ -24,8 +25,8 @@ export const associateSwingTrialSessions = async (
   }
 
   const swingTrialSession = await getTrialSessionById({
-      trialSessionId: swingSessionId,
-    });
+    trialSessionId: swingSessionId,
+  });
 
   if (!swingTrialSession) {
     throw new NotFoundError(`Trial session ${swingSessionId} was not found.`);
@@ -33,11 +34,19 @@ export const associateSwingTrialSessions = async (
 
   const swingSessionEntity = new TrialSession(swingTrialSession);
 
+  if (trialSessionEntity.isReporting() || swingSessionEntity.isReporting()) {
+    throw new Error('Reporting sessions cannot be linked as swing sessions.');
+  }
+
   trialSessionEntity.setAsSwingSession(swingSessionId);
   swingSessionEntity.setAsSwingSession(trialSessionEntity.trialSessionId);
 
-  await updateTrialSession({
-    trialSessionToUpdate: swingSessionEntity.validate().toRawObject(),
+  trialSessionEntity.validate();
+
+  await withTransaction(async () => {
+    await updateTrialSession({
+      trialSessionToUpdate: swingSessionEntity.validate().toRawObject(),
+    });
   });
 
   return trialSessionEntity.validate().toRawObject();

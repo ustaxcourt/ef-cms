@@ -53,6 +53,9 @@ export const setTrialSessionCalendarInteractor = async (
     }
 
     const trialSessionEntity = new TrialSession(trialSession);
+    if (trialSessionEntity.isReporting()) {
+      throw new Error('Reporting sessions require a reporting calendar.');
+    }
     trialSessionEntity.setAsCalendared();
     trialSessionEntity.validate();
 

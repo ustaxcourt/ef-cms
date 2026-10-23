@@ -1,4 +1,8 @@
 import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
+import '@web-api/persistence/postgres/utils/mocks.jest';
+import '@web-api/persistence/postgres/featureFlag/mocks.jest';
+import { getFeatureFlagValues } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
+import { MOCK_TRIAL_REGULAR } from '@shared/test/mockTrial';
 import {
   SESSION_TYPES,
   TRIAL_SESSION_SCOPE_TYPES,
@@ -8,6 +12,7 @@ import { createTrialSessionInteractor } from './createTrialSessionInteractor';
 import { mockDocketClerkUser, mockJudgeUser } from '@shared/test/mockAuthUsers';
 
 const MOCK_TRIAL = {
+  ...MOCK_TRIAL_REGULAR,
   maxCases: 100,
   sessionType: SESSION_TYPES.regular,
   startDate: '2025-12-01T00:00:00.000Z',
@@ -17,6 +22,101 @@ const MOCK_TRIAL = {
 };
 
 describe('createTrialSessionInteractor', () => {
+  it('should reject creating a pre-calendared Reporting session', async () => {
+    await expect(
+      createTrialSessionInteractor(
+        applicationContext,
+        {
+          trialSession: {
+            ...MOCK_TRIAL,
+            proceedingType: 'Reporting',
+            isCalendared: true,
+          },
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow('Reporting sessions require a reporting calendar.');
+    expect(
+      applicationContext.getUseCaseHelpers().createTrialSessionAndWorkingCopy,
+    ).not.toHaveBeenCalled();
+  });
+  it.each([false, undefined])(
+    'should gate Reporting creation with flag %s',
+    async enabled => {
+      jest
+        .mocked(getFeatureFlagValues)
+        .mockResolvedValue(
+          enabled === undefined
+            ? []
+            : [{ name: 'reporting-calendars', value: { current: enabled } }],
+        );
+      const trialSession: RawTrialSession = {
+        ...MOCK_TRIAL,
+        proceedingType: 'Reporting',
+        startTime: undefined,
+        estimatedEndDate: MOCK_TRIAL.startDate,
+      };
+      const result = createTrialSessionInteractor(
+        applicationContext,
+        { trialSession },
+        mockDocketClerkUser,
+      );
+      await expect(result).rejects.toThrow(
+        'Reporting calendars are not enabled.',
+      );
+      expect(
+        applicationContext.getUseCaseHelpers().createTrialSessionAndWorkingCopy,
+      ).not.toHaveBeenCalled();
+    },
+  );
+
+  it('should create an uncalendared Reporting session when enabled', async () => {
+    jest
+      .mocked(getFeatureFlagValues)
+      .mockResolvedValue([
+        { name: 'reporting-calendars', value: { current: true } },
+      ]);
+    const trialSession: RawTrialSession = {
+      ...MOCK_TRIAL,
+      proceedingType: 'Reporting',
+      startTime: undefined,
+      estimatedEndDate: MOCK_TRIAL.startDate,
+    };
+    await expect(
+      createTrialSessionInteractor(
+        applicationContext,
+        { trialSession },
+        mockDocketClerkUser,
+      ),
+    ).resolves.toMatchObject({
+      proceedingType: 'Reporting',
+      isCalendared: false,
+      startTime: undefined,
+    });
+    expect(
+      applicationContext.getUseCaseHelpers().createTrialSessionAndWorkingCopy,
+    ).toHaveBeenCalledWith({
+      trialSessionToAdd: expect.objectContaining({
+        proceedingType: 'Reporting',
+      }),
+    });
+  });
+
+  it('should validate before invoking creation or swing persistence', async () => {
+    await expect(
+      createTrialSessionInteractor(
+        applicationContext,
+        { trialSession: { ...MOCK_TRIAL, maxCases: -1 } },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow();
+    expect(
+      applicationContext.getUseCaseHelpers().createTrialSessionAndWorkingCopy,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().associateSwingTrialSessions,
+    ).not.toHaveBeenCalled();
+  });
   beforeEach(() => {
     applicationContext.environment.stage = 'local';
 
@@ -124,7 +224,7 @@ describe('createTrialSessionInteractor', () => {
         trialSession: {
           ...MOCK_TRIAL,
           swingSession: true,
-          swingSessionId: '1234',
+          swingSessionId: '208a959f-9526-4db5-b262-e58c476a4604',
         } as RawTrialSession,
       },
       mockDocketClerkUser,
@@ -136,10 +236,10 @@ describe('createTrialSessionInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers().associateSwingTrialSessions.mock
         .calls[0][0].swingSessionId,
-    ).toEqual('1234');
+    ).toEqual('208a959f-9526-4db5-b262-e58c476a4604');
   });
 
-  it('shoud not set the trial session as calendared when it is a Regular session type', async () => {
+  it('should not set the trial session as calendared when it is a Regular session type', async () => {
     const result = await createTrialSessionInteractor(
       applicationContext,
       {
