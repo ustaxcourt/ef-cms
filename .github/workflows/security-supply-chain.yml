@@ -90,9 +90,12 @@ jobs:
   trivy:
     name: Trivy Full-Tree Scan
     # Also runs on merges to staging so the tab reflects staging, matching the other baselines.
+    # Skips on PRs into prod: they bring only code that staging has already scanned, so
+    # findings that are already on staging must not block a deployment.
     if: >-
       github.event_name == 'push' ||
-      (github.event_name == 'pull_request' && !github.event.pull_request.draft)
+      (github.event_name == 'pull_request' && !github.event.pull_request.draft &&
+      github.base_ref != 'prod')
     runs-on: ubuntu-latest
     permissions:
       contents: read

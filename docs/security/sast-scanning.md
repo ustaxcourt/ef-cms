@@ -15,6 +15,9 @@ DAWSON uses four static analysis tools, all wired through `.github/workflows/sec
 
 - **PRs** (non-draft, any target branch): runs `semgrep`, `checkov`, `codeql`, `shellcheck`, and the `security-gate` job
 - **Push to staging**: runs `semgrep`, `checkov`, and `codeql`; Semgrep and Checkov populate the default-branch baseline
+- **Docs-only PRs** (only `.md`, `docs/**`, `.gitignore`, `.nvmrc` or `.circleci/config.yml` files): the `changes` job finds them, the scans skip, and the `security-gate` job passes
+
+The workflow has no `paths-ignore` filter for PRs. `Security Gate (SAST)` is a required check, and a filtered workflow does not report it, so the PR cannot merge.
 
 SARIF is uploaded only from pushes to staging. Every PR run, whatever branch it targets, reports its findings in the workflow log and job summary instead.
 
