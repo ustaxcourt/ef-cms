@@ -279,7 +279,7 @@ export const getFormattedTrialSessionDetails = ({
     .getUtilities()
     .formatDateString(trialSession.startDate, 'MMDDYY');
 
-  const formattedEstimatedEndDate = applicationContext
+  let formattedEstimatedEndDate = applicationContext
     .getUtilities()
     .formatDateString(trialSession.estimatedEndDate!, 'MMDDYY');
 
@@ -297,9 +297,11 @@ export const getFormattedTrialSessionDetails = ({
     hourNumber = hourNumber - 12;
   }
 
-  const formattedStartTime = isReportingSession
-    ? ''
-    : `${hourNumber}:${min} ${startTimeExtension}`;
+  let formattedStartTime = `${hourNumber}:${min} ${startTimeExtension}`;
+  if (isReportingSession) {
+    formattedEstimatedEndDate = '';
+    formattedStartTime = '';
+  }
 
   const formattedJudge =
     (trialSession.judge && trialSession.judge.name) || 'Not assigned';

@@ -110,6 +110,13 @@ describe('Reporting trial sessions', () => {
         );
       });
       cy.contains('Reporting').should('be.visible');
+      cy.get('#case-title').should('have.text', '02/10/99');
+      cy.get('[data-testid="trial-session-date"]')
+        .invoke('text')
+        .then(text => {
+          expect(text.trim()).to.eq('02/10/99');
+        });
+      checkA11y();
       cy.contains('Trial clerk').should('not.exist');
       cy.contains('Court reporter').should('not.exist');
       cy.get('[data-testid="edit-trial-session"]').click();

@@ -14,13 +14,15 @@ import {
 } from '@shared/test/mockAuthUsers';
 
 describe('getFormattedTrialSessionDetails', () => {
-  it('should format a Reporting session without inventing a time', () => {
+  it('should format a Reporting session with one date and no time', () => {
     const result = getFormattedTrialSessionDetails({
       applicationContext,
       currentUser: mockPetitionsClerkUser,
       trialSession: {
         ...MOCK_TRIAL_REGULAR,
         proceedingType: 'Reporting',
+        startDate: '2099-02-10T00:00:00.000-05:00',
+        estimatedEndDate: '2099-02-10T00:00:00.000-05:00',
         startTime: undefined,
         calendaredCases: [],
         eligibleCases: [],
@@ -28,7 +30,8 @@ describe('getFormattedTrialSessionDetails', () => {
     });
     expect(result.isReportingSession).toBe(true);
     expect(result.formattedStartTime).toBe('');
-    expect(result.formattedStartDate).toBeDefined();
+    expect(result.formattedStartDate).toBe('02/10/99');
+    expect(result.formattedEstimatedEndDate).toBe('');
   });
   let TRIAL_SESSION: TrialSessionState;
   let mockCase: RawCase & {
