@@ -1,6 +1,8 @@
 name: Security - Supply Chain
 
 on:
+  schedule:
+    - cron: '0 6 * * 1' # Every Monday at 06:00 AM UTC
   pull_request:
     types: [opened, reopened, synchronize, ready_for_review]
     paths-ignore:
@@ -13,6 +15,7 @@ on:
     # The coverage badge bot pushes immediately after each merge; badges cannot change results.
     paths-ignore:
       - 'docs/badges/**'
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
@@ -20,9 +23,23 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 permissions:
+  actions: read
   contents: read
+  security-events: write
 
 jobs:
+  capture-start-time:
+    runs-on: ubuntu-latest
+
+    outputs:
+      workflow_start: ${{ steps.time.outputs.timestamp }}
+
+    steps:
+      - name: Capture workflow start
+        id: time
+        run: |
+          echo "timestamp=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$GITHUB_OUTPUT"
+
   dependency-review:
     name: Dependency Review (PR gate)
     if: github.event_name == 'pull_request' && !github.event.pull_request.draft
@@ -89,9 +106,12 @@ jobs:
 
   trivy:
     name: Trivy Full-Tree Scan
+    needs: capture-start-time
     # Also runs on merges to staging so the tab reflects staging, matching the other baselines.
     if: >-
       github.event_name == 'push' ||
+      github.event_name == 'schedule' ||
+      github.event_name == 'workflow_dispatch' ||
       (github.event_name == 'pull_request' && !github.event.pull_request.draft)
     runs-on: ubuntu-latest
     permissions:
@@ -122,3 +142,25 @@ jobs:
           sarif_file: trivy-results.sarif
           category: trivy
         continue-on-error: true
+
+  notify-teams:
+    needs:
+      - capture-start-time
+      - trivy
+
+    if: >
+      always() &&
+      (
+        github.event_name == 'schedule' ||
+        github.event_name == 'workflow_dispatch'
+      )
+
+    uses: ./.github/workflows/notify-teams.yml
+
+    with:
+      workflow_start: ${{ needs.capture-start-time.outputs.workflow_start }}
+      scanner: Trivy
+      workflow_name: Security - Trivy
+      run_url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+    secrets: inherit

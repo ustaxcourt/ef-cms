@@ -1,0 +1,88 @@
+name: Notify Teams
+
+on:
+  workflow_call:
+    inputs:
+      workflow_start:
+        required: true
+        type: string
+
+      scanner:
+        required: true
+        type: string
+
+      workflow_name:
+        required: true
+        type: string
+
+      run_url:
+        required: true
+        type: string
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+
+    permissions:
+      security-events: read
+      contents: read
+
+    steps:
+      - name: Wait for GitHub Security processing
+        run: sleep 30
+
+      - name: Check for new alerts
+        id: alerts
+        env:
+          START_TIME: ${{ inputs.workflow_start }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          COUNT=$(gh api \
+            repos/$GITHUB_REPOSITORY/code-scanning/alerts \
+            --jq '
+              map(
+                select(
+                  .created_at > "'"$START_TIME"'" and
+                  (
+                    .tool.name == "Semgrep" or
+                    .tool.name == "CodeQL" or
+                    .tool.name == "Checkov" or
+                    .tool.name == "Gitleaks" or
+                    .tool.name == "Trivy"
+                  )
+                )
+              ) | length')
+
+          echo "Found $COUNT new security findings"
+          echo "count=$COUNT" >> "$GITHUB_OUTPUT"
+
+      - name: Send Teams notification
+        if: steps.alerts.outputs.count != '0'
+        env:
+          WORKFLOW_NAME: ${{ inputs.workflow_name }}
+          SCANNER: ${{ inputs.scanner }}
+          FINDING_COUNT: ${{ steps.alerts.outputs.count }}
+          RUN_URL: ${{ inputs.run_url }}
+          TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL }}
+
+        run: |
+          payload=$(cat <<EOF
+          {
+            "text": "🚨 New Security Findings
+
+          Workflow: ${WORKFLOW_NAME}
+          Scanner: ${SCANNER}
+
+          New Findings: ${FINDING_COUNT}
+
+          Run:
+          ${RUN_URL}"
+          }
+          EOF
+          )
+
+          curl -sS \
+            -X POST \
+            "$TEAMS_WEBHOOK_URL" \
+            -H "Content-Type: application/json" \
+            -d "$payload"
