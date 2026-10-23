@@ -8,7 +8,9 @@ type ApiGatewayLikeEvent = {
   url?: string;
 };
 
-const PUBLIC_PATH_REGEX = /\/public-api(\/|$)/i;
+const PUBLIC_API_PATH_REGEX = /(?:^|\/)public-api(?:\/|$)/i;
+const PUBLIC_API_HOST_REGEX = /^public-api(?:-[a-z0-9-]+)?\./i;
+const LOCAL_PUBLIC_API_HOST_REGEX = /^(?:localhost|127\.0\.0\.1):4001$/i;
 
 function getRequestPath(event: ApiGatewayLikeEvent): string {
   if (typeof event.path === 'string') {
@@ -25,7 +27,11 @@ export function isPublicSiteRequest(event: ApiGatewayLikeEvent): boolean {
   const host = typeof hostHeader === 'string' ? hostHeader.toLowerCase() : '';
   const path = getRequestPath(event);
 
-  return host.includes('public-api.') || PUBLIC_PATH_REGEX.test(path);
+  return (
+    PUBLIC_API_HOST_REGEX.test(host) ||
+    LOCAL_PUBLIC_API_HOST_REGEX.test(host) ||
+    PUBLIC_API_PATH_REGEX.test(path)
+  );
 }
 
 export function findUnauthorizedPublicFields(args: {

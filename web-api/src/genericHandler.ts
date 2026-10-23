@@ -13,6 +13,7 @@ import {
   getUserFromAuthHeader,
   handle,
 } from './middleware/apiGatewayHelper';
+import { isPublicSiteRequest } from './middleware/publicDataSanitizer';
 import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 import { getMaintenanceMode } from '@web-api/persistence/postgres/featureFlag/getMaintenanceMode';
 import { getEntityByName } from '@web-api/business/getEntityByName';
@@ -97,7 +98,9 @@ export const genericHandler = (
   } = {},
 ) => {
   return handle(awsEvent, async () => {
-    const user = getUserFromAuthHeader(awsEvent);
+    const user = isPublicSiteRequest(awsEvent)
+      ? undefined
+      : getUserFromAuthHeader(awsEvent);
     const clientConnectionId = getConnectionIdFromEvent(awsEvent);
     getDawsonLogger().addUser({ user });
 

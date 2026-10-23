@@ -1,7 +1,6 @@
 import { PublicCaseResponse } from '@shared/business/dto/cases/PublicCaseResponse';
 import { RestrictedCaseResponse } from '@shared/business/dto/cases/RestrictedCaseResponse';
 import { PublicTrialSessionInfo } from '@shared/business/dto/trialSessions/PublicTrialSessionInfo';
-import { ConsolidatedCaseSummary } from '@shared/business/dto/cases/ConsolidatedCaseSummary';
 import { FeatureFlagResponseDTO } from '@shared/business/dto/system/FeatureFlagResponseDTO';
 import { HealthCheckResponse } from '@shared/business/dto/public/HealthCheckResponse';
 import { PublicDocumentDownloadUrl } from '@shared/business/dto/public/PublicDocumentDownloadUrl';
@@ -48,15 +47,18 @@ const PUBLIC_ENTITY_FACTORIES = {
   PublicCaseSearchResult: (): PublicCaseSearchResult =>
     new PublicCaseSearchResult({} as PublicCaseSearchResult),
   PublicContact: (): PublicContact => new PublicContact({}),
-  PublicDocketEntry: (): PublicDocketEntry => new PublicDocketEntry({}),
+  PublicDocketEntry: (): PublicDocketEntry =>
+    new PublicDocketEntry({
+      docketNumber: '',
+      filingDate: '',
+      receivedAt: '',
+    }),
   PublicDocumentSearchResult: (): PublicDocumentSearchResult =>
     new PublicDocumentSearchResult({}),
   PublicTrialSessionDetails: (): PublicTrialSessionDetails =>
-    new PublicTrialSessionDetails({}),
+    new PublicTrialSessionDetails({ startDate: '' }),
   PublicTrialSessionInfo: (): PublicTrialSessionInfo =>
     new PublicTrialSessionInfo(new TrialSession({})),
-  ConsolidatedCaseSummary: (): ConsolidatedCaseSummary =>
-    new ConsolidatedCaseSummary({}),
   PublicUser: (): PublicUser => new PublicUser({}),
   RestrictedCase: (): RestrictedCase =>
     new RestrictedCase({ docketNumber: '' }),
@@ -108,20 +110,67 @@ const isNonNegativeInteger = (value: unknown): boolean =>
   typeof value === 'number' && Number.isInteger(value) && value >= 0;
 const isPositiveInteger = (value: unknown): boolean =>
   typeof value === 'number' && Number.isInteger(value) && value > 0;
+const isPrimitiveArray = (value: unknown): boolean =>
+  Array.isArray(value) &&
+  value.every(item => typeof item === 'string' || typeof item === 'number');
+const isPublicEntityArray =
+  (entityName: string): ((value: unknown) => boolean) =>
+  (value: unknown): boolean =>
+    Array.isArray(value) &&
+    value.every(item => isRecord(item) && item.entityName === entityName);
 const isPublicDocketEntryArray = (value: unknown): boolean =>
   Array.isArray(value) &&
   value.every(
     item => isRecord(item) && item.entityName === 'PublicDocketEntry',
   );
 
-const PUBLIC_ROOT_RESPONSE_WRAPPER_SCHEMAS: Array<
-  Record<string, (value: unknown) => boolean>
-> = [
+type PublicResponseWrapperSchema = {
+  fields: Record<string, (value: unknown) => boolean>;
+  path: string;
+};
+
+const PUBLIC_RESPONSE_WRAPPER_SCHEMAS: PublicResponseWrapperSchema[] = [
   {
-    docketEntries: isPublicDocketEntryArray,
-    page: isNonNegativeInteger,
-    pageSize: isPositiveInteger,
-    totalCount: isNonNegativeInteger,
+    fields: {
+      docketEntries: isPublicDocketEntryArray,
+      page: isNonNegativeInteger,
+      pageSize: isPositiveInteger,
+      totalCount: isNonNegativeInteger,
+    },
+    path: '',
+  },
+  {
+    fields: {
+      results: isPublicEntityArray('PublicCaseSearchResult'),
+    },
+    path: '',
+  },
+  {
+    fields: {
+      results: isPublicEntityArray('PublicDocumentSearchResult'),
+    },
+    path: '',
+  },
+  {
+    fields: {
+      results: isPublicEntityArray('PublicDocumentSearchResult'),
+      totalCount: isNonNegativeInteger,
+    },
+    path: '',
+  },
+  {
+    fields: {
+      searchResults: isRecord,
+    },
+    path: '',
+  },
+  {
+    fields: {
+      lastKey: isPrimitiveArray,
+      practitioners: isPublicEntityArray('PublicContact'),
+      total: isNonNegativeInteger,
+    },
+    path: 'searchResults',
   },
 ];
 
@@ -176,7 +225,7 @@ const NESTED_OBJECT_SCHEMAS_BY_ENTITY_NAME: Record<
         documentTitle: isStringValue,
         documentType: isStringValue,
       },
-      requiredFields: ['documentTitle', 'documentType'],
+      requiredFields: [],
     },
   },
   PublicTrialSessionInfo: {
@@ -321,15 +370,20 @@ function isUrlOnlyObject(obj: Record<string, unknown>): boolean {
   return Object.keys(obj).length === 1 && typeof obj.url === 'string';
 }
 
-function hasApprovedRootResponseWrapperSchema(
+function hasApprovedResponseWrapperSchema(
   obj: Record<string, unknown>,
+  path: string,
 ): boolean {
-  return PUBLIC_ROOT_RESPONSE_WRAPPER_SCHEMAS.some(schema => {
-    const schemaFields = Object.keys(schema);
+  return PUBLIC_RESPONSE_WRAPPER_SCHEMAS.some(schema => {
+    if (schema.path !== path) {
+      return false;
+    }
+
+    const schemaFields = Object.keys(schema.fields);
     return (
       Object.keys(obj).length === schemaFields.length &&
       schemaFields.every(
-        field => Object.hasOwn(obj, field) && schema[field](obj[field]),
+        field => Object.hasOwn(obj, field) && schema.fields[field](obj[field]),
       )
     );
   });
@@ -344,9 +398,11 @@ function validateObjectWithoutEntityName(args: {
     return [];
   }
 
-  const isApprovedRootResponseWrapper =
-    args.path === '' && hasApprovedRootResponseWrapperSchema(args.obj);
-  const findings = isApprovedRootResponseWrapper
+  const isApprovedResponseWrapper = hasApprovedResponseWrapperSchema(
+    args.obj,
+    args.path,
+  );
+  const findings = isApprovedResponseWrapper
     ? []
     : [createMissingEntityNameFinding(args.path)];
 
@@ -476,6 +532,11 @@ function findUnauthorizedPublicFieldsRecursive({
   path = '',
   url = '',
   isNestedInEntity = false,
+}: {
+  data: unknown;
+  path?: string;
+  url?: string;
+  isNestedInEntity?: boolean;
 }): UnauthorizedPublicFieldFinding[] {
   const findings: UnauthorizedPublicFieldFinding[] = [];
   if (!isRecord(data) && !Array.isArray(data)) {

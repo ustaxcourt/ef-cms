@@ -9,7 +9,7 @@ import { getHeaderValue } from '@shared/utils/headers';
 export type UnauthorizedFieldFinding = UnauthorizedPublicFieldFindingCore & {
   url: string;
   method: string;
-  location: string;
+  location: 'responseBody';
 };
 
 export type PublicDataValidationResult = {
@@ -63,24 +63,6 @@ export function assertCorrectNetworkData(
       appendFindingsForBody({
         body: payload.responseBody,
         findings,
-        location: 'responseBody',
-        method: payload.method,
-        url: payload.url,
-      });
-    }
-
-    if (
-      shouldValidateJsonBody({
-        body: payload.requestBody,
-        headers: payload.requestHeaders,
-        shouldRejectAssetUrls: false,
-        url: payload.url,
-      })
-    ) {
-      appendFindingsForBody({
-        body: payload.requestBody,
-        findings,
-        location: 'requestBody',
         method: payload.method,
         url: payload.url,
       });
@@ -96,7 +78,6 @@ export function assertCorrectNetworkData(
 function appendFindingsForBody(args: {
   body: unknown;
   findings: UnauthorizedFieldFinding[];
-  location: 'requestBody' | 'responseBody';
   method: string;
   url: string;
 }): void {
@@ -107,13 +88,13 @@ function appendFindingsForBody(args: {
     }).filter(finding => finding.type !== 'not_validated');
 
   args.findings.push(
-    ...relevantFindings.map(finding => ({
+    ...relevantFindings.map((finding): UnauthorizedFieldFinding => ({
       entityName: finding.entityName,
       fieldName: finding.fieldName,
       matchPreview: finding.matchPreview,
       url: args.url,
       method: args.method,
-      location: args.location,
+      location: 'responseBody',
     })),
   );
 }

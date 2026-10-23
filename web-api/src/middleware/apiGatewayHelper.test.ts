@@ -233,6 +233,35 @@ describe('handle', () => {
     });
   });
 
+  it.each([
+    {
+      payload: { results: [] },
+      path: '/public-api/search',
+    },
+    {
+      payload: { results: [], totalCount: 0 },
+      path: '/public-api/todays-orders/1/date',
+    },
+    {
+      payload: {
+        searchResults: {
+          lastKey: [],
+          practitioners: [],
+          total: 0,
+        },
+      },
+      path: '/public-api/practitioners',
+    },
+  ])(
+    'allows approved public response wrapper for $path',
+    async ({ payload, path }) => {
+      const response = await handle({ path }, () => payload);
+
+      expect(response.statusCode).toBe('200');
+      expect(JSON.parse(response.body)).toEqual(payload);
+    },
+  );
+
   it('should return 200 status if response is undefined', async () => {
     const response = await handle({}, () => undefined);
     expect(response).toEqual({

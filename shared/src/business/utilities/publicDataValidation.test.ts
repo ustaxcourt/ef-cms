@@ -7,6 +7,8 @@ import { PublicDocketEntry } from '@shared/business/entities/cases/PublicDocketE
 import { PublicUser } from '@shared/business/entities/PublicUser';
 import { PARTY_TYPES } from '@shared/business/entities/EntityConstants';
 import { PublicTrialSessionInfo } from '@shared/business/dto/trialSessions/PublicTrialSessionInfo';
+import { PublicTrialSessionDetails } from '@shared/business/entities/trialSessions/PublicTrialSessionDetails';
+import { RestrictedCaseResponse } from '@shared/business/dto/cases/RestrictedCaseResponse';
 
 const MOCK_UUID = 'c7d90c05-f6cd-442c-a168-202db587f16f';
 
@@ -265,15 +267,162 @@ describe('publicDataValidation', () => {
     expect(findings).toEqual([]);
   });
 
-  it('rejects unapproved fields inside docket-entry relationship objects', () => {
-    const docketEntry = new PublicDocketEntry({
-      affectedDocketEntries: [
-        {
-          docketEntryId: MOCK_UUID,
-          disposition: 'DENIED',
-          privateField: 'do-not-leak',
+  it('passes for approved search, report, and practitioner response wrappers', () => {
+    const results = [
+      { results: [] },
+      { results: [], totalCount: 0 },
+      {
+        searchResults: {
+          lastKey: ['bar-number', 1],
+          practitioners: [],
+          total: 0,
         },
-      ],
+      },
+    ];
+
+    for (const data of results) {
+      expect(
+        findUnauthorizedPublicFields({
+          data,
+          url: 'http://localhost:4001/public-api/search',
+        }),
+      ).toEqual([]);
+    }
+  });
+
+  it('recognizes public entity arrays inside approved result wrappers', () => {
+    const findings = findUnauthorizedPublicFields({
+      data: {
+        results: [{ entityName: 'PublicDocumentSearchResult' }],
+      },
+      url: 'http://localhost:4001/public-api/order-search',
+    });
+
+    expect(findings).toEqual([
+      expect.objectContaining({
+        entityName: 'PublicDocumentSearchResult',
+        fieldName: 'results[0].isValidated',
+        type: 'not_validated',
+      }),
+    ]);
+  });
+
+  it('rejects unauthorized values and extra fields inside approved wrappers', () => {
+    const findings = findUnauthorizedPublicFields({
+      data: {
+        results: [
+          {
+            entityName: 'PublicDocumentSearchResult',
+            isValidated: true,
+            privateField: 'do-not-leak',
+          },
+        ],
+        totalCount: 1,
+      },
+      url: 'http://localhost:4001/public-api/order-search',
+    });
+
+    expect(findings).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          fieldName: 'results[0].privateField',
+          entityName: 'PublicDocumentSearchResult',
+        }),
+      ]),
+    );
+
+    const extraFieldFindings = findUnauthorizedPublicFields({
+      data: {
+        results: [],
+        totalCount: 0,
+        privateField: 'do-not-leak',
+      },
+      url: 'http://localhost:4001/public-api/order-search',
+    });
+
+    expect(extraFieldFindings).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          fieldName: 'entityName',
+          matchPreview: '[missing]',
+        }),
+      ]),
+    );
+  });
+
+  it('does not allow internal consolidated-case summaries as public entities', () => {
+    const findings = findUnauthorizedPublicFields({
+      data: {
+        entityName: 'ConsolidatedCaseSummary',
+        isValidated: true,
+        docketNumber: '101-20',
+        status: 'New',
+        blocked: true,
+      },
+      url: 'http://localhost:4001/public-api/cases/101-20',
+    });
+
+    expect(findings).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          entityName: 'ConsolidatedCaseSummary',
+          fieldName: 'entityName',
+        }),
+      ]),
+    );
+  });
+
+  it('rejects unauthorized fields on nested calendared case responses', () => {
+    const calendaredCase = new RestrictedCaseResponse({
+      docketNumber: '101-20',
+      docketEntries: [],
+    });
+    Object.assign(calendaredCase, { privateField: 'do-not-leak' });
+    const trialSessionDetails = new PublicTrialSessionDetails({
+      calendaredCases: [calendaredCase],
+      startDate: '2026-01-01T00:00:00.000Z',
+    }).validate();
+
+    const findings = findUnauthorizedPublicFields({
+      data: trialSessionDetails,
+      url: 'http://localhost:4001/public-api/trial-sessions/abc',
+    });
+
+    expect(findings).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          entityName: 'RestrictedCaseResponse',
+          fieldName: 'calendaredCases[0].privateField',
+        }),
+      ]),
+    );
+  });
+
+  it('passes for validated docket entries with optional previous-document fields omitted', () => {
+    const docketEntry = new PublicDocketEntry({
+      docketNumber: '101-20',
+      filingDate: '2020-01-05T03:30:45.007Z',
+      isSealed: false,
+      previousDocument: {},
+      receivedAt: '2020-01-05T03:30:45.007Z',
+    }).validate();
+
+    const findings = findUnauthorizedPublicFields({
+      data: docketEntry,
+      url: 'http://localhost:4001/public-api/cases/101-20/docket',
+    });
+
+    expect(findings).toEqual([]);
+  });
+
+  it('rejects unapproved fields inside docket-entry relationship objects', () => {
+    const relationshipWithPrivateField = {
+      docketEntryId: MOCK_UUID,
+      disposition: 'DENIED',
+      privateField: 'do-not-leak',
+    };
+    const docketEntry = new PublicDocketEntry({
+      affectedDocketEntries: [relationshipWithPrivateField],
       docketNumber: '101-20',
       filingDate: '2020-01-05T03:30:45.007Z',
       isSealed: false,
@@ -302,17 +451,11 @@ describe('publicDataValidation', () => {
       isSealed: false,
       receivedAt: '2020-01-05T03:30:45.007Z',
     };
+    const newDocketEntry = () => new PublicDocketEntry(docketEntryFields);
     const findings = [
-      new PublicDocketEntry({
-        ...docketEntryFields,
-        affectedDocketEntries: {},
-      }),
-      new PublicDocketEntry({
-        ...docketEntryFields,
-        affectedByDocketEntries: [null],
-      }),
-      new PublicDocketEntry({
-        ...docketEntryFields,
+      Object.assign(newDocketEntry(), { affectedDocketEntries: {} }),
+      Object.assign(newDocketEntry(), { affectedByDocketEntries: [null] }),
+      Object.assign(newDocketEntry(), {
         affectedByDocketEntries: [{ docketEntryId: MOCK_UUID }],
       }),
     ].flatMap(docketEntry =>

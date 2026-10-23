@@ -41,11 +41,12 @@ export const getPublicTrialSessionDetailsInteractor = async ({
     .filter(aCase => !aCase.removedFromTrial)
     .map(aCase => {
       // No need to see docket entries
-
-      return CaseFactory.getCaseDTO({
+      const caseDTO = CaseFactory.getCaseDTO({
         rawCase: { ...aCase, docketEntries: [] },
         user: undefined,
       }) as PublicCaseResponse | RestrictedCaseResponse;
+
+      return caseDTO.validate();
     });
 
   const publicTrialSessionData = new PublicTrialSessionDetails({

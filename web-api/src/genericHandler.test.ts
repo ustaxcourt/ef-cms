@@ -123,6 +123,18 @@ describe('genericHandler', () => {
     );
   });
 
+  it('does not decode token claims for public API requests', async () => {
+    await genericHandler(
+      {
+        ...MOCK_EVENT,
+        path: '/public-api/practitioners',
+      },
+      () => null,
+    );
+
+    expect(getLoggerMock().addUser).toHaveBeenCalledWith({ user: undefined });
+  });
+
   it('should not log `results` when disabled in options', async () => {
     const callback = () => null;
 
