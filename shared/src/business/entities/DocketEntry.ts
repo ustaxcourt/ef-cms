@@ -532,6 +532,43 @@ export class DocketEntry extends JoiValidationEntity {
     );
   }
 
+  static isMotionSupport(
+    entry: RawDocketEntry,
+    rootDocument?: RawDocketEntry,
+  ): boolean {
+    return (
+      !!rootDocument &&
+      DocketEntry.isMotion(rootDocument.eventCode) &&
+      PUBLIC_SUPPORTING_EVENT_CODES_FOR_MOTIONS.includes(entry.eventCode) &&
+      entry.filingDate === rootDocument.filingDate
+    );
+  }
+
+  static isNonPublicLodged(
+    entry: RawDocketEntry,
+    rootDocument?: RawDocketEntry,
+  ): boolean {
+    return (
+      !!entry.lodged ||
+      (!!rootDocument?.lodged &&
+        DocketEntry.isMotionSupport(entry, rootDocument))
+    );
+  }
+
+  static isMotionPublic(
+    entry: RawDocketEntry,
+    rootDocument: RawDocketEntry | undefined,
+    motionVisibilityChangeDate: string,
+  ): boolean {
+    return (
+      entry.filingDate >= motionVisibilityChangeDate &&
+      !entry.isPaper &&
+      (DocketEntry.isMotion(entry.eventCode) ||
+        DocketEntry.isMotionSupport(entry, rootDocument)) &&
+      DocketEntry.isFiledByPractitioner(entry.filedByRole)
+    );
+  }
+
   static isPublic(
     entry: RawDocketEntry,
     {
@@ -560,13 +597,7 @@ export class DocketEntry extends JoiValidationEntity {
     if (DocketEntry.isPublicEventCode(entry.eventCode)) {
       return true;
     }
-    if (
-      entry.lodged ||
-      (rootDocument?.lodged &&
-        DocketEntry.isMotion(rootDocument.eventCode) &&
-        PUBLIC_SUPPORTING_EVENT_CODES_FOR_MOTIONS.includes(entry.eventCode) &&
-        entry.filingDate === rootDocument.filingDate)
-    ) {
+    if (DocketEntry.isNonPublicLodged(entry, rootDocument)) {
       return false;
     }
 
@@ -575,15 +606,11 @@ export class DocketEntry extends JoiValidationEntity {
       entry.filingDate < visibilityChangeDate
     ) {
       if (
-        entry.filingDate >= motionVisibilityChangeDate &&
-        !entry.isPaper &&
-        (DocketEntry.isMotion(entry.eventCode) ||
-          (DocketEntry.isMotion(rootDocument?.eventCode ?? '') &&
-            PUBLIC_SUPPORTING_EVENT_CODES_FOR_MOTIONS.includes(
-              entry.eventCode,
-            ) &&
-            entry.filingDate === rootDocument?.filingDate)) &&
-        DocketEntry.isFiledByPractitioner(entry.filedByRole)
+        DocketEntry.isMotionPublic(
+          entry,
+          rootDocument,
+          motionVisibilityChangeDate,
+        )
       ) {
         return true;
       }
