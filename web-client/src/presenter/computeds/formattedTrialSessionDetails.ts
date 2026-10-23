@@ -5,8 +5,53 @@ import { TrialSession } from '@shared/business/entities/trialSessions/TrialSessi
 import { isEmpty, isEqual } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 import { thirtyDaysBeforeTrial } from '@web-client/presenter/computeds/trialSessionsHelper';
+import {
+  ROLES,
+  SESSION_STATUS_GROUPS,
+  SESSION_TYPES,
+} from '@shared/business/entities/EntityConstants';
 
 type EditPermissionsType = 'all' | 'limited' | 'none';
+
+const getTrialSessionEditPermissions = ({
+  trialDateInFuture,
+  trialSession,
+  userRole,
+}: {
+  trialDateInFuture: boolean;
+  trialSession: Pick<
+    FormattedTrialSessionDetailsType,
+    'isCalendared' | 'isReportingSession' | 'sessionStatus' | 'sessionType'
+  >;
+  userRole: string;
+}): EditPermissionsType => {
+  if (userRole === ROLES.caseServicesSupervisor && !trialDateInFuture) {
+    return trialSession.isCalendared ? 'limited' : 'none';
+  }
+
+  const readOnlyRoles: string[] = [ROLES.chambers, ROLES.judge];
+  if (
+    !trialDateInFuture ||
+    trialSession.sessionStatus === SESSION_STATUS_GROUPS.closed ||
+    readOnlyRoles.includes(userRole)
+  ) {
+    return 'none';
+  }
+
+  const docketClerkSessionTypes: string[] = [
+    SESSION_TYPES.special,
+    SESSION_TYPES.motionHearing,
+  ];
+  if (
+    userRole === ROLES.docketClerk &&
+    !trialSession.isReportingSession &&
+    !docketClerkSessionTypes.includes(trialSession.sessionType)
+  ) {
+    return 'none';
+  }
+
+  return 'all';
+};
 
 export type FormatTrialSessionHelperType = FormattedTrialSessionDetailsType & {
   alertMessageForNOTT?: string;
@@ -54,7 +99,6 @@ export const formattedTrialSessionDetails = (
     SESSION_STATUS_GROUPS,
     SESSION_STATUS_TYPES,
     TRIAL_SESSION_SCOPE_TYPES,
-    USER_ROLES,
   } = applicationContext.getConstants();
 
   showOpenCases =
@@ -98,36 +142,14 @@ export const formattedTrialSessionDetails = (
       .getUtilities()
       .formatNow(DATE_FORMATS.YYYYMMDD);
 
-    const user = get(state.user);
-    const isChambersUser = user.role === USER_ROLES.chambers;
-    const isJudgeUser = user.role === USER_ROLES.judge;
     const trialDateInFuture = trialDateFormatted > nowDateFormatted;
-    const docketClerkCanEditCheck = sessionType => {
-      const editableSessionTypes = ['Special', 'Motion/Hearing'];
-      return editableSessionTypes.includes(sessionType);
-    };
 
     canDelete = trialDateInFuture && !formattedTrialSession.isCalendared;
-    if (
-      trialDateInFuture &&
-      formattedTrialSession.sessionStatus !== SESSION_STATUS_GROUPS.closed &&
-      !isChambersUser &&
-      !isJudgeUser
-    ) {
-      editPermissions = 'all';
-    }
-
-    if (user.role === USER_ROLES.docketClerk && editPermissions === 'all') {
-      editPermissions = docketClerkCanEditCheck(
-        formattedTrialSession.sessionType,
-      )
-        ? 'all'
-        : 'none';
-    }
-
-    if (user.role === USER_ROLES.caseServicesSupervisor && !trialDateInFuture) {
-      editPermissions = formattedTrialSession.isCalendared ? 'limited' : 'none';
-    }
+    editPermissions = getTrialSessionEditPermissions({
+      trialDateInFuture,
+      trialSession: formattedTrialSession,
+      userRole: currentUser.role,
+    });
 
     const allCases = formattedTrialSession.caseOrder || [];
     const inactiveCases = allCases.filter(

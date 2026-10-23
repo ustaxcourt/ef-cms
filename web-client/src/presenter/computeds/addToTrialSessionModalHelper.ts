@@ -1,5 +1,6 @@
 import { sortBy } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
+import { TRIAL_SESSION_PROCEEDING_TYPES } from '@shared/business/entities/EntityConstants';
 
 export const formatTrialSessionDisplayOptions = (
   trialSessions,
@@ -19,6 +20,7 @@ export const trialSessionOptionText = (trialSession: {
   trialLocation?: string;
   startDate: string;
   sessionType: string;
+  proceedingType?: string;
 }): string => {
   const startDateFormatted = formatDateString(
     trialSession.startDate,
@@ -41,7 +43,11 @@ export const trialSessionOptionText = (trialSession: {
       sessionTypeFormatted = 'M/H';
       break;
   }
-  return `${trialSession.trialLocation} ${startDateFormatted} (${sessionTypeFormatted})`;
+  const reportingSessionSuffix =
+    trialSession.proceedingType === TRIAL_SESSION_PROCEEDING_TYPES.reporting
+      ? '(RP)'
+      : '';
+  return `${trialSession.trialLocation} ${startDateFormatted} (${sessionTypeFormatted})${reportingSessionSuffix}`;
 };
 
 export const trialSessionsModalHelper = ({

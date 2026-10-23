@@ -21,6 +21,7 @@ export class NewTrialSession extends TrialSession {
       startDate: JoiValidationConstants.ISO_DATE.min('now')
         .required()
         .messages({ '*': 'Enter a valid start date' }),
+      ...this.getReportingValidationRules(),
     };
   }
 }

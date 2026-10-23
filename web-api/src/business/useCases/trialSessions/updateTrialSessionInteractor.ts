@@ -35,7 +35,12 @@ import {
   formatNow,
   FORMATS,
 } from '@shared/business/utilities/DateHandler';
-import { ROLES } from '@shared/business/entities/EntityConstants';
+import {
+  ALLOWLIST_FEATURE_FLAGS,
+  ROLES,
+  TRIAL_SESSION_PROCEEDING_TYPES,
+} from '@shared/business/entities/EntityConstants';
+import { getFeatureFlagValue } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValue';
 import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 import { Case } from '@shared/business/entities/cases/Case';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
@@ -46,25 +51,19 @@ type UpdateTrialSessionParams = {
   clientConnectionId: string;
 };
 
-export const updateTrialSession = async (
-  applicationContext: ServerApplicationContext,
-  { clientConnectionId, trialSession }: UpdateTrialSessionParams,
-  authorizedUser: UnknownAuthUser,
-): Promise<void> => {
-  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
-    throw new UnauthorizedError('Unauthorized');
-  }
-
-  const currentTrialSession = (await getTrialSessionById({
-    trialSessionId: trialSession.trialSessionId!,
-  }))!;
-
-  const startDateFormatted = formatDateString(
-    currentTrialSession.startDate,
-    FORMATS.YYYYMMDD,
-  );
-  const nowFormatted = formatNow(FORMATS.YYYYMMDD);
-
+const validateTrialSessionUpdateDates = ({
+  authorizedUser,
+  currentTrialSession,
+  nowFormatted,
+  startDateFormatted,
+  trialSession,
+}: {
+  authorizedUser: UnknownAuthUser;
+  currentTrialSession: RawTrialSession;
+  nowFormatted: string;
+  startDateFormatted: string;
+  trialSession: RawTrialSession;
+}): void => {
   if (
     startDateFormatted <= nowFormatted &&
     authorizedUser &&
@@ -89,13 +88,40 @@ export const updateTrialSession = async (
     trialSession.startDate,
     FORMATS.YYYYMMDD,
   );
-
   if (
     startDateFormatted !== inputStartDateFormatted &&
     inputStartDateFormatted <= nowFormatted
   ) {
     throw new Error('Cannot change the start date to today or a past date.');
   }
+};
+
+export const updateTrialSession = async (
+  applicationContext: ServerApplicationContext,
+  { clientConnectionId, trialSession }: UpdateTrialSessionParams,
+  authorizedUser: UnknownAuthUser,
+): Promise<void> => {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
+    throw new UnauthorizedError('Unauthorized');
+  }
+
+  const currentTrialSession = (await getTrialSessionById({
+    trialSessionId: trialSession.trialSessionId!,
+  }))!;
+
+  const startDateFormatted = formatDateString(
+    currentTrialSession.startDate,
+    FORMATS.YYYYMMDD,
+  );
+  const nowFormatted = formatNow(FORMATS.YYYYMMDD);
+
+  validateTrialSessionUpdateDates({
+    authorizedUser,
+    currentTrialSession,
+    nowFormatted,
+    startDateFormatted,
+    trialSession,
+  });
 
   const LIMITED_EDITABLE_FIELDS: string[] = [
     'alternateTrialClerkName',
@@ -182,6 +208,26 @@ export const updateTrialSession = async (
     ...editableFields,
   });
 
+  updatedTrialSessionEntity.validate();
+  if (
+    updatedTrialSessionEntity.isReporting() &&
+    currentTrialSession.proceedingType !==
+      TRIAL_SESSION_PROCEEDING_TYPES.reporting
+  ) {
+    if (currentTrialSession.isCalendared) {
+      throw new Error(
+        'A session with a trial calendar cannot be changed to Reporting.',
+      );
+    }
+    if (
+      !(await getFeatureFlagValue<boolean>(
+        ALLOWLIST_FEATURE_FLAGS.REPORTING_CALENDARS.key,
+      ))
+    ) {
+      throw new Error('Reporting calendars are not enabled.');
+    }
+  }
+
   let hasPaper: boolean | undefined;
   let pdfUrl: string | undefined;
   let fileId: string | undefined;
@@ -260,6 +306,27 @@ export const updateTrialSession = async (
   }
 
   await withTransaction(async () => {
+    if (
+      updatedTrialSessionEntity.isReporting() &&
+      currentTrialSession.swingSessionId
+    ) {
+      const linkedSession = await getTrialSessionById({
+        trialSessionId: currentTrialSession.swingSessionId,
+      });
+      if (
+        linkedSession?.swingSessionId ===
+        updatedTrialSessionEntity.trialSessionId
+      ) {
+        const unlinkedSession = new TrialSession({
+          ...linkedSession,
+          swingSession: false,
+          swingSessionId: undefined,
+        }).validate();
+        await updateTrialSessionPersistence({
+          trialSessionToUpdate: unlinkedSession.toRawObject(),
+        });
+      }
+    }
     const createWorkingCopyForNewJudge = shouldCreateWorkingCopyForNewJudge(
       currentTrialSession,
       updatedTrialSessionEntity,
@@ -349,6 +416,13 @@ export const determineEntitiesToLock = async (
   const { caseOrder } = currentTrialSession;
 
   const entitiesToLock = [`trial-session|${trialSession.trialSessionId}`];
+
+  if (
+    trialSession.proceedingType === TRIAL_SESSION_PROCEEDING_TYPES.reporting &&
+    currentTrialSession.swingSessionId
+  ) {
+    entitiesToLock.push(`trial-session|${currentTrialSession.swingSessionId}`);
+  }
 
   caseOrder?.forEach(({ docketNumber }) =>
     entitiesToLock.push(`case|${docketNumber}`),

@@ -40,6 +40,33 @@ import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSe
 import { PENDING_DOCKET_ENTRY } from '@shared/test/mockDocketEntry';
 
 describe('setTrialSessionCalendarInteractor', () => {
+  it('should surface an error without writing when an ordinary calendar is requested for Reporting', async () => {
+    getTrialSessionById.mockResolvedValue({
+      ...MOCK_TRIAL,
+      proceedingType: 'Reporting',
+    });
+    await setTrialSessionCalendarInteractor(
+      applicationContext,
+      {
+        trialSessionId: TRIAL_SESSION_ID,
+        clientConnectionId: 'test-connection',
+      },
+      mockPetitionsClerkUser,
+    );
+    expect(updateTrialSession).not.toHaveBeenCalled();
+    expect(upsertCases).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser,
+    ).toHaveBeenCalledWith(
+      expect.objectContaining({
+        message: expect.objectContaining({
+          action: 'set_trial_session_calendar_error',
+          message:
+            'Error setting trial session calendar: Reporting sessions require a reporting calendar.',
+        }),
+      }),
+    );
+  });
   const TRIAL_SESSION_ID = '6805d1ab-18d0-43ec-bafb-654e83405416';
   const AUTOMATIC_BLOCK_FIELDS = {
     automaticBlocked: true,

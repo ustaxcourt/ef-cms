@@ -8648,6 +8648,11 @@
           "type": "string",
           "description": "type of the session"
         },
+        "proceedingType": {
+          "type": "string",
+          "enum": ["In Person", "Remote", "Reporting"],
+          "description": "proceeding type of the session"
+        },
         "maxCases": {
           "type": "string",
           "description": "max number of cases on the session"
@@ -8656,9 +8661,13 @@
           "type": "string",
           "description": "start date of the session"
         },
+        "estimatedEndDate": {
+          "type": "string",
+          "description": "estimated end date of the session; required and equal to startDate for Reporting sessions"
+        },
         "startTime": {
           "type": "string",
-          "description": "start time of the session"
+          "description": "start time of the session, omitted for Reporting sessions"
         },
         "trialLocation": {
           "type": "string",

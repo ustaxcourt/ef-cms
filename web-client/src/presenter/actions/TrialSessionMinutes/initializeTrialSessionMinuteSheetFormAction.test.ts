@@ -142,6 +142,7 @@ describe('initializeMinuteSheet', () => {
     formattedTrialClerk: 'Test Trial Clerk',
     inactiveCases: [],
     isRemoteSession: false,
+    isReportingSession: false,
     noLocationEntered: false,
     openCases: [],
     showSwingSession: false,
