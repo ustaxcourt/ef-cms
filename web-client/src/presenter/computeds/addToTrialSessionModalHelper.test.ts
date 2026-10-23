@@ -75,6 +75,24 @@ describe('addToTrialSessionModalHelper', () => {
   ];
 
   describe('trialSessionOptionText', () => {
+    it.each([
+      ['Regular', 'R'],
+      ['Small', 'S'],
+      ['Hybrid', 'H'],
+      ['Hybrid-S', 'HS'],
+    ])(
+      'should identify Reporting in %s session selections with (RP)',
+      (sessionType, abbreviation) => {
+        expect(
+          trialSessionOptionText({
+            trialLocation: 'Birmingham, Alabama',
+            startDate: '2024-09-27T05:00:00.000Z',
+            sessionType,
+            proceedingType: 'Reporting',
+          }),
+        ).toBe(`Birmingham, Alabama 09/27/24 (${abbreviation})(RP)`);
+      },
+    );
     const trialSession = {
       startDate: '2024-09-27T05:00:00.000Z',
       trialLocation: 'Birmingham, Alabama',
