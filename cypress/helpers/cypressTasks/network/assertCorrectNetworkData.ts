@@ -1,10 +1,18 @@
-import type { CapturedNetworkPayload } from '../../../local-only/support/commands';
 import { findUnauthorizedPublicFields } from '@shared/business/utilities/publicDataValidation';
 import type {
   UnauthorizedPublicFieldFinding,
   UnauthorizedPublicFieldFindingCore,
 } from '@shared/business/utilities/publicDataValidation';
 import { getHeaderValue } from '@shared/utils/headers';
+
+export type CapturedNetworkPayload = {
+  url: string;
+  method: string;
+  requestBody?: unknown;
+  responseBody?: unknown;
+  requestHeaders?: Record<string, unknown>;
+  responseHeaders?: Record<string, unknown>;
+};
 
 export type UnauthorizedFieldFinding = UnauthorizedPublicFieldFindingCore & {
   url: string;

@@ -1,18 +1,10 @@
 import type {
+  CapturedNetworkPayload,
   PublicDataValidationResult,
   UnauthorizedFieldFinding,
 } from '../../helpers/cypressTasks/network/assertCorrectNetworkData';
 import '../../support/commands/keepAliases';
 import 'cypress-file-upload';
-
-export type CapturedNetworkPayload = {
-  url: string;
-  method: string;
-  requestBody?: unknown;
-  responseBody?: unknown;
-  requestHeaders?: Record<string, unknown>;
-  responseHeaders?: Record<string, unknown>;
-};
 
 const capturedNetworkPayloads: CapturedNetworkPayload[] = [];
 
