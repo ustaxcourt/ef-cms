@@ -74,7 +74,10 @@ export const PublicTrialSessionsFilters = function ({
 
   function proceedingTypeRadioOption(key: string, value: string) {
     return (
-      <div className="usa-radio usa-radio__inline padding-right-1" key={key}>
+      <div
+        className="usa-radio usa-radio__inline padding-right-1 tw:max-[479px]:block!"
+        key={key}
+      >
         <input
           aria-describedby="proceeding-type-legend"
           checked={proceedingType === value}
