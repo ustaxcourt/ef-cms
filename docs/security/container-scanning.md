@@ -24,6 +24,9 @@ staging pushes, so an alert still present stays one alert and only a new CVE ope
 On PRs that change no image paths, `containers-gate` still runs and passes, so it stays safe to
 require in branch protection.
 
+The workflow does not run on PRs into prod. Those PRs bring only code that staging has already
+scanned, so findings that are already on staging must not block a deployment.
+
 SARIF reaches the **Security tab** only from pushes to staging, the weekly run, and manual dispatches, under categories `trivy-config`, `trivy-image-base`, `trivy-image-puppeteer`, `trivy-image-batch` (manual dispatch) and `trivy-baseline-base`, `trivy-baseline-puppeteer`, `trivy-baseline-batch` (staging and weekly). A PR, whatever branch it targets, reports its findings in the workflow log and job summary instead. Both list every finding, most severe first, with its file, package, installed and fixed versions, and a link to the advisory (up to 100 per scan, with a by-rule count beyond that).
 
 Removing a scan does not clear alerts it already reported. Existing alerts have to be dismissed in the Security tab, or their analyses deleted by a repo admin.
@@ -32,7 +35,7 @@ Removing a scan does not clear alerts it already reported. Existing alerts have 
 
 | Image | Built from | Purpose |
 |-------|-----------|---------|
-| `ef-cms-us-east-1` | `Dockerfile` | Production Lambda base image |
+| `ef-cms-us-east-1` | `Dockerfile` | CircleCI build, test and deploy image |
 | `efcms-local` | `Dockerfile-local` (FROM ef-cms-us-east-1) | Local dev / CI test runner — **not scanned** |
 | `FROM` of `web-api/runtimes/puppeteer/Dockerfile` | Docker Hub | Puppeteer / PDF generation base |
 | `FROM` of `web-api/terraform/modules/batch/docker-image/Dockerfile` | Docker Hub | Batch processing base |
@@ -86,7 +89,7 @@ gh run watch "$RUN_ID" --exit-status
 The shared `.github/actions/dawson-trivy-image-scan/action.yml` action has the `ROLLOUT GUARD`
 marking image scans as warn-only. To make image scans blocking:
 
-1. Triage existing findings — either fix them or add to `.trivyignore`
+1. Triage existing findings — either fix them or record them as VEX statements in `.vex/ef-cms.openvex.json` (see [container-findings-triage.md](container-findings-triage.md)), and pass that file to the scans with Trivy's `--vex` option
 2. Change `exit-code: '0'` to `exit-code: '1'` in `dawson-trivy-image-scan/action.yml`
 3. The `containers-gate` job will then fail PRs that introduce new vulnerabilities
 
