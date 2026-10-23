@@ -1,10 +1,7 @@
-import {
-  buildHtmlTableDocument,
-  buildHtmlTableDocumentHelper as buildHtmlTableDocumentHelperComputed,
-} from './buildHtmlTableDocumentHelper';
 import { CASE_TYPES } from '@shared/business/entities/EntityConstants';
 import { ClerkDashboardCaseTypeTotal } from '@web-api/business/useCases/reports/getClerkDashboardStatsInteractor';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
+import { buildHtmlTableDocumentHelper as buildHtmlTableDocumentHelperComputed } from './buildHtmlTableDocumentHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '@web-client/withAppContext';
 
@@ -13,96 +10,24 @@ const buildHtmlTableDocumentHelper = withAppContextDecorator(
   { ...applicationContext },
 );
 
-const parse = (html: string) =>
-  new DOMParser().parseFromString(html, 'text/html');
-
-const getBodyRows = (doc: Document) =>
-  Array.from(doc.querySelectorAll('tbody tr')).map(tr =>
-    Array.from(tr.querySelectorAll('td')).map(td => td.textContent),
-  );
-
-describe('buildHtmlTableDocument', () => {
-  it('should build a titled English document with a header row and one row per entry', () => {
-    const doc = parse(
-      buildHtmlTableDocument({
-        labelHeader: 'Type of Case',
-        rows: [
-          { label: 'Deficiency', total: '2,058' },
-          { label: 'CDP (Lien/Levy)', total: '87' },
-        ],
-        title: 'All Open Cases by Type',
-        totalHeader: 'Total',
-      }),
-    );
-
-    expect(doc.documentElement.lang).toEqual('en');
-    expect(doc.title).toEqual('All Open Cases by Type');
-    expect(doc.querySelector('h2')!.textContent).toEqual(
-      'All Open Cases by Type',
-    );
-    expect(
-      Array.from(doc.querySelectorAll('th')).map(th => th.textContent),
-    ).toEqual(['Type of Case', 'Total']);
-    expect(getBodyRows(doc)).toEqual([
-      ['Deficiency', '2,058'],
-      ['CDP (Lien/Levy)', '87'],
-    ]);
-  });
-
-  it('should escape HTML in the title, headers, and rows', () => {
-    const html = buildHtmlTableDocument({
-      labelHeader: '<b>Type</b>',
-      rows: [{ label: '<script>alert(1)</script>', total: '1 & 2' }],
-      title: 'A "quoted" <title>',
-      totalHeader: 'Total',
-    });
-    const doc = parse(html);
-
-    expect(html).not.toContain('<script>');
-    expect(doc.querySelector('script')).toBeNull();
-    expect(doc.querySelector('th')!.textContent).toEqual('<b>Type</b>');
-    expect(doc.querySelector('td')!.textContent).toEqual(
-      '<script>alert(1)</script>',
-    );
-    expect(doc.querySelectorAll('td')[1].textContent).toEqual('1 & 2');
-    expect(doc.title).toEqual('A "quoted" <title>');
-  });
-
-  it('should build an empty table body when there are no rows', () => {
-    const doc = parse(
-      buildHtmlTableDocument({
-        labelHeader: 'Type of Case',
-        rows: [],
-        title: 'Empty',
-        totalHeader: 'Total',
-      }),
-    );
-
-    expect(doc.querySelectorAll('tbody tr')).toHaveLength(0);
-  });
-});
-
 describe('buildHtmlTableDocumentHelper', () => {
-  const getOpenCasesByTypeDocument = (
+  const getOpenCasesByTypeTable = (
     openCasesByCaseType: ClerkDashboardCaseTypeTotal[],
   ) =>
-    parse(
-      runCompute(buildHtmlTableDocumentHelper, {
-        state: { clerkOfCourtDashboardStats: { openCasesByCaseType } },
-      }).openCasesByTypeHtmlDocument,
-    );
+    runCompute(buildHtmlTableDocumentHelper, {
+      state: { clerkOfCourtDashboardStats: { openCasesByCaseType } },
+    }).openCasesByTypeTable;
 
-  it('should title the open cases by type document and its columns', () => {
-    const doc = getOpenCasesByTypeDocument([]);
+  it('should set the open cases by type table title and column headers', () => {
+    const { labelHeader, title, totalHeader } = getOpenCasesByTypeTable([]);
 
-    expect(doc.title).toEqual('All Open Cases by Type');
-    expect(
-      Array.from(doc.querySelectorAll('th')).map(th => th.textContent),
-    ).toEqual(['Type of Case', 'Total']);
+    expect(title).toEqual('All Open Cases by Type');
+    expect(labelHeader).toEqual('Type of Case');
+    expect(totalHeader).toEqual('Total');
   });
 
   it('should list every case type, largest total first', () => {
-    const doc = getOpenCasesByTypeDocument([
+    const { rows } = getOpenCasesByTypeTable([
       { caseType: 'Deficiency', total: 1798 },
       { caseType: 'Declaratory Judgment (Exempt Organization)', total: 51 },
       { caseType: 'Declaratory Judgment (Retirement Plan)', total: 75 },
@@ -113,44 +38,44 @@ describe('buildHtmlTableDocumentHelper', () => {
     ]);
 
     // equal totals keep the Deficiency-first case type order
-    expect(getBodyRows(doc)).toEqual([
-      ['Deficiency', '1,798'],
-      ['Declaratory Judgment (Retirement Plan)', '75'],
-      ['Partnership (Section 6228)', '75'],
-      ['Declaratory Judgment (Exempt Organization)', '51'],
-      ['Partnership (Section 6226)', '48'],
-      ['Partnership (BBA Section 1101)', '26'],
-      ['CDP (Lien/Levy)', '0'],
-      ['Disclosure', '0'],
-      ['Innocent Spouse', '0'],
-      ['Interest Abatement', '0'],
-      ['Other', '0'],
-      ['Passport', '0'],
-      ['Whistleblower', '0'],
-      ['Worker Classification', '0'],
+    expect(rows).toEqual([
+      { label: 'Deficiency', total: '1,798' },
+      { label: 'Declaratory Judgment (Retirement Plan)', total: '75' },
+      { label: 'Partnership (Section 6228)', total: '75' },
+      { label: 'Declaratory Judgment (Exempt Organization)', total: '51' },
+      { label: 'Partnership (Section 6226)', total: '48' },
+      { label: 'Partnership (BBA Section 1101)', total: '26' },
+      { label: 'CDP (Lien/Levy)', total: '0' },
+      { label: 'Disclosure', total: '0' },
+      { label: 'Innocent Spouse', total: '0' },
+      { label: 'Interest Abatement', total: '0' },
+      { label: 'Other', total: '0' },
+      { label: 'Passport', total: '0' },
+      { label: 'Whistleblower', total: '0' },
+      { label: 'Worker Classification', total: '0' },
     ]);
   });
 
   it('should sort by the numeric total, not the formatted text', () => {
-    const doc = getOpenCasesByTypeDocument([
+    const { rows } = getOpenCasesByTypeTable([
       { caseType: 'Other', total: 9 },
       { caseType: 'Passport', total: 1000 },
       { caseType: 'Disclosure', total: 100 },
     ]);
 
-    expect(
-      getBodyRows(doc)
-        .slice(0, 3)
-        .map(([label]) => label),
-    ).toEqual(['Passport', 'Disclosure', 'Other']);
+    expect(rows.slice(0, 3).map(row => row.label)).toEqual([
+      'Passport',
+      'Disclosure',
+      'Other',
+    ]);
   });
 
   it('should zero every case type when there are no open cases', () => {
-    const rows = getBodyRows(getOpenCasesByTypeDocument([]));
+    const { rows } = getOpenCasesByTypeTable([]);
 
     expect(rows).toHaveLength(CASE_TYPES.length);
-    rows.forEach(([, total]) => {
-      expect(total).toEqual('0');
+    rows.forEach(row => {
+      expect(row.total).toEqual('0');
     });
   });
 });
