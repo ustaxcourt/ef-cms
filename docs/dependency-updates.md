@@ -18,7 +18,7 @@ At the moment, the only task we rotate is updating dependencies. As an open-sour
 - `./web-api/runtimes/puppeteer/package.json`
 - `./web-api/terraform/modules/batch/docker-image/package.json`
 
-1. Before running the `upgrade-npm-packages.ts` script, ensure that all packages listed in the caveats section below are in parity with the caveats list in the `upgrade-npm-packages.ts` file. As of 8/17/2026, the script and docs are in sync; the following hand-managed packages are excluded by the upgrade script: `babel-jest`, `ts-jest`, `recharts`, `eslint-plugin-cypress`, and `aws-sigv4-sign`.
+1. Before running the `upgrade-npm-packages.ts` script, ensure that all packages listed in the caveats section below are in parity with the caveats list in the `upgrade-npm-packages.ts` file. Any package documented as held that is missing from the script's `caveats` array will be upgraded to its latest version. As of 10/13/2026, the script and docs are in sync; `@opensearch-project/opensearch` was added to the script this rotation after being documented as held on 10/2/2026 without a matching script entry.
 
 1. You can use the `upgrade-npm-packages.ts` script for this process if you would like. Run the script in each directory containing a package.json:
    ```bash
@@ -33,6 +33,7 @@ At the moment, the only task we rotate is updating dependencies. As an open-sour
    # web-api/terraform/modules/batch/docker-image/package.json
    (cd web-api/terraform/modules/batch/docker-image && node ../../../../../scripts/npm/upgrade-npm-packages.ts)
    ```
+
 1. After running, ensure all three package.json files are updated.
 
 #### 1.1 Run `npm outdated`
@@ -54,6 +55,9 @@ This command informs us of known security vulnerabilities. If transitive depende
 
 > **Why am I seeing a vulnerability for `aws-sdk` v2 or `cognito-local`?**
 > These are dev dependencies with known vulnerabilities. The aws-sdk v2 vulnerability doesn't affect our use case as it's related to region parameter validation and we're only using it for local development/testing.
+
+> **Why am I seeing 19 high severity vulnerabilities for `braces`, `micromatch`, `stylelint`, `nodemon`, and the esbuild plugins?**
+> They all trace back to one advisory: `braces` <=3.0.3 can exhaust the call stack on deeply nested brace patterns ([GHSA-vfj7-8cjw-p6xm](https://github.com/advisories/GHSA-vfj7-8cjw-p6xm), CVE-2026-93687). As of 10/13/2026 there is no patched release, so an override can't fix it. `braces` is only reached through dev and build tooling (`stylelint`, `chokidar`/`nodemon` via the payment-portal test server, `esbuild-plugin-copy`, `esbuild-plugin-clean`), which expand glob patterns from our own configuration rather than user input; `npm ls braces --omit=dev` is empty. Check for a patched `braces` release each rotation and add an override once one ships.
 
 #### 1.3 Approve or deny scripts as needed
 
@@ -81,6 +85,7 @@ When updating Node.js, keep in mind:
  1. Manually update the images in:
    - `./Dockerfile`
    - `./web-api/runtimes/puppeteer/Dockerfile`
+   - `./web-api/terraform/modules/batch/docker-image/Dockerfile`
  1. Manually update the Node.js version defined for the `docker-image-zipper` step in:
    - `./.circleci/config.yml`
  1. Update the node version used by our lambdas.
@@ -113,6 +118,7 @@ Check if updates are necessary for the main `Dockerfile`. We base this image on 
 If the `Dockerfile` has changed, you will need to build a new docker image and publish it to an experimental environment's ECR.
 
 1. Increment the docker image version being used in `.circleci/config.yml` in the `&efcms-docker-image` variable. See [PR #5980](https://github.com/ustaxcourt/ef-cms/pull/5980/files#diff-78a8a19706dbd2a4425dd72bdab0502ed7a2cef16365ab7030a5a0588927bf47) for an example.
+1. Review previously accepted container vulnerability findings and reassess any that may be affected by dependency or image changes. Refer to [Container Finding Triage](./security/container-findings-triage.md) for guidance.
 1. Use the [environment switcher](./additional-resources/environment-switcher.md) to point to an experimental environment:
    ```bash
    . scripts/env/set-env.zsh expN
@@ -150,7 +156,11 @@ Check if there is an update to the Terraform OpenSearch provider and update our 
 1. Change the version of the OpenSearch provider
 
 ### 5. Update PostgreSQL
-Check to see if there is an updated version of the Aurora RDS postgres engine available. If an update is available, we'll need to update postgres locally, in github actions, and in deployed environments.
+Check to see if there is an updated version of the Aurora RDS postgres engine available.
+
+> **Never get ahead of `prod` and `test`.** Local Docker, GitHub Actions service containers, the `RDS_ENGINE_VERSION` default, and experimental Aurora clusters must stay on the same Postgres version that `prod` and `test` run (as of 10/13/2026: **17.5**, pinned as `postgres:17.5-trixie`). A newer engine being available is not a reason to bump anything in a routine rotation; note it in the PR and leave every pin unchanged. An engine upgrade is a planned change that the team schedules for `test` and `prod` together, using the steps below.
+
+When the team schedules an engine upgrade, we'll need to update postgres in deployed environments, locally, and in GitHub Actions together.
 
 1. Use the [environment switcher](./additional-resources/environment-switcher.md) to point to an experimental environment and to retrieve a fresh AWS access key:
    ```bash
@@ -196,7 +206,7 @@ We run postgres via Docker locally and in GitHub Actions. The postgres image we 
    ```bash
    curl -s "https://registry.hub.docker.com/v2/repositories/library/postgres/tags?page_size=100" | jq -r '.results[].name' | sort -V
    ```
-1. The correct tag to use is the target version of postgres plus the Debian codename (e.g. `17.5-bookworm` for postgres 17.5 on Debian bookworm). Generally, the `postgres` images in Dockerhub will have newer versions of postgres than Aurora RDS has available, so don't be alarmed by this discrepancy.
+1. The correct tag to use is the target version of postgres plus the Debian codename from step 1 (e.g. `17.5-trixie` when the CI `cypress/browsers` base is Debian trixie). Generally, the `postgres` images in Dockerhub will have newer versions of postgres than Aurora RDS has available, so don't be alarmed by this discrepancy. Keep local Docker, GHA service containers, and Aurora `RDS_ENGINE_VERSION` on the same major.minor as prod/test — do not advance local or experimental ahead of deployed environments.
 
 #### 5.3 Update PostgreSQL to the latest version locally
 
@@ -270,6 +280,8 @@ If an OpenSearch update is available, we'll need to update OpenSearch in github 
 
 1. Search the project for `opensearch-version:` and make sure it's set to the latest version in `.github/actions/dawson-app-setup/action.yml`.
 
+> **As of 10/13/2026:** Amazon OpenSearch Service supports up to **OpenSearch_3.7** ([release notes, July 29, 2026](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/release-notes.html)). Upstream **3.8.0** and **3.9.0** are on Docker Hub but are not yet AWS engine options. From an experimental environment (`. scripts/env/set-env.zsh expN`), confirm with `aws opensearch list-versions` and compare to `aws opensearch describe-domain --domain-name "efcms-search-${ENV}-${SOURCE_TABLE_VERSION}" --query "DomainStatus.EngineVersion" --output text`. Repo pins already match the AWS maximum: `ES_ENGINE_VERSION` default `OpenSearch_3.7` in `scripts/secrets/create-env-secrets.ts`, local `opensearchproject/opensearch:3.7.0` in `docker-compose.yml` and `web-api/elasticsearch/docker-compose.yml`, and `opensearch-version: 3.7.0` in `.github/actions/dawson-app-setup/action.yml`. No §6.1 secret update, indices report, deploy, or local/GHA bump this rotation.
+
 ### 7. Wrap up
 
 - Check through the list of caveats to see if any of the documented issues have been resolved.
@@ -283,7 +295,13 @@ If an OpenSearch update is available, we'll need to update OpenSearch in github 
 - **GitHub Actions `uses:` pins** — action version tags in `.github/workflows/` files
 - **Inline tool versions** — tools pinned in `run:` steps or `container:` blocks that are not visible to any automated tooling
 
-Do all of these together in a single PR each month.
+Do all of these together in a single PR each month. To see whether this month's update has already been done, check when the pins last changed:
+
+```bash
+git log --format='%ad %an %s' --date=short -- .github/workflows .github/actions | head -20
+```
+
+As of 10/13/2026, these were last updated in the week of 10/12/2026 rotation.
 
 #### 8.0 GitHub Actions `uses:` pins (manual — monthly)
 
@@ -306,6 +324,19 @@ These are the `uses: owner/action@vX.Y.Z` lines in every workflow file. Check an
 | `zaproxy/action-baseline` | `security-dast.yml` | [releases](https://github.com/zaproxy/action-baseline/releases) |
 | `aquasecurity/trivy-action` | `dawson-trivy-image-scan` action and `security-supply-chain.yml` | [releases](https://github.com/aquasecurity/trivy-action/releases) |
 
+**Other actions:**
+
+| Action | Where used | Check releases |
+|---|---|---|
+| `actions/download-artifact` | `job_check-coverage.yml`, `job_persist-test-file-times.yml` | [releases](https://github.com/actions/download-artifact/releases) |
+| `geekyeggo/delete-artifact` | `job_check-coverage.yml` | [releases](https://github.com/GeekyEggo/delete-artifact/releases) |
+| `runforesight/workflow-telemetry-action` | `template_app*.yml`, `template_no-app*.yml`, `pdfs.yml` | [releases](https://github.com/runforesight/workflow-telemetry-action/releases) |
+| `actions/create-github-app-token` | `composite-coverage.yml` | [releases](https://github.com/actions/create-github-app-token/releases) |
+| `stefanzweifel/git-auto-commit-action` | `composite-coverage.yml` | [releases](https://github.com/stefanzweifel/git-auto-commit-action/releases) |
+| `jpb06/coverage-badges-action` | `composite-coverage.yml` | [releases](https://github.com/jpb06/coverage-badges-action/releases) |
+
+> `composite-coverage.yml` only runs after a PR merges to `staging`, so PR checks can't validate changes to its actions. Update those in a separate PR and watch the next `staging` merge. As of 10/13/2026, `actions/create-github-app-token` (v1, latest v3) and `stefanzweifel/git-auto-commit-action` (v5, latest v7) are behind by major versions for this reason.
+
 **Steps to update a `uses:` pin:**
 
 1. Check the releases page for the action (links above).
@@ -327,26 +358,26 @@ These are Docker images used as service containers in workflow jobs (e.g. the Po
 |---|---|---|
 | `postgres` | `security-dast.yml` (dast-api, dast-web), all `template_app*.yml` workflows | See §5.4 above — keep in sync with local and CircleCI postgres version |
 
-> Currently `image: postgres` is unpinned (floats to latest). When §5.4 is executed, pin it to a specific tag (e.g. `postgres:17.5-bookworm`) here too.
+> GHA service containers are pinned to `postgres:17.5-trixie` to match local `docker-compose.yml` and Aurora `RDS_ENGINE_VERSION` (`17.5` on prod/test). Keep these in sync per §5.2–§5.4; do not bump local/GHA/exp ahead of prod/test.
 
 #### 8.1 Semgrep container image
 
-Used in: `.github/workflows/security-sast.yml` (line 33)
+Used in: `.github/workflows/security-sast.yml`
 
 1. Check the latest release at [https://github.com/semgrep/semgrep/releases](https://github.com/semgrep/semgrep/releases)
 1. Search the project for `semgrep/semgrep:` and update the version tag. For example:
    ```yaml
-   image: semgrep/semgrep:1.167.0
+   image: semgrep/semgrep:1.180.0
    ```
 
 #### 8.2 Checkov pip install
 
-Used in: `.github/workflows/security-sast.yml` (line 97)
+Used in: `.github/workflows/security-sast.yml`
 
 1. Check the latest release at [https://pypi.org/project/checkov/](https://pypi.org/project/checkov/)
 1. Search the project for `checkov==` and update the version. For example:
    ```bash
-   pip install checkov==3.3.2
+   pip install checkov==3.3.29
    ```
 1. After bumping, verify the Checkov CI job still passes — Checkov minor versions occasionally change CLI flag behavior.
 
@@ -357,13 +388,13 @@ Used in: `.github/actions/dawson-gitleaks/action.yml`
 1. Check the latest release at [https://github.com/gitleaks/gitleaks/releases](https://github.com/gitleaks/gitleaks/releases)
 1. Update the `version` input in `.github/actions/dawson-gitleaks/action.yml`. For example:
    ```yaml
-   version: 8.31.0
+   version: 8.30.1
    ```
    The download URL and archive filename are derived from this value.
 
 #### 8.4 lockfile-lint npx
 
-Used in: `.github/workflows/security-supply-chain.yml` (line 69)
+Used in: `.github/workflows/security-supply-chain.yml` (line 61)
 
 1. Check the latest release at [https://www.npmjs.com/package/lockfile-lint](https://www.npmjs.com/package/lockfile-lint)
 1. Search the project for `lockfile-lint@` and update the version. For example:
@@ -378,11 +409,34 @@ Used in: `.github/workflows/security-sast.yml` — installed via `curl` in the `
 1. Check the latest release at [https://github.com/koalaman/shellcheck/releases](https://github.com/koalaman/shellcheck/releases)
 2. Search the project for `SHELLCHECK_VERSION=` and update the version variable. For example:
    ```bash
-   SHELLCHECK_VERSION=0.10.0
+   SHELLCHECK_VERSION=0.11.0
    ```
 3. The install URL and filename derive from the variable automatically — no other changes needed.
 
 > **Note:** The `opensearch-version:` input in `dawson-app-setup` is covered by §6.3 above. The `image: postgres` service container in `security-dast.yml` is covered by §5.4 above. GitHub Actions `uses:` pins (including `aquasecurity/trivy-action`, `zaproxy/*`, `github/codeql-action`) are covered by §8.0 above.
+
+### 9. Write the pull request description
+
+Reviewers use the dependency PR description to plan testing, so it has a consistent structure. Copy it from the most recent merged rotation PR (for example [#10476](https://github.com/ustaxcourt/ef-cms/pull/10476)):
+
+- **Package tables**, grouped by `package.json` location (main runtime dependencies, main development dependencies, Puppeteer runtime, Batch docker image). For each package, give the version change, bump type, purpose, where it's used in DAWSON, and what to test. `@aws-sdk/*` packages can share one row.
+- **Infrastructure updates**: Dockerfile base image, AWS CLI, Terraform, CI image, Terraform providers, and CI tool versions.
+- **Manual deployment steps**, matching the new `CHANGES.md` block.
+- **Manual verification results**: the application flows you exercised locally and in the experimental environment, each naming the dependencies it covers, checked off as you complete them.
+- **The dependencies checklist** below, in place of the default PR template checklist.
+
+```markdown
+## Dependencies Checklist
+
+- [ ] I have listed the updated packages, their purpose, where they are used, and the plain-language application areas to test (packages under @aws-sdk are optional to list for brevity).
+- [ ] Mandatory manual testing: I have exercised the affected application areas listed above:
+  - [ ] Locally
+  - [ ] In an experimental environment after deploying this branch
+- [ ] I have built and pushed a new Docker image from the Dockerfile to the experimental environment's ECR if needed, and updated CHANGES.md with the environment where it is deployed.
+- [ ] I have reviewed and updated caveats/hand-managed dependencies as needed.
+- [ ] I have successfully deployed the dependencies branch to an experimental environment.
+- [ ] I have created new Devex/Opex tickets addressing further issues for examination as needed.
+```
 
 ## Configurations
 **Safe to upgrade, but we use a non-standard configuration intentionally**
@@ -424,6 +478,7 @@ Below is a list of dependencies that are locked down due to known issues with se
 Minor and patch versions of DWT _should_ be updated, but require that Court IT update the Windows clients in concert with our app. Do not bump `dwt` during weekly dependency rotations even if a newer version appears on npm — upgrades require the coordination sequence below and a standalone PR to `test`, not a bundled rotation.
 
 - As of 8/10/2026: **Held at 19.4.2** during the 8/10/2026 dependency rotation per operator direction. 19.4.2 is both the pinned version in `package.json` and the latest published release on npm. Re-check each rotation; if a newer version appears, leave it alone until Court IT coordination is complete.
+- As of 9/17/2026: `package.json` pins **19.4.3** (bumped from 19.4.2 in the 8/31/2026 dependency rotation), which is the latest published release on npm.
 
 If an update is available for DWT:
 - Coordinate with Court IT to have the Dynamsoft client updated on Court-owned Windows machines.
@@ -444,8 +499,8 @@ If an update is available for DWT:
    1. The old Windows client and new server version are backwards-compatible.
 
 ### puppeteer and @sparticuz/chromium
-**Current Installed Puppeteer/Puppeteer-core: 25.10.0**
-**Current Installed @sparticuz/chromium: 152.0.0**
+**Current Installed Puppeteer/Puppeteer-core: 25.11.0**
+**Current Installed @sparticuz/chromium: 153.0.0**
 
 - When updating puppeteer or puppeteer core in the project, make sure to also match versions in `web-api/runtimes/puppeteer/package.json` as this is our lambda layer which we use to generate pdfs. Puppeteer and chromium versions should always match between package.json and web-api/runtimes/puppeteer/package.json. Remember to run `npm install --prefix web-api/runtimes/puppeteer` to install and update the package-lock file.
 - Puppeteer also has recommended versions of Chromium, so we should make sure to use the recommended version of chromium for the version of puppeteer that we are on. The chromium versions supported by puppeteer can be found [here](https://pptr.dev/supported-browsers)
@@ -459,6 +514,9 @@ If an update is available for DWT:
 - As of July 27, 2026: Puppeteer **25.4.0** is available. Still blocked — `@sparticuz/chromium` latest on npm remains **149.0.0**; puppeteer 25.2.x and above require Chrome for Testing 150.x.
 - As of 8/10/2026: Puppeteer **25.5.0** is available. Still blocked — `@sparticuz/chromium` latest on npm remains **149.0.0**; puppeteer 25.2.x and above require Chrome for Testing 150.x.
 - As of 9/8/2026: `@sparticuz/chromium` version **152.0.0** has been released, so we have now upgraded to Puppeteer **25.5.10**
+- As of 9/17/2026: upgraded to Puppeteer **25.11.0** with `@sparticuz/chromium` **153.0.0** in both `package.json` and `web-api/runtimes/puppeteer/package.json`.
+- As of 9/22/2026: Puppeteer **25.11.0** and `@sparticuz/chromium` **153.0.0** remain the latest on npm; versions already match in `package.json` and `web-api/runtimes/puppeteer/package.json`. No change.
+- As of 10/13/2026: Puppeteer **25.12.0** requires Chrome for Testing 154 and **25.13.0** requires 155, but `@sparticuz/chromium` latest on npm is still **153.0.0**. Held at **25.11.0**.
 
 ### ws, 3rd party dependency of Cerebral
 
@@ -480,13 +538,14 @@ If an update is available for DWT:
 
 ### jest and jest-environment-jsdom
 **Installed Versions:**
-**jest: 30.4.2**
-**jest-environment-jsdom: 30.4.1**
+**jest: 30.5.2**
+**jest-environment-jsdom: 30.5.2**
+**babel-jest: 30.5.2**
 
 - Upgrade `jest`, `babel-jest`, and `jest-environment-jsdom` together manually rather than via the upgrade script. `babel-jest` is also excluded by the upgrade script's `caveats` array. Verify the full unit test suites after any bump.
-- On June 26, 2025, newer versions of `jest` conflicted with `ts-jest` 29.x; we stayed on Jest 29 until `ts-jest` caught up.
 - On June 30, 2025, a `jest-environment-jsdom` bump caused failures in unit tests that use `Object.defineProperty` (for example, `getPdfJs.test.ts`). Re-test those specs before removing this pin.
 - On September 9, 2026, we were able to upgrade `jest`, `jest-environment-jsdom`, and `babel-jest` to **30.5.1** successfully
+- As of 9/22/2026: upgraded `jest`, `jest-environment-jsdom`, and `babel-jest` together to **30.5.2** (latest). Re-ran `shared/src/business/utilities/pdfs/getPdfJs.test.ts` successfully after the bump.
 
 ### websocket
 **Installed Version: 1.0.35**
@@ -494,21 +553,26 @@ If an update is available for DWT:
 - Direct dependency for the local websocket server in `web-api/src/app-local.ts` and for the integration-test WebSocket polyfill in `web-client/integration-tests/helpers.ts`. Verify local stack websocket behavior after upgrading.
 
 ### p-queue
-**Installed Version: 9.3.3**
+**Installed Version: 9.3.5**
 
 - `p-queue` v7 and above are ESM-only. Jest must transpile them via `transformIgnorePatterns` in `web-api/jest-unit.config.ts` (added December 10, 2025).
 - On September 19, 2025, upgrading past v6 caused module-import errors in GitHub Actions until the Jest config was updated. Patch upgrades within v9 are generally safe but require re-running the web-api unit tests.
+- As of 10/13/2026: updated to **9.3.5**. **10.0.0** is a breaking release: the queue is an `EventTarget` instead of an `EventEmitter`, `.clear()` rejects the promises of removed tasks, `TimeoutError` is a `DOMException`, and option validation is stricter. Nothing in the repo imports `p-queue` directly (only `broadcast-channel` uses it, through its own nested 6.x copy), so removing this dependency may be simpler than upgrading it.
 
 ### @babel/*
 **Current Installed Versions: 7.29.7** (`@babel/core`, `@babel/preset-env`, `@babel/preset-react`, `@babel/preset-typescript`)
 
-- Update on July 13, 2026: `@babel/core` v8.x is available, but upgrading is blocked by `esbuild-plugin-babel-cached@0.2.3` and `ts-jest@29.4.11`, which have versions below v8 listed as peer dependencies. `ts-jest` is likely to be updated, but `esbuild-plugin-babel` has been archived. `esbuild-plugin-babel-cached` appears to be a fork we developed, so we could update this ourselves to support `babel` v8, or find another solution that doesn't use this plugin.
+- Update on July 13, 2026: `@babel/core` v8.x is available, but upgrading is blocked by `esbuild-plugin-babel-cached@0.2.3`, which has versions below v8 listed as peer dependencies. `esbuild-plugin-babel` has been archived. `esbuild-plugin-babel-cached` appears to be a fork we developed, so we could update this ourselves to support `babel` v8, or find another solution that doesn't use this plugin.
 - As of July 27, 2026: `@babel/core` **v8.0.x** is available on npm. Still blocked by `esbuild-plugin-babel-cached@0.2.3`, which publishes peer `@babel/core@^7.0.0` only. The nested-override approach noted in prior rotations remains untested.
 - As of 8/10/2026: `@babel/core` **v8.x** is available on npm. Still blocked by `esbuild-plugin-babel-cached@0.2.3`, which publishes peer `@babel/core@^7.0.0` only.
+- As of 9/17/2026: `@babel/core` **8.0.5** is available. Tracked in DevEx ticket [#10428](https://github.com/ustaxcourt/ef-cms/issues/10428). The plugin is ~50 lines (`babel.loadOptions` + `babel.transform`) used solely by `esbuildHelper.mjs`, so it could be inlined into the repo rather than republished to npm.
+- As of 10/13/2026: `@babel/core` **8.0.7** is available. Still blocked; `esbuild-plugin-babel-cached@0.2.3` still peers `@babel/core@^7.0.0`.
 
 ### @types/node
-**Installed Version: 24.13.3**
-The major version of this package should match our major version of Node. We should use a package that starts with 24. <b>However</b>, the current installed version is 24.13.3, which <b>does not match the current installed version</b>. It is a known issue and another attempt will be made at the next Node.js and @types/node update.
+**Installed Version: 24.19.2**
+The major version of this package should match our major version of Node. We should use a package that starts with 24.
+
+Use the latest compatible `@types/node` release within Node’s major version. Type definitions can lag Node releases, and their patch numbers are independent, so an exact version match is not required. Verify type checking after updates.
 
 - [Dependencies 03 09 2026](https://github.com/ustaxcourt/ef-cms/pull/9465/files), Node.js was `v24.14.0`, but `@types/node` could not be updated to `24.14.0`, so it stayed pinned at `24.12.0`.
 
@@ -527,6 +591,10 @@ The major version of this package should match our major version of Node. We sho
 - As of July 13, 2026: Updated to **24.13.3**, the latest published version under major `24`. No `24.14+` published yet.
 
 - As of 8/10/2026: **24.13.3** remains the latest published version under major `24` (latest overall is 26.2.0). No change.
+
+- As of 9/17/2026: updated to **24.13.5**, the latest published version under major `24`. No `24.14+` published yet, so it still does not match Node.js `v24.21.0` in `.nvmrc`. Updated in both `package.json` and `web-api/terraform/modules/batch/docker-image/package.json`.
+- As of 9/22/2026: updated to **24.13.6**, the latest published version under major `24`. No `24.14+` published yet. Updated in both `package.json` and `web-api/terraform/modules/batch/docker-image/package.json`.
+- As of 10/13/2026: updated to **24.19.2**, the latest published version under major `24` (`24.14+` releases appeared after 9/22, and 24.19.1 was adopted in the week of 10/5/2026). Updated in both `package.json` and `web-api/terraform/modules/batch/docker-image/package.json`.
 
 ### TypeScript
 **Installed Version: 7.0.2 and 6.0.2**
@@ -593,25 +661,31 @@ error: too many arguments. Expected 0 arguments but got 2.
 - July 13, 2026: updated to 9.39.5
 - As of July 27, 2026: eslint **10.8.0** and `@eslint/js` **10.0.1** are available. Still blocked — `eslint-plugin-jsx-a11y` peer is `^3 || … || ^9` and `eslint-plugin-react` peer is `^3 || … || ^9.7`; neither accepts eslint 10. Latest 9.x remains **9.39.5**.
 - As of 8/10/2026: eslint **10.8.1** and `@eslint/js` **10.0.1** are available. Still blocked — `eslint-plugin-jsx-a11y` and `eslint-plugin-react` peers do not accept eslint 10. Latest 9.x remains **9.39.5**.
+- As of 9/17/2026: eslint **10.10.0** is available. Still blocked as`eslint-plugin-jsx-a11y@6.10.2` and `eslint-plugin-react@7.37.5` are still the latest releases and neither accepts eslint 10. No DevEx ticket exists yet; a possible path is evaluating replacements for both plugins that support eslint 10. The other lint packages we use (`eslint-config-prettier`, `eslint-plugin-jest`, `typescript-eslint`) already accept eslint 10. Unblocking eslint 10 would also unblock `eslint-plugin-cypress` 7.x, which requires `eslint >=10`.
+- As of 9/22/2026: eslint **10.x** remains blocked by `eslint-plugin-jsx-a11y` and `eslint-plugin-react` peers. Latest 9.x patches remain **9.39.5** for both `eslint` and `@eslint/js`; already installed. TypeScript dual alias (`typescript@npm:@typescript/typescript6@6.0.2`, `@typescript/native@npm:typescript@7.0.2`) and batch `Dockerfile` global install unchanged — **7.0.2** / **6.0.2** are still latest on npm.
+- As of 10/13/2026: eslint **10.12.0** is available. Still blocked; `eslint-plugin-react@7.37.5` (peer `^9.7`) and `eslint-plugin-jsx-a11y@6.10.2` (peer `^9`) are still the latest releases. TypeScript **7.0.2** / **6.0.2** and `ts-node` **10.9.2** are still latest.
 
 ### eslint-plugin-cypress
 **Installed Version: 6.4.4**
 
 - As of 8/10/2026: **eslint-plugin-cypress 7.0.0** declares `peerDependencies: { eslint: ">=10" }`, but we are pinned to eslint **9.39.5** by the `eslint-plugin-jsx-a11y` / `eslint-plugin-react` block. Keep at **6.4.4** until eslint 10 is unblocked. This package is excluded by the upgrade script's `caveats` array.
+- As of 10/13/2026: **7.0.2** is the latest and still requires eslint 10.
 
 ### uuid
 - On 05-18-2026, we added an override for uuid to fix a vulnerability with versions below 11.
+- As of 10/13/2026: updated to **14.0.3** (patch). The `uuid` override is `$uuid`, so it follows this direct dependency's version.
 
 ### js-yaml
-**Installed Version: 4.3.1**
+**Installed Version: 4.3.2**
 - On 06-16-2026, we added a `js-yaml` override to address the code injection vulnerability affecting versions below 3.14.2 and 4.1.1 ([GHSA-h67p-54hq-rp68](https://github.com/advisories/GHSA-h67p-54hq-rp68)).
 - July 27, 2026: moved the override from 4.2.0 to 4.3.0. The 4.2.0 pin sat inside the vulnerable range for merge-key chain quadratic CPU consumption ([GHSA-52cp-r559-cp3m](https://github.com/advisories/GHSA-52cp-r559-cp3m), CVE-2026-59869). Keep the override at 4.3.0 or later unless all transitive consumers are confirmed to resolve to a patched version.
 - As of 8/10/2026: moved the override from 4.3.0 to **4.3.1**. The 4.3.0 pin sat inside the vulnerable range for quadratic CPU consumption in `!!omap` resolution ([GHSA-5p4m-2wfm-xmqj](https://github.com/advisories/GHSA-5p4m-2wfm-xmqj), CVE-2026-59870). **5.2.3** is the latest overall but is a major jump for transitive consumers; **4.3.1** is the minimal patched version.
+- As of 9/17/2026: moved the override from 4.3.1 to **4.3.2**. The 4.3.1 pin sat inside the vulnerable range for `maxTotalMergeKeys` not limiting CPU use for empty merge sources ([GHSA-2883-xcg3-v3hh](https://github.com/advisories/GHSA-2883-xcg3-v3hh), affecting `>=4.0.0 <4.3.2`). **5.x** remains a major jump for transitive consumers; **4.3.2** is the minimal patched version.
 
 ### image-blob-reduce and pica
 **Installed Versions:**
 **image-blob-reduce: 5.0.1**
-**pica: 10.0.2**
+**pica: 10.0.3**
 - image-blob-reduce is packaged with a version of pica, however it is not re-exporting the package correctly, so we directly added pica to our package.json to use it in our web-client applicationContext. Make sure the version of pica we install matches the version image-blob-reduce is using.
 - If image-blob-reduce is upgraded, we can potentially remove pica from our dependency list. Check that the below import works, and if it does we can remove pica.
 
@@ -639,6 +713,7 @@ const joi: Root = joiImported.extend(JoiDate);
 The issue is with Jest. Jest doesn't work with mjs, so in our config we need to either map to a cjs version of the package or transform it ourselves. The package does not have a cjs dist and trying to run a transformation on the package wasn't working with our tests.
 
 - 8/24/26 - Attempted upgrade to **3.0.0** again and reverted to **2.1.1** (second revert). Jest ESM transforms were required to load the package, and the moment → dayjs switch caused dayjs to parse UTC ISO strings in local time, breaking `.max('now')` validation (e.g. paper-petition creation in Cypress). Re-added `@joi/date` to the upgrade script's `caveats` array.
+- 9/17/26 - Tracked in DevEx ticket [#10383](https://github.com/ustaxcourt/ef-cms/issues/10383) (the ticket title says `joi`, but the package is `@joi/date`). The ticket covers stricter dayjs date-format validation failing on older `test` data; a fix also needs to address the Jest ESM loading and UTC ISO string parsing issues noted above.
 
 ### recharts
 **Installed Version: 3.10.1**
@@ -650,11 +725,29 @@ The issue is with Jest. Jest doesn't work with mjs, so in our config we need to 
 
 - 8/7/26 - Newer versions of this dependency restrict the version rechart that it supports. The current version of recharts is at `3.10.1`. Newer versions of devtools only supports `3.9.0`. Keeping it pinned at `0.0.14` until new versions support our version of recharts.
 - As of 8/10/2026: **@recharts/devtools 0.0.16** peers on `recharts: 3.9.0` exactly, and we are on **3.10.1**. Still pinned at **0.0.14**.
+- As of 10/13/2026: **@recharts/devtools 0.0.18** still peers on `recharts: 3.9.0` exactly; recharts **3.10.1** is still the latest. Still pinned at **0.0.14**.
 
 ### aws-sigv4-sign
 **Installed Version: 2.0.1**
 
 - This package was successfully upgraded to version **2.0.1** and validated in `exp2`. Until we have set up payment portal integration in all experimental environments, we should be careful upgrading this package as it need to be tested in `exp2` before going to `test`. Once all environments have this integration, this caveat can be removed.
+
+### @opensearch-project/opensearch
+**Installed Version: 3.6.0**
+- 10/2/26 - Tried to update to 3.9.0 but got tests throwing new type errors about the search request object. Upon further investigation in this version they updated type definitions of the packages to match newer versions of the opensearch API (dated 2026-09-23). The updates changed how terms are used in aggregations in search requests. I am unsure if this affects our current version of opensearch, or will be an issue in a future release, or if this is just an issue with test data. For context the current version of opensearch is 3.9.0, but AWS currently only supports up to 3.7.0. Reverting for now
+- As of 10/13/2026: added to the upgrade script's `caveats` array. Before this, the script would upgrade it to 3.9.0 on every run even though this hold was documented. 3.9.0 is still the latest, and AWS OpenSearch Service still supports up to 3.7.
+
+### he
+**Installed Version: 2.0.0**
+
+- Used by `sanitizeMinuteSheetForm` in `web-api/src/business/useCaseHelper/trialSessionMinutes/formatMinuteSheet.ts` to HTML-encode trial session minute sheet input before it is rendered into the PDF.
+- As of 10/13/2026: upgraded from 1.2.0 (2018) to **2.0.0**. Version 2 is ESM-only: its `exports` field points to `src/he.mjs`, and it has no `main` or bundled types. `he` is in the `transformIgnoreModules` list in `web-api/jest-unit.config.ts`, and that config's `transform` pattern also matches `.mjs`, because Jest can't load the untransformed `.mjs` file. `encode()` output with the options we use (`useNamedReferences: true`, and the defaults) was compared against 1.2.0 on HTML, quote, Unicode, emoji, control-character, and lone-surrogate inputs and was identical. `s3rver` still depends on he 1.x, so npm nests a 1.2.0 copy for it.
+
+### pixelmatch
+**Installed Version: 8.0.0**
+
+- Used by `generateAndVerifyPdfDiff` for the visual PDF tests (`npm run test:document-generation`). Those tests need GraphicsMagick and Ghostscript, so they normally run in CI (`pdfs.yml`, inside the `efcms-local` image) rather than locally on macOS.
+- As of 10/13/2026: upgraded from 7.2.0 to **8.0.0**. The API is unchanged, but v8 compares colors with a new metric (OKLab/HyAB instead of YIQ), so pixel-difference counts differ from v7 at the same `threshold`. If visual PDF tests start failing right after a pixelmatch upgrade, compare against the previous version before re-baselining the expected images.
 
 ## Troubleshooting
 

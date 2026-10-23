@@ -47,6 +47,5 @@
       "runMode": "on-demand"
     }
   ],
-  "prettier.requireConfig": true,
-  "js/ts.tsdk.path": "./node_modules/typescript/lib"
+  "prettier.requireConfig": true
 }

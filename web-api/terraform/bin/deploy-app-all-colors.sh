@@ -40,6 +40,14 @@ echo "  - PROD_ENV_ACCOUNT_ID=${PROD_ENV_ACCOUNT_ID}"
 echo "  - SLACK_WEBHOOK_URL=${SLACK_WEBHOOK_URL}"
 echo "  - RDS_ENGINE_VERSION=${RDS_ENGINE_VERSION}"
 echo "  - ES_ENGINE_VERSION=${ES_ENGINE_VERSION}"
+echo "  - IDP_NAME=${IDP_NAME}"
+echo "  - OIDC_ISSUER_URL=${OIDC_ISSUER_URL}"
+echo "  - OIDC_CLIENT_ID=${OIDC_CLIENT_ID}"
+if [[ -n "$OIDC_CLIENT_SECRET" ]]; then
+  echo "  - OIDC_CLIENT_SECRET=***"
+else
+  echo "  - OIDC_CLIENT_SECRET="
+fi
 
 ../../../../scripts/verify-terraform-version.sh
 
@@ -114,6 +122,10 @@ export TF_VAR_restoring_aws_account_id=$PROD_ENV_ACCOUNT_ID
 export TF_VAR_rum_sample_rate=$RUM_SAMPLE_RATE
 export TF_VAR_rds_engine_version="$RDS_ENGINE_VERSION"
 export TF_VAR_es_engine_version="$ES_ENGINE_VERSION"
+export TF_VAR_idp_name=$IDP_NAME
+export TF_VAR_oidc_issuer_url=$OIDC_ISSUER_URL
+export TF_VAR_oidc_client_id=$OIDC_CLIENT_ID
+export TF_VAR_oidc_client_secret=$OIDC_CLIENT_SECRET
 
 if [[ -n "${RDS_MIN_CAPACITY}" ]]
 then
@@ -136,9 +148,21 @@ terraform init -upgrade -backend=true \
  -backend-config=dynamodb_table="$LOCK_TABLE" \
  -backend-config=region="$REGION"
 
-if [ -z "${OUTPUT_ONLY}" ]; then 
+if [ -z "${OUTPUT_ONLY}" ]; then
   terraform plan -out execution-plan
   terraform apply -auto-approve execution-plan
-else 
+
+  # this is temporary until terraform supports setting inbound federation trigger
+  # you have to re-set everything in the user pool or it will be overwritten by defaults
+  if [[ -n "$IDP_NAME" ]]; then
+    USER_POOL_ID=$(terraform output -raw aws_cognito_user_pool_id)
+    SES_IDENTITY_ARN=$(terraform output -raw aws_ses_email_identity_arn)
+    sed \
+      "s|REPLACE_MAIN_POOL_ID|${USER_POOL_ID}|g;s|REPLACE_ENVIRONMENT|${ENV}|g;s|REPLACE_ACCOUNT_ID|${LOWER_ENV_ACCOUNT_IDS}|g;s|REPLACE_DNS_DOMAIN|${DNS_DOMAIN}|g;s|REPLACE_SES_IDENTITY_ARN|${SES_IDENTITY_ARN}|g" \
+      ../../bin/cognito-user-pool-update.yml > ../../bin/output.yml
+    aws cognito-idp update-user-pool --cli-input-yaml file://../../bin/output.yml
+    rm ../../bin/output.yml
+  fi
+else
   terraform output -json > output.json
 fi

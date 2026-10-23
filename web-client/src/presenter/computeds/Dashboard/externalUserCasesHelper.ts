@@ -5,6 +5,8 @@ import { cloneDeep } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 import { Case } from '@shared/business/entities/cases/Case';
 import { dateStringsCompared } from '@shared/business/utilities/DateHandler';
+import { ALLOWLIST_FEATURE_FLAGS } from '@shared/business/entities/EntityConstants';
+import { shouldShowMyCasesPayFilingFeeButton } from '@web-client/presenter/computeds/Dashboard/externalCaseFilingFeeDisplayHelper';
 
 export type TAssociatedCaseFormatted = Omit<
   TAssociatedCase,
@@ -17,6 +19,7 @@ export type TAssociatedCaseFormatted = Omit<
   consolidatedCases: TAssociatedCaseFormatted[] | undefined;
   formattedStatus: string;
   isLeadCase: boolean;
+  showMyCasesPayFilingFeeButton: boolean;
 };
 
 const sortExternalUserCases = (
@@ -79,11 +82,25 @@ export const externalUserCasesHelper = (
     sortOrder: 'desc',
   };
 
+  const enablePaymentPortalIntegration = !!get(
+    state.featureFlags[
+      ALLOWLIST_FEATURE_FLAGS.ENABLE_PAYMENT_PORTAL_INTEGRATION.key
+    ],
+  );
+
   const formattedOpenCases = openCases.map(openCase =>
-    formatAssociatedCase(applicationContext, openCase),
+    formatAssociatedCase(
+      applicationContext,
+      openCase,
+      enablePaymentPortalIntegration,
+    ),
   );
   const formattedClosedCases = closedCases.map(closedCase =>
-    formatAssociatedCase(applicationContext, closedCase),
+    formatAssociatedCase(
+      applicationContext,
+      closedCase,
+      enablePaymentPortalIntegration,
+    ),
   );
 
   // sort open/closed cases based off sorting headers
@@ -109,6 +126,7 @@ export const externalUserCasesHelper = (
 const formatAssociatedCase = (
   applicationContext: ClientApplicationContext,
   caseA: TAssociatedCase,
+  enablePaymentPortalIntegration: boolean,
 ): TAssociatedCaseFormatted => {
   const caseInQuestion = cloneDeep(caseA);
 
@@ -121,7 +139,11 @@ const formatAssociatedCase = (
       caseInQuestion.caseCaption || '',
     ),
     consolidatedCases: caseInQuestion.consolidatedCases?.map(c => {
-      return formatAssociatedCase(applicationContext, c);
+      return formatAssociatedCase(
+        applicationContext,
+        c,
+        enablePaymentPortalIntegration,
+      );
     }),
     consolidatedIconTooltipText,
     createdAtFormatted: applicationContext
@@ -134,6 +156,11 @@ const formatAssociatedCase = (
       trialLocation: caseA.trialLocation,
     }),
     isLeadCase,
+    showMyCasesPayFilingFeeButton: shouldShowMyCasesPayFilingFeeButton({
+      enablePaymentPortalIntegration,
+      isRequestingUserAssociated: !!caseInQuestion.isRequestingUserAssociated,
+      petitionPaymentStatus: caseInQuestion.petitionPaymentStatus,
+    }),
   };
 };
 

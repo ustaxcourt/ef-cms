@@ -28,7 +28,9 @@ const CaseDetails = ({ caseDetail, caseDetailHelper }) => (
       {caseDetailHelper.showFilingFeeExternal && (
         <div className="tablet:grid-col-6">
           <p className="label">Filing fee*</p>
-          <p>{caseDetail.filingFee}</p>
+          <p data-testid="case-filing-fee-information">
+            {caseDetail.filingFee}
+          </p>
         </div>
       )}
     </div>

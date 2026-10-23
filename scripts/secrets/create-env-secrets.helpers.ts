@@ -1,0 +1,296 @@
+import {
+  CreateSecretCommand,
+  PutSecretValueCommand,
+  SecretsManagerClient,
+} from '@aws-sdk/client-secrets-manager';
+import { type ScriptConfig } from '../helpers/parseArgsAndEnvVars';
+import { getRepoName } from './createSecretsHelpers';
+import { makeNewPassword } from '../user/make-new-password';
+
+export const createEnvSecretsScriptConfig: ScriptConfig = {
+  description:
+    'create-env-secrets - Creates the "[env]_deploy" secrets in AWS Secrets Manager',
+  environment: {
+    // not using ACCESS_KEY_ID; we haven't deployed the dawson_dev role yet
+    awsProfile: 'AWS_PROFILE',
+  },
+  parameters: {
+    adminUserEmail: {
+      default: 'ustcadmin@example.com',
+      long: 'admin-user-email',
+      type: 'string',
+    },
+    baseDomain: {
+      description: 'Base domain without subdomain',
+      long: 'domain',
+      required: true,
+      type: 'string',
+    },
+    dynamsoftProductKeys: {
+      default: 'noop',
+      long: 'dynamsoft-product-keys',
+      type: 'string',
+    },
+    emailDmarcPolicy: {
+      long: 'email-dmarc-policy',
+      required: true,
+      type: 'string',
+    },
+    enableDynamsoft: {
+      default: false,
+      long: 'enable-dynamsoft',
+      type: 'boolean',
+    },
+    enableEmail: {
+      default: false,
+      long: 'enable-email',
+      type: 'boolean',
+    },
+    enableHealthChecks: {
+      default: false,
+      long: 'enable-health-checks',
+      type: 'boolean',
+    },
+    env: {
+      required: true,
+      type: 'string',
+    },
+    generateSecureDefaultAccountPassword: {
+      default: false,
+      long: 'generate-secure-default-account-password',
+      type: 'boolean',
+    },
+    irsSuperuserEmail: {
+      long: 'irs-superuser-email',
+      type: 'string',
+    },
+    opensearchEngineVersion: {
+      default: 'OpenSearch_3.7',
+      long: 'opensearch-engine-version',
+      type: 'string',
+    },
+    opensearchInstanceCount: {
+      default: '1',
+      long: 'opensearch-instance-count',
+      transform: 'number',
+      type: 'string',
+    },
+    opensearchInstanceType: {
+      default: 't3.small.search',
+      long: 'opensearch-instance-type',
+      type: 'string',
+    },
+    opensearchVolumeSize: {
+      default: '10',
+      long: 'opensearch-volume-size',
+      transform: 'number',
+      type: 'string',
+    },
+    paymentPortalArn: {
+      description: 'The ARN of the payment portal API',
+      long: 'payment-portal-arn',
+      required: true,
+      type: 'string',
+    },
+    paymentPortalHost: {
+      description: 'The URL of the payment portal API',
+      long: 'payment-portal-host',
+      required: true,
+      type: 'string',
+    },
+    payGovOrigin: {
+      description: 'The URL of the payment portal UI',
+      long: 'pay-gov-origin',
+      required: true,
+      type: 'string',
+    },
+    postgresOriginalUsername: {
+      default: 'master', // yuck
+      long: 'postgres-original-username',
+      type: 'string',
+    },
+    prodAccountId: {
+      description: 'AWS account id of the production instance',
+      long: 'prod-account-id',
+      required: true,
+      type: 'string',
+    },
+    prodDocumentsBucket: {
+      description: 'Name of the production documents bucket',
+      long: 'prod-documents-bucket',
+      required: true,
+      type: 'string',
+    },
+    rdsEngineVersion: {
+      default: '17.5',
+      long: 'rds-engine-version',
+      type: 'string',
+    },
+    rdsMaxCapacity: {
+      default: '1',
+      long: 'rds-max-capacity',
+      // do not transform; 'number' only supports integers
+      type: 'string',
+    },
+    rdsMinCapacity: {
+      default: '0.5',
+      long: 'rds-min-capacity',
+      // do not transform; 'number' only supports integers
+      type: 'string',
+    },
+    region: {
+      default: 'us-east-1',
+      type: 'string',
+    },
+    rumSampleRate: {
+      default: '1',
+      long: 'rum-sample-rate',
+      // do not transform; 'number' only supports integers
+      type: 'string',
+    },
+    update: {
+      default: false,
+      type: 'boolean',
+    },
+    zendeskUserEmail: {
+      default: 'ustczendesk@dawson.ustaxcourt.gov',
+      long: 'zendesk-user-email',
+      type: 'string',
+    },
+  },
+  // can't use requireActiveAwsSession; we haven't deployed the dawson_dev role yet
+  requireActiveAwsSession: false,
+};
+
+export type CreateEnvSecretsParams = {
+  adminUserEmail: string;
+  baseDomain: string;
+  dynamsoftProductKeys: string;
+  emailDmarcPolicy: string;
+  enableDynamsoft: boolean;
+  enableEmail: boolean;
+  enableHealthChecks: boolean;
+  env: string;
+  generateSecureDefaultAccountPassword: boolean;
+  irsSuperuserEmail?: string;
+  opensearchEngineVersion: string;
+  opensearchInstanceCount: number;
+  opensearchInstanceType: string;
+  opensearchVolumeSize: number;
+  paymentPortalArn: string;
+  paymentPortalHost: string;
+  payGovOrigin: string;
+  postgresOriginalUsername: string;
+  prodAccountId: string;
+  prodDocumentsBucket: string;
+  rdsEngineVersion: string;
+  rdsMaxCapacity: string;
+  rdsMinCapacity: string;
+  region: string;
+  rumSampleRate: string;
+  secretsClient?: SecretsManagerClient;
+  update: boolean;
+  zendeskUserEmail: string;
+};
+
+export const createEnvSecrets = async ({
+  adminUserEmail,
+  baseDomain,
+  dynamsoftProductKeys,
+  emailDmarcPolicy,
+  enableDynamsoft,
+  enableEmail,
+  enableHealthChecks,
+  env,
+  generateSecureDefaultAccountPassword,
+  irsSuperuserEmail,
+  opensearchEngineVersion,
+  opensearchInstanceCount,
+  opensearchInstanceType,
+  opensearchVolumeSize,
+  paymentPortalArn,
+  paymentPortalHost,
+  payGovOrigin,
+  postgresOriginalUsername,
+  prodAccountId,
+  prodDocumentsBucket,
+  rdsEngineVersion,
+  rdsMaxCapacity,
+  rdsMinCapacity,
+  region,
+  rumSampleRate,
+  secretsClient,
+  update,
+  zendeskUserEmail,
+}: CreateEnvSecretsParams): Promise<void> => {
+  if (env === 'prod') {
+    console.log('Do not use in prod');
+    process.exit(1);
+    return;
+  }
+
+  const repoName = await getRepoName();
+  const repoSlug = repoName.replace(/[^a-z0-9]/gi, '').toLowerCase();
+
+  const adminUserPassword = makeNewPassword();
+  const defaultAccountPass = generateSecureDefaultAccountPassword
+    ? makeNewPassword()
+    : 'Testing1234$';
+  const postgresOriginalPassword = makeNewPassword(
+    ['uppercase', 'lowercase', 'numbers'],
+    42,
+  );
+
+  const zendeskUserPassword = makeNewPassword();
+
+  const envSecrets = {
+    COGNITO_SUFFIX: `${repoSlug}-${env}`,
+    DATABASE_NAME: `${env}_dawson`,
+    DEFAULT_ACCOUNT_PASS: defaultAccountPass,
+    DISABLE_EMAILS: !enableEmail ? 'true' : 'false',
+    DYNAMSOFT_PRODUCT_KEYS: dynamsoftProductKeys,
+    EFCMS_DOMAIN: `${env}.${repoName}.${baseDomain}`,
+    EMAIL_DMARC_POLICY: emailDmarcPolicy,
+    ENABLE_HEALTH_CHECKS: enableHealthChecks ? 1 : 0,
+    ENV: env,
+    ES_ENGINE_VERSION: opensearchEngineVersion,
+    ES_INSTANCE_COUNT: opensearchInstanceCount,
+    ES_INSTANCE_TYPE: opensearchInstanceType,
+    ES_VOLUME_SIZE: opensearchVolumeSize,
+    IRS_SUPERUSER_EMAIL:
+      irsSuperuserEmail || `service.agent.${env}@example.com`,
+    IS_DYNAMSOFT_ENABLED: enableDynamsoft ? 1 : 0,
+    PAYMENT_PORTAL_ARN: paymentPortalArn,
+    PAYMENT_PORTAL_HOST: paymentPortalHost,
+    PAY_GOV_ORIGIN: payGovOrigin,
+    POSTGRES_MASTER_PASSWORD: postgresOriginalPassword,
+    POSTGRES_MASTER_USERNAME: postgresOriginalUsername,
+    POSTGRES_USER: `${env}_dawson`,
+    PROD_DOCUMENTS_BUCKET_NAME: prodDocumentsBucket,
+    PROD_ENV_ACCOUNT_ID: prodAccountId,
+    RDS_ENGINE_VERSION: rdsEngineVersion,
+    RDS_MAX_CAPACITY: rdsMaxCapacity,
+    RDS_MIN_CAPACITY: rdsMinCapacity,
+    RUM_SAMPLE_RATE: rumSampleRate,
+    USTC_ADMIN_PASS: adminUserPassword,
+    USTC_ADMIN_USER: adminUserEmail,
+    USTC_ZENDESK_USER: zendeskUserEmail,
+    USTC_ZENDESK_PASS: zendeskUserPassword,
+  };
+
+  const client = secretsClient ?? new SecretsManagerClient({ region });
+  if (update) {
+    const putSecretValueCommand = new PutSecretValueCommand({
+      SecretId: `${env}_deploy`,
+      SecretString: JSON.stringify(envSecrets),
+    });
+    await client.send(putSecretValueCommand);
+  } else {
+    const createSecretCommand = new CreateSecretCommand({
+      Description: `Environment variables for the ${env} environment`,
+      Name: `${env}_deploy`,
+      SecretString: JSON.stringify(envSecrets),
+    });
+    await client.send(createSecretCommand);
+  }
+};
