@@ -1,6 +1,15 @@
-import { ALLOWLIST_FEATURE_FLAGS } from '@shared/business/entities/EntityConstants';
+import {
+  ALLOWLIST_FEATURE_FLAGS,
+  type FeatureFlagKeys,
+} from '@shared/business/entities/EntityConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import joi from 'joi';
+
+export type FeatureFlagResponseData = Partial<Record<FeatureFlagKeys, any>>;
+
+export interface FeatureFlagResponseDTO extends FeatureFlagResponseData {
+  entityName?: string;
+}
 
 const FEATURE_FLAG_VALUE_SCHEMA = joi
   .alternatives()

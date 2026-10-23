@@ -2,6 +2,7 @@ import {
   ALL_EVENT_CODES,
   DOCKET_ENTRY_SEALED_TO_TYPES,
 } from '../EntityConstants';
+import type { DocketEntryRelation } from '../EntityConstants';
 import { DOCKET_ENTRY_VALIDATION_RULE_KEYS } from '../EntityValidationConstants';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
@@ -40,10 +41,10 @@ export class PublicDocketEntry extends JoiValidationEntity {
   public servedAt?: string;
   public servedPartiesCode?: string;
   public signedJudgeName?: string;
-  public affectedByDocketEntries?: any[];
-  public affectedDocketEntries?: any[];
+  public affectedByDocketEntries?: DocketEntryRelation[] | null;
+  public affectedDocketEntries?: DocketEntryRelation[] | null;
   public previousDocument?: {
-    docketEntryId: string;
+    docketEntryId?: string;
     documentTitle: string;
     documentType: string;
   };
@@ -97,6 +98,30 @@ export class PublicDocketEntry extends JoiValidationEntity {
     additionalInfo: DOCKET_ENTRY_VALIDATION_RULE_KEYS.additionalInfo,
     additionalInfo2: DOCKET_ENTRY_VALIDATION_RULE_KEYS.additionalInfo2,
     attachments: DOCKET_ENTRY_VALIDATION_RULE_KEYS.attachments,
+    affectedByDocketEntries: joi
+      .array()
+      .items(
+        joi
+          .object({
+            disposition: JoiValidationConstants.STRING.required(),
+            docketEntryId: JoiValidationConstants.UUID.required(),
+          })
+          .unknown(false),
+      )
+      .optional()
+      .allow(null),
+    affectedDocketEntries: joi
+      .array()
+      .items(
+        joi
+          .object({
+            disposition: JoiValidationConstants.STRING.required(),
+            docketEntryId: JoiValidationConstants.UUID.required(),
+          })
+          .unknown(false),
+      )
+      .optional()
+      .allow(null),
     certificateOfService:
       DOCKET_ENTRY_VALIDATION_RULE_KEYS.certificateOfService,
     certificateOfServiceDate:
@@ -133,6 +158,14 @@ export class PublicDocketEntry extends JoiValidationEntity {
     numberOfPages: DOCKET_ENTRY_VALIDATION_RULE_KEYS.numberOfPages,
     objections: DOCKET_ENTRY_VALIDATION_RULE_KEYS.objections,
     processingStatus: JoiValidationConstants.STRING.optional(),
+    previousDocument: joi
+      .object({
+        docketEntryId: JoiValidationConstants.UUID.optional(),
+        documentTitle: JoiValidationConstants.STRING.required(),
+        documentType: JoiValidationConstants.STRING.required(),
+      })
+      .unknown(false)
+      .optional(),
     receivedAt: JoiValidationConstants.ISO_DATE.max('now').required(),
     sealedTo: JoiValidationConstants.STRING.when('isSealed', {
       is: true,

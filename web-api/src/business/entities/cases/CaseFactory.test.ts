@@ -335,8 +335,8 @@ describe('CaseFactory', () => {
           rawCase: MOCK_UNSERVED_CASE_WITH_SEALED_ADDRESS,
           user: EXTERNAL_USER,
         });
-        expect(caseData).toBeInstanceOf(PublicCaseDTO);
-        expect((caseData as PublicCaseDTO).petitioners?.[0]).toEqual({
+        expect(caseData).toBeInstanceOf(PublicCaseResponse);
+        expect((caseData as PublicCaseResponse).petitioners?.[0]).toEqual({
           contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
           contactType: 'primary',
           entityName: 'PublicContact',

@@ -91,6 +91,56 @@ describe('PublicDocketEntry', () => {
     });
   });
 
+  it('validates docket-entry relationships and previous documents', () => {
+    const docketEntry = new PublicDocketEntry({
+      affectedByDocketEntries: [
+        {
+          disposition: 'GRANTED',
+          docketEntryId: 'e1d0b1c2-e531-4e07-ab82-851ee9acde64',
+        },
+      ],
+      affectedDocketEntries: [
+        {
+          disposition: 'DENIED',
+          docketEntryId: 'e1d0b1c2-e531-4e07-ab82-851ee9acde64',
+        },
+      ],
+      docketNumber: '101-21',
+      filingDate: '2020-05-27T09:23:43.007Z',
+      isSealed: false,
+      previousDocument: {
+        documentTitle: 'Order',
+        documentType: 'Order',
+      },
+      receivedAt: '2020-05-27T09:23:43.007Z',
+    });
+
+    expect(docketEntry.isValid()).toBe(true);
+  });
+
+  it('rejects unsupported fields in docket-entry relationships', () => {
+    const docketEntry = new PublicDocketEntry({
+      affectedDocketEntries: [
+        {
+          disposition: 'DENIED',
+          docketEntryId: 'e1d0b1c2-e531-4e07-ab82-851ee9acde64',
+          privateField: 'do-not-leak',
+        },
+      ],
+      docketNumber: '101-21',
+      filingDate: '2020-05-27T09:23:43.007Z',
+      isSealed: false,
+      receivedAt: '2020-05-27T09:23:43.007Z',
+    });
+
+    expect(docketEntry.isValid()).toBe(false);
+    expect(docketEntry.getValidationErrors()).toEqual(
+      expect.objectContaining({
+        'affectedDocketEntries-0-privateField': expect.any(String),
+      }),
+    );
+  });
+
   describe('isOnDocketRecord', () => {
     describe('minute entries', () => {
       it('creates a valid minute entry', () => {

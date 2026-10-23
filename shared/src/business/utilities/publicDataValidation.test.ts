@@ -1,9 +1,12 @@
 import { findUnauthorizedPublicFields } from '@shared/business/utilities/publicDataValidation';
 import { FeatureFlagResponseDTO } from '@shared/business/dto/system/FeatureFlagResponseDTO';
 import { PublicCaseResponse } from '@shared/business/dto/cases/PublicCaseResponse';
+import { HealthCheckResponse } from '@shared/business/dto/public/HealthCheckResponse';
 import { PublicContact } from '@shared/business/entities/cases/PublicContact';
+import { PublicDocketEntry } from '@shared/business/entities/cases/PublicDocketEntry';
 import { PublicUser } from '@shared/business/entities/PublicUser';
 import { PARTY_TYPES } from '@shared/business/entities/EntityConstants';
+import { PublicTrialSessionInfo } from '@shared/business/dto/trialSessions/PublicTrialSessionInfo';
 
 const MOCK_UUID = 'c7d90c05-f6cd-442c-a168-202db587f16f';
 
@@ -73,22 +76,10 @@ describe('publicDataValidation', () => {
     expect(findings).toEqual([]);
   });
 
-  it('passes for root numeric payloads without entityName', () => {
+  it('rejects root numeric payloads without an approved response schema', () => {
     const findings = findUnauthorizedPublicFields({
       data: {
-        count: 2,
-        threshold: 7.5,
-      },
-      url: 'http://localhost:4001/public-api/metrics',
-    });
-
-    expect(findings).toEqual([]);
-  });
-
-  it('fails for nonnumeric root payload values without entityName', () => {
-    const findings = findUnauthorizedPublicFields({
-      data: {
-        status: 'bad',
+        privateIdentifier: 123456789,
       },
       url: 'http://localhost:4001/public-api/metrics',
     });
@@ -96,8 +87,47 @@ describe('publicDataValidation', () => {
     expect(findings).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          fieldName: 'status',
-          matchPreview: '[redacted]',
+          fieldName: 'entityName',
+          matchPreview: '[missing]',
+        }),
+      ]),
+    );
+  });
+
+  it('rejects untagged nested objects without an approved schema', () => {
+    const findings = findUnauthorizedPublicFields({
+      data: {
+        container: {
+          privateField: 'synthetic-sensitive-value',
+        },
+      },
+      url: 'http://localhost:4001/public-api/nested',
+    });
+
+    expect(findings).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          fieldName: 'container.entityName',
+          matchPreview: '[missing]',
+        }),
+      ]),
+    );
+  });
+
+  it('rejects unvalidated entities inside plain-object properties', () => {
+    const user = new PublicUser({ name: 'Test User', role: 'petitioner' });
+    const findings = findUnauthorizedPublicFields({
+      data: { result: user },
+      url: 'http://localhost:4001/public-api/nested',
+    });
+
+    expect(findings).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          entityName: 'PublicUser',
+          fieldName: 'result.isValidated',
+          matchPreview: '[not validated]',
+          type: 'not_validated',
         }),
       ]),
     );
@@ -184,6 +214,172 @@ describe('publicDataValidation', () => {
     });
 
     expect(findings).toEqual([]);
+  });
+
+  it('passes for validated docket entries with approved relationship objects', () => {
+    const docketEntry = new PublicDocketEntry({
+      affectedByDocketEntries: [
+        { docketEntryId: MOCK_UUID, disposition: 'GRANTED' },
+      ],
+      affectedDocketEntries: [
+        { docketEntryId: MOCK_UUID, disposition: 'DENIED' },
+      ],
+      docketNumber: '101-20',
+      filingDate: '2020-01-05T03:30:45.007Z',
+      isSealed: false,
+      previousDocument: {
+        docketEntryId: MOCK_UUID,
+        documentTitle: 'Order',
+        documentType: 'Order',
+      },
+      receivedAt: '2020-01-05T03:30:45.007Z',
+    });
+    docketEntry.validate();
+
+    const findings = findUnauthorizedPublicFields({
+      data: docketEntry,
+      url: 'http://localhost:4001/public-api/cases/101-20/docket',
+    });
+
+    expect(findings).toEqual([]);
+  });
+
+  it('passes for the explicit public docket-entry page response schema', () => {
+    const docketEntry = new PublicDocketEntry({
+      docketNumber: '101-20',
+      filingDate: '2020-01-05T03:30:45.007Z',
+      isSealed: false,
+      receivedAt: '2020-01-05T03:30:45.007Z',
+    }).validate();
+
+    const findings = findUnauthorizedPublicFields({
+      data: {
+        docketEntries: [docketEntry],
+        page: 0,
+        pageSize: 1000,
+        totalCount: 1,
+      },
+      url: 'http://localhost:4001/public-api/cases/101-20/docket-entries',
+    });
+
+    expect(findings).toEqual([]);
+  });
+
+  it('rejects unapproved fields inside docket-entry relationship objects', () => {
+    const docketEntry = new PublicDocketEntry({
+      affectedDocketEntries: [
+        {
+          docketEntryId: MOCK_UUID,
+          disposition: 'DENIED',
+          privateField: 'do-not-leak',
+        },
+      ],
+      docketNumber: '101-20',
+      filingDate: '2020-01-05T03:30:45.007Z',
+      isSealed: false,
+      receivedAt: '2020-01-05T03:30:45.007Z',
+    });
+
+    const findings = findUnauthorizedPublicFields({
+      data: docketEntry,
+      url: 'http://localhost:4001/public-api/cases/101-20/docket',
+    });
+
+    expect(findings).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          fieldName: 'affectedDocketEntries[0].privateField',
+          matchPreview: '[invalid]',
+        }),
+      ]),
+    );
+  });
+
+  it('rejects malformed docket-entry relationship values', () => {
+    const docketEntryFields = {
+      docketNumber: '101-20',
+      filingDate: '2020-01-05T03:30:45.007Z',
+      isSealed: false,
+      receivedAt: '2020-01-05T03:30:45.007Z',
+    };
+    const findings = [
+      new PublicDocketEntry({
+        ...docketEntryFields,
+        affectedDocketEntries: {},
+      }),
+      new PublicDocketEntry({
+        ...docketEntryFields,
+        affectedByDocketEntries: [null],
+      }),
+      new PublicDocketEntry({
+        ...docketEntryFields,
+        affectedByDocketEntries: [{ docketEntryId: MOCK_UUID }],
+      }),
+    ].flatMap(docketEntry =>
+      findUnauthorizedPublicFields({
+        data: docketEntry,
+        url: 'http://localhost:4001/public-api/cases/101-20/docket',
+      }),
+    );
+
+    expect(findings).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          fieldName: 'affectedDocketEntries',
+          matchPreview: '[invalid]',
+        }),
+        expect.objectContaining({
+          fieldName: 'affectedByDocketEntries[0]',
+          matchPreview: '[invalid]',
+        }),
+        expect.objectContaining({
+          fieldName: 'affectedByDocketEntries[0].disposition',
+          matchPreview: '[missing]',
+        }),
+      ]),
+    );
+  });
+
+  it('passes for health-check and trial-session value objects with approved fields', () => {
+    const healthCheckResponse = new HealthCheckResponse({
+      cognito: true,
+      elasticsearch: true,
+      emailService: true,
+      s3: {
+        app: true,
+        appFailover: true,
+        eastDocuments: true,
+        eastTempDocuments: true,
+        public: true,
+        publicFailover: true,
+        westDocuments: true,
+        westTempDocuments: true,
+      },
+    }).validate();
+    const trialSessionInfo = new PublicTrialSessionInfo({
+      isCalendared: true,
+      judge: { name: 'Judge Test' },
+      proceedingType: 'In Person',
+      sessionScope: 'Location-based',
+      sessionStatus: 'Open',
+      sessionType: 'Regular',
+      startDate: '2020-01-05T03:30:45.007Z',
+      term: 'Fall',
+      termYear: '2020',
+    } as ConstructorParameters<typeof PublicTrialSessionInfo>[0]).validate();
+
+    expect(
+      findUnauthorizedPublicFields({
+        data: healthCheckResponse,
+        url: 'http://localhost:4001/public-api/health',
+      }),
+    ).toEqual([]);
+    expect(
+      findUnauthorizedPublicFields({
+        data: trialSessionInfo,
+        url: 'http://localhost:4001/public-api/trial-sessions',
+      }),
+    ).toEqual([]);
   });
 
   it('fails for unvalidated entities within arrays nested inside a plain object', () => {
@@ -287,7 +483,7 @@ describe('publicDataValidation', () => {
     );
   });
 
-  it('finds nested missing entityName in non-root object values', () => {
+  it('rejects nested objects without approved schemas', () => {
     const findings = findUnauthorizedPublicFields({
       data: {
         container: {
@@ -299,7 +495,18 @@ describe('publicDataValidation', () => {
       url: 'http://localhost:4001/public-api/nested',
     });
 
-    expect(findings).toEqual([]);
+    expect(findings).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          fieldName: 'container.entityName',
+          matchPreview: '[missing]',
+        }),
+        expect.objectContaining({
+          fieldName: 'container.nested.entityName',
+          matchPreview: '[missing]',
+        }),
+      ]),
+    );
   });
 
   it('flags unauthorized fields for nested known entities', () => {
