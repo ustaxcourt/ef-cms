@@ -1103,7 +1103,7 @@ describe('DocketEntry isPublic', () => {
     });
   });
 
-  describe('Lodged root: motion filings vs non-motion filings', () => {
+  describe('Lodged root document: motion filings vs non-motion filings', () => {
     it('when the lodged root is a practitioner brief, not a motion, related entries keep their usual public visibility', () => {
       const isPublic = DocketEntry.isPublic(
         {
