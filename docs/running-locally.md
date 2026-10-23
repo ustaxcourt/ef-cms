@@ -26,6 +26,8 @@ To run a DAWSON development environment, we will need to install the following C
 - [OAthToolkit](https://oath-toolkit.codeberg.page/) - command-line tools for OAuth 2.0
 - [LibPQ](https://www.postgresql.org/docs/current/libpq.html) - command-line interface for PostgreSQL
 - [GH](https://cli.github.com/) - command-line interface for GitHub
+- [Gitleaks](https://github.com/gitleaks/gitleaks) - secrets scanner used by the pre-commit hook
+- [Trivy](https://trivy.dev/) - vulnerability scanner for checking container findings locally
 - [Docker](https://docs.docker.com/get-started/) - Docker is an open platform for developing, shipping, and running applications.
 - [Docker Compose](https://docs.docker.com/compose/) - Docker Compose is a tool for defining and running multi-container applications.
 
@@ -56,7 +58,8 @@ To run a DAWSON development environment, we will need to install the following C
      oath-toolkit \
      libpq \
      gh \
-     gitleaks
+     gitleaks \
+     trivy
    ```
 1. Several of the installed packages will output some post-installation steps. Follow those instructions to complete the installation.
 1. ⚠️ Apple Silicon Macs Only ⚠️
