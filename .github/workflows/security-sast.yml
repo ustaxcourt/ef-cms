@@ -47,8 +47,16 @@ jobs:
             echo "code=true" >> "$GITHUB_OUTPUT"
             exit 0
           fi
-          # The assignment fails the step when the API call fails, so the scans never skip by mistake.
+          # The assignments fail the step when an API call fails, so the scans never skip by mistake.
+          CHANGED_FILES="$(gh api "repos/${REPO}/pulls/${PR_NUMBER}" --jq '.changed_files')"
           FILES="$(gh api --paginate "repos/${REPO}/pulls/${PR_NUMBER}/files" --jq '.[].filename')"
+          LISTED_FILES="$(grep -c . <<< "$FILES" || true)"
+          # The files API lists 3,000 files at most. An incomplete list can hide a code file.
+          if [ "$LISTED_FILES" -ne "$CHANGED_FILES" ]; then
+            echo "The API listed ${LISTED_FILES} of ${CHANGED_FILES} changed files, so the SAST scans run."
+            echo "code=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
           CODE=false
           while IFS= read -r FILE; do
             # These patterns match the paths-ignore lists that the other PR workflows use.
