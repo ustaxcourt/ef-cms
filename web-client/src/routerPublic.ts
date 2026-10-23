@@ -2,6 +2,7 @@ import {
   getRumPageIdFromRoutePattern,
   recordRumPageView,
 } from '@web-client/providers/realUserMonitoring';
+import type { BaseControllerClass } from 'cerebral';
 import { setPageTitle } from './presenter/utilities/setPageTitle';
 import route from 'riot-route';
 
@@ -23,12 +24,8 @@ const revokeObjectURL = url => {
   return window.URL.revokeObjectURL(url);
 };
 
-type CerebralApp = {
-  getSequence: (name: string) => (...args: any[]) => any;
-};
-
 const router = {
-  initialize: (app: CerebralApp): Promise<void> => {
+  initialize: (app: BaseControllerClass): Promise<void> => {
     window.document.title = 'U.S. Tax Court';
     // expose route function on window for use with cypress
 
@@ -39,7 +36,8 @@ const router = {
 
     const trackedRoute = (
       pattern: string,
-      handler: (...args: any[]) => any,
+      // riot-route passes each wildcard in the pattern as a string
+      handler: (...args: string[]) => void | Promise<void>,
     ): void => {
       route(pattern, (...args) => {
         recordRumPageView(getRumPageIdFromRoutePattern(pattern));

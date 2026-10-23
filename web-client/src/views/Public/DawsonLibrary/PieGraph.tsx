@@ -15,6 +15,8 @@ export interface PieGraphData {
   color?: string;
 }
 
+const FULL_CIRCLE_DEGREES = 360;
+
 const PieSector = (props: PieSectorShapeProps) => {
   // recharts spreads each data entry into the shape props, so color is available directly.
   const fill = (props as unknown as PieGraphData).color;
@@ -36,7 +38,19 @@ const PieSector = (props: PieSectorShapeProps) => {
           );
       }}
     >
-      <Sector {...props} fill={fill} />
+      {Math.abs(props.endAngle - props.startAngle) >= FULL_CIRCLE_DEGREES ? (
+        // a sector spanning the whole pie still strokes its edge from the center
+        <circle
+          cx={props.cx}
+          cy={props.cy}
+          fill={fill}
+          r={props.outerRadius}
+          stroke={props.stroke}
+          strokeWidth={props.strokeWidth}
+        />
+      ) : (
+        <Sector {...props} fill={fill} />
+      )}
     </g>
   );
 };
@@ -133,7 +147,7 @@ export const PieGraph = ({
         return `<tr><td>${d.name}</td><td>${d.value}</td><td>${pct}%</td></tr>`;
       })
       .join('');
-    const html = `<html><body><h2>${title}</h2><table border="1" cellpadding="4" cellspacing="0"><thead><tr><th>Name</th><th>Value</th><th>Percentage</th></tr></thead><tbody>${rows}</tbody></table></body></html>`;
+    const html = `<html lang="en"><head><title>${title ?? 'Chart data'}</title></head><body><h2>${title}</h2><table border="1" cellpadding="4" cellspacing="0"><thead><tr><th>Name</th><th>Value</th><th>Percentage</th></tr></thead><tbody>${rows}</tbody></table></body></html>`;
     const blob = new Blob([html], { type: 'text/html' });
     window.open(URL.createObjectURL(blob), '_blank', 'noopener, noreferrer');
   };
@@ -236,7 +250,8 @@ export const PieGraph = ({
             }
           />
           <Pie
-            data={data}
+            // zero-value slices still render their stroke as a line from the center
+            data={data.filter(d => d.value > 0)}
             labelLine={false}
             dataKey="value"
             nameKey="name"

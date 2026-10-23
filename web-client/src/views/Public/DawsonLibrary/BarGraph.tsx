@@ -72,6 +72,8 @@ export interface MultiBarGraphProps {
   showLabels?: boolean;
   /** Optional: totals to append to each dataset label in the legend (e.g. [4209, 1608]) */
   legendTotals?: number[];
+  /** Optional: heading for the HTML view table, when it differs from the title */
+  htmlTitle?: string;
 }
 
 const defaultColors = [GRAPH_COLORS.BLUE, GRAPH_COLORS.YELLOW];
@@ -315,6 +317,7 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
   columnTotals,
   showLabels = true,
   legendTotals,
+  htmlTitle,
 }) => {
   const openHtmlTable = () => {
     const headerCells = [
@@ -329,8 +332,9 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
         return `<tr><td>${label}</td>${cells}</tr>`;
       })
       .join('');
-    const heading = title ? `<h2>${title}</h2>` : '';
-    const html = `<html><body>${heading}<table border="1" cellpadding="4" cellspacing="0"><thead><tr>${headerCells}</tr></thead><tbody>${rows}</tbody></table></body></html>`;
+    const tableTitle = htmlTitle ?? title;
+    const heading = tableTitle ? `<h2>${tableTitle}</h2>` : '';
+    const html = `<html lang="en"><head><title>${tableTitle ?? 'Chart data'}</title></head><body>${heading}<table border="1" cellpadding="4" cellspacing="0"><thead><tr>${headerCells}</tr></thead><tbody>${rows}</tbody></table></body></html>`;
     const blob = new Blob([html], { type: 'text/html' });
     window.open(URL.createObjectURL(blob), '_blank', 'noopener, noreferrer');
   };
