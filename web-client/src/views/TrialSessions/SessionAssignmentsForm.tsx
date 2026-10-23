@@ -11,6 +11,7 @@ const sessionAssignmentsFormDeps = {
   TRIAL_SESSION_PROCEEDING_TYPES:
     state.constants.TRIAL_SESSION_PROCEEDING_TYPES,
   form: state.form,
+  addTrialSessionInformationHelper: state.addTrialSessionInformationHelper,
   formattedTrialSessionDetails: state.formattedTrialSessionDetails,
   getAllIrsPractitionersForSelectHelper:
     state.getAllIrsPractitionersForSelectHelper,
@@ -28,6 +29,7 @@ export const SessionAssignmentsForm = connect<
   sessionAssignmentsFormDeps,
   function SessionAssignmentsForm({
     addingTrialSession,
+    addTrialSessionInformationHelper,
     form,
     formattedTrialSessionDetails,
     getAllIrsPractitionersForSelectHelper,
@@ -73,7 +75,8 @@ export const SessionAssignmentsForm = connect<
             </select>
           </div>
 
-          {form.proceedingType === TRIAL_SESSION_PROCEEDING_TYPES.inPerson && (
+          {(form.proceedingType === TRIAL_SESSION_PROCEEDING_TYPES.inPerson ||
+            addTrialSessionInformationHelper.isReportingSession) && (
             <div className="usa-form-group">
               <label className="usa-label" htmlFor="chambers-phone-number">
                 Chambers phone number{' '}
@@ -101,88 +104,98 @@ export const SessionAssignmentsForm = connect<
             </div>
           )}
 
-          <div className="grid-row">
-            <div className="usa-form-group desktop:grid-col-6 desktop:margin-right-3 no-shrink">
-              <label
-                className="usa-label"
-                htmlFor="trial-clerk"
-                id="trial-clerk-label"
-              >
-                Trial clerk <span className="usa-hint">(optional)</span>
-              </label>
-              <select
-                aria-describedby="trial-clerk-label"
-                className="usa-select"
-                data-testid="trial-session-trial-clerk"
-                id="trial-clerk"
-                name="trialClerkId"
-                value={form.trialClerkId || ''}
-                onChange={e => {
-                  updateTrialSessionFormDataSequence({
-                    key: e.target.name,
-                    value: sessionAssignmentHelper.formattedTrialClerks.find(
-                      trialClerk => trialClerk.userId === e.target.value,
-                    ),
-                  });
-                }}
-              >
-                <option value="">- Select -</option>
-                {sessionAssignmentHelper.formattedTrialClerks.map(
-                  trialClerk => (
-                    <option key={trialClerk.userId} value={trialClerk.userId}>
-                      {trialClerk.name}
-                    </option>
-                  ),
-                )}
-              </select>
-            </div>
+          {!addTrialSessionInformationHelper.isReportingSession && (
+            <>
+              <div className="grid-row">
+                <div className="usa-form-group desktop:grid-col-6 desktop:margin-right-3 no-shrink">
+                  <label
+                    className="usa-label"
+                    htmlFor="trial-clerk"
+                    id="trial-clerk-label"
+                  >
+                    Trial clerk <span className="usa-hint">(optional)</span>
+                  </label>
+                  <select
+                    aria-describedby="trial-clerk-label"
+                    className="usa-select"
+                    data-testid="trial-session-trial-clerk"
+                    id="trial-clerk"
+                    name="trialClerkId"
+                    value={form.trialClerkId || ''}
+                    onChange={e => {
+                      updateTrialSessionFormDataSequence({
+                        key: e.target.name,
+                        value:
+                          sessionAssignmentHelper.formattedTrialClerks.find(
+                            trialClerk => trialClerk.userId === e.target.value,
+                          ),
+                      });
+                    }}
+                  >
+                    <option value="">- Select -</option>
+                    {sessionAssignmentHelper.formattedTrialClerks.map(
+                      trialClerk => (
+                        <option
+                          key={trialClerk.userId}
+                          value={trialClerk.userId}
+                        >
+                          {trialClerk.name}
+                        </option>
+                      ),
+                    )}
+                  </select>
+                </div>
 
-            <div
-              className="usa-form-group desktop:grid-col-6 no-shrink"
-              hidden={!sessionAssignmentHelper.showAlternateTrialClerkField}
-            >
-              <label className="usa-label" htmlFor="alternate-trial-clerk-name">
-                Alternate trial clerk name{' '}
-              </label>
-              <input
-                autoCapitalize="none"
-                className="usa-input"
-                data-testid="trial-session-trial-clerk-alternate"
-                id="alternate-trial-clerk-name"
-                name="alternateTrialClerkName"
-                type="text"
-                value={form.alternateTrialClerkName || ''}
-                onChange={e => {
-                  updateTrialSessionFormDataSequence({
-                    key: e.target.name,
-                    value: e.target.value,
-                  });
-                }}
-              />
-            </div>
-          </div>
+                <div
+                  className="usa-form-group desktop:grid-col-6 no-shrink"
+                  hidden={!sessionAssignmentHelper.showAlternateTrialClerkField}
+                >
+                  <label
+                    className="usa-label"
+                    htmlFor="alternate-trial-clerk-name"
+                  >
+                    Alternate trial clerk name{' '}
+                  </label>
+                  <input
+                    autoCapitalize="none"
+                    className="usa-input"
+                    data-testid="trial-session-trial-clerk-alternate"
+                    id="alternate-trial-clerk-name"
+                    name="alternateTrialClerkName"
+                    type="text"
+                    value={form.alternateTrialClerkName || ''}
+                    onChange={e => {
+                      updateTrialSessionFormDataSequence({
+                        key: e.target.name,
+                        value: e.target.value,
+                      });
+                    }}
+                  />
+                </div>
+              </div>
 
-          <div className="usa-form-group">
-            <label className="usa-label" htmlFor="court-reporter">
-              Court reporter <span className="usa-hint">(optional)</span>
-            </label>
-            <input
-              autoCapitalize="none"
-              className="usa-input"
-              data-testid="trial-session-court-reporter"
-              id="court-reporter"
-              name="courtReporter"
-              type="text"
-              value={form.courtReporter || ''}
-              onChange={e => {
-                updateTrialSessionFormDataSequence({
-                  key: e.target.name,
-                  value: e.target.value,
-                });
-              }}
-            />
-          </div>
-
+              <div className="usa-form-group">
+                <label className="usa-label" htmlFor="court-reporter">
+                  Court reporter <span className="usa-hint">(optional)</span>
+                </label>
+                <input
+                  autoCapitalize="none"
+                  className="usa-input"
+                  data-testid="trial-session-court-reporter"
+                  id="court-reporter"
+                  name="courtReporter"
+                  type="text"
+                  value={form.courtReporter || ''}
+                  onChange={e => {
+                    updateTrialSessionFormDataSequence({
+                      key: e.target.name,
+                      value: e.target.value,
+                    });
+                  }}
+                />
+              </div>
+            </>
+          )}
           <div className="usa-form-group">
             <FormGroup>
               <label
