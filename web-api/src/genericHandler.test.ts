@@ -123,6 +123,18 @@ describe('genericHandler', () => {
     );
   });
 
+  it('does not decode token claims for public API requests', async () => {
+    await genericHandler(
+      {
+        ...MOCK_EVENT,
+        path: '/public-api/practitioners',
+      },
+      () => null,
+    );
+
+    expect(getLoggerMock().addUser).toHaveBeenCalledWith({ user: undefined });
+  });
+
   it('should not log `results` when disabled in options', async () => {
     const callback = () => null;
 
@@ -211,6 +223,20 @@ describe('genericHandler', () => {
       expect(result).toEqual({
         public: 'public',
       });
+    });
+
+    it('propagates isValidated to the reconstructed entity when the source data was validated', () => {
+      const data = {
+        entityName: 'MockEntity',
+        public: 'public',
+      };
+      Object.defineProperty(data, 'isValidated', {
+        enumerable: false,
+        value: true,
+        writable: false,
+      });
+      const result = dataSecurityFilter(data, { authorizedUser: undefined });
+      expect((result as any).isValidated).toBe(true);
     });
 
     it('returns data without passing through entity constructor if entityName is not present in getEntityConstructors', () => {

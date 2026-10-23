@@ -28,8 +28,10 @@ describe('getAllFeatureFlagsInteractor', () => {
     const RESULT = await getAllFeatureFlagsInteractor(applicationContext, true);
 
     expect(RESULT).toMatchObject({
+      entityName: 'FeatureFlagResponseDTO',
       [FEATURE_FLAG_KEY]: 50,
     });
+    expect(RESULT).toHaveProperty('isValidated', true);
 
     const getFeatureFlagValuesCalls = getFeatureFlagValues.mock.calls;
     expect(getFeatureFlagValuesCalls.length).toEqual(1);
@@ -44,8 +46,10 @@ describe('getAllFeatureFlagsInteractor', () => {
     const RESULT = await getAllFeatureFlagsInteractor(applicationContext, true);
 
     expect(RESULT).toMatchObject({
+      entityName: 'FeatureFlagResponseDTO',
       [FEATURE_FLAG_KEY]: false,
     });
+    expect(RESULT).toHaveProperty('isValidated', true);
 
     const getFeatureFlagValuesCalls = getFeatureFlagValues.mock.calls;
     expect(getFeatureFlagValuesCalls.length).toEqual(1);
@@ -68,16 +72,70 @@ describe('getAllFeatureFlagsInteractor', () => {
     );
 
     expect(RESULT1).toMatchObject({
+      entityName: 'FeatureFlagResponseDTO',
       [FEATURE_FLAG_KEY]: 50,
     });
+    expect(RESULT1).toHaveProperty('isValidated', true);
 
     const RESULT2 = await getAllFeatureFlagsInteractor(applicationContext);
 
     expect(RESULT2).toMatchObject({
+      entityName: 'FeatureFlagResponseDTO',
       [FEATURE_FLAG_KEY]: 50,
     });
+    expect(RESULT2).toHaveProperty('isValidated', true);
 
     const getFeatureFlagValuesCalls = getFeatureFlagValues.mock.calls;
     expect(getFeatureFlagValuesCalls.length).toEqual(1);
+  });
+
+  it('rejects invalid persisted feature flag values', async () => {
+    const FEATURE_FLAG_KEY =
+      ALLOWLIST_FEATURE_FLAGS.AWS_BATCH_ZIPPER_MINIMUM_COUNT.key;
+
+    getFeatureFlagValues.mockResolvedValueOnce([
+      {
+        name: FEATURE_FLAG_KEY,
+        value: { current: { privateField: 'invalid-value' } },
+      },
+    ]);
+
+    await expect(
+      getAllFeatureFlagsInteractor(applicationContext, true),
+    ).rejects.toThrow('FeatureFlagResponseDTO');
+  });
+
+  it('rejects feature flags that are not in the persistence allowlist', async () => {
+    getFeatureFlagValues.mockResolvedValueOnce([
+      {
+        name: 'not-an-allowlisted-flag',
+        value: { current: true },
+      },
+    ]);
+
+    await expect(
+      getAllFeatureFlagsInteractor(applicationContext, true),
+    ).rejects.toThrow(
+      'Unexpected feature flag returned from persistence: not-an-allowlisted-flag',
+    );
+  });
+
+  it('reloads feature flags for the local environment', async () => {
+    const FEATURE_FLAG_KEY =
+      ALLOWLIST_FEATURE_FLAGS.AWS_BATCH_ZIPPER_MINIMUM_COUNT.key;
+    applicationContext.environment.stage = 'local';
+    getFeatureFlagValues.mockResolvedValueOnce([
+      {
+        name: FEATURE_FLAG_KEY,
+        value: { current: 25 },
+      },
+    ]);
+
+    const RESULT = await getAllFeatureFlagsInteractor(applicationContext);
+
+    expect(RESULT).toMatchObject({
+      [FEATURE_FLAG_KEY]: 25,
+    });
+    expect(getFeatureFlagValues).toHaveBeenCalledTimes(1);
   });
 });

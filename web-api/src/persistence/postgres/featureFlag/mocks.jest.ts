@@ -14,7 +14,7 @@ jest.mock(
   () =>
     mockFactory('getFeatureFlagValues', [
       {
-        name: 'entity-locking-feature-flag',
+        name: 'e-consent-fields-enabled-feature-flag',
         value: {
           current: true,
         },

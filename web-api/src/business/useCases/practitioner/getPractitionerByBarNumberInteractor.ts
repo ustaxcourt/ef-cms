@@ -43,7 +43,9 @@ export const getPractitionerByBarNumberInteractor = async (
           new PublicContact({
             ...practitioner,
             state: practitioner.originalBarState,
-          }).toRawObject(),
+          })
+            .validate()
+            .toRawObject(),
         ]
       : []; // return empty array for public user if no practitioner found
 };
