@@ -1,4 +1,4 @@
-jest.mock('@web-client/proxies/users/checkEmailExistsProxy');
+jest.mock('@web-client/proxies/users/checkEmailIsPractitionerProxy');
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { presenter } from '../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';

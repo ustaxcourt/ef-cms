@@ -16,5 +16,5 @@ export const checkEmailIsPetitionerInteractor = async (
 
   const matchingEmails = await checkEmailIsPractitioner({ email });
 
-  return matchingEmails > 0;
+  return matchingEmails;
 };
