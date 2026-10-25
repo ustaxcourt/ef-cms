@@ -2,7 +2,7 @@ import { findUnauthorizedPublicFields as findUnauthorizedPublicFieldsCore } from
 import type { UnauthorizedPublicFieldFinding } from '@shared/business/utilities/publicDataValidation';
 import { getHeaderValue } from '@shared/utils/headers';
 
-type ApiGatewayLikeEvent = {
+export type ApiGatewayLikeEvent = {
   headers?: Record<string, unknown>;
   path?: string;
   url?: string;

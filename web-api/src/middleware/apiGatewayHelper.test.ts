@@ -179,7 +179,7 @@ describe('handle', () => {
       name: 'Bad User',
       role: 'petitioner',
     }).validate();
-    (user as any).privateField = 'this is bad!';
+    Object.assign(user, { privateField: 'this is bad!' });
     const response = await handle(
       {
         path: '/public-api/some-endpoint',
@@ -348,7 +348,7 @@ describe('handle', () => {
 
   it('should enforce public validation for pre-formed responses without skipPublicValidation', async () => {
     const user = new PublicUser({ name: 'Bad User', role: 'petitioner' });
-    (user as any).privateField = 'bad';
+    Object.assign(user, { privateField: 'bad' });
     user.validate();
     const response = await handle(
       { path: '/public-api/some-endpoint' },

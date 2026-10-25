@@ -243,12 +243,12 @@ function extractAllowedFieldsByEntityName(): Map<string, Set<string>> {
   for (const [entityName, createEntity] of Object.entries(
     PUBLIC_ENTITY_FACTORIES,
   )) {
+    const dynamicAllowedFields =
+      DYNAMIC_ALLOWED_FIELDS_BY_ENTITY_NAME.get(entityName);
+
     // Use overridden allowed fields if available
-    if (DYNAMIC_ALLOWED_FIELDS_BY_ENTITY_NAME.has(entityName)) {
-      allowedFieldsByEntityName.set(
-        entityName,
-        DYNAMIC_ALLOWED_FIELDS_BY_ENTITY_NAME.get(entityName)!,
-      );
+    if (dynamicAllowedFields !== undefined) {
+      allowedFieldsByEntityName.set(entityName, dynamicAllowedFields);
       continue;
     }
 
@@ -321,7 +321,9 @@ function validateNestedObjectRecord(args: {
 
   for (const [key, value] of Object.entries(args.obj)) {
     const fieldPath = `${args.path}.${key}`;
-    const validateField = args.schema.fields[key];
+    const validateField = Object.hasOwn(args.schema.fields, key)
+      ? args.schema.fields[key]
+      : undefined;
     const isValidFieldValue =
       validateField && (value === undefined || validateField(value));
 

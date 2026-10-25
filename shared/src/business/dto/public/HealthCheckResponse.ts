@@ -63,7 +63,7 @@ export class HealthCheckResponse
     s3: joi.object(S3_STATUS_RULES).required(),
   };
 
-  getValidationRules() {
+  getValidationRules(): typeof HealthCheckResponse.VALIDATION_RULES {
     return HealthCheckResponse.VALIDATION_RULES;
   }
 }

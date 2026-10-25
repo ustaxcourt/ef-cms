@@ -12,11 +12,12 @@ import { RestrictedCaseResponse } from '@shared/business/dto/cases/RestrictedCas
 
 const MOCK_UUID = 'c7d90c05-f6cd-442c-a168-202db587f16f';
 
-const mockPublicCaseFields = {
+const mockPublicCaseFields: RawPublicCase = {
   caseCaption: 'Test Petitioner, Petitioner',
   docketEntries: [],
   docketNumber: '101-20',
   docketNumberWithSuffix: '101-20',
+  entityName: 'PublicCase',
   hasIrsPractitioner: false,
   isSealed: false,
   receivedAt: '2020-01-05T03:30:45.007Z',
@@ -138,7 +139,7 @@ describe('publicDataValidation', () => {
   it('fails on unauthorized fields for known public entities', () => {
     const user = new PublicUser({ name: 'Test User', role: 'petitioner' });
     user.validate();
-    (user as any).privateField = 'do-not-leak';
+    Object.assign(user, { privateField: 'do-not-leak' });
     const findings = findUnauthorizedPublicFields({
       data: user,
       url: 'http://localhost:4001/public-api/users',
@@ -207,7 +208,7 @@ describe('publicDataValidation', () => {
     const publicCase = new PublicCaseResponse({
       ...mockPublicCaseFields,
       petitioners: [new PublicContact({ contactId: MOCK_UUID })],
-    } as any);
+    });
     publicCase.validate();
 
     const findings = findUnauthorizedPublicFields({
@@ -444,6 +445,36 @@ describe('publicDataValidation', () => {
     );
   });
 
+  it('rejects inherited object keys in docket-entry relationship objects', () => {
+    const relationshipWithConstructor: Record<string, unknown> = {
+      disposition: 'DENIED',
+      docketEntryId: MOCK_UUID,
+      constructor: { privateField: 'do-not-leak' },
+    };
+    const docketEntry = Object.assign(
+      new PublicDocketEntry({
+        docketNumber: '101-20',
+        filingDate: '2020-01-05T03:30:45.007Z',
+        receivedAt: '2020-01-05T03:30:45.007Z',
+      }),
+      { affectedDocketEntries: [relationshipWithConstructor] },
+    );
+
+    const findings = findUnauthorizedPublicFields({
+      data: docketEntry,
+      url: 'http://localhost:4001/public-api/cases/101-20/docket',
+    });
+
+    expect(findings).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          fieldName: 'affectedDocketEntries[0].constructor',
+          matchPreview: '[invalid]',
+        }),
+      ]),
+    );
+  });
+
   it('rejects malformed docket-entry relationship values', () => {
     const docketEntryFields = {
       docketNumber: '101-20',
@@ -549,11 +580,11 @@ describe('publicDataValidation', () => {
 
   it('fails for unauthorized fields on entities nested inside a validated entity', () => {
     const petitioner = new PublicContact({ contactId: MOCK_UUID });
-    (petitioner as any).privateField = 'do-not-leak';
+    Object.assign(petitioner, { privateField: 'do-not-leak' });
     const publicCase = new PublicCaseResponse({
       ...mockPublicCaseFields,
       petitioners: [petitioner],
-    } as any);
+    });
     publicCase.validate();
 
     const findings = findUnauthorizedPublicFields({
@@ -590,7 +621,9 @@ describe('publicDataValidation', () => {
   it('recurses into nested untagged objects within a known entity', () => {
     const user = new PublicUser({ name: 'Test User', role: 'petitioner' });
     user.validate();
-    (user as any).nested = { entityName: 'SomeUnknownEntity', field: 'value' };
+    Object.assign(user, {
+      nested: { entityName: 'SomeUnknownEntity', field: 'value' },
+    });
     const findings = findUnauthorizedPublicFields({
       data: user,
       url: 'http://localhost:4001/public-api/users',

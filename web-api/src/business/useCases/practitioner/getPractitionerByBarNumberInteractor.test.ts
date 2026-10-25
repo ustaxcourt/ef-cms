@@ -56,7 +56,7 @@ describe('getPractitionerByBarNumberInteractor', () => {
         mockPetitionsClerkUser,
       );
 
-      expect((practitioner as any).isValidated).toBe(true);
+      expect(practitioner).toHaveProperty('isValidated', true);
 
       expect(practitioner).toEqual({
         accountStatus: ACCOUNT_STATUS.active,
@@ -114,7 +114,7 @@ describe('getPractitionerByBarNumberInteractor', () => {
         mockPetitionsClerkUser,
       );
 
-      expect((practitioner as any).isValidated).toBe(true);
+      expect(practitioner).toHaveProperty('isValidated', true);
 
       expect(practitioner).toEqual({
         accountStatus: ACCOUNT_STATUS.active,
@@ -200,7 +200,11 @@ describe('getPractitionerByBarNumberInteractor', () => {
         undefined,
       );
 
-      expect((results as any[])[0].isValidated).toBe(true);
+      expect(Array.isArray(results)).toBe(true);
+      if (!Array.isArray(results)) {
+        throw new Error('Expected practitioner results to be an array');
+      }
+      expect(results[0]).toHaveProperty('isValidated', true);
 
       expect(results).toEqual([
         {

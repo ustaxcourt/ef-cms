@@ -69,7 +69,7 @@ export class PublicTrialSessionInfo extends JoiValidationEntity {
     trialSessionId: JoiValidationConstants.UUID.optional(),
   };
 
-  getValidationRules() {
+  getValidationRules(): typeof PublicTrialSessionInfo.VALIDATION_RULES {
     return PublicTrialSessionInfo.VALIDATION_RULES;
   }
 }

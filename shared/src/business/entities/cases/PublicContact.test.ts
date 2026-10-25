@@ -19,6 +19,24 @@ describe('PublicContact', () => {
       expect(contact.getFormattedValidationErrors()).toBeNull();
     });
 
+    it('passes validation when contactId is absent', () => {
+      const contact = new PublicContact({});
+
+      expect(contact.getFormattedValidationErrors()).toBeNull();
+    });
+
+    it('rejects an invalid contactId when supplied', () => {
+      const contact = new PublicContact({
+        contactId: 'not-a-uuid',
+      });
+
+      expect(contact.getValidationErrors()).toEqual(
+        expect.objectContaining({
+          contactId: expect.any(String),
+        }),
+      );
+    });
+
     it('passes validation with all fields populated', () => {
       const contact = new PublicContact({
         admissionsDate: '2020-01-15',

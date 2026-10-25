@@ -75,7 +75,10 @@ export const getPublicDownloadPolicyUrlInteractor = async (
         email: '',
         name: '',
       },
-      visibilityChangeDate: documentVisibilityChangeDate,
+      visibilityChangeDate:
+        typeof documentVisibilityChangeDate === 'string'
+          ? documentVisibilityChangeDate
+          : '',
     })
   ) {
     throw new UnauthorizedError('Unauthorized to access private document');

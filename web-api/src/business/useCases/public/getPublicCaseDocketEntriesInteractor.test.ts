@@ -63,7 +63,7 @@ describe('getPublicCaseDocketEntriesInteractor', () => {
     expect(result.docketEntries.length).toBeGreaterThan(0);
     result.docketEntries.forEach(docketEntry => {
       expect(docketEntry.entityName).toEqual('PublicDocketEntry');
-      expect((docketEntry as any).isValidated).toBe(true);
+      expect(docketEntry).toHaveProperty('isValidated', true);
     });
   });
 

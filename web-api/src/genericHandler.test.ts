@@ -22,6 +22,7 @@ import {
   X_DEPLOYMENT_TIMESTAMP,
   X_MANUAL_REFRESH_REQUIRED,
 } from '@shared/utils/headers';
+import { PublicUser } from '@shared/business/entities/PublicUser';
 import { getEntityByName as getEntityByNameMock } from '@web-api/business/getEntityByName';
 import { getDawsonLogger as getLoggerMock } from '@web-api/utilities/logger/getDawsonLogger';
 import { getMaintenanceMode as getMaintenanceModeMock } from '@web-api/persistence/postgres/featureFlag/getMaintenanceMode';
@@ -176,6 +177,27 @@ describe('genericHandler', () => {
     expect(JSON.parse(result.body)).toEqual({ public: 'public data' });
   });
 
+  it('rejects unsanitized public data before the entity filter reconstructs it', async () => {
+    const user = new PublicUser({
+      name: 'Bad User',
+      role: 'petitioner',
+    }).validate();
+    Object.assign(user, { privateField: 'this is bad!' });
+
+    const result = await genericHandler(
+      {
+        ...MOCK_EVENT,
+        path: '/public-api/users',
+      },
+      () => user,
+    );
+
+    expect(result.statusCode).toBe(500);
+    expect(JSON.parse(result.body)).toContain(
+      'unauthorized field privateField',
+    );
+  });
+
   it('returns a manual refresh response when the client deployment timestamp does not match', async () => {
     process.env.DEPLOYMENT_TIMESTAMP = '222';
     const callback = jest.fn();
@@ -236,7 +258,7 @@ describe('genericHandler', () => {
         writable: false,
       });
       const result = dataSecurityFilter(data, { authorizedUser: undefined });
-      expect((result as any).isValidated).toBe(true);
+      expect(result).toHaveProperty('isValidated', true);
     });
 
     it('returns data without passing through entity constructor if entityName is not present in getEntityConstructors', () => {

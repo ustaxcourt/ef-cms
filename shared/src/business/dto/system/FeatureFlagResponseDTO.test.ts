@@ -23,6 +23,19 @@ describe('FeatureFlagResponseDTO', () => {
     expect(dto.getValidationErrors()).toBeNull();
   });
 
+  it('is valid with false defaults for flags with non-boolean values', () => {
+    const dto = new FeatureFlagResponseDTO({
+      [ALLOWLIST_FEATURE_FLAGS.AWS_BATCH_ZIPPER_MINIMUM_COUNT.key]: false,
+      [ALLOWLIST_FEATURE_FLAGS.CHIEF_JUDGE_NAME.key]: false,
+      [ALLOWLIST_FEATURE_FLAGS.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.key]:
+        false,
+      [ALLOWLIST_FEATURE_FLAGS.RESTRICTED_EVENT_CODES.key]: false,
+    });
+
+    expect(dto.isValid()).toBe(true);
+    expect(dto.getValidationErrors()).toBeNull();
+  });
+
   it('is invalid when a value has an unsupported type', () => {
     const dto = new FeatureFlagResponseDTO({
       [ALLOWLIST_FEATURE_FLAGS.USE_CHANGE_OF_ADDRESS_LAMBDA.key]: {
@@ -34,6 +47,40 @@ describe('FeatureFlagResponseDTO', () => {
     expect(dto.getValidationErrors()).toEqual(
       expect.objectContaining({
         [ALLOWLIST_FEATURE_FLAGS.USE_CHANGE_OF_ADDRESS_LAMBDA.key]:
+          expect.any(String),
+      }),
+    );
+  });
+
+  it('is invalid when a feature flag has a value with the wrong type', () => {
+    const dto = new FeatureFlagResponseDTO({
+      [ALLOWLIST_FEATURE_FLAGS.AWS_BATCH_ZIPPER_MINIMUM_COUNT.key]: '25',
+      [ALLOWLIST_FEATURE_FLAGS.RESTRICTED_EVENT_CODES.key]: ['A', 1],
+    });
+
+    expect(dto.isValid()).toBe(false);
+    expect(dto.getValidationErrors()).toEqual(
+      expect.objectContaining({
+        [ALLOWLIST_FEATURE_FLAGS.AWS_BATCH_ZIPPER_MINIMUM_COUNT.key]:
+          expect.any(String),
+        [ALLOWLIST_FEATURE_FLAGS.RESTRICTED_EVENT_CODES.key]:
+          expect.any(String),
+      }),
+    );
+  });
+
+  it('is invalid when an array value contains an unsupported type', () => {
+    const dto = new FeatureFlagResponseDTO({
+      [ALLOWLIST_FEATURE_FLAGS.RESTRICTED_EVENT_CODES.key]: [
+        'A',
+        { privateField: 'not-allowed' },
+      ],
+    });
+
+    expect(dto.isValid()).toBe(false);
+    expect(dto.getValidationErrors()).toEqual(
+      expect.objectContaining({
+        [ALLOWLIST_FEATURE_FLAGS.RESTRICTED_EVENT_CODES.key]:
           expect.any(String),
       }),
     );

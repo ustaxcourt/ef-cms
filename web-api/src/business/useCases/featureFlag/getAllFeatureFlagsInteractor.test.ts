@@ -14,6 +14,44 @@ describe('getAllFeatureFlagsInteractor', () => {
     jest.resetAllMocks();
   });
 
+  it('retries an invalid initial load instead of caching it', async () => {
+    jest.resetModules();
+    const isolatedInteractorModule =
+      await import('@web-api/business/useCases/featureFlag/getAllFeatureFlagsInteractor');
+    const isolatedPersistenceModule =
+      await import('@web-api/persistence/postgres/featureFlag/getFeatureFlagValues');
+    const isolatedInteractor =
+      isolatedInteractorModule.getAllFeatureFlagsInteractor;
+    const isolatedGetFeatureFlagValues =
+      isolatedPersistenceModule.getFeatureFlagValues;
+    const FEATURE_FLAG_KEY =
+      ALLOWLIST_FEATURE_FLAGS.AWS_BATCH_ZIPPER_MINIMUM_COUNT.key;
+    const isolatedPersistenceMock = jest.mocked(isolatedGetFeatureFlagValues);
+    isolatedPersistenceMock
+      .mockResolvedValueOnce([
+        {
+          name: FEATURE_FLAG_KEY,
+          value: { current: { privateField: 'invalid-value' } },
+        },
+      ])
+      .mockResolvedValueOnce([
+        {
+          name: FEATURE_FLAG_KEY,
+          value: { current: 50 },
+        },
+      ]);
+
+    await expect(isolatedInteractor(applicationContext)).rejects.toThrow(
+      'FeatureFlagResponseDTO',
+    );
+
+    const result = await isolatedInteractor(applicationContext);
+
+    expect(result).toMatchObject({ [FEATURE_FLAG_KEY]: 50 });
+    expect(result).toHaveProperty('isValidated', true);
+    expect(isolatedPersistenceMock).toHaveBeenCalledTimes(2);
+  });
+
   it('should return the value of the feature flag', async () => {
     const FEATURE_FLAG_KEY =
       ALLOWLIST_FEATURE_FLAGS.AWS_BATCH_ZIPPER_MINIMUM_COUNT.key;
