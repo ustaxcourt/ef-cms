@@ -46,7 +46,7 @@ jobs:
       CHECK_DEPLOY_DATE_INTERVAL: ${{ inputs.check_deploy_date_interval }}
     services:
       postgres:
-        image: postgres
+        image: postgres:17.5-trixie
         env:
           POSTGRES_PASSWORD: example
         options: >-
@@ -61,10 +61,6 @@ jobs:
         uses: actions/checkout@v7
         with:
           fetch-depth: ${{ inputs.fetch_depth }}
-      - name: Collect Workflow Telemetry
-        uses: runforesight/workflow-telemetry-action@v2
-        with:
-          comment_on_pr: false
       - name: NPM Install in Current Branch
         uses: ./.github/actions/dawson-node-bootstrap
       - name: Create Cypress Output Directory

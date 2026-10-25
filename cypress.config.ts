@@ -23,7 +23,10 @@ import { unzipFile } from './cypress/helpers/file/unzip-file';
 import { waitForNoce } from './cypress/helpers/cypressTasks/postgres/wait-for-noce';
 import type { Page } from 'puppeteer-core';
 import { retry, setup } from '@cypress/puppeteer';
-import { toggleFeatureFlag } from './cypress/helpers/cypressTasks/postgres/featureFlagsCypress';
+import {
+  getRawFeatureFlagValue,
+  toggleFeatureFlag,
+} from './cypress/helpers/cypressTasks/postgres/featureFlagsCypress';
 import { assertCorrectNetworkData } from './cypress/helpers/cypressTasks/network/assertCorrectNetworkData';
 
 export default defineConfig({
@@ -91,6 +94,9 @@ export default defineConfig({
             eventCode,
           });
         },
+        getRawFeatureFlagValue({ flag }) {
+          return getRawFeatureFlagValue({ flag });
+        },
         getUserByEmail(email: string) {
           return getUserByEmail(email);
         },
@@ -118,7 +124,7 @@ export default defineConfig({
         onMessage: {
           async closeTab(browser: any, url: string) {
             const desiredPage = await retry<Promise<Page>>(async () => {
-              const pages = await browser.pages();
+              const pages: Page[] = await browser.pages();
               const page = pages.find(p => p.url().includes(url));
               if (!page) throw new Error('Could not find page');
               return page;

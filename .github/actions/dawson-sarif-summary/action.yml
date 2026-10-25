@@ -1,0 +1,33 @@
+name: DAWSON SARIF Summary
+description: List the findings of a SARIF report in the workflow log and the job summary.
+
+inputs:
+  max_findings:
+    description: Maximum number of findings to list, most severe first.
+    required: false
+    default: '100'
+  max_rules:
+    description: Maximum number of rules to list in the by-count table shown when findings are truncated.
+    required: false
+    default: '25'
+  sarif_file:
+    description: Path to the SARIF report.
+    required: true
+  title:
+    description: Heading for the summary section.
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Summarize SARIF
+      # No hashFiles guard: the script reports a missing report, which a skipped step cannot.
+      if: always()
+      shell: bash
+      env:
+        MAX_FINDINGS: ${{ inputs.max_findings }}
+        MAX_RULES: ${{ inputs.max_rules }}
+        SARIF_FILE: ${{ inputs.sarif_file }}
+        SUMMARY_TITLE: ${{ inputs.title }}
+      # Not github.action_path: that is the host path, which containerized jobs cannot see.
+      run: '$GITHUB_WORKSPACE/.github/actions/dawson-sarif-summary/summarize-sarif.sh'
