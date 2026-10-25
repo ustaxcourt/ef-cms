@@ -54,12 +54,21 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
 
+function isPublicApiUrl(url: string): boolean {
+  const { pathname } = new URL(url, 'http://localhost');
+  return pathname.startsWith('/public-api/');
+}
+
 export function assertCorrectNetworkData(
   payloads: CapturedNetworkPayload[],
 ): PublicDataValidationResult {
   const findings: UnauthorizedFieldFinding[] = [];
 
   for (const payload of payloads) {
+    if (!isPublicApiUrl(payload.url)) {
+      continue;
+    }
+
     if (
       shouldValidateJsonBody({
         body: payload.responseBody,

@@ -198,6 +198,34 @@ describe('genericHandler', () => {
     );
   });
 
+  it('rejects unsanitized array items before the public entity filter reconstructs them', async () => {
+    const firstUser = new PublicUser({
+      name: 'First User',
+      role: 'petitioner',
+    }).validate();
+    const secondUser = new PublicUser({
+      name: 'Second User',
+      role: 'petitioner',
+    }).validate();
+    Object.assign(secondUser, { privateField: 'this is bad!' });
+
+    const result = await genericHandler(
+      {
+        ...MOCK_EVENT,
+        headers: {
+          ...MOCK_EVENT.headers,
+          host: 'public-api-blue.example.gov',
+        },
+      },
+      () => [firstUser, secondUser],
+    );
+
+    expect(result.statusCode).toBe(500);
+    expect(JSON.parse(result.body)).toContain(
+      'unauthorized field [1].privateField',
+    );
+  });
+
   it('returns a manual refresh response when the client deployment timestamp does not match', async () => {
     process.env.DEPLOYMENT_TIMESTAMP = '222';
     const callback = jest.fn();
