@@ -236,7 +236,12 @@ jobs:
   codeql:
     name: CodeQL Deep Analysis
     needs: changes
-    if: needs.changes.outputs.code == 'true'
+    # Same-repository PRs to staging run CodeQL even when they change only docs. The staging
+    # code-scanning rule needs a CodeQL analysis for each PR, or the PR cannot merge.
+    if: >-
+      needs.changes.outputs.code == 'true' ||
+      (github.event.pull_request.base.ref == 'staging' &&
+      github.event.pull_request.head.repo.full_name == github.event.pull_request.base.repo.full_name)
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -318,7 +323,12 @@ jobs:
             exit 1
           fi
           if [[ "$CODE_CHANGED" == "false" ]]; then
-            echo "This PR changes only docs, so no SAST scans ran. SAST gate passed"
+            # CodeQL still runs on docs-only PRs to staging, for the code-scanning rule.
+            if [[ "$CODEQL_RESULT" != "skipped" && "$CODEQL_RESULT" != "success" ]]; then
+              echo "CodeQL analysis did not complete successfully"
+              exit 1
+            fi
+            echo "This PR changes only docs, so the other SAST scans skipped. SAST gate passed"
             exit 0
           fi
           if [[ "$SEMGREP_RESULT" == "failure" ]]; then
