@@ -46,6 +46,6 @@ jest.mock(
   () => mockFactory('getUserByPendingEmailVerificationToken'),
 );
 
-jest.mock('@web-api/persistence/postgres/users/checkEmailExists', () =>
-  mockFactory('checkEmailExists'),
+jest.mock('@web-api/persistence/postgres/users/checkEmailIsPractitioner', () =>
+  mockFactory('checkEmailIsPractitioner'),
 );

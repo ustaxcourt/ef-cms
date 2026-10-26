@@ -43,7 +43,7 @@ import { invalidateUserContactGeocode as invalidateUserContactGeocodeMock } from
 
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
-import { checkEmailIsPractitioner as checkEmailExistsMock } from '@web-api/persistence/postgres/users/checkEmailIsPractitioner';
+import { checkEmailIsPractitioner as checkEmailIsPractitionerMock } from '@web-api/persistence/postgres/users/checkEmailIsPractitioner';
 import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 import { MOCK_PRACTITIONER } from '@shared/test/mockUsers';
 
@@ -57,7 +57,7 @@ describe('updatePetitionerInformationInteractor', () => {
     invalidateUserContactGeocodeMock,
   );
   const getUserById = jest.mocked(getUserByIdMock);
-  const checkEmailExists = jest.mocked(checkEmailExistsMock);
+  const checkEmailIsPractitioner = jest.mocked(checkEmailIsPractitionerMock);
   const updateCaseAndAssociations = jest
     .mocked(updateCaseAndAssociationsMock)
     .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
@@ -100,7 +100,7 @@ describe('updatePetitionerInformationInteractor', () => {
       .getUseCaseHelpers()
       .createUserForContact.mockResolvedValue(mockCase);
 
-    checkEmailExists.mockResolvedValue(0);
+    checkEmailIsPractitioner.mockResolvedValue(false);
     getCaseByDocketNumber.mockImplementation(() => mockCase);
     generateAndServeDocketEntry.mockResolvedValue({
       url: mockUrl,
@@ -693,7 +693,7 @@ describe('updatePetitionerInformationInteractor', () => {
     });
 
     it('should not allow a duplicate email address (practitioner duplicate)', async () => {
-      checkEmailExists.mockResolvedValue(1);
+      checkEmailIsPractitioner.mockResolvedValue(true);
 
       mockCase.privatePractitioners = [MOCK_PRACTITIONER];
       await expect(
