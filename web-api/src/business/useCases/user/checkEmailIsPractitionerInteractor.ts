@@ -6,7 +6,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { checkEmailIsPractitioner } from '@web-api/persistence/postgres/users/checkEmailIsPractitioner';
 
-export const checkEmailIsPetitionerInteractor = async (
+export const checkEmailIsPractitionerInteractor = async (
   { email }: { email: string },
   authorizedUser: UnknownAuthUser,
 ): Promise<boolean> => {
