@@ -19,7 +19,7 @@ export class EditTrialSession extends TrialSession {
           '*': 'Enter a valid estimated end date',
           'date.min': 'Estimated end date must be after start date',
         }),
-      ...this.getReportingValidationRules(),
+      ...(this.isReporting() ? TrialSession.validationRules.REPORTING : {}),
     };
   }
 }

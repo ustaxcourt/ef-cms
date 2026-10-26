@@ -68,6 +68,20 @@ const stringRequiredForRemoteProceedings = JoiValidationConstants.STRING.max(
   }),
 });
 
+const trialLocationValidation = joi
+  .when('sessionScope', {
+    is: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
+    otherwise: joi
+      .alternatives()
+      .try(
+        JoiValidationConstants.STRING.valid(...TRIAL_CITY_STRINGS, null),
+        JoiValidationConstants.STRING.pattern(TRIAL_LOCATION_MATCHER), // Allow unique values for testing
+      )
+      .required(),
+    then: joi.optional(),
+  })
+  .messages({ '*': 'Select a trial session location' });
+
 export type TJudge = {
   name: string;
   userId: string;
@@ -403,64 +417,10 @@ export class TrialSession extends JoiValidationEntity {
           userId: JoiValidationConstants.UUID.required(),
         })
         .optional(),
-      trialLocation: joi
-        .when('sessionScope', {
-          is: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
-          otherwise: joi
-            .alternatives()
-            .try(
-              JoiValidationConstants.STRING.valid(...TRIAL_CITY_STRINGS, null),
-              JoiValidationConstants.STRING.pattern(TRIAL_LOCATION_MATCHER), // Allow unique values for testing
-            )
-            .required(),
-          then: joi.optional(),
-        })
-        .messages({ '*': 'Select a trial session location' }),
+      trialLocation: trialLocationValidation,
       trialSessionId: JoiValidationConstants.UUID.optional(),
     },
-  };
-
-  getValidationRules() {
-    return {
-      ...TrialSession.validationRules.COMMON,
-      ...this.getReportingValidationRules(),
-      caseOrder: joi.array().items(
-        joi.object().keys({
-          calendarNotes: JoiValidationConstants.STRING.optional().allow(
-            '',
-            null,
-          ),
-          disposition: JoiValidationConstants.STRING.max(100).when(
-            'removedFromTrial',
-            {
-              is: true,
-              otherwise: joi.optional().allow(null),
-              then: joi.required(),
-            },
-          ),
-          docketNumber:
-            JoiValidationConstants.DOCKET_NUMBER.required().description(
-              'Docket number of the case.',
-            ),
-          isManuallyAdded: joi.boolean().optional(),
-          removedFromTrial: joi.boolean().optional(),
-          removedFromTrialDate: JoiValidationConstants.ISO_DATE.when(
-            'removedFromTrial',
-            {
-              is: true,
-              otherwise: joi.optional().allow(null),
-              then: joi.required(),
-            },
-          ),
-        }),
-      ),
-    } as object;
-  }
-
-  getReportingValidationRules(): Record<string, joi.Schema> {
-    if (!this.isReporting()) return {};
-
-    return {
+    REPORTING: {
       ...Object.fromEntries(
         REPORTING_SESSION_EXCLUDED_FIELDS.map((field: string) => [
           field,
@@ -495,9 +455,45 @@ export class TrialSession extends JoiValidationEntity {
           '*': 'Select a session type',
         }),
       swingSession: joi.valid(false).optional(),
-      trialLocation:
-        TrialSession.validationRules.COMMON.trialLocation.invalid(null),
-    };
+      trialLocation: trialLocationValidation.invalid(null),
+    },
+  };
+
+  getValidationRules() {
+    return {
+      ...TrialSession.validationRules.COMMON,
+      ...(this.isReporting() ? TrialSession.validationRules.REPORTING : {}),
+      caseOrder: joi.array().items(
+        joi.object().keys({
+          calendarNotes: JoiValidationConstants.STRING.optional().allow(
+            '',
+            null,
+          ),
+          disposition: JoiValidationConstants.STRING.max(100).when(
+            'removedFromTrial',
+            {
+              is: true,
+              otherwise: joi.optional().allow(null),
+              then: joi.required(),
+            },
+          ),
+          docketNumber:
+            JoiValidationConstants.DOCKET_NUMBER.required().description(
+              'Docket number of the case.',
+            ),
+          isManuallyAdded: joi.boolean().optional(),
+          removedFromTrial: joi.boolean().optional(),
+          removedFromTrialDate: JoiValidationConstants.ISO_DATE.when(
+            'removedFromTrial',
+            {
+              is: true,
+              otherwise: joi.optional().allow(null),
+              then: joi.required(),
+            },
+          ),
+        }),
+      ),
+    } as object;
   }
 
   isReporting(): boolean {
