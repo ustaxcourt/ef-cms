@@ -10,7 +10,10 @@ import {
   ROLES,
 } from './EntityConstants';
 import { DocketEntry } from './DocketEntry';
-import { createISODateString } from '../utilities/DateHandler';
+import {
+  calculateISODate,
+  createISODateString,
+} from '../utilities/DateHandler';
 import { EXTERNAL_FILING_EVENTS } from '@shared/business/entities/docketEntry/externalFilingEvents';
 
 describe('DocketEntry isPublic', () => {
@@ -27,15 +30,27 @@ describe('DocketEntry isPublic', () => {
     '2027-01-01',
     'yyyy-MM-dd',
   );
-  const beforeMotionVisibilityChangeDate = createISODateString(
-    '2026-10-01',
-    'yyyy-MM-dd',
-  );
-  const afterMotionVisibilityChangeDate = createISODateString(
-    '2027-02-01',
-    'yyyy-MM-dd',
-  );
+  const beforeMotionVisibilityChangeDate = calculateISODate({
+    dateString: motionVisibilityChangeDate,
+    howMuch: -1,
+    units: 'days',
+  });
+  const afterMotionVisibilityChangeDate = calculateISODate({
+    dateString: motionVisibilityChangeDate,
+    howMuch: 1,
+    units: 'days',
+  });
+  const afterMotionFilingDate = calculateISODate({
+    dateString: afterMotionVisibilityChangeDate,
+    howMuch: 1,
+    units: 'days',
+  });
   const amendmentEventCodes = ['AMAT', 'ADMT', 'REDC', 'SPML', 'SUPM'];
+  const NON_PUBLIC_SAME_FILING_MOTION_SUPPORTING_EVENT_CODES = [
+    'AFF',
+    'EXH',
+    'USDL',
+  ];
   const baseDocketEntry: RawDocketEntry = {
     createdAt: '2018-11-21T20:49:28.192Z',
     docketEntryId: 'db3ed57e-cfca-4228-ad5c-547484b1a801',
@@ -668,7 +683,7 @@ describe('DocketEntry isPublic', () => {
                 {
                   ...baseDocketEntry,
                   eventCode: supportingEventCode,
-                  filingDate: createISODateString('2027-03-01', 'yyyy-MM-dd'),
+                  filingDate: afterMotionFilingDate,
                   filedByRole: role,
                 },
                 {
@@ -1100,6 +1115,116 @@ describe('DocketEntry isPublic', () => {
           expect(isPublic).toBe(false);
         },
       );
+    });
+    describe('On motion visibility change date', () => {
+      describe.each([ROLES.privatePractitioner, ROLES.irsPractitioner])(
+        'Practitioners e-file on the policy date',
+        role => {
+          it(`should return true for motions filed by a ${role}`, () => {
+            const isPublic = DocketEntry.isPublic(
+              {
+                ...baseDocketEntry,
+                eventCode: motionEventCode,
+                filingDate: motionVisibilityChangeDate,
+                filedByRole: role,
+              },
+              {
+                visibilityChangeDate,
+                motionVisibilityChangeDate,
+              },
+            );
+
+            expect(isPublic).toBe(true);
+          });
+
+          it.each(PUBLIC_SUPPORTING_EVENT_CODES_FOR_MOTIONS)(
+            `should return true for briefs or memoranda in support of a motion filed by a ${role} at the same time as the motion`,
+            supportingEventCode => {
+              const isPublic = DocketEntry.isPublic(
+                {
+                  ...baseDocketEntry,
+                  eventCode: supportingEventCode,
+                  filingDate: motionVisibilityChangeDate,
+                  filedByRole: role,
+                },
+                {
+                  rootDocument: {
+                    ...baseDocketEntry,
+                    eventCode: motionEventCode,
+                    filingDate: motionVisibilityChangeDate,
+                    filedByRole: role,
+                  },
+                  visibilityChangeDate,
+                  motionVisibilityChangeDate,
+                },
+              );
+
+              expect(isPublic).toBe(true);
+            },
+          );
+
+          it.each(NON_PUBLIC_SAME_FILING_MOTION_SUPPORTING_EVENT_CODES)(
+            `should return false for other supporting documents of a motion filed by a ${role} at the same time as the motion`,
+            supportingEventCode => {
+              const isPublic = DocketEntry.isPublic(
+                {
+                  ...baseDocketEntry,
+                  eventCode: supportingEventCode,
+                  filingDate: motionVisibilityChangeDate,
+                  filedByRole: role,
+                },
+                {
+                  rootDocument: {
+                    ...baseDocketEntry,
+                    eventCode: motionEventCode,
+                    filingDate: motionVisibilityChangeDate,
+                    filedByRole: role,
+                  },
+                  visibilityChangeDate,
+                  motionVisibilityChangeDate,
+                },
+              );
+
+              expect(isPublic).toBe(false);
+            },
+          );
+
+          it('should return false for motions that are paper filed', () => {
+            const isPublic = DocketEntry.isPublic(
+              {
+                ...baseDocketEntry,
+                eventCode: motionEventCode,
+                filingDate: motionVisibilityChangeDate,
+                filedByRole: role,
+                isPaper: true,
+              },
+              {
+                visibilityChangeDate,
+                motionVisibilityChangeDate,
+              },
+            );
+
+            expect(isPublic).toBe(false);
+          });
+        },
+      );
+
+      it('should return false for motions filed by a petitioner', () => {
+        const isPublic = DocketEntry.isPublic(
+          {
+            ...baseDocketEntry,
+            eventCode: motionEventCode,
+            filingDate: motionVisibilityChangeDate,
+            filedByRole: ROLES.petitioner,
+          },
+          {
+            visibilityChangeDate,
+            motionVisibilityChangeDate,
+          },
+        );
+
+        expect(isPublic).toBe(false);
+      });
     });
   });
 

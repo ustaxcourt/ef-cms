@@ -434,6 +434,87 @@ describe('fileExternalDocumentInteractor', () => {
       });
     });
 
+    it('should set the same motion visibility fields on each consolidated case', async () => {
+      const consolidatedCasesToFileAcross = [
+        {
+          docketNumber: caseRecord.docketNumber,
+          leadDocketNumber: caseRecord.docketNumber,
+        },
+        {
+          docketNumber: consolidatedCase.docketNumber,
+          leadDocketNumber: caseRecord.docketNumber,
+        },
+      ];
+      const primaryDocumentId = applicationContext.getUniqueId();
+      const secondaryDocumentId = applicationContext.getUniqueId();
+
+      getCaseByDocketNumber.mockResolvedValueOnce({
+        ...caseRecord,
+        consolidatedCases: consolidatedCasesToFileAcross,
+      });
+      getCasesByDocketNumbers.mockResolvedValueOnce([
+        caseRecord,
+        consolidatedCase as any,
+      ]);
+
+      await fileExternalDocumentInteractor(
+        applicationContext,
+        {
+          documentMetadata: {
+            consolidatedCasesToFileAcross,
+            docketNumber: caseRecord.docketNumber,
+            documentTitle: 'Motion for Continuance',
+            documentType: 'Motion for Continuance',
+            eventCode: 'M006',
+            filedBy: 'Test Practitioner',
+            objections: OBJECTIONS_OPTIONS_MAP.NO,
+            primaryDocumentId,
+            docketEntryId: primaryDocumentId,
+            secondaryDocument: {
+              docketEntryId: secondaryDocumentId,
+              documentTitle: 'Motion for Continuance',
+              documentType: 'Motion for Continuance',
+              eventCode: 'M006',
+              filedBy: 'Test Practitioner',
+              objections: OBJECTIONS_OPTIONS_MAP.NO,
+            },
+          },
+        },
+        mockIrsPractitionerUser,
+      );
+
+      const savedCases = updateCaseAndAssociations.mock.calls.map(
+        call => call[0].caseToUpdate,
+      );
+
+      expect(savedCases).toHaveLength(2);
+
+      savedCases.forEach(savedCase => {
+        const primaryMotion = savedCase.docketEntries.find(
+          de =>
+            de.docketEntryId === primaryDocumentId && de.eventCode === 'M006',
+        );
+        const lodgedMotion = savedCase.docketEntries.find(
+          de =>
+            de.docketEntryId === secondaryDocumentId && de.eventCode === 'M006',
+        );
+
+        expect(primaryMotion).toMatchObject({
+          eventCode: 'M006',
+          filedByRole: ROLES.irsPractitioner,
+          isOnDocketRecord: true,
+          lodged: undefined,
+        });
+        expect(lodgedMotion).toMatchObject({
+          eventCode: 'M006',
+          filedByRole: ROLES.irsPractitioner,
+          isOnDocketRecord: true,
+          lodged: true,
+        });
+        expect(primaryMotion?.filingDate).toEqual(lodgedMotion?.filingDate);
+      });
+    });
+
     it('should set the same filling date for all documents to add', async () => {
       const consolidatedCasesToFileAcross = [
         {
