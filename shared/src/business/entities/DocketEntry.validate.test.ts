@@ -209,6 +209,17 @@ describe('validate', () => {
     },
     {
       description:
+        'should pass validation when isDraft is false and signedJudgeName is undefined for an NATJ',
+      docketEntry: {
+        documentType: 'Notice of Assignment of Trial Judge',
+        eventCode: 'NATJ',
+        isDraft: false,
+        signedAt: undefined,
+        signedJudgeName: undefined,
+      },
+    },
+    {
+      description:
         'should pass validation when isDraft is false and signedJudgeName and signedAt are defined for a document requiring signature',
       docketEntry: {
         documentType: 'Order',

@@ -715,6 +715,7 @@ export const SCENARIOS = [
   'Type F',
   'Type G',
   'Type H',
+  'Type I',
 ];
 
 export const TRANSCRIPT_EVENT_CODE = 'TRAN';

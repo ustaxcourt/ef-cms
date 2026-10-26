@@ -13,6 +13,7 @@ import { RawCourtIssuedDocumentTypeE } from '@shared/business/entities/courtIssu
 import { RawCourtIssuedDocumentTypeF } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentTypeF';
 import { RawCourtIssuedDocumentTypeG } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentTypeG';
 import { RawCourtIssuedDocumentTypeH } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentTypeH';
+import { RawCourtIssuedDocumentTypeI } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentTypeI';
 import {
   DocketEntryRelation,
   UNSERVABLE_EVENT_CODES,
@@ -86,4 +87,5 @@ export type CourtIssuedDocumentAnyType = RawCourtIssuedDocument &
   Partial<RawCourtIssuedDocumentTypeE> &
   Partial<RawCourtIssuedDocumentTypeF> &
   Partial<RawCourtIssuedDocumentTypeG> &
-  Partial<RawCourtIssuedDocumentTypeH>;
+  Partial<RawCourtIssuedDocumentTypeH> &
+  Partial<RawCourtIssuedDocumentTypeI>;
