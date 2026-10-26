@@ -55,7 +55,8 @@ describe('Reporting trial sessions', () => {
       cy.get('[data-testid="trial-session-link"]').click();
       cy.get('[data-testid="add-trial-session-button"]').click();
       cy.get('[data-testid="Reporting-proceeding-label"]').click();
-      cy.get('#standaloneRemote-sessionScope').should('be.disabled');
+      cy.get('#standaloneRemote-sessionScope').should('not.exist');
+      cy.get('#locationBased-sessionScope').should('be.checked');
       cy.get('#start-time-hours').should('not.exist');
       cy.get('#trial-clerk').should('not.exist');
       cy.get('#court-reporter').should('not.exist');
@@ -160,6 +161,7 @@ describe('Reporting trial sessions', () => {
     );
     cy.get('[data-testid="Reporting-proceeding-label"]').click();
     cy.get('[data-testid="In Person-proceeding-label"]').click();
+    cy.get('#standaloneRemote-sessionScope').should('be.visible');
     cy.get('[data-testid="trial-session-address-1-input"]').should(
       'have.value',
       '',
