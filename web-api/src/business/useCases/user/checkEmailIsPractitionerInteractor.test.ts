@@ -3,7 +3,7 @@ import {
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
 import { checkEmailIsPractitioner } from '@web-api/persistence/postgres/users/checkEmailIsPractitioner';
-import { checkEmailIsPetitionerInteractor } from './checkEmailIsPractitionerInteractor';
+import { checkEmailIsPractitionerInteractor } from './checkEmailIsPractitionerInteractor';
 
 jest.mock('@web-api/persistence/postgres/users/checkEmailIsPractitioner');
 
@@ -17,7 +17,7 @@ describe('checkEmailIsPetitionerInteractor', () => {
 
   it('should throw when the user is unauthorized to check practitioner emails', async () => {
     await expect(
-      checkEmailIsPetitionerInteractor(
+      checkEmailIsPractitionerInteractor(
         { email: mockEmail },
         mockPetitionsClerkUser,
       ),
@@ -29,7 +29,7 @@ describe('checkEmailIsPetitionerInteractor', () => {
   it('should check the email and return true when it belongs to a practitioner', async () => {
     checkEmailIsPractitionerMock.mockResolvedValue(true);
 
-    const result = await checkEmailIsPetitionerInteractor(
+    const result = await checkEmailIsPractitionerInteractor(
       { email: mockEmail },
       mockAdmissionsClerkUser,
     );
@@ -43,7 +43,7 @@ describe('checkEmailIsPetitionerInteractor', () => {
   it('should return false when the email does not belong to a practitioner', async () => {
     checkEmailIsPractitionerMock.mockResolvedValue(false);
 
-    const result = await checkEmailIsPetitionerInteractor(
+    const result = await checkEmailIsPractitionerInteractor(
       { email: mockEmail },
       mockAdmissionsClerkUser,
     );
