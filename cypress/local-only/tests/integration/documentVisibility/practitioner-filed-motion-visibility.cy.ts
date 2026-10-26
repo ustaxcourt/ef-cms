@@ -1,334 +1,41 @@
-import { PublicDocketEntry } from '@shared/business/entities/cases/PublicDocketEntry';
 import {
-  loginAsDojPractitioner,
+  loginAsDocketClerk1,
   loginAsIrsPractitioner,
-  loginAsIrsPractitioner1,
   loginAsPetitioner,
-  loginAsPrivatePractitioner,
 } from '../../../../helpers/authentication/login-as-helpers';
-import { downloadAndParsePdf } from '../../../support/helpers';
-import { getCypressEnv } from '../../../../helpers/env/cypressEnvironment';
 import {
   calculateISODate,
   formatDateString,
+  formatNow,
+  FORMATS,
 } from '@shared/business/utilities/DateHandler';
 import { externalUserCreatesElectronicCase } from '../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
-import { selectTypeaheadInput } from '../../../../helpers/components/typeAhead/select-typeahead-input';
-import { attachFile } from '../../../../helpers/file/upload-file';
-import { petitionsClerkQcsAndServesElectronicCase } from '../../../../helpers/documentQC/petitions-clerk-qcs-and-serves-electronic-case';
 import { petitionsClerkServesPetition } from '../../../../helpers/documentQC/petitionsclerk-serves-petition';
 import { goToCase } from '../../../../helpers/caseDetail/go-to-case';
-import { logout } from '../../../../helpers/authentication/logout';
-import { faker } from '@faker-js/faker';
-
-const MOTION_FOR_CONTINUANCE_EVENT_CODE = 'M006';
-const BRIEF_IN_SUPPORT_EVENT_CODE = 'BRF';
-const MEMORANDA_IN_SUPPORT_EVENT_CODE = 'MISP';
-const MOTION_VISIBILITY_POLICY_CHANGE_DATE_FLAG =
-  'motion-visibility-policy-change-date';
-const UNAUTHORIZED_PETITIONER_EMAIL = 'petitioner2@example.com';
-
-type MotionVisibilityPublicDocketEntry = {
-  docketEntryId: string;
-  index: number;
-  eventCode?: string;
-};
-
-type MotionVisibilityDocketEntries = {
-  briefInSupport: MotionVisibilityPublicDocketEntry;
-  memorandaInSupport: MotionVisibilityPublicDocketEntry;
-  motion: MotionVisibilityPublicDocketEntry;
-};
-
-type MotionVisibilityCaseFixture = {
-  docketNumber: string;
-  entries: MotionVisibilityDocketEntries;
-};
-
-const getPetitionerFilingPartyTestId = (primaryFilerName: string): string =>
-  `filingParty-${primaryFilerName}, Petitioner`;
-
-const getDocketEntryByEventCode = (
-  docketEntries: PublicDocketEntry[],
-  eventCode: string,
-): MotionVisibilityPublicDocketEntry => {
-  const docketEntry = docketEntries.find(
-    entry => entry.eventCode === eventCode,
-  );
-
-  if (!docketEntry) {
-    throw new Error(`Docket entry with event code ${eventCode} was not found`);
-  }
-
-  const { docketEntryId, index } = docketEntry;
-
-  expect(docketEntryId).to.be.a('string');
-  expect(index).to.be.a('number');
-
-  if (docketEntryId === undefined || index === undefined) {
-    throw new Error(`Docket entry ${eventCode} is missing id or index`);
-  }
-
-  return { docketEntryId, index, eventCode: docketEntry.eventCode };
-};
-
-const getMotionVisibilityDocketEntries = (
-  docketEntries: PublicDocketEntry[],
-): MotionVisibilityDocketEntries => {
-  const briefInSupport = getDocketEntryByEventCode(
-    docketEntries,
-    BRIEF_IN_SUPPORT_EVENT_CODE,
-  );
-  const memorandaInSupport = getDocketEntryByEventCode(
-    docketEntries,
-    MEMORANDA_IN_SUPPORT_EVENT_CODE,
-  );
-  const motion = getDocketEntryByEventCode(
-    docketEntries,
-    MOTION_FOR_CONTINUANCE_EVENT_CODE,
-  );
-
-  expect(briefInSupport.eventCode).to.eq(BRIEF_IN_SUPPORT_EVENT_CODE);
-  expect(memorandaInSupport.eventCode).to.eq(MEMORANDA_IN_SUPPORT_EVENT_CODE);
-
-  return { briefInSupport, memorandaInSupport, motion };
-};
-
-const getMotionVisibilityDocketEntriesForCase = (
-  docketNumber: string,
-): Cypress.Chainable<MotionVisibilityDocketEntries> => {
-  cy.intercept('GET', '**/docket-entries**').as('getDocketEntries');
-  goToCase(docketNumber);
-  return cy.wait('@getDocketEntries').then(({ response }) => {
-    const docketEntries: PublicDocketEntry[] = response?.body.docketEntries;
-    return getMotionVisibilityDocketEntries(docketEntries);
-  });
-};
-
-const createPrivatePractitionerCaseWithFiledMotion = (
-  primaryFilerName: string = faker.person.firstName(),
-): Cypress.Chainable<MotionVisibilityCaseFixture> => {
-  loginAsPrivatePractitioner();
-  return externalUserCreatesElectronicCase(primaryFilerName).then(
-    docketNumber => {
-      logout();
-      petitionsClerkQcsAndServesElectronicCase(docketNumber);
-      loginAsPrivatePractitioner();
-      fileAMotionAndSupportingDocuments(
-        docketNumber,
-        getPetitionerFilingPartyTestId(primaryFilerName),
-      );
-      return getMotionVisibilityDocketEntriesForCase(docketNumber).then(
-        entries => ({
-          docketNumber,
-          entries,
-        }),
-      );
-    },
-  );
-};
-
-const createPetitionerCaseWithFiledMotion = (
-  primaryFilerName: string = faker.person.firstName(),
-): Cypress.Chainable<MotionVisibilityCaseFixture> => {
-  loginAsPetitioner();
-  return externalUserCreatesElectronicCase(primaryFilerName).then(
-    docketNumber => {
-      petitionsClerkServesPetition(docketNumber);
-      loginAsPetitioner();
-      fileAMotionAndSupportingDocuments(
-        docketNumber,
-        getPetitionerFilingPartyTestId(primaryFilerName),
-      );
-      return getMotionVisibilityDocketEntriesForCase(docketNumber).then(
-        entries => ({
-          docketNumber,
-          entries,
-        }),
-      );
-    },
-  );
-};
-
-const fileIrsAnswer = (docketNumber: string): void => {
-  loginAsIrsPractitioner();
-  goToCase(docketNumber);
-  cy.get('[data-testid="button-first-irs-document"]').click();
-  selectTypeaheadInput('complete-doc-document-type-search', 'Answer');
-  cy.get('[data-testid="submit-document"]').click();
-  attachFile({
-    filePath: '../../helpers/file/sample.pdf',
-    selector: '[data-testid="primary-document"]',
-    selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
-  });
-  cy.get('[data-testid="file-document-submit-document"]').click();
-  cy.get('[data-testid="redaction-acknowledgement-label"]').click();
-  cy.get('[data-testid="file-document-review-submit-document"]').click();
-  cy.get('[data-testid="loading-overlay"]').should('not.exist');
-};
-
-const verifyMotionNotViewableOnPublicSite = (
-  docketNumber: string,
-  motion: MotionVisibilityPublicDocketEntry,
-): void => {
-  verifyDocumentCannotBeViewedPublic(docketNumber, motion.index);
-  // this won't work until the fix from 10399 is in
-  // verifyDocumentCannotBeViewedPublic(docketNumber, briefInSupport.index);
-};
-
-const verifyMotionNotViewableByUnassociatedPetitioner = (
-  docketNumber: string,
-  motion: MotionVisibilityPublicDocketEntry,
-): void => {
-  loginAsPetitioner(UNAUTHORIZED_PETITIONER_EMAIL);
-  goToCase(docketNumber);
-  verifyDocumentCannotBeViewed(docketNumber, motion.docketEntryId);
-  // this won't work until the fix from 10399 is in
-  // verifyDocumentCannotBeViewed(briefInSupport.docketEntryId);
-};
-
-const verifyMotionViewableOnPublicSite = (
-  docketNumber: string,
-  motion: MotionVisibilityPublicDocketEntry,
-): void => {
-  verifyDocumentCanBeViewedPublic(docketNumber, motion.index);
-  // this won't work until the fix from 10399 is in
-  // verifyDocumentCanBeViewedPublic(docketNumber, briefInSupport.index);
-};
-
-const verifyDocumentCanBeViewed = (docketEntryId: string) => {
-  cy.get(`[data-testid="${docketEntryId}"]`).then(row => {
-    cy.wrap(row)
-      .find('[data-testid^="document-download-link-"]')
-      .should('exist');
-    downloadAndParsePdf({
-      element: cy.wrap(row).find('[data-testid^="document-download-link-"]'),
-    });
-  });
-};
-
-const verifyDocumentCannotBeViewed = (
-  docketNumber: string,
-  docketEntryId: string,
-) => {
-  cy.get(`[data-testid="${docketEntryId}"]`).then(row => {
-    cy.wrap(row)
-      .find('[data-testid^="document-download-link-"]')
-      .should('not.exist');
-    cy.wrap(row)
-      .find('[data-testid^="docket-entry-filingsAndProceedings-"]')
-      .should('exist');
-    cy.request({
-      url: `http://localhost:4000/case-documents/${docketNumber}/${docketEntryId}/document-download-url`,
-      failOnStatusCode: false,
-    }).then(response => {
-      expect(response.status).to.eq(403);
-    });
-  });
-};
-
-const verifyDocumentCanBeViewedPublic = (
-  docketNumber: string,
-  docketEntryIndex: number,
-) => {
-  const { publicSiteUrl } = getCypressEnv();
-
-  cy.origin(
-    publicSiteUrl,
-    {
-      args: {
-        docketNumber,
-        publicSiteUrl,
-        docketEntryIndex,
-      },
-    },
-    ({ docketNumber: dn, publicSiteUrl: url, docketEntryIndex: index }) => {
-      cy.visit(`${url}/case-detail/${dn}`);
-      cy.get(`[data-testid="public-docket-record-no-${index}"]`).then(row => {
-        cy.wrap(row)
-          .find('[data-testid="Filing-and-Proceedings-link-to-docket-entry"]')
-          .should('exist');
-      });
-    },
-  );
-};
-
-const verifyDocumentCannotBeViewedPublic = (
-  docketNumber: string,
-  docketEntryIndex: number,
-) => {
-  const { publicSiteUrl } = getCypressEnv();
-
-  cy.origin(
-    publicSiteUrl,
-    {
-      args: {
-        docketNumber,
-        publicSiteUrl,
-        docketEntryIndex,
-      },
-    },
-    ({ docketNumber: dn, publicSiteUrl: url, docketEntryIndex: index }) => {
-      cy.visit(`${url}/case-detail/${dn}`);
-      cy.get(`[data-testid="public-docket-record-no-${index}"]`).then(row => {
-        cy.wrap(row)
-          .find('[data-testid="Filing-and-Proceedings-link-to-docket-entry"]')
-          .should('not.exist');
-        cy.wrap(row)
-          .find('[data-label="Filings and Proceedings"]')
-          .should('exist');
-      });
-    },
-  );
-};
-
-const fileAMotionAndSupportingDocuments = (
-  docketNumber: string,
-  filingPartyTestId: string,
-) => {
-  goToCase(docketNumber);
-  cy.get('[data-testid="button-file-document"]').click();
-  cy.get('[data-testid="ready-to-file"]').click();
-
-  selectTypeaheadInput(
-    'complete-doc-document-type-search',
-    'Motion for Continuance',
-  );
-  cy.get('[data-testid="submit-document"]').click();
-
-  attachFile({
-    filePath: '../../helpers/file/sample.pdf',
-    selector: '[data-testid="primary-document"]',
-    selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
-  });
-
-  cy.get('[data-testid="primaryDocument-objections-No"]').click();
-
-  cy.get('#add-supporting-document-button').click();
-  cy.get('#supporting-document-0').select('Brief in Support');
-  attachFile({
-    filePath: '../../helpers/file/sample.pdf',
-    selector: '[data-testid="supporting-document-file-0"]',
-    selectorToAwaitOnSuccess:
-      '[data-testid="upload-file-success-supporting-document-file-0"]',
-  });
-
-  cy.get('#add-supporting-document-button').click();
-  cy.get('#supporting-document-1').select('Memorandum in Support');
-  attachFile({
-    filePath: '../../helpers/file/sample.pdf',
-    selector: '[data-testid="supporting-document-file-1"]',
-    selectorToAwaitOnSuccess:
-      '[data-testid="upload-file-success-supporting-document-file-1"]',
-  });
-
-  cy.get(`[data-testid="${filingPartyTestId}"]`).click();
-  cy.get('[data-testid="file-document-submit-document"]').click();
-
-  cy.get('[data-testid="redaction-acknowledgement-label"]').click();
-  cy.get('[data-testid="file-document-review-submit-document"]').click();
-  cy.get('[data-testid="loading-overlay"]').should('not.exist');
-};
+import { createAndServePaperFiling } from '../../../../helpers/caseDetail/docketRecord/paperFiling/create-and-serve-paper-filing';
+import {
+  MOTION_FOR_CONTINUANCE_EVENT_CODE,
+  MOTION_VISIBILITY_POLICY_CHANGE_DATE_FLAG,
+  MotionVisibilityDocketEntries,
+  MotionVisibilityPublicDocketEntry,
+  UNAUTHORIZED_PETITIONER_EMAIL,
+  createPetitionerCaseWithFiledMotion,
+  createPrivatePractitionerCaseWithFiledMotion,
+  externalViewerRolesForIrsPractitionerFiledMotion,
+  externalViewerRolesForPrivatePractitionerFiledMotion,
+  fileAMotionAndSupportingDocuments,
+  fileIrsAnswer,
+  getMotionVisibilityDocketEntriesForCase,
+  getPaperMotionDocketEntryForCase,
+  lodgeDocketEntryByEventCode,
+  strikeDocketEntryByEventCode,
+  verifyDocumentCanBeViewed,
+  verifyDocumentCanBeViewedPublic,
+  verifyDocumentCannotBeViewed,
+  verifyDocumentCannotBeViewedPublic,
+  verifyMotionNotViewableOnPublicSite,
+  verifyMotionViewableOnPublicSite,
+} from '../../../../helpers/documentVisibility/practitioner-filed-motion-visibility-helpers';
 
 describe('Testing motion visibility after policy change date', () => {
   beforeEach(function () {
@@ -369,39 +76,51 @@ describe('Testing motion visibility after policy change date', () => {
       );
     });
 
-    it('should let motion and supporting documents be downloadable from public site', () => {
+    it('should let motion be downloadable from public site', () => {
       verifyMotionViewableOnPublicSite(caseDocketNumber, motionEntries.motion);
     });
 
-    const roles = [
-      {
-        login: () => loginAsPetitioner(),
-        role: 'petitioner not on case',
-      },
-      {
-        login: () =>
-          loginAsPrivatePractitioner('privatePractitioner2@example.com'),
-        role: 'private practitioner not on case',
-      },
-      {
-        login: () => loginAsIrsPractitioner(),
-        role: 'IRS practitioner not on case',
-      },
-      {
-        login: () => loginAsDojPractitioner(),
-        role: 'DOJ practitioner not on case',
-      },
-    ];
-
-    roles.forEach(({ login, role }) => {
-      it(`should let motion be downloadable by ${role}`, () => {
-        login();
-        goToCase(caseDocketNumber);
-        verifyDocumentCanBeViewed(motionEntries.motion.docketEntryId);
-        // this won't work until the fix from 10399 is in
-        // verifyDocumentCanBeViewed(motionEntries.briefInSupport.docketEntryId);
-      });
+    // TODO(10399): unskip once supporting-document visibility fix from 10399 is merged
+    it.skip('should let brief in support be downloadable from public site', () => {
+      verifyDocumentCanBeViewedPublic(
+        caseDocketNumber,
+        motionEntries.briefInSupport.index,
+      );
     });
+
+    // TODO(10399): unskip once supporting-document visibility fix from 10399 is merged
+    it.skip('should let memorandum in support be downloadable from public site', () => {
+      verifyDocumentCanBeViewedPublic(
+        caseDocketNumber,
+        motionEntries.memorandaInSupport.index,
+      );
+    });
+
+    externalViewerRolesForPrivatePractitionerFiledMotion.forEach(
+      ({ login, role }) => {
+        it(`should let motion be downloadable by ${role}`, () => {
+          login();
+          goToCase(caseDocketNumber);
+          verifyDocumentCanBeViewed(motionEntries.motion.docketEntryId);
+        });
+
+        // TODO(10399): unskip once supporting-document visibility fix from 10399 is merged
+        it.skip(`should let brief in support be downloadable by ${role}`, () => {
+          login();
+          goToCase(caseDocketNumber);
+          verifyDocumentCanBeViewed(motionEntries.briefInSupport.docketEntryId);
+        });
+
+        // TODO(10399): unskip once supporting-document visibility fix from 10399 is merged
+        it.skip(`should let memorandum in support be downloadable by ${role}`, () => {
+          login();
+          goToCase(caseDocketNumber);
+          verifyDocumentCanBeViewed(
+            motionEntries.memorandaInSupport.docketEntryId,
+          );
+        });
+      },
+    );
   });
 
   describe('Motion visibility for documents filed by an IRS practitioner', () => {
@@ -425,38 +144,51 @@ describe('Testing motion visibility after policy change date', () => {
       });
     });
 
-    it('should let motion and supporting documents be downloadable from public site', () => {
+    it('should let motion be downloadable from public site', () => {
       verifyMotionViewableOnPublicSite(caseDocketNumber, motionEntries.motion);
     });
 
-    const roles = [
-      {
-        login: () => loginAsPetitioner('petitioner2@example.com'),
-        role: 'petitioner not on case',
-      },
-      {
-        login: () => loginAsPrivatePractitioner(),
-        role: 'private practitioner not on case',
-      },
-      {
-        login: () => loginAsIrsPractitioner1(),
-        role: 'IRS practitioner not on case',
-      },
-      {
-        login: () => loginAsDojPractitioner(),
-        role: 'DOJ practitioner not on case',
-      },
-    ];
-
-    roles.forEach(({ login, role }) => {
-      it(`should let motion be downloadable by ${role}`, () => {
-        login();
-        goToCase(caseDocketNumber);
-        verifyDocumentCanBeViewed(motionEntries.motion.docketEntryId);
-        // this won't work until the fix from 10399 is in
-        // verifyDocumentCanBeViewed(motionEntries.briefInSupport.docketEntryId);
-      });
+    // TODO(10399): unskip once supporting-document visibility fix from 10399 is merged
+    it.skip('should let brief in support be downloadable from public site', () => {
+      verifyDocumentCanBeViewedPublic(
+        caseDocketNumber,
+        motionEntries.briefInSupport.index,
+      );
     });
+
+    // TODO(10399): unskip once supporting-document visibility fix from 10399 is merged
+    it.skip('should let memorandum in support be downloadable from public site', () => {
+      verifyDocumentCanBeViewedPublic(
+        caseDocketNumber,
+        motionEntries.memorandaInSupport.index,
+      );
+    });
+
+    externalViewerRolesForIrsPractitionerFiledMotion.forEach(
+      ({ login, role }) => {
+        it(`should let motion be downloadable by ${role}`, () => {
+          login();
+          goToCase(caseDocketNumber);
+          verifyDocumentCanBeViewed(motionEntries.motion.docketEntryId);
+        });
+
+        // TODO(10399): unskip once supporting-document visibility fix from 10399 is merged
+        it.skip(`should let brief in support be downloadable by ${role}`, () => {
+          login();
+          goToCase(caseDocketNumber);
+          verifyDocumentCanBeViewed(motionEntries.briefInSupport.docketEntryId);
+        });
+
+        // TODO(10399): unskip once supporting-document visibility fix from 10399 is merged
+        it.skip(`should let memorandum in support be downloadable by ${role}`, () => {
+          login();
+          goToCase(caseDocketNumber);
+          verifyDocumentCanBeViewed(
+            motionEntries.memorandaInSupport.docketEntryId,
+          );
+        });
+      },
+    );
   });
 
   describe('Motion visibility for practitioner-filed motions before policy change date', () => {
@@ -491,10 +223,52 @@ describe('Testing motion visibility after policy change date', () => {
       );
     });
 
-    it('should not let motion be downloadable by unassociated petitioner', () => {
-      verifyMotionNotViewableByUnassociatedPetitioner(
+    // TODO(10399): unskip once supporting-document visibility fix from 10399 is merged
+    it.skip('should not let brief in support be downloadable from public site', () => {
+      verifyDocumentCannotBeViewedPublic(
         caseDocketNumber,
-        motionEntries.motion,
+        motionEntries.briefInSupport.index,
+      );
+    });
+
+    // TODO(10399): unskip once supporting-document visibility fix from 10399 is merged
+    it.skip('should not let memorandum in support be downloadable from public site', () => {
+      verifyDocumentCannotBeViewedPublic(
+        caseDocketNumber,
+        motionEntries.memorandaInSupport.index,
+      );
+    });
+
+    externalViewerRolesForPrivatePractitionerFiledMotion.forEach(
+      ({ login, role }) => {
+        it(`should not let motion be downloadable by ${role}`, () => {
+          login();
+          goToCase(caseDocketNumber);
+          verifyDocumentCannotBeViewed(
+            caseDocketNumber,
+            motionEntries.motion.docketEntryId,
+          );
+        });
+      },
+    );
+
+    // TODO(10399): unskip once supporting-document visibility fix from 10399 is merged
+    it.skip('should not let brief in support be downloadable by unassociated petitioner', () => {
+      loginAsPetitioner(UNAUTHORIZED_PETITIONER_EMAIL);
+      goToCase(caseDocketNumber);
+      verifyDocumentCannotBeViewed(
+        caseDocketNumber,
+        motionEntries.briefInSupport.docketEntryId,
+      );
+    });
+
+    // TODO(10399): unskip once supporting-document visibility fix from 10399 is merged
+    it.skip('should not let memorandum in support be downloadable by unassociated petitioner', () => {
+      loginAsPetitioner(UNAUTHORIZED_PETITIONER_EMAIL);
+      goToCase(caseDocketNumber);
+      verifyDocumentCannotBeViewed(
+        caseDocketNumber,
+        motionEntries.memorandaInSupport.docketEntryId,
       );
     });
   });
@@ -519,10 +293,252 @@ describe('Testing motion visibility after policy change date', () => {
       );
     });
 
-    it('should not let motion be downloadable by unassociated petitioner', () => {
-      verifyMotionNotViewableByUnassociatedPetitioner(
+    // TODO(10399): unskip once supporting-document visibility fix from 10399 is merged
+    it.skip('should not let brief in support be downloadable from public site', () => {
+      verifyDocumentCannotBeViewedPublic(
+        caseDocketNumber,
+        motionEntries.briefInSupport.index,
+      );
+    });
+
+    // TODO(10399): unskip once supporting-document visibility fix from 10399 is merged
+    it.skip('should not let memorandum in support be downloadable from public site', () => {
+      verifyDocumentCannotBeViewedPublic(
+        caseDocketNumber,
+        motionEntries.memorandaInSupport.index,
+      );
+    });
+
+    externalViewerRolesForPrivatePractitionerFiledMotion.forEach(
+      ({ login, role }) => {
+        it(`should not let motion be downloadable by ${role}`, () => {
+          login();
+          goToCase(caseDocketNumber);
+          verifyDocumentCannotBeViewed(
+            caseDocketNumber,
+            motionEntries.motion.docketEntryId,
+          );
+        });
+      },
+    );
+
+    // TODO(10399): unskip once supporting-document visibility fix from 10399 is merged
+    it.skip('should not let brief in support be downloadable by unassociated petitioner', () => {
+      loginAsPetitioner(UNAUTHORIZED_PETITIONER_EMAIL);
+      goToCase(caseDocketNumber);
+      verifyDocumentCannotBeViewed(
+        caseDocketNumber,
+        motionEntries.briefInSupport.docketEntryId,
+      );
+    });
+
+    // TODO(10399): unskip once supporting-document visibility fix from 10399 is merged
+    it.skip('should not let memorandum in support be downloadable by unassociated petitioner', () => {
+      loginAsPetitioner(UNAUTHORIZED_PETITIONER_EMAIL);
+      goToCase(caseDocketNumber);
+      verifyDocumentCannotBeViewed(
+        caseDocketNumber,
+        motionEntries.memorandaInSupport.docketEntryId,
+      );
+    });
+  });
+
+  describe('Stricken practitioner-filed motion', () => {
+    let caseDocketNumber: string;
+    let motionEntries: MotionVisibilityDocketEntries;
+
+    before(() => {
+      createPrivatePractitionerCaseWithFiledMotion().then(
+        ({ docketNumber, entries }) => {
+          caseDocketNumber = docketNumber;
+          motionEntries = entries;
+          loginAsDocketClerk1();
+          goToCase(docketNumber);
+          strikeDocketEntryByEventCode(MOTION_FOR_CONTINUANCE_EVENT_CODE);
+        },
+      );
+    });
+
+    it('should not let stricken motion be downloadable from public site', () => {
+      verifyMotionNotViewableOnPublicSite(
         caseDocketNumber,
         motionEntries.motion,
+      );
+    });
+
+    it('should not let stricken motion be downloadable by unassociated petitioner', () => {
+      loginAsPetitioner(UNAUTHORIZED_PETITIONER_EMAIL);
+      goToCase(caseDocketNumber);
+      verifyDocumentCannotBeViewed(
+        caseDocketNumber,
+        motionEntries.motion.docketEntryId,
+      );
+    });
+  });
+
+  describe('Sealed practitioner-filed motion', () => {
+    let caseDocketNumber: string;
+    let motionEntries: MotionVisibilityDocketEntries;
+
+    before(() => {
+      createPrivatePractitionerCaseWithFiledMotion().then(
+        ({ docketNumber, entries }) => {
+          caseDocketNumber = docketNumber;
+          motionEntries = entries;
+          loginAsDocketClerk1();
+          goToCase(docketNumber);
+          cy.get(
+            `[data-testid="seal-docket-entry-button-${entries.motion.index}"]`,
+          ).click();
+          cy.get('[data-testid="modal-button-confirm"]').click();
+        },
+      );
+    });
+
+    it('should not let sealed motion be downloadable from public site', () => {
+      verifyMotionNotViewableOnPublicSite(
+        caseDocketNumber,
+        motionEntries.motion,
+      );
+    });
+
+    it('should not let sealed motion be downloadable by unassociated petitioner', () => {
+      loginAsPetitioner(UNAUTHORIZED_PETITIONER_EMAIL);
+      goToCase(caseDocketNumber);
+      verifyDocumentCannotBeViewed(
+        caseDocketNumber,
+        motionEntries.motion.docketEntryId,
+      );
+    });
+  });
+
+  describe('Sealed case with practitioner-filed motion', () => {
+    let caseDocketNumber: string;
+    let motionEntries: MotionVisibilityDocketEntries;
+
+    before(() => {
+      createPrivatePractitionerCaseWithFiledMotion().then(
+        ({ docketNumber, entries }) => {
+          caseDocketNumber = docketNumber;
+          motionEntries = entries;
+          loginAsDocketClerk1();
+          goToCase(docketNumber);
+          cy.get('[data-testid="tab-case-information"]').click();
+          cy.get('[data-testid="seal-case-button"]').click();
+          cy.get('[data-testid="modal-button-confirm"]').click();
+        },
+      );
+    });
+
+    it('should not let motion be downloadable from public site when case is sealed', () => {
+      verifyMotionNotViewableOnPublicSite(
+        caseDocketNumber,
+        motionEntries.motion,
+      );
+    });
+  });
+
+  describe('Lodged practitioner-filed motion', () => {
+    let caseDocketNumber: string;
+    let motionEntries: MotionVisibilityDocketEntries;
+
+    afterEach(() => {
+      cy.task('setAllowedTerminalIpAddresses', []);
+    });
+
+    before(() => {
+      createPrivatePractitionerCaseWithFiledMotion().then(
+        ({ docketNumber, entries }) => {
+          caseDocketNumber = docketNumber;
+          motionEntries = entries;
+          loginAsDocketClerk1();
+          goToCase(docketNumber);
+          lodgeDocketEntryByEventCode(MOTION_FOR_CONTINUANCE_EVENT_CODE);
+        },
+      );
+    });
+
+    it('should not let lodged motion be downloadable from public site', () => {
+      verifyMotionNotViewableOnPublicSite(
+        caseDocketNumber,
+        motionEntries.motion,
+      );
+    });
+
+    it('should let lodged motion be downloadable from public site for terminal user', () => {
+      cy.task('setAllowedTerminalIpAddresses', ['localhost']).then(() => {
+        verifyDocumentCanBeViewedPublic(
+          caseDocketNumber,
+          motionEntries.motion.index,
+        );
+      });
+    });
+
+    // TODO(10399): unskip once supporting-document visibility fix from 10399 is merged
+    it.skip('should not let brief in support be downloadable from public site when motion is lodged', () => {
+      verifyDocumentCannotBeViewedPublic(
+        caseDocketNumber,
+        motionEntries.briefInSupport.index,
+      );
+    });
+
+    // TODO(10399): unskip once supporting-document visibility fix from 10399 is merged
+    it.skip('should not let memorandum in support be downloadable from public site when motion is lodged', () => {
+      verifyDocumentCannotBeViewedPublic(
+        caseDocketNumber,
+        motionEntries.memorandaInSupport.index,
+      );
+    });
+
+    // TODO(10399): unskip once supporting-document visibility fix from 10399 is merged
+    it.skip('should let brief in support be downloadable from public site for terminal user when motion is lodged', () => {
+      cy.task('setAllowedTerminalIpAddresses', ['localhost']).then(() => {
+        verifyDocumentCanBeViewedPublic(
+          caseDocketNumber,
+          motionEntries.briefInSupport.index,
+        );
+      });
+    });
+
+    // TODO(10399): unskip once supporting-document visibility fix from 10399 is merged
+    it.skip('should let memorandum in support be downloadable from public site for terminal user when motion is lodged', () => {
+      cy.task('setAllowedTerminalIpAddresses', ['localhost']).then(() => {
+        verifyDocumentCanBeViewedPublic(
+          caseDocketNumber,
+          motionEntries.memorandaInSupport.index,
+        );
+      });
+    });
+  });
+
+  describe('Paper-filed motion after policy change date', () => {
+    let caseDocketNumber: string;
+    let paperMotionEntry: MotionVisibilityPublicDocketEntry;
+
+    before(() => {
+      const today = formatNow(FORMATS.MMDDYYYY);
+
+      createPrivatePractitionerCaseWithFiledMotion().then(
+        ({ docketNumber }) => {
+          caseDocketNumber = docketNumber;
+          loginAsDocketClerk1();
+          goToCase(docketNumber);
+          createAndServePaperFiling({
+            dateReceived: today,
+            documentType: 'Motion for Continuance',
+            isPaperCase: false,
+          });
+          getPaperMotionDocketEntryForCase(docketNumber).then(entry => {
+            paperMotionEntry = entry;
+          });
+        },
+      );
+    });
+
+    it('should not let paper-filed motion be downloadable from public site', () => {
+      verifyDocumentCannotBeViewedPublic(
+        caseDocketNumber,
+        paperMotionEntry.index,
       );
     });
   });
