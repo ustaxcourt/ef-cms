@@ -524,6 +524,8 @@ export const createTestApplicationContext = () => {
     }),
     getCognito: appContextProxy({
       adminCreateUser: jest.fn(),
+      adminLinkProviderForUser: jest.fn(),
+      adminSetUserPassword: jest.fn(),
       adminUpdateUserAttributes: jest.fn(),
       initiateAuth: jest.fn(),
       adminDisableUser: jest.fn(),

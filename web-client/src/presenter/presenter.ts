@@ -57,6 +57,7 @@ import { clearExistingDocumentSequence } from './sequences/clearExistingDocument
 import { clearModalFormSequence } from './sequences/clearModalFormSequence';
 import { clearModalSequence } from './sequences/clearModalSequence';
 import { clearMotionOrderResponseFormSequence } from './sequences/MotionOrderResponse/clearMotionOrderResponseFormSequence';
+import { clearDashboardCaseListPageSequence } from './sequences/clearDashboardCaseListPageSequence';
 import { clearOpenClosedCasesCurrentPageSequence } from './sequences/clearOpenClosedCasesCurrentPageSequence';
 import { clearOptionalCustomCaseReportFilterSequence } from './sequences/clearOptionalCustomCaseReportFilterSequence';
 import { clearPdfPreviewUrlSequence } from './sequences/clearPdfPreviewUrlSequence';
@@ -657,9 +658,13 @@ import { saveMinuteSheetToDraftsSequence } from './sequences/TrialSessionMinutes
 import { showCaseStatusInfoSequence } from '@web-client/presenter/sequences/showCaseStatusInfoSequence';
 import { openConfirmTrialSessionLocationChangeModalSequence } from '@web-client/presenter/sequences/openConfirmTrialSessionLocationChangeModalSequence';
 import { initFilingFeePaymentSequence } from '@web-client/presenter/sequences/initFilingFeePaymentSequence';
+import { initMyCasesFilingFeePaymentSequence } from '@web-client/presenter/sequences/initMyCasesFilingFeePaymentSequence';
 import { paymentCancelSequence } from '@web-client/presenter/sequences/paymentCancelSequence';
 import { paymentSuccessSequence } from '@web-client/presenter/sequences/paymentSuccessSequence';
 import { setClerkOfCourtDashboardOptionsSequence } from '@web-client/presenter/sequences/setClerkOfCourtDashboardOptionSequence';
+import { setDashboardCaseListPageSequence } from '@web-client/presenter/sequences/setDashboardCaseListPageSequence';
+import { authCodeSequence } from '@web-client/presenter/sequences/authCodeSequence';
+import { idpLoginSequence } from '@web-client/presenter/sequences/Login/idpLoginSequence';
 
 export const presenterSequences = {
   addAnotherIrsNoticeToFormSequence,
@@ -737,6 +742,8 @@ export const presenterSequences = {
   clearModalFormSequence: clearModalFormSequence as unknown as Function,
   clearModalSequence: clearModalSequence as unknown as Function,
   clearMotionOrderResponseFormSequence,
+  clearDashboardCaseListPageSequence:
+    clearDashboardCaseListPageSequence as unknown as Function,
   clearOpenClosedCasesCurrentPageSequence:
     clearOpenClosedCasesCurrentPageSequence as unknown as Function,
   clearOptionalCustomCaseReportFilterSequence,
@@ -1027,9 +1034,12 @@ export const presenterSequences = {
   gotoWorkQueueSequence: gotoWorkQueueSequence as unknown as Function,
   gotoRecentFilingsSequence: gotoRecentFilingsSequence as unknown as Function,
   handleAppHasUpdatedSequence,
+  idpLoginSequence: idpLoginSequence as unknown as Function,
   initAppSequence,
   initFilingFeePaymentSequence:
     initFilingFeePaymentSequence as unknown as Function,
+  initMyCasesFilingFeePaymentSequence:
+    initMyCasesFilingFeePaymentSequence as unknown as Function,
   leaveCaseForLaterServiceSequence:
     leaveCaseForLaterServiceSequence as unknown as Function,
   loadDefaultDocketViewerDocumentToDisplaySequence:
@@ -1323,6 +1333,8 @@ export const presenterSequences = {
   setCurrentTabSequence,
   setCurrentPaginationPageSequence:
     setCurrentPaginationPageSequence as unknown as Function,
+  setDashboardCaseListPageSequence:
+    setDashboardCaseListPageSequence as unknown as Function,
 
   setCustomCaseReportFiltersSequence,
   setDocketClerkReportMessagesTableSortSequence:
@@ -1392,6 +1404,7 @@ export const presenterSequences = {
   sortTableSequence,
   startRefreshIntervalSequence:
     startRefreshIntervalSequence as unknown as Function,
+  authCodeSequence: authCodeSequence as unknown as Function,
   startScanSequence: startScanSequence as unknown as Function,
   statusReportOrderPdfPreviewSequence,
   strikeDocketEntrySequence: strikeDocketEntrySequence as unknown as Function,

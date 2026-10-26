@@ -173,7 +173,7 @@ const frozenConstants = deepFreeze({
   MAX_ELASTICSEARCH_PAGINATION,
 });
 
-let forceRefreshCallback: () => {};
+let forceRefreshCallback: () => Promise<boolean> | void;
 
 const applicationContextPublic = {
   getBaseUrl: () => {
