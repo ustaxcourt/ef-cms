@@ -15,6 +15,7 @@ import { petitionsClerkQcsAndServesElectronicCase } from '../documentQC/petition
 import { petitionsClerkServesPetition } from '../documentQC/petitionsclerk-serves-petition';
 import { goToCase } from '../caseDetail/go-to-case';
 import { logout } from '../authentication/logout';
+import { getMotionForLeaveEntriesFromDocketEntries } from './motion-visibility-docket-entry-helpers';
 import { faker } from '@faker-js/faker';
 import {
   calculateISODate,
@@ -41,8 +42,14 @@ const DEFAULT_SUPPORTING_DOCUMENT_TYPES = [
   'Brief in Support',
   'Memorandum in Support',
 ];
-export const MOTION_VISIBILITY_POLICY_CHANGE_DATE_FLAG =
-  'motion-visibility-policy-change-date';
+export {
+  MOTION_VISIBILITY_POLICY_CHANGE_DATE_FLAG,
+  restoreMotionVisibilityPolicyFlag,
+  setMotionVisibilityPolicyDateToToday,
+  setMotionVisibilityPolicyDateToTomorrow,
+  setMotionVisibilityPolicyDateToYesterday,
+  toggleMotionVisibilityPolicyFlag,
+} from './motion-visibility-policy-flag-helpers';
 export const UNAUTHORIZED_PETITIONER_EMAIL = 'petitioner2@example.com';
 
 export type MotionVisibilityPublicDocketEntry = {
@@ -62,12 +69,12 @@ export type MotionVisibilityCaseFixture = {
   entries: MotionVisibilityDocketEntries;
 };
 
-export type ExternalViewerRole = {
+export type UnassociatedExternalRole = {
   login: () => void;
   role: string;
 };
 
-export const externalViewerRolesForPrivatePractitionerFiledMotion: ExternalViewerRole[] =
+export const unassociatedExternalRolesForPrivatePractitionerFiledMotion: UnassociatedExternalRole[] =
   [
     {
       login: () => loginAsPetitioner(),
@@ -88,7 +95,7 @@ export const externalViewerRolesForPrivatePractitionerFiledMotion: ExternalViewe
     },
   ];
 
-export const externalViewerRolesForIrsPractitionerFiledMotion: ExternalViewerRole[] =
+export const unassociatedExternalRolesForIrsPractitionerFiledMotion: UnassociatedExternalRole[] =
   [
     {
       login: () => loginAsPetitioner('petitioner2@example.com'),
@@ -302,8 +309,10 @@ export function fileDocketEntryByEventCode(eventCode: string): void {
 }
 
 export type MotionForLeaveDocketEntries = {
-  leave: MotionVisibilityPublicDocketEntry;
+  motionForLeave: MotionVisibilityPublicDocketEntry;
   lodgedSecondary: MotionVisibilityPublicDocketEntry;
+  primarySupportingEntries: MotionVisibilityPublicDocketEntry[];
+  lodgedSecondarySupportingEntries: MotionVisibilityPublicDocketEntry[];
 };
 
 export function getEFiledMotionEntryForCase(
@@ -349,35 +358,7 @@ export function getMotionForLeaveEntriesForCase(
   goToCase(docketNumber);
   return cy.wait('@getDocketEntries').then(({ response }) => {
     const docketEntries: PublicDocketEntry[] = response?.body.docketEntries;
-    const leave = getDocketEntryByEventCode(
-      docketEntries,
-      MOTION_FOR_LEAVE_EVENT_CODE,
-    );
-    const lodgedSecondaryEntry = docketEntries.find(
-      entry =>
-        entry.eventCode === MOTION_FOR_CONTINUANCE_EVENT_CODE &&
-        entry.lodged === true,
-    );
-
-    if (!lodgedSecondaryEntry) {
-      throw new Error('Lodged secondary motion docket entry was not found');
-    }
-
-    const { docketEntryId, index } = lodgedSecondaryEntry;
-
-    if (docketEntryId === undefined || index === undefined) {
-      throw new Error(
-        'Lodged secondary motion docket entry is missing id or index',
-      );
-    }
-
-    const lodgedSecondary: MotionVisibilityPublicDocketEntry = {
-      docketEntryId,
-      index,
-      eventCode: lodgedSecondaryEntry.eventCode,
-    };
-
-    return { leave, lodgedSecondary };
+    return getMotionForLeaveEntriesFromDocketEntries(docketEntries);
   });
 }
 

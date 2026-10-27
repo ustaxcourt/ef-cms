@@ -2,20 +2,18 @@ import {
   loginAsPetitioner,
   loginAsPrivatePractitioner,
 } from '../../../../helpers/authentication/login-as-helpers';
-import {
-  calculateISODate,
-  formatDateString,
-} from '@shared/business/utilities/DateHandler';
 import { externalUserCreatesElectronicCase } from '../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { logout } from '../../../../helpers/authentication/logout';
 import { petitionsClerkQcsAndServesElectronicCase } from '../../../../helpers/documentQC/petitions-clerk-qcs-and-serves-electronic-case';
 import { goToCase } from '../../../../helpers/caseDetail/go-to-case';
 import {
-  MOTION_VISIBILITY_POLICY_CHANGE_DATE_FLAG,
   MotionVisibilityPublicDocketEntry,
   UNAUTHORIZED_PETITIONER_EMAIL,
   fileMotionForLeave,
   getMotionForLeaveEntriesForCase,
+  MOTION_VISIBILITY_POLICY_CHANGE_DATE_FLAG,
+  restoreMotionVisibilityPolicyFlag,
+  setMotionVisibilityPolicyDateToYesterday,
   verifyDocumentCanBeViewed,
   verifyDocumentCanBeViewedPublic,
   verifyDocumentCannotBeViewed,
@@ -28,30 +26,17 @@ describe('Motion visibility — Motion for Leave with lodged secondary', () => {
       flag: MOTION_VISIBILITY_POLICY_CHANGE_DATE_FLAG,
     }).as('ORIGINAL_FEATURE_FLAG_VALUE');
 
-    const yesterday = formatDateString(
-      calculateISODate({ howMuch: -1, units: 'days' }),
-      'yyyy-MM-dd',
-    );
-
-    cy.task('toggleFeatureFlag', {
-      flag: MOTION_VISIBILITY_POLICY_CHANGE_DATE_FLAG,
-      flagValue: yesterday,
-    });
+    setMotionVisibilityPolicyDateToYesterday();
   });
 
   afterEach(function () {
-    cy.get('@ORIGINAL_FEATURE_FLAG_VALUE').then(ORIGINAL_FEATURE_FLAG_VALUE => {
-      cy.task('toggleFeatureFlag', {
-        flag: MOTION_VISIBILITY_POLICY_CHANGE_DATE_FLAG,
-        flagValue: ORIGINAL_FEATURE_FLAG_VALUE,
-      });
-    });
+    restoreMotionVisibilityPolicyFlag();
   });
 
   describe('Motion for Leave to File with lodged secondary Motion for Continuance', () => {
     const primaryFilerName = 'LeaveLodgedFiler';
     let caseDocketNumber: string;
-    let leaveEntry: MotionVisibilityPublicDocketEntry;
+    let motionForLeaveEntry: MotionVisibilityPublicDocketEntry;
     let lodgedSecondary: MotionVisibilityPublicDocketEntry;
 
     afterEach(() => {
@@ -70,8 +55,8 @@ describe('Motion visibility — Motion for Leave with lodged secondary', () => {
           `filingParty-${primaryFilerName}, Petitioner`,
         );
         getMotionForLeaveEntriesForCase(docketNumber).then(
-          ({ leave, lodgedSecondary: lodgedSecondaryEntry }) => {
-            leaveEntry = leave;
+          ({ motionForLeave, lodgedSecondary: lodgedSecondaryEntry }) => {
+            motionForLeaveEntry = motionForLeave;
             lodgedSecondary = lodgedSecondaryEntry;
           },
         );
@@ -79,7 +64,10 @@ describe('Motion visibility — Motion for Leave with lodged secondary', () => {
     });
 
     it('should let public download Motion for Leave to File', () => {
-      verifyDocumentCanBeViewedPublic(caseDocketNumber, leaveEntry.index);
+      verifyDocumentCanBeViewedPublic(
+        caseDocketNumber,
+        motionForLeaveEntry.index,
+      );
     });
 
     it('should not let public download lodged secondary Motion for Continuance', () => {

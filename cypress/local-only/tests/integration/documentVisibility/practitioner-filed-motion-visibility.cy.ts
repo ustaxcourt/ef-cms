@@ -4,12 +4,7 @@ import {
   loginAsPetitioner,
   loginAsPrivatePractitioner,
 } from '../../../../helpers/authentication/login-as-helpers';
-import {
-  calculateISODate,
-  formatDateString,
-  formatNow,
-  FORMATS,
-} from '@shared/business/utilities/DateHandler';
+import { formatNow, FORMATS } from '@shared/business/utilities/DateHandler';
 import { externalUserCreatesElectronicCase } from '../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { logout } from '../../../../helpers/authentication/logout';
 import { petitionsClerkQcsAndServesElectronicCase } from '../../../../helpers/documentQC/petitions-clerk-qcs-and-serves-electronic-case';
@@ -18,16 +13,19 @@ import { goToCase } from '../../../../helpers/caseDetail/go-to-case';
 import { createAndServePaperFiling } from '../../../../helpers/caseDetail/docketRecord/paperFiling/create-and-serve-paper-filing';
 import {
   MOTION_FOR_CONTINUANCE_EVENT_CODE,
-  MOTION_VISIBILITY_POLICY_CHANGE_DATE_FLAG,
   MotionVisibilityDocketEntries,
   MotionVisibilityPublicDocketEntry,
   UNAUTHORIZED_PETITIONER_EMAIL,
   createPetitionerCaseWithFiledMotion,
   createPrivatePractitionerCaseWithFiledMotion,
   fileDocketEntryByEventCode,
-  externalViewerRolesForIrsPractitionerFiledMotion,
-  externalViewerRolesForPrivatePractitionerFiledMotion,
+  unassociatedExternalRolesForIrsPractitionerFiledMotion,
+  unassociatedExternalRolesForPrivatePractitionerFiledMotion,
   fileAMotionAndSupportingDocuments,
+  MOTION_VISIBILITY_POLICY_CHANGE_DATE_FLAG,
+  restoreMotionVisibilityPolicyFlag,
+  setMotionVisibilityPolicyDateToTomorrow,
+  setMotionVisibilityPolicyDateToYesterday,
   fileBriefInSupportOfMotion,
   fileIrsAnswer,
   fileMotionOnly,
@@ -54,24 +52,11 @@ describe('Testing motion visibility after policy change date', () => {
       flag: MOTION_VISIBILITY_POLICY_CHANGE_DATE_FLAG,
     }).as('ORIGINAL_FEATURE_FLAG_VALUE');
 
-    const yesterday = formatDateString(
-      calculateISODate({ howMuch: -1, units: 'days' }),
-      'yyyy-MM-dd',
-    );
-
-    cy.task('toggleFeatureFlag', {
-      flag: MOTION_VISIBILITY_POLICY_CHANGE_DATE_FLAG,
-      flagValue: yesterday,
-    });
+    setMotionVisibilityPolicyDateToYesterday();
   });
 
   afterEach(function () {
-    cy.get('@ORIGINAL_FEATURE_FLAG_VALUE').then(ORIGINAL_FEATURE_FLAG_VALUE => {
-      cy.task('toggleFeatureFlag', {
-        flag: MOTION_VISIBILITY_POLICY_CHANGE_DATE_FLAG,
-        flagValue: ORIGINAL_FEATURE_FLAG_VALUE,
-      });
-    });
+    restoreMotionVisibilityPolicyFlag();
   });
 
   describe('Motion visibility for documents filed by a private practitioner', () => {
@@ -107,7 +92,7 @@ describe('Testing motion visibility after policy change date', () => {
       );
     });
 
-    externalViewerRolesForPrivatePractitionerFiledMotion.forEach(
+    unassociatedExternalRolesForPrivatePractitionerFiledMotion.forEach(
       ({ login, role }) => {
         it(`should let motion be downloadable by ${role}`, () => {
           login();
@@ -175,7 +160,7 @@ describe('Testing motion visibility after policy change date', () => {
       );
     });
 
-    externalViewerRolesForIrsPractitionerFiledMotion.forEach(
+    unassociatedExternalRolesForIrsPractitionerFiledMotion.forEach(
       ({ login, role }) => {
         it(`should let motion be downloadable by ${role}`, () => {
           login();
@@ -216,15 +201,7 @@ describe('Testing motion visibility after policy change date', () => {
     });
 
     beforeEach(() => {
-      const tomorrow = formatDateString(
-        calculateISODate({ howMuch: 1, units: 'days' }),
-        'yyyy-MM-dd',
-      );
-
-      cy.task('toggleFeatureFlag', {
-        flag: MOTION_VISIBILITY_POLICY_CHANGE_DATE_FLAG,
-        flagValue: tomorrow,
-      });
+      setMotionVisibilityPolicyDateToTomorrow();
     });
 
     afterEach(() => {
@@ -281,7 +258,7 @@ describe('Testing motion visibility after policy change date', () => {
       );
     });
 
-    externalViewerRolesForPrivatePractitionerFiledMotion.forEach(
+    unassociatedExternalRolesForPrivatePractitionerFiledMotion.forEach(
       ({ login, role }) => {
         it(`should not let motion be downloadable by ${role}`, () => {
           login();
@@ -369,7 +346,7 @@ describe('Testing motion visibility after policy change date', () => {
       );
     });
 
-    externalViewerRolesForPrivatePractitionerFiledMotion.forEach(
+    unassociatedExternalRolesForPrivatePractitionerFiledMotion.forEach(
       ({ login, role }) => {
         it(`should not let motion be downloadable by ${role}`, () => {
           login();

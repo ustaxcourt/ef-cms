@@ -1,9 +1,4 @@
-import {
-  calculateISODate,
-  formatDateString,
-  formatNow,
-  FORMATS,
-} from '@shared/business/utilities/DateHandler';
+import { formatNow, FORMATS } from '@shared/business/utilities/DateHandler';
 import {
   loginAsDocketClerk1,
   loginAsPetitioner,
@@ -24,7 +19,6 @@ import {
   fileIrsAnswer,
   fileMotionAndSupports,
   MOTION_FOR_CONTINUANCE_EVENT_CODE,
-  MOTION_VISIBILITY_POLICY_CHANGE_DATE_FLAG,
   MotionVisibilityPublicDocketEntry,
 } from './practitioner-filed-motion-visibility-helpers';
 
@@ -50,15 +44,6 @@ export type CreatePetitionerFiledMotionOptions = {
   primaryFilerName: string;
   supportingDocs?: string[];
 };
-
-export function setMotionVisibilityPolicyDateToToday(): void {
-  const today = formatDateString(calculateISODate({}), 'yyyy-MM-dd');
-
-  cy.task('toggleFeatureFlag', {
-    flag: MOTION_VISIBILITY_POLICY_CHANGE_DATE_FLAG,
-    flagValue: today,
-  });
-}
 
 const getPetitionerFiledMotionCaseFixture = (
   docketNumber: string,

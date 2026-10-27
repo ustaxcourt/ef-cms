@@ -3,17 +3,15 @@ import {
   loginAsPetitioner,
   loginAsPrivatePractitioner,
 } from '../../../../helpers/authentication/login-as-helpers';
-import {
-  calculateISODate,
-  formatDateString,
-} from '@shared/business/utilities/DateHandler';
 import { goToCase } from '../../../../helpers/caseDetail/go-to-case';
 import {
-  MOTION_VISIBILITY_POLICY_CHANGE_DATE_FLAG,
   MotionVisibilityDocketEntries,
   UNAUTHORIZED_PETITIONER_EMAIL,
   createPrivatePractitionerCaseWithFiledMotion,
+  MOTION_VISIBILITY_POLICY_CHANGE_DATE_FLAG,
+  restoreMotionVisibilityPolicyFlag,
   sealDocketEntryAtIndex,
+  setMotionVisibilityPolicyDateToYesterday,
   verifyDocumentCanBeViewed,
   verifyDocumentCannotBeViewed,
   verifyDocumentCannotBeViewedPublic,
@@ -26,24 +24,11 @@ describe('Motion visibility — seal to public and parties', () => {
       flag: MOTION_VISIBILITY_POLICY_CHANGE_DATE_FLAG,
     }).as('ORIGINAL_FEATURE_FLAG_VALUE');
 
-    const yesterday = formatDateString(
-      calculateISODate({ howMuch: -1, units: 'days' }),
-      'yyyy-MM-dd',
-    );
-
-    cy.task('toggleFeatureFlag', {
-      flag: MOTION_VISIBILITY_POLICY_CHANGE_DATE_FLAG,
-      flagValue: yesterday,
-    });
+    setMotionVisibilityPolicyDateToYesterday();
   });
 
   afterEach(function () {
-    cy.get('@ORIGINAL_FEATURE_FLAG_VALUE').then(ORIGINAL_FEATURE_FLAG_VALUE => {
-      cy.task('toggleFeatureFlag', {
-        flag: MOTION_VISIBILITY_POLICY_CHANGE_DATE_FLAG,
-        flagValue: ORIGINAL_FEATURE_FLAG_VALUE,
-      });
-    });
+    restoreMotionVisibilityPolicyFlag();
   });
 
   describe('Practitioner-filed motion sealed to the public', () => {

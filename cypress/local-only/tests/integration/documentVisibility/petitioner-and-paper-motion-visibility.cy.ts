@@ -4,24 +4,22 @@ import {
   loginAsDocketClerk1,
   loginAsPetitioner,
 } from '../../../../helpers/authentication/login-as-helpers';
-import {
-  calculateISODate,
-  formatDateString,
-} from '@shared/business/utilities/DateHandler';
 import { goToCase } from '../../../../helpers/caseDetail/go-to-case';
 import type { PaperFilingParty } from '../../../../helpers/caseDetail/docketRecord/paperFiling/fill-paper-filing-form';
 import {
   createCaseWithPaperFiledMotionDocuments,
   createPetitionerFiledMotionCase,
-  setMotionVisibilityPolicyDateToToday,
 } from '../../../../helpers/documentVisibility/petitioner-paper-motion-visibility-helpers';
 import {
-  externalViewerRolesForPrivatePractitionerFiledMotion,
+  unassociatedExternalRolesForPrivatePractitionerFiledMotion,
   MOTION_FOR_NEW_TRIAL_DOCUMENT_TYPE,
   MOTION_FOR_NEW_TRIAL_EVENT_CODE,
   MOTION_VISIBILITY_POLICY_CHANGE_DATE_FLAG,
   MotionVisibilityPublicDocketEntry,
   PETITIONER_FIVE_SUPPORTING_DOCUMENT_TYPES,
+  restoreMotionVisibilityPolicyFlag,
+  setMotionVisibilityPolicyDateToToday,
+  setMotionVisibilityPolicyDateToYesterday,
   verifyDocumentCanBeViewed,
   verifyDocumentCanBeViewedPublic,
   verifyDocumentCannotBeViewed,
@@ -35,24 +33,11 @@ describe('Petitioner-filed and paper-filed motion visibility', () => {
       flag: MOTION_VISIBILITY_POLICY_CHANGE_DATE_FLAG,
     }).as('ORIGINAL_FEATURE_FLAG_VALUE');
 
-    const yesterday = formatDateString(
-      calculateISODate({ howMuch: -1, units: 'days' }),
-      'yyyy-MM-dd',
-    );
-
-    cy.task('toggleFeatureFlag', {
-      flag: MOTION_VISIBILITY_POLICY_CHANGE_DATE_FLAG,
-      flagValue: yesterday,
-    });
+    setMotionVisibilityPolicyDateToYesterday();
   });
 
   afterEach(function () {
-    cy.get('@ORIGINAL_FEATURE_FLAG_VALUE').then(ORIGINAL_FEATURE_FLAG_VALUE => {
-      cy.task('toggleFeatureFlag', {
-        flag: MOTION_VISIBILITY_POLICY_CHANGE_DATE_FLAG,
-        flagValue: ORIGINAL_FEATURE_FLAG_VALUE,
-      });
-    });
+    restoreMotionVisibilityPolicyFlag();
   });
 
   [
@@ -154,7 +139,7 @@ describe('Petitioner-filed and paper-filed motion visibility', () => {
         verifyMotionNotViewableOnPublicSite(caseDocketNumber, motionEntry);
       });
 
-      externalViewerRolesForPrivatePractitionerFiledMotion.forEach(
+      unassociatedExternalRolesForPrivatePractitionerFiledMotion.forEach(
         ({ login, role }) => {
           it(`should not let motion be downloadable by ${role}`, () => {
             login();
@@ -246,7 +231,7 @@ describe('Petitioner-filed and paper-filed motion visibility', () => {
               );
             });
 
-            externalViewerRolesForPrivatePractitionerFiledMotion.forEach(
+            unassociatedExternalRolesForPrivatePractitionerFiledMotion.forEach(
               ({ login, role }) => {
                 it(`should not let paper docket entry ${entryNumber} be downloadable by ${role}`, () => {
                   login();

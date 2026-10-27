@@ -51,9 +51,13 @@ type DocumentWithPreviousDocument = {
 
 const setPreviousDocumentDocketEntryId = (
   supportingDocument: DocumentWithPreviousDocument,
-  parentDocketEntryId: string,
-  parentDocument: { documentTitle?: string; documentType?: string },
+  parentDocketEntryId: string | undefined,
+  parentDocument: { documentTitle?: string; documentType?: string } | undefined,
 ): void => {
+  if (!parentDocketEntryId || !parentDocument) {
+    return;
+  }
+
   if (!supportingDocument.previousDocument) {
     return;
   }
@@ -72,6 +76,77 @@ const setPreviousDocumentDocketEntryId = (
       supportingDocument.previousDocument.documentType ??
       parentDocument.documentType,
   };
+};
+
+const getDocumentsToAdd = ({
+  documentMetadata,
+  primaryDocumentMetadata,
+  secondaryDocument,
+  secondarySupportingDocuments,
+  supportingDocuments,
+}: {
+  documentMetadata: any;
+  primaryDocumentMetadata: any;
+  secondaryDocument: any;
+  secondarySupportingDocuments: any[] | undefined;
+  supportingDocuments: any[] | undefined;
+}): Array<[string | undefined, any, string]> => {
+  const documentsToAdd: Array<[string | undefined, any, string]> = [
+    [
+      documentMetadata.primaryDocumentId,
+      { ...primaryDocumentMetadata, secondaryDocument },
+      DOCUMENT_RELATIONSHIPS.PRIMARY,
+    ],
+  ];
+
+  if (secondarySupportingDocuments) {
+    secondarySupportingDocuments.forEach(item => {
+      item.lodged = true;
+    });
+  }
+
+  if (supportingDocuments) {
+    for (let i = 0; i < supportingDocuments.length; i++) {
+      supportingDocuments[i].filedBy = primaryDocumentMetadata.filedBy;
+      setPreviousDocumentDocketEntryId(
+        supportingDocuments[i],
+        documentMetadata.primaryDocumentId,
+        primaryDocumentMetadata,
+      );
+      documentsToAdd.push([
+        supportingDocuments[i].docketEntryId,
+        supportingDocuments[i],
+        DOCUMENT_RELATIONSHIPS.PRIMARY_SUPPORTING,
+      ]);
+    }
+  }
+
+  if (secondaryDocument) {
+    secondaryDocument.lodged = true;
+
+    documentsToAdd.push([
+      secondaryDocument.docketEntryId,
+      secondaryDocument,
+      DOCUMENT_RELATIONSHIPS.SECONDARY,
+    ]);
+  }
+
+  if (secondarySupportingDocuments) {
+    for (let i = 0; i < secondarySupportingDocuments.length; i++) {
+      setPreviousDocumentDocketEntryId(
+        secondarySupportingDocuments[i],
+        secondaryDocument?.docketEntryId,
+        secondaryDocument,
+      );
+      documentsToAdd.push([
+        secondarySupportingDocuments[i].docketEntryId,
+        secondarySupportingDocuments[i],
+        DOCUMENT_RELATIONSHIPS.SUPPORTING,
+      ]);
+    }
+  }
+
+  return documentsToAdd;
 };
 
 export const fileExternalDocument = async (
@@ -146,13 +221,13 @@ export const fileExternalDocument = async (
     'practitioner',
     'docketNumber',
   ]);
-  const documentsToAdd = [
-    [
-      documentMetadata.primaryDocumentId,
-      { ...primaryDocumentMetadata, secondaryDocument },
-      DOCUMENT_RELATIONSHIPS.PRIMARY,
-    ],
-  ];
+  const documentsToAdd = getDocumentsToAdd({
+    documentMetadata,
+    primaryDocumentMetadata,
+    secondaryDocument,
+    secondarySupportingDocuments,
+    supportingDocuments,
+  });
 
   // every document in an M112/NOTW filing carries the filing practitioner's name,
   // taken from the user record rather than the client-supplied filedBy
@@ -162,55 +237,6 @@ export const fileExternalDocument = async (
   })
     ? user.name
     : undefined;
-
-  if (secondarySupportingDocuments) {
-    secondarySupportingDocuments.forEach(item => {
-      item.lodged = true;
-    });
-  }
-
-  if (supportingDocuments) {
-    for (let i = 0; i < supportingDocuments.length; i++) {
-      supportingDocuments[i].filedBy = primaryDocumentMetadata.filedBy;
-      setPreviousDocumentDocketEntryId(
-        supportingDocuments[i],
-        documentMetadata.primaryDocumentId,
-        primaryDocumentMetadata,
-      );
-      documentsToAdd.push([
-        supportingDocuments[i].docketEntryId,
-        supportingDocuments[i],
-        DOCUMENT_RELATIONSHIPS.PRIMARY_SUPPORTING,
-      ]);
-    }
-  }
-
-  if (secondaryDocument) {
-    secondaryDocument.lodged = true;
-
-    documentsToAdd.push([
-      secondaryDocument.docketEntryId,
-      secondaryDocument,
-      DOCUMENT_RELATIONSHIPS.SECONDARY,
-    ]);
-  }
-
-  if (secondarySupportingDocuments) {
-    for (let i = 0; i < secondarySupportingDocuments.length; i++) {
-      if (secondaryDocument?.docketEntryId) {
-        setPreviousDocumentDocketEntryId(
-          secondarySupportingDocuments[i],
-          secondaryDocument.docketEntryId,
-          secondaryDocument,
-        );
-      }
-      documentsToAdd.push([
-        secondarySupportingDocuments[i].docketEntryId,
-        secondarySupportingDocuments[i],
-        DOCUMENT_RELATIONSHIPS.SUPPORTING,
-      ]);
-    }
-  }
 
   const documentMetadataForConsolidatedCases: TDocumentMetaData[] = [];
   if (
