@@ -32,7 +32,7 @@ Removing a scan does not clear alerts it already reported. Existing alerts have 
 
 | Image | Built from | Purpose |
 |-------|-----------|---------|
-| `ef-cms-us-east-1` | `Dockerfile` | Production Lambda base image |
+| `ef-cms-us-east-1` | `Dockerfile` | CircleCI build, test and deploy image |
 | `efcms-local` | `Dockerfile-local` (FROM ef-cms-us-east-1) | Local dev / CI test runner — **not scanned** |
 | `FROM` of `web-api/runtimes/puppeteer/Dockerfile` | Docker Hub | Puppeteer / PDF generation base |
 | `FROM` of `web-api/terraform/modules/batch/docker-image/Dockerfile` | Docker Hub | Batch processing base |
@@ -86,7 +86,7 @@ gh run watch "$RUN_ID" --exit-status
 The shared `.github/actions/dawson-trivy-image-scan/action.yml` action has the `ROLLOUT GUARD`
 marking image scans as warn-only. To make image scans blocking:
 
-1. Triage existing findings — either fix them or add to `.trivyignore`
+1. Triage existing findings — either fix them or record them as VEX statements in `.vex/ef-cms.openvex.json` (see [container-findings-triage.md](container-findings-triage.md)), and pass that file to the scans with Trivy's `--vex` option
 2. Change `exit-code: '0'` to `exit-code: '1'` in `dawson-trivy-image-scan/action.yml`
 3. The `containers-gate` job will then fail PRs that introduce new vulnerabilities
 
