@@ -36,7 +36,7 @@ describe('fetchRootDocument', () => {
     });
   });
 
-  it('should return the closest to the parent if the chain is missing an entry', () => {
+  it('should return the closest previous document if the chain is missing an entry', () => {
     const theDocketEntry: any = {
       docketEntryId: '1',
       documentTitle: 'booba',
@@ -65,7 +65,7 @@ describe('fetchRootDocument', () => {
     });
   });
 
-  it('should resolve the primary motion for a same-filing supporting document without a parent docket entry id', () => {
+  it('should resolve the primary motion for a same-filing supporting document without a previousDocument docketEntryId', () => {
     const filingDate = createISODateString('2027-01-02', 'yyyy-MM-dd');
     const motionDocketEntryId = applicationContext.getUniqueId();
     const briefDocketEntryId = applicationContext.getUniqueId();

@@ -6,8 +6,8 @@ import {
 import { addIntervenorAsPartyToCase } from '../caseDetail/caseInformation/add-intervenor-to-case';
 import { addParticipantAsPartyToCase } from '../caseDetail/caseInformation/add-participant-to-case';
 import { goToCase } from '../caseDetail/go-to-case';
-import { createAndServePaperFiling } from '../caseDetail/docketRecord/paperFiling/create-and-serve-paper-filing';
-import type { PaperFilingParty } from '../caseDetail/docketRecord/paperFiling/fill-paper-filing-form';
+import { attachFile } from '../file/upload-file';
+import { selectTypeaheadInput } from '../components/typeAhead/select-typeahead-input';
 import { externalUserCreatesElectronicCase } from '../fileAPetition/petitioner-creates-electronic-case';
 import { petitionsClerkServesPetition } from '../documentQC/petitionsclerk-serves-petition';
 import {
@@ -21,6 +21,52 @@ import {
   MOTION_FOR_CONTINUANCE_EVENT_CODE,
   MotionVisibilityPublicDocketEntry,
 } from './practitioner-filed-motion-visibility-helpers';
+
+export type PaperFilingParty = 'petitioner' | 'respondent' | { other: string };
+
+const selectPaperFilingParty = (party: PaperFilingParty): void => {
+  if (party === 'petitioner') {
+    cy.get('[data-testid="filed-by-option"]').contains('Petitioner').click();
+    return;
+  }
+
+  if (party === 'respondent') {
+    cy.get('label[for="party-irs-practitioner"]').click();
+    cy.get('#party-irs-practitioner').should('be.checked');
+    return;
+  }
+
+  cy.get('label[for="has-other-filing-party"]').click();
+  cy.get('#has-other-filing-party').should('be.checked');
+  cy.get('#other-filing-party').type(party.other);
+};
+
+const createAndServePaperFilingForParty = ({
+  dateReceived,
+  documentType,
+  party,
+}: {
+  dateReceived: string;
+  documentType: string;
+  party: PaperFilingParty;
+}): void => {
+  cy.get('[data-testid="case-detail-menu-button"]').click();
+  cy.get('[data-testid="menu-button-add-paper-filing"]').click();
+  cy.get(
+    '.usa-date-picker__wrapper > [data-testid="date-received-picker"]',
+  ).type(dateReceived);
+  selectTypeaheadInput('primary-document-type-search', documentType);
+  selectPaperFilingParty(party);
+  cy.get('[data-testid="objections-No"]').click();
+  cy.get('[data-testid="upload-pdf-button"]').click();
+  attachFile({
+    filePath: '../../helpers/file/sample.pdf',
+    selector: 'input#primaryDocumentFile-file',
+    selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
+  });
+  cy.get('[data-testid="save-and-serve"]').click();
+  cy.get('[data-testid="modal-button-confirm"]').click();
+};
 
 export type PetitionerFiledMotionCaseFixture = {
   docketNumber: string;
@@ -144,23 +190,20 @@ export function createCaseWithPaperFiledMotionDocuments({
     fileIrsAnswer(docketNumber);
     loginAsClerk();
     goToCase(docketNumber);
-    createAndServePaperFiling({
+    createAndServePaperFilingForParty({
       dateReceived: today,
       documentType: 'Motion for Continuance',
-      isPaperCase: false,
       party,
     });
     if (fileBriefAndMemorandum) {
-      createAndServePaperFiling({
+      createAndServePaperFilingForParty({
         dateReceived: today,
         documentType: 'Brief in Support',
-        isPaperCase: false,
         party,
       });
-      createAndServePaperFiling({
+      createAndServePaperFilingForParty({
         dateReceived: today,
         documentType: 'Memorandum in Support',
-        isPaperCase: false,
         party,
       });
     }

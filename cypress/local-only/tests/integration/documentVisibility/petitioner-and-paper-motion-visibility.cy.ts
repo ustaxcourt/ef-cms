@@ -5,10 +5,10 @@ import {
   loginAsPetitioner,
 } from '../../../../helpers/authentication/login-as-helpers';
 import { goToCase } from '../../../../helpers/caseDetail/go-to-case';
-import type { PaperFilingParty } from '../../../../helpers/caseDetail/docketRecord/paperFiling/fill-paper-filing-form';
 import {
   createCaseWithPaperFiledMotionDocuments,
   createPetitionerFiledMotionCase,
+  type PaperFilingParty,
 } from '../../../../helpers/documentVisibility/petitioner-paper-motion-visibility-helpers';
 import {
   unassociatedExternalRolesForPrivatePractitionerFiledMotion,

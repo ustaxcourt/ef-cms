@@ -962,24 +962,24 @@ export class DocketEntry extends JoiValidationEntity {
       return DocketEntry.fetchRootDocument(previousEntry, docketEntries);
     }
 
-    const parentRelationship =
+    const previousDocumentRelationship =
       entry.relationship === DOCUMENT_RELATIONSHIPS.PRIMARY_SUPPORTING
         ? DOCUMENT_RELATIONSHIPS.PRIMARY
         : entry.relationship === DOCUMENT_RELATIONSHIPS.SUPPORTING
           ? DOCUMENT_RELATIONSHIPS.SECONDARY
           : null;
 
-    if (parentRelationship && previousDocument.documentType) {
-      const parentEntry = docketEntries.find(
+    if (previousDocumentRelationship && previousDocument.documentType) {
+      const previousEntry = docketEntries.find(
         e =>
-          e.relationship === parentRelationship &&
+          e.relationship === previousDocumentRelationship &&
           e.filingDate === entry.filingDate &&
           (e.documentType === previousDocument.documentType ||
             e.documentTitle === previousDocument.documentTitle),
       );
 
-      if (parentEntry) {
-        return DocketEntry.fetchRootDocument(parentEntry, docketEntries);
+      if (previousEntry) {
+        return DocketEntry.fetchRootDocument(previousEntry, docketEntries);
       }
     }
 

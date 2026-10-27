@@ -51,10 +51,10 @@ type DocumentWithPreviousDocument = {
 
 const setPreviousDocumentDocketEntryId = (
   supportingDocument: DocumentWithPreviousDocument,
-  parentDocketEntryId: string | undefined,
-  parentDocument: { documentTitle?: string; documentType?: string } | undefined,
+  previousDocketEntryId: string | undefined,
+  previousDocument: PreviousDocumentReference | undefined,
 ): void => {
-  if (!parentDocketEntryId || !parentDocument) {
+  if (!previousDocketEntryId || !previousDocument) {
     return;
   }
 
@@ -68,13 +68,13 @@ const setPreviousDocumentDocketEntryId = (
 
   supportingDocument.previousDocument = {
     ...supportingDocument.previousDocument,
-    docketEntryId: parentDocketEntryId,
+    docketEntryId: previousDocketEntryId,
     documentTitle:
       supportingDocument.previousDocument.documentTitle ??
-      parentDocument.documentTitle,
+      previousDocument.documentTitle,
     documentType:
       supportingDocument.previousDocument.documentType ??
-      parentDocument.documentType,
+      previousDocument.documentType,
   };
 };
 
