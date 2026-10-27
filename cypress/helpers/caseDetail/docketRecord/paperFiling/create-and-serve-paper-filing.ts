@@ -1,17 +1,24 @@
-import { fillPaperFilingForm } from './fill-paper-filing-form';
+import {
+  fillPaperFilingForm,
+  type PaperFilingParty,
+} from './fill-paper-filing-form';
 
 export function createAndServePaperFiling({
   dateReceived,
   documentType,
   purpose,
   isPaperCase = true,
+  filedBy,
+  party,
 }: {
   documentType: string;
   dateReceived: string;
   isPaperCase?: boolean;
   purpose?: string;
+  filedBy?: PaperFilingParty;
+  party?: PaperFilingParty;
 }) {
-  fillPaperFilingForm({ dateReceived, documentType });
+  fillPaperFilingForm({ dateReceived, documentType, filedBy, party });
 
   if (documentType.includes('Motion') && purpose) {
     cy.log('Filling in document description for motion type document');
