@@ -23,7 +23,16 @@ import {
 } from '@shared/business/utilities/DateHandler';
 
 export const MOTION_FOR_CONTINUANCE_EVENT_CODE = 'M006';
+export const MOTION_FOR_NEW_TRIAL_DOCUMENT_TYPE = 'Motion for a New Trial';
+export const MOTION_FOR_NEW_TRIAL_EVENT_CODE = 'M218';
 export const MOTION_FOR_LEAVE_EVENT_CODE = 'M115';
+export const PETITIONER_FIVE_SUPPORTING_DOCUMENT_TYPES = [
+  'Brief in Support',
+  'Brief in Support',
+  'Brief in Support',
+  'Memorandum in Support',
+  'Memorandum in Support',
+];
 const BRIEF_IN_SUPPORT_DOCUMENT_TYPE = 'Brief in Support';
 const BRIEF_IN_SUPPORT_EVENT_CODE = 'BRF';
 const MEMORANDA_IN_SUPPORT_EVENT_CODE = 'MISP';
@@ -102,6 +111,18 @@ export const externalViewerRolesForIrsPractitionerFiledMotion: ExternalViewerRol
 const getPetitionerFilingPartyTestId = (primaryFilerName: string): string =>
   `filingParty-${primaryFilerName}, Petitioner`;
 
+export function getMotionVisibilityPublicDocketEntry(
+  docketEntry: PublicDocketEntry,
+): MotionVisibilityPublicDocketEntry {
+  const { docketEntryId, index, eventCode } = docketEntry;
+
+  if (docketEntryId === undefined || index === undefined) {
+    throw new Error(`Docket entry ${eventCode} is missing id or index`);
+  }
+
+  return { docketEntryId, index, eventCode };
+}
+
 const getDocketEntryByEventCode = (
   docketEntries: PublicDocketEntry[],
   eventCode: string,
@@ -114,16 +135,10 @@ const getDocketEntryByEventCode = (
     throw new Error(`Docket entry with event code ${eventCode} was not found`);
   }
 
-  const { docketEntryId, index } = docketEntry;
+  expect(docketEntry.docketEntryId).to.be.a('string');
+  expect(docketEntry.index).to.be.a('number');
 
-  expect(docketEntryId).to.be.a('string');
-  expect(index).to.be.a('number');
-
-  if (docketEntryId === undefined || index === undefined) {
-    throw new Error(`Docket entry ${eventCode} is missing id or index`);
-  }
-
-  return { docketEntryId, index, eventCode: docketEntry.eventCode };
+  return getMotionVisibilityPublicDocketEntry(docketEntry);
 };
 
 const getPaperMotionDocketEntry = (
@@ -138,13 +153,7 @@ const getPaperMotionDocketEntry = (
     throw new Error('Paper motion docket entry was not found');
   }
 
-  const { docketEntryId, index } = docketEntry;
-
-  if (docketEntryId === undefined || index === undefined) {
-    throw new Error('Paper motion docket entry is missing id or index');
-  }
-
-  return { docketEntryId, index, eventCode: docketEntry.eventCode };
+  return getMotionVisibilityPublicDocketEntry(docketEntry);
 };
 
 const getMotionVisibilityDocketEntries = (
