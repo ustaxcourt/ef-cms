@@ -39,6 +39,41 @@ import { verifyPendingCaseForUser } from '@web-api/persistence/postgres/cases/pe
 import { isFiledByPractitionerName } from '@shared/business/entities/docketEntry/isFiledByPractitionerName';
 import { createISODateString } from '@shared/business/utilities/DateHandler';
 
+type PreviousDocumentReference = {
+  docketEntryId?: string;
+  documentTitle?: string;
+  documentType?: string;
+};
+
+type DocumentWithPreviousDocument = {
+  previousDocument?: PreviousDocumentReference;
+};
+
+const setPreviousDocumentDocketEntryId = (
+  supportingDocument: DocumentWithPreviousDocument,
+  parentDocketEntryId: string,
+  parentDocument: { documentTitle?: string; documentType?: string },
+): void => {
+  if (!supportingDocument.previousDocument) {
+    return;
+  }
+
+  if (supportingDocument.previousDocument.docketEntryId) {
+    return;
+  }
+
+  supportingDocument.previousDocument = {
+    ...supportingDocument.previousDocument,
+    docketEntryId: parentDocketEntryId,
+    documentTitle:
+      supportingDocument.previousDocument.documentTitle ??
+      parentDocument.documentTitle,
+    documentType:
+      supportingDocument.previousDocument.documentType ??
+      parentDocument.documentType,
+  };
+};
+
 export const fileExternalDocument = async (
   applicationContext: ServerApplicationContext,
   { documentMetadata }: { documentMetadata: any },
@@ -137,6 +172,11 @@ export const fileExternalDocument = async (
   if (supportingDocuments) {
     for (let i = 0; i < supportingDocuments.length; i++) {
       supportingDocuments[i].filedBy = primaryDocumentMetadata.filedBy;
+      setPreviousDocumentDocketEntryId(
+        supportingDocuments[i],
+        documentMetadata.primaryDocumentId,
+        primaryDocumentMetadata,
+      );
       documentsToAdd.push([
         supportingDocuments[i].docketEntryId,
         supportingDocuments[i],
@@ -157,6 +197,13 @@ export const fileExternalDocument = async (
 
   if (secondarySupportingDocuments) {
     for (let i = 0; i < secondarySupportingDocuments.length; i++) {
+      if (secondaryDocument?.docketEntryId) {
+        setPreviousDocumentDocketEntryId(
+          secondarySupportingDocuments[i],
+          secondaryDocument.docketEntryId,
+          secondaryDocument,
+        );
+      }
       documentsToAdd.push([
         secondarySupportingDocuments[i].docketEntryId,
         secondarySupportingDocuments[i],

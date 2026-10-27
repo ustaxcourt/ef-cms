@@ -235,6 +235,49 @@ describe('fileExternalDocumentInteractor', () => {
     ).not.toHaveBeenCalled();
   });
 
+  it('should link same-filing primary supporting documents to the primary document docket entry id', async () => {
+    const briefDocketEntryId = applicationContext.getUniqueId();
+    const primaryDocumentId = applicationContext.getUniqueId();
+
+    await fileExternalDocumentInteractor(
+      applicationContext,
+      {
+        documentMetadata: {
+          docketNumber: caseRecord.docketNumber,
+          documentTitle: 'Motion for Continuance',
+          documentType: 'Motion for Continuance',
+          eventCode: 'M006',
+          filedBy: 'Test Practitioner',
+          objections: OBJECTIONS_OPTIONS_MAP.NO,
+          primaryDocumentId,
+          supportingDocuments: [
+            {
+              docketEntryId: briefDocketEntryId,
+              documentTitle: 'Brief in Support of Motion for Continuance',
+              documentType: 'Brief in Support',
+              eventCode: 'BRF',
+              previousDocument: {
+                documentType: 'Motion for Continuance',
+                documentTitle: 'Motion for Continuance',
+              },
+            },
+          ],
+        },
+      },
+      mockIrsPractitionerUser,
+    );
+
+    const savedCase = updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    const brief = savedCase.docketEntries.find(
+      de => de.docketEntryId === briefDocketEntryId,
+    );
+
+    expect(brief?.previousDocument).toMatchObject({
+      docketEntryId: primaryDocumentId,
+      documentType: 'Motion for Continuance',
+    });
+  });
+
   it('should add documents and workitems and auto-serve the documents on the parties with an electronic service indicator', async () => {
     await fileExternalDocumentInteractor(
       applicationContext,

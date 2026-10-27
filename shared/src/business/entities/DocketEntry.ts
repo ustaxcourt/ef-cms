@@ -12,6 +12,7 @@ import {
   DocketEntryRelation,
   DOCUMENT_NOTICE_EVENT_CODES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
+  DOCUMENT_RELATIONSHIPS,
   EXTERNAL_DOCUMENT_TYPES,
   MINUTE_ENTRIES_MAP,
   MINUTE_SHEET_EVENT_CODES,
@@ -951,13 +952,38 @@ export class DocketEntry extends JoiValidationEntity {
     const { previousDocument } = entry;
     if (!previousDocument) return entry;
 
-    const previousEntry = docketEntries.find(
-      e => e.docketEntryId === previousDocument.docketEntryId,
-    );
+    if (previousDocument.docketEntryId) {
+      const previousEntry = docketEntries.find(
+        e => e.docketEntryId === previousDocument.docketEntryId,
+      );
 
-    if (!previousEntry) return entry;
+      if (!previousEntry) return entry;
 
-    return DocketEntry.fetchRootDocument(previousEntry, docketEntries);
+      return DocketEntry.fetchRootDocument(previousEntry, docketEntries);
+    }
+
+    const parentRelationship =
+      entry.relationship === DOCUMENT_RELATIONSHIPS.PRIMARY_SUPPORTING
+        ? DOCUMENT_RELATIONSHIPS.PRIMARY
+        : entry.relationship === DOCUMENT_RELATIONSHIPS.SUPPORTING
+          ? DOCUMENT_RELATIONSHIPS.SECONDARY
+          : null;
+
+    if (parentRelationship && previousDocument.documentType) {
+      const parentEntry = docketEntries.find(
+        e =>
+          e.relationship === parentRelationship &&
+          e.filingDate === entry.filingDate &&
+          (e.documentType === previousDocument.documentType ||
+            e.documentTitle === previousDocument.documentTitle),
+      );
+
+      if (parentEntry) {
+        return DocketEntry.fetchRootDocument(parentEntry, docketEntries);
+      }
+    }
+
+    return entry;
   };
 
   documentTypeForStampedDocketEntry(): string {
