@@ -1,14 +1,14 @@
 import { CourtIssuedDocumentPartial } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentPartial';
-import { CourtIssuedDocument } from './CourtIssuedDocumentConstants';
-import { CourtIssuedDocumentTypeA } from './CourtIssuedDocumentTypeA';
-import { CourtIssuedDocumentTypeB } from './CourtIssuedDocumentTypeB';
-import { CourtIssuedDocumentTypeC } from './CourtIssuedDocumentTypeC';
-import { CourtIssuedDocumentTypeD } from './CourtIssuedDocumentTypeD';
-import { CourtIssuedDocumentTypeE } from './CourtIssuedDocumentTypeE';
-import { CourtIssuedDocumentTypeF } from './CourtIssuedDocumentTypeF';
-import { CourtIssuedDocumentTypeG } from './CourtIssuedDocumentTypeG';
-import { CourtIssuedDocumentTypeH } from './CourtIssuedDocumentTypeH';
-import { CourtIssuedDocumentTypeI } from './CourtIssuedDocumentTypeI';
+import { CourtIssuedDocument } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
+import { CourtIssuedDocumentTypeA } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentTypeA';
+import { CourtIssuedDocumentTypeB } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentTypeB';
+import { CourtIssuedDocumentTypeC } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentTypeC';
+import { CourtIssuedDocumentTypeD } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentTypeD';
+import { CourtIssuedDocumentTypeE } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentTypeE';
+import { CourtIssuedDocumentTypeF } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentTypeF';
+import { CourtIssuedDocumentTypeG } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentTypeG';
+import { CourtIssuedDocumentTypeH } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentTypeH';
+import { CourtIssuedDocumentTypeI } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentTypeI';
 
 export function CourtIssuedDocumentFactory(
   documentMetadata,

@@ -3,8 +3,8 @@ import {
   calculateISODate,
   createISODateString,
   formatDateString,
-} from '../../utilities/DateHandler';
-import { JoiValidationEntity } from '../JoiValidationEntity';
+} from '@shared/business/utilities/DateHandler';
+import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import { RawCourtIssuedDocumentTypeA } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentTypeA';
 import { RawCourtIssuedDocumentTypeB } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentTypeB';
 import { RawCourtIssuedDocumentTypeC } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentTypeC';
@@ -17,8 +17,8 @@ import { RawCourtIssuedDocumentTypeI } from '@shared/business/entities/courtIssu
 import {
   DocketEntryRelation,
   UNSERVABLE_EVENT_CODES,
-} from '../EntityConstants';
-import { JoiValidationConstants } from '../JoiValidationConstants';
+} from '@shared/business/entities/EntityConstants';
+import { JoiValidationConstants } from '@shared/business/entities/JoiValidationConstants';
 import joi from 'joi';
 
 export abstract class CourtIssuedDocument extends JoiValidationEntity {

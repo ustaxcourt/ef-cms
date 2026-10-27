@@ -1,6 +1,6 @@
-import { CourtIssuedDocument } from './CourtIssuedDocumentConstants';
-import { JoiValidationConstants } from '../JoiValidationConstants';
-import { replaceBracketed } from '../../utilities/replaceBracketed';
+import { CourtIssuedDocument } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
+import { JoiValidationConstants } from '@shared/business/entities/JoiValidationConstants';
+import { replaceBracketed } from '@shared/business/utilities/replaceBracketed';
 
 export class CourtIssuedDocumentTypeI extends CourtIssuedDocument {
   public attachments: boolean;

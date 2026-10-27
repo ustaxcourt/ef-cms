@@ -1,6 +1,6 @@
-import { CourtIssuedDocumentFactory } from './CourtIssuedDocumentFactory';
-import { CourtIssuedDocumentPartial } from './CourtIssuedDocumentPartial';
-import { CourtIssuedDocumentTypeI } from './CourtIssuedDocumentTypeI';
+import { CourtIssuedDocumentFactory } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentFactory';
+import { CourtIssuedDocumentPartial } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentPartial';
+import { CourtIssuedDocumentTypeI } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentTypeI';
 
 describe('CourtIssuedDocumentFactory', () => {
   it('should return a CourtIssuedDocumentPartial when no scenario is provided', () => {
