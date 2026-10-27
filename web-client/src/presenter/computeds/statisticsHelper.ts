@@ -19,6 +19,13 @@ export const formatStatistic = ({
     .getUtilities()
     .formatDollars(statistic.irsTotalPenalties);
 
+  const formattedIrsTotal = applicationContext
+    .getUtilities()
+    .formatDollars(
+      Number(statistic.irsDeficiencyAmount) +
+        Number(statistic.irsTotalPenalties),
+    );
+
   const formattedDeterminationDeficiencyAmount =
     statistic.determinationDeficiencyAmount
       ? applicationContext
@@ -33,6 +40,17 @@ export const formatStatistic = ({
           .formatDollars(statistic.determinationTotalPenalties)
       : 'TBD';
 
+  const formattedDeterminationTotal =
+    statistic.determinationDeficiencyAmount +
+    statistic.determinationTotalPenalties
+      ? applicationContext
+          .getUtilities()
+          .formatDollars(
+            Number(statistic.determinationDeficiencyAmount) +
+              Number(statistic.determinationTotalPenalties),
+          )
+      : 'TBD';
+
   const editStatisticLink = `/case-detail/${docketNumber}/edit-deficiency-statistic/${statistic.statisticId}`;
 
   return {
@@ -41,8 +59,10 @@ export const formatStatistic = ({
     formattedDate,
     formattedDeterminationDeficiencyAmount,
     formattedDeterminationTotalPenalties,
+    formattedDeterminationTotal,
     formattedIrsDeficiencyAmount,
     formattedIrsTotalPenalties,
+    formattedIrsTotal,
   };
 };
 
