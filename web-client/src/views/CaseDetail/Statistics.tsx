@@ -79,14 +79,16 @@ export const Statistics = connect(
                   </tr>
                 </tbody>
               </table>
-              <Button
-                link
-                className="tw:self-start tw:ml-4"
-                href={statistic.editStatisticLink}
-                icon="edit"
-              >
-                Edit Year/Period
-              </Button>
+              {statisticsHelper.showEditButtons && (
+                <Button
+                  link
+                  className="tw:self-start tw:ml-4"
+                  href={statistic.editStatisticLink}
+                  icon="edit"
+                >
+                  Edit Year/Period
+                </Button>
+              )}
               <Button
                 link
                 data-testid={`view-itemized-penalties-button-${statistic.statisticId}`}
