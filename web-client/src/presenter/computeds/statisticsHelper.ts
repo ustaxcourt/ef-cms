@@ -134,8 +134,6 @@ export const statisticsHelper = (
   const showAddOtherStatisticsButton =
     permissions.ADD_EDIT_STATISTICS && !showOtherStatistics;
 
-  console.log('formattedStatistics:', formattedStatistics);
-
   return {
     formattedDamages,
     formattedLitigationCosts,
