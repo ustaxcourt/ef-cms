@@ -7,9 +7,9 @@ import {
   OPINION_DOCUMENT_TYPES,
   ORDER_TYPES,
   TRANSCRIPT_EVENT_CODE,
-} from './EntityConstants';
-import { DocketEntry } from './DocketEntry';
-import { applicationContext } from '../test/createTestApplicationContext';
+} from '@shared/business/entities/EntityConstants';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import {
   A_VALID_DOCKET_ENTRY,
   MOCK_PETITIONERS,

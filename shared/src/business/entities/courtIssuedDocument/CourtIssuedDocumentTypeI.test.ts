@@ -1,5 +1,5 @@
-import { CourtIssuedDocumentFactory } from './CourtIssuedDocumentFactory';
-import { CourtIssuedDocumentTypeI } from './CourtIssuedDocumentTypeI';
+import { CourtIssuedDocumentFactory } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentFactory';
+import { CourtIssuedDocumentTypeI } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentTypeI';
 
 describe('CourtIssuedDocumentTypeI', () => {
   const validProps = {
