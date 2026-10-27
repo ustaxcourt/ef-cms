@@ -16,10 +16,22 @@ import { petitionsClerkServesPetition } from '../documentQC/petitionsclerk-serve
 import { goToCase } from '../caseDetail/go-to-case';
 import { logout } from '../authentication/logout';
 import { faker } from '@faker-js/faker';
+import {
+  calculateISODate,
+  formatDateString,
+  FORMATS,
+} from '@shared/business/utilities/DateHandler';
 
 export const MOTION_FOR_CONTINUANCE_EVENT_CODE = 'M006';
+export const MOTION_FOR_LEAVE_EVENT_CODE = 'M115';
+const BRIEF_IN_SUPPORT_DOCUMENT_TYPE = 'Brief in Support';
 const BRIEF_IN_SUPPORT_EVENT_CODE = 'BRF';
 const MEMORANDA_IN_SUPPORT_EVENT_CODE = 'MISP';
+const DEFAULT_MOTION_DOCUMENT_TYPE = 'Motion for Continuance';
+const DEFAULT_SUPPORTING_DOCUMENT_TYPES = [
+  'Brief in Support',
+  'Memorandum in Support',
+];
 export const MOTION_VISIBILITY_POLICY_CHANGE_DATE_FLAG =
   'motion-visibility-policy-change-date';
 export const UNAUTHORIZED_PETITIONER_EMAIL = 'petitioner2@example.com';
@@ -274,6 +286,282 @@ export function lodgeDocketEntryByEventCode(eventCode: string): void {
   cy.get('[data-testid="save-edit-docket-entry-meta"]').click();
 }
 
+export function fileDocketEntryByEventCode(eventCode: string): void {
+  cy.get(`[data-testid="edit-${eventCode}"]`).click();
+  cy.get('#filing-status-File').click();
+  cy.get('[data-testid="save-edit-docket-entry-meta"]').click();
+}
+
+export type MotionForLeaveDocketEntries = {
+  leave: MotionVisibilityPublicDocketEntry;
+  lodgedSecondary: MotionVisibilityPublicDocketEntry;
+};
+
+export function getEFiledMotionEntryForCase(
+  docketNumber: string,
+): Cypress.Chainable<MotionVisibilityPublicDocketEntry> {
+  cy.intercept('GET', '**/docket-entries**').as('getDocketEntries');
+  goToCase(docketNumber);
+  return cy.wait('@getDocketEntries').then(({ response }) => {
+    const docketEntries: PublicDocketEntry[] = response?.body.docketEntries;
+    const motionDocketEntry = docketEntries.find(
+      entry =>
+        entry.eventCode === MOTION_FOR_CONTINUANCE_EVENT_CODE && !entry.isPaper,
+    );
+
+    if (!motionDocketEntry) {
+      throw new Error(
+        `E-filed docket entry with event code ${MOTION_FOR_CONTINUANCE_EVENT_CODE} was not found`,
+      );
+    }
+
+    const { docketEntryId, index } = motionDocketEntry;
+
+    if (docketEntryId === undefined || index === undefined) {
+      throw new Error(
+        `E-filed docket entry ${MOTION_FOR_CONTINUANCE_EVENT_CODE} is missing id or index`,
+      );
+    }
+
+    const motion: MotionVisibilityPublicDocketEntry = {
+      docketEntryId,
+      index,
+      eventCode: motionDocketEntry.eventCode,
+    };
+
+    return motion;
+  });
+}
+
+export function getMotionForLeaveEntriesForCase(
+  docketNumber: string,
+): Cypress.Chainable<MotionForLeaveDocketEntries> {
+  cy.intercept('GET', '**/docket-entries**').as('getDocketEntries');
+  goToCase(docketNumber);
+  return cy.wait('@getDocketEntries').then(({ response }) => {
+    const docketEntries: PublicDocketEntry[] = response?.body.docketEntries;
+    const leave = getDocketEntryByEventCode(
+      docketEntries,
+      MOTION_FOR_LEAVE_EVENT_CODE,
+    );
+    const lodgedSecondaryEntry = docketEntries.find(
+      entry =>
+        entry.eventCode === MOTION_FOR_CONTINUANCE_EVENT_CODE &&
+        entry.lodged === true,
+    );
+
+    if (!lodgedSecondaryEntry) {
+      throw new Error('Lodged secondary motion docket entry was not found');
+    }
+
+    const { docketEntryId, index } = lodgedSecondaryEntry;
+
+    if (docketEntryId === undefined || index === undefined) {
+      throw new Error(
+        'Lodged secondary motion docket entry is missing id or index',
+      );
+    }
+
+    const lodgedSecondary: MotionVisibilityPublicDocketEntry = {
+      docketEntryId,
+      index,
+      eventCode: lodgedSecondaryEntry.eventCode,
+    };
+
+    return { leave, lodgedSecondary };
+  });
+}
+
+export function getBriefInSupportEntryForCase(
+  docketNumber: string,
+): Cypress.Chainable<MotionVisibilityPublicDocketEntry> {
+  cy.intercept('GET', '**/docket-entries**').as('getDocketEntries');
+  goToCase(docketNumber);
+  return cy.wait('@getDocketEntries').then(({ response }) => {
+    const docketEntries: PublicDocketEntry[] = response?.body.docketEntries;
+    return getDocketEntryByEventCode(
+      docketEntries,
+      BRIEF_IN_SUPPORT_EVENT_CODE,
+    );
+  });
+}
+
+export function sealDocketEntryAtIndex(
+  docketRecordIndex: number,
+  sealTo: 'public' | 'external',
+): void {
+  cy.get(
+    `[data-testid="seal-docket-entry-button-${docketRecordIndex}"]`,
+  ).click();
+  cy.get('[data-testid="seal-docket-entry-modal"]');
+  if (sealTo === 'public') {
+    cy.get('#docket-entry-sealed-to-public').click();
+  } else {
+    cy.get('#docket-entry-sealed-to-external').click();
+  }
+  cy.get('[data-testid="modal-button-confirm"]').click();
+  cy.get('[data-testid="loading-overlay"]').should('not.exist');
+}
+
+export function setDocketEntryFilingDateToYesterday(
+  docketNumber: string,
+  docketRecordIndex: number,
+): void {
+  const yesterday = formatDateString(
+    calculateISODate({ howMuch: -1, units: 'days' }),
+    FORMATS.MMDDYYYY,
+  );
+  const editMetaUrl = `/case-detail/${docketNumber}/docket-entry/${docketRecordIndex}/edit-meta`;
+
+  cy.visit(editMetaUrl);
+  cy.get(
+    '.usa-date-picker__wrapper > [data-testid="filing-date-picker"]',
+  ).clear();
+  cy.get('.usa-date-picker__wrapper > [data-testid="filing-date-picker"]').type(
+    yesterday,
+  );
+  cy.get('[data-testid="save-edit-docket-entry-meta"]').click();
+  cy.get('[data-testid="loading-overlay"]').should('not.exist');
+}
+
+const selectPreviousDocumentOptionContaining = (text: string): void => {
+  cy.get('[data-testid="previous-document-search"]')
+    .find('option')
+    .then($options => {
+      const matchingOption = Array.from($options).find(option =>
+        option.textContent?.includes(text),
+      );
+      const optionText = matchingOption?.textContent?.trim() || '';
+      cy.get('[data-testid="previous-document-search"]').select(optionText);
+    });
+};
+
+export function fileMotionOnly(
+  docketNumber: string,
+  filingPartyTestId: string,
+  documentType: string = DEFAULT_MOTION_DOCUMENT_TYPE,
+): void {
+  fileMotionAndSupports(docketNumber, {
+    documentType,
+    filingPartyTestId,
+    supportingDocs: [],
+  });
+}
+
+export function fileBriefInSupportOfMotion(
+  docketNumber: string,
+  filingPartyTestId: string,
+): void {
+  goToCase(docketNumber);
+  cy.get('[data-testid="button-file-document"]').click();
+  cy.get('[data-testid="ready-to-file"]').click();
+
+  selectTypeaheadInput(
+    'complete-doc-document-type-search',
+    BRIEF_IN_SUPPORT_DOCUMENT_TYPE,
+  );
+  cy.get('[data-testid="submit-document"]').click();
+
+  attachFile({
+    filePath: '../../helpers/file/sample.pdf',
+    selector: '[data-testid="primary-document"]',
+    selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
+  });
+
+  cy.get('[data-testid="primaryDocument-objections-No"]').click();
+  selectPreviousDocumentOptionContaining(DEFAULT_MOTION_DOCUMENT_TYPE);
+
+  cy.get(`[data-testid="${filingPartyTestId}"]`).click();
+  cy.get('[data-testid="file-document-submit-document"]').click();
+  cy.get('[data-testid="redaction-acknowledgement-label"]').click();
+  cy.get('[data-testid="file-document-review-submit-document"]').click();
+  cy.get('[data-testid="loading-overlay"]').should('not.exist');
+}
+
+export function fileMotionForLeave(
+  docketNumber: string,
+  filingPartyTestId: string,
+): void {
+  goToCase(docketNumber);
+  cy.get('[data-testid="button-file-document"]').click();
+  cy.get('[data-testid="ready-to-file"]').click();
+
+  selectTypeaheadInput(
+    'complete-doc-document-type-search',
+    'Motion for Leave to File',
+  );
+  selectTypeaheadInput(
+    'secondary-doc-secondary-document-type',
+    DEFAULT_MOTION_DOCUMENT_TYPE,
+  );
+  cy.get('[data-testid="submit-document"]').click();
+
+  attachFile({
+    filePath: '../../helpers/file/sample.pdf',
+    selector: '[data-testid="primary-document"]',
+    selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
+  });
+  attachFile({
+    filePath: '../../helpers/file/sample.pdf',
+    selector: '[data-testid="secondary-document"]',
+    selectorToAwaitOnSuccess:
+      '[data-testid="upload-file-success-secondary-document"]',
+  });
+
+  cy.get('[data-testid="primaryDocument-objections-No"]').click();
+  cy.get('[data-testid="secondaryDocument-objections-No"]').click();
+
+  cy.get(`[data-testid="${filingPartyTestId}"]`).click();
+  cy.get('[data-testid="file-document-submit-document"]').click();
+  cy.get('[data-testid="redaction-acknowledgement-label"]').click();
+  cy.get('[data-testid="file-document-review-submit-document"]').click();
+  cy.get('[data-testid="loading-overlay"]').should('not.exist');
+}
+
+export function verifyStrickenDocketEntry(docketEntryId: string): void {
+  cy.get(`[data-testid="${docketEntryId}"]`)
+    .find('.stricken-docket-record')
+    .should('exist');
+  cy.get(`[data-testid="${docketEntryId}"]`)
+    .contains('(STRICKEN)')
+    .should('exist');
+}
+
+export function verifyDocumentRowHasNoDownloadLink(
+  docketEntryId: string,
+): void {
+  cy.get(`[data-testid="${docketEntryId}"]`)
+    .find('[data-testid^="document-download-link-"]')
+    .should('not.exist');
+}
+
+export function verifyPublicSealedEntryShowsLockWithoutLink(
+  docketNumber: string,
+  docketEntryIndex: number,
+): void {
+  const { publicSiteUrl } = getCypressEnv();
+
+  cy.origin(
+    publicSiteUrl,
+    {
+      args: {
+        docketNumber,
+        publicSiteUrl,
+        docketEntryIndex,
+      },
+    },
+    ({ docketNumber: dn, publicSiteUrl: url, docketEntryIndex: index }) => {
+      cy.visit(`${url}/case-detail/${dn}`);
+      cy.get(`[data-testid="public-docket-record-no-${index}"]`).then(row => {
+        cy.wrap(row).find('.icon-sealed').should('exist');
+        cy.wrap(row)
+          .find('[data-testid="Filing-and-Proceedings-link-to-docket-entry"]')
+          .should('not.exist');
+      });
+    },
+  );
+}
+
 export function verifyMotionNotViewableOnPublicSite(
   docketNumber: string,
   motion: MotionVisibilityPublicDocketEntry,
@@ -303,6 +591,8 @@ export function verifyDocumentCannotBeViewed(
   docketNumber: string,
   docketEntryId: string,
 ): void {
+  const { privateApiUrl } = getCypressEnv();
+
   cy.get(`[data-testid="${docketEntryId}"]`).then(row => {
     cy.wrap(row)
       .find('[data-testid^="document-download-link-"]')
@@ -311,7 +601,7 @@ export function verifyDocumentCannotBeViewed(
       .find('[data-testid^="docket-entry-filingsAndProceedings-"]')
       .should('exist');
     cy.request({
-      url: `http://localhost:4000/case-documents/${docketNumber}/${docketEntryId}/document-download-url`,
+      url: `${privateApiUrl}/case-documents/${docketNumber}/${docketEntryId}/document-download-url`,
       failOnStatusCode: false,
     }).then(response => {
       expect(response.status).to.eq(403);
@@ -386,18 +676,39 @@ export function verifyDocumentCannotBeViewedPublic(
   );
 }
 
-export function fileAMotionAndSupportingDocuments(
+export function verifyPublicDownloadForbidden(
   docketNumber: string,
-  filingPartyTestId: string,
+  docketEntryId: string,
 ): void {
+  const { publicApiUrl } = getCypressEnv();
+  cy.request({
+    url: `${publicApiUrl}/public-api/${docketNumber}/${docketEntryId}/public-document-download-url`,
+    failOnStatusCode: false,
+  }).then(response => {
+    expect(response.status).to.eq(403);
+  });
+}
+
+export type FileMotionAndSupportsOptions = {
+  documentType?: string;
+  fileOnConsolidatedGroup?: boolean;
+  filingPartyTestId: string;
+  supportingDocs?: string[];
+};
+
+export function fileMotionAndSupports(
+  docketNumber: string,
+  options: FileMotionAndSupportsOptions,
+): void {
+  const documentType = options.documentType ?? DEFAULT_MOTION_DOCUMENT_TYPE;
+  const supportingDocs =
+    options.supportingDocs ?? DEFAULT_SUPPORTING_DOCUMENT_TYPES;
+
   goToCase(docketNumber);
   cy.get('[data-testid="button-file-document"]').click();
   cy.get('[data-testid="ready-to-file"]').click();
 
-  selectTypeaheadInput(
-    'complete-doc-document-type-search',
-    'Motion for Continuance',
-  );
+  selectTypeaheadInput('complete-doc-document-type-search', documentType);
   cy.get('[data-testid="submit-document"]').click();
 
   attachFile({
@@ -408,28 +719,41 @@ export function fileAMotionAndSupportingDocuments(
 
   cy.get('[data-testid="primaryDocument-objections-No"]').click();
 
-  cy.get('#add-supporting-document-button').click();
-  cy.get('#supporting-document-0').select('Brief in Support');
-  attachFile({
-    filePath: '../../helpers/file/sample.pdf',
-    selector: '[data-testid="supporting-document-file-0"]',
-    selectorToAwaitOnSuccess:
-      '[data-testid="upload-file-success-supporting-document-file-0"]',
+  supportingDocs.forEach((supportingDocType, index) => {
+    cy.get('#add-supporting-document-button').click();
+    cy.get(`#supporting-document-${index}`).select(supportingDocType);
+    attachFile({
+      filePath: '../../helpers/file/sample.pdf',
+      selector: `[data-testid="supporting-document-file-${index}"]`,
+      selectorToAwaitOnSuccess: `[data-testid="upload-file-success-supporting-document-file-${index}"]`,
+    });
   });
 
-  cy.get('#add-supporting-document-button').click();
-  cy.get('#supporting-document-1').select('Memorandum in Support');
-  attachFile({
-    filePath: '../../helpers/file/sample.pdf',
-    selector: '[data-testid="supporting-document-file-1"]',
-    selectorToAwaitOnSuccess:
-      '[data-testid="upload-file-success-supporting-document-file-1"]',
-  });
+  if (options.fileOnConsolidatedGroup) {
+    cy.get('#consolidated-group-all').check({ force: true });
+  }
 
-  cy.get(`[data-testid="${filingPartyTestId}"]`).click();
+  cy.get(`[data-testid="${options.filingPartyTestId}"]`).click();
   cy.get('[data-testid="file-document-submit-document"]').click();
 
   cy.get('[data-testid="redaction-acknowledgement-label"]').click();
   cy.get('[data-testid="file-document-review-submit-document"]').click();
   cy.get('[data-testid="loading-overlay"]').should('not.exist');
+}
+
+export function fileMotionOnGroup(
+  leadDocketNumber: string,
+  options: FileMotionAndSupportsOptions,
+): void {
+  fileMotionAndSupports(leadDocketNumber, {
+    ...options,
+    fileOnConsolidatedGroup: true,
+  });
+}
+
+export function fileAMotionAndSupportingDocuments(
+  docketNumber: string,
+  filingPartyTestId: string,
+): void {
+  fileMotionAndSupports(docketNumber, { filingPartyTestId });
 }
