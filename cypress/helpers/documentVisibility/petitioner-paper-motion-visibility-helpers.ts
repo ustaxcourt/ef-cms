@@ -1,3 +1,4 @@
+import { faker } from '@faker-js/faker';
 import { formatNow, FORMATS } from '@shared/business/utilities/DateHandler';
 import {
   loginAsDocketClerk1,
@@ -18,6 +19,7 @@ import {
 import {
   fileIrsAnswer,
   fileMotionAndSupports,
+  getPetitionerFilerTestId,
   MOTION_FOR_CONTINUANCE_EVENT_CODE,
   MotionVisibilityPublicDocketEntry,
 } from './practitioner-filed-motion-visibility-helpers';
@@ -80,14 +82,14 @@ export type PaperFiledMotionCaseFixture = {
 };
 
 export type CreatePetitionerFiledMotionOptions = {
-  addParty?: {
-    name: string;
+  additionalContact?: {
+    name?: string;
     type: 'intervenor' | 'participant';
   };
   documentType?: string;
-  filingPartyTestId: string;
+  filerTestId?: string;
   motionEventCode?: string;
-  primaryFilerName: string;
+  primaryFilerName?: string;
   supportingDocs?: string[];
 };
 
@@ -131,32 +133,46 @@ const getPetitionerFiledMotionCaseFixture = (
   );
 
 export function createPetitionerFiledMotionCase({
-  addParty,
+  additionalContact,
   documentType,
-  filingPartyTestId,
+  filerTestId,
   motionEventCode = MOTION_FOR_CONTINUANCE_EVENT_CODE,
-  primaryFilerName,
+  primaryFilerName = faker.person.firstName(),
   supportingDocs,
 }: CreatePetitionerFiledMotionOptions): Cypress.Chainable<PetitionerFiledMotionCaseFixture> {
+  const contact = additionalContact
+    ? {
+        name: additionalContact.name ?? faker.person.firstName(),
+        type: additionalContact.type,
+      }
+    : undefined;
+  const resolvedFilerTestId =
+    filerTestId ??
+    (contact
+      ? `filingParty-${contact.name}, ${
+          contact.type === 'intervenor' ? 'Intervenor' : 'Participant'
+        }`
+      : getPetitionerFilerTestId(primaryFilerName));
+
   loginAsPetitioner();
   return externalUserCreatesElectronicCase(primaryFilerName)
     .then(docketNumber => {
       petitionsClerkServesPetition(docketNumber);
 
-      if (addParty) {
+      if (contact) {
         loginAsDocketClerk1();
         goToCase(docketNumber);
-        if (addParty.type === 'intervenor') {
-          addIntervenorAsPartyToCase(addParty.name);
+        if (contact.type === 'intervenor') {
+          addIntervenorAsPartyToCase(contact.name);
         } else {
-          addParticipantAsPartyToCase(addParty.name);
+          addParticipantAsPartyToCase(contact.name);
         }
       }
 
       loginAsPetitioner();
       fileMotionAndSupports(docketNumber, {
         documentType,
-        filingPartyTestId,
+        filerTestId: resolvedFilerTestId,
         supportingDocs,
       });
 

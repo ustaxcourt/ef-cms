@@ -1,3 +1,4 @@
+import { faker } from '@faker-js/faker';
 import {
   loginAsDocketClerk1,
   loginAsIrsPractitioner,
@@ -12,6 +13,8 @@ import { petitionsClerkServesPetition } from '../../../../helpers/documentQC/pet
 import { goToCase } from '../../../../helpers/caseDetail/go-to-case';
 import { createAndServePaperFiling } from '../../../../helpers/caseDetail/docketRecord/paperFiling/create-and-serve-paper-filing';
 import {
+  BRIEF_IN_SUPPORT_EVENT_CODE,
+  MEMORANDA_IN_SUPPORT_EVENT_CODE,
   MOTION_FOR_CONTINUANCE_EVENT_CODE,
   MotionVisibilityDocketEntries,
   MotionVisibilityPublicDocketEntry,
@@ -22,6 +25,7 @@ import {
   unassociatedExternalRolesForIrsPractitionerFiledMotion,
   unassociatedExternalRolesForPrivatePractitionerFiledMotion,
   fileAMotionAndSupportingDocuments,
+  getPetitionerFilerTestId,
   MOTION_VISIBILITY_POLICY_CHANGE_DATE_FLAG,
   restoreMotionVisibilityPolicyFlag,
   setMotionVisibilityPolicyDateToTomorrow,
@@ -654,12 +658,54 @@ describe('Testing motion visibility after policy change date', () => {
     });
   });
 
-  describe('Metadata de-lodge of petitioner motion filed after policy change date', () => {
+  describe('Metadata de-lodge of practitioner motion with supporting docs filed after policy change date', () => {
     let caseDocketNumber: string;
     let motionEntries: MotionVisibilityDocketEntries;
 
     before(() => {
-      createPetitionerCaseWithFiledMotion().then(
+      createPrivatePractitionerCaseWithFiledMotion().then(
+        ({ docketNumber, entries }) => {
+          caseDocketNumber = docketNumber;
+          motionEntries = entries;
+          loginAsDocketClerk1();
+          goToCase(docketNumber);
+          lodgeDocketEntryByEventCode(MOTION_FOR_CONTINUANCE_EVENT_CODE);
+          lodgeDocketEntryByEventCode(BRIEF_IN_SUPPORT_EVENT_CODE);
+          lodgeDocketEntryByEventCode(MEMORANDA_IN_SUPPORT_EVENT_CODE);
+          fileDocketEntryByEventCode(MOTION_FOR_CONTINUANCE_EVENT_CODE);
+          fileDocketEntryByEventCode(BRIEF_IN_SUPPORT_EVENT_CODE);
+          fileDocketEntryByEventCode(MEMORANDA_IN_SUPPORT_EVENT_CODE);
+        },
+      );
+    });
+
+    it('should let public download practitioner motion after metadata de-lodge', () => {
+      verifyMotionViewableOnPublicSite(caseDocketNumber, motionEntries.motion);
+    });
+
+    // TODO(10399): unskip once supporting-document visibility fix from 10399 is merged
+    it.skip('should let public download brief in support after metadata de-lodge', () => {
+      verifyDocumentCanBeViewedPublic(
+        caseDocketNumber,
+        motionEntries.briefInSupport.index,
+      );
+    });
+
+    // TODO(10399): unskip once supporting-document visibility fix from 10399 is merged
+    it.skip('should let public download memorandum in support after metadata de-lodge', () => {
+      verifyDocumentCanBeViewedPublic(
+        caseDocketNumber,
+        motionEntries.memorandaInSupport.index,
+      );
+    });
+  });
+
+  describe('Metadata de-lodge of practitioner motion filed before policy change date', () => {
+    let caseDocketNumber: string;
+    let motionEntries: MotionVisibilityDocketEntries;
+
+    before(() => {
+      createPrivatePractitionerCaseWithFiledMotion().then(
         ({ docketNumber, entries }) => {
           caseDocketNumber = docketNumber;
           motionEntries = entries;
@@ -671,22 +717,27 @@ describe('Testing motion visibility after policy change date', () => {
       );
     });
 
-    it('should not let public download petitioner motion after metadata de-lodge', () => {
+    beforeEach(() => {
+      setMotionVisibilityPolicyDateToTomorrow();
+    });
+
+    it('should not let public download practitioner motion after metadata de-lodge before policy change date', () => {
       verifyMotionNotViewableOnPublicSite(
         caseDocketNumber,
         motionEntries.motion,
       );
     });
 
-    it('should let filer open petitioner motion after metadata de-lodge', () => {
-      loginAsPetitioner();
+    it('should let filer open practitioner motion after metadata de-lodge before policy change date', () => {
+      loginAsPrivatePractitioner();
       goToCase(caseDocketNumber);
       verifyDocumentCanBeViewed(motionEntries.motion.docketEntryId);
     });
   });
 
   describe('Later brief in support of an existing practitioner-filed motion', () => {
-    const primaryFilerName = 'LaterBriefFiler';
+    const primaryFilerName = faker.person.firstName();
+    const filerTestId = getPetitionerFilerTestId(primaryFilerName);
     let caseDocketNumber: string;
     let motionEntry: MotionVisibilityPublicDocketEntry;
     let briefEntry: MotionVisibilityPublicDocketEntry;
@@ -702,19 +753,13 @@ describe('Testing motion visibility after policy change date', () => {
         logout();
         petitionsClerkQcsAndServesElectronicCase(docketNumber);
         loginAsPrivatePractitioner();
-        fileMotionOnly(
-          docketNumber,
-          `filingParty-${primaryFilerName}, Petitioner`,
-        );
+        fileMotionOnly(docketNumber, filerTestId);
         getEFiledMotionEntryForCase(docketNumber).then(motion => {
           motionEntry = motion;
           loginAsDocketClerk1();
           setDocketEntryFilingDateToYesterday(docketNumber, motion.index);
           loginAsPrivatePractitioner();
-          fileBriefInSupportOfMotion(
-            docketNumber,
-            `filingParty-${primaryFilerName}, Petitioner`,
-          );
+          fileBriefInSupportOfMotion(docketNumber, filerTestId);
           getBriefInSupportEntryForCase(docketNumber).then(brief => {
             briefEntry = brief;
           });

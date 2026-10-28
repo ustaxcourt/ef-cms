@@ -1,3 +1,4 @@
+import { faker } from '@faker-js/faker';
 import {
   loginAsPetitioner,
   loginAsPrivatePractitioner,
@@ -9,8 +10,10 @@ import { goToCase } from '../../../../helpers/caseDetail/go-to-case';
 import {
   MotionVisibilityPublicDocketEntry,
   UNAUTHORIZED_PETITIONER_EMAIL,
+  docketClerkCompletesSectionQcChangingLodgeToFile,
   fileMotionForLeave,
   getMotionForLeaveEntriesForCase,
+  getPetitionerFilerTestId,
   MOTION_VISIBILITY_POLICY_CHANGE_DATE_FLAG,
   restoreMotionVisibilityPolicyFlag,
   setMotionVisibilityPolicyDateToYesterday,
@@ -34,7 +37,7 @@ describe('Motion visibility — Motion for Leave with lodged secondary', () => {
   });
 
   describe('Motion for Leave to File with lodged secondary Motion for Continuance', () => {
-    const primaryFilerName = 'LeaveLodgedFiler';
+    const primaryFilerName = faker.person.firstName();
     let caseDocketNumber: string;
     let motionForLeaveEntry: MotionVisibilityPublicDocketEntry;
     let lodgedSecondary: MotionVisibilityPublicDocketEntry;
@@ -52,7 +55,7 @@ describe('Motion visibility — Motion for Leave with lodged secondary', () => {
         loginAsPrivatePractitioner();
         fileMotionForLeave(
           docketNumber,
-          `filingParty-${primaryFilerName}, Petitioner`,
+          getPetitionerFilerTestId(primaryFilerName),
         );
         getMotionForLeaveEntriesForCase(docketNumber).then(
           ({ motionForLeave, lodgedSecondary: lodgedSecondaryEntry }) => {
@@ -99,6 +102,45 @@ describe('Motion visibility — Motion for Leave with lodged secondary', () => {
           lodgedSecondary.index,
         );
       });
+    });
+  });
+
+  describe('Section QC de-lodge of practitioner Motion for Leave lodged secondary after policy change date', () => {
+    const primaryFilerName = faker.person.firstName();
+    let caseDocketNumber: string;
+    let lodgedSecondary: MotionVisibilityPublicDocketEntry;
+
+    before(() => {
+      loginAsPrivatePractitioner();
+      externalUserCreatesElectronicCase(primaryFilerName).then(docketNumber => {
+        caseDocketNumber = docketNumber;
+        logout();
+        petitionsClerkQcsAndServesElectronicCase(docketNumber);
+        loginAsPrivatePractitioner();
+        fileMotionForLeave(
+          docketNumber,
+          getPetitionerFilerTestId(primaryFilerName),
+        );
+        getMotionForLeaveEntriesForCase(docketNumber).then(
+          ({ lodgedSecondary: lodgedSecondaryEntry }) => {
+            lodgedSecondary = lodgedSecondaryEntry;
+            docketClerkCompletesSectionQcChangingLodgeToFile(
+              docketNumber,
+              'Motion for Continuance',
+            );
+          },
+        );
+      });
+    });
+
+    it('should let public download previously lodged secondary Motion for Continuance after Section QC de-lodge', () => {
+      verifyDocumentCanBeViewedPublic(caseDocketNumber, lodgedSecondary.index);
+    });
+
+    it('should let filer open previously lodged secondary Motion for Continuance after Section QC de-lodge', () => {
+      loginAsPrivatePractitioner();
+      goToCase(caseDocketNumber);
+      verifyDocumentCanBeViewed(lodgedSecondary.docketEntryId);
     });
   });
 });

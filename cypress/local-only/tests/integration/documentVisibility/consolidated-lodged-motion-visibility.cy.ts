@@ -9,7 +9,7 @@ import {
   ConsolidatedMotionFiler,
   createConsolidatedGroupWithOneMember,
   fileLeaveWithLodgedSecondaryOnGroup,
-  getFilingPartyTestIdForConsolidatedFiler,
+  getFilerTestIdForConsolidatedFiler,
   loginConsolidatedFiler,
   prepareConsolidatedFiler,
 } from '../../../../helpers/documentVisibility/consolidated-motion-visibility-helpers';
@@ -133,10 +133,7 @@ describe('Consolidated group lodged motion visibility', () => {
             prepareConsolidatedFiler(filer, group);
             loginConsolidatedFiler(filer);
             fileLeaveWithLodgedSecondaryOnGroup(leadDocketNumber, {
-              filingPartyTestId: getFilingPartyTestIdForConsolidatedFiler(
-                filer,
-                group,
-              ),
+              filerTestId: getFilerTestIdForConsolidatedFiler(filer, group),
               primaryDocumentType,
               primarySupportingDocs,
               secondaryDocumentType,

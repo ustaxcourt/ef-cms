@@ -1,5 +1,6 @@
 import { PublicDocketEntry } from '@shared/business/entities/cases/PublicDocketEntry';
 import {
+  loginAsDocketClerk1,
   loginAsDojPractitioner,
   loginAsIrsPractitioner,
   loginAsIrsPractitioner1,
@@ -35,8 +36,8 @@ export const PETITIONER_FIVE_SUPPORTING_DOCUMENT_TYPES = [
   'Memorandum in Support',
 ];
 const BRIEF_IN_SUPPORT_DOCUMENT_TYPE = 'Brief in Support';
-const BRIEF_IN_SUPPORT_EVENT_CODE = 'BRF';
-const MEMORANDA_IN_SUPPORT_EVENT_CODE = 'MISP';
+export const BRIEF_IN_SUPPORT_EVENT_CODE = 'BRF';
+export const MEMORANDA_IN_SUPPORT_EVENT_CODE = 'MISP';
 const DEFAULT_MOTION_DOCUMENT_TYPE = 'Motion for Continuance';
 const DEFAULT_SUPPORTING_DOCUMENT_TYPES = [
   'Brief in Support',
@@ -115,7 +116,7 @@ export const unassociatedExternalRolesForIrsPractitionerFiledMotion: Unassociate
     },
   ];
 
-const getPetitionerFilingPartyTestId = (primaryFilerName: string): string =>
+export const getPetitionerFilerTestId = (primaryFilerName: string): string =>
   `filingParty-${primaryFilerName}, Petitioner`;
 
 export function getMotionVisibilityPublicDocketEntry(
@@ -238,7 +239,7 @@ export function createPrivatePractitionerCaseWithFiledMotion(
       loginAsPrivatePractitioner();
       fileAMotionAndSupportingDocuments(
         docketNumber,
-        getPetitionerFilingPartyTestId(primaryFilerName),
+        getPetitionerFilerTestId(primaryFilerName),
       );
       return getMotionVisibilityDocketEntriesForCase(docketNumber).then(
         entries => ({
@@ -260,7 +261,7 @@ export function createPetitionerCaseWithFiledMotion(
       loginAsPetitioner();
       fileAMotionAndSupportingDocuments(
         docketNumber,
-        getPetitionerFilingPartyTestId(primaryFilerName),
+        getPetitionerFilerTestId(primaryFilerName),
       );
       return getMotionVisibilityDocketEntriesForCase(docketNumber).then(
         entries => ({
@@ -306,6 +307,22 @@ export function fileDocketEntryByEventCode(eventCode: string): void {
   cy.get(`[data-testid="edit-${eventCode}"]`).click();
   cy.get('#filing-status-File').click();
   cy.get('[data-testid="save-edit-docket-entry-meta"]').click();
+}
+
+export function docketClerkCompletesSectionQcChangingLodgeToFile(
+  docketNumber: string,
+  documentTitleContains: string,
+): void {
+  loginAsDocketClerk1();
+  cy.get('[data-testid="document-qc-nav-item"]').click();
+  cy.get('[data-testid="switch-to-section-document-qc-button"]').click();
+  cy.contains(
+    `[data-testid="work-item-document-link-${docketNumber}"]`,
+    documentTitleContains,
+  ).click();
+  cy.get('#filing-status-File').click();
+  cy.get('[data-testid="save-and-finish-document-qc"]').click();
+  cy.get('[data-testid="loading-overlay"]').should('not.exist');
 }
 
 export type MotionForLeaveDocketEntries = {
@@ -428,19 +445,19 @@ const selectPreviousDocumentOptionContaining = (text: string): void => {
 
 export function fileMotionOnly(
   docketNumber: string,
-  filingPartyTestId: string,
+  filerTestId: string,
   documentType: string = DEFAULT_MOTION_DOCUMENT_TYPE,
 ): void {
   fileMotionAndSupports(docketNumber, {
     documentType,
-    filingPartyTestId,
+    filerTestId,
     supportingDocs: [],
   });
 }
 
 export function fileBriefInSupportOfMotion(
   docketNumber: string,
-  filingPartyTestId: string,
+  filerTestId: string,
 ): void {
   goToCase(docketNumber);
   cy.get('[data-testid="button-file-document"]').click();
@@ -461,7 +478,7 @@ export function fileBriefInSupportOfMotion(
   cy.get('[data-testid="primaryDocument-objections-No"]').click();
   selectPreviousDocumentOptionContaining(DEFAULT_MOTION_DOCUMENT_TYPE);
 
-  cy.get(`[data-testid="${filingPartyTestId}"]`).click();
+  cy.get(`[data-testid="${filerTestId}"]`).click();
   cy.get('[data-testid="file-document-submit-document"]').click();
   cy.get('[data-testid="redaction-acknowledgement-label"]').click();
   cy.get('[data-testid="file-document-review-submit-document"]').click();
@@ -470,7 +487,7 @@ export function fileBriefInSupportOfMotion(
 
 export function fileMotionForLeave(
   docketNumber: string,
-  filingPartyTestId: string,
+  filerTestId: string,
 ): void {
   goToCase(docketNumber);
   cy.get('[data-testid="button-file-document"]').click();
@@ -501,7 +518,7 @@ export function fileMotionForLeave(
   cy.get('[data-testid="primaryDocument-objections-No"]').click();
   cy.get('[data-testid="secondaryDocument-objections-No"]').click();
 
-  cy.get(`[data-testid="${filingPartyTestId}"]`).click();
+  cy.get(`[data-testid="${filerTestId}"]`).click();
   cy.get('[data-testid="file-document-submit-document"]').click();
   cy.get('[data-testid="redaction-acknowledgement-label"]').click();
   cy.get('[data-testid="file-document-review-submit-document"]').click();
@@ -682,7 +699,7 @@ export function verifyPublicDownloadForbidden(
 export type FileMotionAndSupportsOptions = {
   documentType?: string;
   fileOnConsolidatedGroup?: boolean;
-  filingPartyTestId: string;
+  filerTestId: string;
   supportingDocs?: string[];
 };
 
@@ -723,7 +740,7 @@ export function fileMotionAndSupports(
     cy.get('#consolidated-group-all').check({ force: true });
   }
 
-  cy.get(`[data-testid="${options.filingPartyTestId}"]`).click();
+  cy.get(`[data-testid="${options.filerTestId}"]`).click();
   cy.get('[data-testid="file-document-submit-document"]').click();
 
   cy.get('[data-testid="redaction-acknowledgement-label"]').click();
@@ -743,7 +760,7 @@ export function fileMotionOnGroup(
 
 export function fileAMotionAndSupportingDocuments(
   docketNumber: string,
-  filingPartyTestId: string,
+  filerTestId: string,
 ): void {
-  fileMotionAndSupports(docketNumber, { filingPartyTestId });
+  fileMotionAndSupports(docketNumber, { filerTestId });
 }

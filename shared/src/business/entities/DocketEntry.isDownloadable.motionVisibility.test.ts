@@ -97,6 +97,22 @@ describe('isDownloadable motion visibility', () => {
           output: false,
         },
         {
+          description: 'de-lodged practitioner motion after the policy date',
+          input: {
+            filingDate: afterMotionVisibilityChangeDate,
+            lodged: false,
+          },
+          output: true,
+        },
+        {
+          description: 'de-lodged practitioner motion before the policy date',
+          input: {
+            filingDate: beforeMotionVisibilityChangeDate,
+            lodged: false,
+          },
+          output: false,
+        },
+        {
           description: 'paper practitioner motion after the policy date',
           input: {
             filingDate: afterMotionVisibilityChangeDate,

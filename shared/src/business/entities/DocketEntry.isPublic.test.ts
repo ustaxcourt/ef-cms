@@ -603,6 +603,24 @@ describe('DocketEntry isPublic', () => {
 
             expect(isPublic).toBe(false);
           });
+          it(`should return false for de-lodged motions filed by a ${role} before the policy date`, () => {
+            const isPublic = DocketEntry.isPublic(
+              {
+                ...baseDocketEntry,
+                eventCode: motionEventCode,
+                filingDate: beforeMotionVisibilityChangeDate,
+                filedByRole: role,
+                isPaper: false,
+                lodged: false,
+              },
+              {
+                visibilityChangeDate,
+                motionVisibilityChangeDate,
+              },
+            );
+
+            expect(isPublic).toBe(false);
+          });
           it.each(PUBLIC_SUPPORTING_EVENT_CODES_FOR_MOTIONS)(
             `should return false for briefs or memoranda in support of a motion filed by a ${role} at the same time as the motion`,
             supportingEventCode => {
@@ -791,6 +809,24 @@ describe('DocketEntry isPublic', () => {
             );
 
             expect(isPublic).toBe(false);
+          });
+          it(`should return true for de-lodged motions filed by a ${role} after the policy date`, () => {
+            const isPublic = DocketEntry.isPublic(
+              {
+                ...baseDocketEntry,
+                eventCode: motionEventCode,
+                filingDate: afterMotionVisibilityChangeDate,
+                filedByRole: role,
+                isPaper: false,
+                lodged: false,
+              },
+              {
+                visibilityChangeDate,
+                motionVisibilityChangeDate,
+              },
+            );
+
+            expect(isPublic).toBe(true);
           });
           it.each(PUBLIC_SUPPORTING_EVENT_CODES_FOR_MOTIONS)(
             `should return false for briefs or memoranda in support of a lodged motion filed by a ${role} at the same time as the motion`,

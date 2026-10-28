@@ -5,7 +5,7 @@ import {
   fileConsolidatedMotionOnGroup,
   fileSupportInSupportOfMotionOnGroup,
   getEFiledMotionOnCase,
-  getFilingPartyTestIdForConsolidatedFiler,
+  getFilerTestIdForConsolidatedFiler,
   getMotionAndSupportingEntriesForCase,
   getMotionEventCodeForDocumentType,
   getMotionVisibilityDocketEntriesForCase,
@@ -417,10 +417,7 @@ describe('Consolidated group motion visibility', () => {
             loginConsolidatedFiler(filer);
             fileSupportInSupportOfMotionOnGroup(leadDocketNumber, {
               documentType: supportingDocumentType,
-              filingPartyTestId: getFilingPartyTestIdForConsolidatedFiler(
-                filer,
-                group,
-              ),
+              filerTestId: getFilerTestIdForConsolidatedFiler(filer, group),
             });
 
             getEFiledMotionOnCase(leadDocketNumber).then(motionEntry => {

@@ -130,13 +130,13 @@ export function prepareDojConsolidatedFiler(docketNumbers: string[]): void {
   });
 }
 
-export function getPrivatePractitionerFilingPartyTestId(
+export function getPrivatePractitionerFilerTestId(
   group: ConsolidatedGroupFixture,
 ): string {
   return `filingParty-${group.leadPetitionerName}, Petitioner`;
 }
 
-export function getRespondentFilingPartyTestId(): string {
+export function getRespondentFilerTestId(): string {
   return 'party-irs-practitioner-label';
 }
 
@@ -173,15 +173,15 @@ export function prepareConsolidatedFiler(
   prepareDojConsolidatedFiler(docketNumbers);
 }
 
-export function getFilingPartyTestIdForConsolidatedFiler(
+export function getFilerTestIdForConsolidatedFiler(
   filer: ConsolidatedMotionFiler,
   group: ConsolidatedGroupFixture,
 ): string {
   if (filer === 'privatePractitioner') {
-    return getPrivatePractitionerFilingPartyTestId(group);
+    return getPrivatePractitionerFilerTestId(group);
   }
 
-  return getRespondentFilingPartyTestId();
+  return getRespondentFilerTestId();
 }
 
 export function getMotionEventCodeForDocumentType(
@@ -292,7 +292,7 @@ export function getMotionAndSupportingEntriesForCase(
 
 export type FileSupportInSupportOfMotionOnGroupOptions = {
   documentType: 'Brief in Support' | 'Memorandum in Support';
-  filingPartyTestId: string;
+  filerTestId: string;
   motionDocumentType?: string;
 };
 
@@ -331,7 +331,7 @@ export function fileSupportInSupportOfMotionOnGroup(
     });
 
   cy.get('#consolidated-group-all').check({ force: true });
-  cy.get(`[data-testid="${options.filingPartyTestId}"]`).click();
+  cy.get(`[data-testid="${options.filerTestId}"]`).click();
   cy.get('[data-testid="file-document-submit-document"]').click();
   cy.get('[data-testid="redaction-acknowledgement-label"]').click();
   cy.get('[data-testid="file-document-review-submit-document"]').click();
@@ -339,7 +339,7 @@ export function fileSupportInSupportOfMotionOnGroup(
 }
 
 export type FileLeaveWithLodgedSecondaryOnGroupOptions = {
-  filingPartyTestId: string;
+  filerTestId: string;
   primaryDocumentType?: string;
   primarySupportingDocs?: string[];
   secondaryDocumentType?: string;
@@ -413,7 +413,7 @@ export function fileLeaveWithLodgedSecondaryOnGroup(
   });
 
   cy.get('#consolidated-group-all').check({ force: true });
-  cy.get(`[data-testid="${options.filingPartyTestId}"]`).click();
+  cy.get(`[data-testid="${options.filerTestId}"]`).click();
   cy.get('[data-testid="file-document-submit-document"]').click();
   cy.get('[data-testid="redaction-acknowledgement-label"]').click();
   cy.get('[data-testid="file-document-review-submit-document"]').click();
@@ -432,7 +432,7 @@ export function fileConsolidatedMotionOnGroup(
   loginConsolidatedFiler(filer);
   fileMotionOnGroup(leadDocketNumber, {
     documentType: options.documentType,
-    filingPartyTestId: getFilingPartyTestIdForConsolidatedFiler(filer, group),
+    filerTestId: getFilerTestIdForConsolidatedFiler(filer, group),
     supportingDocs: options.supportingDocs,
   });
 }

@@ -46,12 +46,9 @@ describe('Petitioner-filed and paper-filed motion visibility', () => {
         'Motion visibility for petitioner-filed motion on behalf of an intervenor',
       supportingDocumentCount: 0,
       motionSetup: {
-        primaryFilerName: 'IntervenorMotionPetitioner',
-        addParty: {
+        additionalContact: {
           type: 'intervenor' as const,
-          name: 'IntervenorMotionParty',
         },
-        filingPartyTestId: 'filingParty-IntervenorMotionParty, Intervenor',
       },
     },
     {
@@ -59,22 +56,17 @@ describe('Petitioner-filed and paper-filed motion visibility', () => {
         'Motion visibility for petitioner-filed motion on behalf of a participant',
       supportingDocumentCount: 0,
       motionSetup: {
-        primaryFilerName: 'ParticipantMotionPetitioner',
-        addParty: {
+        additionalContact: {
           type: 'participant' as const,
-          name: 'ParticipantMotionParty',
         },
-        filingPartyTestId: 'filingParty-ParticipantMotionParty, Participant',
       },
     },
     {
       title: 'Motion visibility for petitioner-filed Motion for a New Trial',
       supportingDocumentCount: 0,
       motionSetup: {
-        primaryFilerName: 'NewTrialMotionPetitioner',
         documentType: MOTION_FOR_NEW_TRIAL_DOCUMENT_TYPE,
         motionEventCode: MOTION_FOR_NEW_TRIAL_EVENT_CODE,
-        filingPartyTestId: 'filingParty-NewTrialMotionPetitioner, Petitioner',
       },
     },
     {
@@ -82,9 +74,6 @@ describe('Petitioner-filed and paper-filed motion visibility', () => {
         'Motion visibility for petitioner-filed motion with five supporting documents',
       supportingDocumentCount: 5,
       motionSetup: {
-        primaryFilerName: 'FiveSupportingDocsPetitioner',
-        filingPartyTestId:
-          'filingParty-FiveSupportingDocsPetitioner, Petitioner',
         supportingDocs: PETITIONER_FIVE_SUPPORTING_DOCUMENT_TYPES,
       },
     },
