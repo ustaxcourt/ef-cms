@@ -1,5 +1,10 @@
 import { checkA11y } from '../../../support/generalCommands/checkA11y';
-import { loginAsClerkOfCourt } from '../../../../helpers/authentication/login-as-helpers';
+import { getCurrentDateTimeInMillis } from '@shared/business/utilities/DateHandler';
+import {
+  loginAsClerkOfCourt,
+  loginAsDocketClerk,
+} from '../../../../helpers/authentication/login-as-helpers';
+import { sendMessageOnCase } from '../../../../helpers/messages/send-message-on-case';
 
 const emptyCaseStats = {
   calendarYearCaseStats: {
@@ -144,10 +149,25 @@ describe('Dashboard - Clerk of Court Accessibility', () => {
 
   describe('Recent Messages tab', () => {
     it('should be free of a11y issues when viewing recent messages', () => {
+      // ensure the Recent Messages table has at least one row with a docket number link
+      const subject = `Clerk of Court a11y ${getCurrentDateTimeInMillis()}`;
+      loginAsDocketClerk();
+      sendMessageOnCase({
+        docketNumber: '103-20',
+        subject,
+        to: {
+          recipient: 'Test Clerk of Court',
+          section: 'clerkofcourt',
+        },
+      });
+
       loginAsClerkOfCourt();
       cy.get('#tabButton-recentMessages').click();
 
       cy.get('[data-testid="recent-messages-table"]').should('exist');
+      cy.get('[data-testid="recent-messages-table"]')
+        .contains('tr', subject)
+        .should('exist');
 
       checkA11y();
     });
