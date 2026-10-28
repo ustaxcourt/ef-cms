@@ -65,6 +65,11 @@ export const getPublicDownloadPolicyUrlInteractor = async (
       ALLOWLIST_FEATURE_FLAGS.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.key
     ];
 
+  const motionVisibilityChangeDate =
+    featureFlags[
+      ALLOWLIST_FEATURE_FLAGS.MOTION_VISIBILITY_POLICY_CHANGE_DATE.key
+    ];
+
   if (
     !DocketEntry.isDownloadable(docketEntryEntity, {
       isTerminalUser,
@@ -76,6 +81,7 @@ export const getPublicDownloadPolicyUrlInteractor = async (
         name: '',
       },
       visibilityChangeDate: documentVisibilityChangeDate,
+      motionVisibilityChangeDate,
     })
   ) {
     throw new UnauthorizedError('Unauthorized to access private document');

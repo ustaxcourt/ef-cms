@@ -11,10 +11,22 @@ export function generateRandomPhoneNumber(): string {
   return phoneNumber;
 }
 
-export function downloadAndParsePdf(element: string) {
+export function downloadAndParsePdf({
+  selector,
+  element,
+}: {
+  selector?: string;
+  element?: Cypress.Chainable<JQuery<HTMLElement>>;
+}) {
   cy.intercept('GET', '**/document-download-url').as('documentDownloadUrl');
 
-  cy.get(element).click();
+  if (selector) {
+    cy.get(selector).click();
+  } else if (element) {
+    element.click();
+  } else {
+    throw Error('Either selector or element must be set');
+  }
 
   return cy.wait('@documentDownloadUrl').then(({ response }) => {
     if (!response) throw Error('Did not find response');

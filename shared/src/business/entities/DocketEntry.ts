@@ -12,6 +12,7 @@ import {
   DocketEntryRelation,
   DOCUMENT_NOTICE_EVENT_CODES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
+  DOCUMENT_RELATIONSHIPS,
   EXTERNAL_DOCUMENT_TYPES,
   MINUTE_ENTRIES_MAP,
   MINUTE_SHEET_EVENT_CODES,
@@ -29,6 +30,7 @@ import {
   TRACKED_DOCUMENT_TYPES_EVENT_CODES,
   TRANSCRIPT_EVENT_CODE,
   UNSERVABLE_EVENT_CODES,
+  PUBLIC_SUPPORTING_EVENT_CODES_FOR_MOTIONS,
 } from './EntityConstants';
 import {
   Case,
@@ -531,16 +533,55 @@ export class DocketEntry extends JoiValidationEntity {
     );
   }
 
+  static isMotionSupport(
+    entry: RawDocketEntry,
+    rootDocument?: RawDocketEntry,
+  ): boolean {
+    return (
+      !!rootDocument &&
+      DocketEntry.isMotion(rootDocument.eventCode) &&
+      PUBLIC_SUPPORTING_EVENT_CODES_FOR_MOTIONS.includes(entry.eventCode) &&
+      entry.filingDate === rootDocument.filingDate
+    );
+  }
+
+  static isNonPublicLodged(
+    entry: RawDocketEntry,
+    rootDocument?: RawDocketEntry,
+  ): boolean {
+    return (
+      !!entry.lodged ||
+      (!!rootDocument?.lodged &&
+        DocketEntry.isMotionSupport(entry, rootDocument))
+    );
+  }
+
+  static isMotionPublic(
+    entry: RawDocketEntry,
+    rootDocument: RawDocketEntry | undefined,
+    motionVisibilityChangeDate: string,
+  ): boolean {
+    return (
+      entry.filingDate >= motionVisibilityChangeDate &&
+      !entry.isPaper &&
+      (DocketEntry.isMotion(entry.eventCode) ||
+        DocketEntry.isMotionSupport(entry, rootDocument)) &&
+      DocketEntry.isFiledByPractitioner(entry.filedByRole)
+    );
+  }
+
   static isPublic(
     entry: RawDocketEntry,
     {
       caseIsSealed = false,
       rootDocument,
       visibilityChangeDate,
+      motionVisibilityChangeDate,
     }: {
       caseIsSealed?: boolean;
       rootDocument?: RawDocketEntry;
       visibilityChangeDate: string;
+      motionVisibilityChangeDate: string;
     },
   ): boolean {
     if (
@@ -557,7 +598,7 @@ export class DocketEntry extends JoiValidationEntity {
     if (DocketEntry.isPublicEventCode(entry.eventCode)) {
       return true;
     }
-    if (entry.lodged) {
+    if (DocketEntry.isNonPublicLodged(entry, rootDocument)) {
       return false;
     }
 
@@ -565,6 +606,16 @@ export class DocketEntry extends JoiValidationEntity {
       !POLICY_DATE_IMPACTED_EVENTCODES.includes(entry.eventCode) ||
       entry.filingDate < visibilityChangeDate
     ) {
+      if (
+        DocketEntry.isMotionPublic(
+          entry,
+          rootDocument,
+          motionVisibilityChangeDate,
+        )
+      ) {
+        return true;
+      }
+
       return false;
     }
     if ([AMICUS_BRIEF_EVENT_CODE, 'SDEC'].includes(entry.eventCode)) {
@@ -721,11 +772,13 @@ export class DocketEntry extends JoiValidationEntity {
       rawCase,
       user,
       visibilityChangeDate,
+      motionVisibilityChangeDate,
     }: {
       rawCase: RawCase | RawPublicCase;
       user: AuthUser;
       isTerminalUser: boolean;
       visibilityChangeDate: string;
+      motionVisibilityChangeDate: string;
     },
   ): boolean => {
     if (!entry.isFileAttached) return false;
@@ -763,6 +816,7 @@ export class DocketEntry extends JoiValidationEntity {
       caseIsSealed: isSealedCase(rawCase),
       rootDocument: DocketEntry.fetchRootDocument(entry, rawCase.docketEntries),
       visibilityChangeDate,
+      motionVisibilityChangeDate,
     });
 
     if (!userHasAccessToCase || isPublicDocument) return !!isPublicDocument;
@@ -898,13 +952,38 @@ export class DocketEntry extends JoiValidationEntity {
     const { previousDocument } = entry;
     if (!previousDocument) return entry;
 
-    const previousEntry = docketEntries.find(
-      e => e.docketEntryId === previousDocument.docketEntryId,
-    );
+    if (previousDocument.docketEntryId) {
+      const previousEntry = docketEntries.find(
+        e => e.docketEntryId === previousDocument.docketEntryId,
+      );
 
-    if (!previousEntry) return entry;
+      if (!previousEntry) return entry;
 
-    return DocketEntry.fetchRootDocument(previousEntry, docketEntries);
+      return DocketEntry.fetchRootDocument(previousEntry, docketEntries);
+    }
+
+    const previousDocumentRelationship =
+      entry.relationship === DOCUMENT_RELATIONSHIPS.PRIMARY_SUPPORTING
+        ? DOCUMENT_RELATIONSHIPS.PRIMARY
+        : entry.relationship === DOCUMENT_RELATIONSHIPS.SUPPORTING
+          ? DOCUMENT_RELATIONSHIPS.SECONDARY
+          : null;
+
+    if (previousDocumentRelationship && previousDocument.documentType) {
+      const previousEntry = docketEntries.find(
+        e =>
+          e.relationship === previousDocumentRelationship &&
+          e.filingDate === entry.filingDate &&
+          (e.documentType === previousDocument.documentType ||
+            e.documentTitle === previousDocument.documentTitle),
+      );
+
+      if (previousEntry) {
+        return DocketEntry.fetchRootDocument(previousEntry, docketEntries);
+      }
+    }
+
+    return entry;
   };
 
   documentTypeForStampedDocketEntry(): string {

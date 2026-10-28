@@ -42,6 +42,117 @@ import { canUserFileFirstIrsFiling } from '@shared/business/utilities/canUserFil
 import { canPractitionerFileEntryOfAppearance } from '@shared/business/utilities/canPractitionerFileEntryOfAppearance';
 import { verifyPendingCaseForUser } from '@web-api/persistence/postgres/cases/pendingCases/verifyPendingCaseForUser';
 import { isFiledByPractitionerName } from '@shared/business/entities/docketEntry/isFiledByPractitionerName';
+import { createISODateString } from '@shared/business/utilities/DateHandler';
+
+type PreviousDocumentReference = {
+  docketEntryId?: string;
+  documentTitle?: string;
+  documentType?: string;
+};
+
+type DocumentWithPreviousDocument = {
+  previousDocument?: PreviousDocumentReference;
+};
+
+const setPreviousDocumentDocketEntryId = (
+  supportingDocument: DocumentWithPreviousDocument,
+  previousDocketEntryId: string | undefined,
+  previousDocument: PreviousDocumentReference | undefined,
+): void => {
+  if (!previousDocketEntryId || !previousDocument) {
+    return;
+  }
+
+  if (!supportingDocument.previousDocument) {
+    return;
+  }
+
+  if (supportingDocument.previousDocument.docketEntryId) {
+    return;
+  }
+
+  supportingDocument.previousDocument = {
+    ...supportingDocument.previousDocument,
+    docketEntryId: previousDocketEntryId,
+    documentTitle:
+      supportingDocument.previousDocument.documentTitle ??
+      previousDocument.documentTitle,
+    documentType:
+      supportingDocument.previousDocument.documentType ??
+      previousDocument.documentType,
+  };
+};
+
+const getDocumentsToAdd = ({
+  documentMetadata,
+  primaryDocumentMetadata,
+  secondaryDocument,
+  secondarySupportingDocuments,
+  supportingDocuments,
+}: {
+  documentMetadata: any;
+  primaryDocumentMetadata: any;
+  secondaryDocument: any;
+  secondarySupportingDocuments: any[] | undefined;
+  supportingDocuments: any[] | undefined;
+}): Array<[string | undefined, any, string]> => {
+  const documentsToAdd: Array<[string | undefined, any, string]> = [
+    [
+      documentMetadata.primaryDocumentId,
+      { ...primaryDocumentMetadata, secondaryDocument },
+      DOCUMENT_RELATIONSHIPS.PRIMARY,
+    ],
+  ];
+
+  if (secondarySupportingDocuments) {
+    secondarySupportingDocuments.forEach(item => {
+      item.lodged = true;
+    });
+  }
+
+  if (supportingDocuments) {
+    for (let i = 0; i < supportingDocuments.length; i++) {
+      supportingDocuments[i].filedBy = primaryDocumentMetadata.filedBy;
+      setPreviousDocumentDocketEntryId(
+        supportingDocuments[i],
+        documentMetadata.primaryDocumentId,
+        primaryDocumentMetadata,
+      );
+      documentsToAdd.push([
+        supportingDocuments[i].docketEntryId,
+        supportingDocuments[i],
+        DOCUMENT_RELATIONSHIPS.PRIMARY_SUPPORTING,
+      ]);
+    }
+  }
+
+  if (secondaryDocument) {
+    secondaryDocument.lodged = true;
+
+    documentsToAdd.push([
+      secondaryDocument.docketEntryId,
+      secondaryDocument,
+      DOCUMENT_RELATIONSHIPS.SECONDARY,
+    ]);
+  }
+
+  if (secondarySupportingDocuments) {
+    for (let i = 0; i < secondarySupportingDocuments.length; i++) {
+      setPreviousDocumentDocketEntryId(
+        secondarySupportingDocuments[i],
+        secondaryDocument?.docketEntryId,
+        secondaryDocument,
+      );
+      documentsToAdd.push([
+        secondarySupportingDocuments[i].docketEntryId,
+        secondarySupportingDocuments[i],
+        DOCUMENT_RELATIONSHIPS.SUPPORTING,
+      ]);
+    }
+  }
+
+  return documentsToAdd;
+};
 
 export const fileExternalDocument = async (
   applicationContext: ServerApplicationContext,
@@ -117,13 +228,13 @@ export const fileExternalDocument = async (
     'practitioner',
     'docketNumber',
   ]);
-  const documentsToAdd = [
-    [
-      documentMetadata.primaryDocumentId,
-      { ...primaryDocumentMetadata, secondaryDocument },
-      DOCUMENT_RELATIONSHIPS.PRIMARY,
-    ],
-  ];
+  const documentsToAdd = getDocumentsToAdd({
+    documentMetadata,
+    primaryDocumentMetadata,
+    secondaryDocument,
+    secondarySupportingDocuments,
+    supportingDocuments,
+  });
 
   // every document in an M112/NOTW filing carries the filing practitioner's name,
   // taken from the user record rather than the client-supplied filedBy
@@ -133,51 +244,6 @@ export const fileExternalDocument = async (
   })
     ? user.name
     : undefined;
-
-  if (secondarySupportingDocuments) {
-    secondarySupportingDocuments.forEach(item => {
-      item.lodged = true;
-    });
-  }
-
-  if (supportingDocuments) {
-    for (let i = 0; i < supportingDocuments.length; i++) {
-      supportingDocuments[i].filedBy = primaryDocumentMetadata.filedBy;
-      supportingDocuments[i].previousDocument = {
-        ...supportingDocuments[i].previousDocument,
-        docketEntryId: documentMetadata.primaryDocumentId,
-      };
-      documentsToAdd.push([
-        supportingDocuments[i].docketEntryId,
-        supportingDocuments[i],
-        DOCUMENT_RELATIONSHIPS.PRIMARY_SUPPORTING,
-      ]);
-    }
-  }
-
-  if (secondaryDocument) {
-    secondaryDocument.lodged = true;
-
-    documentsToAdd.push([
-      secondaryDocument.docketEntryId,
-      secondaryDocument,
-      DOCUMENT_RELATIONSHIPS.SECONDARY,
-    ]);
-  }
-
-  if (secondarySupportingDocuments) {
-    for (let i = 0; i < secondarySupportingDocuments.length; i++) {
-      secondarySupportingDocuments[i].previousDocument = {
-        ...secondarySupportingDocuments[i].previousDocument,
-        docketEntryId: secondaryDocument.docketEntryId,
-      };
-      documentsToAdd.push([
-        secondarySupportingDocuments[i].docketEntryId,
-        secondarySupportingDocuments[i],
-        DOCUMENT_RELATIONSHIPS.SUPPORTING,
-      ]);
-    }
-  }
 
   const documentMetadataForConsolidatedCases: TDocumentMetaData[] = [];
   if (
@@ -233,6 +299,7 @@ export const fileExternalDocument = async (
   }
 
   await withTransaction(async () => {
+    const filingDate = createISODateString();
     const consolidatedCaseEntities = casesToUpdate.map(async caseToUpdate => {
       let caseEntity = new Case(caseToUpdate, { authorizedUser });
 
@@ -253,6 +320,7 @@ export const fileExternalDocument = async (
               isOnDocketRecord: true,
               relationship,
               numberOfPages,
+              filingDate,
             },
             {
               authorizedUser,

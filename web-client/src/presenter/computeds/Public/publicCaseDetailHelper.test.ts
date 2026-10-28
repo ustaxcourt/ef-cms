@@ -544,6 +544,7 @@ describe('publicCaseDetailHelper', () => {
             isTerminalUser: false,
             rawCase: mockCase,
             visibilityPolicyDate: '',
+            motionVisibilityPolicyDate: '',
           },
         );
 
@@ -565,6 +566,7 @@ describe('publicCaseDetailHelper', () => {
             isTerminalUser: false,
             rawCase: mockCase,
             visibilityPolicyDate: '',
+            motionVisibilityPolicyDate: '',
           },
         );
 
@@ -1135,6 +1137,7 @@ describe('publicCaseDetailHelper', () => {
             isTerminalUser: true,
             rawCase: mockCase,
             visibilityPolicyDate: '',
+            motionVisibilityPolicyDate: '',
           },
         );
 
@@ -1156,6 +1159,7 @@ describe('publicCaseDetailHelper', () => {
             isTerminalUser: true,
             rawCase: mockCase,
             visibilityPolicyDate: '2010-05-16T00:00:00.000-04:00',
+            motionVisibilityPolicyDate: '',
           },
         );
 
@@ -1177,6 +1181,30 @@ describe('publicCaseDetailHelper', () => {
             isTerminalUser: true,
             rawCase: mockCase,
             visibilityPolicyDate: '2040-05-16T00:00:00.000-04:00',
+            motionVisibilityPolicyDate: '',
+          },
+        );
+
+        expect(showLinkToDocument).toBe(true);
+      });
+
+      it('should show document link for a motion date impacted document for the terminal user when filed by practitioner after motion change date', () => {
+        const { showLinkToDocument } = formatDocketEntryOnDocketRecord(
+          applicationContextPublic,
+          {
+            entry: {
+              ...baseDocketEntry,
+              filingDate: '2028-05-16T00:00:00.000-04:00',
+              eventCode: POLICY_DATE_IMPACTED_EVENTCODES[0],
+              filedByRole: ROLES.privatePractitioner,
+              isCourtIssuedDocument: false,
+              rootDocument: { documentType: 'Petition' },
+              servedAt: '2012-05-16T00:00:00.000-04:00',
+            },
+            isTerminalUser: true,
+            rawCase: mockCase,
+            visibilityPolicyDate: '',
+            motionVisibilityPolicyDate: '2027-05-16T00:00:00.000-04:00',
           },
         );
 
@@ -1199,13 +1227,14 @@ describe('publicCaseDetailHelper', () => {
             isTerminalUser: false,
             rawCase: mockCase,
             visibilityPolicyDate: '2020-05-16T00:00:00.000-04:00',
+            motionVisibilityPolicyDate: '',
           },
         );
 
         expect(showLinkToDocument).toBe(true);
       });
 
-      it('should NOT show document link for a policy date impacted, court-issued stip decision when filed before policy change date for the public user', () => {
+      it('should not show document link for a policy date impacted, court-issued stip decision when filed before policy change date for the public user', () => {
         const result = formatDocketEntryOnDocketRecord(
           applicationContextPublic,
           {
@@ -1222,6 +1251,31 @@ describe('publicCaseDetailHelper', () => {
             isTerminalUser: false,
             rawCase: mockCase,
             visibilityPolicyDate: '2040-05-16T00:00:00.000-04:00',
+            motionVisibilityPolicyDate: '',
+          },
+        );
+
+        expect(result.showLinkToDocument).toBe(false);
+      });
+
+      it('should not show document link for a motion date impacted, court-issued stip decision when filed before motion change date for the public user', () => {
+        const result = formatDocketEntryOnDocketRecord(
+          applicationContextPublic,
+          {
+            entry: {
+              ...baseDocketEntry,
+              eventCode: STIPULATED_DECISION_EVENT_CODE,
+              filedByRole: ROLES.privatePractitioner,
+              filingDate: '2027-05-16T00:00:00.000-04:00',
+              isCourtIssuedDocument: true,
+              isNotServedDocument: false,
+              isStipDecision: true,
+              rootDocument: { documentType: 'Petition' },
+            },
+            isTerminalUser: false,
+            rawCase: mockCase,
+            visibilityPolicyDate: '2040-05-16T00:00:00.000-04:00',
+            motionVisibilityPolicyDate: '2028-05-16T00:00:00.000-04:00',
           },
         );
 
@@ -1244,13 +1298,14 @@ describe('publicCaseDetailHelper', () => {
             isTerminalUser: false,
             rawCase: mockCase,
             visibilityPolicyDate: '2040-05-16T00:00:00.000-04:00',
+            motionVisibilityPolicyDate: '',
           },
         );
 
         expect(result.showLinkToDocument).toBe(false);
       });
 
-      it('should NOT show document link for an amended brief when the docket entry was filed before visibility policy date (8/1/2023) by a practitioner on the case', () => {
+      it('should not show document link for an amended brief when the docket entry was filed before visibility policy date (8/1/2023) by a practitioner on the case', () => {
         const result = formatDocketEntryOnDocketRecord(
           applicationContextPublic,
           {
@@ -1270,6 +1325,34 @@ describe('publicCaseDetailHelper', () => {
             isTerminalUser: false,
             rawCase: mockCase,
             visibilityPolicyDate: '2023-08-01T00:00:00.000-04:00',
+            motionVisibilityPolicyDate: '',
+          },
+        );
+
+        expect(result.showLinkToDocument).toBe(false);
+      });
+
+      it('should not show document link for a motion when the docket entry was filed before visibility policy date (8/1/2023) by a practitioner on the case', () => {
+        const result = formatDocketEntryOnDocketRecord(
+          applicationContextPublic,
+          {
+            entry: {
+              ...baseDocketEntry,
+              eventCode: 'MISP',
+              filedByRole: ROLES.privatePractitioner,
+              filingDate: '2020-05-16T00:00:00.000-04:00',
+              isCourtIssuedDocument: false,
+              isNotServedDocument: false,
+              rootDocument: {
+                docketEntryId: 'e86b58a8-aeb3-460e-af4b-3a31b6bae864',
+                documentTitle: 'Seriatim Answering Memorandum Brief',
+                documentType: 'Seriatim Answering Memorandum Brief',
+              },
+            },
+            isTerminalUser: false,
+            rawCase: mockCase,
+            visibilityPolicyDate: '2023-08-01T00:00:00.000-04:00',
+            motionVisibilityPolicyDate: '2027-08-01T00:00:00.000-04:00',
           },
         );
 
@@ -1301,13 +1384,14 @@ describe('publicCaseDetailHelper', () => {
             isTerminalUser: false,
             rawCase: mockCase,
             visibilityPolicyDate: '2023-08-01T00:00:00.000-04:00',
+            motionVisibilityPolicyDate: '',
           },
         );
 
         expect(showLinkToDocument).toBe(true);
       });
 
-      it('should NOT show document link for an amendment docket entry when the previous docket entry is NOT a brief', () => {
+      it('should not show document link for an amendment docket entry when the previous docket entry is NOT a brief', () => {
         mockCase.docketEntries.push({
           ...baseDocketEntry,
           docketEntryId: '123',
@@ -1331,6 +1415,7 @@ describe('publicCaseDetailHelper', () => {
             isTerminalUser: false,
             rawCase: mockCase,
             visibilityPolicyDate: '2023-08-01T00:00:00.000-04:00',
+            motionVisibilityPolicyDate: '',
           },
         );
 
@@ -1349,13 +1434,14 @@ describe('publicCaseDetailHelper', () => {
             isTerminalUser: false,
             rawCase: mockCase,
             visibilityPolicyDate: '2023-08-01T00:00:00.000-04:00',
+            motionVisibilityPolicyDate: '',
           },
         );
 
         expect(result.showLinkToDocument).toBe(true);
       });
 
-      it('should NOT show a document link for an amended brief entry when the document was not filed by a practitioner on the case', () => {
+      it('should not show a document link for an amended brief entry when the document was not filed by a practitioner on the case', () => {
         const result = formatDocketEntryOnDocketRecord(
           applicationContextPublic,
           {
@@ -1375,6 +1461,34 @@ describe('publicCaseDetailHelper', () => {
             isTerminalUser: false,
             rawCase: mockCase,
             visibilityPolicyDate: '2023-08-01T00:00:00.000-04:00',
+            motionVisibilityPolicyDate: '',
+          },
+        );
+
+        expect(result.showLinkToDocument).toBe(false);
+      });
+
+      it('should not show a document link for a motion entry when the document was not filed by a practitioner on the case', () => {
+        const result = formatDocketEntryOnDocketRecord(
+          applicationContextPublic,
+          {
+            entry: {
+              ...baseDocketEntry,
+              eventCode: 'MISP',
+              filedByRole: ROLES.docketClerk,
+              filingDate: '2050-05-16T00:00:00.000-04:00',
+              isCourtIssuedDocument: false,
+              isNotServedDocument: false,
+              rootDocument: {
+                docketEntryId: baseDocketEntry.docketEntryId,
+                documentTitle: 'Seriatim Answering Memorandum Brief',
+                documentType: 'Seriatim Answering Memorandum Brief',
+              },
+            },
+            isTerminalUser: false,
+            rawCase: mockCase,
+            visibilityPolicyDate: '2023-08-01T00:00:00.000-04:00',
+            motionVisibilityPolicyDate: '2027-08-01T00:00:00.000-04:00',
           },
         );
 
@@ -1408,6 +1522,41 @@ describe('publicCaseDetailHelper', () => {
             isTerminalUser: false,
             rawCase: mockCase,
             visibilityPolicyDate: '2023-08-01T00:00:00.000-04:00',
+            motionVisibilityPolicyDate: '',
+          },
+        );
+
+        expect(showLinkToDocument).toBe(true);
+      });
+
+      it('should show a document link for a motion when the document was filed after the visibility policy date (8/1/2023)', () => {
+        mockCase.docketEntries.push({
+          ...baseDocketEntry,
+          docketEntryId: '123',
+          documentTitle: 'Motion for Continuance',
+          documentType: 'Motion for Continuance',
+          eventCode: 'M006',
+          filedByRole: ROLES.privatePractitioner,
+        });
+
+        const { showLinkToDocument } = formatDocketEntryOnDocketRecord(
+          applicationContextPublic,
+          {
+            entry: {
+              ...baseDocketEntry,
+              eventCode: 'M006',
+              filedByRole: ROLES.privatePractitioner,
+              filingDate: '2050-05-16T00:00:00.000-04:00',
+              isCourtIssuedDocument: false,
+              previousDocument: {
+                docketEntryId: '123',
+              },
+              servedAt: '2050-05-16T00:00:00.000-04:00',
+            },
+            isTerminalUser: false,
+            rawCase: mockCase,
+            visibilityPolicyDate: '2023-08-01T00:00:00.000-04:00',
+            motionVisibilityPolicyDate: '2027-08-01T00:00:00.000-04:00',
           },
         );
 
@@ -1440,6 +1589,7 @@ describe('publicCaseDetailHelper', () => {
             isTerminalUser: false,
             rawCase: mockCase,
             visibilityPolicyDate: '2023-08-01T00:00:00.000-04:00',
+            motionVisibilityPolicyDate: '',
           },
         );
 
@@ -1535,6 +1685,7 @@ describe('formatDocketEntryOnDocketRecord', () => {
         isTerminalUser: true,
         rawCase: mockCase,
         visibilityPolicyDate: '2010-05-16T00:00:00.000-04:00',
+        motionVisibilityPolicyDate: '',
       },
     );
 
@@ -1553,6 +1704,7 @@ describe('formatDocketEntryOnDocketRecord', () => {
         isTerminalUser: true,
         rawCase: mockCase,
         visibilityPolicyDate: '2010-05-16T00:00:00.000-04:00',
+        motionVisibilityPolicyDate: '',
       },
     );
 
@@ -1571,6 +1723,7 @@ describe('formatDocketEntryOnDocketRecord', () => {
         isTerminalUser: true,
         rawCase: mockCase,
         visibilityPolicyDate: '2010-05-16T00:00:00.000-04:00',
+        motionVisibilityPolicyDate: '',
       },
     );
 
@@ -1588,6 +1741,7 @@ describe('formatDocketEntryOnDocketRecord', () => {
       isTerminalUser: true,
       rawCase: mockCase,
       visibilityPolicyDate: '2010-05-16T00:00:00.000-04:00',
+      motionVisibilityPolicyDate: '',
     });
 
     expect(result.descriptionDisplay).toBe('Answer (C/S 04/01/25)');
@@ -1674,6 +1828,7 @@ describe('formatDocketEntryOnDocketRecord', () => {
             isTerminalUser: false,
             rawCase: mockCase,
             visibilityPolicyDate: '',
+            motionVisibilityPolicyDate: '',
           },
         );
 
@@ -1703,6 +1858,7 @@ describe('formatDocketEntryOnDocketRecord', () => {
             isTerminalUser: false,
             rawCase: mockCase,
             visibilityPolicyDate: '',
+            motionVisibilityPolicyDate: '',
           },
         );
 
@@ -1734,6 +1890,7 @@ describe('formatDocketEntryOnDocketRecord', () => {
             isTerminalUser: false,
             rawCase: mockCase,
             visibilityPolicyDate: '',
+            motionVisibilityPolicyDate: '',
           },
         );
 
@@ -1763,6 +1920,7 @@ describe('formatDocketEntryOnDocketRecord', () => {
             isTerminalUser: false,
             rawCase: mockCase,
             visibilityPolicyDate: '',
+            motionVisibilityPolicyDate: '',
           },
         );
 
