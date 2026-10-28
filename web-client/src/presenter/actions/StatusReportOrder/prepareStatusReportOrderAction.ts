@@ -7,6 +7,7 @@ import {
 import { state } from '@web-client/presenter/app.cerebral';
 import { isLeadCase } from '@shared/business/entities/cases/Case';
 import { formatAdditionalOrderClauseForRichText } from '@web-client/utilities/formatAdditionalOrderClauseForRichText';
+import { getConsolidatedCasesWording } from '@web-client/utilities/getConsolidatedCasesWording';
 import {
   additionalOrderTextArrayWithRequiredFirstField,
   normalizeAdditionalOrderTextArray,
@@ -16,7 +17,7 @@ export const prepareStatusReportOrderAction = ({
   applicationContext,
   get,
   store,
-}: ActionProps) => {
+}: ActionProps): void => {
   const {
     additionalOrderTextArray,
     dueDate,
@@ -60,19 +61,26 @@ export const prepareStatusReportOrderAction = ({
     .getUtilities()
     .formatDateString(statusReportFilingDate, FORMATS.MONTH_DAY_YEAR);
 
+  const isOnLeadCaseAndAllCases =
+    isLeadCaseResult &&
+    issueOrder ===
+      STATUS_REPORT_ORDER_OPTIONS.issueOrderOptions.allCasesInGroup;
+
+  const consolidatedCasesWording = getConsolidatedCasesWording(
+    isOnLeadCaseAndAllCases,
+  );
+
   let calendaredLine = '';
   if (isCalendared && !isMotionOrHearing) {
     const formattedTrialDate = applicationContext
       .getUtilities()
       .formatDateString(caseDetail.trialDate, FORMATS.MONTH_DAY_YEAR);
-    calendaredLine = `This case is set for trial at the session of the Court commencing on ${formattedTrialDate}, in ${caseDetail.trialLocation}. `;
+    calendaredLine = `${consolidatedCasesWording.calendaredPreamble} set for trial at the session of the Court commencing on ${formattedTrialDate}, in ${caseDetail.trialLocation}. `;
   }
 
-  const filedLine =
-    isLeadCaseResult &&
-    issueOrder === STATUS_REPORT_ORDER_OPTIONS.issueOrderOptions.allCasesInGroup
-      ? `<p class="indent-paragraph">${calendaredLine}On ${statusReportFilingDateFormatted}, a status report was filed (lead case doc. no. ${statusReportIndex}). For cause, it is</p>`
-      : `<p class="indent-paragraph">${calendaredLine}On ${statusReportFilingDateFormatted}, a status report was filed (doc. no. ${statusReportIndex}). For cause, it is</p>`;
+  const filedLine = isOnLeadCaseAndAllCases
+    ? `<p class="indent-paragraph">${calendaredLine}On ${statusReportFilingDateFormatted}, a status report was filed (lead case doc. no. ${statusReportIndex}). For cause, it is</p>`
+    : `<p class="indent-paragraph">${calendaredLine}On ${statusReportFilingDateFormatted}, a status report was filed (doc. no. ${statusReportIndex}). For cause, it is</p>`;
 
   const orderTypeLine =
     hasOrderType &&
@@ -83,7 +91,7 @@ export const prepareStatusReportOrderAction = ({
         : '';
 
   const strickenLine = hasStrickenFromTrialSessions
-    ? '<p class="indent-paragraph">ORDERED that this case is stricken from the trial session.</p>'
+    ? `<p class="indent-paragraph">ORDERED that ${consolidatedCasesWording.orderedSubject} stricken from the trial session.</p>`
     : '';
 
   const jurisdictionLine =
@@ -91,7 +99,7 @@ export const prepareStatusReportOrderAction = ({
     jurisdiction === STATUS_REPORT_ORDER_OPTIONS.jurisdictionOptions.retained
       ? '<p class="indent-paragraph">ORDERED that jurisdiction is retained by the undersigned.</p>'
       : hasJurisdiction
-        ? '<p class="indent-paragraph">ORDERED that this case is restored to the general docket.</p>'
+        ? `<p class="indent-paragraph">ORDERED that ${consolidatedCasesWording.orderedSubject} restored to the general docket.</p>`
         : '';
 
   let additionalTextLine = '';

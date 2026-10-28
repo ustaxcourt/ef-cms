@@ -69,6 +69,7 @@ export const InclusionsForm: React.FC<{
               Select extra items to include with your document
               <Button
                 link
+                data-testid={`${type}-what-can-i-include-button`}
                 onClick={() =>
                   openCleanModalSequence({
                     showModal: 'WhatCanIIncludeModalOverlay',
