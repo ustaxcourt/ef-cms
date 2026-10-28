@@ -10,12 +10,12 @@ import { petitionsClerkServesPetition } from '../../../../helpers/documentQC/pet
 import { selectTypeaheadInput } from '../../../../helpers/components/typeAhead/select-typeahead-input';
 
 /**
- * Type I court-issued documents (e.g. Notice of Assignment of Trial Judge)
+ * Type I court-issued documents (e.g. Notice of Assignment of Judge)
  * require a judge to be selected and have no description field, per
  * `addCourtIssuedDocketEntryNonstandardHelper`'s `Type I` case.
  */
 describe('Docket Clerk adds a Type I Court Issued document', () => {
-  it('requires a judge to be selected and files a Notice of Assignment of Trial Judge', () => {
+  it('requires a judge to be selected and files a Notice of Assignment of Judge', () => {
     loginAsPetitioner();
     externalUserCreatesElectronicCase().then(docketNumber => {
       petitionsClerkServesPetition(docketNumber);
@@ -24,7 +24,7 @@ describe('Docket Clerk adds a Type I Court Issued document', () => {
       loginAsDocketClerk();
       cy.visit(`/case-detail/${docketNumber}/upload-court-issued`);
       cy.get('[data-testid="upload-description"]').type(
-        'Notice of Assignment of Trial Judge',
+        'Notice of Assignment of Judge',
       );
       attachFile({
         filePath: '../../helpers/file/sample.pdf',
@@ -36,7 +36,7 @@ describe('Docket Clerk adds a Type I Court Issued document', () => {
 
       selectTypeaheadInput(
         'court-issued-document-type-search',
-        'Notice of Assignment of Trial Judge',
+        'Notice of Assignment of Judge',
       );
       cy.get('[data-testid="judge-select"]').should('exist');
       cy.get('[data-testid="document-description-input"]').should('not.exist');
@@ -48,7 +48,7 @@ describe('Docket Clerk adds a Type I Court Issued document', () => {
       cy.contains('.usa-error-message', 'Select a judge').should('not.exist');
       cy.get('[data-testid="docket-entry-preview-text"]').should(
         'contain.text',
-        'Notice of Assignment of Trial Judge to Judge Colvin',
+        'Notice of Assignment of Judge to Judge Colvin',
       );
 
       cy.get('[data-testid="serve-to-parties-btn"]').click();
@@ -57,9 +57,9 @@ describe('Docket Clerk adds a Type I Court Issued document', () => {
       cy.url().should('not.contain', '/add-court-issued-docket-entry');
 
       goToCase(docketNumber);
-      cy.get('[data-testid="document-viewer-link-NATJ"]').should(
+      cy.get('[data-testid="document-viewer-link-NAJ"]').should(
         'have.text',
-        'Notice of Assignment of Trial Judge to Judge Colvin',
+        'Notice of Assignment of Judge to Judge Colvin',
       );
     });
   });
