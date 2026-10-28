@@ -158,6 +158,23 @@ describe('addCourtIssuedDocketEntryNonstandardHelper', () => {
     });
   });
 
+  it('returns only showJudge = true when state.form.eventCode is NATJ (scenario = Type I)', () => {
+    const testState = { ...state, form: { eventCode: 'NATJ' } };
+
+    const result = runCompute(addCourtIssuedDocketEntryNonstandardHelper, {
+      state: testState,
+    });
+    expect(result).toMatchObject({
+      showDateFirst: false,
+      showDateLast: false,
+      showDocketNumbers: false,
+      showFreeText: false,
+      showJudge: true,
+      showOptionalFreeText: false,
+      showTrialLocation: false,
+    });
+  });
+
   it('should set dateLabel to "Trial date" when state.form.scenario is Type G', () => {
     const testState = {
       ...state,
