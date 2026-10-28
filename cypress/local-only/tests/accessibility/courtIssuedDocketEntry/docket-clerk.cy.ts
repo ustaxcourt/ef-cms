@@ -54,7 +54,7 @@ describe('Court Issued Docket Entry - Docket Clerk Accessibility', () => {
 
     selectTypeaheadInput(
       'court-issued-document-type-search',
-      'Notice of Assignment of Trial Judge',
+      'Notice of Assignment of Judge',
     );
     cy.get('[data-testid="judge-select"]').should('exist');
 

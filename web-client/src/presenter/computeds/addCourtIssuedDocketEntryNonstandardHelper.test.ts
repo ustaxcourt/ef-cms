@@ -158,8 +158,8 @@ describe('addCourtIssuedDocketEntryNonstandardHelper', () => {
     });
   });
 
-  it('returns only showJudge = true when state.form.eventCode is NATJ (scenario = Type I)', () => {
-    const testState = { ...state, form: { eventCode: 'NATJ' } };
+  it('returns only showJudge = true when state.form.eventCode is NAJ (scenario = Type I)', () => {
+    const testState = { ...state, form: { eventCode: 'NAJ' } };
 
     const result = runCompute(addCourtIssuedDocketEntryNonstandardHelper, {
       state: testState,

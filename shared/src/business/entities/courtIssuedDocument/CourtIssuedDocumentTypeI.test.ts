@@ -4,9 +4,9 @@ import { CourtIssuedDocumentTypeI } from '@shared/business/entities/courtIssuedD
 describe('CourtIssuedDocumentTypeI', () => {
   const validProps = {
     attachments: false,
-    documentTitle: 'Notice of Assignment of Trial Judge to [Judge Name]',
-    documentType: 'Notice of Assignment of Trial Judge',
-    eventCode: 'NATJ',
+    documentTitle: 'Notice of Assignment of Judge to [Judge Name]',
+    documentType: 'Notice of Assignment of Judge',
+    eventCode: 'NAJ',
     judge: 'Buch',
     judgeWithTitle: 'Judge Buch',
     scenario: 'Type I',
@@ -62,7 +62,7 @@ describe('CourtIssuedDocumentTypeI', () => {
       const documentInstance = CourtIssuedDocumentFactory(validProps);
 
       expect(documentInstance.getDocumentTitle()).toEqual(
-        'Notice of Assignment of Trial Judge to Judge Buch',
+        'Notice of Assignment of Judge to Judge Buch',
       );
     });
 
@@ -73,7 +73,7 @@ describe('CourtIssuedDocumentTypeI', () => {
       });
 
       expect(documentInstance.getDocumentTitle()).toEqual(
-        'Notice of Assignment of Trial Judge to Buch',
+        'Notice of Assignment of Judge to Buch',
       );
     });
   });

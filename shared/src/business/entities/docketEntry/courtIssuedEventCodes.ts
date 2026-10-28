@@ -473,9 +473,9 @@ export const COURT_ISSUED_EVENTS: CourtIssuedEvent[] = [
     requiresSignature: false,
   },
   {
-    eventCode: 'NATJ',
-    documentType: 'Notice of Assignment of Trial Judge',
-    documentTitle: 'Notice of Assignment of Trial Judge to [Judge Name]',
+    eventCode: 'NAJ',
+    documentType: 'Notice of Assignment of Judge',
+    documentTitle: 'Notice of Assignment of Judge to [Judge Name]',
     scenario: 'Type I',
     isNotice: true,
     requiresSignature: false,
