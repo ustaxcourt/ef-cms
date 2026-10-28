@@ -415,7 +415,7 @@ describe('fileExternalDocumentInteractor', () => {
       });
       getCasesByDocketNumbers.mockResolvedValueOnce([
         caseRecord,
-        consolidatedCase as any,
+        { ...caseRecord, ...consolidatedCase },
       ]);
 
       await fileExternalDocumentInteractor(
@@ -497,7 +497,7 @@ describe('fileExternalDocumentInteractor', () => {
       });
       getCasesByDocketNumbers.mockResolvedValueOnce([
         caseRecord,
-        consolidatedCase as any,
+        { ...caseRecord, ...consolidatedCase },
       ]);
 
       await fileExternalDocumentInteractor(
@@ -576,7 +576,7 @@ describe('fileExternalDocumentInteractor', () => {
       });
       getCasesByDocketNumbers.mockResolvedValueOnce([
         caseRecord,
-        consolidatedCase as any,
+        { ...caseRecord, ...consolidatedCase },
       ]);
       const secondaryDocument = {
         docketNumber: caseRecord.docketNumber,
@@ -664,7 +664,7 @@ describe('fileExternalDocumentInteractor', () => {
       });
       getCasesByDocketNumbers.mockResolvedValueOnce([
         caseRecord,
-        consolidatedCase as any,
+        { ...caseRecord, ...consolidatedCase },
       ]);
 
       await fileExternalDocumentInteractor(

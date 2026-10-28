@@ -2,11 +2,11 @@ import { faker } from '@faker-js/faker';
 import {
   loginAsPetitioner,
   loginAsPrivatePractitioner,
-} from '../../../../helpers/authentication/login-as-helpers';
-import { externalUserCreatesElectronicCase } from '../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
-import { logout } from '../../../../helpers/authentication/logout';
-import { petitionsClerkQcsAndServesElectronicCase } from '../../../../helpers/documentQC/petitions-clerk-qcs-and-serves-electronic-case';
-import { goToCase } from '../../../../helpers/caseDetail/go-to-case';
+} from 'cypress/helpers/authentication/login-as-helpers';
+import { externalUserCreatesElectronicCase } from 'cypress/helpers/fileAPetition/petitioner-creates-electronic-case';
+import { logout } from 'cypress/helpers/authentication/logout';
+import { petitionsClerkQcsAndServesElectronicCase } from 'cypress/helpers/documentQC/petitions-clerk-qcs-and-serves-electronic-case';
+import { goToCase } from 'cypress/helpers/caseDetail/go-to-case';
 import {
   MotionVisibilityPublicDocketEntry,
   UNAUTHORIZED_PETITIONER_EMAIL,
@@ -14,8 +14,8 @@ import {
   fileMotionForLeave,
   getMotionForLeaveEntriesForCase,
   getPetitionerFilerTestId,
-  MOTION_VISIBILITY_POLICY_CHANGE_DATE_FLAG,
   restoreMotionVisibilityPolicyFlag,
+  setOriginalMotionVisibilityPolicyFlag,
   setMotionVisibilityPolicyDateToYesterday,
   verifyDocumentCanBeViewed,
   verifyDocumentCanBeViewedPublic,
@@ -23,12 +23,9 @@ import {
   verifyDocumentCannotBeViewedPublic,
 } from '../../../../helpers/documentVisibility/practitioner-filed-motion-visibility-helpers';
 
-describe('Motion visibility — Motion for Leave with lodged secondary', () => {
+describe('Motion visibility for Motion for Leave with lodged secondary', () => {
   beforeEach(function () {
-    cy.task('getRawFeatureFlagValue', {
-      flag: MOTION_VISIBILITY_POLICY_CHANGE_DATE_FLAG,
-    }).as('ORIGINAL_FEATURE_FLAG_VALUE');
-
+    setOriginalMotionVisibilityPolicyFlag();
     setMotionVisibilityPolicyDateToYesterday();
   });
 

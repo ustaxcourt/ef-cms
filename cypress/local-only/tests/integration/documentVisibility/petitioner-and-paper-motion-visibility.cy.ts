@@ -3,21 +3,22 @@ import {
   loginAsClerkOfCourt,
   loginAsDocketClerk1,
   loginAsPetitioner,
-} from '../../../../helpers/authentication/login-as-helpers';
-import { goToCase } from '../../../../helpers/caseDetail/go-to-case';
+} from 'cypress/helpers/authentication/login-as-helpers';
+import { goToCase } from 'cypress/helpers/caseDetail/go-to-case';
 import {
   createCaseWithPaperFiledMotionDocuments,
-  createPetitionerFiledMotionCase,
+  createCaseWithPetitionerFiledMotion,
+  OTHER_FILING_PARTY_NAME,
   type PaperFilingParty,
-} from '../../../../helpers/documentVisibility/petitioner-paper-motion-visibility-helpers';
+} from 'cypress/helpers/documentVisibility/petitioner-paper-motion-visibility-helpers';
 import {
-  unassociatedExternalRolesForPrivatePractitionerFiledMotion,
+  unassociatedExternalRolesForPetitionerOrPaperMotionCase,
   MOTION_FOR_NEW_TRIAL_DOCUMENT_TYPE,
   MOTION_FOR_NEW_TRIAL_EVENT_CODE,
-  MOTION_VISIBILITY_POLICY_CHANGE_DATE_FLAG,
   MotionVisibilityPublicDocketEntry,
   PETITIONER_FIVE_SUPPORTING_DOCUMENT_TYPES,
   restoreMotionVisibilityPolicyFlag,
+  setOriginalMotionVisibilityPolicyFlag,
   setMotionVisibilityPolicyDateToToday,
   setMotionVisibilityPolicyDateToYesterday,
   verifyDocumentCanBeViewed,
@@ -29,10 +30,7 @@ import {
 
 describe('Petitioner-filed and paper-filed motion visibility', () => {
   beforeEach(function () {
-    cy.task('getRawFeatureFlagValue', {
-      flag: MOTION_VISIBILITY_POLICY_CHANGE_DATE_FLAG,
-    }).as('ORIGINAL_FEATURE_FLAG_VALUE');
-
+    setOriginalMotionVisibilityPolicyFlag();
     setMotionVisibilityPolicyDateToYesterday();
   });
 
@@ -88,7 +86,7 @@ describe('Petitioner-filed and paper-filed motion visibility', () => {
       });
 
       before(() => {
-        createPetitionerFiledMotionCase(motionSetup).then(
+        createCaseWithPetitionerFiledMotion(motionSetup).then(
           ({ docketNumber, motion, supportingEntries: docs }) => {
             caseDocketNumber = docketNumber;
             motionEntry = motion;
@@ -128,7 +126,7 @@ describe('Petitioner-filed and paper-filed motion visibility', () => {
         verifyMotionNotViewableOnPublicSite(caseDocketNumber, motionEntry);
       });
 
-      unassociatedExternalRolesForPrivatePractitionerFiledMotion.forEach(
+      unassociatedExternalRolesForPetitionerOrPaperMotionCase.forEach(
         ({ login, role }) => {
           it(`should not let motion be downloadable by ${role}`, () => {
             login();
@@ -168,7 +166,7 @@ describe('Petitioner-filed and paper-filed motion visibility', () => {
       title: 'Paper-filed motion for other filing party',
       loginAsClerk: () => loginAsDocketClerk1(),
       expectedPaperEntryCount: 1,
-      party: { other: 'Other Filing Party' } as PaperFilingParty,
+      party: { other: OTHER_FILING_PARTY_NAME } as PaperFilingParty,
     },
     {
       title: 'Paper-filed motion with separate brief and memorandum in support',
@@ -220,7 +218,7 @@ describe('Petitioner-filed and paper-filed motion visibility', () => {
               );
             });
 
-            unassociatedExternalRolesForPrivatePractitionerFiledMotion.forEach(
+            unassociatedExternalRolesForPetitionerOrPaperMotionCase.forEach(
               ({ login, role }) => {
                 it(`should not let paper docket entry ${entryNumber} be downloadable by ${role}`, () => {
                   login();

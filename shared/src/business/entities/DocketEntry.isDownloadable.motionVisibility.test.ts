@@ -14,7 +14,7 @@ import { MOCK_CASE } from '@shared/test/mockCase';
 import { casePetitioner, petitionerUser } from '@shared/test/mockUsers';
 import { cloneDeep } from 'lodash';
 
-describe('isDownloadable motion visibility', () => {
+describe('DocketEntry isDownloadable motion visibility', () => {
   const visibilityChangeDate = createISODateString('2023-08-01', 'yyyy-MM-dd');
   const motionVisibilityChangeDate = createISODateString(
     '2027-01-01',

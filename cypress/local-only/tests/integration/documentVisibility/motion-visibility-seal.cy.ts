@@ -2,14 +2,14 @@ import {
   loginAsDocketClerk1,
   loginAsPetitioner,
   loginAsPrivatePractitioner,
-} from '../../../../helpers/authentication/login-as-helpers';
-import { goToCase } from '../../../../helpers/caseDetail/go-to-case';
+} from 'cypress/helpers/authentication/login-as-helpers';
+import { goToCase } from 'cypress/helpers/caseDetail/go-to-case';
 import {
   MotionVisibilityDocketEntries,
   UNAUTHORIZED_PETITIONER_EMAIL,
   createPrivatePractitionerCaseWithFiledMotion,
-  MOTION_VISIBILITY_POLICY_CHANGE_DATE_FLAG,
   restoreMotionVisibilityPolicyFlag,
+  setOriginalMotionVisibilityPolicyFlag,
   sealDocketEntryAtIndex,
   setMotionVisibilityPolicyDateToYesterday,
   verifyDocumentCanBeViewed,
@@ -18,12 +18,9 @@ import {
   verifyPublicSealedEntryShowsLockWithoutLink,
 } from '../../../../helpers/documentVisibility/practitioner-filed-motion-visibility-helpers';
 
-describe('Motion visibility — seal to public and parties', () => {
+describe('Motion visibility for seal to public and parties', () => {
   beforeEach(function () {
-    cy.task('getRawFeatureFlagValue', {
-      flag: MOTION_VISIBILITY_POLICY_CHANGE_DATE_FLAG,
-    }).as('ORIGINAL_FEATURE_FLAG_VALUE');
-
+    setOriginalMotionVisibilityPolicyFlag();
     setMotionVisibilityPolicyDateToYesterday();
   });
 

@@ -4,14 +4,14 @@ import {
   loginAsIrsPractitioner,
   loginAsPetitioner,
   loginAsPrivatePractitioner,
-} from '../../../../helpers/authentication/login-as-helpers';
+} from 'cypress/helpers/authentication/login-as-helpers';
 import { formatNow, FORMATS } from '@shared/business/utilities/DateHandler';
-import { externalUserCreatesElectronicCase } from '../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
-import { logout } from '../../../../helpers/authentication/logout';
-import { petitionsClerkQcsAndServesElectronicCase } from '../../../../helpers/documentQC/petitions-clerk-qcs-and-serves-electronic-case';
-import { petitionsClerkServesPetition } from '../../../../helpers/documentQC/petitionsclerk-serves-petition';
-import { goToCase } from '../../../../helpers/caseDetail/go-to-case';
-import { createAndServePaperFiling } from '../../../../helpers/caseDetail/docketRecord/paperFiling/create-and-serve-paper-filing';
+import { externalUserCreatesElectronicCase } from 'cypress/helpers/fileAPetition/petitioner-creates-electronic-case';
+import { logout } from 'cypress/helpers/authentication/logout';
+import { petitionsClerkQcsAndServesElectronicCase } from 'cypress/helpers/documentQC/petitions-clerk-qcs-and-serves-electronic-case';
+import { petitionsClerkServesPetition } from 'cypress/helpers/documentQC/petitionsclerk-serves-petition';
+import { goToCase } from 'cypress/helpers/caseDetail/go-to-case';
+import { createAndServePaperFiling } from 'cypress/helpers/caseDetail/docketRecord/paperFiling/create-and-serve-paper-filing';
 import {
   BRIEF_IN_SUPPORT_EVENT_CODE,
   MEMORANDA_IN_SUPPORT_EVENT_CODE,
@@ -21,13 +21,13 @@ import {
   UNAUTHORIZED_PETITIONER_EMAIL,
   createPetitionerCaseWithFiledMotion,
   createPrivatePractitionerCaseWithFiledMotion,
-  fileDocketEntryByEventCode,
+  setDocketEntryFilingStatusByEventCode,
   unassociatedExternalRolesForIrsPractitionerFiledMotion,
   unassociatedExternalRolesForPrivatePractitionerFiledMotion,
   fileAMotionAndSupportingDocuments,
   getPetitionerFilerTestId,
-  MOTION_VISIBILITY_POLICY_CHANGE_DATE_FLAG,
   restoreMotionVisibilityPolicyFlag,
+  setOriginalMotionVisibilityPolicyFlag,
   setMotionVisibilityPolicyDateToTomorrow,
   setMotionVisibilityPolicyDateToYesterday,
   fileBriefInSupportOfMotion,
@@ -50,12 +50,9 @@ import {
   verifyStrickenDocketEntry,
 } from '../../../../helpers/documentVisibility/practitioner-filed-motion-visibility-helpers';
 
-describe('Testing motion visibility after policy change date', () => {
+describe('Motion visibility after policy change date', () => {
   beforeEach(function () {
-    cy.task('getRawFeatureFlagValue', {
-      flag: MOTION_VISIBILITY_POLICY_CHANGE_DATE_FLAG,
-    }).as('ORIGINAL_FEATURE_FLAG_VALUE');
-
+    setOriginalMotionVisibilityPolicyFlag();
     setMotionVisibilityPolicyDateToYesterday();
   });
 
@@ -648,7 +645,9 @@ describe('Testing motion visibility after policy change date', () => {
           loginAsDocketClerk1();
           goToCase(docketNumber);
           lodgeDocketEntryByEventCode(MOTION_FOR_CONTINUANCE_EVENT_CODE);
-          fileDocketEntryByEventCode(MOTION_FOR_CONTINUANCE_EVENT_CODE);
+          setDocketEntryFilingStatusByEventCode(
+            MOTION_FOR_CONTINUANCE_EVENT_CODE,
+          );
         },
       );
     });
@@ -672,9 +671,13 @@ describe('Testing motion visibility after policy change date', () => {
           lodgeDocketEntryByEventCode(MOTION_FOR_CONTINUANCE_EVENT_CODE);
           lodgeDocketEntryByEventCode(BRIEF_IN_SUPPORT_EVENT_CODE);
           lodgeDocketEntryByEventCode(MEMORANDA_IN_SUPPORT_EVENT_CODE);
-          fileDocketEntryByEventCode(MOTION_FOR_CONTINUANCE_EVENT_CODE);
-          fileDocketEntryByEventCode(BRIEF_IN_SUPPORT_EVENT_CODE);
-          fileDocketEntryByEventCode(MEMORANDA_IN_SUPPORT_EVENT_CODE);
+          setDocketEntryFilingStatusByEventCode(
+            MOTION_FOR_CONTINUANCE_EVENT_CODE,
+          );
+          setDocketEntryFilingStatusByEventCode(BRIEF_IN_SUPPORT_EVENT_CODE);
+          setDocketEntryFilingStatusByEventCode(
+            MEMORANDA_IN_SUPPORT_EVENT_CODE,
+          );
         },
       );
     });
@@ -712,7 +715,9 @@ describe('Testing motion visibility after policy change date', () => {
           loginAsDocketClerk1();
           goToCase(docketNumber);
           lodgeDocketEntryByEventCode(MOTION_FOR_CONTINUANCE_EVENT_CODE);
-          fileDocketEntryByEventCode(MOTION_FOR_CONTINUANCE_EVENT_CODE);
+          setDocketEntryFilingStatusByEventCode(
+            MOTION_FOR_CONTINUANCE_EVENT_CODE,
+          );
         },
       );
     });

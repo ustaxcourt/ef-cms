@@ -26,6 +26,8 @@ import {
 
 export type PaperFilingParty = 'petitioner' | 'respondent' | { other: string };
 
+export const OTHER_FILING_PARTY_NAME = 'Other Filing Party';
+
 const selectPaperFilingParty = (party: PaperFilingParty): void => {
   if (party === 'petitioner') {
     cy.get('[data-testid="filed-by-option"]').contains('Petitioner').click();
@@ -132,7 +134,7 @@ const getPetitionerFiledMotionCaseFixture = (
       ),
   );
 
-export function createPetitionerFiledMotionCase({
+export function createCaseWithPetitionerFiledMotion({
   additionalContact,
   documentType,
   filerTestId,

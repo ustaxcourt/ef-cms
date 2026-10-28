@@ -1,9 +1,4 @@
-import {
-  loginAsIrsPractitioner,
-  loginAsPetitioner,
-  loginAsPrivatePractitioner,
-} from '../../../../helpers/authentication/login-as-helpers';
-import { goToCase } from '../../../../helpers/caseDetail/go-to-case';
+import { goToCase } from 'cypress/helpers/caseDetail/go-to-case';
 import {
   ConsolidatedGroupFixture,
   ConsolidatedMotionFiler,
@@ -12,37 +7,22 @@ import {
   getFilerTestIdForConsolidatedFiler,
   loginConsolidatedFiler,
   prepareConsolidatedFiler,
-} from '../../../../helpers/documentVisibility/consolidated-motion-visibility-helpers';
+} from 'cypress/helpers/documentVisibility/consolidated-motion-visibility-helpers';
 import {
   getMotionForLeaveEntriesForCase,
   MOTION_FOR_NEW_TRIAL_DOCUMENT_TYPE,
   MotionForLeaveDocketEntries,
-  MOTION_VISIBILITY_POLICY_CHANGE_DATE_FLAG,
   MotionVisibilityPublicDocketEntry,
   PETITIONER_FIVE_SUPPORTING_DOCUMENT_TYPES,
-  UNAUTHORIZED_PETITIONER_EMAIL,
   restoreMotionVisibilityPolicyFlag,
+  setOriginalMotionVisibilityPolicyFlag,
+  unassociatedExternalRolesForPetitionerOrPaperMotionCase,
   setMotionVisibilityPolicyDateToYesterday,
   verifyDocumentCanBeViewed,
   verifyDocumentCanBeViewedPublic,
   verifyDocumentCannotBeViewed,
   verifyDocumentCannotBeViewedPublic,
 } from '../../../../helpers/documentVisibility/practitioner-filed-motion-visibility-helpers';
-
-const unassociatedExternalRoles = [
-  {
-    login: () => loginAsPetitioner(UNAUTHORIZED_PETITIONER_EMAIL),
-    role: 'petitioner not on case',
-  },
-  {
-    login: () => loginAsPrivatePractitioner('privatePractitioner2@example.com'),
-    role: 'private practitioner not on case',
-  },
-  {
-    login: () => loginAsIrsPractitioner(),
-    role: 'IRS practitioner not on case',
-  },
-];
 
 const primaryFilings = (
   entries: MotionForLeaveDocketEntries,
@@ -60,10 +40,7 @@ const lodgedSecondaryFilings = (
 
 describe('Consolidated group lodged motion visibility', () => {
   beforeEach(function () {
-    cy.task('getRawFeatureFlagValue', {
-      flag: MOTION_VISIBILITY_POLICY_CHANGE_DATE_FLAG,
-    }).as('ORIGINAL_FEATURE_FLAG_VALUE');
-
+    setOriginalMotionVisibilityPolicyFlag();
     setMotionVisibilityPolicyDateToYesterday();
   });
 
@@ -191,36 +168,38 @@ describe('Consolidated group lodged motion visibility', () => {
           });
         });
 
-        unassociatedExternalRoles.forEach(({ login, role }) => {
-          it(`should let ${role} download Motion for Leave on lead and member cases`, () => {
-            login();
-            [
-              { docketNumber: leadDocketNumber, entries: leadEntries },
-              { docketNumber: memberDocketNumber, entries: memberEntries },
-            ].forEach(({ docketNumber, entries }) => {
-              goToCase(docketNumber);
-              primaryFilings(entries).forEach(docketEntry => {
-                verifyDocumentCanBeViewed(docketEntry.docketEntryId);
+        unassociatedExternalRolesForPetitionerOrPaperMotionCase.forEach(
+          ({ login, role }) => {
+            it(`should let ${role} download Motion for Leave on lead and member cases`, () => {
+              login();
+              [
+                { docketNumber: leadDocketNumber, entries: leadEntries },
+                { docketNumber: memberDocketNumber, entries: memberEntries },
+              ].forEach(({ docketNumber, entries }) => {
+                goToCase(docketNumber);
+                primaryFilings(entries).forEach(docketEntry => {
+                  verifyDocumentCanBeViewed(docketEntry.docketEntryId);
+                });
               });
             });
-          });
 
-          it(`should not let ${role} download lodged secondary on lead and member cases`, () => {
-            login();
-            [
-              { docketNumber: leadDocketNumber, entries: leadEntries },
-              { docketNumber: memberDocketNumber, entries: memberEntries },
-            ].forEach(({ docketNumber, entries }) => {
-              goToCase(docketNumber);
-              lodgedSecondaryFilings(entries).forEach(docketEntry => {
-                verifyDocumentCannotBeViewed(
-                  docketNumber,
-                  docketEntry.docketEntryId,
-                );
+            it(`should not let ${role} download lodged secondary on lead and member cases`, () => {
+              login();
+              [
+                { docketNumber: leadDocketNumber, entries: leadEntries },
+                { docketNumber: memberDocketNumber, entries: memberEntries },
+              ].forEach(({ docketNumber, entries }) => {
+                goToCase(docketNumber);
+                lodgedSecondaryFilings(entries).forEach(docketEntry => {
+                  verifyDocumentCannotBeViewed(
+                    docketNumber,
+                    docketEntry.docketEntryId,
+                  );
+                });
               });
             });
-          });
-        });
+          },
+        );
 
         it('should let terminal user download lodged secondary on lead and member cases', () => {
           cy.task('setAllowedTerminalIpAddresses', ['localhost']).then(() => {

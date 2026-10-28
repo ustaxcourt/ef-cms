@@ -1234,7 +1234,7 @@ describe('publicCaseDetailHelper', () => {
         expect(showLinkToDocument).toBe(true);
       });
 
-      it('should NOT show document link for a policy date impacted, court-issued stip decision when filed before policy change date for the public user', () => {
+      it('should not show document link for a policy date impacted, court-issued stip decision when filed before policy change date for the public user', () => {
         const result = formatDocketEntryOnDocketRecord(
           applicationContextPublic,
           {
@@ -1258,7 +1258,7 @@ describe('publicCaseDetailHelper', () => {
         expect(result.showLinkToDocument).toBe(false);
       });
 
-      it('should NOT show document link for a motion date impacted, court-issued stip decision when filed before motion change date for the public user', () => {
+      it('should not show document link for a motion date impacted, court-issued stip decision when filed before motion change date for the public user', () => {
         const result = formatDocketEntryOnDocketRecord(
           applicationContextPublic,
           {
@@ -1282,7 +1282,7 @@ describe('publicCaseDetailHelper', () => {
         expect(result.showLinkToDocument).toBe(false);
       });
 
-      it('should NOT show document link for a policy date impacted document when filed by practitioner before policy change date for the public user and is not a court issued document', () => {
+      it('should not show document link for a policy date impacted document when filed by practitioner before policy change date for the public user and is not a court issued document', () => {
         const result = formatDocketEntryOnDocketRecord(
           applicationContextPublic,
           {
@@ -1305,7 +1305,7 @@ describe('publicCaseDetailHelper', () => {
         expect(result.showLinkToDocument).toBe(false);
       });
 
-      it('should NOT show document link for an amended brief when the docket entry was filed before visibility policy date (8/1/2023) by a practitioner on the case', () => {
+      it('should not show document link for an amended brief when the docket entry was filed before visibility policy date (8/1/2023) by a practitioner on the case', () => {
         const result = formatDocketEntryOnDocketRecord(
           applicationContextPublic,
           {
@@ -1332,7 +1332,7 @@ describe('publicCaseDetailHelper', () => {
         expect(result.showLinkToDocument).toBe(false);
       });
 
-      it('should NOT show document link for a motion when the docket entry was filed before visibility policy date (8/1/2023) by a practitioner on the case', () => {
+      it('should not show document link for a motion when the docket entry was filed before visibility policy date (8/1/2023) by a practitioner on the case', () => {
         const result = formatDocketEntryOnDocketRecord(
           applicationContextPublic,
           {
@@ -1391,7 +1391,7 @@ describe('publicCaseDetailHelper', () => {
         expect(showLinkToDocument).toBe(true);
       });
 
-      it('should NOT show document link for an amendment docket entry when the previous docket entry is NOT a brief', () => {
+      it('should not show document link for an amendment docket entry when the previous docket entry is NOT a brief', () => {
         mockCase.docketEntries.push({
           ...baseDocketEntry,
           docketEntryId: '123',
@@ -1441,7 +1441,7 @@ describe('publicCaseDetailHelper', () => {
         expect(result.showLinkToDocument).toBe(true);
       });
 
-      it('should NOT show a document link for an amended brief entry when the document was not filed by a practitioner on the case', () => {
+      it('should not show a document link for an amended brief entry when the document was not filed by a practitioner on the case', () => {
         const result = formatDocketEntryOnDocketRecord(
           applicationContextPublic,
           {
@@ -1468,7 +1468,7 @@ describe('publicCaseDetailHelper', () => {
         expect(result.showLinkToDocument).toBe(false);
       });
 
-      it('should NOT show a document link for a motion entry when the document was not filed by a practitioner on the case', () => {
+      it('should not show a document link for a motion entry when the document was not filed by a practitioner on the case', () => {
         const result = formatDocketEntryOnDocketRecord(
           applicationContextPublic,
           {

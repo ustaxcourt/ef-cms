@@ -1,4 +1,4 @@
-import { goToCase } from '../../../../helpers/caseDetail/go-to-case';
+import { goToCase } from 'cypress/helpers/caseDetail/go-to-case';
 import {
   ConsolidatedMotionFiler,
   createConsolidatedGroupWithOneMember,
@@ -11,16 +11,16 @@ import {
   getMotionVisibilityDocketEntriesForCase,
   loginConsolidatedFiler,
   prepareConsolidatedFiler,
-} from '../../../../helpers/documentVisibility/consolidated-motion-visibility-helpers';
+} from 'cypress/helpers/documentVisibility/consolidated-motion-visibility-helpers';
 import {
   unassociatedExternalRolesForIrsPractitionerFiledMotion,
   unassociatedExternalRolesForPrivatePractitionerFiledMotion,
   MOTION_FOR_NEW_TRIAL_DOCUMENT_TYPE,
-  MOTION_VISIBILITY_POLICY_CHANGE_DATE_FLAG,
   MotionVisibilityDocketEntries,
   MotionVisibilityPublicDocketEntry,
   PETITIONER_FIVE_SUPPORTING_DOCUMENT_TYPES,
   restoreMotionVisibilityPolicyFlag,
+  setOriginalMotionVisibilityPolicyFlag,
   setMotionVisibilityPolicyDateToToday,
   setMotionVisibilityPolicyDateToTomorrow,
   setMotionVisibilityPolicyDateToYesterday,
@@ -33,10 +33,7 @@ import {
 
 describe('Consolidated group motion visibility', () => {
   beforeEach(function () {
-    cy.task('getRawFeatureFlagValue', {
-      flag: MOTION_VISIBILITY_POLICY_CHANGE_DATE_FLAG,
-    }).as('ORIGINAL_FEATURE_FLAG_VALUE');
-
+    setOriginalMotionVisibilityPolicyFlag();
     setMotionVisibilityPolicyDateToYesterday();
   });
 
