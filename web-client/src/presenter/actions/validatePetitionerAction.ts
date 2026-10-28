@@ -52,7 +52,7 @@ export const validatePetitionerAction = async ({
 
   const { confirmEmail } = contact;
 
-  const errors: any = {};
+  const errors: Record<string, string> = {};
 
   if (confirmEmail) {
     Object.assign(
