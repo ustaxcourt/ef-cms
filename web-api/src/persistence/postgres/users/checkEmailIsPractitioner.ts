@@ -14,7 +14,11 @@ export const checkEmailIsPractitioner = async ({
           eb(eb.fn('lower', ['pendingEmail']), '=', email.toLowerCase()),
         ]),
       )
-      .where('section', 'in', ['irsPractitioner', 'privatePractitioner'])
+      .where('section', 'in', [
+        'irsPractitioner',
+        'privatePractitioner',
+        'inactivePractitioner',
+      ])
       .select(fn => fn.fn.countAll().as('count'))
       .executeTakeFirst(),
   );
