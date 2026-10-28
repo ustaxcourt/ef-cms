@@ -75,7 +75,7 @@ export const Statistics = connect(
                     <td className="tw:font-semibold">Determination</td>
                     <td>{statistic.formattedDeterminationDeficiencyAmount}</td>
                     <td>{statistic.formattedDeterminationTotalPenalties}</td>
-                    <td>{statistic.formattedDeterminationTotal || 'TBD'}</td>
+                    <td>{statistic.formattedDeterminationTotal}</td>
                   </tr>
                 </tbody>
               </table>

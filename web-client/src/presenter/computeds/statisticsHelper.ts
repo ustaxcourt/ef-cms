@@ -40,16 +40,18 @@ export const formatStatistic = ({
           .formatDollars(statistic.determinationTotalPenalties)
       : 'TBD';
 
-  const formattedDeterminationTotal =
-    statistic.determinationDeficiencyAmount +
-    statistic.determinationTotalPenalties
-      ? applicationContext
-          .getUtilities()
-          .formatDollars(
-            Number(statistic.determinationDeficiencyAmount) +
-              Number(statistic.determinationTotalPenalties),
-          )
-      : 'TBD';
+  const hasDeterminationAmounts =
+    statistic.determinationDeficiencyAmount &&
+    statistic.determinationTotalPenalties;
+
+  const formattedDeterminationTotal = hasDeterminationAmounts
+    ? applicationContext
+        .getUtilities()
+        .formatDollars(
+          Number(statistic.determinationDeficiencyAmount) +
+            Number(statistic.determinationTotalPenalties),
+        )
+    : 'TBD';
 
   const editStatisticLink = `/case-detail/${docketNumber}/edit-deficiency-statistic/${statistic.statisticId}`;
 
