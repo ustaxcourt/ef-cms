@@ -1,14 +1,11 @@
-import {
-  FORMATS,
-  formatNow,
-} from '../../../../../shared/src/business/utilities/DateHandler';
+import { FORMATS, formatNow } from '@shared/business/utilities/DateHandler';
 
 import { createAndServeConsolidatedGroup } from 'cypress/helpers/fileAPetition/create-consolidated-case-group';
 import {
   loginAsCaseServicesSupervisor,
   loginAsColvin,
   loginAsDocketClerk,
-} from '../../../../helpers/authentication/login-as-helpers';
+} from 'cypress/helpers/authentication/login-as-helpers';
 import { createAndServePaperPetition } from 'cypress/helpers/fileAPetition/create-and-serve-paper-petition';
 import { createAndServePaperFiling } from 'cypress/helpers/caseDetail/docketRecord/paperFiling/create-and-serve-paper-filing';
 import { retry } from 'cypress/helpers/retry';
@@ -424,6 +421,48 @@ describe('file motion response order', () => {
           loginAsColvin();
           openOrderResponseFromDocumentView({
             docketNumber,
+            motionDocketEntryId: docketEntryId,
+          });
+          enterResponseDate(today);
+          cy.get('#case-is-stricken-from-trial-session').check({ force: true });
+          cy.get('#case-is-stricken-from-trial-session').should('be.checked');
+          saveDraftAndAssertContents(expectedContents);
+        });
+      });
+    });
+  });
+
+  it('should allow a judge to strike on a lead consolidated case with all cases from a trial session when filing a motion response order', () => {
+    const expectedContents = [
+      `On ${formattedToday}, petitioner filed a Motion for a New Trial`,
+      'These consolidated cases are set for trial',
+      'these cases are stricken from the trial session.',
+    ];
+
+    loginAsCaseServicesSupervisor();
+    createTrialSession().then(({ trialSessionId }) => {
+      cy.get('[data-testid="new-trial-sessions-tab"]').click();
+      cy.contains('Anchorage, Alaska').last().click();
+      cy.contains('Set Calendar').click();
+      cy.contains('Yes, Set Calendar').click();
+
+      createAndServeConsolidatedGroup({}).then(({ leadDocketNumber }) => {
+        loginAsCaseServicesSupervisor();
+        cy.visit(`/case-detail/${leadDocketNumber}`);
+
+        createAndServePaperFiling({
+          dateReceived: today,
+          documentType: motionType,
+        }).then(({ docketEntryId }) => {
+          cy.get('[data-testid="tab-case-information"]').click();
+          cy.get('[data-testid="add-to-trial-session-btn"]').click();
+          cy.get('#show-all-locations-true').click({ force: true });
+          cy.get('[data-testid="trial-session-select"]').select(trialSessionId);
+          cy.get('[data-testid="modal-button-confirm"]').click();
+
+          loginAsColvin();
+          openOrderResponseFromDocumentView({
+            docketNumber: leadDocketNumber,
             motionDocketEntryId: docketEntryId,
           });
           enterResponseDate(today);
