@@ -36,9 +36,11 @@ Things to know when reading this table:
 - **SARIF reaches the Security tab** from every run except PRs, plus same-repository PRs into
   staging (`.github/actions/dawson-upload-sarif/action.yml`). Other PRs report findings only in
   the job log and summary.
-- **Base-image scans see only the base.** The Puppeteer and batch scans check the image named in
-  each Dockerfile's `FROM` line, not the built image. For batch, that means `awscli`, the global
-  `ts-node` and `typescript`, and its npm packages are not covered by the container scan.
+- **Image scans see the built image.** The Puppeteer and batch scans build each image from its
+  Dockerfile (`.github/actions/dawson-runtime-image`), so they cover what the Dockerfile adds to
+  its base image: `awscli`, the global `ts-node` and `typescript`, and the npm packages in batch,
+  and `zip` and the npm packages in Puppeteer. The images are built fresh in CI, so they can differ
+  from what is deployed; batch runs the image last pushed to ECR.
 - **No scanner checks npm devDependencies.** npm audit runs with `--omit=dev`, and Trivy ["doesn't
   report development dependencies"](https://trivy.dev/latest/docs/coverage/language/nodejs/) unless
   `--include-dev-deps` is set, which no DAWSON workflow does. T3 npm packages, Cypress included, are
@@ -93,18 +95,19 @@ different event.
 | --- | --- | --- | --- |
 | `ef-cms-us-east-1` (T2) | Change `FROM` in `Dockerfile`, increase the `efcms-docker-image` tag in `.circleci/config.yml`, then publish the image with `npm run deploy:ci-image`. See [Dependency Updates](../../dependency-updates.md), "Publish new ECR docker image". | When CircleCI starts using the new tag, once it is published to each environment's ECR. Publishing needs AWS credentials, so a person does it. | After the next `trivy-baseline-base` run on `staging`. The scan builds from `Dockerfile`, so it can clear before CircleCI uses the new image; keep the record open until the tag is published. |
 | Batch `docket-entry-zipper` (T1) | Change `FROM` in `web-api/terraform/modules/batch/docker-image/Dockerfile` | On the next deploy; CircleCI's `docker-image-zipper` job rebuilds it with `--no-cache` every time | After the next `trivy-baseline-batch` run |
-| Puppeteer layer (T1) | Patch `web-api/runtimes/puppeteer/package-lock.json` | On the next deploy; CircleCI's deploy job rebuilds the layer every time | After the next `trivy` run on `staging`. The filesystem scan reads all three lockfiles, this one included. |
+| Puppeteer layer (T1) | Patch `web-api/runtimes/puppeteer/package-lock.json` | On the next deploy; CircleCI's deploy job rebuilds the layer every time | After the next `trivy` run on `staging`, which reads all three lockfiles, this one included, and the next `trivy-baseline-puppeteer` run, which installs from it. |
 | Puppeteer `Dockerfile` (T3) | Change `FROM` in `web-api/runtimes/puppeteer/Dockerfile` | The next time someone builds the layer locally | After the next `trivy-baseline-puppeteer` run |
 
 Things to know:
 
-- **Base-image scans clear only when `FROM` changes.** They scan the image named on the `FROM`
-  line, not the image DAWSON builds. A fix added inside a Dockerfile, such as
-  `apt-get install --only-upgrade <package>`, protects the built image but leaves the alert open.
-  That is still worth doing for a T1 Critical finding while waiting for a new base image: dismiss
-  the alert as `won't fix` with a comment pointing to the PR. The dismissal hides the alert, so
-  nothing will show when the base image catches up. Keep the tracking record open, check for a new
-  base image at each weekly triage, and remove the extra line when the `FROM` bump lands.
+- **A fix inside a Dockerfile clears the alert.** The image scans build each Dockerfile, so a
+  line such as `apt-get install --only-upgrade <package>` clears the alert on the next baseline
+  run, as a `FROM` change does. Use it for a T1 Critical finding while waiting for a new base
+  image, and do not dismiss the alert: the next baseline run confirms the fix. Remove the extra
+  line when a `FROM` bump brings the fixed package; the baseline run after that shows whether the
+  new base image really has it. Alerts dismissed as `won't fix` under earlier advice were on the
+  `library/node` base images, and those dismissals do not carry over to the built images (see
+  [Container Scanning](../container-scanning.md)).
 - **Keep Node versions in step.** All three Dockerfiles use Node base images. When a `FROM` change
   moves to a new Node version, follow the "To update Node.js" list in [Dependency
   Updates](../../dependency-updates.md), so the Lambda runtime and the images stay on the same
