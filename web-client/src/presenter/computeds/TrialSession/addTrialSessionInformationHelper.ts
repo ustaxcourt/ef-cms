@@ -39,10 +39,9 @@ export const addTrialSessionInformationHelper = (
   const isStandaloneSession = TrialSession.isStandaloneRemote(sessionScope);
   const isReportingSession =
     proceedingType === TRIAL_SESSION_PROCEEDING_TYPES.reporting;
-  const showReportingOption =
-    !!get(
-      state.featureFlags[ALLOWLIST_FEATURE_FLAGS.REPORTING_CALENDARS.key],
-    ) || isReportingSession;
+  const showReportingOption = !!get(
+    state.featureFlags[ALLOWLIST_FEATURE_FLAGS.REPORTING_CALENDARS.key],
+  );
 
   const title = isStandaloneSession
     ? 'Remote Proceeding Information'

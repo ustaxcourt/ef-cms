@@ -1,9 +1,16 @@
+import { ALLOWLIST_FEATURE_FLAGS } from '@shared/business/entities/EntityConstants';
 import { selectTypeaheadInput } from '../../../../../helpers/components/typeAhead/select-typeahead-input';
 import { checkA11y } from '../../../../support/generalCommands/checkA11y';
 
 describe('Public Trial Sessions', () => {
   beforeEach(() => {
+    cy.intercept('GET', '**/system/feature-flag/', req => {
+      req.continue(res => {
+        res.body[ALLOWLIST_FEATURE_FLAGS.REPORTING_CALENDARS.key] = true;
+      });
+    }).as('getFeatureFlags');
     cy.visit('/trial-sessions');
+    cy.wait('@getFeatureFlags');
   });
 
   it('should stack proceeding types on mobile and keep them inline on desktop', () => {

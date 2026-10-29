@@ -1,6 +1,9 @@
 import { sortBy } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
-import { TRIAL_SESSION_PROCEEDING_TYPES } from '@shared/business/entities/EntityConstants';
+import {
+  ALLOWLIST_FEATURE_FLAGS,
+  TRIAL_SESSION_PROCEEDING_TYPES,
+} from '@shared/business/entities/EntityConstants';
 
 export const formatTrialSessionDisplayOptions = (
   trialSessions,
@@ -70,6 +73,14 @@ export const trialSessionsModalHelper = ({
   const trialSessionRemote = 'Remote';
 
   if (trialSessionsFormatted) {
+    trialSessionsFormatted = trialSessionsFormatted.filter(
+      trialSession =>
+        trialSession.proceedingType !==
+          TRIAL_SESSION_PROCEEDING_TYPES.reporting ||
+        !!get(
+          state.featureFlags[ALLOWLIST_FEATURE_FLAGS.REPORTING_CALENDARS.key],
+        ),
+    );
     trialSessionsFormatted = formatTrialSessionDisplayOptions(
       trialSessionsFormatted,
       applicationContext,

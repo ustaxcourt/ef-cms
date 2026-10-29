@@ -1,4 +1,5 @@
 import {
+  ALLOWLIST_FEATURE_FLAGS,
   SESSION_STATUS_TYPES,
   SESSION_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
@@ -22,7 +23,9 @@ describe('addTrialSessionInformationHelper', () => {
         ),
         {
           state: {
-            featureFlags: { 'reporting-calendars': enabled },
+            featureFlags: {
+              [ALLOWLIST_FEATURE_FLAGS.REPORTING_CALENDARS.key]: enabled,
+            },
             form: { proceedingType: 'Remote' },
             user: { role: 'petitionsclerk' },
           },
@@ -51,7 +54,7 @@ describe('addTrialSessionInformationHelper', () => {
           },
         },
       );
-      expect(result.showReportingOption).toBe(true);
+      expect(result.showReportingOption).toBe(false);
       expect(result.isReportingSession).toBe(true);
       expect(result.startDateId).toBe('due-date');
       expect(result.startDateLabel).toBe('Due date');

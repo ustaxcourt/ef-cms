@@ -1,3 +1,4 @@
+import { ALLOWLIST_FEATURE_FLAGS } from '@shared/business/entities/EntityConstants';
 import {
   loginAsAdc,
   loginAsAdmissionsClerk,
@@ -15,25 +16,25 @@ describe('Reporting trial sessions', () => {
 
   beforeEach(() => {
     cy.task<boolean | number | string | null>('toggleFeatureFlag', {
-      flag: 'reporting-calendars',
+      flag: ALLOWLIST_FEATURE_FLAGS.REPORTING_CALENDARS.key,
       readOnly: true,
     }).then(value => {
       previousFlag = value;
     });
     cy.task('toggleFeatureFlag', {
-      flag: 'reporting-calendars',
+      flag: ALLOWLIST_FEATURE_FLAGS.REPORTING_CALENDARS.key,
       flagValue: true,
     });
     cy.intercept('GET', '**/system/feature-flag/', req => {
       req.continue(res => {
-        res.body['reporting-calendars'] = true;
+        res.body[ALLOWLIST_FEATURE_FLAGS.REPORTING_CALENDARS.key] = true;
       });
     });
   });
 
   afterEach(() => {
     cy.task('toggleFeatureFlag', {
-      flag: 'reporting-calendars',
+      flag: ALLOWLIST_FEATURE_FLAGS.REPORTING_CALENDARS.key,
       flagValue: previousFlag,
     });
   });
@@ -170,10 +171,11 @@ describe('Reporting trial sessions', () => {
 
   it('should hide Reporting creation when the feature flag is disabled', () => {
     cy.intercept('GET', '**/system/feature-flag/', {
-      'reporting-calendars': false,
+      [ALLOWLIST_FEATURE_FLAGS.REPORTING_CALENDARS.key]: false,
     });
     loginAsCaseServicesSupervisor();
     cy.get('[data-testid="trial-session-link"]').click();
+    cy.get('[data-testid="proceedingType-Reporting"]').should('not.exist');
     cy.get('[data-testid="add-trial-session-button"]').click();
     cy.get('[data-testid="Reporting-proceeding-label"]').should('not.exist');
   });
