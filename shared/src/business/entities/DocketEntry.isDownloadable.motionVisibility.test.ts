@@ -76,7 +76,7 @@ describe('DocketEntry isDownloadable motion visibility', () => {
       };
     });
 
-    describe('After motion visibility change date', () => {
+    describe('Before/after motion visibility change date', () => {
       it.each([
         {
           description: 'practitioner motion on the policy date',

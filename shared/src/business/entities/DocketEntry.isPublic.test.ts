@@ -46,11 +46,14 @@ describe('DocketEntry isPublic', () => {
     units: 'days',
   });
   const amendmentEventCodes = ['AMAT', 'ADMT', 'REDC', 'SPML', 'SUPM'];
-  const NON_PUBLIC_SAME_FILING_MOTION_SUPPORTING_EVENT_CODES = [
-    'AFF',
-    'EXH',
-    'USDL',
-  ];
+  const supportingEventCodes = EXTERNAL_FILING_EVENTS[
+    'Supporting Document'
+  ].map(event => event.eventCode);
+  const NON_PUBLIC_SAME_FILING_MOTION_SUPPORTING_EVENT_CODES =
+    supportingEventCodes.filter(
+      eventCode =>
+        !PUBLIC_SUPPORTING_EVENT_CODES_FOR_MOTIONS.includes(eventCode),
+    );
   const baseDocketEntry: RawDocketEntry = {
     createdAt: '2018-11-21T20:49:28.192Z',
     docketEntryId: 'db3ed57e-cfca-4228-ad5c-547484b1a801',
@@ -69,9 +72,6 @@ describe('DocketEntry isPublic', () => {
     servedAt: '2018-11-21T20:49:28.192Z',
     stampData: {},
   };
-  const supportingEventCodes = EXTERNAL_FILING_EVENTS[
-    'Supporting Document'
-  ].map(event => event.eventCode);
 
   describe.each([
     'DEC',
@@ -461,7 +461,7 @@ describe('DocketEntry isPublic', () => {
         );
 
         describe.each(POLICY_DATE_IMPACTED_EVENTCODES)(
-          'supprting documents for non-motion visibility policy imacted event codes',
+          'supporting documents for non-motion visibility policy impacted event codes',
           eventCode => {
             it.each(supportingEventCodes)(
               'should return false for supporting of documents of a non-motion filing by a private practitioner',
@@ -719,12 +719,7 @@ describe('DocketEntry isPublic', () => {
               expect(isPublic).toBe(false);
             },
           );
-          it.each(
-            supportingEventCodes.filter(
-              eventCode =>
-                !PUBLIC_SUPPORTING_EVENT_CODES_FOR_MOTIONS.includes(eventCode),
-            ),
-          )(
+          it.each(NON_PUBLIC_SAME_FILING_MOTION_SUPPORTING_EVENT_CODES)(
             `should return false for other supporting documents of a motion filed by a ${role} at the same time as the motion`,
             supportingEventCode => {
               const isPublic = DocketEntry.isPublic(
@@ -884,31 +879,34 @@ describe('DocketEntry isPublic', () => {
               expect(isPublic).toBe(false);
             },
           );
-          it(`should return false for other supporting documents of a lodged motion filed by a ${role} at the same time as the motion`, () => {
-            const isPublic = DocketEntry.isPublic(
-              {
-                ...baseDocketEntry,
-                eventCode: 'EXH',
-                filingDate: afterMotionVisibilityChangeDate,
-                filedByRole: role,
-                isPaper: false,
-              },
-              {
-                rootDocument: {
+          it.each(NON_PUBLIC_SAME_FILING_MOTION_SUPPORTING_EVENT_CODES)(
+            `should return false for other supporting documents of a lodged motion filed by a ${role} at the same time as the motion`,
+            supportingEventCode => {
+              const isPublic = DocketEntry.isPublic(
+                {
                   ...baseDocketEntry,
-                  eventCode: motionEventCode,
+                  eventCode: supportingEventCode,
                   filingDate: afterMotionVisibilityChangeDate,
                   filedByRole: role,
                   isPaper: false,
-                  lodged: true,
                 },
-                visibilityChangeDate,
-                motionVisibilityChangeDate,
-              },
-            );
+                {
+                  rootDocument: {
+                    ...baseDocketEntry,
+                    eventCode: motionEventCode,
+                    filingDate: afterMotionVisibilityChangeDate,
+                    filedByRole: role,
+                    isPaper: false,
+                    lodged: true,
+                  },
+                  visibilityChangeDate,
+                  motionVisibilityChangeDate,
+                },
+              );
 
-            expect(isPublic).toBe(false);
-          });
+              expect(isPublic).toBe(false);
+            },
+          );
           it(`should return false for stricken motions filed by a ${role}`, () => {
             const isPublic = DocketEntry.isPublic(
               {
@@ -1083,31 +1081,34 @@ describe('DocketEntry isPublic', () => {
 
             expect(isPublic).toBe(false);
           });
-          it(`should return false for unserved briefs in support of a motion filed by a ${role} at the same time as the motion`, () => {
-            const isPublic = DocketEntry.isPublic(
-              {
-                ...baseDocketEntry,
-                eventCode: 'BRF',
-                filingDate: afterMotionVisibilityChangeDate,
-                filedByRole: role,
-                isPaper: false,
-                servedAt: undefined,
-              },
-              {
-                rootDocument: {
+          it.each(PUBLIC_SUPPORTING_EVENT_CODES_FOR_MOTIONS)(
+            `should return false for unserved briefs and memoranda in support of a motion filed by a ${role} at the same time as the motion`,
+            supportingEventCode => {
+              const isPublic = DocketEntry.isPublic(
+                {
                   ...baseDocketEntry,
-                  eventCode: motionEventCode,
+                  eventCode: supportingEventCode,
                   filingDate: afterMotionVisibilityChangeDate,
                   filedByRole: role,
                   isPaper: false,
+                  servedAt: undefined,
                 },
-                visibilityChangeDate,
-                motionVisibilityChangeDate,
-              },
-            );
+                {
+                  rootDocument: {
+                    ...baseDocketEntry,
+                    eventCode: motionEventCode,
+                    filingDate: afterMotionVisibilityChangeDate,
+                    filedByRole: role,
+                    isPaper: false,
+                  },
+                  visibilityChangeDate,
+                  motionVisibilityChangeDate,
+                },
+              );
 
-            expect(isPublic).toBe(false);
-          });
+              expect(isPublic).toBe(false);
+            },
+          );
         },
       );
       it('should return false for motions filed by a petitioner', () => {

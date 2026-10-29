@@ -1332,7 +1332,7 @@ describe('publicCaseDetailHelper', () => {
         expect(result.showLinkToDocument).toBe(false);
       });
 
-      it('should not show document link for a motion when the docket entry was filed before visibility policy date (8/1/2023) by a practitioner on the case', () => {
+      it('should not show document link for a memorandum in support of a motion when the docket entry was filed before visibility policy date (8/1/2023) by a practitioner on the case', () => {
         const result = formatDocketEntryOnDocketRecord(
           applicationContextPublic,
           {
@@ -1345,8 +1345,8 @@ describe('publicCaseDetailHelper', () => {
               isNotServedDocument: false,
               rootDocument: {
                 docketEntryId: 'e86b58a8-aeb3-460e-af4b-3a31b6bae864',
-                documentTitle: 'Seriatim Answering Memorandum Brief',
-                documentType: 'Seriatim Answering Memorandum Brief',
+                documentTitle: 'Motion for Continuance',
+                documentType: 'Motion for Continuance',
               },
             },
             isTerminalUser: false,
@@ -1468,7 +1468,7 @@ describe('publicCaseDetailHelper', () => {
         expect(result.showLinkToDocument).toBe(false);
       });
 
-      it('should not show a document link for a motion entry when the document was not filed by a practitioner on the case', () => {
+      it('should not show a document link for a memorandum in support of a motion entry when the document was not filed by a practitioner on the case', () => {
         const result = formatDocketEntryOnDocketRecord(
           applicationContextPublic,
           {
@@ -1481,8 +1481,8 @@ describe('publicCaseDetailHelper', () => {
               isNotServedDocument: false,
               rootDocument: {
                 docketEntryId: baseDocketEntry.docketEntryId,
-                documentTitle: 'Seriatim Answering Memorandum Brief',
-                documentType: 'Seriatim Answering Memorandum Brief',
+                documentTitle: 'Motion for Continuance',
+                documentType: 'Motion for Continuance',
               },
             },
             isTerminalUser: false,
