@@ -1,6 +1,6 @@
 ARG TARGETARCH=amd64
 
-FROM cypress/browsers:node-24.21.0-chrome-153.0.8010.36-1-ff-156.0-edge-153.0.4234.32-1
+FROM cypress/browsers:node-24.22.0-chrome-155.0.8059.79-1-ff-158.0-edge-155.0.4283.45-1
 WORKDIR /home/app
 
 # needed to install jre successfully
@@ -33,12 +33,12 @@ RUN apt-get install -y build-essential
 RUN apt-get install -y libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
 
 ENV JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64
-RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.37.10.zip" -o "awscliv2.zip" && \
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.38.2.zip" -o "awscliv2.zip" && \
   unzip awscliv2.zip && \
   ./aws/install && \
   rm -rf awscliv2.zip
 
-RUN wget -q -O terraform.zip https://releases.hashicorp.com/terraform/1.16.5/terraform_1.16.5_linux_amd64.zip && \
+RUN wget -q -O terraform.zip https://releases.hashicorp.com/terraform/1.16.6/terraform_1.16.6_linux_amd64.zip && \
   unzip -o terraform.zip terraform && \
   rm terraform.zip && \
   cp terraform /usr/local/bin/

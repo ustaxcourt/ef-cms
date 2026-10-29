@@ -19,7 +19,13 @@ import {
   SERVICE_INDICATOR_TYPES,
   SIMULTANEOUS_DOCUMENT_EVENT_CODES,
 } from '@shared/business/entities/EntityConstants';
-import { ServiceUnavailableError } from '@web-api/errors/errors';
+import {
+  InvalidEntityError,
+  InvalidRequest,
+  NotFoundError,
+  ServiceUnavailableError,
+  UnauthorizedError,
+} from '@web-api/errors/errors';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { fileExternalDocumentInteractor } from './fileExternalDocumentInteractor';
 import { getCaseDeadlinesByDocketNumber as getCaseDeadlinesByDocketNumberMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
@@ -141,63 +147,133 @@ describe('fileExternalDocumentInteractor', () => {
   });
 
   it('should throw an error when the user is not authorized to file an external document on a case', async () => {
-    await expect(
-      fileExternalDocumentInteractor(
-        applicationContext,
-        {
-          documentMetadata: {
-            docketNumber: caseRecord.docketNumber,
-            documentTitle: 'Memorandum in Support',
-            documentType: 'Memorandum in Support',
-            eventCode: 'A',
-            filedBy: 'Test Petitioner',
-            primaryDocumentId: mockDocketEntryId,
-          },
+    const result = fileExternalDocumentInteractor(
+      applicationContext,
+      {
+        documentMetadata: {
+          docketNumber: caseRecord.docketNumber,
+          documentTitle: 'Memorandum in Support',
+          documentType: 'Memorandum in Support',
+          eventCode: 'A',
+          filedBy: 'Test Petitioner',
+          primaryDocumentId: mockDocketEntryId,
         },
-        mockDocketClerkUser,
-      ),
-    ).rejects.toThrow('Unauthorized');
+      },
+      mockDocketClerkUser,
+    );
+
+    await expect(result).rejects.toBeInstanceOf(UnauthorizedError);
+    await expect(result).rejects.toThrow('Unauthorized');
   });
 
   it('should throw an error if the user is not found', async () => {
     getUserById.mockResolvedValue(undefined);
-    await expect(
-      fileExternalDocumentInteractor(
-        applicationContext,
-        {
-          documentMetadata: {
-            docketNumber: caseRecord.docketNumber,
-            documentTitle: 'Memorandum in Support',
-            documentType: 'Memorandum in Support',
-            eventCode: 'A',
-            filedBy: 'Test Petitioner',
-            primaryDocumentId: mockDocketEntryId,
-          },
+    const result = fileExternalDocumentInteractor(
+      applicationContext,
+      {
+        documentMetadata: {
+          docketNumber: caseRecord.docketNumber,
+          documentTitle: 'Memorandum in Support',
+          documentType: 'Memorandum in Support',
+          eventCode: 'A',
+          filedBy: 'Test Petitioner',
+          primaryDocumentId: mockDocketEntryId,
         },
-        mockIrsPractitionerUser,
-      ),
-    ).rejects.toThrow(
+      },
+      mockIrsPractitionerUser,
+    );
+
+    await expect(result).rejects.toBeInstanceOf(NotFoundError);
+    await expect(result).rejects.toThrow(
       `User not found with user id ${mockIrsPractitionerUser.userId}`,
     );
   });
 
-  it('should validate docket entry entities before adding them to the case and not call service or persistence methods', async () => {
-    await expect(
-      fileExternalDocumentInteractor(
-        applicationContext,
-        {
-          documentMetadata: {
-            docketNumber: caseRecord.docketNumber,
-            documentTitle: 'Memorandum in Support',
-            documentType: 'Memorandum in Support',
-            eventCode: 'XYZ',
-            filedBy: 'Test Petitioner',
-            primaryDocumentId: mockDocketEntryId,
-          },
+  it('should throw an invalid request error if supporting documents are filed without a valid primaryDocumentId', async () => {
+    const result = fileExternalDocumentInteractor(
+      applicationContext,
+      {
+        documentMetadata: {
+          docketNumber: caseRecord.docketNumber,
+          primaryDocumentId: 'not-a-uuid',
+          supportingDocuments: [{ docketEntryId: mockDocketEntryId }],
         },
-        mockIrsPractitionerUser,
-      ),
-    ).rejects.toThrow('The DocketEntry entity was invalid.');
+      },
+      mockIrsPractitionerUser,
+    );
+
+    await expect(result).rejects.toBeInstanceOf(InvalidRequest);
+    await expect(result).rejects.toThrow(
+      'Supporting documents require a valid primary document docketEntryId',
+    );
+
+    expect(getCaseByDocketNumber).not.toHaveBeenCalled();
+    expect(updateCaseAndAssociations).not.toHaveBeenCalled();
+  });
+
+  it('should throw an invalid request error if secondary supporting documents are filed without a valid secondary document docketEntryId', async () => {
+    const result = fileExternalDocumentInteractor(
+      applicationContext,
+      {
+        documentMetadata: {
+          docketNumber: caseRecord.docketNumber,
+          primaryDocumentId: mockDocketEntryId,
+          secondaryDocument: { docketEntryId: 'not-a-uuid' },
+          secondarySupportingDocuments: [{ docketEntryId: mockDocketEntryId }],
+        },
+      },
+      mockIrsPractitionerUser,
+    );
+
+    await expect(result).rejects.toBeInstanceOf(InvalidRequest);
+    await expect(result).rejects.toThrow(
+      'Secondary supporting documents require a valid secondary document docketEntryId',
+    );
+
+    expect(getCaseByDocketNumber).not.toHaveBeenCalled();
+    expect(updateCaseAndAssociations).not.toHaveBeenCalled();
+  });
+
+  it('should throw an invalid request error if secondary supporting documents are filed without a secondary document', async () => {
+    const result = fileExternalDocumentInteractor(
+      applicationContext,
+      {
+        documentMetadata: {
+          docketNumber: caseRecord.docketNumber,
+          primaryDocumentId: mockDocketEntryId,
+          secondarySupportingDocuments: [{ docketEntryId: mockDocketEntryId }],
+        },
+      },
+      mockIrsPractitionerUser,
+    );
+
+    await expect(result).rejects.toBeInstanceOf(InvalidRequest);
+    await expect(result).rejects.toThrow(
+      'Secondary supporting documents require a valid secondary document docketEntryId',
+    );
+
+    expect(getCaseByDocketNumber).not.toHaveBeenCalled();
+    expect(updateCaseAndAssociations).not.toHaveBeenCalled();
+  });
+
+  it('should validate docket entry entities before adding them to the case and not call service or persistence methods', async () => {
+    const result = fileExternalDocumentInteractor(
+      applicationContext,
+      {
+        documentMetadata: {
+          docketNumber: caseRecord.docketNumber,
+          documentTitle: 'Memorandum in Support',
+          documentType: 'Memorandum in Support',
+          eventCode: 'XYZ',
+          filedBy: 'Test Petitioner',
+          primaryDocumentId: mockDocketEntryId,
+        },
+      },
+      mockIrsPractitionerUser,
+    );
+
+    await expect(result).rejects.toBeInstanceOf(InvalidEntityError);
+    await expect(result).rejects.toThrow('The DocketEntry entity was invalid.');
 
     expect(getCaseByDocketNumber).toHaveBeenCalled();
     expect(upsertWorkItems).not.toHaveBeenCalled();
@@ -754,6 +830,11 @@ describe('fileExternalDocumentInteractor', () => {
               eventCode: 'M135',
               filedBy: 'Test Petitioner',
               objections: OBJECTIONS_OPTIONS_MAP.NO,
+              previousDocument: {
+                docketEntryId: 'incorrect-parent-id',
+                documentTitle: 'Motion for Judgment on the Pleadings',
+                documentType: 'Motion for Judgment on the Pleadings',
+              },
             },
           ],
           supportingDocuments: [
@@ -790,6 +871,9 @@ describe('fileExternalDocumentInteractor', () => {
           isOnDocketRecord: true,
           // supporting document
           lodged: undefined,
+          previousDocument: expect.objectContaining({
+            docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          }),
         }),
         expect.objectContaining({
           eventCode: 'M121', //secondary document
@@ -800,6 +884,10 @@ describe('fileExternalDocumentInteractor', () => {
           eventCode: 'M135', // secondary supporting document
           isOnDocketRecord: true,
           lodged: true,
+          previousDocument: expect.objectContaining({
+            docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
+            documentTitle: 'Motion for Judgment on the Pleadings',
+          }),
         }),
       ]),
     );
@@ -1074,23 +1162,24 @@ describe('fileExternalDocumentInteractor', () => {
 
   it('should throw an unauthorized error if the user is not related to a case', async () => {
     getUserById.mockResolvedValue(mockPetitionerUser as DbUser);
-    await expect(
-      fileExternalDocumentInteractor(
-        applicationContext,
-        {
-          documentMetadata: {
-            category: 'Application',
-            docketNumber: caseRecord.docketNumber,
-            documentTitle: 'Application for Waiver of Filing Fee',
-            documentType: 'Application for Waiver of Filing Fee',
-            eventCode: 'APPW',
-            filedBy: 'Test Petitioner',
-            primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-          },
+    const result = fileExternalDocumentInteractor(
+      applicationContext,
+      {
+        documentMetadata: {
+          category: 'Application',
+          docketNumber: caseRecord.docketNumber,
+          documentTitle: 'Application for Waiver of Filing Fee',
+          documentType: 'Application for Waiver of Filing Fee',
+          eventCode: 'APPW',
+          filedBy: 'Test Petitioner',
+          primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         },
-        mockPetitionerUser,
-      ),
-    ).rejects.toThrow(
+      },
+      mockPetitionerUser,
+    );
+
+    await expect(result).rejects.toBeInstanceOf(UnauthorizedError);
+    await expect(result).rejects.toThrow(
       `User is not associated with case: ${caseRecord.docketNumber}`,
     );
   });
@@ -1098,22 +1187,23 @@ describe('fileExternalDocumentInteractor', () => {
   it('should throw an unauthorized error if the private practitioner has a pending case association', async () => {
     getUserById.mockResolvedValue(mockPrivatePractitionerUser as DbUser);
     verifyPendingCaseForUser.mockResolvedValue(true);
-    await expect(
-      fileExternalDocumentInteractor(
-        applicationContext,
-        {
-          documentMetadata: {
-            docketNumber: caseRecord.docketNumber,
-            documentTitle: 'Entry of Appearance for IRS Practitioner',
-            documentType: 'Entry of Appearance',
-            eventCode: 'EA',
-            filedBy: 'IRS Practitioner',
-            primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-          },
+    const result = fileExternalDocumentInteractor(
+      applicationContext,
+      {
+        documentMetadata: {
+          docketNumber: caseRecord.docketNumber,
+          documentTitle: 'Entry of Appearance for IRS Practitioner',
+          documentType: 'Entry of Appearance',
+          eventCode: 'EA',
+          filedBy: 'IRS Practitioner',
+          primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         },
-        mockPrivatePractitionerUser,
-      ),
-    ).rejects.toThrow(
+      },
+      mockPrivatePractitionerUser,
+    );
+
+    await expect(result).rejects.toBeInstanceOf(UnauthorizedError);
+    await expect(result).rejects.toThrow(
       `User is not associated with case: ${caseRecord.docketNumber}`,
     );
   });

@@ -58,7 +58,7 @@ jobs:
       - name: lockfile-lint
         continue-on-error: true
         run: |
-          npx lockfile-lint@5.0.1 \
+          npx lockfile-lint@5.1.0 \
             --path package-lock.json \
             --type npm \
             --allowed-hosts npm \

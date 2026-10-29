@@ -19,6 +19,68 @@ Use `yyyy-MM-dd`. Leave `2027-01-01` in place until the Court sets the date.
 
 A fresh local seed sets this flag to `2026-10-15`. An existing local database receives `2027-01-01` when the migration runs. To use another date locally, source the local environment and run the same script.
 </details>
+<details><summary>Dependency Updates - Week of 2026-10-19</summary>
+
+## Local
+
+#### Upgrade NodeJS to `24.22.0`
+```bash
+nvm install
+nvm use
+nvm alias default "$(cat .nvmrc)"
+```
+
+#### Upgrade Terraform to `1.16.6`
+
+Use either tfswitch or tfenv:
+
+```bash
+tfswitch 1.16.6
+```
+
+```bash
+tfenv install 1.16.6
+tfenv use 1.16.6
+```
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Deploy Docker container `4.3.102`
+
+This script will prompt for an environment to pull the image from; choose `exp5`.
+
+```bash
+npm run ecr:check-version
+```
+</details>
+
+<details><summary>DAW-8 - Install trivy</summary>
+
+## Local
+
+#### Install trivy (container vulnerability scanning) for triaging container findings
+See [docs/security/container-findings-triage.md](docs/security/container-findings-triage.md).
+```bash
+brew update && brew install trivy
+```
+</details>
+<details><summary>Dependency Updates - Week of 2026-10-12</summary>
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Deploy Docker container `4.3.101`
+
+This script will prompt for an environment to pull the image from; choose `exp8`.
+
+```bash
+npm run ecr:check-version
+```
+
+</details>
 
 <details><summary>Single Sign-on Updates</summary>
 
