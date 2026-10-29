@@ -20,6 +20,7 @@ import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { invalidateUserContactGeocode } from '@web-api/persistence/postgres/userContacts/invalidateUserContactGeocode';
 import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 import { canUserUpdatePetitionerContact } from '@shared/business/utilities/canUserUpdatePetitionerContact';
+import { checkEmailIsPractitioner } from '@web-api/persistence/postgres/users/checkEmailIsPractitioner';
 
 const assertEmailAvailableForPetitioner = async ({
   applicationContext,
@@ -56,14 +57,26 @@ const assertEmailAvailableForPetitioner = async ({
     throw new Error(`Email ${updatedEmail} is pending for another petitioner`);
   }
 
-  const currentMatchesUpdated = petitionerCaseRaw.petitioners
-    .map(p => (p.email || '').toLowerCase())
-    .includes((updatedEmail || '').toLowerCase());
+  if (updatedEmail) {
+    const currentMatchesUpdated = petitionerCaseRaw.petitioners
+      .map(p => (p.email || '').toLowerCase())
+      .includes((updatedEmail || '').toLowerCase());
 
-  if (updatedEmail && currentMatchesUpdated) {
-    throw new Error(
-      `Email ${updatedPetitionerData.updatedEmail} is already in use by another petitioner`,
-    );
+    if (currentMatchesUpdated) {
+      throw new Error(
+        `Email ${updatedEmail} is already in use by another petitioner`,
+      );
+    }
+
+    const practitoinerMatchesUpdated = await checkEmailIsPractitioner({
+      email: updatedEmail,
+    });
+
+    if (practitoinerMatchesUpdated) {
+      throw new Error(
+        `Email ${updatedEmail} is already in use by another practitioner`,
+      );
+    }
   }
 };
 

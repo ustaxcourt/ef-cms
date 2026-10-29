@@ -7,9 +7,9 @@ import {
   OPINION_DOCUMENT_TYPES,
   ORDER_TYPES,
   TRANSCRIPT_EVENT_CODE,
-} from './EntityConstants';
-import { DocketEntry } from './DocketEntry';
-import { applicationContext } from '../test/createTestApplicationContext';
+} from '@shared/business/entities/EntityConstants';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import {
   A_VALID_DOCKET_ENTRY,
   MOCK_PETITIONERS,
@@ -202,6 +202,17 @@ describe('validate', () => {
       docketEntry: {
         documentType: 'Standing Scheduling Order',
         eventCode: 'SSO',
+        isDraft: false,
+        signedAt: undefined,
+        signedJudgeName: undefined,
+      },
+    },
+    {
+      description:
+        'should pass validation when isDraft is false and signedJudgeName is undefined for an NAJ',
+      docketEntry: {
+        documentType: 'Notice of Assignment of Judge',
+        eventCode: 'NAJ',
         isDraft: false,
         signedAt: undefined,
         signedJudgeName: undefined,

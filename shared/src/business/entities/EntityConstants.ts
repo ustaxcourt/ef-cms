@@ -1,5 +1,5 @@
 /* eslint-disable max-lines */
-import { FORMATS, formatNow } from '../utilities/DateHandler';
+import { FORMATS, formatNow } from '@shared/business/utilities/DateHandler';
 import {
   flatten,
   invert,
@@ -715,6 +715,7 @@ export const SCENARIOS = [
   'Type F',
   'Type G',
   'Type H',
+  'Type I',
 ];
 
 export const TRANSCRIPT_EVENT_CODE = 'TRAN';

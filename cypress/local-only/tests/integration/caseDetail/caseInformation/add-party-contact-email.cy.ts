@@ -33,7 +33,7 @@ const goToAddPartyAndFillRequiredFields = (
 describe('Add Party - Contact Email Address', () => {
   let docketNumber: string;
 
-  before(() => {
+  beforeEach(() => {
     loginAsPetitioner();
     externalUserCreatesElectronicCase().then(createdDocketNumber => {
       docketNumber = createdDocketNumber;
