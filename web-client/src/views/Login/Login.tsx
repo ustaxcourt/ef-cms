@@ -137,7 +137,6 @@ export const Login = connect(
                     </form>
                     <div className="tw:xs:mb-4 tw:mb-3 tw:flex tw:w-full">
                       <Button
-                        aria-label="Forgot password"
                         variant="primaryTertiary"
                         data-testid="forgot-password-button"
                         className="tw:mr-auto tw:w-auto"

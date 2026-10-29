@@ -9,6 +9,8 @@ import {
 } from 'cypress/helpers/authentication/login-as-helpers';
 import { petitionsClerkServesPetition } from 'cypress/helpers/documentQC/petitionsclerk-serves-petition';
 import { selectTypeaheadInput } from 'cypress/helpers/components/typeAhead/select-typeahead-input';
+import { assertNoticeOfDocketChangeDoesNotExist } from 'cypress/helpers/caseDetail/docketRecord/assert-docket-entry-page-count';
+import { checkA11y } from 'cypress/local-only/support/generalCommands/checkA11y';
 
 describe(
   'Petitioner files an Exhibit in Support (EXS)',
@@ -148,7 +150,7 @@ describe(
       });
     });
 
-    it('should file a Motion with an Exhibit in Support, with Certificate of Service and Attachments, and reflect it on the Docket Record', () => {
+    it('should file a Motion with an Exhibit in Support and show the Motion on QC and Edit Docket Entry', () => {
       const primaryFilerName = 'John';
       const today = formatNow(FORMATS.MMDDYYYY);
       const todayShort = formatNow(FORMATS.MMDDYY);
@@ -160,6 +162,14 @@ describe(
         externalUserSearchesDocketNumber(docketNumber);
 
         cy.get('[data-testid="button-file-document"]').click();
+
+        cy.contains('h2', 'Before You File a Document').should('exist');
+        cy.contains('.caseItem', 'Gather All Documents')
+          .should('contain', 'Affidavits, exhibits, briefs, memoranda')
+          .and('contain', 'that is not specifically mentioned as a Supporting')
+          .find('a[href="https://ustaxcourt.gov/dawson-user-guides/"]')
+          .should('contain', 'DAWSON User Guides');
+        checkA11y();
         cy.get('[data-testid="ready-to-file"]').click();
 
         selectTypeaheadInput(
@@ -179,6 +189,25 @@ describe(
         );
 
         cy.get('[data-testid="primaryDocument-objections-No"]').click();
+
+        cy.get(
+          '[data-testid="primaryDocument-what-can-i-include-button"]',
+        ).click();
+        cy.get('.what-can-i-include')
+          .should('contain', 'Examples include affidavits, exhibits, briefs')
+          .and('contain', 'certificate of service is required because the IRS')
+          .find('a[href="https://ustaxcourt.gov/dawson-user-guides/"]')
+          .should('contain', 'DAWSON User Guides');
+        cy.get('.what-can-i-include .includeItem__icon').should('not.exist');
+        cy.get('.what-can-i-include svg[data-icon="check-circle"]').should(
+          'not.exist',
+        );
+        cy.get('.what-can-i-include svg[data-icon="times-circle"]').should(
+          'not.exist',
+        );
+        checkA11y();
+        cy.contains('.what-can-i-include button', 'Close').click();
+        cy.get('.what-can-i-include').should('not.exist');
 
         cy.get('#add-supporting-document-button').click();
         cy.contains('h2', 'Supporting Document 1').should('exist');
@@ -295,6 +324,34 @@ describe(
 
         cy.get('#document-filter-by').select('Exhibits');
         cy.get('[data-testid="document-download-link-EXS"]').should('exist');
+
+        loginAsDocketClerk();
+        cy.task<{ docketEntryId: string }[]>(
+          'getDocketEntryIdsByDocketNumberAndEventCode',
+          { docketNumber, eventCode: 'EXS' },
+        ).then((entries: { docketEntryId: string }[]): void => {
+          expect(entries).to.have.length(1);
+          cy.visit(
+            `/case-detail/${docketNumber}/documents/${entries[0].docketEntryId}/edit`,
+          );
+        });
+        cy.get(
+          '[data-testid="previous-document-search"] option:selected',
+        ).should('contain.text', 'Motion for Continuance');
+        checkA11y();
+        cy.get('[data-testid="save-and-finish-document-qc"]').click();
+        cy.get('[data-testid="success-alert"]').should(
+          'contain',
+          'QC Completed',
+        );
+
+        goToCase(docketNumber);
+        assertNoticeOfDocketChangeDoesNotExist();
+        cy.get('[data-testid="edit-EXS"]').click();
+        cy.get(
+          '[data-testid="previous-document-search"] option:selected',
+        ).should('contain.text', 'Motion for Continuance');
+        checkA11y();
       });
     });
 
