@@ -145,7 +145,7 @@ const batchDownloadDocketEntriesHelper = async (
 
   const useAwsBatchMechanism =
     applicationContext.environment.stage !== 'local' &&
-    !!awsBatchMinimumCount &&
+    typeof awsBatchMinimumCount === 'number' &&
     documentsToZip.length > awsBatchMinimumCount;
 
   const onProgress = async (progressData: ProgressData) => {

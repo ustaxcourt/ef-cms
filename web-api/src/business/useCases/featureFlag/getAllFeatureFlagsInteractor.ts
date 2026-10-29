@@ -1,18 +1,27 @@
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import {
   ALLOWLIST_FEATURE_FLAGS,
-  FeatureFlagKeys,
+  type FeatureFlagKeys,
 } from '@shared/business/entities/EntityConstants';
+import { FeatureFlagResponseDTO } from '@shared/business/dto/system/FeatureFlagResponseDTO';
+import type { FeatureFlagResponseData } from '@shared/business/dto/system/FeatureFlagResponseDTO';
 import { isEmpty } from 'lodash';
 import { getFeatureFlagValues } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
 
-export type AllFeatureFlags = Partial<{ [K in FeatureFlagKeys]: any }>;
+export type AllFeatureFlags = FeatureFlagResponseData;
 const allFeatureFlags: AllFeatureFlags = {};
+
+const cacheFeatureFlag = <Key extends FeatureFlagKeys>(
+  key: Key,
+  value: NonNullable<FeatureFlagResponseData[Key]>,
+): void => {
+  allFeatureFlags[key] = value;
+};
 
 export const getAllFeatureFlagsInteractor = async (
   applicationContext: ServerApplicationContext,
   hardReload: boolean = false,
-): Promise<AllFeatureFlags> => {
+): Promise<FeatureFlagResponseDTO> => {
   const allowlistFeatures = Object.values(ALLOWLIST_FEATURE_FLAGS).map(
     flag => flag.key,
   );
@@ -24,21 +33,36 @@ export const getAllFeatureFlagsInteractor = async (
     isEmpty(allFeatureFlags) ||
     applicationContext.environment.stage === 'local'
   ) {
-    Object.keys(allFeatureFlags).forEach(
-      ffKey => delete allFeatureFlags[ffKey],
-    );
+    const candidateData: Record<string, unknown> = {};
 
     const ALL_FEATURE_FLAGS = await getFeatureFlagValues(allowlistFeatures);
     ALL_FEATURE_FLAGS.forEach(({ name, value }) => {
       const { current } = value;
-      allFeatureFlags[name] = current;
+      const featureFlagKey = allowlistFeatures.find(key => key === name);
+      if (!featureFlagKey) {
+        throw new Error(
+          `Unexpected feature flag returned from persistence: ${name}`,
+        );
+      }
+      candidateData[featureFlagKey] = current;
     });
 
     allowlistFeatures.forEach(featureFlag => {
-      if (allFeatureFlags[featureFlag] === undefined)
-        allFeatureFlags[featureFlag] = false;
+      if (candidateData[featureFlag] === undefined) {
+        candidateData[featureFlag] = false;
+      }
     });
+
+    const candidateResponse = new FeatureFlagResponseDTO(
+      candidateData,
+    ).validate();
+
+    allowlistFeatures.forEach(featureFlag => {
+      cacheFeatureFlag(featureFlag, candidateResponse[featureFlag] ?? false);
+    });
+
+    return candidateResponse;
   }
 
-  return allFeatureFlags;
+  return new FeatureFlagResponseDTO(allFeatureFlags).validate();
 };

@@ -79,7 +79,10 @@ export const getDownloadPolicyUrlInteractor = async (
         isTerminalUser: false,
         rawCase: caseData,
         user: authorizedUser,
-        visibilityChangeDate: documentVisibilityChangeDate,
+        visibilityChangeDate:
+          typeof documentVisibilityChangeDate === 'string'
+            ? documentVisibilityChangeDate
+            : '',
       })
     ) {
       throw new UnauthorizedError(UNAUTHORIZED_DOCUMENT_MESSAGE);

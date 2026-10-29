@@ -17,7 +17,7 @@ import { RawPractitioner } from '@shared/business/entities/Practitioner';
  * @param {array}  providers.consolidatedCasesDocketNumbers a list of the docketNumbers on which to file the case association document
  * @param {string} providers.docketNumber the docket number of the case
  * @param {string} providers.filers the parties represented by the practitioner
- * @returns {Promise<CaseDTO | PublicCaseDTO | RestrictedCaseDTO>} the promise of the case association request
+ * @returns {Promise<void>} resolves when the case association request is submitted
  */
 const submitCaseAssociationRequest = async (
   applicationContext: ServerApplicationContext,

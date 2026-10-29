@@ -26,7 +26,7 @@ export const getTodaysOpinionsInteractor = async (
     });
 
   const formattedResults = results.map(opinion => {
-    return new PublicDocumentSearchResult(opinion).toRawObject();
+    return new PublicDocumentSearchResult(opinion).validate().toRawObject();
   });
 
   return formattedResults;

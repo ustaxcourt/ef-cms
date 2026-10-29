@@ -12,7 +12,9 @@ import {
   getConnectionIdFromEvent,
   getUserFromAuthHeader,
   handle,
+  validatePublicResponse,
 } from './middleware/apiGatewayHelper';
+import { isPublicSiteRequest } from './middleware/publicDataSanitizer';
 import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 import { getMaintenanceMode } from '@web-api/persistence/postgres/featureFlag/getMaintenanceMode';
 import { getEntityByName } from '@web-api/business/getEntityByName';
@@ -29,14 +31,21 @@ export const dataSecurityFilter = (
   if (data && Array.isArray(data) && data.length && data[0].entityName) {
     const entityConstructor = getEntityByName(data[0].entityName);
     if (entityConstructor) {
-      returnData = data.map(
-        result =>
-          new entityConstructor(result, {
-            applicationContext,
-            authorizedUser,
-            filtered: true,
-          }),
-      );
+      returnData = data.map(result => {
+        const entity = new entityConstructor(result, {
+          applicationContext,
+          authorizedUser,
+          filtered: true,
+        });
+        if (result.isValidated === true) {
+          Object.defineProperty(entity, 'isValidated', {
+            enumerable: false,
+            value: true,
+            writable: false,
+          });
+        }
+        return entity;
+      });
     }
   } else if (data && data.entityName) {
     const entityConstructor = getEntityByName(data.entityName);
@@ -46,6 +55,13 @@ export const dataSecurityFilter = (
         authorizedUser,
         filtered: true,
       });
+      if (data.isValidated === true) {
+        Object.defineProperty(returnData, 'isValidated', {
+          enumerable: false,
+          value: true,
+          writable: false,
+        });
+      }
     }
   }
   return returnData;
@@ -83,7 +99,9 @@ export const genericHandler = (
   } = {},
 ) => {
   return handle(awsEvent, async () => {
-    const user = getUserFromAuthHeader(awsEvent);
+    const user = isPublicSiteRequest(awsEvent)
+      ? undefined
+      : getUserFromAuthHeader(awsEvent);
     const clientConnectionId = getConnectionIdFromEvent(awsEvent);
     getDawsonLogger().addUser({ user });
 
@@ -127,6 +145,7 @@ export const genericHandler = (
         applicationContext,
         clientConnectionId,
       });
+      validatePublicResponse(awsEvent, results);
       const returnResults = dataSecurityFilter(results, {
         authorizedUser: user,
       });

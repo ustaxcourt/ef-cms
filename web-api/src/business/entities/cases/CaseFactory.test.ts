@@ -1,6 +1,6 @@
 import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
-import { PublicCaseDTO } from '@shared/business/dto/cases/PublicCaseDTO';
-import { RestrictedCaseDTO } from '@shared/business/dto/cases/RestrictedCaseDTO';
+import { PublicCaseResponse } from '@shared/business/dto/cases/PublicCaseResponse';
+import { RestrictedCaseResponse } from '@shared/business/dto/cases/RestrictedCaseResponse';
 import { Case } from '@shared/business/entities/cases/Case';
 import { CaseFactory } from '@web-api/business/entities/cases/CaseFactory';
 import { PublicCase } from '@shared/business/entities/cases/PublicCase';
@@ -335,8 +335,8 @@ describe('CaseFactory', () => {
           rawCase: MOCK_UNSERVED_CASE_WITH_SEALED_ADDRESS,
           user: EXTERNAL_USER,
         });
-        expect(caseData).toBeInstanceOf(PublicCaseDTO);
-        expect((caseData as PublicCaseDTO).petitioners?.[0]).toEqual({
+        expect(caseData).toBeInstanceOf(PublicCaseResponse);
+        expect((caseData as PublicCaseResponse).petitioners?.[0]).toEqual({
           contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
           contactType: 'primary',
           entityName: 'PublicContact',
@@ -483,7 +483,7 @@ describe('CaseFactory', () => {
             rawCase: MOCK_UNSERVED_CASE,
             user,
           });
-          expect(caseData).toBeInstanceOf(PublicCaseDTO);
+          expect(caseData).toBeInstanceOf(PublicCaseResponse);
           expect(caseData.docketEntries).toMatchObject(
             MOCK_UNSERVED_CASE.docketEntries
               .filter(d => d.isOnDocketRecord)
@@ -498,7 +498,7 @@ describe('CaseFactory', () => {
             rawCase: MOCK_UNSERVED_AND_SEALED_CASE,
             user,
           });
-          expect(caseData).toBeInstanceOf(RestrictedCaseDTO);
+          expect(caseData).toBeInstanceOf(RestrictedCaseResponse);
           expect(caseData.docketEntries).toHaveLength(0);
         });
       });

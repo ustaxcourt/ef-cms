@@ -241,7 +241,7 @@ export const PetitionPaymentForm: React.FC<PetitionPaymentFormProps> = connect(
     isPaymentPortalIntegrationEnabled:
       state.featureFlags[
         ALLOWLIST_FEATURE_FLAGS.ENABLE_PAYMENT_PORTAL_INTEGRATION.key
-      ],
+      ] === true,
     paymentStatus: state.constants.PAYMENT_STATUS,
     validationErrors: state[props.validationErrorsBind],
   },
