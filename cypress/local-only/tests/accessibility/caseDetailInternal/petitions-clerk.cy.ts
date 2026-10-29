@@ -140,6 +140,36 @@ describe('Case Detail Page - Petitions Clerk Accessibility', () => {
         checkA11y();
       });
 
+      it('should be free of a11y issues when the case has deficiency and other statistics', () => {
+        loginAsPetitionsClerk();
+
+        cy.visit('/case-detail/105-20');
+        cy.get('[data-testid="docket-record-table"]').should('exist');
+        cy.get('#tab-case-information').click();
+        cy.get('#tab-statistics').click();
+        cy.get(
+          '[data-testid="statistics-table-cb557361-50ee-4440-aaff-0a9f1bfa30ed"]',
+        ).should('exist');
+        cy.contains('h4', 'Other').should('exist');
+
+        checkA11y();
+      });
+
+      it('should be free of a11y issues when viewing itemized penalties', () => {
+        loginAsPetitionsClerk();
+
+        cy.visit('/case-detail/105-20');
+        cy.get('[data-testid="docket-record-table"]').should('exist');
+        cy.get('#tab-case-information').click();
+        cy.get('#tab-statistics').click();
+        cy.get(
+          '[data-testid="view-itemized-penalties-button-cb557361-50ee-4440-aaff-0a9f1bfa30ed"]',
+        ).click();
+        cy.get('[data-testid="itemized-penalties-modal"]').should('exist');
+
+        checkA11y();
+      });
+
       it('should be free of a11y issues when adding other statistics', () => {
         loginAsPetitionsClerk();
 
