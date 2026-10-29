@@ -1,3 +1,40 @@
+<details><summary>Dependency Updates - Week of 2026-10-19</summary>
+
+## Local
+
+#### Upgrade NodeJS to `24.22.0`
+```bash
+nvm install
+nvm use
+nvm alias default "$(cat .nvmrc)"
+```
+
+#### Upgrade Terraform to `1.16.6`
+
+Use either tfswitch or tfenv:
+
+```bash
+tfswitch 1.16.6
+```
+
+```bash
+tfenv install 1.16.6
+tfenv use 1.16.6
+```
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Deploy Docker container `4.3.102`
+
+This script will prompt for an environment to pull the image from; choose `exp5`.
+
+```bash
+npm run ecr:check-version
+```
+</details>
+
 <details><summary>DAW-8 - Install trivy</summary>
 
 ## Local
