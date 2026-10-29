@@ -157,6 +157,31 @@ describe('prepareGrantDenyMotionAction', () => {
     );
   });
 
+  it('prepends trial preamble when calendared for a lead consolidated case with all cases', async () => {
+    const result = await runAction(prepareGrantDenyMotionAction, {
+      modules: { presenter },
+      state: {
+        ...baseState,
+        caseDetail: {
+          ...baseCaseDetail,
+          leadDocketNumber: baseCaseDetail.docketNumber,
+          status: CASE_STATUS_TYPES.calendared,
+          trialDate: '2026-09-15',
+          trialLocation: 'Washington, DC',
+        },
+        form: {
+          disposition: MOTION_DISPOSITIONS.GRANTED,
+          issueOrder:
+            GRANT_DENY_MOTION_OPTIONS.issueOrderOptions.allCasesInGroup,
+        },
+      },
+    });
+
+    expect(result.state.form.richText).toContain(
+      'These consolidated cases are set for trial at the session of the Court commencing on September 15, 2026, in Washington, DC.',
+    );
+  });
+
   it('appends stricken-from-trial clause referencing the trial date and location', async () => {
     const result = await runAction(prepareGrantDenyMotionAction, {
       modules: { presenter },
@@ -181,6 +206,33 @@ describe('prepareGrantDenyMotionAction', () => {
     expect(result.state.form.richText).toContain('It is further');
   });
 
+  it('appends stricken-from-trial clause referencing the trial date and location on a lead consolidated case with all cases', async () => {
+    const result = await runAction(prepareGrantDenyMotionAction, {
+      modules: { presenter },
+      state: {
+        ...baseState,
+        caseDetail: {
+          ...baseCaseDetail,
+          leadDocketNumber: baseCaseDetail.docketNumber,
+          status: CASE_STATUS_TYPES.calendared,
+          trialDate: '2026-09-15',
+          trialLocation: 'Washington, DC',
+        },
+        form: {
+          disposition: MOTION_DISPOSITIONS.GRANTED,
+          strickenFromTrialSession: true,
+          issueOrder:
+            GRANT_DENY_MOTION_OPTIONS.issueOrderOptions.allCasesInGroup,
+        },
+      },
+    });
+
+    expect(result.state.form.richText).toContain(
+      'ORDERED that these cases are stricken from the September 15, 2026, Washington, DC trial session.',
+    );
+    expect(result.state.form.richText).toContain('It is further');
+  });
+
   it('appends restored-to-docket clause when jurisdiction = restored', async () => {
     const result = await runAction(prepareGrantDenyMotionAction, {
       modules: { presenter },
@@ -195,6 +247,35 @@ describe('prepareGrantDenyMotionAction', () => {
 
     expect(result.state.form.richText).toContain(
       'ORDERED that this case is restored to the general docket.',
+    );
+    expect(result.state.form.richText).not.toContain(
+      'jurisdiction is retained',
+    );
+  });
+
+  it('appends restored-to-docket clause when jurisdiction = restored on a lead consolidated case with all cases', async () => {
+    const result = await runAction(prepareGrantDenyMotionAction, {
+      modules: { presenter },
+      state: {
+        ...baseState,
+        caseDetail: {
+          ...baseCaseDetail,
+          leadDocketNumber: baseCaseDetail.docketNumber,
+          status: CASE_STATUS_TYPES.calendared,
+          trialDate: '2026-09-15',
+          trialLocation: 'Washington, DC',
+        },
+        form: {
+          disposition: MOTION_DISPOSITIONS.GRANTED,
+          jurisdiction: GRANT_DENY_MOTION_OPTIONS.jurisdictionOptions.restored,
+          issueOrder:
+            GRANT_DENY_MOTION_OPTIONS.issueOrderOptions.allCasesInGroup,
+        },
+      },
+    });
+
+    expect(result.state.form.richText).toContain(
+      'ORDERED that these cases are restored to the general docket.',
     );
     expect(result.state.form.richText).not.toContain(
       'jurisdiction is retained',
