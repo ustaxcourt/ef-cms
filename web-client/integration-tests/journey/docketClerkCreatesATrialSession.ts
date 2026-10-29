@@ -49,6 +49,7 @@ export const docketClerkCreatesATrialSession = (
     });
 
     const createTrialSessionForm = {
+      proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
       address1: '123 Flavor Ave',
       chambersPhoneNumber: '1234567890',
       city: 'Seattle',
@@ -58,7 +59,6 @@ export const docketClerkCreatesATrialSession = (
       },
       maxCases,
       postalCode: '98101',
-      proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
       sessionType,
       state: 'WA',
       trialClerk,
@@ -70,6 +70,13 @@ export const docketClerkCreatesATrialSession = (
         value,
       });
     }
+
+    expect(cerebralTest.getState('form')).toMatchObject({
+      address1: '123 Flavor Ave',
+      city: 'Seattle',
+      postalCode: '98101',
+      state: 'WA',
+    });
 
     await cerebralTest.runSequence(
       'formatAndUpdateDateFromDatePickerSequence',
