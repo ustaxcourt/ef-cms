@@ -6,7 +6,7 @@
   "repository": "https://github.com/ustaxcourt/ef-cms",
   "engines": {
     "node": ">=24.22.1 <25.0.0",
-    "npm": ">=11.16.0 <12.0.0"
+    "npm": ">=11.19.1 <12.0.0"
   },
   "dependencies": {
     "@18f/us-federal-holidays": "4.0.0",
@@ -58,7 +58,6 @@
     "classnames": "2.5.1",
     "clsx": "2.1.1",
     "cookie": "2.0.1",
-    "core-js": "3.51.0",
     "cors": "2.8.6",
     "csv-stringify": "6.9.0",
     "deep-freeze": "0.0.1",
@@ -370,13 +369,12 @@
     "aws-sdk": false,
     "bufferutil": false,
     "canvas": false,
-    "core-js": false,
     "es5-ext": false,
     "esbuild": false,
     "fsevents": false,
     "unrs-resolver": false,
     "utf-8-validate": false,
     "puppeteer@25.11.0": true,
-    "cypress@16.1.1": true
+    "cypress@16.2.0": true
   }
 }
