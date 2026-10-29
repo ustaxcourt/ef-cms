@@ -3,8 +3,6 @@
     [
       "@babel/env",
       {
-        "useBuiltIns": "usage",
-        "corejs": "3",
         "targets": {
           "chrome": "70",
           "edge": "42",
