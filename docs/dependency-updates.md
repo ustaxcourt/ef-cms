@@ -463,7 +463,7 @@ Reviewers use the dependency PR description to plan testing, so it has a consist
 Below is a list of dependencies that are locked down due to known issues with security, integration problems within DAWSON, etc. Try to update these items but please be aware of the issue that's documented and ensure it's been resolved.
 
 ### pdfjs-dist
-**Current Version Installed: 6.3.289**
+**Current Version Installed: 6.4.299**
 
 - When upgrading to version 5.4.624 the newer pdfjs-dist release relies on DOMMatrix, which caused errors in AWS Lambda when scraping text from PDFs. This worked locally but failed in the deployed environment because Lambda does not provide DOMMatrix. To resolve this, I added a polyfill using the `dommatrix` library that is used when DOMMatrix is undefined. See `getPdfJs.ts` and `parsePdf.ts` for details.
    - I debugged this by temporarily ignoring the smoketests in search.cy.ts in order for the build to pass and deploy to an exp environment. From there I ran the cypress smoketests on the exp environement locally, found the error in cloudwatch logs, tested multiple fixes and made the neccessary changes.
@@ -472,13 +472,16 @@ Below is a list of dependencies that are locked down due to known issues with se
 
 - As of 8/10/2026: Updated to **6.2.108** for [GHSA-hq66-cqwq-w95j](https://github.com/advisories/GHSA-hq66-cqwq-w95j) (arbitrary JavaScript execution on opening a malicious PDF, affecting `>=5.6.83 <6.2.108`). Re-verify `getPdfJs.ts` and `parsePdf.ts`, especially the `DOMMatrix` polyfill, in an experimental deploy — the Lambda-only failure mode does not reproduce locally.
 
+- As of 10/26/2026: Updated from 6.3.289 to **6.4.299**. Verified in `exp5`: the upload form rejects corrupt and encrypted PDFs and accepts a valid PDF, the signing page renders the order PDF, and keyword order search finds text from a served order (Lambda scrape) with no `DOMMatrix` or `Error scraping PDF` errors in CloudWatch.
+
 ### DWT
-**Current Installed DWT: 19.4.3**
+**Current Installed DWT: 19.4.4**
 
 Minor and patch versions of DWT _should_ be updated, but require that Court IT update the Windows clients in concert with our app. Do not bump `dwt` during weekly dependency rotations even if a newer version appears on npm — upgrades require the coordination sequence below and a standalone PR to `test`, not a bundled rotation.
 
 - As of 8/10/2026: **Held at 19.4.2** during the 8/10/2026 dependency rotation per operator direction. 19.4.2 is both the pinned version in `package.json` and the latest published release on npm. Re-check each rotation; if a newer version appears, leave it alone until Court IT coordination is complete.
 - As of 9/17/2026: `package.json` pins **19.4.3** (bumped from 19.4.2 in the 8/31/2026 dependency rotation), which is the latest published release on npm.
+- As of 10/26/2026: `package.json` pins **19.4.4**, from a standalone DWT update (commit `56758f9420`), not a weekly rotation.
 
 If an update is available for DWT:
 - Coordinate with Court IT to have the Dynamsoft client updated on Court-owned Windows machines.
@@ -517,6 +520,7 @@ If an update is available for DWT:
 - As of 9/17/2026: upgraded to Puppeteer **25.11.0** with `@sparticuz/chromium` **153.0.0** in both `package.json` and `web-api/runtimes/puppeteer/package.json`.
 - As of 9/22/2026: Puppeteer **25.11.0** and `@sparticuz/chromium` **153.0.0** remain the latest on npm; versions already match in `package.json` and `web-api/runtimes/puppeteer/package.json`. No change.
 - As of 10/13/2026: Puppeteer **25.12.0** requires Chrome for Testing 154 and **25.13.0** requires 155, but `@sparticuz/chromium` latest on npm is still **153.0.0**. Held at **25.11.0**.
+- As of 10/26/2026: `@sparticuz/chromium` latest on npm is still **153.0.0**. Held at **25.11.0**. `npm audit` reports `zod` (via `chromium-bidi`), and the fix needs puppeteer 25.12+.
 
 ### ws, 3rd party dependency of Cerebral
 

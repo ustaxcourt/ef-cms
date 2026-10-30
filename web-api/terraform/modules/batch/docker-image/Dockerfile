@@ -1,5 +1,5 @@
 ARG TARGETARCH=amd64
-FROM node:24.22.0
+FROM node:24.22.1
 
 RUN apt-get update && \
 	apt-get install -y awscli && \
