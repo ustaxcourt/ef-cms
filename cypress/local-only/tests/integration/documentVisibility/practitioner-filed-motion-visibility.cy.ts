@@ -77,16 +77,14 @@ describe('Motion visibility after policy change date', () => {
       verifyMotionViewableOnPublicSite(caseDocketNumber, motionEntries.motion);
     });
 
-    // TODO(10399): unskip once supporting-document visibility fix from 10399 is merged
-    it.skip('should let brief in support be downloadable from public site', () => {
+    it('should let brief in support be downloadable from public site', () => {
       verifyDocumentCanBeViewedPublic(
         caseDocketNumber,
         motionEntries.briefInSupport.index,
       );
     });
 
-    // TODO(10399): unskip once supporting-document visibility fix from 10399 is merged
-    it.skip('should let memorandum in support be downloadable from public site', () => {
+    it('should let memorandum in support be downloadable from public site', () => {
       verifyDocumentCanBeViewedPublic(
         caseDocketNumber,
         motionEntries.memorandaInSupport.index,
@@ -101,15 +99,13 @@ describe('Motion visibility after policy change date', () => {
           verifyDocumentCanBeViewed(motionEntries.motion.docketEntryId);
         });
 
-        // TODO(10399): unskip once supporting-document visibility fix from 10399 is merged
-        it.skip(`should let brief in support be downloadable by ${role}`, () => {
+        it(`should let brief in support be downloadable by ${role}`, () => {
           login();
           goToCase(caseDocketNumber);
           verifyDocumentCanBeViewed(motionEntries.briefInSupport.docketEntryId);
         });
 
-        // TODO(10399): unskip once supporting-document visibility fix from 10399 is merged
-        it.skip(`should let memorandum in support be downloadable by ${role}`, () => {
+        it(`should let memorandum in support be downloadable by ${role}`, () => {
           login();
           goToCase(caseDocketNumber);
           verifyDocumentCanBeViewed(
@@ -145,16 +141,14 @@ describe('Motion visibility after policy change date', () => {
       verifyMotionViewableOnPublicSite(caseDocketNumber, motionEntries.motion);
     });
 
-    // TODO(10399): unskip once supporting-document visibility fix from 10399 is merged
-    it.skip('should let brief in support be downloadable from public site', () => {
+    it('should let brief in support be downloadable from public site', () => {
       verifyDocumentCanBeViewedPublic(
         caseDocketNumber,
         motionEntries.briefInSupport.index,
       );
     });
 
-    // TODO(10399): unskip once supporting-document visibility fix from 10399 is merged
-    it.skip('should let memorandum in support be downloadable from public site', () => {
+    it('should let memorandum in support be downloadable from public site', () => {
       verifyDocumentCanBeViewedPublic(
         caseDocketNumber,
         motionEntries.memorandaInSupport.index,
@@ -169,15 +163,13 @@ describe('Motion visibility after policy change date', () => {
           verifyDocumentCanBeViewed(motionEntries.motion.docketEntryId);
         });
 
-        // TODO(10399): unskip once supporting-document visibility fix from 10399 is merged
-        it.skip(`should let brief in support be downloadable by ${role}`, () => {
+        it(`should let brief in support be downloadable by ${role}`, () => {
           login();
           goToCase(caseDocketNumber);
           verifyDocumentCanBeViewed(motionEntries.briefInSupport.docketEntryId);
         });
 
-        // TODO(10399): unskip once supporting-document visibility fix from 10399 is merged
-        it.skip(`should let memorandum in support be downloadable by ${role}`, () => {
+        it(`should let memorandum in support be downloadable by ${role}`, () => {
           login();
           goToCase(caseDocketNumber);
           verifyDocumentCanBeViewed(
@@ -243,16 +235,14 @@ describe('Motion visibility after policy change date', () => {
       );
     });
 
-    // TODO(10399): unskip once supporting-document visibility fix from 10399 is merged
-    it.skip('should not let brief in support be downloadable from public site', () => {
+    it('should not let brief in support be downloadable from public site', () => {
       verifyDocumentCannotBeViewedPublic(
         caseDocketNumber,
         motionEntries.briefInSupport.index,
       );
     });
 
-    // TODO(10399): unskip once supporting-document visibility fix from 10399 is merged
-    it.skip('should not let memorandum in support be downloadable from public site', () => {
+    it('should not let memorandum in support be downloadable from public site', () => {
       verifyDocumentCannotBeViewedPublic(
         caseDocketNumber,
         motionEntries.memorandaInSupport.index,
@@ -272,8 +262,7 @@ describe('Motion visibility after policy change date', () => {
       },
     );
 
-    // TODO(10399): unskip once supporting-document visibility fix from 10399 is merged
-    it.skip('should not let brief in support be downloadable by unassociated petitioner', () => {
+    it('should not let brief in support be downloadable by unassociated petitioner', () => {
       loginAsPetitioner(UNAUTHORIZED_PETITIONER_EMAIL);
       goToCase(caseDocketNumber);
       verifyDocumentCannotBeViewed(
@@ -282,8 +271,7 @@ describe('Motion visibility after policy change date', () => {
       );
     });
 
-    // TODO(10399): unskip once supporting-document visibility fix from 10399 is merged
-    it.skip('should not let memorandum in support be downloadable by unassociated petitioner', () => {
+    it('should not let memorandum in support be downloadable by unassociated petitioner', () => {
       loginAsPetitioner(UNAUTHORIZED_PETITIONER_EMAIL);
       goToCase(caseDocketNumber);
       verifyDocumentCannotBeViewed(
@@ -331,16 +319,14 @@ describe('Motion visibility after policy change date', () => {
       verifyDocumentCanBeViewed(motionEntries.memorandaInSupport.docketEntryId);
     });
 
-    // TODO(10399): unskip once supporting-document visibility fix from 10399 is merged
-    it.skip('should not let brief in support be downloadable from public site', () => {
+    it('should not let brief in support be downloadable from public site', () => {
       verifyDocumentCannotBeViewedPublic(
         caseDocketNumber,
         motionEntries.briefInSupport.index,
       );
     });
 
-    // TODO(10399): unskip once supporting-document visibility fix from 10399 is merged
-    it.skip('should not let memorandum in support be downloadable from public site', () => {
+    it('should not let memorandum in support be downloadable from public site', () => {
       verifyDocumentCannotBeViewedPublic(
         caseDocketNumber,
         motionEntries.memorandaInSupport.index,
@@ -360,8 +346,7 @@ describe('Motion visibility after policy change date', () => {
       },
     );
 
-    // TODO(10399): unskip once supporting-document visibility fix from 10399 is merged
-    it.skip('should not let brief in support be downloadable by unassociated petitioner', () => {
+    it('should not let brief in support be downloadable by unassociated petitioner', () => {
       loginAsPetitioner(UNAUTHORIZED_PETITIONER_EMAIL);
       goToCase(caseDocketNumber);
       verifyDocumentCannotBeViewed(
@@ -370,8 +355,7 @@ describe('Motion visibility after policy change date', () => {
       );
     });
 
-    // TODO(10399): unskip once supporting-document visibility fix from 10399 is merged
-    it.skip('should not let memorandum in support be downloadable by unassociated petitioner', () => {
+    it('should not let memorandum in support be downloadable by unassociated petitioner', () => {
       loginAsPetitioner(UNAUTHORIZED_PETITIONER_EMAIL);
       goToCase(caseDocketNumber);
       verifyDocumentCannotBeViewed(
@@ -542,24 +526,21 @@ describe('Motion visibility after policy change date', () => {
       verifyDocumentCanBeViewed(motionEntries.motion.docketEntryId);
     });
 
-    // TODO(10399): unskip once supporting-document visibility fix from 10399 is merged
-    it.skip('should not let brief in support be downloadable from public site when motion is lodged', () => {
+    it('should not let brief in support be downloadable from public site when motion is lodged', () => {
       verifyDocumentCannotBeViewedPublic(
         caseDocketNumber,
         motionEntries.briefInSupport.index,
       );
     });
 
-    // TODO(10399): unskip once supporting-document visibility fix from 10399 is merged
-    it.skip('should not let memorandum in support be downloadable from public site when motion is lodged', () => {
+    it('should not let memorandum in support be downloadable from public site when motion is lodged', () => {
       verifyDocumentCannotBeViewedPublic(
         caseDocketNumber,
         motionEntries.memorandaInSupport.index,
       );
     });
 
-    // TODO(10399): unskip once supporting-document visibility fix from 10399 is merged
-    it.skip('should let brief in support be downloadable from public site for terminal user when motion is lodged', () => {
+    it('should let brief in support be downloadable from public site for terminal user when motion is lodged', () => {
       cy.task('setAllowedTerminalIpAddresses', ['localhost']).then(() => {
         verifyDocumentCanBeViewedPublic(
           caseDocketNumber,
@@ -568,8 +549,7 @@ describe('Motion visibility after policy change date', () => {
       });
     });
 
-    // TODO(10399): unskip once supporting-document visibility fix from 10399 is merged
-    it.skip('should let memorandum in support be downloadable from public site for terminal user when motion is lodged', () => {
+    it('should let memorandum in support be downloadable from public site for terminal user when motion is lodged', () => {
       cy.task('setAllowedTerminalIpAddresses', ['localhost']).then(() => {
         verifyDocumentCanBeViewedPublic(
           caseDocketNumber,
@@ -686,16 +666,14 @@ describe('Motion visibility after policy change date', () => {
       verifyMotionViewableOnPublicSite(caseDocketNumber, motionEntries.motion);
     });
 
-    // TODO(10399): unskip once supporting-document visibility fix from 10399 is merged
-    it.skip('should let public download brief in support after metadata de-lodge', () => {
+    it('should let public download brief in support after metadata de-lodge', () => {
       verifyDocumentCanBeViewedPublic(
         caseDocketNumber,
         motionEntries.briefInSupport.index,
       );
     });
 
-    // TODO(10399): unskip once supporting-document visibility fix from 10399 is merged
-    it.skip('should let public download memorandum in support after metadata de-lodge', () => {
+    it('should let public download memorandum in support after metadata de-lodge', () => {
       verifyDocumentCanBeViewedPublic(
         caseDocketNumber,
         motionEntries.memorandaInSupport.index,

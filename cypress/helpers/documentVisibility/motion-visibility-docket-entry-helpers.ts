@@ -153,6 +153,7 @@ export function getDocketEntriesByEventCodeForCase(
   isPaper?: boolean,
 ): Cypress.Chainable<MotionVisibilityPublicDocketEntry[]> {
   cy.intercept('GET', '**/docket-entries**').as('getDocketEntries');
+  cy.visit('/');
   goToCase(docketNumber);
   return cy.wait('@getDocketEntries').then(({ response }) => {
     const docketEntries: PublicDocketEntry[] = response?.body.docketEntries;
