@@ -107,6 +107,18 @@ export function fileIrsAnswer(docketNumber: string): void {
   submitFileDocumentWithRedaction();
 }
 
+export function qcDocument(docketNumber: string): void {
+  loginAsDocketClerk1();
+  cy.get('[data-testid="document-qc-nav-item"]').click();
+  cy.get('[data-testid="switch-to-section-document-qc-button"]').click();
+  cy.get(`[data-testid=work-item-${docketNumber}]`)
+    .find(`[data-testid=work-item-document-link-${docketNumber}]`)
+    .first()
+    .click();
+  cy.get('[data-testid="save-and-finish-document-qc"]').click();
+  cy.get('[data-testid="success-alert"]').should('exist');
+}
+
 export function strikeDocketEntryByEventCode(eventCode: string): void {
   cy.get(`[data-testid="edit-${eventCode}"]`).click();
   cy.get('[data-testid="tab-action"]').click();
@@ -116,7 +128,7 @@ export function strikeDocketEntryByEventCode(eventCode: string): void {
 
 export function lodgeDocketEntryByEventCode(eventCode: string): void {
   cy.get(`[data-testid="edit-${eventCode}"]`).click();
-  cy.get('#filing-status-Lodge').click();
+  cy.get('[data-testid="filing-status-Lodge"]').click();
   cy.get('[data-testid="save-edit-docket-entry-meta"]').click();
 }
 

@@ -254,11 +254,9 @@ export function getBriefInSupportEntryForCase(
   });
 }
 
-export function getPaperMotionDocketEntryForCase(
-  docketNumber: string,
-): Cypress.Chainable<MotionVisibilityPublicDocketEntry> {
+export function getPaperMotionDocketEntryForCase(): Cypress.Chainable<MotionVisibilityPublicDocketEntry> {
   cy.intercept('GET', '**/docket-entries**').as('getDocketEntries');
-  goToCase(docketNumber);
+  cy.reload();
   return cy.wait('@getDocketEntries').then(({ response }) => {
     const docketEntries: PublicDocketEntry[] = response?.body.docketEntries;
     return getPaperMotionDocketEntry(docketEntries);

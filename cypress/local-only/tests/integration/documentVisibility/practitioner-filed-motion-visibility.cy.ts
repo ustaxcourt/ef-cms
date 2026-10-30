@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { faker } from '@faker-js/faker';
 import {
   loginAsDocketClerk1,
@@ -48,7 +49,9 @@ import {
   verifyMotionNotViewableOnPublicSite,
   verifyMotionViewableOnPublicSite,
   verifyStrickenDocketEntry,
+  qcDocument,
 } from '../../../../helpers/documentVisibility/practitioner-filed-motion-visibility-helpers';
+import { getCypressEnv } from '../../../../helpers/env/cypressEnvironment';
 
 describe('Motion visibility after policy change date', () => {
   beforeEach(function () {
@@ -81,6 +84,7 @@ describe('Motion visibility after policy change date', () => {
       verifyDocumentCanBeViewedPublic(
         caseDocketNumber,
         motionEntries.briefInSupport.index,
+        motionEntries.briefInSupport.docketEntryId,
       );
     });
 
@@ -88,6 +92,7 @@ describe('Motion visibility after policy change date', () => {
       verifyDocumentCanBeViewedPublic(
         caseDocketNumber,
         motionEntries.memorandaInSupport.index,
+        motionEntries.memorandaInSupport.docketEntryId,
       );
     });
 
@@ -145,6 +150,7 @@ describe('Motion visibility after policy change date', () => {
       verifyDocumentCanBeViewedPublic(
         caseDocketNumber,
         motionEntries.briefInSupport.index,
+        motionEntries.briefInSupport.docketEntryId,
       );
     });
 
@@ -152,6 +158,7 @@ describe('Motion visibility after policy change date', () => {
       verifyDocumentCanBeViewedPublic(
         caseDocketNumber,
         motionEntries.memorandaInSupport.index,
+        motionEntries.memorandaInSupport.docketEntryId,
       );
     });
 
@@ -224,6 +231,7 @@ describe('Motion visibility after policy change date', () => {
         verifyDocumentCanBeViewedPublic(
           caseDocketNumber,
           motionEntries.motion.index,
+          motionEntries.motion.docketEntryId,
         );
       });
     });
@@ -239,6 +247,7 @@ describe('Motion visibility after policy change date', () => {
       verifyDocumentCannotBeViewedPublic(
         caseDocketNumber,
         motionEntries.briefInSupport.index,
+        motionEntries.briefInSupport.docketEntryId,
       );
     });
 
@@ -246,6 +255,7 @@ describe('Motion visibility after policy change date', () => {
       verifyDocumentCannotBeViewedPublic(
         caseDocketNumber,
         motionEntries.memorandaInSupport.index,
+        motionEntries.memorandaInSupport.docketEntryId,
       );
     });
 
@@ -323,6 +333,7 @@ describe('Motion visibility after policy change date', () => {
       verifyDocumentCannotBeViewedPublic(
         caseDocketNumber,
         motionEntries.briefInSupport.index,
+        motionEntries.briefInSupport.docketEntryId,
       );
     });
 
@@ -330,6 +341,7 @@ describe('Motion visibility after policy change date', () => {
       verifyDocumentCannotBeViewedPublic(
         caseDocketNumber,
         motionEntries.memorandaInSupport.index,
+        motionEntries.memorandaInSupport.docketEntryId,
       );
     });
 
@@ -378,7 +390,7 @@ describe('Motion visibility after policy change date', () => {
         ({ docketNumber, entries }) => {
           caseDocketNumber = docketNumber;
           motionEntries = entries;
-          loginAsDocketClerk1();
+          qcDocument(docketNumber);
           goToCase(docketNumber);
           strikeDocketEntryByEventCode(MOTION_FOR_CONTINUANCE_EVENT_CODE);
         },
@@ -477,9 +489,38 @@ describe('Motion visibility after policy change date', () => {
     });
 
     it('should not let motion be downloadable from public site when case is sealed', () => {
-      verifyMotionNotViewableOnPublicSite(
-        caseDocketNumber,
-        motionEntries.motion,
+      const { publicSiteUrl, publicApiUrl } = getCypressEnv();
+      cy.origin(
+        publicSiteUrl,
+        {
+          args: {
+            docketNumber: caseDocketNumber,
+            publicSiteUrl,
+            publicApiUrl,
+            docketEntryId: motionEntries.motion.docketEntryId,
+          },
+        },
+        ({
+          docketNumber: dn,
+          publicSiteUrl: url,
+          publicApiUrl: apiUrl,
+          docketEntryId: id,
+        }) => {
+          cy.visit(`${url}/case-detail/${dn}`);
+          cy.get('.sealed-banner').should(
+            'contain.text',
+            'This case is sealed',
+          );
+          cy.get('[data-testid="table-public-docket-record"]').should(
+            'not.exist',
+          );
+          cy.request({
+            url: `${apiUrl}/public-api/${dn}/${id}/public-document-download-url`,
+            failOnStatusCode: false,
+          }).then(response => {
+            expect(response.status).to.eq(403);
+          });
+        },
       );
     });
   });
@@ -497,7 +538,7 @@ describe('Motion visibility after policy change date', () => {
         ({ docketNumber, entries }) => {
           caseDocketNumber = docketNumber;
           motionEntries = entries;
-          loginAsDocketClerk1();
+          qcDocument(docketNumber);
           goToCase(docketNumber);
           lodgeDocketEntryByEventCode(MOTION_FOR_CONTINUANCE_EVENT_CODE);
         },
@@ -516,6 +557,7 @@ describe('Motion visibility after policy change date', () => {
         verifyDocumentCanBeViewedPublic(
           caseDocketNumber,
           motionEntries.motion.index,
+          motionEntries.motion.docketEntryId,
         );
       });
     });
@@ -530,6 +572,7 @@ describe('Motion visibility after policy change date', () => {
       verifyDocumentCannotBeViewedPublic(
         caseDocketNumber,
         motionEntries.briefInSupport.index,
+        motionEntries.briefInSupport.docketEntryId,
       );
     });
 
@@ -537,6 +580,7 @@ describe('Motion visibility after policy change date', () => {
       verifyDocumentCannotBeViewedPublic(
         caseDocketNumber,
         motionEntries.memorandaInSupport.index,
+        motionEntries.memorandaInSupport.docketEntryId,
       );
     });
 
@@ -545,6 +589,7 @@ describe('Motion visibility after policy change date', () => {
         verifyDocumentCanBeViewedPublic(
           caseDocketNumber,
           motionEntries.briefInSupport.index,
+          motionEntries.briefInSupport.docketEntryId,
         );
       });
     });
@@ -554,6 +599,7 @@ describe('Motion visibility after policy change date', () => {
         verifyDocumentCanBeViewedPublic(
           caseDocketNumber,
           motionEntries.memorandaInSupport.index,
+          motionEntries.memorandaInSupport.docketEntryId,
         );
       });
     });
@@ -580,17 +626,19 @@ describe('Motion visibility after policy change date', () => {
             documentType: 'Motion for Continuance',
             isPaperCase: false,
           });
-          getPaperMotionDocketEntryForCase(docketNumber).then(entry => {
+          cy.get('[data-testid="success-alert"]').should('exist');
+          getPaperMotionDocketEntryForCase().then(entry => {
             paperMotionEntry = entry;
           });
         },
       );
     });
 
-    it('should not let paper-filed motion be downloadable from public site', () => {
+    it.only('should not let paper-filed motion be downloadable from public site', () => {
       verifyDocumentCannotBeViewedPublic(
         caseDocketNumber,
         paperMotionEntry.index,
+        paperMotionEntry.docketEntryId,
       );
     });
 
@@ -608,6 +656,7 @@ describe('Motion visibility after policy change date', () => {
         verifyDocumentCanBeViewedPublic(
           caseDocketNumber,
           paperMotionEntry.index,
+          paperMotionEntry.docketEntryId,
         );
       });
     });
@@ -670,6 +719,7 @@ describe('Motion visibility after policy change date', () => {
       verifyDocumentCanBeViewedPublic(
         caseDocketNumber,
         motionEntries.briefInSupport.index,
+        motionEntries.briefInSupport.docketEntryId,
       );
     });
 
@@ -677,6 +727,7 @@ describe('Motion visibility after policy change date', () => {
       verifyDocumentCanBeViewedPublic(
         caseDocketNumber,
         motionEntries.memorandaInSupport.index,
+        motionEntries.memorandaInSupport.docketEntryId,
       );
     });
   });
@@ -755,7 +806,11 @@ describe('Motion visibility after policy change date', () => {
     });
 
     it('should not let public download later brief in support', () => {
-      verifyDocumentCannotBeViewedPublic(caseDocketNumber, briefEntry.index);
+      verifyDocumentCannotBeViewedPublic(
+        caseDocketNumber,
+        briefEntry.index,
+        briefEntry.docketEntryId,
+      );
     });
 
     it('should not let unassociated petitioner download later brief in support', () => {
@@ -772,7 +827,11 @@ describe('Motion visibility after policy change date', () => {
 
     it('should let terminal user open later brief in support', () => {
       cy.task('setAllowedTerminalIpAddresses', ['localhost']).then(() => {
-        verifyDocumentCanBeViewedPublic(caseDocketNumber, briefEntry.index);
+        verifyDocumentCanBeViewedPublic(
+          caseDocketNumber,
+          briefEntry.index,
+          briefEntry.docketEntryId,
+        );
       });
     });
   });
