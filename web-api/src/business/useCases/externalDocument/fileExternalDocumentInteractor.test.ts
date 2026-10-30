@@ -635,6 +635,10 @@ describe('fileExternalDocumentInteractor', () => {
     });
 
     it('should set the same filling date for all documents to add', async () => {
+      const primaryDocketEntryId = 'c54ba5a9-b37b-479d-9201-067ec6e335b0';
+      const secondaryDocketEntryId = 'c54ba5a9-b37b-479d-9201-067ec6e335b1';
+      const supportingDocketEntryId = 'c54ba5a9-b37b-479d-9201-067ec6e335b2';
+
       const consolidatedCasesToFileAcross = [
         {
           docketNumber: caseRecord.docketNumber,
@@ -660,7 +664,7 @@ describe('fileExternalDocumentInteractor', () => {
         documentType: 'Motion for Continuance',
         eventCode: 'M006',
         filedBy: 'Test Petitioner',
-        primaryDocumentId: mockDocketEntryId,
+        primaryDocumentId: secondaryDocketEntryId,
         docketEntryId: applicationContext.getUniqueId(),
       };
       const supportingDocument = {
@@ -669,7 +673,7 @@ describe('fileExternalDocumentInteractor', () => {
         documentType: 'Motion for Continuance',
         eventCode: 'M006',
         filedBy: 'Test Petitioner',
-        primaryDocumentId: mockDocketEntryId,
+        primaryDocumentId: supportingDocketEntryId,
         docketEntryId: applicationContext.getUniqueId(),
       };
 
@@ -680,7 +684,7 @@ describe('fileExternalDocumentInteractor', () => {
         documentType: 'Motion for Continuance',
         eventCode: 'M006',
         filedBy: 'Test Petitioner',
-        primaryDocumentId: mockDocketEntryId,
+        primaryDocumentId: primaryDocketEntryId,
         docketEntryId: applicationContext.getUniqueId(),
         secondaryDocument,
         supportingDocuments: [supportingDocument],
@@ -694,6 +698,11 @@ describe('fileExternalDocumentInteractor', () => {
         mockIrsPractitionerUser,
       );
 
+      const primary =
+        updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
+          d => d.docketEntryId === primaryDocketEntryId,
+        );
+
       const secondary =
         updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
           d => d.docketEntryId === secondaryDocument.docketEntryId,
@@ -704,6 +713,7 @@ describe('fileExternalDocumentInteractor', () => {
           d => d.docketEntryId === supportingDocument.docketEntryId,
         );
 
+      expect(secondary.filingDate).toBe(primary.filingDate);
       expect(secondary.filingDate).toBe(supporting.filingDate);
     });
 
