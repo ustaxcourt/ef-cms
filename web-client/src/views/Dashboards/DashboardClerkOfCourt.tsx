@@ -105,8 +105,8 @@ const ALL_OPEN_CASES_BY_TYPE_TITLE = 'All Open Cases by type';
 
 const PETITIONS_BY_MONTH_TITLE = 'Petitions: Total Petitions by Month';
 
-// pie chart columns, wide enough for the legend and the HTML view button
-const PIE_COLUMN_CLASS = 'tw:w-162 tw:max-w-full';
+// pie chart columns match the PieGraph's width, so the flex gap is the whole space between the charts
+const PIE_COLUMN_CLASS = 'tw:xs:w-160 tw:w-105 tw:max-w-full';
 
 const casesData = ({
   casesByYearIsFiscal,
@@ -180,10 +180,12 @@ const casesData = ({
           </div>
         </div>
         {/* open cases by type has no chart, only an HTML view of all open cases */}
-        <div className="tw:xs:mt-12 tw:mt-8">
+        {/* on desktop the pie's SVG already leaves space under the circle, so only 8px more goes under the pie charts */}
+        <div className="tw:xs:mt-2 tw:mt-8">
           <ClerkOfCourtHtmlView title={ALL_OPEN_CASES_BY_TYPE_TITLE} />
         </div>
-        <div className="tw:xs:mt-12 tw:mt-8">
+        {/* margins account for the MultiBarGraph's built-in top padding so the gap above it is 48px on desktop and 32px on mobile */}
+        <div className="tw:xs:mt-10 tw:mt-6">
           <MultiBarGraph
             showLabels={false}
             width={CHART_WIDTH}
