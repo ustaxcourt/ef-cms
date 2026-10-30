@@ -82,22 +82,6 @@ npm run ecr:check-version
 
 </details>
 
-<details><summary>Dependency Updates - Week of 2026-10-12</summary>
-
-## Manual Deployment Steps
-
-### Before Deployment
-
-#### Deploy Docker container `4.3.101`
-
-This script will prompt for an environment to pull the image from; choose `exp8`.
-
-```bash
-npm run ecr:check-version
-```
-
-</details>
-
 <details><summary>Single Sign-on Updates</summary>
 
 ## Manual Deployment Steps

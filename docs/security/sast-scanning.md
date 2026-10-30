@@ -15,10 +15,13 @@ DAWSON uses four static analysis tools, all wired through `.github/workflows/sec
 
 - **PRs** (non-draft, any target branch): runs `semgrep`, `checkov`, `codeql`, `shellcheck`, and the `security-gate` job
 - **Push to staging**: runs `semgrep`, `checkov`, and `codeql`; Semgrep and Checkov populate the default-branch baseline
+- **Docs-only PRs** (only `.md`, `docs/**`, `.gitignore`, `.nvmrc` or `.circleci/config.yml` files): the `changes` job finds them, and Semgrep, Checkov and ShellCheck skip. CodeQL skips too, except on same-repository PRs to staging. The `security-gate` job passes when CodeQL skips or succeeds
+
+The workflow has no `paths-ignore` filter for PRs. `Security Gate (SAST)` is a required check, and a filtered workflow does not report it, so the PR cannot merge.
 
 SARIF is uploaded only from pushes to staging. Every PR run, whatever branch it targets, reports its findings in the workflow log and job summary instead.
 
-CodeQL is the one exception. It also uploads from same-repository PRs to staging, because the staging code-scanning ruleset needs a CodeQL analysis before a PR can merge. GitHub keeps these analyses on the PR ref, so they do not add alerts to staging.
+CodeQL is the one exception. It also uploads from same-repository PRs to staging, because the staging code-scanning ruleset needs a CodeQL analysis before a PR can merge. GitHub keeps these analyses on the PR ref, so they do not add alerts to staging. For the same reason, CodeQL runs on these PRs even when they change only docs.
 
 ## Semgrep
 
