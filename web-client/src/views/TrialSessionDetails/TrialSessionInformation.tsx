@@ -175,7 +175,11 @@ export const TrialSessionInformation = connect(
 
                       <div className="grid-row grid-gap">
                         <div className="grid-col-6">
-                          <p className="label">Date</p>
+                          <p className="label">
+                            {formattedTrialSessionDetails.isReportingSession
+                              ? 'Due Date'
+                              : 'Date'}
+                          </p>
                           <p
                             className={classNames(
                               !formattedTrialSessionDetails.showSwingSession &&

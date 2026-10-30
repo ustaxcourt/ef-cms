@@ -113,6 +113,7 @@ describe('Reporting trial sessions', () => {
       });
       cy.contains('Reporting').should('be.visible');
       cy.get('#case-title').should('have.text', '02/10/99');
+      cy.contains('p.label', 'Due Date').should('be.visible');
       cy.get('[data-testid="trial-session-date"]')
         .invoke('text')
         .then(text => {
