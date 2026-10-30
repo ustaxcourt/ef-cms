@@ -51,7 +51,9 @@ export const Statistics = connect(
         {statisticsHelper.formattedStatistics &&
           statisticsHelper.formattedStatistics.map(statistic => (
             <div className="tw:flex tw:flex-wrap" key={statistic.statisticId}>
-              <h4 className="tw:w-full">{statistic.formattedDate}</h4>
+              <h4 className="tw:w-full tw:text-2xl">
+                {statistic.formattedDate}
+              </h4>
               <table
                 className="usa-table ustc-table responsive-table tw:w-1/2"
                 data-testid={`statistics-table-${statistic.statisticId}`}
@@ -108,7 +110,7 @@ export const Statistics = connect(
           ))}
         {statisticsHelper.showOtherStatistics && (
           <div className="tw:flex tw:flex-wrap">
-            <h4 className="tw:w-full">Other</h4>
+            <h4 className="tw:w-full tw:text-2xl">Other</h4>
             <table className="usa-table ustc-table responsive-table tw:w-1/2">
               <thead>
                 <tr>
