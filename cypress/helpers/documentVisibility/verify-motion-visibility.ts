@@ -50,14 +50,22 @@ export function verifyMotionNotViewableOnPublicSite(
   docketNumber: string,
   motion: MotionVisibilityPublicDocketEntry,
 ): void {
-  verifyDocumentCannotBeViewedPublic(docketNumber, motion.index);
+  verifyDocumentCannotBeViewedPublic(
+    docketNumber,
+    motion.index,
+    motion.docketEntryId,
+  );
 }
 
 export function verifyMotionViewableOnPublicSite(
   docketNumber: string,
   motion: MotionVisibilityPublicDocketEntry,
 ): void {
-  verifyDocumentCanBeViewedPublic(docketNumber, motion.index);
+  verifyDocumentCanBeViewedPublic(
+    docketNumber,
+    motion.index,
+    motion.docketEntryId,
+  );
 }
 
 export function verifyDocumentCanBeViewed(docketEntryId: string): void {
@@ -96,8 +104,9 @@ export function verifyDocumentCannotBeViewed(
 export function verifyDocumentCanBeViewedPublic(
   docketNumber: string,
   docketEntryIndex: number,
+  docketEntryId: string,
 ): void {
-  const { publicSiteUrl } = getCypressEnv();
+  const { publicSiteUrl, publicApiUrl } = getCypressEnv();
 
   cy.origin(
     publicSiteUrl,
@@ -105,14 +114,18 @@ export function verifyDocumentCanBeViewedPublic(
       args: {
         docketNumber,
         publicSiteUrl,
+        publicApiUrl,
         docketEntryIndex,
+        docketEntryId,
       },
     },
-    ({ docketNumber: dn, publicSiteUrl: url, docketEntryIndex: index }) => {
-      cy.intercept('GET', '**/public-api/**/public-document-download-url').as(
-        'publicDownload',
-      );
-
+    ({
+      docketNumber: dn,
+      publicSiteUrl: url,
+      publicApiUrl: apiUrl,
+      docketEntryIndex: index,
+      docketEntryId: id,
+    }) => {
       cy.visit(`${url}/case-detail/${dn}`);
 
       cy.window().then(win => {
@@ -121,11 +134,13 @@ export function verifyDocumentCanBeViewedPublic(
 
       cy.get(`[data-testid="public-docket-record-no-${index}"]`)
         .find('[data-testid="Filing-and-Proceedings-link-to-docket-entry"]')
-        .should('exist')
-        .click();
+        .should('exist');
 
-      cy.wait('@publicDownload').then(({ response }) => {
-        expect(response?.statusCode).to.eq(200);
+      cy.request({
+        url: `${apiUrl}/public-api/${dn}/${id}/public-document-download-url`,
+        failOnStatusCode: false,
+      }).then(response => {
+        expect(response.status).to.eq(200);
       });
     },
   );
@@ -134,8 +149,9 @@ export function verifyDocumentCanBeViewedPublic(
 export function verifyDocumentCannotBeViewedPublic(
   docketNumber: string,
   docketEntryIndex: number,
+  docketEntryId: string,
 ): void {
-  const { publicSiteUrl } = getCypressEnv();
+  const { publicSiteUrl, publicApiUrl } = getCypressEnv();
 
   cy.origin(
     publicSiteUrl,
@@ -143,10 +159,18 @@ export function verifyDocumentCannotBeViewedPublic(
       args: {
         docketNumber,
         publicSiteUrl,
+        publicApiUrl,
         docketEntryIndex,
+        docketEntryId,
       },
     },
-    ({ docketNumber: dn, publicSiteUrl: url, docketEntryIndex: index }) => {
+    ({
+      docketNumber: dn,
+      publicSiteUrl: url,
+      publicApiUrl: apiUrl,
+      docketEntryIndex: index,
+      docketEntryId: id,
+    }) => {
       cy.visit(`${url}/case-detail/${dn}`);
       cy.get(`[data-testid="public-docket-record-no-${index}"]`).then(row => {
         cy.wrap(row)
@@ -156,19 +180,12 @@ export function verifyDocumentCannotBeViewedPublic(
           .find('[data-label="Filings and Proceedings"]')
           .should('exist');
       });
+      cy.request({
+        url: `${apiUrl}/public-api/${dn}/${id}/public-document-download-url`,
+        failOnStatusCode: false,
+      }).then(response => {
+        expect(response.status).to.eq(403);
+      });
     },
   );
-}
-
-export function verifyPublicDownloadForbidden(
-  docketNumber: string,
-  docketEntryId: string,
-): void {
-  const { publicApiUrl } = getCypressEnv();
-  cy.request({
-    url: `${publicApiUrl}/public-api/${docketNumber}/${docketEntryId}/public-document-download-url`,
-    failOnStatusCode: false,
-  }).then(response => {
-    expect(response.status).to.eq(403);
-  });
 }

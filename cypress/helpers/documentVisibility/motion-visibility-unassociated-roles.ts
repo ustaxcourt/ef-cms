@@ -11,7 +11,7 @@ import { UnassociatedExternalRole } from './motion-visibility-types';
 export const unassociatedExternalRolesForPrivatePractitionerFiledMotion: UnassociatedExternalRole[] =
   [
     {
-      login: () => loginAsPetitioner(),
+      login: () => loginAsPetitioner(UNAUTHORIZED_PETITIONER_EMAIL),
       role: 'petitioner not on case',
     },
     {

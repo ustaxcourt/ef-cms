@@ -28,7 +28,7 @@ export const getCypressEnv = () => {
         : `https://api-${getEnvValue('DEPLOYING_COLOR')}.${getEnvValue('EFCMS_DOMAIN')}`,
     publicApiUrl:
       env === 'local'
-        ? 'http://localhost:4000'
+        ? 'http://localhost:4001'
         : `https://public-api-${getEnvValue('DEPLOYING_COLOR')}.${getEnvValue('EFCMS_DOMAIN')}`,
     publicSiteUrl:
       env === 'local'
