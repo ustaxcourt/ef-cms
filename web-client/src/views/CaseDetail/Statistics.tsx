@@ -55,7 +55,7 @@ export const Statistics = connect(
                 {statistic.formattedDate}
               </h4>
               <table
-                className="usa-table ustc-table responsive-table tw:w-1/2"
+                className="usa-table ustc-table responsive-table tw:w-1/2 tw:mb-12"
                 data-testid={`statistics-table-${statistic.statisticId}`}
               >
                 <thead>
