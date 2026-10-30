@@ -49,7 +49,7 @@ describe('getPublicDownloadPolicyUrlInteractor motion visibility', () => {
     getCaseByDocketNumber.mockResolvedValue(mockCase);
     applicationContext
       .getPersistenceGateway()
-      .getDownloadPolicyUrl.mockReturnValue('localhost');
+      .getDownloadPolicyUrl.mockReturnValue({ url: 'https://example.com' });
   });
 
   it('should pass the correct motion visibility change date to the docket entry', async () => {
@@ -121,7 +121,7 @@ describe('getPublicDownloadPolicyUrlInteractor lodged practitioner motion', () =
     getCaseByDocketNumber.mockResolvedValue(mockCase);
     applicationContext
       .getPersistenceGateway()
-      .getDownloadPolicyUrl.mockResolvedValue({ url: 'localhost' });
+      .getDownloadPolicyUrl.mockResolvedValue({ url: 'https://example.com' });
   });
 
   afterAll(() => {
@@ -139,7 +139,7 @@ describe('getPublicDownloadPolicyUrlInteractor lodged practitioner motion', () =
       mockDocketClerkUser,
     );
 
-    expect(result).toEqual({ url: 'localhost' });
+    expect(result.url).toEqual('https://example.com');
   });
 
   it('throws when a non-terminal public user requests a lodged practitioner motion', async () => {
