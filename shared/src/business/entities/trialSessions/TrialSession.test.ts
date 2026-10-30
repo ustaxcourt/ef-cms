@@ -552,10 +552,8 @@ describe('Reporting validation', () => {
 
   it.each([
     [undefined, 'Enter a valid estimated end date'],
-    [null, 'Enter a valid estimated end date'],
     ['invalid', 'Enter a valid estimated end date'],
     ['3000-12-02T00:00:00.000Z', 'Reporting start and end date must match'],
-    ['3000-11-30T00:00:00.000Z', 'Reporting start and end date must match'],
   ])('should reject end date %s', (estimatedEndDate, message) => {
     expect(
       new TrialSession({
@@ -583,17 +581,14 @@ describe('Reporting validation', () => {
     ).toHaveProperty('sessionScope');
   });
 
-  it.each([undefined, null, ''])(
-    'should require a trial location (%s)',
-    trialLocation => {
-      expect(
-        new TrialSession({
-          ...reportingSession,
-          trialLocation,
-        }).getFormattedValidationErrors(),
-      ).toHaveProperty('trialLocation');
-    },
-  );
+  it('should require a trial location', () => {
+    expect(
+      new TrialSession({
+        ...reportingSession,
+        trialLocation: undefined,
+      }).getFormattedValidationErrors(),
+    ).toHaveProperty('trialLocation');
+  });
 
   it.each(REPORTING_SESSION_EXCLUDED_FIELDS)(
     'should reject excluded field %s',

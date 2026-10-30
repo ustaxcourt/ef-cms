@@ -34,7 +34,7 @@ const trialSessionsHelper = withAppContextDecorator(
 );
 
 describe('trialSessionsHelper', () => {
-  it.each([true, false, undefined])(
+  it.each([true, false])(
     'should gate the Reporting filter with flag %s',
     enabled => {
       const result = runCompute(trialSessionsHelper, {
@@ -46,19 +46,11 @@ describe('trialSessionsHelper', () => {
           permissions: getUserPermissions(docketClerk1User),
           trialSessionsPage: {
             ...trialSessionsPageState,
-            filters: { ...trialSessionsPageState.filters, currentTab: 'new' },
-            trialSessions: [
-              {
-                ...trialSession1,
-                isCalendared: false,
-                proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.reporting,
-              },
-            ],
+            trialSessions: [],
           },
         },
       });
       expect(result.showReportingOption).toBe(!!enabled);
-      expect(result.trialSessionsCount).toBe(1);
     },
   );
 

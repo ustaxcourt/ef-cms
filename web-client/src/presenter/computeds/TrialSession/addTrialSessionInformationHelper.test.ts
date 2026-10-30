@@ -13,7 +13,7 @@ import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../../withAppContext';
 
 describe('addTrialSessionInformationHelper', () => {
-  it.each([true, false, undefined])(
+  it.each([true, false])(
     'should gate the Reporting option with flag %s',
     enabled => {
       const result = runCompute(

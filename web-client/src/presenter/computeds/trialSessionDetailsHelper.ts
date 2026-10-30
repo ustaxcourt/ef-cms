@@ -1,7 +1,6 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-import { TRIAL_SESSION_PROCEEDING_TYPES } from '@shared/business/entities/EntityConstants';
 
 export const trialSessionDetailsHelper = (
   get: Get,
@@ -10,13 +9,9 @@ export const trialSessionDetailsHelper = (
   const { DOCKET_NUMBER_SUFFIXES, HYBRID_SESSION_TYPES } =
     applicationContext.getConstants();
 
-  const {
-    eligibleCases,
-    hasNottBeenServed,
-    proceedingType,
-    sessionType,
-    trialSessionId,
-  } = get(state.trialSession);
+  const { eligibleCases, hasNottBeenServed, sessionType, trialSessionId } = get(
+    state.trialSession,
+  );
   const permissions = get(state.permissions);
 
   const eligibleTotalCaseQcCompleteCount = (eligibleCases || []).filter(
@@ -58,9 +53,7 @@ export const trialSessionDetailsHelper = (
     nottReminderAction,
     showNewMinuteSheetButton: permissions.MANAGE_MINUTE_SHEET,
     showQcComplete,
-    showSetCalendarButton:
-      permissions.SET_TRIAL_SESSION_CALENDAR &&
-      proceedingType !== TRIAL_SESSION_PROCEEDING_TYPES.reporting,
+    showSetCalendarButton: permissions.SET_TRIAL_SESSION_CALENDAR,
     showSmallAndRegularQcComplete,
   };
 };

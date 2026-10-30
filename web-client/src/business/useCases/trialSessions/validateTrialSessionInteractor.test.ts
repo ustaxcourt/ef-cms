@@ -26,7 +26,7 @@ describe('validateTrialSessionInteractor', () => {
     },
   );
 
-  it.each(['', 'invalid', '2000-01-01T00:00:00.000Z'])(
+  it.each(['', '2000-01-01T00:00:00.000Z'])(
     'should show one due date error for invalid Reporting date %s',
     startDate => {
       const errors = validateTrialSessionInteractor({

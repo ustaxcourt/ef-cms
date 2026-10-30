@@ -26,6 +26,7 @@ describe('applyTrialSessionProceedingTypeRulesAction', () => {
               startTimeExtension: 'am',
               swingSession: true,
               trialLocation: 'Birmingham, Alabama',
+              chambersPhoneNumber: '1234567890',
               startDate: '3000-12-01T00:00:00.000Z',
               estimatedEndDate: '3000-12-05T00:00:00.000Z',
             },
@@ -41,25 +42,12 @@ describe('applyTrialSessionProceedingTypeRulesAction', () => {
       expect(result.state.form.startTimeHours).toBeUndefined();
       expect(result.state.form.swingSession).toBeUndefined();
       expect(result.state.form.trialLocation).toBe('Birmingham, Alabama');
+      expect(result.state.form.chambersPhoneNumber).toBe('1234567890');
       expect(result.state.form.estimatedEndDate).toBe(
         result.state.form.startDate,
       );
     },
   );
-
-  it('should preserve a chambers phone number added by judge selection on a Reporting session', async () => {
-    const result = await runAction(applyTrialSessionProceedingTypeRulesAction, {
-      props: { key: 'judgeId' },
-      state: {
-        form: {
-          proceedingType: 'Reporting',
-          chambersPhoneNumber: '1234567890',
-          sessionType: 'Regular',
-        },
-      },
-    });
-    expect(result.state.form.chambersPhoneNumber).toBe('1234567890');
-  });
 
   it('should reset proceeding data and restore time when switching away from Reporting', async () => {
     const result = await runAction(applyTrialSessionProceedingTypeRulesAction, {

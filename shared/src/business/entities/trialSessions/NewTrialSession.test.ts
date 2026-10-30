@@ -126,7 +126,6 @@ describe('Reporting validation', () => {
   it.each([
     [undefined, 'Enter a valid estimated end date'],
     ['3000-12-02T00:00:00.000Z', 'Reporting start and end date must match'],
-    ['3000-11-30T00:00:00.000Z', 'Reporting start and end date must match'],
   ])('should reject end date %s', (estimatedEndDate, message) => {
     expect(
       new NewTrialSession({

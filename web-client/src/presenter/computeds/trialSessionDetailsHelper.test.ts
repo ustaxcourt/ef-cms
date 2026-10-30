@@ -11,7 +11,7 @@ import { trialSessionDetailsHelper as trialSessionDetailsHelperComputed } from '
 import { withAppContextDecorator } from '../../withAppContext';
 
 describe('trialSessionDetailsHelper', () => {
-  it('should hide ordinary calendaring for Reporting while keeping eligible-case QC', () => {
+  it('should show Set Calendar for Reporting when permitted while keeping eligible-case QC', () => {
     const result = runCompute(
       withAppContextDecorator(
         trialSessionDetailsHelperComputed,
@@ -27,7 +27,7 @@ describe('trialSessionDetailsHelper', () => {
         },
       },
     );
-    expect(result.showSetCalendarButton).toBe(false);
+    expect(result.showSetCalendarButton).toBe(true);
     expect(result.showQcComplete).toBe(true);
   });
   const mockEligibleCases = [

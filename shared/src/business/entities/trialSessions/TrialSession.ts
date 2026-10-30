@@ -613,8 +613,8 @@ export class TrialSession extends JoiValidationEntity {
   }
 
   /**
-   * checks certain properties of the trial session for emptiness.
-   * if one field is empty (via lodash.isEmpty), the method returns false
+   * checks whether the session supports ordinary trial calendaring and has
+   * all required fields populated.
    */
   canSetAsCalendared() {
     return !this.isReporting() && isEmpty(this.getEmptyFields());

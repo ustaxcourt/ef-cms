@@ -238,11 +238,7 @@ export const TrialSessionInformation = connect(
                 {formattedTrialSessionDetails.isReportingSession && (
                   <div className="card trial-session-card height-full">
                     <div className="content-wrapper">
-                      <h3 className="underlined">Location Information</h3>
-                      <p className="label">Proceeding type</p>
-                      <p>Reporting</p>
-                      <p className="label">Trial location</p>
-                      <p>{formattedTrialSessionDetails.trialLocation}</p>
+                      <h3 className="underlined">Reporting</h3>
                     </div>
                   </div>
                 )}

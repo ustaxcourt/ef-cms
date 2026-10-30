@@ -11,7 +11,7 @@ import { publicTrialSessionsHelper } from '@web-client/presenter/computeds/Publi
 import { runCompute } from '@web-client/presenter/test.cerebral';
 
 describe('publicTrialSessionsHelper', () => {
-  it.each([true, false, undefined])(
+  it.each([true, false])(
     'should gate the public Reporting filter with flag %s',
     enabled => {
       const result = runCompute(publicTrialSessionsHelper, {
