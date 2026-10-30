@@ -1,5 +1,8 @@
 /* eslint-disable max-lines */
-import { getClerkDashboardStatsInteractor } from './getClerkDashboardStatsInteractor';
+import {
+  Month,
+  getClerkDashboardStatsInteractor,
+} from './getClerkDashboardStatsInteractor';
 import {
   mockDocketClerkUser,
   mockPetitionerUser,
@@ -8,6 +11,9 @@ import {
 jest.mock(
   '@web-api/persistence/postgres/cases/reports/getClerkDashboardStats',
   () => ({
+    caseStatusChangesByYear: jest.fn(),
+    openCasesByCaseType: jest.fn(),
+    openCasesByProcedureType: jest.fn(),
     petitionsDataByYear: jest.fn(),
   }),
 );
@@ -17,8 +23,23 @@ jest.mock('@shared/business/utilities/DateHandler', () => ({
   createISODateString: jest.fn(),
 }));
 
-import { petitionsDataByYear } from '@web-api/persistence/postgres/cases/reports/getClerkDashboardStats';
+import {
+  caseStatusChangesByYear,
+  openCasesByCaseType,
+  openCasesByProcedureType,
+  petitionsDataByYear,
+} from '@web-api/persistence/postgres/cases/reports/getClerkDashboardStats';
 import { createISODateString } from '@shared/business/utilities/DateHandler';
+import {
+  CASE_TYPES,
+  FISCAL_MONTH_LABELS,
+  MONTH_LABELS,
+} from '@shared/business/entities/EntityConstants';
+
+const toMonths = (labels: string[]): Month[] =>
+  labels.map(label => Month[label as keyof typeof Month]);
+const CALENDAR_MONTHS = toMonths(MONTH_LABELS);
+const FISCAL_MONTHS = toMonths(FISCAL_MONTH_LABELS);
 
 describe('getClerkDashboardStatsInteractor', () => {
   const mockStats = [
@@ -48,6 +69,9 @@ describe('getClerkDashboardStatsInteractor', () => {
 
   beforeEach(() => {
     (petitionsDataByYear as jest.Mock).mockResolvedValue(mockStats);
+    (openCasesByProcedureType as jest.Mock).mockResolvedValue([]);
+    (openCasesByCaseType as jest.Mock).mockResolvedValue([]);
+    (caseStatusChangesByYear as jest.Mock).mockResolvedValue([]);
     (createISODateString as jest.Mock).mockReturnValue(
       '2026-02-01T00:00:00.000Z',
     );
@@ -123,8 +147,9 @@ describe('getClerkDashboardStatsInteractor', () => {
 
     const result = await getClerkDashboardStatsInteractor(mockDocketClerkUser);
 
-    expect(result).toEqual({
+    expect(result).toMatchObject({
       year: '2026',
+      fiscalYear: '2026',
       calendarYearPetitionStats: {
         petitionFullPaperMonths: [
           {
@@ -721,6 +746,222 @@ describe('getClerkDashboardStatsInteractor', () => {
       ],
       petitionsByServiceType: [],
       petitionsByRepresentation: [],
+    });
+  });
+  describe('cases', () => {
+    it('should return open cases by procedure type in Regular, Small order', async () => {
+      (openCasesByProcedureType as jest.Mock).mockResolvedValue([
+        { procedureType: 'Small', total: '5591' },
+        { procedureType: 'Regular', total: '14216' },
+      ]);
+
+      const result =
+        await getClerkDashboardStatsInteractor(mockDocketClerkUser);
+
+      expect(result.openCasesByProcedureType).toEqual([
+        { procedureType: 'Regular', total: 14216 },
+        { procedureType: 'Small', total: 5591 },
+      ]);
+    });
+
+    it('should default missing procedure types to zero', async () => {
+      (openCasesByProcedureType as jest.Mock).mockResolvedValue([
+        { procedureType: 'Regular', total: '12' },
+      ]);
+
+      const result =
+        await getClerkDashboardStatsInteractor(mockDocketClerkUser);
+
+      expect(result.openCasesByProcedureType).toEqual([
+        { procedureType: 'Regular', total: 12 },
+        { procedureType: 'Small', total: 0 },
+      ]);
+    });
+
+    it('should return open cases for every case type, defaulting missing case types to zero', async () => {
+      (openCasesByCaseType as jest.Mock).mockResolvedValue([
+        { caseType: 'Deficiency', total: '1798' },
+        { caseType: 'Partnership (Section 6226)', total: '48' },
+      ]);
+
+      const result =
+        await getClerkDashboardStatsInteractor(mockDocketClerkUser);
+
+      expect(result.openCasesByCaseType).toHaveLength(CASE_TYPES.length);
+      expect(result.openCasesByCaseType).toEqual(
+        expect.arrayContaining([
+          { caseType: 'Deficiency', total: 1798 },
+          { caseType: 'Partnership (Section 6226)', total: 48 },
+          { caseType: 'Passport', total: 0 },
+        ]),
+      );
+    });
+
+    it('should return open cases by case type in CASE_TYPES order', async () => {
+      const result =
+        await getClerkDashboardStatsInteractor(mockDocketClerkUser);
+
+      expect(result.openCasesByCaseType.map(c => c.caseType)).toEqual(
+        CASE_TYPES,
+      );
+    });
+
+    it('should query case status changes for the calendar and fiscal year', async () => {
+      await getClerkDashboardStatsInteractor(mockDocketClerkUser);
+
+      expect(caseStatusChangesByYear).toHaveBeenCalledTimes(2);
+      expect(
+        (caseStatusChangesByYear as jest.Mock).mock.calls[0][0].toISOString(),
+      ).toEqual('2026-01-01T05:00:00.000Z');
+      expect(
+        (caseStatusChangesByYear as jest.Mock).mock.calls[1][0].toISOString(),
+      ).toEqual('2025-10-01T04:00:00.000Z');
+    });
+
+    it('should reject with a case query error even while the petition queries are pending', async () => {
+      (petitionsDataByYear as jest.Mock).mockImplementation(
+        () => new Promise(resolve => setTimeout(() => resolve([]), 50)),
+      );
+      (caseStatusChangesByYear as jest.Mock).mockRejectedValue(
+        new Error('case query failed'),
+      );
+
+      await expect(
+        getClerkDashboardStatsInteractor(mockDocketClerkUser),
+      ).rejects.toThrow('case query failed');
+    });
+
+    it('should use the fiscal year ending this year through September 30 Eastern time', async () => {
+      // 11:59 PM on September 30 in Eastern time
+      (createISODateString as jest.Mock).mockReturnValue(
+        '2026-10-01T03:59:00.000Z',
+      );
+
+      const result =
+        await getClerkDashboardStatsInteractor(mockDocketClerkUser);
+
+      expect(result.year).toEqual('2026');
+      expect(result.fiscalYear).toEqual('2026');
+      const [fiscalBegin, fiscalEnd] = (caseStatusChangesByYear as jest.Mock)
+        .mock.calls[1];
+      expect(fiscalBegin.toISOString()).toEqual('2025-10-01T04:00:00.000Z');
+      expect(fiscalEnd.toISOString()).toEqual('2026-10-01T04:00:00.000Z');
+    });
+
+    it('should use the fiscal year ending next year from October 1 Eastern time', async () => {
+      // 12:01 AM on October 1 in Eastern time
+      (createISODateString as jest.Mock).mockReturnValue(
+        '2026-10-01T04:01:00.000Z',
+      );
+
+      const result =
+        await getClerkDashboardStatsInteractor(mockDocketClerkUser);
+
+      expect(result.year).toEqual('2026');
+      expect(result.fiscalYear).toEqual('2027');
+      const [fiscalBegin, fiscalEnd] = (caseStatusChangesByYear as jest.Mock)
+        .mock.calls[1];
+      expect(fiscalBegin.toISOString()).toEqual('2026-10-01T04:00:00.000Z');
+      expect(fiscalEnd.toISOString()).toEqual('2027-10-01T04:00:00.000Z');
+      // the petitions stats use the same fiscal year
+      expect(
+        (petitionsDataByYear as jest.Mock).mock.calls[1][0].toISOString(),
+      ).toEqual('2026-10-01T04:00:00.000Z');
+    });
+
+    it('should return cases closed and on appeal by month and closed cases by procedure type', async () => {
+      const statusChanges = [
+        {
+          month: '1',
+          procedureType: null,
+          statusGroup: 'closed',
+          total: '130',
+        },
+        {
+          month: '2',
+          procedureType: null,
+          statusGroup: 'closed',
+          total: '113',
+        },
+        { month: '11', procedureType: null, statusGroup: 'closed', total: '7' },
+        {
+          month: '2',
+          procedureType: null,
+          statusGroup: 'onAppeal',
+          total: '4',
+        },
+        {
+          month: '10',
+          procedureType: null,
+          statusGroup: 'onAppeal',
+          total: '1',
+        },
+        {
+          month: null,
+          procedureType: 'Regular',
+          statusGroup: 'closed',
+          total: '200',
+        },
+        {
+          month: null,
+          procedureType: 'Small',
+          statusGroup: 'closed',
+          total: '50',
+        },
+        {
+          month: null,
+          procedureType: 'Regular',
+          statusGroup: 'onAppeal',
+          total: '5',
+        },
+      ];
+      (caseStatusChangesByYear as jest.Mock).mockResolvedValue(statusChanges);
+
+      const result =
+        await getClerkDashboardStatsInteractor(mockDocketClerkUser);
+
+      expect(result.calendarYearCaseStats).toEqual({
+        casesClosedByMonth: [130, 113, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0].map(
+          (total, i) => ({ month: CALENDAR_MONTHS[i], total }),
+        ),
+        casesClosedByProcedureType: [
+          { procedureType: 'Regular', total: 200 },
+          { procedureType: 'Small', total: 50 },
+        ],
+        casesOnAppealByMonth: [0, 4, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0].map(
+          (total, i) => ({ month: CALENDAR_MONTHS[i], total }),
+        ),
+      });
+
+      expect(result.fiscalYearCaseStats.casesClosedByMonth).toEqual(
+        [0, 7, 0, 130, 113, 0, 0, 0, 0, 0, 0, 0].map((total, i) => ({
+          month: FISCAL_MONTHS[i],
+          total,
+        })),
+      );
+      expect(result.fiscalYearCaseStats.casesOnAppealByMonth).toEqual(
+        [1, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0].map((total, i) => ({
+          month: FISCAL_MONTHS[i],
+          total,
+        })),
+      );
+    });
+
+    it('should return zeroed case stats when there are no status changes', async () => {
+      const result =
+        await getClerkDashboardStatsInteractor(mockDocketClerkUser);
+
+      expect(result.calendarYearCaseStats).toEqual({
+        casesClosedByMonth: CALENDAR_MONTHS.map(month => ({ month, total: 0 })),
+        casesClosedByProcedureType: [
+          { procedureType: 'Regular', total: 0 },
+          { procedureType: 'Small', total: 0 },
+        ],
+        casesOnAppealByMonth: CALENDAR_MONTHS.map(month => ({
+          month,
+          total: 0,
+        })),
+      });
     });
   });
 });
