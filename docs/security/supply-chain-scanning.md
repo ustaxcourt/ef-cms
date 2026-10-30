@@ -15,6 +15,10 @@ DAWSON uses multiple tools to detect vulnerable or compromised dependencies. All
 
 All jobs run on non-draft PRs, whatever branch they target. The `trivy` full-tree scan also runs on pushes to staging, so its findings reach the Security tab; the other three jobs stay PR-only because they either compare against a PR base or report only to the log.
 
+The `trivy` job does not run on PRs into prod. Those PRs bring only code that staging has already scanned, so findings that are already on staging must not block a deployment. The staging push scan still uploads its findings to the Security tab.
+
+A PR from staging into prod can still show a `Trivy` check. This check comes from the staging push scan of the same commit, not from the PR. It is not a required check for prod.
+
 ## Dependency Review
 
 Uses GitHub's native dependency graph diff to flag newly added dependencies with HIGH+ severity advisories. Currently `warn-only: true`.

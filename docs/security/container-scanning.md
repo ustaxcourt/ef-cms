@@ -24,6 +24,9 @@ staging pushes, so an alert still present stays one alert and only a new CVE ope
 On PRs that change no image paths, `containers-gate` still runs and passes, so it stays safe to
 require in branch protection.
 
+The workflow does not run on PRs into prod. Those PRs bring only code that staging has already
+scanned, so findings that are already on staging must not block a deployment.
+
 SARIF reaches the **Security tab** only from pushes to staging, the weekly run, and manual dispatches, under categories `trivy-config`, `trivy-image-base`, `trivy-image-puppeteer`, `trivy-image-batch` (manual dispatch) and `trivy-baseline-base`, `trivy-baseline-puppeteer`, `trivy-baseline-batch` (staging and weekly). A PR, whatever branch it targets, reports its findings in the workflow log and job summary instead. Both list every finding, most severe first, with its file, package, installed and fixed versions, and a link to the advisory (up to 100 per scan, with a by-rule count beyond that).
 
 Removing a scan does not clear alerts it already reported. Existing alerts have to be dismissed in the Security tab, or their analyses deleted by a repo admin.
