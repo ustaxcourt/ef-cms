@@ -1,4 +1,5 @@
 import { Button } from '../../ustc-ui/Button/Button';
+import { CaseLink } from '@web-client/ustc-ui/CaseLink/CaseLink';
 import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
 import { Icon } from '../../ustc-ui/Icon/Icon';
 import { connect } from '@web-client/presenter/shared.cerebral';
@@ -46,8 +47,11 @@ export const RecentMessagesInbox = connect(
                       showLeadCaseIcon={item.isLeadCase}
                     />
                   </td>
-                  <td className="message-queue-row small">
-                    {item.docketNumberWithSuffix}
+                  <td
+                    className="message-queue-row small"
+                    data-testid="recent-messages-docketNumber-cell"
+                  >
+                    <CaseLink formattedCase={item} />
                   </td>
                   <td>{item.createdAtFormatted}</td>
                   <td className="message-unread-column">
