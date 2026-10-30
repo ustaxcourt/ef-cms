@@ -18,8 +18,11 @@ on:
     # with IMAGE_PATHS in the changes job below.
     paths:
       - '**/Dockerfile*'
+      - 'web-api/terraform/modules/batch/docker-image/**'
+      - 'web-api/runtimes/puppeteer/package*.json'
       - '.github/workflows/security-containers.yml'
       - '.github/actions/dawson-container-images/**'
+      - '.github/actions/dawson-runtime-image/**'
       - '.github/actions/dawson-trivy-image-scan/**'
       - '.github/actions/dawson-upload-sarif/**'
       - '.github/actions/dawson-sarif-summary/**'
@@ -97,13 +100,13 @@ jobs:
         id: diff
         env:
           # Keep in sync with the push trigger paths above.
-          IMAGE_PATHS: '(^|/)Dockerfile[^/]*$|^\.github/workflows/security-containers\.yml$|^\.github/actions/dawson-(container-images|trivy-image-scan|upload-sarif|sarif-summary)/'
+          IMAGE_PATHS: '(^|/)Dockerfile[^/]*$|^web-api/terraform/modules/batch/docker-image/|^web-api/runtimes/puppeteer/package(-lock)?\.json$|^\.github/workflows/security-containers\.yml$|^\.github/actions/dawson-(container-images|runtime-image|trivy-image-scan|upload-sarif|sarif-summary)/'
         run: |
           if git diff --name-only HEAD^1 HEAD | grep -qE "$IMAGE_PATHS"; then
             echo "images=true" >> "$GITHUB_OUTPUT"
           else
             echo "images=false" >> "$GITHUB_OUTPUT"
-            echo "No Dockerfile or scan tooling changes; skipping image scans." >> "$GITHUB_STEP_SUMMARY"
+            echo "No image build input or scan tooling changes; skipping image scans." >> "$GITHUB_STEP_SUMMARY"
           fi
 
   trivy-image:
@@ -135,8 +138,10 @@ jobs:
           report_path: trivy-base.sarif
           category: trivy-image-base
 
-  trivy-runtime-base:
-    name: Trivy Base Scan (${{ matrix.name }})
+  # Builds each image from its Dockerfile, so packages the Dockerfile adds (apt-get, global
+  # npm installs) are scanned along with the base image's.
+  trivy-runtime-image:
+    name: Trivy Image Scan (${{ matrix.name }})
     needs: changes
     if: >-
       always() &&
@@ -145,30 +150,25 @@ jobs:
     permissions:
       contents: read
       security-events: write
-    timeout-minutes: 15
+    timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - name: puppeteer
-            dockerfile: web-api/runtimes/puppeteer/Dockerfile
-          - name: batch
-            dockerfile: web-api/terraform/modules/batch/docker-image/Dockerfile
+        name: [puppeteer, batch]
     steps:
       - name: Checkout
         uses: actions/checkout@v7
 
-      # Read from the Dockerfile so the scan follows the weekly base image bumps.
-      - name: Resolve base image
-        id: base
-        env:
-          DOCKERFILE: ${{ matrix.dockerfile }}
-        run: echo "image=$(awk '/^FROM /{print $2; exit}' "$DOCKERFILE")" >> "$GITHUB_OUTPUT"
+      - name: Build ${{ matrix.name }} image
+        id: build
+        uses: ./.github/actions/dawson-runtime-image
+        with:
+          image: ${{ matrix.name }}
 
-      - name: Trivy scan — ${{ steps.base.outputs.image }}
+      - name: Trivy scan — ${{ steps.build.outputs.image_ref }}
         uses: ./.github/actions/dawson-trivy-image-scan
         with:
-          image_ref: ${{ steps.base.outputs.image }}
+          image_ref: ${{ steps.build.outputs.image_ref }}
           report_path: trivy-${{ matrix.name }}.sarif
           category: trivy-image-${{ matrix.name }}
 
@@ -203,24 +203,29 @@ jobs:
           report_path: trivy-baseline-base.sarif
           category: trivy-baseline-base
 
-      # Read from the Dockerfiles so the scans follow the weekly base image bumps.
-      - name: Resolve base images
-        id: base
-        run: |
-          echo "puppeteer=$(awk '/^FROM /{print $2; exit}' web-api/runtimes/puppeteer/Dockerfile)" >> "$GITHUB_OUTPUT"
-          echo "batch=$(awk '/^FROM /{print $2; exit}' web-api/terraform/modules/batch/docker-image/Dockerfile)" >> "$GITHUB_OUTPUT"
+      - name: Build puppeteer image
+        id: puppeteer
+        uses: ./.github/actions/dawson-runtime-image
+        with:
+          image: puppeteer
 
-      - name: Trivy scan — ${{ steps.base.outputs.puppeteer }} (baseline)
+      - name: Trivy scan — ${{ steps.puppeteer.outputs.image_ref }} (baseline)
         uses: ./.github/actions/dawson-trivy-image-scan
         with:
-          image_ref: ${{ steps.base.outputs.puppeteer }}
+          image_ref: ${{ steps.puppeteer.outputs.image_ref }}
           report_path: trivy-baseline-puppeteer.sarif
           category: trivy-baseline-puppeteer
 
-      - name: Trivy scan — ${{ steps.base.outputs.batch }} (baseline)
+      - name: Build batch image
+        id: batch
+        uses: ./.github/actions/dawson-runtime-image
+        with:
+          image: batch
+
+      - name: Trivy scan — ${{ steps.batch.outputs.image_ref }} (baseline)
         uses: ./.github/actions/dawson-trivy-image-scan
         with:
-          image_ref: ${{ steps.base.outputs.batch }}
+          image_ref: ${{ steps.batch.outputs.image_ref }}
           report_path: trivy-baseline-batch.sarif
           category: trivy-baseline-batch
 
@@ -235,7 +240,7 @@ jobs:
       always() &&
       (github.event_name == 'workflow_dispatch' ||
       (github.event_name == 'pull_request' && !github.event.pull_request.draft))
-    needs: [trivy-config, changes, trivy-image, trivy-runtime-base]
+    needs: [trivy-config, changes, trivy-image, trivy-runtime-image]
     runs-on: ubuntu-latest
     permissions: {}
     steps:
@@ -244,7 +249,7 @@ jobs:
           CONFIG_RESULT: ${{ needs.trivy-config.result }}
           CHANGES_RESULT: ${{ needs.changes.result }}
           IMAGE_RESULT: ${{ needs.trivy-image.result }}
-          RUNTIME_RESULT: ${{ needs.trivy-runtime-base.result }}
+          RUNTIME_RESULT: ${{ needs.trivy-runtime-image.result }}
         run: |
           if [[ "$CONFIG_RESULT" == "failure" ]]; then
             echo "Trivy Dockerfile config scan failed — see the Security tab for details"
@@ -259,7 +264,7 @@ jobs:
             exit 1
           fi
           if [[ "$RUNTIME_RESULT" == "failure" ]]; then
-            echo "Trivy runtime base scan failed — see the Security tab for details"
+            echo "Trivy batch or puppeteer image scan failed — see the Security tab for details"
             exit 1
           fi
           echo "Containers gate passed"
