@@ -1,3 +1,24 @@
+<details><summary>10241 - Motion visibility policy date</summary>
+
+## Manual Deployment Steps
+
+### After Deployment
+
+Migration `2026-10-16T18_36_55Z-set-motion-visibility-flag` inserts the `motion-visibility-policy-change-date` feature flag with a placeholder of `2027-01-01`. The migration overwrites that flag when it runs, so set the Court-approved date only after the migration has completed.
+
+Practitioner e-filed motions, and a brief in support (`BRF`) or memorandum in support (`MISP`) filed in that same motion filing, become visible to the public when filed on or after this date. Replace the placeholder with the date from the Court's public notice:
+
+```bash
+. ./scripts/env/set-env.zsh {YOUR_ENV}
+./scripts/postgres/featureFlags/setup-motion-visibility-policy-change-date.ts YYYY-MM-DD
+```
+
+Use `yyyy-MM-dd`. Leave `2027-01-01` in place until the Court sets the date.
+
+## Local
+
+A fresh local seed sets this flag to `2026-10-15`. An existing local database receives `2027-01-01` when the migration runs. To use another date locally, source the local environment and run the same script.
+</details>
 <details><summary>Dependency Updates - Week of 2026-10-19</summary>
 
 ## Local

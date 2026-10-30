@@ -22,6 +22,14 @@ export const getCypressEnv = () => {
     managedLoginOrigin: `https://ef-cms-${env}.auth.us-east-1.amazoncognito.com`,
     payGovOrigin:
       env === 'local' ? 'http://localhost:3366' : getEnvValue('PAY_GOV_ORIGIN'),
+    privateApiUrl:
+      env === 'local'
+        ? 'http://localhost:4000'
+        : `https://api-${getEnvValue('DEPLOYING_COLOR')}.${getEnvValue('EFCMS_DOMAIN')}`,
+    publicApiUrl:
+      env === 'local'
+        ? 'http://localhost:4000'
+        : `https://public-api-${getEnvValue('DEPLOYING_COLOR')}.${getEnvValue('EFCMS_DOMAIN')}`,
     publicSiteUrl:
       env === 'local'
         ? 'http://localhost:5678'
