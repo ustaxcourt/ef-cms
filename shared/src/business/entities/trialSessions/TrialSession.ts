@@ -30,6 +30,24 @@ import { getUniqueId } from '@shared/sharedAppContext';
 import { isEmpty, isEqual } from 'lodash';
 import joi from 'joi';
 
+export const REPORTING_SESSION_EXCLUDED_FIELDS = [
+  'address1',
+  'address2',
+  'city',
+  'state',
+  'postalCode',
+  'courthouseName',
+  'joinPhoneNumber',
+  'meetingId',
+  'password',
+  'startTime',
+  'trialClerk',
+  'trialClerkId',
+  'alternateTrialClerkName',
+  'courtReporter',
+  'swingSessionId',
+] as const;
+
 const stringRequiredForRemoteProceedings = JoiValidationConstants.STRING.max(
   100,
 ).when('isCalendared', {
@@ -49,6 +67,20 @@ const stringRequiredForRemoteProceedings = JoiValidationConstants.STRING.max(
     }),
   }),
 });
+
+const trialLocationValidation = joi
+  .when('sessionScope', {
+    is: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
+    otherwise: joi
+      .alternatives()
+      .try(
+        JoiValidationConstants.STRING.valid(...TRIAL_CITY_STRINGS, null),
+        JoiValidationConstants.STRING.pattern(TRIAL_LOCATION_MATCHER), // Allow unique values for testing
+      )
+      .required(),
+    then: joi.optional(),
+  })
+  .messages({ '*': 'Select a trial session location' });
 
 export type TJudge = {
   name: string;
@@ -130,6 +162,7 @@ export class TrialSession extends JoiValidationEntity {
       'password',
       'judge',
     ],
+    [TRIAL_SESSION_PROCEEDING_TYPES.reporting]: [],
   };
 
   constructor(rawSession) {
@@ -171,11 +204,7 @@ export class TrialSession extends JoiValidationEntity {
       rawSession.sessionScope || TRIAL_SESSION_SCOPE_TYPES.locationBased;
     this.sessionType = rawSession.sessionType;
     this.startDate = rawSession.startDate;
-    if (this.isStandaloneRemote()) {
-      this.startTime = '13:00';
-    } else {
-      this.startTime = rawSession.startTime || '10:00';
-    }
+    this.startTime = this.getStartTime(rawSession);
     this.state = rawSession.state;
     this.swingSession = rawSession.swingSession;
     this.swingSessionId = rawSession.swingSessionId;
@@ -185,9 +214,11 @@ export class TrialSession extends JoiValidationEntity {
     this.trialLocation = this.isStandaloneRemote()
       ? TRIAL_SESSION_SCOPE_TYPES.standaloneRemote
       : rawSession.trialLocation;
-    this.proceedingType = this.isStandaloneRemote()
-      ? TRIAL_SESSION_PROCEEDING_TYPES.remote
-      : rawSession.proceedingType;
+    this.proceedingType =
+      this.isStandaloneRemote() &&
+      rawSession.proceedingType !== TRIAL_SESSION_PROCEEDING_TYPES.reporting
+        ? TRIAL_SESSION_PROCEEDING_TYPES.remote
+        : rawSession.proceedingType;
     this.trialSessionId = rawSession.trialSessionId || getUniqueId();
     this.paperServicePdfs = rawSession.paperServicePdfs || [];
 
@@ -208,6 +239,20 @@ export class TrialSession extends JoiValidationEntity {
 
   static isStandaloneRemote(sessionScope) {
     return sessionScope === TRIAL_SESSION_SCOPE_TYPES.standaloneRemote;
+  }
+
+  getStartTime({
+    proceedingType,
+    startTime,
+  }: Pick<RawTrialSession, 'proceedingType' | 'startTime'>):
+    string | undefined {
+    if (proceedingType === TRIAL_SESSION_PROCEEDING_TYPES.reporting) {
+      return startTime;
+    }
+    if (this.isStandaloneRemote()) {
+      return '13:00';
+    }
+    return startTime || '10:00';
   }
 
   static isStartDateWithinNOTTReminderRange({
@@ -372,26 +417,52 @@ export class TrialSession extends JoiValidationEntity {
           userId: JoiValidationConstants.UUID.required(),
         })
         .optional(),
-      trialLocation: joi
-        .when('sessionScope', {
-          is: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
-          otherwise: joi
-            .alternatives()
-            .try(
-              JoiValidationConstants.STRING.valid(...TRIAL_CITY_STRINGS, null),
-              JoiValidationConstants.STRING.pattern(TRIAL_LOCATION_MATCHER), // Allow unique values for testing
-            )
-            .required(),
-          then: joi.optional(),
-        })
-        .messages({ '*': 'Select a trial session location' }),
+      trialLocation: trialLocationValidation,
       trialSessionId: JoiValidationConstants.UUID.optional(),
+    },
+    REPORTING: {
+      ...Object.fromEntries(
+        REPORTING_SESSION_EXCLUDED_FIELDS.map((field: string) => [
+          field,
+          joi.forbidden(),
+        ]),
+      ),
+      chambersPhoneNumber: JoiValidationConstants.STRING.max(100)
+        .allow('')
+        .optional(),
+      estimatedEndDate: JoiValidationConstants.ISO_DATE.min(
+        joi.ref('startDate'),
+      )
+        .max(joi.ref('startDate'))
+        .required()
+        .messages({
+          '*': 'Enter a valid estimated end date',
+          'date.min': 'Reporting start and end date must match',
+          'date.max': 'Reporting start and end date must match',
+        }),
+      sessionScope: joi
+        .valid(TRIAL_SESSION_SCOPE_TYPES.locationBased)
+        .required(),
+      sessionType: JoiValidationConstants.STRING.valid(
+        ...Object.values(SESSION_TYPES).filter(
+          (type: string) =>
+            type !== SESSION_TYPES.special &&
+            type !== SESSION_TYPES.motionHearing,
+        ),
+      )
+        .required()
+        .messages({
+          '*': 'Select a session type',
+        }),
+      swingSession: joi.valid(false).optional(),
+      trialLocation: trialLocationValidation.invalid(null),
     },
   };
 
   getValidationRules() {
     return {
       ...TrialSession.validationRules.COMMON,
+      ...(this.isReporting() ? TrialSession.validationRules.REPORTING : {}),
       caseOrder: joi.array().items(
         joi.object().keys({
           calendarNotes: JoiValidationConstants.STRING.optional().allow(
@@ -423,6 +494,10 @@ export class TrialSession extends JoiValidationEntity {
         }),
       ),
     } as object;
+  }
+
+  isReporting(): boolean {
+    return this.proceedingType === TRIAL_SESSION_PROCEEDING_TYPES.reporting;
   }
 
   setAsSwingSession(swingSessionId) {
@@ -538,11 +613,11 @@ export class TrialSession extends JoiValidationEntity {
   }
 
   /**
-   * checks certain properties of the trial session for emptiness.
-   * if one field is empty (via lodash.isEmpty), the method returns false
+   * checks whether the session supports ordinary trial calendaring and has
+   * all required fields populated.
    */
   canSetAsCalendared() {
-    return isEmpty(this.getEmptyFields());
+    return !this.isReporting() && isEmpty(this.getEmptyFields());
   }
 
   isRemote() {

@@ -1,4 +1,5 @@
 import {
+  ALLOWLIST_FEATURE_FLAGS,
   SESSION_STATUS_TYPES,
   SESSION_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
@@ -12,6 +13,83 @@ import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../../withAppContext';
 
 describe('addTrialSessionInformationHelper', () => {
+  it.each([true, false])(
+    'should gate the Reporting option with flag %s',
+    enabled => {
+      const result = runCompute(
+        withAppContextDecorator(
+          addTrialSessionInformationHelperComputed,
+          applicationContext,
+        ),
+        {
+          state: {
+            featureFlags: {
+              [ALLOWLIST_FEATURE_FLAGS.REPORTING_CALENDARS.key]: enabled,
+            },
+            form: { proceedingType: 'Remote' },
+            user: { role: 'petitionsclerk' },
+          },
+        },
+      );
+      expect(result.showReportingOption).toBe(!!enabled);
+      expect(result.isReportingSession).toBe(false);
+      expect(result.startDateId).toBe('start-date');
+      expect(result.startDateLabel).toBe('Start date');
+    },
+  );
+
+  it.each(['petitionsclerk', 'docketclerk'])(
+    'should keep existing Reporting sessions editable with restricted session types and no swing option for %s',
+    role => {
+      const result = runCompute(
+        withAppContextDecorator(
+          addTrialSessionInformationHelperComputed,
+          applicationContext,
+        ),
+        {
+          state: {
+            featureFlags: {},
+            form: { proceedingType: 'Reporting' },
+            user: { role },
+          },
+        },
+      );
+      expect(result.showReportingOption).toBe(false);
+      expect(result.isReportingSession).toBe(true);
+      expect(result.startDateId).toBe('due-date');
+      expect(result.startDateLabel).toBe('Due date');
+      expect(result.sessionTypes).toEqual([
+        'Regular',
+        'Small',
+        'Hybrid',
+        'Hybrid-S',
+      ]);
+      expect(result.displayRemoteProceedingForm).toBe(false);
+      expect(result.showSwingSessionOption).toBe(false);
+    },
+  );
+
+  it('should exclude Reporting sessions from potential swing links', () => {
+    const result = runCompute(
+      withAppContextDecorator(
+        addTrialSessionInformationHelperComputed,
+        applicationContext,
+      ),
+      {
+        state: {
+          form: { proceedingType: 'Remote', term: 'Winter', termYear: '2022' },
+          user: { role: 'petitionsclerk' },
+          trialSessions: [
+            { ...trialSession1, proceedingType: 'Reporting' },
+            trialSession2,
+          ],
+        },
+      },
+    );
+    expect(result.swingSessions.map(session => session.trialSessionId)).toEqual(
+      [trialSession2.trialSessionId],
+    );
+  });
   let trialSession1: TrialSessionInfoDTO;
   let trialSession2: TrialSessionInfoDTO;
   beforeEach(() => {

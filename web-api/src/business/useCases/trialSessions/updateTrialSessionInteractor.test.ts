@@ -1,3 +1,5 @@
+jest.mock('@web-api/persistence/postgres/featureFlag/getFeatureFlagValue');
+import { getFeatureFlagValue } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValue';
 jest.mock(
   '@web-api/business/useCases/trialSessions/updateTrialSessionInteractorHelper',
 );
@@ -65,9 +67,10 @@ import { shouldGenerateNoticeOfChangeTrialStartDate } from '@shared/business/uti
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { Case } from '@shared/business/entities/cases/Case';
 
+const getTrialSessionById = jest.mocked(getTrialSessionByIdMock);
+const updateTrialSessionMocked = jest.mocked(updateTrialSessionMock);
+
 describe('updateTrialSessionInteractor', () => {
-  const getTrialSessionById = jest.mocked(getTrialSessionByIdMock);
-  const updateTrialSessionMocked = jest.mocked(updateTrialSessionMock);
   const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
 
   describe('updateTrialSession', () => {
@@ -651,4 +654,131 @@ describe('updateTrialSessionInteractor', () => {
       );
     });
   });
+});
+
+describe('updateTrialSession Reporting', () => {
+  const linkedId = '208a959f-9526-4db5-b262-e58c476a4604';
+  const tomorrow = calculateISODate({ howMuch: 1, units: 'days' });
+  const currentSession: RawTrialSession = {
+    ...MOCK_TRIAL_INPERSON,
+    startDate: tomorrow,
+    caseOrder: [],
+  };
+  const reportingSession: RawTrialSession = {
+    ...currentSession,
+    proceedingType: 'Reporting',
+    address1: undefined,
+    city: undefined,
+    state: undefined,
+    postalCode: undefined,
+    startTime: undefined,
+    estimatedEndDate: tomorrow,
+  };
+  const updateSession = (trialSession: RawTrialSession): Promise<void> =>
+    updateTrialSession(
+      applicationContext,
+      { trialSession, clientConnectionId: 'reporting-connection' },
+      mockCaseServicesSupervisorUser,
+    );
+
+  it('should lock the former swing partner before unlinking a Reporting conversion', async () => {
+    getTrialSessionById.mockResolvedValue({
+      ...currentSession,
+      swingSessionId: linkedId,
+    });
+    const result = await determineEntitiesToLock(applicationContext, {
+      trialSession: new TrialSession(reportingSession),
+    });
+    expect(result.identifiers).toEqual([
+      `trial-session|${currentSession.trialSessionId}`,
+      `trial-session|${linkedId}`,
+    ]);
+  });
+
+  it.each([true, false])(
+    'should reject conversion to Reporting with the flag disabled (isCalendared=%s)',
+    async isCalendared => {
+      jest.mocked(getFeatureFlagValue).mockResolvedValue(false);
+      getTrialSessionById.mockResolvedValue({
+        ...currentSession,
+        isCalendared,
+      });
+      await expect(
+        updateSession({ ...reportingSession, isCalendared }),
+      ).rejects.toThrow(
+        isCalendared
+          ? 'A session with a trial calendar cannot be changed to Reporting.'
+          : 'Reporting calendars are not enabled.',
+      );
+      expect(updateTrialSessionMocked).not.toHaveBeenCalled();
+    },
+  );
+
+  it('should edit an existing Reporting session even when creation is disabled', async () => {
+    jest.mocked(getFeatureFlagValue).mockResolvedValue(false);
+    getTrialSessionById.mockResolvedValue(reportingSession);
+    const irsCalendarAdministratorInfo = {
+      name: 'Calendar Admin',
+      email: 'calendar@example.com',
+      phone: '2025550100',
+    };
+    await updateSession({ ...reportingSession, irsCalendarAdministratorInfo });
+    expect(getFeatureFlagValue).not.toHaveBeenCalled();
+    expect(updateTrialSessionMocked).toHaveBeenCalledWith({
+      trialSessionToUpdate: expect.objectContaining({
+        proceedingType: 'Reporting',
+        irsCalendarAdministratorInfo,
+      }),
+    });
+  });
+
+  it('should reject invalid Reporting edits before saving associated entities', async () => {
+    const reporting = { ...reportingSession, estimatedEndDate: undefined };
+    getTrialSessionById.mockResolvedValue(reporting);
+    await expect(updateSession(reporting)).rejects.toThrow(
+      'Enter a valid estimated end date',
+    );
+    expect(updateTrialSessionMocked).not.toHaveBeenCalled();
+    expect(createWorkingCopyForNewUserOnSession).not.toHaveBeenCalled();
+    expect(updateCasesAndSetNoticeOfChange).not.toHaveBeenCalled();
+  });
+
+  it.each(['reciprocal', 'unrelated', 'missing'])(
+    'should remove a former reciprocal swing association when converting to Reporting (%s)',
+    async association => {
+      jest.mocked(getFeatureFlagValue).mockResolvedValue(true);
+      const current = {
+        ...currentSession,
+        swingSession: true,
+        swingSessionId: linkedId,
+      };
+      const linked = {
+        ...MOCK_TRIAL_INPERSON,
+        trialSessionId: linkedId,
+        swingSessionId:
+          association === 'reciprocal' ? current.trialSessionId : getUniqueId(),
+        swingSession: true,
+      };
+      getTrialSessionById
+        .mockResolvedValueOnce(current)
+        .mockResolvedValueOnce(association === 'missing' ? undefined : linked);
+      await updateSession(reportingSession);
+      const expectedIds =
+        association === 'reciprocal'
+          ? [linkedId, current.trialSessionId]
+          : [current.trialSessionId];
+      expect(
+        updateTrialSessionMocked.mock.calls.map(
+          ([args]) => args.trialSessionToUpdate.trialSessionId,
+        ),
+      ).toEqual(expectedIds);
+      expect(
+        updateTrialSessionMocked.mock.calls.every(
+          ([args]) =>
+            !args.trialSessionToUpdate.swingSession &&
+            !args.trialSessionToUpdate.swingSessionId,
+        ),
+      ).toBe(true);
+    },
+  );
 });

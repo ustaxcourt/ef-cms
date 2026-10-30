@@ -6,7 +6,10 @@ import {
   TRIAL_SESSION_PROCEEDING_TYPES,
   TRIAL_SESSION_SCOPE_TYPES,
 } from '../EntityConstants';
-import { TrialSession } from './TrialSession';
+import {
+  REPORTING_SESSION_EXCLUDED_FIELDS,
+  TrialSession,
+} from './TrialSession';
 
 describe('TrialSession entity', () => {
   describe('isValid', () => {
@@ -509,5 +512,112 @@ describe('TrialSession entity', () => {
         'paperServicePdfs-0-title': '"paperServicePdfs[0].title" is required',
       });
     });
+  });
+});
+
+describe('Reporting validation', () => {
+  const reportingSession = {
+    ...MOCK_TRIAL_REGULAR,
+    proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.reporting,
+    startDate: '3000-12-01T00:00:00.000Z',
+    estimatedEndDate: '3000-12-01T00:00:00.000Z',
+    startTime: undefined,
+  };
+
+  it.each([
+    SESSION_TYPES.regular,
+    SESSION_TYPES.small,
+    SESSION_TYPES.hybrid,
+    SESSION_TYPES.hybridSmall,
+  ])(
+    'should accept a single-day reporting session with type %s and no time',
+    sessionType => {
+      const entity = new TrialSession({ ...reportingSession, sessionType });
+      expect(entity.getFormattedValidationErrors()).toBeNull();
+      expect(entity.startTime).toBeUndefined();
+    },
+  );
+
+  it.each([SESSION_TYPES.special, SESSION_TYPES.motionHearing])(
+    'should reject session type %s',
+    sessionType => {
+      expect(
+        new TrialSession({
+          ...reportingSession,
+          sessionType,
+        }).getFormattedValidationErrors(),
+      ).toHaveProperty('sessionType');
+    },
+  );
+
+  it.each([
+    [undefined, 'Enter a valid estimated end date'],
+    ['invalid', 'Enter a valid estimated end date'],
+    ['3000-12-02T00:00:00.000Z', 'Reporting start and end date must match'],
+  ])('should reject end date %s', (estimatedEndDate, message) => {
+    expect(
+      new TrialSession({
+        ...reportingSession,
+        estimatedEndDate,
+      }).getFormattedValidationErrors(),
+    ).toHaveProperty('estimatedEndDate', message);
+  });
+
+  it('should use the standard message when no session type is selected', () => {
+    expect(
+      new TrialSession({
+        ...reportingSession,
+        sessionType: undefined,
+      }).getFormattedValidationErrors(),
+    ).toHaveProperty('sessionType', 'Select a session type');
+  });
+
+  it('should reject standalone sessions', () => {
+    expect(
+      new TrialSession({
+        ...reportingSession,
+        sessionScope: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
+      }).getFormattedValidationErrors(),
+    ).toHaveProperty('sessionScope');
+  });
+
+  it('should require a trial location', () => {
+    expect(
+      new TrialSession({
+        ...reportingSession,
+        trialLocation: undefined,
+      }).getFormattedValidationErrors(),
+    ).toHaveProperty('trialLocation');
+  });
+
+  it.each(REPORTING_SESSION_EXCLUDED_FIELDS)(
+    'should reject excluded field %s',
+    field => {
+      const value =
+        field === 'trialClerk'
+          ? { name: 'Trial Clerk', userId: MOCK_TRIAL_REGULAR.judge?.userId }
+          : 'unexpected';
+      expect(
+        new TrialSession({
+          ...reportingSession,
+          [field]: value,
+        }).getFormattedValidationErrors(),
+      ).toHaveProperty(field);
+    },
+  );
+
+  it('should reject swing designation', () => {
+    expect(
+      new TrialSession({
+        ...reportingSession,
+        swingSession: true,
+      }).getFormattedValidationErrors(),
+    ).toHaveProperty('swingSession');
+  });
+  it('should not be able to set an ordinary trial calendar', () => {
+    const entity = new TrialSession(reportingSession);
+    expect(entity.isReporting()).toBe(true);
+    expect(entity.getEmptyFields()).toEqual([]);
+    expect(entity.canSetAsCalendared()).toBe(false);
   });
 });
