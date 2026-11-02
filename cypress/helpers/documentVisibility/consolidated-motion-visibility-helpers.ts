@@ -69,12 +69,12 @@ export function createConsolidatedGroupWithOneMember(): Cypress.Chainable<Consol
           updateCaseStatus(CASE_STATUS_TYPES.generalDocketReadyForTrial);
           addCaseToGroup(leadDocketNumber);
 
-          return {
+          return cy.wrap({
             leadDocketNumber,
             leadPetitionerName,
             memberDocketNumber,
             memberPetitionerName,
-          };
+          });
         },
       );
     },

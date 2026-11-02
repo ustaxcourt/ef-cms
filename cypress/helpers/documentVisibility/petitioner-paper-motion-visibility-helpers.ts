@@ -178,7 +178,7 @@ export function createCaseWithPetitionerFiledMotion({
         supportingDocs,
       });
 
-      return docketNumber;
+      return cy.wrap(docketNumber);
     })
     .then(docketNumber =>
       getPetitionerFiledMotionCaseFixture(
