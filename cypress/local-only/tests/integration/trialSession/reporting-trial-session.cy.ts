@@ -60,7 +60,7 @@ describe('Reporting trial sessions', () => {
     });
   });
 
-  it('should create, filter, and edit a Reporting session with a single due date', () => {
+  it('should create, filter, refresh, and edit a Reporting session with a single due date', () => {
     loginAsPetitionsClerk();
     cy.get('[data-testid="trial-session-link"]').click();
     cy.get('[data-testid="add-trial-session-button"]').click();
@@ -124,6 +124,10 @@ describe('Reporting trial sessions', () => {
       .should('not.exist');
     cy.get('#case-title').should('have.text', '02/10/99');
     cy.contains('p.label', 'Due Date').should('be.visible');
+    cy.contains('a', 'View Session Copy').should('not.exist');
+    cy.reload();
+    cy.contains('p.label', 'Due Date').should('be.visible');
+    cy.contains('a', 'View Session Copy').should('not.exist');
     cy.get('[data-testid="set-calendar-button"]').should('be.visible').click();
     cy.contains('Reporting sessions cannot be calendared yet.').should(
       'be.visible',
