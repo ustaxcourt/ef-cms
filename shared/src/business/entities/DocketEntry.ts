@@ -561,7 +561,8 @@ export class DocketEntry extends JoiValidationEntity {
     motionVisibilityChangeDate: string,
   ): boolean {
     return (
-      entry.filingDate >= motionVisibilityChangeDate &&
+      !!motionVisibilityChangeDate &&
+      entry.filingDate >= createISODateString(motionVisibilityChangeDate) &&
       !entry.isPaper &&
       (DocketEntry.isMotion(entry.eventCode) ||
         DocketEntry.isMotionSupport(entry, rootDocument)) &&

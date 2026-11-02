@@ -117,6 +117,7 @@ describe('Petitioner-filed and paper-filed motion visibility', () => {
             verifyDocumentCannotBeViewedPublic(
               caseDocketNumber,
               supportingEntries[supportingIndex].index,
+              supportingEntries[supportingIndex].docketEntryId,
             );
           });
         },
@@ -215,6 +216,7 @@ describe('Petitioner-filed and paper-filed motion visibility', () => {
               verifyDocumentCannotBeViewedPublic(
                 caseDocketNumber,
                 paperEntries[entryIndex].index,
+                paperEntries[entryIndex].docketEntryId,
               );
             });
 
@@ -237,6 +239,7 @@ describe('Petitioner-filed and paper-filed motion visibility', () => {
                   verifyDocumentCanBeViewedPublic(
                     caseDocketNumber,
                     paperEntries[entryIndex].index,
+                    paperEntries[entryIndex].docketEntryId,
                   );
                 },
               );
