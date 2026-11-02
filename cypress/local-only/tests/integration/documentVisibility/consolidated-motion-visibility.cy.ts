@@ -252,11 +252,16 @@ describe('Consolidated group motion visibility', () => {
               supportingEntries: memberSupportingEntries,
             },
           ].forEach(({ docketNumber, motionEntry, supportingEntries }) => {
-            verifyDocumentCanBeViewedPublic(docketNumber, motionEntry.index);
+            verifyDocumentCanBeViewedPublic(
+              docketNumber,
+              motionEntry.index,
+              motionEntry.docketEntryId,
+            );
             supportingEntries.forEach(supportingEntry => {
               verifyDocumentCanBeViewedPublic(
                 docketNumber,
                 supportingEntry.index,
+                supportingEntry.docketEntryId,
               );
             });
           });
@@ -273,14 +278,17 @@ describe('Consolidated group motion visibility', () => {
           verifyDocumentCanBeViewedPublic(
             docketNumber,
             motionEntries.motion.index,
+            motionEntries.motion.docketEntryId,
           );
           verifyDocumentCanBeViewedPublic(
             docketNumber,
             motionEntries.briefInSupport.index,
+            motionEntries.briefInSupport.docketEntryId,
           );
           verifyDocumentCanBeViewedPublic(
             docketNumber,
             motionEntries.memorandaInSupport.index,
+            motionEntries.memorandaInSupport.docketEntryId,
           );
         });
       });
@@ -476,10 +484,12 @@ describe('Consolidated group motion visibility', () => {
           verifyDocumentCannotBeViewedPublic(
             leadDocketNumber,
             leadSupportingEntry.index,
+            leadSupportingEntry.docketEntryId,
           );
           verifyDocumentCannotBeViewedPublic(
             memberDocketNumber,
             memberSupportingEntry.index,
+            memberSupportingEntry.docketEntryId,
           );
         });
 
@@ -507,10 +517,12 @@ describe('Consolidated group motion visibility', () => {
             verifyDocumentCanBeViewedPublic(
               leadDocketNumber,
               leadSupportingEntry.index,
+              leadSupportingEntry.docketEntryId,
             );
             verifyDocumentCanBeViewedPublic(
               memberDocketNumber,
               memberSupportingEntry.index,
+              memberSupportingEntry.docketEntryId,
             );
           });
         });
