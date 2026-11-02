@@ -29,6 +29,7 @@ import {
   verifyDocumentCannotBeViewed,
   verifyDocumentCannotBeViewedPublic,
   verifyMotionViewableOnPublicSite,
+  unassociatedExternalRolesForDoj,
 } from '../../../../helpers/documentVisibility/practitioner-filed-motion-visibility-helpers';
 
 describe('Consolidated group motion visibility', () => {
@@ -295,7 +296,9 @@ describe('Consolidated group motion visibility', () => {
 
       (filer === 'irsPractitioner'
         ? unassociatedExternalRolesForIrsPractitionerFiledMotion
-        : unassociatedExternalRolesForPrivatePractitionerFiledMotion
+        : filer === 'dojPractitioner'
+          ? unassociatedExternalRolesForDoj
+          : unassociatedExternalRolesForPrivatePractitionerFiledMotion
       ).forEach(({ login, role }) => {
         it(`should let ${role} open motion and supporting documents on lead and member cases`, () => {
           login();
@@ -495,7 +498,9 @@ describe('Consolidated group motion visibility', () => {
 
         (filer === 'irsPractitioner'
           ? unassociatedExternalRolesForIrsPractitionerFiledMotion
-          : unassociatedExternalRolesForPrivatePractitionerFiledMotion
+          : filer === 'dojPractitioner'
+            ? unassociatedExternalRolesForDoj
+            : unassociatedExternalRolesForPrivatePractitionerFiledMotion
         ).forEach(({ login, role }) => {
           it(`should not let ${role} download later ${supportingDocumentLabel} on lead and member cases`, () => {
             login();

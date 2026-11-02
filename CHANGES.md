@@ -18,6 +18,10 @@ Use `yyyy-MM-dd`. Leave `2027-01-01` in place until the Court sets the date.
 ## Local
 
 A fresh local seed sets this flag to `2026-10-15`. An existing local database receives `2027-01-01` when the migration runs. To use another date locally, source the local environment and run the same script.
+A second DOJ practitioner was added to local seed data:
+
+- email: `dojpractitioner2@example.com`
+- bar number: `DT2222`
 </details>
 <details><summary>Dependency Updates - Week of 2026-10-19</summary>
 
