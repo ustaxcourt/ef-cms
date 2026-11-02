@@ -20,12 +20,17 @@ import { getFeatureFlagValues as getFeatureFlagValuesMock } from '@web-api/persi
 import {
   calculateISODate,
   createISODateString,
+  formatDateString,
+  FORMATS,
 } from '@shared/business/utilities/DateHandler';
 const getFeatureFlagValues = getFeatureFlagValuesMock as jest.Mock;
 const isDownloadableMock = jest
   .spyOn(DocketEntry, 'isDownloadable')
   .mockImplementation(() => true);
-const motionVisibilityChangeDate = createISODateString();
+const motionVisibilityChangeDate = formatDateString(
+  createISODateString(),
+  FORMATS.YYYYMMDD,
+);
 
 describe('getFormattedDocketEntry', () => {
   let simpleDocketEntry;
