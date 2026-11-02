@@ -16,8 +16,8 @@ import {
 export function getMotionForLeaveEntriesFromDocketEntries(
   docketEntries: PublicDocketEntry[],
 ): MotionForLeaveDocketEntries {
-  const motionForLeaveDocketEntry = docketEntries.find(
-    entry => entry.eventCode === MOTION_FOR_LEAVE_EVENT_CODE,
+  const motionForLeaveDocketEntry = docketEntries.find(entry =>
+    [MOTION_FOR_LEAVE_EVENT_CODE, 'M014'].includes(entry.eventCode ?? ''),
   );
 
   if (!motionForLeaveDocketEntry) {
@@ -28,7 +28,7 @@ export function getMotionForLeaveEntriesFromDocketEntries(
     entry =>
       entry.lodged === true &&
       !entry.isPaper &&
-      entry.eventCode !== MOTION_FOR_LEAVE_EVENT_CODE,
+      entry.docketEntryId !== motionForLeaveDocketEntry.docketEntryId,
   );
 
   if (!lodgedSecondaryDocketEntry) {
