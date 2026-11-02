@@ -92,11 +92,22 @@ export function verifyDocumentCannotBeViewed(
     cy.wrap(row)
       .find('[data-testid^="docket-entry-filingsAndProceedings-"]')
       .should('exist');
-    cy.request({
-      url: `${privateApiUrl}/case-documents/${docketNumber}/${docketEntryId}/document-download-url`,
-      failOnStatusCode: false,
-    }).then(response => {
-      expect(response.status).to.eq(403);
+
+    cy.reload();
+
+    cy.intercept('GET', '**/users').as('getUsers');
+
+    cy.wait('@getUsers').then(users => {
+      const bearer = users.request.headers['authorization'];
+      cy.request({
+        auth: {
+          bearer,
+        },
+        url: `${privateApiUrl}/case-documents/${docketNumber}/${docketEntryId}/document-download-url`,
+        failOnStatusCode: false,
+      }).then(response => {
+        expect(response.status).to.eq(403);
+      });
     });
   });
 }
