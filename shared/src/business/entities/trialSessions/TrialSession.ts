@@ -162,7 +162,7 @@ export class TrialSession extends JoiValidationEntity {
       'password',
       'judge',
     ],
-    [TRIAL_SESSION_PROCEEDING_TYPES.reporting]: [],
+    [TRIAL_SESSION_PROCEEDING_TYPES.reporting]: ['judge'],
   };
 
   constructor(rawSession) {
@@ -617,6 +617,7 @@ export class TrialSession extends JoiValidationEntity {
    * all required fields populated.
    */
   canSetAsCalendared() {
+    // 10217 TODO: Remove !this.isReporting() after adding Reporting calendar support so getEmptyFields() determines eligibility.
     return !this.isReporting() && isEmpty(this.getEmptyFields());
   }
 
