@@ -70,5 +70,24 @@ export const unassociatedExternalRolesForIrsPractitionerFiledMotion: Unassociate
     },
   ];
 
+export const unassociatedExternalRolesForDoj: UnassociatedExternalRole[] = [
+  {
+    login: () => loginAsPetitioner(UNAUTHORIZED_PETITIONER_EMAIL),
+    role: 'petitioner not on case',
+  },
+  {
+    login: () => loginAsPrivatePractitioner('privatePractitioner2@example.com'),
+    role: 'private practitioner not on case',
+  },
+  {
+    login: () => loginAsIrsPractitioner(),
+    role: 'IRS practitioner not on case',
+  },
+  {
+    login: () => loginAsDojPractitioner('dojPractitioner2@example.com'),
+    role: 'DOJ practitioner not on case',
+  },
+];
+
 export const getPetitionerFilerTestId = (primaryFilerName: string): string =>
   `filingParty-${primaryFilerName}, Petitioner`;
