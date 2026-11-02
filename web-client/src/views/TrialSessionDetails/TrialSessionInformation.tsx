@@ -6,8 +6,23 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
+import { FormattedTrialSessionDetailsType } from '@shared/business/utilities/trialSession/getFormattedTrialSessionDetails';
 
-const RemoteProceedingInformation = ({ formattedTrialSessionDetails }) => {
+const ReportingInformation = () => {
+  return (
+    <div className="card trial-session-card height-full">
+      <div className="content-wrapper">
+        <h3 className="underlined">Reporting</h3>
+      </div>
+    </div>
+  );
+};
+
+const RemoteProceedingInformation = ({
+  formattedTrialSessionDetails,
+}: {
+  formattedTrialSessionDetails: FormattedTrialSessionDetailsType;
+}) => {
   return (
     <div className="card trial-session-card height-full">
       <div className="content-wrapper">
@@ -42,7 +57,11 @@ const RemoteProceedingInformation = ({ formattedTrialSessionDetails }) => {
   );
 };
 
-const InPersonProceedingInformation = ({ formattedTrialSessionDetails }) => {
+const InPersonProceedingInformation = ({
+  formattedTrialSessionDetails,
+}: {
+  formattedTrialSessionDetails: FormattedTrialSessionDetailsType;
+}) => {
   return (
     <div className="card trial-session-card height-full">
       <div className="content-wrapper">
@@ -235,13 +254,8 @@ export const TrialSessionInformation = connect(
             </div>
             <div className="grid-row grid-gap">
               <div className="grid-col-6">
-                {formattedTrialSessionDetails.isReportingSession && (
-                  <div className="card trial-session-card height-full">
-                    <div className="content-wrapper">
-                      <h3 className="underlined">Reporting</h3>
-                    </div>
-                  </div>
-                )}
+                {formattedTrialSessionDetails.isReportingSession &&
+                  ReportingInformation()}
                 {formattedTrialSessionDetails.proceedingType ===
                   TRIAL_SESSION_PROCEEDING_TYPES.inPerson &&
                   InPersonProceedingInformation({
