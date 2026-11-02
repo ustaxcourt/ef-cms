@@ -135,6 +135,7 @@ describe('Consolidated group lodged motion visibility', () => {
             { docketNumber: leadDocketNumber, entries: leadEntries },
             { docketNumber: memberDocketNumber, entries: memberEntries },
           ].forEach(({ docketNumber, entries }) => {
+            cy.visit('/');
             goToCase(docketNumber);
             primaryFilings(entries).forEach(docketEntry => {
               verifyDocumentCanBeViewed(docketEntry.docketEntryId);

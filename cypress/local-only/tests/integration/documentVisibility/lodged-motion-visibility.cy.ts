@@ -67,6 +67,7 @@ describe('Motion visibility for Motion for Leave with lodged secondary', () => {
       verifyDocumentCanBeViewedPublic(
         caseDocketNumber,
         motionForLeaveEntry.index,
+        motionForLeaveEntry.docketEntryId,
       );
     });
 
@@ -74,6 +75,7 @@ describe('Motion visibility for Motion for Leave with lodged secondary', () => {
       verifyDocumentCannotBeViewedPublic(
         caseDocketNumber,
         lodgedSecondary.index,
+        lodgedSecondary.docketEntryId,
       );
     });
 
@@ -97,6 +99,7 @@ describe('Motion visibility for Motion for Leave with lodged secondary', () => {
         verifyDocumentCanBeViewedPublic(
           caseDocketNumber,
           lodgedSecondary.index,
+          lodgedSecondary.docketEntryId,
         );
       });
     });
@@ -131,7 +134,11 @@ describe('Motion visibility for Motion for Leave with lodged secondary', () => {
     });
 
     it('should let public download previously lodged secondary Motion for Continuance after Section QC de-lodge', () => {
-      verifyDocumentCanBeViewedPublic(caseDocketNumber, lodgedSecondary.index);
+      verifyDocumentCanBeViewedPublic(
+        caseDocketNumber,
+        lodgedSecondary.index,
+        lodgedSecondary.docketEntryId,
+      );
     });
 
     it('should let filer open previously lodged secondary Motion for Continuance after Section QC de-lodge', () => {

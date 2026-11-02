@@ -66,6 +66,7 @@ describe('Motion visibility for seal to public and parties', () => {
         verifyDocumentCannotBeViewedPublic(
           caseDocketNumber,
           motionEntries.motion.index,
+          motionEntries.motion.docketEntryId,
         );
       });
     });
