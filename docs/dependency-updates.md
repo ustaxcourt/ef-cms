@@ -118,6 +118,7 @@ Check if updates are necessary for the main `Dockerfile`. We base this image on 
 If the `Dockerfile` has changed, you will need to build a new docker image and publish it to an experimental environment's ECR.
 
 1. Increment the docker image version being used in `.circleci/config.yml` in the `&efcms-docker-image` variable. See [PR #5980](https://github.com/ustaxcourt/ef-cms/pull/5980/files#diff-78a8a19706dbd2a4425dd72bdab0502ed7a2cef16365ab7030a5a0588927bf47) for an example.
+1. Review previously accepted container vulnerability findings and reassess any that may be affected by dependency or image changes. Refer to [Container Finding Triage](./security/container-findings-triage.md) for guidance.
 1. Use the [environment switcher](./additional-resources/environment-switcher.md) to point to an experimental environment:
    ```bash
    . scripts/env/set-env.zsh expN

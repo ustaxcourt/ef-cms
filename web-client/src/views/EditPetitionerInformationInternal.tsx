@@ -201,6 +201,7 @@ export const EditPetitionerInformationInternal = connect(
               />
             </FormGroup>
             <FormGroup
+              errorId="contact-email-address-error"
               errorText={validationErrors?.contact?.contactEmailAddress}
             >
               <label className="usa-label" htmlFor="contactEmailAddress">
@@ -211,6 +212,12 @@ export const EditPetitionerInformationInternal = connect(
                 autoCapitalize="none"
                 className="usa-input"
                 data-testid="contact-email-input"
+                aria-describedby={
+                  validationErrors?.contact?.contactEmailAddress
+                    ? 'contact-email-address-error'
+                    : undefined
+                }
+                aria-invalid={!!validationErrors?.contact?.contactEmailAddress}
                 id="contactEmailAddress"
                 name="contact.contactEmailAddress"
                 type="email"
