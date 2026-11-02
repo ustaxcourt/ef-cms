@@ -57,6 +57,9 @@ export const addCourtIssuedDocketEntryNonstandardHelper = (
         showFreeText = true;
         showDateLast = true;
         break;
+      case 'Type I':
+        showJudge = true;
+        break;
     }
   }
 
