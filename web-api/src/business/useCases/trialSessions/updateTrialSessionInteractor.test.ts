@@ -705,11 +705,12 @@ describe('updateTrialSession Reporting', () => {
       });
       await expect(
         updateSession({ ...reportingSession, isCalendared }),
-      ).rejects.toThrow(
-        isCalendared
-          ? 'A session with a trial calendar cannot be changed to Reporting.'
-          : 'Reporting calendars are not enabled.',
-      );
+      ).rejects.toMatchObject({
+        message: isCalendared
+          ? 'A session with an existing trial calendar cannot be changed to Reporting.'
+          : 'Changing a session to Reporting is not enabled.',
+        statusCode: 400,
+      });
       expect(updateTrialSessionMocked).not.toHaveBeenCalled();
     },
   );

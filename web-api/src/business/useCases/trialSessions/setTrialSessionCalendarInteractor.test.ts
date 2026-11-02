@@ -55,6 +55,12 @@ describe('setTrialSessionCalendarInteractor', () => {
     );
     expect(updateTrialSession).not.toHaveBeenCalled();
     expect(upsertCases).not.toHaveBeenCalled();
+    expect(applicationContext.logger.error).toHaveBeenCalledWith(
+      expect.objectContaining({
+        message: 'Reporting sessions cannot be calendared yet.',
+        statusCode: 400,
+      }),
+    );
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser,
     ).toHaveBeenCalledWith(
@@ -62,7 +68,7 @@ describe('setTrialSessionCalendarInteractor', () => {
         message: expect.objectContaining({
           action: 'set_trial_session_calendar_error',
           message:
-            'Error setting trial session calendar: Reporting sessions require a reporting calendar.',
+            'Error setting trial session calendar: Reporting sessions cannot be calendared yet.',
         }),
       }),
     );

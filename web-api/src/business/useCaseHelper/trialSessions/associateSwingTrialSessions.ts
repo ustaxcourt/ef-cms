@@ -7,7 +7,7 @@ import {
   RawTrialSession,
   TrialSession,
 } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
-import { UnauthorizedError } from '@web-api/errors/errors';
+import { InvalidRequest, UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 import { updateTrialSession } from '@web-api/persistence/postgres/trialSessions/updateTrialSession';
@@ -35,7 +35,9 @@ export const associateSwingTrialSessions = async (
   const swingSessionEntity = new TrialSession(swingTrialSession);
 
   if (trialSessionEntity.isReporting() || swingSessionEntity.isReporting()) {
-    throw new Error('Reporting sessions cannot be linked as swing sessions.');
+    throw new InvalidRequest(
+      'Reporting sessions cannot be linked as swing sessions.',
+    );
   }
 
   trialSessionEntity.setAsSwingSession(swingSessionId);

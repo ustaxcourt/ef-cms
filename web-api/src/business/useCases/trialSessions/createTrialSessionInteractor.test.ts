@@ -35,7 +35,10 @@ describe('createTrialSessionInteractor', () => {
         },
         mockDocketClerkUser,
       ),
-    ).rejects.toThrow('Reporting sessions require a reporting calendar.');
+    ).rejects.toMatchObject({
+      message: 'Reporting sessions must be created without a calendar.',
+      statusCode: 400,
+    });
     expect(
       applicationContext.getUseCaseHelpers().createTrialSessionAndWorkingCopy,
     ).not.toHaveBeenCalled();
@@ -61,9 +64,10 @@ describe('createTrialSessionInteractor', () => {
         { trialSession },
         mockDocketClerkUser,
       );
-      await expect(result).rejects.toThrow(
-        'Reporting calendars are not enabled.',
-      );
+      await expect(result).rejects.toMatchObject({
+        message: 'Reporting session creation is not enabled.',
+        statusCode: 400,
+      });
       expect(
         applicationContext.getUseCaseHelpers().createTrialSessionAndWorkingCopy,
       ).not.toHaveBeenCalled();

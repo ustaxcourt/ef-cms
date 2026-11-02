@@ -7,7 +7,7 @@ import {
   TrialSession,
 } from '@shared/business/entities/trialSessions/TrialSession';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '@web-api/errors/errors';
+import { InvalidRequest, UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { ALLOWLIST_FEATURE_FLAGS } from '@shared/business/entities/EntityConstants';
 import { getFeatureFlagValue } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValue';
@@ -25,7 +25,9 @@ export const createTrialSessionInteractor = async (
   const trialSessionToAdd = new TrialSession(trialSession);
 
   if (trialSessionToAdd.isReporting() && trialSessionToAdd.isCalendared) {
-    throw new Error('Reporting sessions require a reporting calendar.');
+    throw new InvalidRequest(
+      'Reporting sessions must be created without a calendar.',
+    );
   }
 
   if (
@@ -34,7 +36,7 @@ export const createTrialSessionInteractor = async (
       ALLOWLIST_FEATURE_FLAGS.REPORTING_CALENDARS.key,
     ))
   ) {
-    throw new Error('Reporting calendars are not enabled.');
+    throw new InvalidRequest('Reporting session creation is not enabled.');
   }
 
   if (

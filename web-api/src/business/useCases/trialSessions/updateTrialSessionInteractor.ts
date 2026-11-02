@@ -7,7 +7,11 @@ import {
   TrialSession,
 } from '@shared/business/entities/trialSessions/TrialSession';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
+import {
+  InvalidRequest,
+  NotFoundError,
+  UnauthorizedError,
+} from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import {
   createWorkingCopyForNewUserOnSession,
@@ -215,8 +219,8 @@ export const updateTrialSession = async (
       TRIAL_SESSION_PROCEEDING_TYPES.reporting
   ) {
     if (currentTrialSession.isCalendared) {
-      throw new Error(
-        'A session with a trial calendar cannot be changed to Reporting.',
+      throw new InvalidRequest(
+        'A session with an existing trial calendar cannot be changed to Reporting.',
       );
     }
     if (
@@ -224,7 +228,9 @@ export const updateTrialSession = async (
         ALLOWLIST_FEATURE_FLAGS.REPORTING_CALENDARS.key,
       ))
     ) {
-      throw new Error('Reporting calendars are not enabled.');
+      throw new InvalidRequest(
+        'Changing a session to Reporting is not enabled.',
+      );
     }
   }
 

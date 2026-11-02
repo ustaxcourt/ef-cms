@@ -1,6 +1,10 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { Case } from '@shared/business/entities/cases/Case';
-import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
+import {
+  InvalidRequest,
+  NotFoundError,
+  UnauthorizedError,
+} from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -54,7 +58,7 @@ export const setTrialSessionCalendarInteractor = async (
 
     const trialSessionEntity = new TrialSession(trialSession);
     if (trialSessionEntity.isReporting()) {
-      throw new Error('Reporting sessions require a reporting calendar.');
+      throw new InvalidRequest('Reporting sessions cannot be calendared yet.');
     }
     trialSessionEntity.setAsCalendared();
     trialSessionEntity.validate();

@@ -49,9 +49,10 @@ describe('associateSwingTrialSessions', () => {
           },
           mockPetitionsClerkUser,
         ),
-      ).rejects.toThrow(
-        'Reporting sessions cannot be linked as swing sessions.',
-      );
+      ).rejects.toMatchObject({
+        message: 'Reporting sessions cannot be linked as swing sessions.',
+        statusCode: 400,
+      });
       expect(updateTrialSessionMock).not.toHaveBeenCalled();
     },
   );
