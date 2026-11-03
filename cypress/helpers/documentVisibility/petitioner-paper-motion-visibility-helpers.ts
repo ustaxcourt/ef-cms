@@ -70,6 +70,7 @@ const createAndServePaperFilingForParty = ({
   });
   cy.get('[data-testid="save-and-serve"]').click();
   cy.get('[data-testid="modal-button-confirm"]').click();
+  cy.get('[data-testid="success-alert"]').should('exist');
 };
 
 export type PetitionerFiledMotionCaseFixture = {
@@ -207,7 +208,9 @@ export function createCaseWithPaperFiledMotionDocuments({
     petitionsClerkServesPetition(docketNumber);
     fileIrsAnswer(docketNumber);
     loginAsClerk();
-    goToCase(docketNumber);
+    cy.get('[data-testid="docket-number-search-input"]').type(docketNumber);
+    cy.get('[data-testid="search-docket-number"]').click();
+    cy.get('[data-testid="tab-docket-record"]').should('be.visible');
     createAndServePaperFilingForParty({
       dateReceived: today,
       documentType: 'Motion for Continuance',
