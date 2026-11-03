@@ -60,7 +60,7 @@ const assertEmailAvailableForPetitioner = async ({
   if (updatedEmail) {
     const currentMatchesUpdated = petitionerCaseRaw.petitioners
       .map(p => (p.email || '').toLowerCase())
-      .includes((updatedEmail || '').toLowerCase());
+      .includes(updatedEmail.toLowerCase());
 
     if (currentMatchesUpdated) {
       throw new Error(
