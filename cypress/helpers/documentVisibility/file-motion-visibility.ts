@@ -221,10 +221,9 @@ export function fileBriefInSupportOfMotion(
     'complete-doc-document-type-search',
     BRIEF_IN_SUPPORT_DOCUMENT_TYPE,
   );
+  selectPreviousDocumentOptionContaining(DEFAULT_MOTION_DOCUMENT_TYPE);
   cy.get('[data-testid="submit-document"]').click();
   attachPrimarySampleDocument();
-  cy.get('[data-testid="primaryDocument-objections-No"]').click();
-  selectPreviousDocumentOptionContaining(DEFAULT_MOTION_DOCUMENT_TYPE);
   selectFilerAndSubmitFileDocument(filerTestId);
 }
 
@@ -267,10 +266,9 @@ export function fileSupportInSupportOfMotionOnGroup(
     'complete-doc-document-type-search',
     options.documentType,
   );
+  selectPreviousDocumentOptionContaining(motionDocumentType);
   cy.get('[data-testid="submit-document"]').click();
   attachPrimarySampleDocument();
-  cy.get('[data-testid="primaryDocument-objections-No"]').click();
-  selectPreviousDocumentOptionContaining(motionDocumentType);
   selectFilerAndSubmitFileDocument(options.filerTestId, {
     fileOnConsolidatedGroup: true,
   });
