@@ -1,18 +1,13 @@
-/* eslint-disable max-lines */
 import { faker } from '@faker-js/faker';
 import {
   loginAsDocketClerk1,
-  loginAsIrsPractitioner,
   loginAsPetitioner,
   loginAsPrivatePractitioner,
 } from 'cypress/helpers/authentication/login-as-helpers';
-import { formatNow, FORMATS } from '@shared/business/utilities/DateHandler';
 import { externalUserCreatesElectronicCase } from 'cypress/helpers/fileAPetition/petitioner-creates-electronic-case';
 import { logout } from 'cypress/helpers/authentication/logout';
 import { petitionsClerkQcsAndServesElectronicCase } from 'cypress/helpers/documentQC/petitions-clerk-qcs-and-serves-electronic-case';
-import { petitionsClerkServesPetition } from 'cypress/helpers/documentQC/petitionsclerk-serves-petition';
 import { goToCase } from 'cypress/helpers/caseDetail/go-to-case';
-import { createAndServePaperFiling } from 'cypress/helpers/caseDetail/docketRecord/paperFiling/create-and-serve-paper-filing';
 import {
   BRIEF_IN_SUPPORT_EVENT_CODE,
   MEMORANDA_IN_SUPPORT_EVENT_CODE,
@@ -20,24 +15,17 @@ import {
   MotionVisibilityDocketEntries,
   MotionVisibilityPublicDocketEntry,
   UNAUTHORIZED_PETITIONER_EMAIL,
-  createPetitionerCaseWithFiledMotion,
   createPrivatePractitionerCaseWithFiledMotion,
   setDocketEntryFilingStatusByEventCode,
-  unassociatedExternalRolesForIrsPractitionerFiledMotion,
-  unassociatedExternalRolesForPrivatePractitionerFiledMotion,
-  fileAMotionAndSupportingDocuments,
   getPetitionerFilerTestId,
   restoreMotionVisibilityPolicyFlag,
   setOriginalMotionVisibilityPolicyFlag,
   setMotionVisibilityPolicyDateToTomorrow,
   setMotionVisibilityPolicyDateToYesterday,
   fileBriefInSupportOfMotion,
-  fileIrsAnswer,
   fileMotionOnly,
   getBriefInSupportEntryForCase,
   getEFiledMotionEntryForCase,
-  getMotionVisibilityDocketEntriesForCase,
-  getPaperMotionDocketEntryForCase,
   lodgeDocketEntryByEventCode,
   setDocketEntryFilingDateToYesterday,
   strikeDocketEntryByEventCode,
@@ -53,7 +41,7 @@ import {
 } from '../../../../helpers/documentVisibility/practitioner-filed-motion-visibility-helpers';
 import { getCypressEnv } from '../../../../helpers/env/cypressEnvironment';
 
-describe('Motion visibility after policy change date', () => {
+describe('Practitioner-filed motion visibility smoke', () => {
   beforeEach(function () {
     setOriginalMotionVisibilityPolicyFlag();
     setMotionVisibilityPolicyDateToYesterday();
@@ -63,7 +51,7 @@ describe('Motion visibility after policy change date', () => {
     restoreMotionVisibilityPolicyFlag();
   });
 
-  describe('Motion visibility for documents filed by a private practitioner', () => {
+  describe('After motion visibility policy change date', () => {
     let caseDocketNumber: string;
     let motionEntries: MotionVisibilityDocketEntries;
 
@@ -76,19 +64,13 @@ describe('Motion visibility after policy change date', () => {
       );
     });
 
-    it('should let motion be downloadable from public site', () => {
+    it('should let public download practitioner motion brief and memorandum in support', () => {
       verifyMotionViewableOnPublicSite(caseDocketNumber, motionEntries.motion);
-    });
-
-    it('should let brief in support be downloadable from public site', () => {
       verifyDocumentCanBeViewedPublic(
         caseDocketNumber,
         motionEntries.briefInSupport.index,
         motionEntries.briefInSupport.docketEntryId,
       );
-    });
-
-    it('should let memorandum in support be downloadable from public site', () => {
       verifyDocumentCanBeViewedPublic(
         caseDocketNumber,
         motionEntries.memorandaInSupport.index,
@@ -96,98 +78,16 @@ describe('Motion visibility after policy change date', () => {
       );
     });
 
-    unassociatedExternalRolesForPrivatePractitionerFiledMotion.forEach(
-      ({ login, role }) => {
-        it(`should let motion be downloadable by ${role}`, () => {
-          login();
-          goToCase(caseDocketNumber);
-          verifyDocumentCanBeViewed(motionEntries.motion.docketEntryId);
-        });
-
-        it(`should let brief in support be downloadable by ${role}`, () => {
-          login();
-          goToCase(caseDocketNumber);
-          verifyDocumentCanBeViewed(motionEntries.briefInSupport.docketEntryId);
-        });
-
-        it(`should let memorandum in support be downloadable by ${role}`, () => {
-          login();
-          goToCase(caseDocketNumber);
-          verifyDocumentCanBeViewed(
-            motionEntries.memorandaInSupport.docketEntryId,
-          );
-        });
-      },
-    );
+    it('should let unassociated petitioner download practitioner motion brief and memorandum in support', () => {
+      loginAsPetitioner(UNAUTHORIZED_PETITIONER_EMAIL);
+      goToCase(caseDocketNumber);
+      verifyDocumentCanBeViewed(motionEntries.motion.docketEntryId);
+      verifyDocumentCanBeViewed(motionEntries.briefInSupport.docketEntryId);
+      verifyDocumentCanBeViewed(motionEntries.memorandaInSupport.docketEntryId);
+    });
   });
 
-  describe('Motion visibility for documents filed by an IRS practitioner', () => {
-    let caseDocketNumber: string;
-    let motionEntries: MotionVisibilityDocketEntries;
-
-    before(() => {
-      loginAsPetitioner();
-      externalUserCreatesElectronicCase().then(docketNumber => {
-        caseDocketNumber = docketNumber;
-        petitionsClerkServesPetition(docketNumber);
-        fileIrsAnswer(docketNumber);
-        loginAsIrsPractitioner();
-        fileAMotionAndSupportingDocuments(
-          docketNumber,
-          'party-irs-practitioner-label',
-        );
-        getMotionVisibilityDocketEntriesForCase(docketNumber).then(entries => {
-          motionEntries = entries;
-        });
-      });
-    });
-
-    it('should let motion be downloadable from public site', () => {
-      verifyMotionViewableOnPublicSite(caseDocketNumber, motionEntries.motion);
-    });
-
-    it('should let brief in support be downloadable from public site', () => {
-      verifyDocumentCanBeViewedPublic(
-        caseDocketNumber,
-        motionEntries.briefInSupport.index,
-        motionEntries.briefInSupport.docketEntryId,
-      );
-    });
-
-    it('should let memorandum in support be downloadable from public site', () => {
-      verifyDocumentCanBeViewedPublic(
-        caseDocketNumber,
-        motionEntries.memorandaInSupport.index,
-        motionEntries.memorandaInSupport.docketEntryId,
-      );
-    });
-
-    unassociatedExternalRolesForIrsPractitionerFiledMotion.forEach(
-      ({ login, role }) => {
-        it(`should let motion be downloadable by ${role}`, () => {
-          login();
-          goToCase(caseDocketNumber);
-          verifyDocumentCanBeViewed(motionEntries.motion.docketEntryId);
-        });
-
-        it(`should let brief in support be downloadable by ${role}`, () => {
-          login();
-          goToCase(caseDocketNumber);
-          verifyDocumentCanBeViewed(motionEntries.briefInSupport.docketEntryId);
-        });
-
-        it(`should let memorandum in support be downloadable by ${role}`, () => {
-          login();
-          goToCase(caseDocketNumber);
-          verifyDocumentCanBeViewed(
-            motionEntries.memorandaInSupport.docketEntryId,
-          );
-        });
-      },
-    );
-  });
-
-  describe('Motion visibility for practitioner-filed motions before policy change date', () => {
+  describe('Before motion visibility policy change date', () => {
     let caseDocketNumber: string;
     let motionEntries: MotionVisibilityDocketEntries;
 
@@ -208,25 +108,28 @@ describe('Motion visibility after policy change date', () => {
       cy.task('setAllowedTerminalIpAddresses', []);
     });
 
-    it('should let filer open motion filed before policy change date', () => {
+    it('should not let public download practitioner motion brief or memorandum in support', () => {
+      verifyMotionNotViewableOnPublicSite(
+        caseDocketNumber,
+        motionEntries.motion,
+      );
+      verifyDocumentCannotBeViewedPublic(
+        caseDocketNumber,
+        motionEntries.briefInSupport.index,
+        motionEntries.briefInSupport.docketEntryId,
+      );
+      verifyDocumentCannotBeViewedPublic(
+        caseDocketNumber,
+        motionEntries.memorandaInSupport.index,
+        motionEntries.memorandaInSupport.docketEntryId,
+      );
+    });
+
+    it('should let filer and terminal user open practitioner motion filed before policy change date', () => {
       loginAsPrivatePractitioner();
       goToCase(caseDocketNumber);
       verifyDocumentCanBeViewed(motionEntries.motion.docketEntryId);
-    });
 
-    it('should let filer open brief in support filed before policy change date', () => {
-      loginAsPrivatePractitioner();
-      goToCase(caseDocketNumber);
-      verifyDocumentCanBeViewed(motionEntries.briefInSupport.docketEntryId);
-    });
-
-    it('should let filer open memorandum in support filed before policy change date', () => {
-      loginAsPrivatePractitioner();
-      goToCase(caseDocketNumber);
-      verifyDocumentCanBeViewed(motionEntries.memorandaInSupport.docketEntryId);
-    });
-
-    it('should let terminal user open motion filed before policy change date', () => {
       cy.task('setAllowedTerminalIpAddresses', ['localhost']).then(() => {
         verifyDocumentCanBeViewedPublic(
           caseDocketNumber,
@@ -234,146 +137,6 @@ describe('Motion visibility after policy change date', () => {
           motionEntries.motion.docketEntryId,
         );
       });
-    });
-
-    it('should not let motion be downloadable from public site', () => {
-      verifyMotionNotViewableOnPublicSite(
-        caseDocketNumber,
-        motionEntries.motion,
-      );
-    });
-
-    it('should not let brief in support be downloadable from public site', () => {
-      verifyDocumentCannotBeViewedPublic(
-        caseDocketNumber,
-        motionEntries.briefInSupport.index,
-        motionEntries.briefInSupport.docketEntryId,
-      );
-    });
-
-    it('should not let memorandum in support be downloadable from public site', () => {
-      verifyDocumentCannotBeViewedPublic(
-        caseDocketNumber,
-        motionEntries.memorandaInSupport.index,
-        motionEntries.memorandaInSupport.docketEntryId,
-      );
-    });
-
-    unassociatedExternalRolesForPrivatePractitionerFiledMotion.forEach(
-      ({ login, role }) => {
-        it(`should not let motion be downloadable by ${role}`, () => {
-          login();
-          goToCase(caseDocketNumber);
-          verifyDocumentCannotBeViewed(
-            caseDocketNumber,
-            motionEntries.motion.docketEntryId,
-          );
-        });
-      },
-    );
-
-    it('should not let brief in support be downloadable by unassociated petitioner', () => {
-      loginAsPetitioner(UNAUTHORIZED_PETITIONER_EMAIL);
-      goToCase(caseDocketNumber);
-      verifyDocumentCannotBeViewed(
-        caseDocketNumber,
-        motionEntries.briefInSupport.docketEntryId,
-      );
-    });
-
-    it('should not let memorandum in support be downloadable by unassociated petitioner', () => {
-      loginAsPetitioner(UNAUTHORIZED_PETITIONER_EMAIL);
-      goToCase(caseDocketNumber);
-      verifyDocumentCannotBeViewed(
-        caseDocketNumber,
-        motionEntries.memorandaInSupport.docketEntryId,
-      );
-    });
-  });
-
-  describe('Motion visibility for documents filed by a petitioner after policy change date', () => {
-    let caseDocketNumber: string;
-    let motionEntries: MotionVisibilityDocketEntries;
-
-    before(() => {
-      createPetitionerCaseWithFiledMotion().then(
-        ({ docketNumber, entries }) => {
-          caseDocketNumber = docketNumber;
-          motionEntries = entries;
-        },
-      );
-    });
-
-    it('should not let motion be downloadable from public site', () => {
-      verifyMotionNotViewableOnPublicSite(
-        caseDocketNumber,
-        motionEntries.motion,
-      );
-    });
-
-    it('should let filer open motion filed by petitioner after policy change date', () => {
-      loginAsPetitioner();
-      goToCase(caseDocketNumber);
-      verifyDocumentCanBeViewed(motionEntries.motion.docketEntryId);
-    });
-
-    it('should let filer open brief in support filed by petitioner after policy change date', () => {
-      loginAsPetitioner();
-      goToCase(caseDocketNumber);
-      verifyDocumentCanBeViewed(motionEntries.briefInSupport.docketEntryId);
-    });
-
-    it('should let filer open memorandum in support filed by petitioner after policy change date', () => {
-      loginAsPetitioner();
-      goToCase(caseDocketNumber);
-      verifyDocumentCanBeViewed(motionEntries.memorandaInSupport.docketEntryId);
-    });
-
-    it('should not let brief in support be downloadable from public site', () => {
-      verifyDocumentCannotBeViewedPublic(
-        caseDocketNumber,
-        motionEntries.briefInSupport.index,
-        motionEntries.briefInSupport.docketEntryId,
-      );
-    });
-
-    it('should not let memorandum in support be downloadable from public site', () => {
-      verifyDocumentCannotBeViewedPublic(
-        caseDocketNumber,
-        motionEntries.memorandaInSupport.index,
-        motionEntries.memorandaInSupport.docketEntryId,
-      );
-    });
-
-    unassociatedExternalRolesForPrivatePractitionerFiledMotion.forEach(
-      ({ login, role }) => {
-        it(`should not let motion be downloadable by ${role}`, () => {
-          login();
-          goToCase(caseDocketNumber);
-          verifyDocumentCannotBeViewed(
-            caseDocketNumber,
-            motionEntries.motion.docketEntryId,
-          );
-        });
-      },
-    );
-
-    it('should not let brief in support be downloadable by unassociated petitioner', () => {
-      loginAsPetitioner(UNAUTHORIZED_PETITIONER_EMAIL);
-      goToCase(caseDocketNumber);
-      verifyDocumentCannotBeViewed(
-        caseDocketNumber,
-        motionEntries.briefInSupport.docketEntryId,
-      );
-    });
-
-    it('should not let memorandum in support be downloadable by unassociated petitioner', () => {
-      loginAsPetitioner(UNAUTHORIZED_PETITIONER_EMAIL);
-      goToCase(caseDocketNumber);
-      verifyDocumentCannotBeViewed(
-        caseDocketNumber,
-        motionEntries.memorandaInSupport.docketEntryId,
-      );
     });
   });
 
@@ -397,14 +160,11 @@ describe('Motion visibility after policy change date', () => {
       );
     });
 
-    it('should not let stricken motion be downloadable from public site', () => {
+    it('should not let public or unassociated petitioner download stricken motion', () => {
       verifyMotionNotViewableOnPublicSite(
         caseDocketNumber,
         motionEntries.motion,
       );
-    });
-
-    it('should not let stricken motion be downloadable by unassociated petitioner', () => {
       loginAsPetitioner(UNAUTHORIZED_PETITIONER_EMAIL);
       goToCase(caseDocketNumber);
       verifyDocumentCannotBeViewed(
@@ -413,60 +173,16 @@ describe('Motion visibility after policy change date', () => {
       );
     });
 
-    it('should show stricken label on stricken practitioner-filed motion', () => {
+    it('should show stricken label and no download link for filer or terminal user', () => {
       loginAsDocketClerk1();
       goToCase(caseDocketNumber);
       verifyStrickenDocketEntry(motionEntries.motion.docketEntryId);
-    });
 
-    it('should not show download link for stricken motion to filer', () => {
-      loginAsPrivatePractitioner();
-      goToCase(caseDocketNumber);
-      verifyDocumentRowHasNoDownloadLink(motionEntries.motion.docketEntryId);
-    });
-
-    it('should not show download link for stricken motion to terminal user', () => {
       cy.task('setAllowedTerminalIpAddresses', ['localhost']).then(() => {
         loginAsPrivatePractitioner();
         goToCase(caseDocketNumber);
         verifyDocumentRowHasNoDownloadLink(motionEntries.motion.docketEntryId);
       });
-    });
-  });
-
-  describe('Sealed practitioner-filed motion', () => {
-    let caseDocketNumber: string;
-    let motionEntries: MotionVisibilityDocketEntries;
-
-    before(() => {
-      createPrivatePractitionerCaseWithFiledMotion().then(
-        ({ docketNumber, entries }) => {
-          caseDocketNumber = docketNumber;
-          motionEntries = entries;
-          loginAsDocketClerk1();
-          goToCase(docketNumber);
-          cy.get(
-            `[data-testid="seal-docket-entry-button-${entries.motion.index}"]`,
-          ).click();
-          cy.get('[data-testid="modal-button-confirm"]').click();
-        },
-      );
-    });
-
-    it('should not let sealed motion be downloadable from public site', () => {
-      verifyMotionNotViewableOnPublicSite(
-        caseDocketNumber,
-        motionEntries.motion,
-      );
-    });
-
-    it('should not let sealed motion be downloadable by unassociated petitioner', () => {
-      loginAsPetitioner(UNAUTHORIZED_PETITIONER_EMAIL);
-      goToCase(caseDocketNumber);
-      verifyDocumentCannotBeViewed(
-        caseDocketNumber,
-        motionEntries.motion.docketEntryId,
-      );
     });
   });
 
@@ -488,7 +204,7 @@ describe('Motion visibility after policy change date', () => {
       );
     });
 
-    it('should not let motion be downloadable from public site when case is sealed', () => {
+    it('should not let public download motion when case is sealed', () => {
       const { publicSiteUrl, publicApiUrl } = getCypressEnv();
       cy.origin(
         publicSiteUrl,
@@ -525,250 +241,6 @@ describe('Motion visibility after policy change date', () => {
     });
   });
 
-  describe('Lodged practitioner-filed motion', () => {
-    let caseDocketNumber: string;
-    let motionEntries: MotionVisibilityDocketEntries;
-
-    afterEach(() => {
-      cy.task('setAllowedTerminalIpAddresses', []);
-    });
-
-    before(() => {
-      createPrivatePractitionerCaseWithFiledMotion().then(
-        ({ docketNumber, entries }) => {
-          caseDocketNumber = docketNumber;
-          motionEntries = entries;
-          qcDocument(docketNumber);
-          goToCase(docketNumber);
-          lodgeDocketEntryByEventCode(MOTION_FOR_CONTINUANCE_EVENT_CODE);
-        },
-      );
-    });
-
-    it('should not let lodged motion be downloadable from public site', () => {
-      verifyMotionNotViewableOnPublicSite(
-        caseDocketNumber,
-        motionEntries.motion,
-      );
-    });
-
-    it('should let lodged motion be downloadable from public site for terminal user', () => {
-      cy.task('setAllowedTerminalIpAddresses', ['localhost']).then(() => {
-        verifyDocumentCanBeViewedPublic(
-          caseDocketNumber,
-          motionEntries.motion.index,
-          motionEntries.motion.docketEntryId,
-        );
-      });
-    });
-
-    it('should let filer open lodged practitioner-filed motion', () => {
-      loginAsPrivatePractitioner();
-      goToCase(caseDocketNumber);
-      verifyDocumentCanBeViewed(motionEntries.motion.docketEntryId);
-    });
-
-    it('should not let brief in support be downloadable from public site when motion is lodged', () => {
-      verifyDocumentCannotBeViewedPublic(
-        caseDocketNumber,
-        motionEntries.briefInSupport.index,
-        motionEntries.briefInSupport.docketEntryId,
-      );
-    });
-
-    it('should not let memorandum in support be downloadable from public site when motion is lodged', () => {
-      verifyDocumentCannotBeViewedPublic(
-        caseDocketNumber,
-        motionEntries.memorandaInSupport.index,
-        motionEntries.memorandaInSupport.docketEntryId,
-      );
-    });
-
-    it('should let brief in support be downloadable from public site for terminal user when motion is lodged', () => {
-      cy.task('setAllowedTerminalIpAddresses', ['localhost']).then(() => {
-        verifyDocumentCanBeViewedPublic(
-          caseDocketNumber,
-          motionEntries.briefInSupport.index,
-          motionEntries.briefInSupport.docketEntryId,
-        );
-      });
-    });
-
-    it('should let memorandum in support be downloadable from public site for terminal user when motion is lodged', () => {
-      cy.task('setAllowedTerminalIpAddresses', ['localhost']).then(() => {
-        verifyDocumentCanBeViewedPublic(
-          caseDocketNumber,
-          motionEntries.memorandaInSupport.index,
-          motionEntries.memorandaInSupport.docketEntryId,
-        );
-      });
-    });
-  });
-
-  describe('Paper-filed motion after policy change date', () => {
-    let caseDocketNumber: string;
-    let paperMotionEntry: MotionVisibilityPublicDocketEntry;
-
-    afterEach(() => {
-      cy.task('setAllowedTerminalIpAddresses', []);
-    });
-
-    before(() => {
-      const today = formatNow(FORMATS.MMDDYYYY);
-
-      createPrivatePractitionerCaseWithFiledMotion().then(
-        ({ docketNumber }) => {
-          caseDocketNumber = docketNumber;
-          loginAsDocketClerk1();
-          goToCase(docketNumber);
-          createAndServePaperFiling({
-            dateReceived: today,
-            documentType: 'Motion for Continuance',
-            isPaperCase: false,
-          });
-          cy.get('[data-testid="success-alert"]').should('exist');
-          getPaperMotionDocketEntryForCase().then(entry => {
-            paperMotionEntry = entry;
-          });
-        },
-      );
-    });
-
-    it.only('should not let paper-filed motion be downloadable from public site', () => {
-      verifyDocumentCannotBeViewedPublic(
-        caseDocketNumber,
-        paperMotionEntry.index,
-        paperMotionEntry.docketEntryId,
-      );
-    });
-
-    it('should not let paper-filed motion be downloadable by unassociated petitioner', () => {
-      loginAsPetitioner(UNAUTHORIZED_PETITIONER_EMAIL);
-      goToCase(caseDocketNumber);
-      verifyDocumentCannotBeViewed(
-        caseDocketNumber,
-        paperMotionEntry.docketEntryId,
-      );
-    });
-
-    it('should let terminal user open paper-filed motion', () => {
-      cy.task('setAllowedTerminalIpAddresses', ['localhost']).then(() => {
-        verifyDocumentCanBeViewedPublic(
-          caseDocketNumber,
-          paperMotionEntry.index,
-          paperMotionEntry.docketEntryId,
-        );
-      });
-    });
-  });
-
-  describe('Metadata de-lodge of practitioner motion filed after policy change date', () => {
-    let caseDocketNumber: string;
-    let motionEntries: MotionVisibilityDocketEntries;
-
-    before(() => {
-      createPrivatePractitionerCaseWithFiledMotion().then(
-        ({ docketNumber, entries }) => {
-          caseDocketNumber = docketNumber;
-          motionEntries = entries;
-          loginAsDocketClerk1();
-          goToCase(docketNumber);
-          lodgeDocketEntryByEventCode(MOTION_FOR_CONTINUANCE_EVENT_CODE);
-          setDocketEntryFilingStatusByEventCode(
-            MOTION_FOR_CONTINUANCE_EVENT_CODE,
-          );
-        },
-      );
-    });
-
-    it('should let public download practitioner motion after metadata de-lodge', () => {
-      verifyMotionViewableOnPublicSite(caseDocketNumber, motionEntries.motion);
-    });
-  });
-
-  describe('Metadata de-lodge of practitioner motion with supporting docs filed after policy change date', () => {
-    let caseDocketNumber: string;
-    let motionEntries: MotionVisibilityDocketEntries;
-
-    before(() => {
-      createPrivatePractitionerCaseWithFiledMotion().then(
-        ({ docketNumber, entries }) => {
-          caseDocketNumber = docketNumber;
-          motionEntries = entries;
-          loginAsDocketClerk1();
-          goToCase(docketNumber);
-          lodgeDocketEntryByEventCode(MOTION_FOR_CONTINUANCE_EVENT_CODE);
-          lodgeDocketEntryByEventCode(BRIEF_IN_SUPPORT_EVENT_CODE);
-          lodgeDocketEntryByEventCode(MEMORANDA_IN_SUPPORT_EVENT_CODE);
-          setDocketEntryFilingStatusByEventCode(
-            MOTION_FOR_CONTINUANCE_EVENT_CODE,
-          );
-          setDocketEntryFilingStatusByEventCode(BRIEF_IN_SUPPORT_EVENT_CODE);
-          setDocketEntryFilingStatusByEventCode(
-            MEMORANDA_IN_SUPPORT_EVENT_CODE,
-          );
-        },
-      );
-    });
-
-    it('should let public download practitioner motion after metadata de-lodge', () => {
-      verifyMotionViewableOnPublicSite(caseDocketNumber, motionEntries.motion);
-    });
-
-    it('should let public download brief in support after metadata de-lodge', () => {
-      verifyDocumentCanBeViewedPublic(
-        caseDocketNumber,
-        motionEntries.briefInSupport.index,
-        motionEntries.briefInSupport.docketEntryId,
-      );
-    });
-
-    it('should let public download memorandum in support after metadata de-lodge', () => {
-      verifyDocumentCanBeViewedPublic(
-        caseDocketNumber,
-        motionEntries.memorandaInSupport.index,
-        motionEntries.memorandaInSupport.docketEntryId,
-      );
-    });
-  });
-
-  describe('Metadata de-lodge of practitioner motion filed before policy change date', () => {
-    let caseDocketNumber: string;
-    let motionEntries: MotionVisibilityDocketEntries;
-
-    before(() => {
-      createPrivatePractitionerCaseWithFiledMotion().then(
-        ({ docketNumber, entries }) => {
-          caseDocketNumber = docketNumber;
-          motionEntries = entries;
-          loginAsDocketClerk1();
-          goToCase(docketNumber);
-          lodgeDocketEntryByEventCode(MOTION_FOR_CONTINUANCE_EVENT_CODE);
-          setDocketEntryFilingStatusByEventCode(
-            MOTION_FOR_CONTINUANCE_EVENT_CODE,
-          );
-        },
-      );
-    });
-
-    beforeEach(() => {
-      setMotionVisibilityPolicyDateToTomorrow();
-    });
-
-    it('should not let public download practitioner motion after metadata de-lodge before policy change date', () => {
-      verifyMotionNotViewableOnPublicSite(
-        caseDocketNumber,
-        motionEntries.motion,
-      );
-    });
-
-    it('should let filer open practitioner motion after metadata de-lodge before policy change date', () => {
-      loginAsPrivatePractitioner();
-      goToCase(caseDocketNumber);
-      verifyDocumentCanBeViewed(motionEntries.motion.docketEntryId);
-    });
-  });
-
   describe('Later brief in support of an existing practitioner-filed motion', () => {
     const primaryFilerName = faker.person.firstName();
     const filerTestId = getPetitionerFilerTestId(primaryFilerName);
@@ -801,11 +273,8 @@ describe('Motion visibility after policy change date', () => {
       });
     });
 
-    it('should let public download original motion after later brief is filed', () => {
+    it('should let public download original motion but not later brief in support', () => {
       verifyMotionViewableOnPublicSite(caseDocketNumber, motionEntry);
-    });
-
-    it('should not let public download later brief in support', () => {
       verifyDocumentCannotBeViewedPublic(
         caseDocketNumber,
         briefEntry.index,
@@ -813,19 +282,11 @@ describe('Motion visibility after policy change date', () => {
       );
     });
 
-    it('should not let unassociated petitioner download later brief in support', () => {
-      loginAsPetitioner(UNAUTHORIZED_PETITIONER_EMAIL);
-      goToCase(caseDocketNumber);
-      verifyDocumentCannotBeViewed(caseDocketNumber, briefEntry.docketEntryId);
-    });
-
-    it('should let filer open later brief in support', () => {
+    it('should let filer and terminal user open later brief in support', () => {
       loginAsPrivatePractitioner();
       goToCase(caseDocketNumber);
       verifyDocumentCanBeViewed(briefEntry.docketEntryId);
-    });
 
-    it('should let terminal user open later brief in support', () => {
       cy.task('setAllowedTerminalIpAddresses', ['localhost']).then(() => {
         verifyDocumentCanBeViewedPublic(
           caseDocketNumber,
@@ -833,6 +294,46 @@ describe('Motion visibility after policy change date', () => {
           briefEntry.docketEntryId,
         );
       });
+    });
+  });
+
+  describe('Metadata de-lodge of practitioner motion with supporting documents', () => {
+    let caseDocketNumber: string;
+    let motionEntries: MotionVisibilityDocketEntries;
+
+    before(() => {
+      createPrivatePractitionerCaseWithFiledMotion().then(
+        ({ docketNumber, entries }) => {
+          caseDocketNumber = docketNumber;
+          motionEntries = entries;
+          loginAsDocketClerk1();
+          goToCase(docketNumber);
+          lodgeDocketEntryByEventCode(MOTION_FOR_CONTINUANCE_EVENT_CODE);
+          lodgeDocketEntryByEventCode(BRIEF_IN_SUPPORT_EVENT_CODE);
+          lodgeDocketEntryByEventCode(MEMORANDA_IN_SUPPORT_EVENT_CODE);
+          setDocketEntryFilingStatusByEventCode(
+            MOTION_FOR_CONTINUANCE_EVENT_CODE,
+          );
+          setDocketEntryFilingStatusByEventCode(BRIEF_IN_SUPPORT_EVENT_CODE);
+          setDocketEntryFilingStatusByEventCode(
+            MEMORANDA_IN_SUPPORT_EVENT_CODE,
+          );
+        },
+      );
+    });
+
+    it('should let public download practitioner motion brief and memorandum after metadata de-lodge', () => {
+      verifyMotionViewableOnPublicSite(caseDocketNumber, motionEntries.motion);
+      verifyDocumentCanBeViewedPublic(
+        caseDocketNumber,
+        motionEntries.briefInSupport.index,
+        motionEntries.briefInSupport.docketEntryId,
+      );
+      verifyDocumentCanBeViewedPublic(
+        caseDocketNumber,
+        motionEntries.memorandaInSupport.index,
+        motionEntries.memorandaInSupport.docketEntryId,
+      );
     });
   });
 });

@@ -17,11 +17,6 @@ export type MotionVisibilityCaseFixture = {
   entries: MotionVisibilityDocketEntries;
 };
 
-export type UnassociatedExternalRole = {
-  login: () => void;
-  role: string;
-};
-
 export type MotionForLeaveDocketEntries = {
   motionForLeave: MotionVisibilityPublicDocketEntry;
   lodgedSecondary: MotionVisibilityPublicDocketEntry;
