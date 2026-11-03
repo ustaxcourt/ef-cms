@@ -28,6 +28,7 @@ export function getMotionForLeaveEntriesFromDocketEntries(
     entry =>
       entry.lodged === true &&
       !entry.isPaper &&
+      !entry.previousDocument &&
       entry.docketEntryId !== motionForLeaveDocketEntry.docketEntryId,
   );
 
@@ -55,12 +56,16 @@ export function getMotionForLeaveEntriesFromDocketEntries(
 
     const supportingEntry = getMotionVisibilityPublicDocketEntry(entry);
 
-    if (supportingEntry.index < lodgedSecondary.index) {
+    if (
+      entry.previousDocument?.docketEntryId === motionForLeave.docketEntryId
+    ) {
       primarySupportingEntries.push(supportingEntry);
       return;
     }
 
-    if (supportingEntry.index > lodgedSecondary.index) {
+    if (
+      entry.previousDocument?.docketEntryId === lodgedSecondary.docketEntryId
+    ) {
       lodgedSecondarySupportingEntries.push(supportingEntry);
     }
   });
