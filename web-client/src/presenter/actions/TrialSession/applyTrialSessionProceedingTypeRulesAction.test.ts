@@ -51,7 +51,7 @@ describe('applyTrialSessionProceedingTypeRulesAction', () => {
 
   it('should reset proceeding data and restore time when switching away from Reporting', async () => {
     const result = await runAction(applyTrialSessionProceedingTypeRulesAction, {
-      props: { key: 'proceedingType' },
+      props: { key: 'proceedingType', previousProceedingType: 'Reporting' },
       state: {
         form: {
           proceedingType: 'Remote',
