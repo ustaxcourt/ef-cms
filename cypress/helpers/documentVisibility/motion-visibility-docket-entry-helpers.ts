@@ -169,6 +169,7 @@ export function getPaperDocketEntriesForCase(
   docketNumber: string,
 ): Cypress.Chainable<MotionVisibilityPublicDocketEntry[]> {
   cy.intercept('GET', '**/docket-entries**').as('getDocketEntries');
+  cy.visit('/');
   goToCase(docketNumber);
   return cy.wait('@getDocketEntries').then(({ response }) => {
     const docketEntries: PublicDocketEntry[] = response?.body.docketEntries;
@@ -233,6 +234,7 @@ export function getMotionForLeaveEntriesForCase(
   docketNumber: string,
 ): Cypress.Chainable<MotionForLeaveDocketEntries> {
   cy.intercept('GET', '**/docket-entries**').as('getDocketEntries');
+  cy.visit('/');
   goToCase(docketNumber);
   return cy.wait('@getDocketEntries').then(({ response }) => {
     const docketEntries: PublicDocketEntry[] = response?.body.docketEntries;
@@ -244,6 +246,7 @@ export function getBriefInSupportEntryForCase(
   docketNumber: string,
 ): Cypress.Chainable<MotionVisibilityPublicDocketEntry> {
   cy.intercept('GET', '**/docket-entries**').as('getDocketEntries');
+  cy.visit('/');
   goToCase(docketNumber);
   return cy.wait('@getDocketEntries').then(({ response }) => {
     const docketEntries: PublicDocketEntry[] = response?.body.docketEntries;
@@ -272,6 +275,7 @@ export function getMotionAndSupportingEntriesForCase(
 }> {
   cy.intercept('GET', '**/docket-entries**').as('getDocketEntries');
   goToCase(docketNumber);
+  cy.visit('/');
   return cy.wait('@getDocketEntries').then(({ response }) => {
     const docketEntries = response?.body.docketEntries;
     const motionEntry = docketEntries.find(
