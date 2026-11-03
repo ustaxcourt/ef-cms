@@ -69,6 +69,11 @@ export function verifyMotionViewableOnPublicSite(
 }
 
 export function verifyDocumentCanBeViewed(docketEntryId: string): void {
+  cy.window().then(win => {
+    if (!('restore' in win.open)) {
+      cy.stub(win, 'open').as('windowOpen');
+    }
+  });
   cy.get(`[data-testid="${docketEntryId}"]`).then(row => {
     cy.wrap(row)
       .find('[data-testid^="document-download-link-"]')

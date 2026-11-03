@@ -124,10 +124,7 @@ describe('Motion visibility for Motion for Leave with lodged secondary', () => {
         getMotionForLeaveEntriesForCase(docketNumber).then(
           ({ lodgedSecondary: lodgedSecondaryEntry }) => {
             lodgedSecondary = lodgedSecondaryEntry;
-            docketClerkCompletesSectionQcChangingLodgeToFile(
-              docketNumber,
-              'Motion for Continuance',
-            );
+            docketClerkCompletesSectionQcChangingLodgeToFile(docketNumber);
           },
         );
       });

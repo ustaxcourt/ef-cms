@@ -134,23 +134,24 @@ export function lodgeDocketEntryByEventCode(eventCode: string): void {
 
 export function setDocketEntryFilingStatusByEventCode(eventCode: string): void {
   cy.get(`[data-testid="edit-${eventCode}"]`).click();
-  cy.get('#filing-status-File').click();
+  cy.get('[data-testid="filing-status-File"]').click();
   cy.get('[data-testid="save-edit-docket-entry-meta"]').click();
 }
 
 export function docketClerkCompletesSectionQcChangingLodgeToFile(
   docketNumber: string,
-  documentTitleContains: string,
 ): void {
   loginAsDocketClerk1();
   cy.get('[data-testid="document-qc-nav-item"]').click();
   cy.get('[data-testid="switch-to-section-document-qc-button"]').click();
-  cy.contains(
-    `[data-testid="work-item-document-link-${docketNumber}"]`,
-    documentTitleContains,
-  ).click();
-  cy.get('#filing-status-File').click();
+  cy.get(`[data-testid="work-item-document-link-${docketNumber}"]`)
+    .not(':contains("Motion for Leave")')
+    .click();
+  cy.get('#filing-status-Lodge').should('be.checked');
+  cy.get('[data-testid="filing-status-File"]').click();
+  cy.get('#filing-status-File').should('be.checked');
   cy.get('[data-testid="save-and-finish-document-qc"]').click();
+  cy.get('[data-testid="success-alert"]').should('exist');
   cy.get('[data-testid="loading-overlay"]').should('not.exist');
 }
 

@@ -127,6 +127,26 @@ const getPaperMotionDocketEntry = (
   return getMotionVisibilityPublicDocketEntry(docketEntry);
 };
 
+/**
+ * The intercept is registered after visiting the home page so that it cannot
+ * match an in-flight request from the previous page, which the visit aborts.
+ */
+function getDocketEntriesForCase(
+  docketNumber: string,
+): Cypress.Chainable<PublicDocketEntry[]> {
+  cy.visit('/');
+  cy.intercept('GET', `**/cases/${docketNumber}/docket-entries**`).as(
+    'getDocketEntries',
+  );
+  goToCase(docketNumber);
+  return cy.wait('@getDocketEntries').then(({ response }) => {
+    expect(response?.statusCode).to.eq(200);
+    const docketEntries: PublicDocketEntry[] = response?.body.docketEntries;
+    expect(docketEntries).to.be.an('array');
+    return docketEntries;
+  });
+}
+
 export function getDocketEntryByEventCodeForCase(
   docketNumber: string,
   eventCode: string,
@@ -152,11 +172,7 @@ export function getDocketEntriesByEventCodeForCase(
   eventCode: string,
   isPaper?: boolean,
 ): Cypress.Chainable<MotionVisibilityPublicDocketEntry[]> {
-  cy.intercept('GET', '**/docket-entries**').as('getDocketEntries');
-  cy.visit('/');
-  goToCase(docketNumber);
-  return cy.wait('@getDocketEntries').then(({ response }) => {
-    const docketEntries: PublicDocketEntry[] = response?.body.docketEntries;
+  return getDocketEntriesForCase(docketNumber).then(docketEntries => {
     return filterDocketEntriesByEventCode(
       docketEntries,
       eventCode,
@@ -232,28 +248,17 @@ export function getMotionVisibilityDocketEntriesForCase(
 export function getMotionForLeaveEntriesForCase(
   docketNumber: string,
 ): Cypress.Chainable<MotionForLeaveDocketEntries> {
-  cy.intercept('GET', '**/docket-entries**').as('getDocketEntries');
-  cy.visit('/');
-  goToCase(docketNumber);
-  return cy.wait('@getDocketEntries').then(({ response }) => {
-    const docketEntries: PublicDocketEntry[] = response?.body.docketEntries;
-    return getMotionForLeaveEntriesFromDocketEntries(docketEntries);
-  });
+  return getDocketEntriesForCase(docketNumber).then(
+    getMotionForLeaveEntriesFromDocketEntries,
+  );
 }
 
 export function getBriefInSupportEntryForCase(
   docketNumber: string,
 ): Cypress.Chainable<MotionVisibilityPublicDocketEntry> {
-  cy.intercept('GET', '**/docket-entries**').as('getDocketEntries');
-  cy.visit('/');
-  goToCase(docketNumber);
-  return cy.wait('@getDocketEntries').then(({ response }) => {
-    const docketEntries: PublicDocketEntry[] = response?.body.docketEntries;
-    return getDocketEntryByEventCode(
-      docketEntries,
-      BRIEF_IN_SUPPORT_EVENT_CODE,
-    );
-  });
+  return getDocketEntriesForCase(docketNumber).then(docketEntries =>
+    getDocketEntryByEventCode(docketEntries, BRIEF_IN_SUPPORT_EVENT_CODE),
+  );
 }
 
 export function getPaperMotionDocketEntryForCase(): Cypress.Chainable<MotionVisibilityPublicDocketEntry> {
@@ -272,50 +277,26 @@ export function getMotionAndSupportingEntriesForCase(
   motion: MotionVisibilityPublicDocketEntry;
   supportingEntries: MotionVisibilityPublicDocketEntry[];
 }> {
-  cy.intercept('GET', '**/docket-entries**').as('getDocketEntries');
-  goToCase(docketNumber);
-  cy.visit('/');
-  return cy.wait('@getDocketEntries').then(({ response }) => {
-    const docketEntries = response?.body.docketEntries;
+  return getDocketEntriesForCase(docketNumber).then(docketEntries => {
     const motionEntry = docketEntries.find(
-      (entry: { eventCode: string; isPaper?: boolean }) =>
-        entry.eventCode === motionEventCode && !entry.isPaper,
+      entry => entry.eventCode === motionEventCode && !entry.isPaper,
     );
 
     if (!motionEntry) {
       throw new Error(`Motion ${motionEventCode} was not found`);
     }
 
-    const motion: MotionVisibilityPublicDocketEntry = {
-      docketEntryId: motionEntry.docketEntryId,
-      index: motionEntry.index,
-      eventCode: motionEntry.eventCode,
-    };
+    const motion = getMotionVisibilityPublicDocketEntry(motionEntry);
 
     const supportingEntries = docketEntries
       .filter(
-        (entry: { eventCode: string; index: number }) =>
-          (entry.eventCode === BRIEF_IN_SUPPORT_EVENT_CODE ||
-            entry.eventCode === MEMORANDA_IN_SUPPORT_EVENT_CODE) &&
-          entry.index > motion.index,
+        entry =>
+          entry.eventCode === BRIEF_IN_SUPPORT_EVENT_CODE ||
+          entry.eventCode === MEMORANDA_IN_SUPPORT_EVENT_CODE,
       )
-      .map(
-        (entry: {
-          docketEntryId: string;
-          index: number;
-          eventCode: string;
-        }) => ({
-          docketEntryId: entry.docketEntryId,
-          index: entry.index,
-          eventCode: entry.eventCode,
-        }),
-      )
-      .sort(
-        (
-          a: MotionVisibilityPublicDocketEntry,
-          b: MotionVisibilityPublicDocketEntry,
-        ) => a.index - b.index,
-      );
+      .map(getMotionVisibilityPublicDocketEntry)
+      .filter(entry => entry.index > motion.index)
+      .sort((a, b) => a.index - b.index);
 
     return { motion, supportingEntries };
   });
