@@ -260,10 +260,21 @@ export function getMotionForLeaveEntriesForCase(
 
 export function getBriefInSupportEntryForCase(
   docketNumber: string,
+  attemptsRemaining: number = 5,
 ): Cypress.Chainable<MotionVisibilityPublicDocketEntry> {
-  return getDocketEntriesForCase(docketNumber).then(docketEntries =>
-    getDocketEntryByEventCode(docketEntries, BRIEF_IN_SUPPORT_EVENT_CODE),
-  );
+  return getDocketEntriesForCase(docketNumber).then(docketEntries => {
+    const hasBriefInSupport = docketEntries.some(
+      entry => entry.eventCode === BRIEF_IN_SUPPORT_EVENT_CODE,
+    );
+
+    if (!hasBriefInSupport && attemptsRemaining > 1) {
+      return getBriefInSupportEntryForCase(docketNumber, attemptsRemaining - 1);
+    }
+
+    return cy.wrap(
+      getDocketEntryByEventCode(docketEntries, BRIEF_IN_SUPPORT_EVENT_CODE),
+    );
+  });
 }
 
 export function getPaperMotionDocketEntryForCase(): Cypress.Chainable<MotionVisibilityPublicDocketEntry> {
