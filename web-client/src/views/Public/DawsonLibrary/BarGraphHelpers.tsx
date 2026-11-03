@@ -16,10 +16,15 @@ export const renderCustomLegend = (props: any) => {
             className="tw:shrink-0 tw:border-2 tw:border-black tw:rounded-[0.5rem] tw:w-10 tw:h-10 tw:xs:w-12 tw:xs:h-12"
             style={{ backgroundColor: entry.color }}
           />
-          <span className="tw:text-black tw:font-bold tw:text-base tw:xs:text-xl">
-            {entry.total != null
-              ? `${entry.value}: ${entry.total.toLocaleString()}`
-              : entry.value}
+          <span className="tw:text-black tw:text-base tw:xs:text-xl">
+            {entry.total != null ? (
+              <>
+                <span className="tw:font-bold">{entry.value}: </span>
+                {entry.total.toLocaleString()}
+              </>
+            ) : (
+              <span className="tw:font-bold">{entry.value}</span>
+            )}
           </span>
         </div>
       ))}
