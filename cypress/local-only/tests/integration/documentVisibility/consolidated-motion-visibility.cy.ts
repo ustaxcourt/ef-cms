@@ -63,6 +63,7 @@ describe('Consolidated group motion visibility smoke', () => {
       loginConsolidatedFiler('privatePractitioner');
       goToCase(leadDocketNumber);
       verifyDocumentCanBeViewed(leadMotionEntry.docketEntryId);
+      cy.visit('/');
       goToCase(memberDocketNumber);
       verifyDocumentCanBeViewed(memberMotionEntry.docketEntryId);
     });
