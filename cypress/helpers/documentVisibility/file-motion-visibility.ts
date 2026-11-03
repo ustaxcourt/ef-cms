@@ -5,6 +5,7 @@ import {
   loginAsDocketClerk1,
   loginAsIrsPractitioner,
 } from '../authentication/login-as-helpers';
+import { logout } from '../authentication/logout';
 import {
   BRIEF_IN_SUPPORT_DOCUMENT_TYPE,
   DEFAULT_MOTION_DOCUMENT_TYPE,
@@ -153,6 +154,7 @@ export function docketClerkCompletesSectionQcChangingLodgeToFile(
   cy.get('[data-testid="save-and-finish-document-qc"]').click();
   cy.get('[data-testid="success-alert"]').should('exist');
   cy.get('[data-testid="loading-overlay"]').should('not.exist');
+  logout();
 }
 
 export type FileMotionAndSupportsOptions = {
