@@ -94,6 +94,7 @@ export function selectFilerAndSubmitFileDocument(
 export function submitFileDocumentWithRedaction(): void {
   cy.get('[data-testid="redaction-acknowledgement-label"]').click();
   cy.get('[data-testid="file-document-review-submit-document"]').click();
+  cy.get('[data-testid="success-alert"]').should('exist');
   cy.get('[data-testid="loading-overlay"]').should('not.exist');
 }
 
@@ -120,6 +121,15 @@ export function qcDocument(docketNumber: string): void {
   cy.get('[data-testid="success-alert"]').should('exist');
 }
 
+export function qcDocuments(
+  docketNumber: string,
+  numberOfDocuments: number,
+): void {
+  Array.from({ length: numberOfDocuments }).forEach(() => {
+    qcDocument(docketNumber);
+  });
+}
+
 export function strikeDocketEntryByEventCode(eventCode: string): void {
   cy.get(`[data-testid="edit-${eventCode}"]`).click();
   cy.get('[data-testid="tab-action"]').click();
@@ -131,12 +141,18 @@ export function lodgeDocketEntryByEventCode(eventCode: string): void {
   cy.get(`[data-testid="edit-${eventCode}"]`).click();
   cy.get('[data-testid="filing-status-Lodge"]').click();
   cy.get('[data-testid="save-edit-docket-entry-meta"]').click();
+  cy.get('[data-testid="success-alert"]').should('exist');
 }
 
-export function setDocketEntryFilingStatusByEventCode(eventCode: string): void {
-  cy.get(`[data-testid="edit-${eventCode}"]`).click();
-  cy.get('[data-testid="filing-status-File"]').click();
+export function setDocketEntryFilingStatusByDocketEntryId(
+  docketEntryId: string,
+): void {
+  cy.get(`[data-testid="${docketEntryId}"]`)
+    .find('[data-testid^="edit-"]')
+    .click();
+  cy.get('[data-testid="filing-status-Filed"]').click();
   cy.get('[data-testid="save-edit-docket-entry-meta"]').click();
+  cy.get('[data-testid="success-alert"]').should('exist');
 }
 
 export function docketClerkCompletesSectionQcChangingLodgeToFile(

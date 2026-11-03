@@ -16,7 +16,7 @@ import {
   MotionVisibilityPublicDocketEntry,
   UNAUTHORIZED_PETITIONER_EMAIL,
   createPrivatePractitionerCaseWithFiledMotion,
-  setDocketEntryFilingStatusByEventCode,
+  setDocketEntryFilingStatusByDocketEntryId,
   getPetitionerFilerTestId,
   restoreMotionVisibilityPolicyFlag,
   setOriginalMotionVisibilityPolicyFlag,
@@ -38,6 +38,7 @@ import {
   verifyMotionViewableOnPublicSite,
   verifyStrickenDocketEntry,
   qcDocument,
+  qcDocuments,
 } from '../../../../helpers/documentVisibility/practitioner-filed-motion-visibility-helpers';
 import { getCypressEnv } from '../../../../helpers/env/cypressEnvironment';
 
@@ -49,6 +50,7 @@ describe('Practitioner-filed motion visibility smoke', () => {
 
   afterEach(function () {
     restoreMotionVisibilityPolicyFlag();
+    logout();
   });
 
   describe('After motion visibility policy change date', () => {
@@ -306,17 +308,19 @@ describe('Practitioner-filed motion visibility smoke', () => {
         ({ docketNumber, entries }) => {
           caseDocketNumber = docketNumber;
           motionEntries = entries;
-          loginAsDocketClerk1();
+          qcDocuments(docketNumber, 3);
           goToCase(docketNumber);
           lodgeDocketEntryByEventCode(MOTION_FOR_CONTINUANCE_EVENT_CODE);
           lodgeDocketEntryByEventCode(BRIEF_IN_SUPPORT_EVENT_CODE);
           lodgeDocketEntryByEventCode(MEMORANDA_IN_SUPPORT_EVENT_CODE);
-          setDocketEntryFilingStatusByEventCode(
-            MOTION_FOR_CONTINUANCE_EVENT_CODE,
+          setDocketEntryFilingStatusByDocketEntryId(
+            entries.motion.docketEntryId,
           );
-          setDocketEntryFilingStatusByEventCode(BRIEF_IN_SUPPORT_EVENT_CODE);
-          setDocketEntryFilingStatusByEventCode(
-            MEMORANDA_IN_SUPPORT_EVENT_CODE,
+          setDocketEntryFilingStatusByDocketEntryId(
+            entries.briefInSupport.docketEntryId,
+          );
+          setDocketEntryFilingStatusByDocketEntryId(
+            entries.memorandaInSupport.docketEntryId,
           );
         },
       );
