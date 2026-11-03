@@ -1,4 +1,5 @@
 import {
+  ALLOWLIST_FEATURE_FLAGS,
   SESSION_STATUS_TYPES,
   SESSION_TYPES,
 } from '@shared/business/entities/EntityConstants';
@@ -75,6 +76,16 @@ describe('addToTrialSessionModalHelper', () => {
   ];
 
   describe('trialSessionOptionText', () => {
+    it('should identify Reporting session selections with (RP)', () => {
+      expect(
+        trialSessionOptionText({
+          trialLocation: 'Birmingham, Alabama',
+          startDate: '2024-09-27T05:00:00.000Z',
+          sessionType: SESSION_TYPES.regular,
+          proceedingType: 'Reporting',
+        }),
+      ).toBe('Birmingham, Alabama 09/27/24 (R)(RP)');
+    });
     const trialSession = {
       startDate: '2024-09-27T05:00:00.000Z',
       trialLocation: 'Birmingham, Alabama',
@@ -125,6 +136,45 @@ describe('addToTrialSessionModalHelper', () => {
     });
   });
   describe('trialSessionsModalHelper', () => {
+    it.each([
+      [true, false],
+      [false, false],
+      [true, true],
+      [false, true],
+    ])(
+      'should gate Reporting choices with flag %s when all locations is %s',
+      (enabled, showAllLocations) => {
+        const result = runCompute(addToTrialSessionModalHelper, {
+          state: {
+            featureFlags: {
+              [ALLOWLIST_FEATURE_FLAGS.REPORTING_CALENDARS.key]: enabled,
+            },
+            caseDetail: { hearings: [], preferredTrialCity: 'Boise, Idaho' },
+            modal: {
+              showAllLocations,
+              trialSessions: [
+                trialSessions[0],
+                {
+                  ...trialSessions[0],
+                  trialSessionId: 'reporting',
+                  proceedingType: 'Reporting',
+                },
+              ],
+            },
+          },
+        });
+        const options = showAllLocations
+          ? result.trialSessionsFormattedByState.Idaho
+          : result.trialSessionsFormatted;
+        expect(
+          options.map(
+            (session: { trialSessionId: string }): string =>
+              session.trialSessionId,
+          ),
+        ).toEqual(enabled ? ['4', 'reporting'] : ['4']);
+      },
+    );
+
     it('should not return trialSessionsFormatted or trialSessionsFormattedByState if modal state does not contain trialSessions', () => {
       const result = runCompute(addToTrialSessionModalHelper, {
         state: {

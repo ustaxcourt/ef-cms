@@ -1,3 +1,5 @@
+import { MOCK_TRIAL_REGULAR } from '@shared/test/mockTrial';
+import { TRIAL_SESSION_PROCEEDING_TYPES } from '../EntityConstants';
 import { TrialSessionTypes } from '@shared/business/entities/EntityConstants';
 import { calculateISODate } from '../../utilities/DateHandler';
 import { MOCK_NEW_TRIAL_REMOTE } from '../../../test/mockTrial';
@@ -103,5 +105,33 @@ describe('NewTrialSession entity', () => {
 
       expect(trialSession.isValid()).toEqual(true);
     });
+  });
+});
+
+describe('Reporting validation', () => {
+  const reportingSession = {
+    ...MOCK_TRIAL_REGULAR,
+    proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.reporting,
+    startDate: '3000-12-01T00:00:00.000Z',
+    estimatedEndDate: '3000-12-01T00:00:00.000Z',
+    startTime: undefined,
+  };
+
+  it('should accept a Reporting session with matching dates and no time', () => {
+    const entity = new NewTrialSession(reportingSession);
+    expect(entity.getFormattedValidationErrors()).toBeNull();
+    expect(entity.startTime).toBeUndefined();
+  });
+
+  it.each([
+    [undefined, 'Enter a valid estimated end date'],
+    ['3000-12-02T00:00:00.000Z', 'Reporting start and end date must match'],
+  ])('should reject end date %s', (estimatedEndDate, message) => {
+    expect(
+      new NewTrialSession({
+        ...reportingSession,
+        estimatedEndDate,
+      }).getFormattedValidationErrors(),
+    ).toHaveProperty('estimatedEndDate', message);
   });
 });

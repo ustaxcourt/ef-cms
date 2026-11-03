@@ -35,7 +35,7 @@ export const trialSessionHeaderHelper = (
 
   const isTrialClerk = currentUser.role === USER_ROLES.trialClerk;
   const isJudgeAssignedToSession =
-    judgeUser && trialSession.judge?.userId === judgeUser.userId;
+    !!judgeUser?.userId && trialSession.judge?.userId === judgeUser.userId;
   const isTrialClerkAssignedToSession =
     isTrialClerk && trialSession.trialClerk?.userId === currentUser.userId;
   const isAssigned = isJudgeAssignedToSession || isTrialClerkAssignedToSession;

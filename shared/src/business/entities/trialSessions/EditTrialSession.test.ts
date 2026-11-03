@@ -1,3 +1,4 @@
+import { TRIAL_SESSION_PROCEEDING_TYPES } from '../EntityConstants';
 import { EditTrialSession } from '@shared/business/entities/trialSessions/EditTrialSession';
 import {
   calculateISODate,
@@ -66,5 +67,33 @@ describe('EditTrialSession', () => {
     expect(trialSession.getFormattedValidationErrors()).toMatchObject({
       estimatedEndDate: 'Estimated end date must be after start date',
     });
+  });
+});
+
+describe('Reporting validation', () => {
+  const reportingSession = {
+    ...MOCK_TRIAL_REGULAR,
+    proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.reporting,
+    startDate: '3000-12-01T00:00:00.000Z',
+    estimatedEndDate: '3000-12-01T00:00:00.000Z',
+    startTime: undefined,
+  };
+
+  it('should accept a Reporting session with matching dates and no time', () => {
+    const entity = new EditTrialSession(reportingSession);
+    expect(entity.getFormattedValidationErrors()).toBeNull();
+    expect(entity.startTime).toBeUndefined();
+  });
+
+  it.each([
+    [undefined, 'Enter a valid estimated end date'],
+    ['3000-12-02T00:00:00.000Z', 'Reporting start and end date must match'],
+  ])('should reject end date %s', (estimatedEndDate, message) => {
+    expect(
+      new EditTrialSession({
+        ...reportingSession,
+        estimatedEndDate,
+      }).getFormattedValidationErrors(),
+    ).toHaveProperty('estimatedEndDate', message);
   });
 });

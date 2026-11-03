@@ -1,3 +1,19 @@
+<details><summary>10444 - Reporting Trial Sessions</summary>
+
+## Manual Deployment Steps
+
+### After Deployment
+
+Initialize the `reporting-calendars` feature flag:
+
+```bash
+./scripts/postgres/featureFlags/setup-reporting-calendars.ts
+```
+
+Set the flag to `true` to enable Reporting Trial Sessions.
+
+</details>
+
 <details><summary>Dependency Updates - Week of 2026-10-26</summary>
 
 ## Local

@@ -6,8 +6,65 @@ import {
 } from '@shared/business/entities/EntityConstants';
 import { validateTrialSessionInteractor } from '@web-client/business/useCases/trialSessions/validateTrialSessionInteractor';
 import { RawEditTrialSession } from '@shared/business/entities/trialSessions/EditTrialSession';
+import { MOCK_TRIAL_REGULAR } from '@shared/test/mockTrial';
 
 describe('validateTrialSessionInteractor', () => {
+  it.each(['', MOCK_TRIAL_REGULAR.trialSessionId])(
+    'should accept matching Reporting dates for session %s',
+    trialSessionId => {
+      const errors = validateTrialSessionInteractor({
+        trialSession: {
+          ...MOCK_TRIAL_REGULAR,
+          trialSessionId,
+          proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.reporting,
+          startTime: undefined,
+          startDate: '3000-12-01T00:00:00.000Z',
+          estimatedEndDate: '3000-12-01T00:00:00.000Z',
+        },
+      });
+      expect(errors).toBeNull();
+    },
+  );
+
+  it.each(['', '2000-01-01T00:00:00.000Z'])(
+    'should show one due date error for invalid Reporting date %s',
+    startDate => {
+      const errors = validateTrialSessionInteractor({
+        trialSession: {
+          ...MOCK_TRIAL_REGULAR,
+          trialSessionId: '',
+          proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.reporting,
+          startTime: undefined,
+          startDate,
+          estimatedEndDate: startDate,
+        },
+      });
+      expect(errors).toMatchObject({ startDate: 'Enter a valid due date' });
+      expect(errors).not.toHaveProperty('estimatedEndDate');
+    },
+  );
+
+  it.each(['', MOCK_TRIAL_REGULAR.trialSessionId])(
+    'should show one due date error for mismatched Reporting dates for session %s',
+    trialSessionId => {
+      const errors = validateTrialSessionInteractor({
+        trialSession: {
+          ...MOCK_TRIAL_REGULAR,
+          trialSessionId,
+          proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.reporting,
+          startTime: undefined,
+          startDate: '3000-12-01T00:00:00.000Z',
+          estimatedEndDate: '3000-12-02T00:00:00.000Z',
+        },
+      });
+
+      expect(errors).toMatchObject({
+        startDate: 'Enter a valid due date',
+      });
+      expect(errors).not.toHaveProperty('estimatedEndDate');
+    },
+  );
+
   it('returns a list of errors when the edit trial session is invalid', () => {
     const errors = validateTrialSessionInteractor({
       trialSession: { trialSessionId: '123' } as RawEditTrialSession,
