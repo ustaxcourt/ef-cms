@@ -1,28 +1,28 @@
 # Branching and Baseline Strategy
 
-A baseline is a recorded set of accepted pre-existing findings, so a pull request fails only on findings it introduces. This table covers the tools that run on pull requests. "PR gate (staging)" means the tool can block a merge into `staging`, according to the `staging` branch rulesets. "Gated on test" means the same for `test`. No security check is required on `test`, `develop`, `irs` or `prod`; see [Branch rules today](#branch-rules-today).
+A baseline is a recorded set of accepted pre-existing findings, so a pull request fails only on findings it introduces. This table covers the tools that run on pull requests. "PR gate (staging)" means the tool can block a merge into `staging`, according to the `staging` branch rulesets. No security check is required on `test`, `develop`, `irs` or `prod`; see [Branch rules today](#branch-rules-today).
 
 ## Per-tool baseline status
 
 "In repo" means the baseline or suppression lives in a file that is committed and reviewed with the code. "Documented" means [scanner-reference.md](scanner-reference.md) or the tool's own page in this folder explains how to add to it.
 
-| Tool | Workflow | PR gate (staging) | Gated on test | Baseline method in the repo | Documented way to add or refresh | What's missing |
-|------|----------|---------|---------------|-----------------------------|----------------------------------|----------------|
-| Semgrep | `security-sast.yml` | Yes. `Security Gate (SAST)` is required on `staging`. | No. | Yes, derived from git: `--baseline-commit` against the merge base. No file to maintain. | Yes. `// nosemgrep: <rule-id>` | Nothing. |
-| Checkov | `security-sast.yml` | Partly. `Security Gate (SAST)` fails only for four hard-fail checks; the rest are `--soft-fail`. | No. | Yes, nine `.checkov.baseline` files. Only `allColors` and `account-specific` have entries. | Partly. Docs say to add an accepted finding to the baseline, with `#checkov:skip` preferred for new ones, but not how to regenerate the file. | The command and steps to regenerate a baseline. |
-| CodeQL | `security-sast.yml` | Yes. The code-scanning rule on `staging` blocks new high-or-higher alerts, and `Security Gate (SAST)` requires the job to complete. | No. | No file. Baseline is alert state on staging, compared by the `staging` ruleset's code-scanning rule. | Yes. Security tab dismissal with a required comment format. | Nothing in the repo. The baseline depends on staging uploads continuing. |
-| ShellCheck | `security-sast.yml` | Yes. `Security Gate (SAST)` is required on `staging`. | No. | No. `.shellcheckignore` holds one line (`node_modules/`), but nothing reads it: ShellCheck has no ignore file, and `run-shellcheck.sh` excludes paths in its own `find` command. The job fails on any error-level finding. | No. Not covered in the suppression table. | A baseline method, and the documentation for it. |
-| Gitleaks | `security-secrets.yml` | Yes. `Security Gate (Secrets)` is required on `staging`. | No. | Yes. `.gitleaksignore` (6 entries) and `.gitleaks.toml`. The PR scan is limited to the PR's own commits. | Yes. Fingerprint in `.gitleaksignore`, or an `allowlist` entry. | Nothing. |
-| Dependency Review | `security-supply-chain.yml` | No. `warn-only: true`, and not a required check. | No. | Yes, derived from the dependency graph: it compares base and head manifests. `allow-ghsas` is empty. | Yes. `allow-ghsas` | Nothing. |
-| npm audit | `security-supply-chain.yml` | No. `continue-on-error`, and not a required check. | No. | No. It reports every advisory on every run. | No. Docs say "None. Patch or accept." | A baseline method (an allowlist of accepted advisories), and the documentation for it. |
-| lockfile-lint | `security-supply-chain.yml` | No. `continue-on-error`, and not a required check. | No. | No. | No. | A baseline method, and the documentation for it. |
-| Trivy (`fs`) | `security-supply-chain.yml` | No. `continue-on-error`, and not a required check. | No. | No. There is no `.trivyignore`. | Partly. Security tab dismissal only. | An in-repo baseline method (`.trivyignore` or equivalent), and its documentation. |
-| Trivy (`fs`) | `security-compare.yml` | No. The job fails if the branch has a finding that `staging` doesn't, but it is not a required check. | No. | Yes, derived from a scan of `staging` in the same job on every run, so it needs no refresh. Findings are compared by identity (`ruleId`, package and file), not by count. | n/a, since staging is rescanned each run. | It isn't a required check. Also, the summary has no cap on the number of findings it lists. |
-| Trivy (`config`) | `security-containers.yml` | No. Not a required check, and the containers gate is not required either. | No. | No. | Partly. Security tab dismissal only. | An in-repo baseline method, and its documentation. |
-| Trivy (`image`, core image) | `security-containers.yml` | No. Scans run with `exit-code: '0'`. | No. | No. `container-findings-triage.md` describes a VEX file at `.vex/ef-cms.openvex.json`, but that file is not in the repo, and no workflow passes `--vex`. | Partly. The VEX update steps are documented, and Security tab dismissal is documented. | The VEX file itself, or another in-repo method. |
-| Trivy (`image`, runtime base images) | `security-containers.yml` | No. Scans run with `exit-code: '0'`. | No. | No. Same as the core image. | Same as the core image. | Same as the core image. |
-| ZAP API Scan | `security-dast.yml` | No. `continue-on-error`, and not a required check. | No. | Partly. `.zap/rules.tsv` sets handling per rule (three `WARN` lines, no `IGNORE`), not per alert. | Yes. `IGNORE` line in `.zap/rules.tsv` | Per-alert baselining (rule ID plus URL), and a comparison against staging. |
-| ZAP Public API Baseline Scan | `security-dast.yml` | No. `continue-on-error`, and not a required check. | No. | Partly. Same `.zap/rules.tsv`. | Yes. Same file. | Same as the ZAP API Scan, plus the SARIF converter (#10412) so results reach the Security tab. |
+| Tool | Workflow | PR gate (staging) | Baseline method in the repo | Documented way to add or refresh | What's missing |
+|------|----------|---------|-----------------------------|----------------------------------|----------------|
+| Semgrep | `security-sast.yml` | Yes. `Security Gate (SAST)` is required on `staging`. | Yes, derived from git: `--baseline-commit` against the merge base. No file to maintain. | Yes. `// nosemgrep: <rule-id>` | Nothing. |
+| Checkov | `security-sast.yml` | Partly. `Security Gate (SAST)` fails only for four hard-fail checks; the rest are `--soft-fail`. | Yes, nine `.checkov.baseline` files. Only `allColors` and `account-specific` have entries. | Partly. Docs say to add an accepted finding to the baseline, with `#checkov:skip` preferred for new ones, but not how to regenerate the file. | The command and steps to regenerate a baseline. |
+| CodeQL | `security-sast.yml` | Yes. The code-scanning rule on `staging` blocks new high-or-higher alerts, and `Security Gate (SAST)` requires the job to complete. | No file. Baseline is alert state on staging, compared by the `staging` ruleset's code-scanning rule. | Yes. Security tab dismissal with a required comment format. | Nothing in the repo. The baseline depends on staging uploads continuing. |
+| ShellCheck | `security-sast.yml` | Yes. `Security Gate (SAST)` is required on `staging`. | No. `.shellcheckignore` holds one line (`node_modules/`), but nothing reads it: ShellCheck has no ignore file, and `run-shellcheck.sh` excludes paths in its own `find` command. The job fails on any error-level finding. | No. Not covered in the suppression table. | A baseline method, and the documentation for it. |
+| Gitleaks | `security-secrets.yml` | Yes. `Security Gate (Secrets)` is required on `staging`. | Yes. `.gitleaksignore` (6 entries) and `.gitleaks.toml`. The PR scan is limited to the PR's own commits. | Yes. Fingerprint in `.gitleaksignore`, or an `allowlist` entry. | Nothing. |
+| Dependency Review | `security-supply-chain.yml` | No. `warn-only: true`, and not a required check. | Yes, derived from the dependency graph: it compares base and head manifests. `allow-ghsas` is empty. | Yes. `allow-ghsas` | Nothing. |
+| npm audit | `security-supply-chain.yml` | No. `continue-on-error`, and not a required check. | No. It reports every advisory on every run. | No. Docs say "None. Patch or accept." | A baseline method (an allowlist of accepted advisories), and the documentation for it. |
+| lockfile-lint | `security-supply-chain.yml` | No. `continue-on-error`, and not a required check. | No. | No. | A baseline method, and the documentation for it. |
+| Trivy (`fs`) | `security-supply-chain.yml` | No. `continue-on-error`, and not a required check. | No. There is no `.trivyignore`. | Partly. Security tab dismissal only. | An in-repo baseline method (`.trivyignore` or equivalent), and its documentation. |
+| Trivy (`fs`) | `security-compare.yml` | No. The job fails if the branch has a finding that `staging` doesn't, but it is not a required check. | Yes, derived from a scan of `staging` in the same job on every run, so it needs no refresh. Findings are compared by identity (`ruleId`, package and file), not by count. | n/a, since staging is rescanned each run. | It isn't a required check. Also, the summary has no cap on the number of findings it lists. |
+| Trivy (`config`) | `security-containers.yml` | No. Not a required check, and the containers gate is not required either. | No. | Partly. Security tab dismissal only. | An in-repo baseline method, and its documentation. |
+| Trivy (`image`, core image) | `security-containers.yml` | No. Scans run with `exit-code: '0'`. | No. `container-findings-triage.md` describes a VEX file at `.vex/ef-cms.openvex.json`, but that file is not in the repo, and no workflow passes `--vex`. | Partly. The VEX update steps are documented, and Security tab dismissal is documented. | The VEX file itself, or another in-repo method. |
+| Trivy (`image`, runtime base images) | `security-containers.yml` | No. Scans run with `exit-code: '0'`. | No. Same as the core image. | Same as the core image. | Same as the core image. |
+| ZAP API Scan | `security-dast.yml` | No. `continue-on-error`, and not a required check. | Partly. `.zap/rules.tsv` sets handling per rule (three `WARN` lines, no `IGNORE`), not per alert. | Yes. `IGNORE` line in `.zap/rules.tsv` | Per-alert baselining (rule ID plus URL), and a comparison against staging. |
+| ZAP Public API Baseline Scan | `security-dast.yml` | No. `continue-on-error`, and not a required check. | Partly. Same `.zap/rules.tsv`. | Yes. Same file. | Same as the ZAP API Scan, plus the SARIF converter (#10412) so results reach the Security tab. |
 
 ## Branch rules today
 
@@ -47,21 +47,15 @@ No ruleset lists a bypass actor. Nobody can merge past a failing required check 
 
 | Tool | A finding is new when | Compared against, PR into `staging` | Compared against, PR into `test` today | Needed for `test` to match `staging` |
 |------|-----------------------|-------------------------------------|----------------------------------------|--------------------------------------|
-| Semgrep | It is on a line the PR changed since the merge base. | `staging`'s tip. | `test`'s tip, so it scores only the PR's own change, which is what the later `staging` PR will see. | Nothing, once the gates are required on `test`. |
+| Semgrep | It is on a line the PR changed since the merge base. | `staging`'s tip. | `test`'s tip, so it scores only the PR's own change, which is what the later `staging` PR will see. Pointing at `staging` would instead report other developers' unpromoted code. | Nothing, once the gates are required on `test`. |
 | Checkov | It is not in the directory's `.checkov.baseline`. Only the four hard-fail checks block. | The baseline file on the PR's branch. | Same. | Nothing. |
 | CodeQL | The alert is not already open on `staging`. The `staging` code-scanning rule blocks new high-or-higher alerts. | Alert state on `staging`. | Nothing. The job only has to complete. | A decision: leave ungated, or add a step that diffs the local SARIF against `staging`'s alerts. |
 | ShellCheck | Any error-level finding. There is no baseline. | n/a | n/a | Nothing. |
 | Gitleaks | It is in a commit that belongs to the PR and is not in `.gitleaksignore` or `.gitleaks.toml`. | The PR's own commits. | Same: `base.sha..head.sha`, with `base.sha` being `test`'s tip. A merge of `staging` into the branch also falls in the range. Those commits already passed the `staging` gate. | Nothing. |
 | Dependency Review | A manifest change adds a vulnerable dependency. Warn-only. | The base branch's manifests. | `test`'s manifests. | Nothing for now, since it does not block. |
-| Trivy `fs` (`Findings vs staging`) | The rule, package and file combination is not in a Trivy scan of `staging` made in the same job. HIGH, CRITICAL and UNKNOWN, vulnerabilities only. | `staging`, scanned on every run. | Same. | Require the check (item 2 below). |
+| Trivy `fs` (`Findings vs staging`) | The rule, package and file combination is not in a Trivy scan of `staging` made in the same job. HIGH, CRITICAL and UNKNOWN, vulnerabilities only. | `staging`, scanned on every run. | Same, but the scan merges the PR into `test`, so another branch's unpromoted finding can show as new on yours. | Require the check (item 2 below). |
 
 Trivy `config`, Trivy `image`, npm audit, lockfile-lint and ZAP have no comparison. They report everything on every run.
-
-### Where the `test` comparison is not exact
-
-- The Trivy compare scans the PR as a merge into its base branch. On a `test` PR that includes commits other developers have merged to `test` but not yet to `staging`. A finding introduced by someone else's branch can show up as new on yours, and the chance grows with the number of unpromoted branches on `test`.
-- Semgrep baselines against `test`'s tip, so a finding another branch put on `test` is treated as accepted. That is safe once the gates are required on `test`, because anything on `test` then either passed the gate or carries a suppression. It also matches what the `staging` PR will see, which is only your branch's own change. Pointing the baseline at `staging` would instead report other developers' unpromoted code on your PR.
-- `Findings vs staging` and Dependency Review run on PRs into `test`, but neither is a required check anywhere, so neither blocks a merge.
 
 ### Required for `test` to catch new findings
 
@@ -79,6 +73,7 @@ None of these changes have been made. Each is a ruleset or workflow edit for a f
 The baseline is `staging`'s own scan results, plus the files that record accepted findings. Every push to `staging` rescans the whole tree with Semgrep, Checkov, CodeQL, Trivy `fs` and Gitleaks, so those baselines refresh themselves. Nothing has to be run by hand to create them.
 
 [See Triage Dashboard](https://calm-mud-04b384a0f.4.azurestaticapps.net/) - updated every Monday, after `ef-cms` code scanning workflows post production merge are complete.
+
 
 Result counts are per analysis. They are not the open-alert totals in the weekly triage. To list the newest analysis per category again:
 
@@ -124,7 +119,7 @@ Proposed:
 
 There is no documented hotfix path today. The [playbook](playbook.md#same-day-triage) already defines what counts as an emergency: a possible secret, a KEV-listed or publicly exploited vulnerability in T1 or T2, or a finding reported by a person. This section covers how the fix then reaches `staging` and `prod`. It is a proposal.
 
-**The gates are not bypassed.** No ruleset has a bypass actor, and the gates only fail on findings the PR adds. A fix that removes a finding passes them. Skipping a gate would need a ruleset change, and that is not part of this path.
+**The gates are not bypassed.** No ruleset has a bypass actor, and the gates fail only on findings the PR adds, so a fix that removes one passes them.
 
 1. **Triage the same day.** Follow [Same-day triage](playbook.md#same-day-triage). The approver opens the draft advisory and is told directly. For a secret, rotate first ([Secrets](playbook.md#secrets)); the code change is the clean-up, not the fix.
 2. **Branch from `staging`** and change only what the fix needs. Open the PR into `staging`. `test` may be skipped when the approver agrees on the PR, because `test` is a dry run for the same gates. Skipping it also skips the product owner's check in the `test` environment.
@@ -153,7 +148,7 @@ Where each scanner reads the suppression, and what is missing. The full list of 
 | Checkov | `#checkov:skip=<ID>:<ticket>` in the resource | Yes. | The four hard-fail checks should be fixed, not skipped. How to regenerate a `.checkov.baseline` is undocumented. |
 | CodeQL | None verified | No on `staging`: a new alert stays open until dismissed in the Security tab, and the `staging` rule blocks on it. On `test` nothing is gated yet. | A decision, below. |
 | ShellCheck | `# shellcheck disable=SC<number>` above the line | Yes. | The form is not in `scanner-reference.md`. |
-| Gitleaks | `.gitleaksignore` fingerprint, in a separate PR, after the secret is rotated if it was real | Yes, once the file is on the branch the PR is compared with. | A real secret is never deferred. |
+| Gitleaks | `.gitleaksignore` fingerprint, in a separate PR, after the secret is rotated if it was real | Yes, once the file is on the branch the PR is compared with. | None. |
 | Dependency Review | `allow-ghsas` in `security-supply-chain.yml` | Not applicable while `warn-only`. | None until it blocks. |
 | Trivy `fs` | None. The check keeps flagging the finding until it reaches `staging`. | No. | See below. |
 | Trivy `image`, `config`, ZAP | None for `image` and `config`; `IGNORE` in `.zap/rules.tsv` for ZAP | Nothing blocks on these today. | None until they block. |
@@ -184,33 +179,37 @@ If so:
 3. Record the decision in the ticket using the [exception record](playbook.md#the-exception-record). For a Trivy `fs` or `image` finding, this proposal adds a [VEX statement](playbook.md#vex-statements), whether or not the fix lands in your branch. The playbook is narrower: it publishes only `not_affected` and `fixed` statements, and keeps `affected` ones for T1 and T2 in the advisory.
 4. If there is no upstream fix, work through [No upstream fix](playbook.md#no-upstream-fix) first. "No patch" alone isn't a reason to accept a finding.
 
-To suppress a finding in a scanner, see [Suppression mechanisms](scanner-reference.md#suppression-mechanisms) and [Remediating or accepting a failure](#remediating-or-accepting-a-failure). Unless the tech lead has authorized it, if your change causes a finding, you fix it.
-
+To suppress a finding in a scanner, see [Suppression mechanisms](scanner-reference.md#suppression-mechanisms) and [Remediating or accepting a failure](#remediating-or-accepting-a-failure).
 **Never deferred:** a real secret. Rotate it the same business day and follow [Secrets](playbook.md#secrets).
 
-### Semgrep and CodeQL
-**Compares against:** Semgrep, the PR's base branch, reporting only findings in code your PR changed. CodeQL, the alerts open on `staging`.
+### Keeping sensitive details out of public places
 
-- **Semgrep blocks your PR** (`Security Gate (SAST)`). Fix the flagged code. See [If your PR is blocked by Semgrep](../sast-scanning.md#if-your-pr-is-blocked-by-semgrep).
-- **CodeQL blocks a PR into `staging`** for new high-or-higher alerts. Fix the alert, or have the approver agree to a dismissal in the Security tab with a tracking record.
-- **PRs into `test`:** Results aren't uploaded, so read the job log and fix what it reports. Don't leave it for the `staging` PR.
+The repository is public, so a pushed branch, its PR, its commit messages and its workflow runs are all readable by anyone. The scans on a PR list each finding in the run's log and job summary, with the rule, file, line and offending code. That output can't be hidden. These expectations limit what else is said.
+
+**When a finding is sensitive.** The [playbook](playbook.md#where-findings-are-tracked) says which findings are sensitive. This proposal adds when that applies to a finding found on a PR:
+- **Fixed before merge:** it never reaches `staging`, so nothing is tracked and there is no advisory.
+- **Deferred and merged:** it is now in the codebase. Treat it as sensitive if the playbook says so, with a draft advisory and a GHSA ID in place of details.
+- **A secret:** always sensitive, from the moment it is pushed.
+
+**What to write.** For a finding that is or may be sensitive:
+- Describe the change by what it does, not by the weakness it removes. Write "Validate the docket number in the lookup", not "Fix SSRF in the lookup".
+- Leave the vulnerability class, rule name, CVE, severity and impact out of the PR title, PR description, commit messages and review comments. Put them in the ticket or advisory, once it exists.
+- Don't paste the scanner's output into the PR, a comment or a chat. Link to the ticket instead.
+- In a suppression comment, use only the ticket or GHSA ID, as in [Remediating or accepting a failure](#remediating-or-accepting-a-failure).
+
+An upgrade to a published fix for a public advisory is routine. The PR can name the package and the advisory.
+
+### What each scanner compares against, and what to do
+
+How to suppress is in the table under [Remediating or accepting a failure](#remediating-or-accepting-a-failure). What differs by scanner:
+
+- **Semgrep** compares against the PR's base branch and reports only code your PR changed. It blocks `Security Gate (SAST)`. See [If your PR is blocked by Semgrep](../sast-scanning.md#if-your-pr-is-blocked-by-semgrep).
+- **CodeQL** compares against the alerts open on `staging`. It blocks a PR into `staging` for new high-or-higher alerts. Fix the alert, or have the approver agree to a dismissal in the Security tab with a tracking record. On a PR into `test`, results aren't uploaded: read the job log and fix what it reports, and don't leave it for the `staging` PR.
+- **Checkov** compares against the directory's `.checkov.baseline`. Only the four hard-fail checks block your PR, and they are fixed, not skipped. Fix other findings your change adds too.
+- **ShellCheck** compares against nothing. Any error-level finding blocks the PR. Don't add paths to `.shellcheckignore`: nothing reads it. Excluding a path means editing the `find` command in `run-shellcheck.sh`.
+- **Gitleaks** compares against the commits in your PR only. A false positive goes in `.gitleaksignore` in a separate PR with the approver's sign-off ([Secrets scanning](../secrets-scanning.md#2-pr-ci-gate-blocking)).
 
 ### npm audit and Trivy fs
 **Compares against:** nothing, except Dependency Review (changed dependencies, high and above) and `Findings vs staging` (new Trivy fs findings not on `staging`, matched by CVE, package and file).
 
 These don't block your PR, so a green check doesn't mean you added nothing. If your PR changes `package.json` or the lockfile, check the Dependency Review and `Findings vs staging` summaries, and take the fix by updating the dependency ([Patching npm dependencies](playbook.md#patching-npm-dependencies)). If you can't, defer with a ticket as above.
-
-### Gitleaks
-**Compares against:** the commits in your PR only.
-
-A real secret is never deferred: rotate it and clean it up ([Secrets](playbook.md#secrets)). A false positive goes in `.gitleaksignore` in a separate PR with the approver's sign-off ([Secrets scanning](../secrets-scanning.md#2-pr-ci-gate-blocking)).
-
-### Checkov (Terraform)
-**Compares against:** the directory's `.checkov.baseline`.
-
-Only the four hard-fail checks block your PR. Fix the resource for all of them. For other Checkov findings your change adds, fix them too. If one can't be fixed, prefer an inline `#checkov:skip=<CHECK_ID>:<reason>` over adding to a baseline file, and get the approver's sign-off.
-
-### ShellCheck
-**Compares against:** nothing. Any error-level finding blocks the PR.
-
-Fix the error in the PR. Don't add paths to `.shellcheckignore`: nothing reads it, and ShellCheck has no ignore file. Excluding a path means editing the `find` command in `run-shellcheck.sh`. A single false positive can be suppressed inline with `# shellcheck disable=SC<number>` above the line, with the approver's sign-off and a one-line reason. That form isn't in the suppression table in `scanner-reference.md` yet.
