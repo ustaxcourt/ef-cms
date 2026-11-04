@@ -15,18 +15,6 @@ import {
 
 const SAMPLE_PDF = '../../helpers/file/sample.pdf';
 
-export const selectPreviousDocumentOptionContaining = (text: string): void => {
-  cy.get('[data-testid="previous-document-search"]')
-    .find('option')
-    .then($options => {
-      const matchingOption = Array.from($options).find(option =>
-        option.textContent?.includes(text),
-      );
-      const optionText = matchingOption?.textContent?.trim() || '';
-      cy.get('[data-testid="previous-document-search"]').select(optionText);
-    });
-};
-
 export function startFileDocumentFlow(docketNumber: string): void {
   goToCase(docketNumber);
   cy.get('[data-testid="button-file-document"]').click();
@@ -137,24 +125,6 @@ export function strikeDocketEntryByEventCode(eventCode: string): void {
   cy.get('[data-testid="modal-button-confirm"]').click();
 }
 
-export function lodgeDocketEntryByEventCode(eventCode: string): void {
-  cy.get(`[data-testid="edit-${eventCode}"]`).click();
-  cy.get('[data-testid="filing-status-Lodge"]').click();
-  cy.get('[data-testid="save-edit-docket-entry-meta"]').click();
-  cy.get('[data-testid="success-alert"]').should('exist');
-}
-
-export function setDocketEntryFilingStatusByDocketEntryId(
-  docketEntryId: string,
-): void {
-  cy.get(`[data-testid="${docketEntryId}"]`)
-    .find('[data-testid^="edit-"]')
-    .click();
-  cy.get('[data-testid="filing-status-Filed"]').click();
-  cy.get('[data-testid="save-edit-docket-entry-meta"]').click();
-  cy.get('[data-testid="success-alert"]').should('exist');
-}
-
 export function docketClerkCompletesSectionQcChangingLodgeToFile(
   docketNumber: string,
 ): void {
@@ -199,48 +169,11 @@ export function fileMotionAndSupports(
   });
 }
 
-export function fileMotionOnGroup(
-  leadDocketNumber: string,
-  options: FileMotionAndSupportsOptions,
-): void {
-  fileMotionAndSupports(leadDocketNumber, {
-    ...options,
-    fileOnConsolidatedGroup: true,
-  });
-}
-
 export function fileAMotionAndSupportingDocuments(
   docketNumber: string,
   filerTestId: string,
 ): void {
   fileMotionAndSupports(docketNumber, { filerTestId });
-}
-
-export function fileMotionOnly(
-  docketNumber: string,
-  filerTestId: string,
-  documentType: string = DEFAULT_MOTION_DOCUMENT_TYPE,
-): void {
-  fileMotionAndSupports(docketNumber, {
-    documentType,
-    filerTestId,
-    supportingDocs: [],
-  });
-}
-
-export function fileBriefInSupportOfMotion(
-  docketNumber: string,
-  filerTestId: string,
-): void {
-  startFileDocumentFlow(docketNumber);
-  selectTypeaheadInput(
-    'complete-doc-document-type-search',
-    BRIEF_IN_SUPPORT_DOCUMENT_TYPE,
-  );
-  selectPreviousDocumentOptionContaining(DEFAULT_MOTION_DOCUMENT_TYPE);
-  cy.get('[data-testid="submit-document"]').click();
-  attachPrimarySampleDocument();
-  selectFilerAndSubmitFileDocument(filerTestId);
 }
 
 export function fileMotionForLeave(
@@ -262,32 +195,6 @@ export function fileMotionForLeave(
   cy.get('[data-testid="primaryDocument-objections-No"]').click();
   cy.get('[data-testid="secondaryDocument-objections-No"]').click();
   selectFilerAndSubmitFileDocument(filerTestId);
-}
-
-export type FileSupportInSupportOfMotionOnGroupOptions = {
-  documentType: 'Brief in Support' | 'Memorandum in Support';
-  filerTestId: string;
-  motionDocumentType?: string;
-};
-
-export function fileSupportInSupportOfMotionOnGroup(
-  leadDocketNumber: string,
-  options: FileSupportInSupportOfMotionOnGroupOptions,
-): void {
-  const motionDocumentType =
-    options.motionDocumentType ?? DEFAULT_MOTION_DOCUMENT_TYPE;
-
-  startFileDocumentFlow(leadDocketNumber);
-  selectTypeaheadInput(
-    'complete-doc-document-type-search',
-    options.documentType,
-  );
-  selectPreviousDocumentOptionContaining(motionDocumentType);
-  cy.get('[data-testid="submit-document"]').click();
-  attachPrimarySampleDocument();
-  selectFilerAndSubmitFileDocument(options.filerTestId, {
-    fileOnConsolidatedGroup: true,
-  });
 }
 
 export type FileLeaveWithLodgedSecondaryOnGroupOptions = {

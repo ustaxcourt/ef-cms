@@ -11,14 +11,6 @@ export function verifyStrickenDocketEntry(docketEntryId: string): void {
     .should('exist');
 }
 
-export function verifyDocumentRowHasNoDownloadLink(
-  docketEntryId: string,
-): void {
-  cy.get(`[data-testid="${docketEntryId}"]`)
-    .find('[data-testid^="document-download-link-"]')
-    .should('not.exist');
-}
-
 export function verifyPublicSealedEntryShowsLockWithoutLink(
   docketNumber: string,
   docketEntryIndex: number,
