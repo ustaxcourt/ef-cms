@@ -2,6 +2,20 @@
 
 A baseline is a recorded set of accepted pre-existing findings, so a pull request fails only on findings it introduces. This table covers the tools that run on pull requests. "PR gate (staging)" means the tool can block a merge into `staging`, according to the `staging` branch rulesets. No security check is required on `test`, `develop`, `irs` or `prod`; see [Branch rules today](#branch-rules-today).
 
+## Contents
+
+- [Per-tool baseline status](#per-tool-baseline-status)
+- [Branch rules today](#branch-rules-today)
+- [Baseline and comparison behavior](#baseline-and-comparison-behavior)
+  - [What counts as a new finding](#what-counts-as-a-new-finding)
+  - [Required for `test` to catch new findings](#required-for-test-to-catch-new-findings)
+  - [Background scans](#background-scans)
+- [Establishing the baseline](#establishing-the-baseline)
+- [Protecting the baseline](#protecting-the-baseline)
+- [Emergency security fixes](#emergency-security-fixes)
+- [Remediating or accepting a failure](#remediating-or-accepting-a-failure)
+- [npm audit and Trivy fs](#npm-audit-and-trivy-fs)
+
 ## Per-tool baseline status
 
 "In repo" means the baseline or suppression lives in a file that is committed and reviewed with the code. "Documented" means [scanner-reference.md](scanner-reference.md) or the tool's own page in this folder explains how to add to it.
@@ -35,7 +49,6 @@ Read from the repository's rulesets (`gh api repos/ustaxcourt/ef-cms/rulesets`) 
 | `develop`, `irs` | 3, as on `test`. | The functional checks only. | None. |
 | `prod` | None. | The functional checks only. | Same restrictions as `staging`: force-push, deletion, creation and update of the ref. |
 
-No ruleset lists a bypass actor. Nobody can merge past a failing required check without first changing the ruleset.
 
 ## Baseline and comparison behavior
 
@@ -47,13 +60,13 @@ No ruleset lists a bypass actor. Nobody can merge past a failing required check 
 
 | Tool | A finding is new when | Compared against, PR into `staging` | Compared against, PR into `test` today | Needed for `test` to match `staging` |
 |------|-----------------------|-------------------------------------|----------------------------------------|--------------------------------------|
-| Semgrep | It is on a line the PR changed since the merge base. | `staging`'s tip. | `test`'s tip, so it scores only the PR's own change, which is what the later `staging` PR will see. Pointing at `staging` would instead report other developers' unpromoted code. | Nothing, once the gates are required on `test`. |
-| Checkov | It is not in the directory's `.checkov.baseline`. Only the four hard-fail checks block. | The baseline file on the PR's branch. | Same. | Nothing. |
-| CodeQL | The alert is not already open on `staging`. The `staging` code-scanning rule blocks new high-or-higher alerts. | Alert state on `staging`. | Nothing. The job only has to complete. | A decision: leave ungated, or add a step that diffs the local SARIF against `staging`'s alerts. |
-| ShellCheck | Any error-level finding. There is no baseline. | n/a | n/a | Nothing. |
-| Gitleaks | It is in a commit that belongs to the PR and is not in `.gitleaksignore` or `.gitleaks.toml`. | The PR's own commits. | Same: `base.sha..head.sha`, with `base.sha` being `test`'s tip. A merge of `staging` into the branch also falls in the range. Those commits already passed the `staging` gate. | Nothing. |
+| Semgrep | It is on a line the PR changed since the merge base. | `staging`'s tip. | `test`'s tip, so it scores only the PR's own change, which is what the later `staging` PR will see. Pointing at `staging` would instead report other developers' unpromoted code. | Nothing, once the gates are required on `test`. If blocked, see [If your PR is blocked by Semgrep](../sast-scanning.md#if-your-pr-is-blocked-by-semgrep). |
+| Checkov | It is not in the directory's `.checkov.baseline`. Only the four hard-fail checks block. | The baseline file on the PR's branch. | Same. | Nothing. Fix the hard-fail checks rather than skipping them, and fix other findings your change adds too. |
+| CodeQL | The alert is not already open on `staging`. The `staging` code-scanning rule blocks new high-or-higher alerts. | Alert state on `staging`. | Nothing. The job only has to complete, and its results aren't uploaded, so read the job log and fix what it reports rather than leaving it for the `staging` PR. | A decision: leave ungated, or add a step that diffs the local SARIF against `staging`'s alerts. |
+| ShellCheck | Any error-level finding. There is no baseline. | n/a | n/a | Nothing. Don't add paths to `.shellcheckignore`: nothing reads it. |
+| Gitleaks | It is in a commit that belongs to the PR and is not in `.gitleaksignore` or `.gitleaks.toml`. | The PR's own commits. | Same: `base.sha..head.sha`, with `base.sha` being `test`'s tip. A merge of `staging` into the branch also falls in the range. Those commits already passed the `staging` gate. | Nothing. A false positive goes in `.gitleaksignore` in a separate PR with the approver's sign-off ([Secrets scanning](../secrets-scanning.md#2-pr-ci-gate-blocking)). |
 | Dependency Review | A manifest change adds a vulnerable dependency. Warn-only. | The base branch's manifests. | `test`'s manifests. | Nothing for now, since it does not block. |
-| Trivy `fs` (`Findings vs staging`) | The rule, package and file combination is not in a Trivy scan of `staging` made in the same job. HIGH, CRITICAL and UNKNOWN, vulnerabilities only. | `staging`, scanned on every run. | Same, but the scan merges the PR into `test`, so another branch's unpromoted finding can show as new on yours. | Require the check (item 2 below). |
+| Trivy `fs` (`Findings vs staging`) | The rule, package and file combination is not in a Trivy scan of `staging` made in the same job. HIGH, CRITICAL and UNKNOWN, vulnerabilities only. | `staging`, scanned on every run. | Same, but the scan merges the PR into `test`, so another branch's unpromoted finding can show as new on yours. | Decided: require the check on `test` (item 2 below). |
 
 Trivy `config`, Trivy `image`, npm audit, lockfile-lint and ZAP have no comparison. They report everything on every run.
 
@@ -62,11 +75,34 @@ Trivy `config`, Trivy `image`, npm audit, lockfile-lint and ZAP have no comparis
 `test` requires approvals and the functional checks today, and no security check. To block PRs on new findings without uploading anything:
 
 1. Require `Security Gate (SAST)` and `Security Gate (Secrets)` on `test`, as on `staging`.
-2. Require `Findings vs staging` on `test`, so new Trivy `fs` findings block there too.
+2. Require `Findings vs staging` on `test`, so new Trivy `fs` findings block there too. This is decided. A person reads the result, so the developer fixes what their branch caused and logs what it didn't ([Findings on pull requests](playbook.md#findings-on-pull-requests)).
 3. Decide how CodeQL behaves on `test`, as described above.
 4. Resolve the docs-only case. These workflows skip docs-only PRs with `paths-ignore`, and a required check that is skipped stays pending, so a docs-only PR cannot merge. Remove `paths-ignore` from the gate workflows, or add a gate that always reports a status.
 
 None of these changes have been made. Each is a ruleset or workflow edit for a follow-up ticket.
+
+### Background scans
+
+Some scans are not required checks. They exist to catch vulnerabilities published after the code merged, and to get them logged early.
+
+**Trivy `fs`** is not in this group. It is a required check on `test`, so a person reads its result before the merge. Auto-logging it was considered and dropped: a developer can tell which findings their branch caused, and an automatic log can't.
+
+**Container scans** (`security-containers.yml`) run on every non-draft PR, including PRs into `test`, as well as weekly and when a Dockerfile changes. They are not required and don't block a merge. Instead, their findings are logged automatically as Jira tickets (a proposal; nothing is built yet):
+
+1. **Collect.** After `trivy-image` runs, read its findings (the SARIF already produced) at or above the severity the playbook tracks. Each finding is a CVE ID, a package and an image.
+2. **Match on the CVE ID.** The same CVE in a different package or a different image belongs in the same ticket, because one upstream fix or one rebuild often closes them together. Each ticket carries a Jira label per CVE, such as `cve-2024-1234`, and a table of the packages and images affected. The job finds open tickets with a JQL search (`project = <key> AND labels = cve-2024-1234 AND statusCategory != Done`), one CVE at a time or in a batch.
+3. **If a CVE is already in an open ticket,** add the new package or image as a comment on that ticket, and say which run saw it. If that package and image are already listed, add nothing.
+4. **If a CVE is in no open ticket,** group it with the other new CVEs from the same image and fix, and create one ticket for them. That keeps the playbook's [one ticket per fix, not per alert](playbook.md#ownership): a base-image upgrade that closes 40 CVEs is one ticket, not 40. The ticket uses the [title format](playbook.md#ownership), the severity and clock line, the labels and the table.
+5. **If one run's CVEs already sit in different open tickets,** each CVE goes where it is. Merging tickets is a person's decision.
+
+Two CVEs from one image can end up in separate tickets this way, when one was logged earlier by another image. That is intended: the earlier ticket already has an owner and a due date.
+
+Things to settle before building it:
+- **How it talks to Jira.** There is no `gh`-style CLI in the runner. The job calls the Jira Cloud REST API (`POST /rest/api/3/search/jql`, `POST /rest/api/3/issue`, `POST /rest/api/3/issue/{key}/comment`) with `curl`, or uses Atlassian's own CLI if the court allows it. Either needs a service-account API token stored as a repository secret, a project key, and an issue type. Whether the court's Jira is Cloud or Data Center changes the endpoints. All of this is unverified.
+- **Where it runs.** Secrets are not passed to workflows triggered by a PR from a fork, so tickets can come only from PRs on branches in this repository, plus the weekly and `staging` runs. The weekly run is the reliable source; the PR runs add speed.
+- **Duplicates.** Two PR runs at once can both find a CVE in no ticket and both create one. Serialize the logging step with a `concurrency` group that doesn't cancel.
+- **What the ticket may say.** Jira is not public, so a ticket can carry more than a GitHub issue could. Whether the container findings can then all go in Jira, including ones the playbook now calls sensitive, is a decision for the approver. Until it is made, the job logs only routine findings and leaves the rest to a person.
+- **Closing.** When a rebuilt image no longer has the CVEs, the ticket is closed by a person after checking the fix is deployed, as the playbook's [definition of resolved](playbook.md#what-counts-as-resolved) requires.
 
 ## Establishing the baseline
 
@@ -103,14 +139,14 @@ The accepted baseline grows whenever something stops a finding from failing or s
 | Way the baseline grows | Stopped by today | Gap |
 |------------------------|------------------|-----|
 | A PR merges to `staging` with a new finding | `Security Gate (SAST)`, `Security Gate (Secrets)` and the CodeQL rule. | Checkov findings outside the four hard-fail checks, new Trivy `fs` findings and new Dependency Review findings merge without failing. `Findings vs staging` is not required. |
-| A PR adds a suppression or baseline entry: `nosemgrep`, `#checkov:skip`, `shellcheck disable`, `.checkov.baseline`, `.gitleaksignore`, `.gitleaks.toml`, `.zap/rules.tsv`, `allow-ghsas` | A reviewer noticing it. There is no `CODEOWNERS` file. | Nothing enforces the approver's sign-off. |
+| A PR adds a suppression or baseline entry: `nosemgrep`, `#checkov:skip`, `shellcheck disable`, `.checkov.baseline`, `.gitleaksignore`, `.gitleaks.toml`, `.zap/rules.tsv`, `allow-ghsas` | A reviewer noticing it. | Nothing enforces the approver's sign-off. |
 | A PR widens what the scans skip: `--exclude` or `--skip-check` in `security-sast.yml`, `paths-ignore` in a workflow or in `.github/codeql/codeql-config.yml` | Same. | Same. |
 | An alert is dismissed in the Security tab | Write access to the repository. | Dismissals are not reviewed anywhere in code. |
 | A commit reaches `prod` without passing through `staging` | Nothing in the security checks. `prod` requires only the functional checks, and no security workflow runs on a `prod` push. | A commit made directly on `prod` is never scanned. |
 | A suppression merges to `test` and the same branch is then refused at `staging` | Nothing. | `test` then carries an acceptance that `staging` has not made. |
 
 Proposed:
-1. **Add `CODEOWNERS` entries** for the suppression files, `security-*.yml`, `.github/codeql/` and `.zap/`, owned by the approver or a security team, and set `require_code_owner_review` on `test` and `staging`. A listed path is the only thing that then needs the approver's review, so the playbook's sign-off rule becomes enforced rather than asked for. The `staging` ruleset already requires reviewers by team, so the alternative is a path-scoped entry in that rule's `required_reviewers`.
+1. **Require the approver's review on the suppression files** with a path-scoped entry in the `required_reviewers` of the `test` and `staging` rulesets, covering the suppression files, `security-*.yml`, `.github/codeql/` and `.zap/`. A listed path is the only thing that then needs the approver's review, so the playbook's sign-off rule becomes enforced rather than asked for. The `staging` ruleset already requires reviewers by team, so this extends a rule that exists.
 2. **Treat `staging` as the only source for `prod`.** Promotion is a merge of `staging` into `prod` by the court's operations staff ([pr-workflow.md](../../pr-workflow.md)), so a promotion adds nothing `staging` has not accepted. To make that provable, require the two security gates on `prod` as well. They would pass on a clean promotion.
 3. **Review suppressions on `test` once.** The approver signs off on the `test` PR, as in [Remediating or accepting a failure](#remediating-or-accepting-a-failure). The `staging` PR for the same branch is then judged only by the gates. A suppression that is refused at `staging` is removed from `test` by reverting that branch.
 4. **List dismissals in the weekly triage.** Add `state=dismissed` alerts since the last triage to [weekly-triage.md](weekly-triage.md), so every dismissal has a record and a review date.
@@ -133,83 +169,34 @@ Decisions needed:
 
 ## Remediating or accepting a failure
 
-The steps are already written. This section adds only what the baseline strategy changes: the suppression is committed on the developer's own branch, and the scan must then stay quiet for later PRs.
+The policy is in the [playbook](playbook.md#findings-on-pull-requests). This section adds only what the baseline strategy changes: the suppression is committed on the developer's own branch, and the scan must then stay quiet for later PRs.
 
-1. **Fix it in the PR.** See [When Devs are expected to fix alerts](#when-devs-are-expected-to-fix-alerts-caused-by-their-changes).
+1. **Fix it in the PR.** See [Fix it in the PR that caused it](playbook.md#fix-it-in-the-pr-that-caused-it).
 2. **If it cannot be fixed,** log the ticket, get the approver's sign-off, and record the decision in the [exception record](playbook.md#the-exception-record). The playbook's order is remove, patch, upgrade, suppress, then accept.
-3. **Commit the suppression on your branch,** after the ticket exists, in the form the tool reads. Put the ticket number in the suppression's reason. For a sensitive finding, use the GHSA ID instead and keep the reasoning in the advisory ([Suppressing a finding](playbook.md#suppressing-a-finding)).
+3. **Commit the suppression on your branch,** after the ticket exists, in the form the tool reads. Put the Jira ticket key in the suppression's reason. For a sensitive finding, use the GHSA ID instead and keep the reasoning in the advisory ([Suppressing a finding](playbook.md#suppressing-a-finding)).
 4. **Re-run the checks.** For the tools marked "Yes" below, later PRs into `test` and `staging` then do not report the same finding at the same place.
 
-Where each scanner reads the suppression, and what is missing. The full list of mechanisms is in [scanner-reference.md](scanner-reference.md#suppression-mechanisms).
+How to write the suppression for each scanner is in [scanner-reference.md](scanner-reference.md#suppression-mechanisms). This table covers only what the baseline strategy adds: whether the scan stays quiet for later PRs once the suppression is on your branch, and what is missing.
 
-| Tool | Commit on your branch | Quiet on later PRs? | Gap |
-|------|-----------------------|---------------------|-----|
-| Semgrep | `// nosemgrep: <rule-id>` above the line | Yes. It travels with the line. | None. |
-| Checkov | `#checkov:skip=<ID>:<ticket>` in the resource | Yes. | The four hard-fail checks should be fixed, not skipped. How to regenerate a `.checkov.baseline` is undocumented. |
-| CodeQL | None verified | No on `staging`: a new alert stays open until dismissed in the Security tab, and the `staging` rule blocks on it. On `test` nothing is gated yet. | A decision, below. |
-| ShellCheck | `# shellcheck disable=SC<number>` above the line | Yes. | The form is not in `scanner-reference.md`. |
-| Gitleaks | `.gitleaksignore` fingerprint, in a separate PR, after the secret is rotated if it was real | Yes, once the file is on the branch the PR is compared with. | None. |
-| Dependency Review | `allow-ghsas` in `security-supply-chain.yml` | Not applicable while `warn-only`. | None until it blocks. |
-| Trivy `fs` | None. The check keeps flagging the finding until it reaches `staging`. | No. | See below. |
-| Trivy `image`, `config`, ZAP | None for `image` and `config`; `IGNORE` in `.zap/rules.tsv` for ZAP | Nothing blocks on these today. | None until they block. |
+| Tool | Quiet on later PRs? | Gap |
+|------|---------------------|-----|
+| Semgrep | Yes. The `nosemgrep` comment travels with the line. | None. |
+| Checkov | Yes. | The four hard-fail checks should be fixed, not skipped. How to regenerate a `.checkov.baseline` is undocumented. |
+| CodeQL | No on `staging`: a new alert stays open until dismissed in the Security tab, and the `staging` rule blocks on it. On `test` nothing is gated yet. No suppression comment is verified. | A decision, below. |
+| ShellCheck | Yes. The `shellcheck disable` comment travels with the line. | None. |
+| Gitleaks | Yes, once `.gitleaksignore` is on the branch the PR is compared with. It goes in a separate PR, after rotation if the secret was real. | None. |
+| Dependency Review | Not applicable while `warn-only`. | None until it blocks. |
+| Trivy `fs` | No. There is no suppression, so the check keeps flagging the finding until it reaches `staging`. | See below. |
+| Trivy `image`, `config`, ZAP | Nothing blocks on these today. | None until they block. |
 
-**Trivy `fs` needs an ignore file to meet the goal.** `aquasecurity/trivy-action@v0.36.0` takes a `trivyignores` input, a list of `.trivyignore` files or one `.trivyignore.yaml`. The YAML form has `id`, `paths`, `purls`, `expired_at` and `statement` fields, so an entry can name the location, carry the ticket, and expire on the playbook's review date. Passing the file to the branch scan in `security-compare.yml` makes that finding stop being "new". Leaving it off the `trivy` job that uploads from `staging` keeps the alert open in the Security tab as the record. Trivy's own docs mark `.trivyignore.yaml` experimental, so confirm it works with the pinned version before relying on it.
+**Trivy `fs` needs an ignore file to meet the goal.** `aquasecurity/trivy-action@v0.36.0` takes a `trivyignores` input, a list of `.trivyignore` files or one `.trivyignore.yaml`. Both formats can expire an entry on the playbook's review date. The plain `.trivyignore` takes an `exp:` date after the ID, as in `CVE-2022-1234 exp:2026-12-31`, and matches by ID only, so the ticket and reason go in a comment above the entry. The YAML form has `id`, `paths`, `purls`, `expired_at` and `statement` fields, so an entry can also name the location and carry the ticket. Trivy's own docs mark `.trivyignore.yaml` experimental, so prefer the plain file unless scoping by path is needed. Passing the file to the branch scan in `security-compare.yml` makes that finding stop being "new". Leaving it off the `trivy` job that uploads from `staging` keeps the alert open in the Security tab as the record. Confirm the chosen format works with the pinned `trivy-action` version before relying on it.
 
 **VEX does not do this job.** No workflow passes `--vex`, `trivy-action@v0.36.0` has no VEX input, and Trivy applies only `not_affected` and `fixed` statements. An accepted finding is `affected`, so a VEX file cannot silence it. The playbook also keeps `affected` statements for T1 and T2 out of the public file.
 
 **CodeQL is undecided.** The options are: leave `test` ungated; add a gate step that diffs the local SARIF against `staging`'s open alerts; or an inline `// codeql[<rule-id>]` suppression comment. The syntax and whether our config reads it are unverified. Excluding a rule in `.github/codeql/codeql-config.yml` is not an option: the config is shared with the `staging` uploads, so it would close the `staging` alert as well.
 
-## When Devs are expected to fix alerts caused by their changes
+## npm audit and Trivy fs
 
-These are proposed expectations for the team. Where they differ from the [playbook](playbook.md), the playbook still applies until it is changed.
-
-**Fix it in the PR that caused it.** A finding that appears in your PR because of your change is cheapest to fix now, while the code is fresh and before it reaches `test` or `staging`. Don't wait for the weekly triage, and don't merge on the assumption that someone else will pick it up. The [playbook](playbook.md#missing-an-sla) holds new code to a stricter standard than existing findings: it must not add medium- or high-severity findings at all.
-
-Findings already in the baseline are not your responsibility, and they don't block your PR. They are worked through the SLAs in the [playbook](playbook.md#remediation-slas).
-
-### When a fix can be deferred to a ticket
-
-Defer only when one of these is true:
-- The fix is too large for this PR AND **is not** in scope for your branch's changes.
-- No fix exists yet, for example the package has no patched release.
-
-If so:
-1. Log a Jira ticket before you merge, using the title format in [Ownership](playbook.md#ownership). For now Jira holds these tickets. The playbook tracks findings as GitHub issues on the ZenHub board, so it needs the same change before this is adopted.
-2. Get the approver's (tech lead or delegate) sign-off on the PR. Every deferral, suppression and risk acceptance needs it, at every severity ([Suppressing a finding](playbook.md#suppressing-a-finding)).
-3. Record the decision in the ticket using the [exception record](playbook.md#the-exception-record). For a Trivy `fs` or `image` finding, this proposal adds a [VEX statement](playbook.md#vex-statements), whether or not the fix lands in your branch. The playbook is narrower: it publishes only `not_affected` and `fixed` statements, and keeps `affected` ones for T1 and T2 in the advisory.
-4. If there is no upstream fix, work through [No upstream fix](playbook.md#no-upstream-fix) first. "No patch" alone isn't a reason to accept a finding.
-
-To suppress a finding in a scanner, see [Suppression mechanisms](scanner-reference.md#suppression-mechanisms) and [Remediating or accepting a failure](#remediating-or-accepting-a-failure).
-**Never deferred:** a real secret. Rotate it the same business day and follow [Secrets](playbook.md#secrets).
-
-### Keeping sensitive details out of public places
-
-The repository is public, so a pushed branch, its PR, its commit messages and its workflow runs are all readable by anyone. The scans on a PR list each finding in the run's log and job summary, with the rule, file, line and offending code. That output can't be hidden. These expectations limit what else is said.
-
-**When a finding is sensitive.** The [playbook](playbook.md#where-findings-are-tracked) says which findings are sensitive. This proposal adds when that applies to a finding found on a PR:
-- **Fixed before merge:** it never reaches `staging`, so nothing is tracked and there is no advisory.
-- **Deferred and merged:** it is now in the codebase. Treat it as sensitive if the playbook says so, with a draft advisory and a GHSA ID in place of details.
-- **A secret:** always sensitive, from the moment it is pushed.
-
-**What to write.** For a finding that is or may be sensitive:
-- Describe the change by what it does, not by the weakness it removes. Write "Validate the docket number in the lookup", not "Fix SSRF in the lookup".
-- Leave the vulnerability class, rule name, CVE, severity and impact out of the PR title, PR description, commit messages and review comments. Put them in the ticket or advisory, once it exists.
-- Don't paste the scanner's output into the PR, a comment or a chat. Link to the ticket instead.
-- In a suppression comment, use only the ticket or GHSA ID, as in [Remediating or accepting a failure](#remediating-or-accepting-a-failure).
-
-An upgrade to a published fix for a public advisory is routine. The PR can name the package and the advisory.
-
-### What each scanner compares against, and what to do
-
-How to suppress is in the table under [Remediating or accepting a failure](#remediating-or-accepting-a-failure). What differs by scanner:
-
-- **Semgrep** compares against the PR's base branch and reports only code your PR changed. It blocks `Security Gate (SAST)`. See [If your PR is blocked by Semgrep](../sast-scanning.md#if-your-pr-is-blocked-by-semgrep).
-- **CodeQL** compares against the alerts open on `staging`. It blocks a PR into `staging` for new high-or-higher alerts. Fix the alert, or have the approver agree to a dismissal in the Security tab with a tracking record. On a PR into `test`, results aren't uploaded: read the job log and fix what it reports, and don't leave it for the `staging` PR.
-- **Checkov** compares against the directory's `.checkov.baseline`. Only the four hard-fail checks block your PR, and they are fixed, not skipped. Fix other findings your change adds too.
-- **ShellCheck** compares against nothing. Any error-level finding blocks the PR. Don't add paths to `.shellcheckignore`: nothing reads it. Excluding a path means editing the `find` command in `run-shellcheck.sh`.
-- **Gitleaks** compares against the commits in your PR only. A false positive goes in `.gitleaksignore` in a separate PR with the approver's sign-off ([Secrets scanning](../secrets-scanning.md#2-pr-ci-gate-blocking)).
-
-### npm audit and Trivy fs
 **Compares against:** nothing, except Dependency Review (changed dependencies, high and above) and `Findings vs staging` (new Trivy fs findings not on `staging`, matched by CVE, package and file).
 
-These don't block your PR, so a green check doesn't mean you added nothing. If your PR changes `package.json` or the lockfile, check the Dependency Review and `Findings vs staging` summaries, and take the fix by updating the dependency ([Patching npm dependencies](playbook.md#patching-npm-dependencies)). If you can't, defer with a ticket as above.
+These don't block your PR, so a green check doesn't mean you added nothing. If your PR changes `package.json` or the lockfile, check the Dependency Review and `Findings vs staging` summaries, and take the fix by updating the dependency ([Patching npm dependencies](playbook.md#patching-npm-dependencies)). If you can't, defer it as described in [When a fix can be deferred](playbook.md#when-a-fix-can-be-deferred).

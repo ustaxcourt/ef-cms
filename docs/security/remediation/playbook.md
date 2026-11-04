@@ -8,6 +8,57 @@ this doc is the process that sits on top of them.
 On triage this week? Use the [weekly triage runbook](weekly-triage.md). For scanner details,
 suppression mechanisms and image rebuilds, see the [scanner reference](scanner-reference.md).
 
+## Contents
+
+- [Purpose and scope](#purpose-and-scope)
+- [Where findings are tracked](#where-findings-are-tracked)
+- [Roles](#roles)
+- [Exposure tiers](#exposure-tiers)
+  - [T1: production runtime](#t1-production-runtime)
+  - [T2: CI/CD with deploy credentials](#t2-cicd-with-deploy-credentials)
+  - [T3: development and test only](#t3-development-and-test-only)
+- [Severity rubric](#severity-rubric)
+  - [1. Start from the scanner's severity](#1-start-from-the-scanners-severity)
+  - [2. Check whether DAWSON is affected at all](#2-check-whether-dawson-is-affected-at-all)
+  - [3. Apply the modifiers](#3-apply-the-modifiers)
+  - [Worked examples](#worked-examples)
+- [Remediation SLAs](#remediation-slas)
+  - [What counts as resolved](#what-counts-as-resolved)
+  - [When the clock starts](#when-the-clock-starts)∏
+  - [Missing an SLA](#missing-an-sla)
+- [Intake and ownership](#intake-and-ownership)
+  - [Same-day triage](#same-day-triage)
+  - [Findings reported by people](#findings-reported-by-people)
+  - [Ownership](#ownership)
+- [Choosing an action](#choosing-an-action)
+  - [Patching npm dependencies](#patching-npm-dependencies)
+  - [Suppressing a finding](#suppressing-a-finding)
+  - [No upstream fix](#no-upstream-fix)
+- [Findings on pull requests](#findings-on-pull-requests)
+  - [Fix it in the PR that caused it](#fix-it-in-the-pr-that-caused-it)
+  - [When a fix can be deferred](#when-a-fix-can-be-deferred)
+  - [Keeping sensitive details out of the PR](#keeping-sensitive-details-out-of-the-pr)
+  - [Scans that run in the background](#scans-that-run-in-the-background)
+- [Exceptions](#exceptions)
+  - [The exception record](#the-exception-record)
+  - [Review dates](#review-dates)
+  - [On the review date](#on-the-review-date)
+- [VEX statements](#vex-statements)
+  - [How decisions map to VEX](#how-decisions-map-to-vex)
+  - [What may be published](#what-may-be-published)
+- [Secrets](#secrets)
+  - [1. Contain](#1-contain)
+  - [2. Rotate, within 1 business day at the latest](#2-rotate-within-1-business-day-at-the-latest)
+  - [3. Verify](#3-verify)
+  - [4. Clean up](#4-clean-up)
+  - [5. Record](#5-record)
+  - [False positives](#false-positives)
+  - [Prevention](#prevention)
+- [Validation and closure](#validation-and-closure)
+  - [Validation](#validation)
+  - [Closure](#closure)
+- [Reporting](#reporting)
+
 ## Purpose and scope
 
 - **Audience:** the DAWSON team.
@@ -21,14 +72,14 @@ suppression mechanisms and image rebuilds, see the [scanner reference](scanner-r
 
 ## Where findings are tracked
 
-The repository and its GitHub Issues are public. Every finding is tracked as a GitHub issue on
-the [ZenHub](../../zenhub.md) board, so all security work shows up in one place with an assignee and
-a due date. What the issue is allowed to say depends on whether the finding is sensitive.
+The repository and its GitHub Issues are public; Jira is not. Every finding is tracked as a Jira
+ticket, so all security work shows up in one place with an assignee and a due date. What the
+ticket and the public repository are allowed to say depends on whether the finding is sensitive.
 
 | Finding | Tracking | What the public issue contains |
 | --- | --- | --- |
-| **Routine:** an upgrade to a published fix for a public advisory, in any tier; T3 findings; false positives; findings marked not affected | GitHub issue only | The full details |
-| **Sensitive:** any other finding that affects T1 or T2, such as one in DAWSON's own code or configuration (CodeQL, Semgrep, Checkov, ZAP) or a public CVE with no fixed version; any exposed secret; any finding reported by a person | Draft security advisory for the details, plus a GitHub issue that points to it | Only "Private security finding", the advisory's GHSA ID, the assignee and the due date. No component, severity or CVE. |
+| **Routine:** an upgrade to a published fix for a public advisory, in any tier; T3 findings; false positives; findings marked not affected | Jira ticket only | The full details |
+| **Sensitive:** any other finding that affects T1 or T2, such as one in DAWSON's own code or configuration (CodeQL, Semgrep, Checkov, ZAP) or a public CVE with no fixed version; any exposed secret; any finding reported by a person | Draft security advisory for the details, plus a Jira ticket that points to it | Only "Private security finding", the advisory's GHSA ID, the assignee and the due date. No component, severity or CVE. |
 
 A dependency or base-image upgrade for a public advisory is routine even in T1 or T2: the advisory
 is already public, and the upgrade PR names the package anyway. When in doubt, treat a finding as
@@ -396,7 +447,7 @@ as "not encrypted because..." tells an attacker where to look. For a sensitive f
 suppression's justification is only the GHSA ID, for example `#checkov:skip=CKV_AWS_18:See
 GHSA-xxxx-xxxx-xxxx`. The reasoning goes in the advisory.
 
-Nothing enforces the approval yet: the repository has no `CODEOWNERS` file. Any reviewer who sees
+Nothing enforces the approval yet: no ruleset requires the approver's review on these files. Any reviewer who sees
 a new suppression in a PR asks for the approver's review before approving it.
 
 Suppressions that existed before this playbook, such as the inline Checkov skips, do not name a
@@ -434,6 +485,83 @@ through this list, not the end of it.
 
 For container findings, the full method for deciding whether a package is present and reachable
 in an image is in the [container findings triage guide](../container-findings-triage.md#2-evaluating-container-findings).
+
+## Findings on pull requests
+
+The aim is to catch a vulnerability as early in the pipeline as possible, so the fix costs the
+least. A PR into `test` runs the same required security checks as a PR into `staging`, so the
+developer sees a finding while the code is fresh and before it can reach `staging`. How those
+checks decide what is new is in the [branching and baseline strategy](branching-and-baseline-strategy.md).
+
+### Fix it in the PR that caused it
+
+A finding that appears because of your change is yours to fix in that PR. Don't wait for the
+weekly triage, and don't merge on the assumption that someone else will pick it up. New code is
+held to a stricter standard than existing findings: it must not add Medium or High findings
+(see [Missing an SLA](#missing-an-sla)).
+
+Findings already on `staging` are not yours and don't block your PR. They follow the
+[SLAs](#remediation-slas).
+
+A finding that appears on your PR but has nothing to do with your change, such as a newly
+published CVE in a dependency you didn't touch, is not yours to fix either. Log it as a finding
+(see [Where findings are tracked](#where-findings-are-tracked)) so it enters the normal triage,
+and tell the triager.
+
+### When a fix can be deferred
+
+Defer only when one of these is true:
+
+- The fix is too large for this PR and is not in scope for the branch's changes.
+- No fix exists yet, for example the package has no patched release.
+
+If so:
+
+1. Log the finding in Jira before you merge, using the title format in [Ownership](#ownership).
+2. Get the approver's sign-off on the PR. Every deferral, suppression and risk acceptance needs
+   it, at every severity ([Suppressing a finding](#suppressing-a-finding)).
+3. Record the decision in the [exception record](#the-exception-record).
+4. If there is no upstream fix, work through [No upstream fix](#no-upstream-fix) first. "No patch"
+   alone isn't a reason to accept a finding.
+
+A real secret is never deferred. Rotate it the same business day and follow [Secrets](#secrets).
+
+A finding fixed before the PR merges never reaches `staging`, so nothing is tracked and there is
+no advisory.
+
+### Keeping sensitive details out of the PR
+
+The repository is public, so a pushed branch, its PR, its commit messages and its workflow runs
+are all readable by anyone. The scans list each finding in the run's log and job summary, with
+the rule, file, line and offending code, and that output can't be hidden. These rules limit what
+else is said.
+
+A finding found on a PR is sensitive on the same terms as any other
+([Where findings are tracked](#where-findings-are-tracked)), with one addition: a secret is
+sensitive from the moment it is pushed. For a finding that is or may be sensitive:
+
+- Describe the change by what it does, not by the weakness it removes. Write "Validate the docket
+  number in the lookup", not "Fix SSRF in the lookup".
+- Leave the vulnerability class, rule name, CVE, severity and impact out of the PR title, PR
+  description, commit messages and review comments. Put them in the advisory.
+- Don't paste the scanner's output into the PR, a comment or a chat. Link to the issue instead.
+- In a suppression comment, use only the GHSA ID, as in [Suppressing a finding](#suppressing-a-finding).
+
+An upgrade to a published fix for a public advisory is routine. The PR can name the package and
+the advisory.
+
+### Scans that run in the background
+
+Some scans don't gate a PR. They run on a schedule, or when a base image changes, to catch
+vulnerabilities published after the code merged.
+
+- **Container image scans** run on PRs (including PRs into `test`), weekly, and when a Dockerfile
+  changes. They don't block a merge. Their findings are logged automatically: the job looks for an
+  open issue that already lists the CVE, adds the new package or image to it, and creates an issue
+  only for CVEs that are in none. The
+  mechanics are in the [baseline strategy](branching-and-baseline-strategy.md#background-scans).
+- **Trivy `fs`** isn't a background scan. It gates PRs through `Findings vs staging`, and a person
+  reads the result so the developer can fix what their branch caused and log what it didn't.
 
 ## Exceptions
 
