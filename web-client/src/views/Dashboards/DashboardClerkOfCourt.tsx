@@ -157,6 +157,7 @@ const casesData = ({
               <span className="tw:font-normal">{totalOpenCases}</span>
             </h2>
             <PieGraph
+              isAnimationActive={false}
               data={openCasesPieData}
               title={ALL_OPEN_CASES_TITLE}
               showTitle={false}
@@ -172,6 +173,7 @@ const casesData = ({
               <span className="tw:font-normal">{totalCasesClosed}</span>
             </h2>
             <PieGraph
+              isAnimationActive={false}
               data={casesClosedPieData}
               title={`Cases Changed to Closed/Closed - Dismissed in ${casesYearLabel}`}
               showTitle={false}
@@ -271,12 +273,14 @@ export const DashboardClerkOfCourt = connect(
                       </h2>
                       <div className="tw:flex tw:flex-wrap tw:gap-12">
                         <PieGraph
+                          isAnimationActive={false}
                           data={petitionsByServiceTypePieData}
                           title={`Petitions Created in ${petitionsYearLabel}`}
                           showTitle={false}
                           tooltipTitle="Petitions Created"
                         />
                         <PieGraph
+                          isAnimationActive={false}
                           data={petitionsByRepresentationPieData}
                           title={`Petitions Created in ${petitionsYearLabel}`}
                           showTitle={false}
@@ -356,6 +360,7 @@ export const DashboardClerkOfCourt = connect(
                     </h2>
                     <div className="tw:mb-8">
                       <PieGraph
+                        isAnimationActive={false}
                         data={petitionsByServiceTypePieData}
                         title={`Petitions Created in ${petitionsYearLabel}`}
                         showTitle={false}
@@ -364,6 +369,7 @@ export const DashboardClerkOfCourt = connect(
                     </div>
                     <div className="tw:mb-6">
                       <PieGraph
+                        isAnimationActive={false}
                         data={petitionsByRepresentationPieData}
                         title={`Petitions Created in ${petitionsYearLabel}`}
                         showTitle={false}
