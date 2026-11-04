@@ -12,7 +12,7 @@ A baseline is a recorded set of accepted pre-existing findings, so a pull reques
 
 A finding is caught on `test`, before it reaches `staging`, and `staging` stays the accepted baseline, so it doesn't grow. The other scans (dependency review, npm audit, lockfile-lint, container scans and ZAP) are out of scope.
 
-In the table below, "PR gate (staging)" means the tool can block a merge into `staging`, according to the `staging` branch rulesets. Today no security check is required on `test`, `develop`, `irs` or `prod`; see [Branch rules today](#branch-rules-today).
+In the table below, "PR gate (staging)" means the tool can block a merge into `staging`, according to the `staging` branch rulesets. Today no security check is required on `test`; see [Branch rules today](#branch-rules-today).
 
 ## Contents
 
@@ -49,13 +49,11 @@ Read from the repository's rulesets (`gh api repos/ustaxcourt/ef-cms/rulesets`) 
 |--------|-----------|------------------------|-------------|
 | `staging` | 2: one from each of two teams. | The functional checks, `Security Gate (SAST)` and `Security Gate (Secrets)`. The PR branch must be up to date with `staging`. | CodeQL code-scanning rule (high or higher). Restrictions on force-push, deletion, creation and update of the ref. |
 | `test` | 3: one from one team, two from the other. | The functional checks only. The PR branch need not be up to date. | No force-push, no deletion. |
-| `develop`, `irs` | 3, as on `test`. | The functional checks only. | None. |
-| `prod` | None. | The functional checks only. | Same restrictions as `staging`: force-push, deletion, creation and update of the ref. |
 
 
 ## Baseline and comparison behavior
 
-**The baseline branch is `staging`.** Findings that exist on `staging` are accepted pre-existing debt. A pull request is judged only on findings it adds. Production is built from `staging`, so nothing reaches production that `staging` has not already accepted.
+**The baseline branch is `staging`.** Findings that exist on `staging` are accepted pre-existing debt. A pull request is judged only on findings it adds.
 
 `test` is a dry run of the `staging` PR: it is `staging` plus the developer's branch. Its baseline is therefore `staging`'s baseline, not a second one. Developers sync their branch with `staging` before opening a PR into `test`. Scan results from `test` are not uploaded to the Security tab, so `test` has no alert state of its own. It can only catch new findings, by comparing against `staging`.
 
@@ -91,7 +89,7 @@ When `Findings vs staging` fails, the developer follows [Trivy fs findings](play
 
 The baseline is `staging`'s own scan results, plus the files that record accepted findings. Every push to `staging` rescans the whole tree with Semgrep, Checkov, CodeQL, Trivy `fs` and Gitleaks, so those baselines refresh themselves. Nothing has to be run by hand to create them.
 
-[See Triage Dashboard](https://calm-mud-04b384a0f.4.azurestaticapps.net/) - updated every Monday, after `ef-cms` code scanning workflows post production merge are complete.
+[See Triage Dashboard](https://calm-mud-04b384a0f.4.azurestaticapps.net/) - updated every Monday, after the `ef-cms` code scanning workflows on `staging` are complete.
 
 
 Result counts are per analysis. They are not the open-alert totals in the weekly triage. To list the newest analysis per category again:
@@ -124,25 +122,23 @@ The accepted baseline grows whenever something stops a finding from failing or s
 | A PR adds a suppression or baseline entry: `nosemgrep`, `#checkov:skip`, `shellcheck disable`, `.checkov.baseline`, `.gitleaksignore`, `.gitleaks.toml`, `.trivyignore` | A reviewer noticing it. | Nothing enforces the approver's sign-off. |
 | A PR widens what the scans skip: `--exclude` or `--skip-check` in `security-sast.yml`, `paths-ignore` in a workflow or in `.github/codeql/codeql-config.yml` | Same. | Same. |
 | An alert is dismissed in the Security tab | Write access to the repository. | Dismissals are not reviewed anywhere in code. |
-| A commit reaches `prod` without passing through `staging` | Nothing in the security checks. `prod` requires only the functional checks, and no security workflow runs on a `prod` push. | A commit made directly on `prod` is never scanned. |
 | A suppression merges to `test` and the same branch is then refused at `staging` | Nothing. | `test` then carries an acceptance that `staging` has not made. |
 
 Proposed:
 1. **Require the approver's review on the suppression files** with a path-scoped entry in the `required_reviewers` of the `test` and `staging` rulesets, covering the suppression files, `security-*.yml` and `.github/codeql/`. A listed path is the only thing that then needs the approver's review, so the playbook's sign-off rule becomes enforced rather than asked for. The `staging` ruleset already requires reviewers by team, so this extends a rule that exists.
-2. **Treat `staging` as the only source for `prod`.** Promotion is a merge of `staging` into `prod` by the court's operations staff ([pr-workflow.md](../../pr-workflow.md)), so a promotion adds nothing `staging` has not accepted. To make that provable, require the two security gates on `prod` as well. They would pass on a clean promotion.
-3. **Review suppressions on `test` once.** The approver signs off on the `test` PR, as in [Remediating or accepting a failure](#remediating-or-accepting-a-failure). The `staging` PR for the same branch is then judged only by the gates. A suppression that is refused at `staging` is removed from `test` by reverting that branch.
-4. **List dismissals in the weekly triage.** Add `state=dismissed` alerts since the last triage to [weekly-triage.md](weekly-triage.md), so every dismissal has a record and a review date.
+2. **Review suppressions on `test` once.** The approver signs off on the `test` PR, as in [Remediating or accepting a failure](#remediating-or-accepting-a-failure). The `staging` PR for the same branch is then judged only by the gates. A suppression that is refused at `staging` is removed from `test` by reverting that branch.
+3. **List dismissals in the weekly triage.** Add `state=dismissed` alerts since the last triage to [weekly-triage.md](weekly-triage.md), so every dismissal has a record and a review date.
 
 ## Emergency security fixes
 
-The [playbook](playbook.md#same-day-triage) already defines what counts as an emergency: a possible secret, a KEV-listed or publicly exploited vulnerability in T1 or T2, or a finding reported by a person. This section covers how the fix then reaches `staging` and `prod`.
+The [playbook](playbook.md#same-day-triage) already defines what counts as an emergency: a possible secret, a KEV-listed or publicly exploited vulnerability in T1 or T2, or a finding reported by a person. This section covers how the fix then reaches `staging`.
 
 **The gates are not bypassed.** No ruleset has a bypass actor, and the gates fail only on findings the PR adds, so a fix that removes one passes them.
 
 1. **Triage the same day.** Follow [Same-day triage](playbook.md#same-day-triage). The approver opens the draft advisory and is told directly. For a secret, rotate first ([Secrets](playbook.md#secrets)); the code change is the clean-up, not the fix.
 2. **Branch from `staging`** and change only what the fix needs. Open the PR into `staging`. `test` may be skipped when the approver agrees on the PR, because `test` is a dry run for the same gates. Skipping it also skips the product owner's check in the `test` environment.
 3. **If the fix trips a gate,** fix that finding. If it cannot be fixed, the approver signs off on the PR the same day, the suppression goes on the branch, and the ticket is logged before merge. An emergency shortens the wait for sign-off, not what is recorded. See [Remediating or accepting a failure](#remediating-or-accepting-a-failure).
-4. **Ask for the earlier deploy** as soon as the PR merges. [Deploys follow the court's schedule](playbook.md#what-counts-as-resolved), and the playbook already has the owner ask the court for an earlier one for a Critical or High finding in T1. Court operations merge `staging` into `prod`.
+4. **Ask for the earlier deploy** as soon as the PR merges. [Deploys follow the court's schedule](playbook.md#what-counts-as-resolved), and the playbook already has the owner ask the court for an earlier one for a Critical or High finding in T1.
 5. **Back-merge `staging` into `test`** afterwards so `test` carries the fix.
 
 ## Remediating or accepting a failure
