@@ -1,7 +1,7 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-import { ClerkDashboardProcedureTypeTotal } from '@web-api/business/useCases/reports/getClerkDashboardStatsInteractor';
+import { ClerkDashboardProcedureTypeTotal } from '@web-api/business/useCases/reports/clerkDashboardStats';
 import {
   ClerkOfCourtPieChartData,
   DashboardClerkOfTheCourtHelper,
@@ -36,21 +36,26 @@ export const dashboardClerkOfTheCourtHelper = (
   get: Get,
   _applicationContext: ClientApplicationContext,
 ): DashboardClerkOfTheCourtHelper => {
-  const stats = get(state.clerkOfCourtDashboardStats);
+  const petitionsStats = get(state.clerkOfCourtDashboardStats.petitions.data);
+  const casesStats = get(state.clerkOfCourtDashboardStats.cases.data);
 
-  // the stats carry the court's current years; until they load, fall back to the browser's
-  const year = stats.year || formatNow(FORMATS.YEAR);
-  const fiscalYear = stats.fiscalYear || year;
-  const getYearLabel = (isFiscal: boolean): string =>
-    isFiscal ? `FYTD ${fiscalYear}` : `YTD ${year}`;
+  // each tab's stats carry the court's current years; until they load, fall back to the browser's
+  const getYearLabel = (
+    isFiscal: boolean,
+    stats: { fiscalYear: string; year: string },
+  ): string => {
+    const year = stats.year || formatNow(FORMATS.YEAR);
+    const fiscalYear = stats.fiscalYear || year;
+    return isFiscal ? `FYTD ${fiscalYear}` : `YTD ${year}`;
+  };
 
   const petitionsByYearIsFiscal = get(
     state.clerkOfCourtDashboardOptions.petitionsByYearIsFiscal,
   );
 
   const petitionerStats = petitionsByYearIsFiscal
-    ? stats.fiscalYearPetitionStats
-    : stats.calendarYearPetitionStats;
+    ? petitionsStats.fiscalYearPetitionStats
+    : petitionsStats.calendarYearPetitionStats;
 
   const petitionsByMonthAndServiceTypeChartData = [
     {
@@ -94,8 +99,8 @@ export const dashboardClerkOfTheCourtHelper = (
   );
 
   const caseStats = casesByYearIsFiscal
-    ? stats.fiscalYearCaseStats
-    : stats.calendarYearCaseStats;
+    ? casesStats.fiscalYearCaseStats
+    : casesStats.calendarYearCaseStats;
 
   const totalCasesClosed = sum(
     caseStats.casesClosedByProcedureType.map(p => p.total),
@@ -125,17 +130,19 @@ export const dashboardClerkOfTheCourtHelper = (
       caseStats.casesClosedByProcedureType,
     ),
     casesMonths: casesByYearIsFiscal ? FISCAL_MONTH_LABELS : MONTH_LABELS,
-    openCasesPieData: getProcedureTypePieData(stats.openCasesByProcedureType),
+    openCasesPieData: getProcedureTypePieData(
+      casesStats.openCasesByProcedureType,
+    ),
     totalCasesClosed: formatPositiveNumber(totalCasesClosed),
     totalOpenCases: formatPositiveNumber(
-      sum(stats.openCasesByProcedureType.map(p => p.total)),
+      sum(casesStats.openCasesByProcedureType.map(p => p.total)),
     ),
     petitionsByMonthAndServiceTypeChartData,
     petitionsByRepresentationPieData,
     petitionsByServiceTypePieData,
     totalPetitions: formatPositiveNumber(totalPetitions),
     months: petitionsByYearIsFiscal ? FISCAL_MONTH_LABELS : MONTH_LABELS,
-    casesYearLabel: getYearLabel(casesByYearIsFiscal),
-    petitionsYearLabel: getYearLabel(petitionsByYearIsFiscal),
+    casesYearLabel: getYearLabel(casesByYearIsFiscal, casesStats),
+    petitionsYearLabel: getYearLabel(petitionsByYearIsFiscal, petitionsStats),
   };
 };

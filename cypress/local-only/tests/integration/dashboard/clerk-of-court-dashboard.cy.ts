@@ -165,7 +165,7 @@ describe('Clerk of Court Dashboard', () => {
       logout();
       loginAsPetitionsClerk1();
       createAndServePaperPetition({ yearReceived: year }).then(() => {
-        cy.intercept('GET', '**/clerk-dashboard-stats').as(
+        cy.intercept('GET', '**/clerk-dashboard-stats/petitions').as(
           'clerkDashboardStats',
         );
         loginAsClerkOfCourt();
@@ -335,7 +335,9 @@ describe('Clerk of Court Dashboard', () => {
     const sumTotals = (entries: { total: number }[]) =>
       entries.reduce((total, entry) => total + entry.total, 0);
 
-    cy.intercept('GET', '**/clerk-dashboard-stats').as('clerkDashboardStats');
+    cy.intercept('GET', '**/clerk-dashboard-stats/cases').as(
+      'clerkDashboardStats',
+    );
     loginAsClerkOfCourt();
     cy.wait('@clerkDashboardStats').then(clerkDashboardStats => {
       const {
@@ -455,7 +457,7 @@ describe('Clerk of Court Dashboard', () => {
       casesClosedByProcedureType: [],
       casesOnAppealByMonth: [],
     };
-    cy.intercept('GET', '**/clerk-dashboard-stats', {
+    cy.intercept('GET', '**/clerk-dashboard-stats/cases', {
       body: {
         calendarYearCaseStats: {
           ...emptyCaseStats,
@@ -512,7 +514,7 @@ describe('Clerk of Court Dashboard', () => {
   });
 
   it('should show one loading state for the tab until the stats arrive', () => {
-    cy.intercept('GET', '**/clerk-dashboard-stats', req => {
+    cy.intercept('GET', '**/clerk-dashboard-stats/petitions', req => {
       req.on('response', res => {
         res.setDelay(STATS_LOADING_DELAY_MS);
       });
@@ -532,7 +534,7 @@ describe('Clerk of Court Dashboard', () => {
   });
 
   it('should navigate away from the dashboard while the stats are still loading', () => {
-    cy.intercept('GET', '**/clerk-dashboard-stats', req => {
+    cy.intercept('GET', '**/clerk-dashboard-stats/*', req => {
       req.on('response', res => {
         res.setDelay(STATS_HELD_DELAY_MS);
       });
@@ -551,12 +553,12 @@ describe('Clerk of Court Dashboard', () => {
     }).should('exist');
   });
 
-  it('should show one error state for the tab when the stats fail to load', () => {
-    cy.intercept('GET', '**/clerk-dashboard-stats', {
+  it('should show one error state for each tab when the stats fail to load', () => {
+    cy.intercept('GET', '**/clerk-dashboard-stats/*', {
       statusCode: 500,
     }).as('clerkDashboardStats');
     loginAsClerkOfCourt();
-    cy.wait('@clerkDashboardStats');
+    cy.wait(['@clerkDashboardStats', '@clerkDashboardStats']);
 
     cy.get('[data-testid="chart-error"]')
       .should('have.length', 1)
@@ -567,6 +569,22 @@ describe('Clerk of Court Dashboard', () => {
     cy.get('[data-testid="chart-error"]').should('have.length', 1);
     cy.get('[data-testid="cases-data-div"]').should('not.exist');
     cy.get('[data-testid="error-alert"]').should('not.exist');
+  });
+
+  it('should load each tab from its own request, so one failed tab does not block another', () => {
+    cy.intercept('GET', '**/clerk-dashboard-stats/petitions', {
+      statusCode: 500,
+    }).as('petitionsStats');
+    cy.intercept('GET', '**/clerk-dashboard-stats/cases').as('casesStats');
+    loginAsClerkOfCourt();
+    cy.wait(['@petitionsStats', '@casesStats']);
+
+    cy.get('[data-testid="chart-error"]').should('have.length', 1);
+    cy.get('[data-testid="petitions-data-div"]').should('not.exist');
+
+    cy.get('#tabButton-cases').click();
+    cy.get('[data-testid="chart-error"]').should('not.exist');
+    cy.get('[data-testid="cases-data-div"]').should('exist');
   });
 
   it('should display messages', () => {
