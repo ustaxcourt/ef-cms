@@ -3,6 +3,9 @@ name: Security - Containers
 on:
   pull_request:
     types: [opened, reopened, synchronize, ready_for_review]
+    # A PR into prod brings only code that staging has already scanned. Do not let findings
+    # that are already on staging block a deployment.
+    branches-ignore: [prod]
     paths-ignore:
       - '**.md'
       - '**/.gitignore'
