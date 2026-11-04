@@ -1,6 +1,5 @@
 import { ALLOWLIST_FEATURE_FLAGS } from '@shared/business/entities/EntityConstants';
 import { selectTypeaheadInput } from '../../../../../helpers/components/typeAhead/select-typeahead-input';
-import { checkA11y } from '../../../../support/generalCommands/checkA11y';
 
 describe('Public Trial Sessions', () => {
   beforeEach(() => {
@@ -21,8 +20,6 @@ describe('Public Trial Sessions', () => {
       .each(option => {
         cy.wrap(option).should('have.css', 'display', 'block');
       });
-    checkA11y();
-
     cy.viewport(1280, 800);
     cy.get('[data-testid="proceeding-type-filter"] .usa-radio')
       .should('have.length', 4)

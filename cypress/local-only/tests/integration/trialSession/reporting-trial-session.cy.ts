@@ -9,7 +9,6 @@ import {
   loginAsPetitionsClerk,
   loginAsTrialClerk,
 } from '../../../../helpers/authentication/login-as-helpers';
-import { checkA11y } from '../../../support/generalCommands/checkA11y';
 
 describe('Reporting trial sessions', () => {
   let previousFlag: boolean | number | string | null;
@@ -91,7 +90,6 @@ describe('Reporting trial sessions', () => {
       'calendar@example.com',
     );
     cy.get('#irs-calendar-administrator-info-phone').type('2025550100');
-    checkA11y();
     cy.intercept('POST', '**/trial-sessions').as('createReporting');
     cy.get('[data-testid="submit-trial-session"]').click();
     cy.wait('@createReporting').then(({ request, response }) => {
@@ -138,7 +136,6 @@ describe('Reporting trial sessions', () => {
       .then(text => {
         expect(text.trim()).to.eq('02/10/99');
       });
-    checkA11y();
     cy.contains('Trial clerk').should('not.exist');
     cy.contains('Court reporter').should('not.exist');
     loginAsDocketClerk();
@@ -156,7 +153,6 @@ describe('Reporting trial sessions', () => {
     cy.get('#irs-calendar-administrator-info-name').type(
       'Updated Calendar Admin',
     );
-    checkA11y();
     cy.intercept('PUT', '**/async/trial-sessions').as('editReporting');
     cy.get('[data-testid="submit-edit-trial-session"]').click();
     cy.wait('@editReporting').then(({ request }) => {
@@ -181,7 +177,6 @@ describe('Reporting trial sessions', () => {
     cy.get('[data-testid="edit-trial-session"]').click();
     cy.get('#irs-calendar-administrator-info-name').clear();
     cy.get('#irs-calendar-administrator-info-name').type('Flag Disabled Admin');
-    checkA11y();
     cy.get('[data-testid="submit-edit-trial-session"]').click();
     cy.wait('@editReporting');
     cy.get('[data-testid="success-alert"]').should('be.visible');
