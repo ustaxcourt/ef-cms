@@ -13,11 +13,19 @@ jest.mock(
   '@web-api/business/useCaseHelper/noticeOfDocketChange/generateNoticeOfDocketChangePdf',
 );
 import {
+  CASE_STATUS_TYPES,
   DOCKET_SECTION,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
+  ROLES,
   SERVICE_INDICATOR_TYPES,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
 } from '@shared/business/entities/EntityConstants';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
+import {
+  calculateISODate,
+  createISODateString,
+} from '@shared/business/utilities/DateHandler';
+import { petitionerUser } from '@shared/test/mockUsers';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { completeDocketEntryQCInteractor } from './completeDocketEntryQCInteractor';
@@ -953,5 +961,165 @@ describe('completeDocketEntryQCInteractor', () => {
     expect(
       applicationContext.getUseCases().addCoversheetInteractor,
     ).toHaveBeenCalledTimes(1);
+  });
+
+  describe('de-lodge motion visibility', () => {
+    const visibilityChangeDate = createISODateString(
+      '2023-08-01',
+      'yyyy-MM-dd',
+    );
+    const motionVisibilityChangeDate = calculateISODate({
+      dateString: createISODateString(),
+      howMuch: -60,
+      units: 'days',
+    });
+    const afterMotionFilingDate = calculateISODate({
+      dateString: motionVisibilityChangeDate,
+      howMuch: 1,
+      units: 'days',
+    });
+    const beforeMotionFilingDate = calculateISODate({
+      dateString: motionVisibilityChangeDate,
+      howMuch: -1,
+      units: 'days',
+    });
+
+    const mispDocketEntryId = 'a1a1a1a1-a1a1-a1a1-a1a1-a1a1a1a1a1a1';
+    const brfDocketEntryId = 'b2b2b2b2-b2b2-b2b2-b2b2-b2b2b2b2b2b2';
+
+    const publicSiteUser = {
+      ...petitionerUser,
+      userId: '',
+    };
+
+    const buildLodgedPractitionerMotionEntries = (
+      filingDate: string,
+    ): RawDocketEntry[] => {
+      const motionDocument = {
+        documentTitle: 'Motion for Continuance',
+        documentType: 'Motion for Continuance',
+      };
+      const motionEntry: RawDocketEntry = {
+        ...caseRecord.docketEntries[0],
+        ...motionDocument,
+        docketEntryId: mockDocketEntryId,
+        eventCode: 'M006',
+        filedByRole: ROLES.privatePractitioner,
+        filingDate,
+        isFileAttached: true,
+        isOnDocketRecord: true,
+        isPaper: false,
+        lodged: true,
+        processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+        servedAt: filingDate,
+      };
+      const previousDocument = {
+        docketEntryId: mockDocketEntryId,
+        ...motionDocument,
+      };
+
+      return [
+        motionEntry,
+        {
+          ...motionEntry,
+          docketEntryId: mispDocketEntryId,
+          documentTitle: 'Memorandum in Support',
+          documentType: 'Memorandum in Support',
+          eventCode: 'MISP',
+          lodged: undefined,
+          previousDocument,
+        },
+        {
+          ...motionEntry,
+          docketEntryId: brfDocketEntryId,
+          documentTitle: 'Brief in Support',
+          documentType: 'Brief in Support',
+          eventCode: 'BRF',
+          lodged: undefined,
+          previousDocument,
+        },
+      ];
+    };
+
+    const expectPublicDownloadable = (
+      entry: RawDocketEntry,
+      rawCase: RawCase,
+      expected: boolean,
+    ): void => {
+      expect(
+        DocketEntry.isDownloadable(
+          {
+            ...entry,
+            isFileAttached: true,
+            processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+          },
+          {
+            isTerminalUser: false,
+            motionVisibilityChangeDate,
+            rawCase,
+            user: publicSiteUser,
+            visibilityChangeDate,
+          },
+        ),
+      ).toEqual(expected);
+    };
+
+    it.each([
+      {
+        description: 'after the policy date',
+        expectedDownloadable: true,
+        filingDate: afterMotionFilingDate,
+      },
+      {
+        description: 'before the policy date',
+        expectedDownloadable: false,
+        filingDate: beforeMotionFilingDate,
+      },
+    ])(
+      'should persist lodged false on QC de-lodge when filing $description',
+      async ({ expectedDownloadable, filingDate }) => {
+        const lodgedMotionEntries =
+          buildLodgedPractitionerMotionEntries(filingDate);
+        getCasesByDocketNumbers.mockResolvedValueOnce([
+          {
+            ...caseRecord,
+            docketEntries: lodgedMotionEntries,
+            status: CASE_STATUS_TYPES.generalDocket,
+          },
+        ]);
+
+        await completeDocketEntryQCInteractor(
+          applicationContext,
+          {
+            entryMetadata: {
+              ...lodgedMotionEntries[0],
+              lodged: false,
+            },
+          },
+          mockDocketClerkUser,
+        );
+
+        const { caseToUpdate } = updateCaseAndAssociations.mock.calls[0][0];
+        const updatedMotion = caseToUpdate.docketEntries.find(
+          entry => entry.docketEntryId === mockDocketEntryId,
+        );
+        expect(updatedMotion?.lodged).toBe(false);
+
+        const rawCase: RawCase = {
+          ...caseToUpdate,
+          status: CASE_STATUS_TYPES.generalDocket,
+        };
+        const updatedMisp = caseToUpdate.docketEntries.find(
+          entry => entry.docketEntryId === mispDocketEntryId,
+        );
+        const updatedBrf = caseToUpdate.docketEntries.find(
+          entry => entry.docketEntryId === brfDocketEntryId,
+        );
+
+        expectPublicDownloadable(updatedMotion!, rawCase, expectedDownloadable);
+        expectPublicDownloadable(updatedMisp!, rawCase, expectedDownloadable);
+        expectPublicDownloadable(updatedBrf!, rawCase, expectedDownloadable);
+      },
+    );
   });
 });
