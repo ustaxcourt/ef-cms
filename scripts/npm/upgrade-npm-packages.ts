@@ -23,7 +23,6 @@ const caveats: string[] = [
   '@types/node',
   'typescript',
   'websocket',
-  'p-queue',
   'dwt',
   'uuid',
   'aws-sigv4-sign',

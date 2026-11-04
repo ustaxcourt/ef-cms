@@ -1,3 +1,21 @@
+<details><summary>Dependency Updates - Week of 2026-11-03</summary>
+
+## Local
+
+#### Upgrade Terraform to `1.17.1`
+
+Use either tfswitch or tfenv:
+
+```bash
+tfswitch 1.17.1
+```
+
+```bash
+tfenv install 1.17.1
+tfenv use 1.17.1
+```
+
+</details>
 <details><summary>Dependency Updates - Week of 2026-10-26</summary>
 
 ## Local
