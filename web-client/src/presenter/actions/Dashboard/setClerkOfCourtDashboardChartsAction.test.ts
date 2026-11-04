@@ -244,10 +244,15 @@ describe('setClerkOfCourtDashboardChartsAction', () => {
       );
       newer.resolve(newerStats);
       older.resolve(mockCasesStats);
-      await Promise.all([newerRun, olderRun]);
+      const [{ state: newerState }] = await Promise.all([newerRun, olderRun]);
 
       expect(petitionsState.clerkOfCourtDashboardStats.petitions).toEqual({
         data: mockPetitionsStats,
+        status: 'loaded',
+      });
+      // the petitions load started last, so this fails if the tabs share one request counter
+      expect(newerState.clerkOfCourtDashboardStats.cases).toEqual({
+        data: newerStats,
         status: 'loaded',
       });
     });

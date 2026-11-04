@@ -587,6 +587,35 @@ describe('Clerk of Court Dashboard', () => {
     cy.get('[data-testid="cases-data-div"]').should('exist');
   });
 
+  (
+    [
+      { heldTab: 'cases', loadedTab: 'petitions' },
+      { heldTab: 'petitions', loadedTab: 'cases' },
+    ] as const
+  ).forEach(({ heldTab, loadedTab }) => {
+    it(`should render the ${loadedTab} tab while the ${heldTab} response is still pending`, () => {
+      // hold one tab's response well past the default command timeout, so the other tab must render first
+      cy.intercept('GET', `**/clerk-dashboard-stats/${heldTab}`, req => {
+        req.on('response', res => {
+          res.setDelay(STATS_HELD_DELAY_MS);
+        });
+      });
+      cy.intercept('GET', `**/clerk-dashboard-stats/${loadedTab}`).as(
+        'loadedTabStats',
+      );
+      loginAsClerkOfCourt();
+      cy.wait('@loadedTabStats');
+
+      cy.get(`#tabButton-${loadedTab}`).click();
+      cy.get(`[data-testid="${loadedTab}-data-div"]`).should('exist');
+      cy.get('[data-testid="chart-loading"]').should('not.exist');
+
+      cy.get(`#tabButton-${heldTab}`).click();
+      cy.get('[data-testid="chart-loading"]').should('have.length', 1);
+      cy.get(`[data-testid="${heldTab}-data-div"]`).should('not.exist');
+    });
+  });
+
   it('should display messages', () => {
     loginAsPetitionsClerk1();
     createAndServePaperPetition().then(({ docketNumber }) => {
