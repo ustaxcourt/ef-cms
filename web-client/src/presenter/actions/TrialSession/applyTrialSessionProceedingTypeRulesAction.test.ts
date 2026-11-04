@@ -70,6 +70,34 @@ describe('applyTrialSessionProceedingTypeRulesAction', () => {
     });
   });
 
+  it.each([
+    ['In Person', 'Remote'],
+    ['Remote', 'In Person'],
+  ])(
+    'should preserve session values when switching from %s to %s',
+    async (previousProceedingType, proceedingType) => {
+      const form = {
+        proceedingType,
+        address1: '123 Main Street',
+        meetingId: '123',
+        trialClerkId: 'clerk-id',
+        courtReporter: 'Court Reporter',
+        startTime: '11:30',
+        startTimeHours: '11',
+        startTimeMinutes: '30',
+        startTimeExtension: 'am',
+      };
+      const result = await runAction(
+        applyTrialSessionProceedingTypeRulesAction,
+        {
+          props: { key: 'proceedingType', previousProceedingType },
+          state: { form },
+        },
+      );
+      expect(result.state.form).toEqual(form);
+    },
+  );
+
   it('should preserve other edits to an ordinary session', async () => {
     const form = {
       proceedingType: 'Remote',
