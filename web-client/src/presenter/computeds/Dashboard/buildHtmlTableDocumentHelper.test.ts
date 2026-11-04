@@ -1,5 +1,5 @@
 import { CASE_TYPES } from '@shared/business/entities/EntityConstants';
-import { ClerkDashboardCaseTypeTotal } from '@web-api/business/useCases/reports/getClerkDashboardStatsInteractor';
+import { ClerkDashboardCaseTypeTotal } from '@web-api/business/useCases/reports/clerkDashboardStats';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { buildHtmlTableDocumentHelper as buildHtmlTableDocumentHelperComputed } from './buildHtmlTableDocumentHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
@@ -15,7 +15,11 @@ describe('buildHtmlTableDocumentHelper', () => {
     openCasesByCaseType: ClerkDashboardCaseTypeTotal[],
   ) =>
     runCompute(buildHtmlTableDocumentHelper, {
-      state: { clerkOfCourtDashboardStats: { openCasesByCaseType } },
+      state: {
+        clerkOfCourtDashboardStats: {
+          cases: { data: { openCasesByCaseType } },
+        },
+      },
     }).openCasesByTypeTable;
 
   it('should set the open cases by type table title and column headers', () => {

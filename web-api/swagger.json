@@ -290,11 +290,55 @@
         }
       }
     },
-    "/reports/clerk-dashboard-stats": {
+    "/reports/clerk-dashboard-stats/cases": {
       "get": {
         "tags": [],
-        "summary": "get clerk of court dashboard stats",
-        "description": "get aggregated stats for the clerk of court dashboard.\n",
+        "summary": "get clerk of court dashboard cases stats",
+        "description": "get aggregated stats for the cases tab of the clerk of court dashboard.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/document"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/reports/clerk-dashboard-stats/petitions": {
+      "get": {
+        "tags": [],
+        "summary": "get clerk of court dashboard petitions stats",
+        "description": "get aggregated stats for the petitions tab of the clerk of court dashboard.\n",
         "produces": ["application/json"],
         "responses": {
           "200": {
@@ -3913,7 +3957,6 @@
         }
       }
     },
-
     "/sections/{section}/users": {
       "parameters": [
         {
@@ -9419,18 +9462,32 @@
     "filingFeePaymentDetails": {
       "type": "object",
       "properties": {
-        "paymentStatus": { "type": "string" },
+        "paymentStatus": {
+          "type": "string"
+        },
         "transactions": {
           "type": "array",
           "items": {
             "type": "object",
             "properties": {
-              "transactionStatus": { "type": "string" },
-              "payGovTrackingId": { "type": "string" },
-              "paymentMethod": { "type": "string" },
-              "returnDetail": { "type": "string" },
-              "createdTimestamp": { "type": "string" },
-              "updatedTimestamp": { "type": "string" }
+              "transactionStatus": {
+                "type": "string"
+              },
+              "payGovTrackingId": {
+                "type": "string"
+              },
+              "paymentMethod": {
+                "type": "string"
+              },
+              "returnDetail": {
+                "type": "string"
+              },
+              "createdTimestamp": {
+                "type": "string"
+              },
+              "updatedTimestamp": {
+                "type": "string"
+              }
             },
             "required": ["transactionStatus"]
           }

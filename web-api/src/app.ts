@@ -21,7 +21,8 @@ import { checkEmailAvailabilityLambda } from './lambdas/users/checkEmailAvailabi
 import { checkForReadyForTrialCasesLambda } from './lambdas/cases/checkForReadyForTrialCasesLambda';
 import { closeTrialSessionLambda } from './lambdas/trialSessions/closeTrialSessionLambda';
 import { coldCaseReportLambda } from './lambdas/reports/coldCaseReportLambda';
-import { getClerkDashboardStatsLambda } from './lambdas/reports/getClerkDashboardStatsLambda';
+import { getClerkDashboardCasesStatsLambda } from './lambdas/reports/getClerkDashboardCasesStatsLambda';
+import { getClerkDashboardPetitionsStatsLambda } from './lambdas/reports/getClerkDashboardPetitionsStatsLambda';
 import { completeDocketEntryQCLambda } from './lambdas/documents/completeDocketEntryQCLambda';
 import { completeMessageLambda } from './lambdas/messages/completeMessageLambda';
 import { completeWorkItemLambda } from './lambdas/workitems/completeWorkItemLambda';
@@ -923,8 +924,12 @@ app.delete(
   );
   app.get('/reports/cold-case-report', lambdaWrapper(coldCaseReportLambda));
   app.get(
-    '/reports/clerk-dashboard-stats',
-    lambdaWrapper(getClerkDashboardStatsLambda),
+    '/reports/clerk-dashboard-stats/cases',
+    lambdaWrapper(getClerkDashboardCasesStatsLambda),
+  );
+  app.get(
+    '/reports/clerk-dashboard-stats/petitions',
+    lambdaWrapper(getClerkDashboardPetitionsStatsLambda),
   );
   app.post(
     '/reports/trial-calendar-pdf',

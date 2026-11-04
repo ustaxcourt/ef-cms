@@ -5,8 +5,8 @@ import classNames from 'classnames';
 
 /**
  * Renders a dashboard tab's charts once their data has loaded. All the charts
- * share one request, so until then the tab shows one loading or error state,
- * centered on the page.
+ * in a tab share the tab's request, so until then the tab shows one loading or
+ * error state, centered on the page.
  */
 export const ClerkOfCourtChartStatus = ({
   children,
