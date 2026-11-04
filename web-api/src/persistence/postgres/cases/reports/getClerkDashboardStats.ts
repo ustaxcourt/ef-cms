@@ -7,82 +7,72 @@ import { sql } from 'kysely';
 
 export type CaseStatusChangeGroup = 'closed' | 'onAppeal';
 
-export const openCasesByProcedureType = async (): Promise<
-  {
-    procedureType: string;
-    total: number;
-  }[]
-> => {
-  return getDbReader(async reader => {
-    return reader
-      .selectFrom('dwCase')
-      .select(['procedureType', sql<number>`count(1)`.as('total')])
-      .where('status', 'not in', CLOSED_CASE_STATUSES)
-      .groupBy('procedureType')
-      .execute();
-  });
-};
+type Timeframe = { begin: Date; end: Date };
 
-export const openCasesByCaseType = async (): Promise<
+/**
+ * Counts the open cases by procedure type and by case type in one scan.
+ * A procedure type row has a null caseType, and a case type row has a null procedureType.
+ */
+export const openCasesByProcedureTypeAndCaseType = async (): Promise<
   {
-    caseType: string;
+    caseType: string | null;
+    procedureType: string | null;
     total: number;
   }[]
 > => {
   return getDbReader(async reader => {
     return reader
       .selectFrom('dwCase')
-      .select(['caseType', sql<number>`count(1)`.as('total')])
+      .select(['procedureType', 'caseType', sql<number>`count(1)`.as('total')])
       .where('status', 'not in', CLOSED_CASE_STATUSES)
-      .groupBy('caseType')
+      .groupBy(sql`grouping sets((procedure_type), (case_type))`)
       .execute();
   });
 };
 
 /**
  * Counts the times a case's status was changed to Closed/Closed - Dismissed or
- * On Appeal within the given timeframe, grouped by month and by procedure type.
+ * On Appeal within the calendar year and within the fiscal year, grouped by month
+ * and by procedure type. One pass over the histories covers both timeframes.
  * Each change counts, so a case closed, reopened, and closed again counts twice.
  * A change between Closed and Closed - Dismissed is not a new closure.
  */
-export const caseStatusChangesByYear = async (
-  yearStart: Date,
-  yearEnd: Date,
-): Promise<
+export const caseStatusChangesByYear = async ({
+  calendarYear,
+  fiscalYear,
+}: {
+  calendarYear: Timeframe;
+  fiscalYear: Timeframe;
+}): Promise<
   {
+    calendarYearTotal: number;
+    fiscalYearTotal: number;
     month: number | null;
     procedureType: string | null;
     statusGroup: CaseStatusChangeGroup;
-    total: number;
   }[]
 > => {
+  // the query reads from the earliest begin to the latest end of the two timeframes
+  const begin =
+    calendarYear.begin < fiscalYear.begin
+      ? calendarYear.begin
+      : fiscalYear.begin;
+  const end =
+    calendarYear.end > fiscalYear.end ? calendarYear.end : fiscalYear.end;
+  const isWithin = (timeframe: Timeframe) =>
+    sql<boolean>`changed_at >= ${timeframe.begin} AND changed_at < ${timeframe.end}`;
+
   return getDbReader(async reader => {
     return reader
       .selectFrom(eb =>
         eb
           .selectFrom(eb2 =>
             eb2
-              .selectFrom(eb3 =>
-                eb3
-                  .selectFrom('dwCase')
-                  .select([
-                    'docketNumber',
-                    'procedureType',
-                    sql`jsonb_array_elements(case_status_history)`.as(
-                      'statusChange',
-                    ),
-                  ])
-                  .where(sql`jsonb_typeof(case_status_history)`, '=', 'array')
-                  // only expand the histories of cases with a status change in the timeframe;
-                  // their full history is still expanded, so LAG sees the change before it
-                  .where(
-                    sql<boolean>`EXISTS (
-                      SELECT 1 FROM jsonb_array_elements(case_status_history) AS change
-                      WHERE (change->>'date')::timestamptz >= ${yearStart}
-                        AND (change->>'date')::timestamptz < ${yearEnd}
-                    )`,
-                  )
-                  .as('statusChanges'),
+              .selectFrom('dwCase')
+              .crossJoinLateral(
+                sql`jsonb_array_elements(case_status_history) WITH ORDINALITY`.as<'history'>(
+                  sql`history(status_change, change_number)`,
+                ),
               )
               .select([
                 'procedureType',
@@ -92,14 +82,27 @@ export const caseStatusChangesByYear = async (
                 sql<Date>`(status_change->>'date')::timestamptz`.as(
                   'changedAt',
                 ),
-                // the previous status is taken from the full history, before the timeframe filter
-                sql<
-                  string | null
-                >`LAG(status_change->>'updatedCaseStatus') OVER (PARTITION BY docket_number ORDER BY (status_change->>'date')::timestamptz)`.as(
-                  'previousCaseStatus',
-                ),
+                // the previous status is the latest earlier change by date, not the element before
+                // this one, because scripts can append back-dated changes to the end of the history;
+                // the array position breaks ties between changes with the same date
+                sql<string | null>`(
+                  SELECT earlier_change->>'updatedCaseStatus'
+                  FROM jsonb_array_elements(case_status_history) WITH ORDINALITY AS earlier(earlier_change, earlier_change_number)
+                  WHERE ((earlier_change->>'date')::timestamptz, earlier_change_number)
+                    < ((status_change->>'date')::timestamptz, change_number)
+                  ORDER BY (earlier_change->>'date')::timestamptz DESC, earlier_change_number DESC
+                  LIMIT 1
+                )`.as('previousCaseStatus'),
               ])
-              .as('orderedStatusChanges'),
+              .where(sql`jsonb_typeof(case_status_history)`, '=', 'array')
+              // filter here, so the previous status is only looked up for the changes that can count
+              .where(sql`status_change->>'updatedCaseStatus'`, 'in', [
+                ...CLOSED_CASE_STATUSES,
+                CASE_STATUS_TYPES.onAppeal,
+              ])
+              .where(sql`(status_change->>'date')::timestamptz`, '>=', begin)
+              .where(sql`(status_change->>'date')::timestamptz`, '<', end)
+              .as('statusChanges'),
           )
           .select([
             'procedureType',
@@ -110,9 +113,9 @@ export const caseStatusChangesByYear = async (
             sql<number>`EXTRACT(MONTH FROM changed_at AT TIME ZONE 'America/New_York')`.as(
               'month',
             ),
+            isWithin(calendarYear).as('isInCalendarYear'),
+            isWithin(fiscalYear).as('isInFiscalYear'),
           ])
-          .where('changedAt', '>=', yearStart)
-          .where('changedAt', '<', yearEnd)
           .where(
             sql<boolean>`((
               updated_case_status IN (${sql.join(CLOSED_CASE_STATUSES)})
@@ -128,7 +131,12 @@ export const caseStatusChangesByYear = async (
         'statusGroup',
         'procedureType',
         'month',
-        sql<number>`count(1)`.as('total'),
+        sql<number>`count(1) FILTER (WHERE is_in_calendar_year)`.as(
+          'calendarYearTotal',
+        ),
+        sql<number>`count(1) FILTER (WHERE is_in_fiscal_year)`.as(
+          'fiscalYearTotal',
+        ),
       ])
       .groupBy(
         sql`grouping sets((status_group, month), (status_group, procedure_type))`,

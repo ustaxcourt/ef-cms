@@ -1,7 +1,6 @@
 import {
   caseStatusChangesByYear,
-  openCasesByCaseType,
-  openCasesByProcedureType,
+  openCasesByProcedureTypeAndCaseType,
   petitionsDataByYear,
 } from '@web-api/persistence/postgres/cases/reports/getClerkDashboardStats';
 import {
@@ -108,29 +107,32 @@ const toProcedureTypeTotals = (
     ),
   }));
 
-const getOpenCasesByProcedureType = async (): Promise<
-  ClerkDashboardProcedureTypeTotal[]
-> => {
-  const openCases = await openCasesByProcedureType();
-  return toProcedureTypeTotals(openCases);
+const getOpenCases = async (): Promise<{
+  openCasesByCaseType: ClerkDashboardCaseTypeTotal[];
+  openCasesByProcedureType: ClerkDashboardProcedureTypeTotal[];
+}> => {
+  // a procedure type row has a null caseType and a case type row has a null procedureType,
+  // so each lookup below only matches the rows for its own grouping
+  const openCases = await openCasesByProcedureTypeAndCaseType();
+  return {
+    openCasesByCaseType: CASE_TYPES.map(caseType => ({
+      caseType,
+      total: Number(
+        openCases.find(row => row.caseType === caseType)?.total ?? 0,
+      ),
+    })),
+    openCasesByProcedureType: toProcedureTypeTotals(openCases),
+  };
 };
 
-const getOpenCasesByCaseType = async (): Promise<
-  ClerkDashboardCaseTypeTotal[]
-> => {
-  const openCases = await openCasesByCaseType();
-  return CASE_TYPES.map(caseType => ({
-    caseType,
-    total: Number(openCases.find(row => row.caseType === caseType)?.total ?? 0),
-  }));
-};
-
-const getCasesDataByYear = async (
+const toCasesStats = (
   isFiscal: boolean,
-  yearStart: Date,
-  yearEnd: Date,
-): Promise<ClerkDashboardCasesStats> => {
-  const statusChanges = await caseStatusChangesByYear(yearStart, yearEnd);
+  statusChangeRows: Awaited<ReturnType<typeof caseStatusChangesByYear>>,
+): ClerkDashboardCasesStats => {
+  const statusChanges = statusChangeRows.map(row => ({
+    ...row,
+    total: isFiscal ? row.fiscalYearTotal : row.calendarYearTotal,
+  }));
 
   const getFullMonths = (
     statusGroup: 'closed' | 'onAppeal',
@@ -245,21 +247,21 @@ export const getClerkDashboardStatsInteractor = async (
     year: fiscalYear,
   });
 
-  // run the queries together; Promise.all observes every rejection, so none goes unhandled
+  // Promise.all observes every rejection, so none goes unhandled; the pool has one
+  // connection, so the queries still run one after another
   const [
     calendarYearPetitionStats,
     fiscalYearPetitionStats,
-    openCasesByCaseType,
-    openCasesByProcedureType,
-    calendarYearCaseStats,
-    fiscalYearCaseStats,
+    { openCasesByCaseType, openCasesByProcedureType },
+    statusChanges,
   ] = await Promise.all([
     getPetitionsDataByYear(false, calendarYearbegin, calendarYearEnd),
     getPetitionsDataByYear(true, fiscalYearBegin, fiscalYearEnd),
-    getOpenCasesByCaseType(),
-    getOpenCasesByProcedureType(),
-    getCasesDataByYear(false, calendarYearbegin, calendarYearEnd),
-    getCasesDataByYear(true, fiscalYearBegin, fiscalYearEnd),
+    getOpenCases(),
+    caseStatusChangesByYear({
+      calendarYear: { begin: calendarYearbegin, end: calendarYearEnd },
+      fiscalYear: { begin: fiscalYearBegin, end: fiscalYearEnd },
+    }),
   ]);
 
   return {
@@ -269,7 +271,7 @@ export const getClerkDashboardStatsInteractor = async (
     fiscalYearPetitionStats,
     openCasesByCaseType,
     openCasesByProcedureType,
-    calendarYearCaseStats,
-    fiscalYearCaseStats,
+    calendarYearCaseStats: toCasesStats(false, statusChanges),
+    fiscalYearCaseStats: toCasesStats(true, statusChanges),
   };
 };
