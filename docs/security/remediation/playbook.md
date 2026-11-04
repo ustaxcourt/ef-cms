@@ -36,9 +36,9 @@ suppression mechanisms and image rebuilds, see the [scanner reference](scanner-r
   - [No upstream fix](#no-upstream-fix)
 - [Findings on pull requests](#findings-on-pull-requests)
   - [Fix it in the PR that caused it](#fix-it-in-the-pr-that-caused-it)
+  - [Trivy fs findings](#trivy-fs-findings)
   - [When a fix can be deferred](#when-a-fix-can-be-deferred)
   - [Keeping sensitive details out of the PR](#keeping-sensitive-details-out-of-the-pr)
-  - [Scans that run in the background](#scans-that-run-in-the-background)
 - [Exceptions](#exceptions)
   - [The exception record](#the-exception-record)
   - [Review dates](#review-dates)
@@ -504,9 +504,41 @@ Findings already on `staging` are not yours and don't block your PR. They follow
 [SLAs](#remediation-slas).
 
 A finding that appears on your PR but has nothing to do with your change, such as a newly
-published CVE in a dependency you didn't touch, is not yours to fix either. Log it as a finding
-(see [Where findings are tracked](#where-findings-are-tracked)) so it enters the normal triage,
-and tell the triager.
+published CVE in a dependency you didn't touch, is not yours to fix either, but the PR can't
+merge past the required check until it is dealt with. For a Trivy `fs` finding, follow
+[Trivy fs findings](#trivy-fs-findings).
+
+### Trivy fs findings
+
+`Findings vs staging` is a required check on `test`. It fails when your branch has a vulnerability
+that `staging` doesn't. Your change may have added the dependency, or a CVE may have been published
+against one that was already there. Either way, the PR deals with it, in this order.
+
+1. **Has the maintainer published a fix?**
+   - **Yes.** Check whether this week's dependency update already covers it. If it does, there is
+     nothing to do. If it doesn't, add the fixed version to your branch, and make sure the upgrade
+     is part of the PR's manual test plan.
+   - **No.** Go to step 2.
+2. **Does the CVE apply to DAWSON?** Have the agent check. The CVE may be in a package feature we
+   don't use (see [Severity rubric](#severity-rubric), step 2).
+   - **It doesn't apply.** Record a `not_affected` statement in the VEX file, with the justification
+     ([VEX statements](#vex-statements)).
+   - **It does, or it can't be ruled out.** Record `under_investigation` in the VEX file, log a Jira
+     ticket with the alert information so it can be investigated, and add the CVE to `.trivyignore`
+     with an expiry of the Monday the next weekly dependency update starts, for example
+     `CVE-2026-1234 exp:2026-11-09`. Put the ticket key in a comment above the line. The ignore
+     lapses when that update begins, so the finding is looked at again then, and the line is
+     removed once it is fixed.
+
+Trivy applies only `not_affected` and `fixed` VEX statements, and no workflow passes `--vex` yet.
+Until it does, a not-affected finding still fails the check, so it also needs a `.trivyignore`
+line, with the exception's review date as the expiry ([Review dates](#review-dates)).
+
+Needs a decision: for a T1 or T2 component, an unfixed CVE that affects DAWSON is sensitive under
+[Where findings are tracked](#where-findings-are-tracked), and
+[What may be published](#what-may-be-published) keeps `affected` statements out of the public
+VEX file. `.trivyignore` and an `under_investigation` statement are both in the public repository
+and name the CVE.
 
 ### When a fix can be deferred
 
@@ -549,19 +581,6 @@ sensitive from the moment it is pushed. For a finding that is or may be sensitiv
 
 An upgrade to a published fix for a public advisory is routine. The PR can name the package and
 the advisory.
-
-### Scans that run in the background
-
-Some scans don't gate a PR. They run on a schedule, or when a base image changes, to catch
-vulnerabilities published after the code merged.
-
-- **Container image scans** run on PRs (including PRs into `test`), weekly, and when a Dockerfile
-  changes. They don't block a merge. Their findings are logged automatically: the job looks for an
-  open issue that already lists the CVE, adds the new package or image to it, and creates an issue
-  only for CVEs that are in none. The
-  mechanics are in the [baseline strategy](branching-and-baseline-strategy.md#background-scans).
-- **Trivy `fs`** isn't a background scan. It gates PRs through `Findings vs staging`, and a person
-  reads the result so the developer can fix what their branch caused and log what it didn't.
 
 ## Exceptions
 
