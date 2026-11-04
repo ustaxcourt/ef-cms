@@ -2,6 +2,7 @@ import {
   CASE_STATUS_TYPES,
   DOCKET_ENTRY_SEALED_TO_TYPES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
+  PUBLIC_SUPPORTING_EVENT_CODES_FOR_MOTIONS,
   ROLES,
 } from '@shared/business/entities/EntityConstants';
 import { DocketEntry } from './DocketEntry';
@@ -62,6 +63,41 @@ describe('DocketEntry isDownloadable motion visibility', () => {
     servedAt: motionVisibilityChangeDate,
     ...overrides,
   });
+
+  const createPractitionerMotionWithSupportingDocument = (
+    supportingEventCode: string,
+    {
+      motionOverrides = {},
+      supportingOverrides = {},
+    }: {
+      motionOverrides?: Partial<RawDocketEntry>;
+      supportingOverrides?: Partial<RawDocketEntry>;
+    } = {},
+  ): { rootMotion: RawDocketEntry; supportingDocument: RawDocketEntry } => {
+    const rootMotion = createPractitionerMotionEntry({
+      docketEntryId: rootMotionDocketEntryId,
+      filingDate: afterMotionVisibilityChangeDate,
+      ...motionOverrides,
+    });
+    const supportingDocument = createPractitionerMotionEntry({
+      docketEntryId: applicationContext.getUniqueId(),
+      eventCode: supportingEventCode,
+      filingDate: afterMotionVisibilityChangeDate,
+      previousDocument: {
+        docketEntryId: rootMotionDocketEntryId,
+        documentTitle: 'Motion for Continuance',
+        documentType: 'Motion for Continuance',
+      },
+      ...supportingOverrides,
+    });
+    rawCase.docketEntries = [
+      ...rawCase.docketEntries,
+      rootMotion,
+      supportingDocument,
+    ];
+
+    return { rootMotion, supportingDocument };
+  };
 
   describe('External with no access to the case', () => {
     let options;
@@ -199,6 +235,87 @@ describe('DocketEntry isDownloadable motion visibility', () => {
         ).toEqual(output);
       });
     });
+
+    describe('Sealed or stricken MISP and BRF filed with a practitioner motion', () => {
+      it.each(PUBLIC_SUPPORTING_EVENT_CODES_FOR_MOTIONS)(
+        'returns false for %s sealed to the public',
+        supportingEventCode => {
+          const { supportingDocument } =
+            createPractitionerMotionWithSupportingDocument(
+              supportingEventCode,
+              {
+                supportingOverrides: {
+                  isSealed: true,
+                  sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
+                },
+              },
+            );
+
+          expect(
+            DocketEntry.isDownloadable(supportingDocument, options),
+          ).toEqual(false);
+        },
+      );
+
+      it.each(PUBLIC_SUPPORTING_EVENT_CODES_FOR_MOTIONS)(
+        'returns false for %s sealed to the public and parties',
+        supportingEventCode => {
+          const { supportingDocument } =
+            createPractitionerMotionWithSupportingDocument(
+              supportingEventCode,
+              {
+                supportingOverrides: {
+                  isSealed: true,
+                  sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.EXTERNAL,
+                },
+              },
+            );
+
+          expect(
+            DocketEntry.isDownloadable(supportingDocument, options),
+          ).toEqual(false);
+        },
+      );
+
+      it.each(PUBLIC_SUPPORTING_EVENT_CODES_FOR_MOTIONS)(
+        'returns false for stricken %s',
+        supportingEventCode => {
+          const { supportingDocument } =
+            createPractitionerMotionWithSupportingDocument(
+              supportingEventCode,
+              {
+                supportingOverrides: { isStricken: true },
+              },
+            );
+
+          expect(
+            DocketEntry.isDownloadable(supportingDocument, options),
+          ).toEqual(false);
+        },
+      );
+    });
+
+    describe('Stricken practitioner motion with MISP and BRF', () => {
+      it.each(PUBLIC_SUPPORTING_EVENT_CODES_FOR_MOTIONS)(
+        'returns false for the stricken motion and true for non-stricken %s',
+        supportingEventCode => {
+          const { rootMotion, supportingDocument } =
+            createPractitionerMotionWithSupportingDocument(
+              supportingEventCode,
+              {
+                motionOverrides: { isStricken: true },
+              },
+            );
+
+          expect(DocketEntry.isDownloadable(rootMotion, options)).toEqual(
+            false,
+          );
+          expect(
+            DocketEntry.isDownloadable(supportingDocument, options),
+          ).toEqual(true);
+        },
+      );
+    });
   });
 
   describe('External user with access to the case', () => {
@@ -327,6 +444,87 @@ describe('DocketEntry isDownloadable motion visibility', () => {
         ).toEqual(output);
       });
     });
+
+    describe('Sealed or stricken MISP and BRF filed with a practitioner motion', () => {
+      it.each(PUBLIC_SUPPORTING_EVENT_CODES_FOR_MOTIONS)(
+        'returns true for %s sealed to the public',
+        supportingEventCode => {
+          const { supportingDocument } =
+            createPractitionerMotionWithSupportingDocument(
+              supportingEventCode,
+              {
+                supportingOverrides: {
+                  isSealed: true,
+                  sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
+                },
+              },
+            );
+
+          expect(
+            DocketEntry.isDownloadable(supportingDocument, options),
+          ).toEqual(true);
+        },
+      );
+
+      it.each(PUBLIC_SUPPORTING_EVENT_CODES_FOR_MOTIONS)(
+        'returns false for %s sealed to the public and parties',
+        supportingEventCode => {
+          const { supportingDocument } =
+            createPractitionerMotionWithSupportingDocument(
+              supportingEventCode,
+              {
+                supportingOverrides: {
+                  isSealed: true,
+                  sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.EXTERNAL,
+                },
+              },
+            );
+
+          expect(
+            DocketEntry.isDownloadable(supportingDocument, options),
+          ).toEqual(false);
+        },
+      );
+
+      it.each(PUBLIC_SUPPORTING_EVENT_CODES_FOR_MOTIONS)(
+        'returns false for stricken %s',
+        supportingEventCode => {
+          const { supportingDocument } =
+            createPractitionerMotionWithSupportingDocument(
+              supportingEventCode,
+              {
+                supportingOverrides: { isStricken: true },
+              },
+            );
+
+          expect(
+            DocketEntry.isDownloadable(supportingDocument, options),
+          ).toEqual(false);
+        },
+      );
+    });
+
+    describe('Stricken practitioner motion with MISP and BRF', () => {
+      it.each(PUBLIC_SUPPORTING_EVENT_CODES_FOR_MOTIONS)(
+        'returns false for the stricken motion and true for non-stricken %s',
+        supportingEventCode => {
+          const { rootMotion, supportingDocument } =
+            createPractitionerMotionWithSupportingDocument(
+              supportingEventCode,
+              {
+                motionOverrides: { isStricken: true },
+              },
+            );
+
+          expect(DocketEntry.isDownloadable(rootMotion, options)).toEqual(
+            false,
+          );
+          expect(
+            DocketEntry.isDownloadable(supportingDocument, options),
+          ).toEqual(true);
+        },
+      );
+    });
   });
 
   describe('Terminal User', () => {
@@ -453,6 +651,87 @@ describe('DocketEntry isDownloadable motion visibility', () => {
           ),
         ).toEqual(output);
       });
+    });
+
+    describe('Sealed or stricken MISP and BRF filed with a practitioner motion', () => {
+      it.each(PUBLIC_SUPPORTING_EVENT_CODES_FOR_MOTIONS)(
+        'returns false for %s sealed to the public',
+        supportingEventCode => {
+          const { supportingDocument } =
+            createPractitionerMotionWithSupportingDocument(
+              supportingEventCode,
+              {
+                supportingOverrides: {
+                  isSealed: true,
+                  sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
+                },
+              },
+            );
+
+          expect(
+            DocketEntry.isDownloadable(supportingDocument, options),
+          ).toEqual(false);
+        },
+      );
+
+      it.each(PUBLIC_SUPPORTING_EVENT_CODES_FOR_MOTIONS)(
+        'returns false for %s sealed to the public and parties',
+        supportingEventCode => {
+          const { supportingDocument } =
+            createPractitionerMotionWithSupportingDocument(
+              supportingEventCode,
+              {
+                supportingOverrides: {
+                  isSealed: true,
+                  sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.EXTERNAL,
+                },
+              },
+            );
+
+          expect(
+            DocketEntry.isDownloadable(supportingDocument, options),
+          ).toEqual(false);
+        },
+      );
+
+      it.each(PUBLIC_SUPPORTING_EVENT_CODES_FOR_MOTIONS)(
+        'returns false for stricken %s',
+        supportingEventCode => {
+          const { supportingDocument } =
+            createPractitionerMotionWithSupportingDocument(
+              supportingEventCode,
+              {
+                supportingOverrides: { isStricken: true },
+              },
+            );
+
+          expect(
+            DocketEntry.isDownloadable(supportingDocument, options),
+          ).toEqual(false);
+        },
+      );
+    });
+
+    describe('Stricken practitioner motion with MISP and BRF', () => {
+      it.each(PUBLIC_SUPPORTING_EVENT_CODES_FOR_MOTIONS)(
+        'returns false for the stricken motion and true for non-stricken %s',
+        supportingEventCode => {
+          const { rootMotion, supportingDocument } =
+            createPractitionerMotionWithSupportingDocument(
+              supportingEventCode,
+              {
+                motionOverrides: { isStricken: true },
+              },
+            );
+
+          expect(DocketEntry.isDownloadable(rootMotion, options)).toEqual(
+            false,
+          );
+          expect(
+            DocketEntry.isDownloadable(supportingDocument, options),
+          ).toEqual(true);
+        },
+      );
     });
   });
 });

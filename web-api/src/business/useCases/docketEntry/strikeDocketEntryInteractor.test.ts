@@ -121,6 +121,7 @@ describe('strikeDocketEntryInteractor', () => {
       docketEntryId: docketNumberId,
     });
     expect(docketEntry).toMatchObject({
+      isStricken: true,
       strickenAt: expect.anything(),
     });
   });

@@ -13,7 +13,17 @@ import {
   ServiceUnavailableError,
   UnauthorizedError,
 } from '@web-api/errors/errors';
-import { ROLES } from '@shared/business/entities/EntityConstants';
+import {
+  CASE_STATUS_TYPES,
+  DOCUMENT_PROCESSING_STATUS_OPTIONS,
+  ROLES,
+} from '@shared/business/entities/EntityConstants';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
+import {
+  calculateISODate,
+  createISODateString,
+} from '@shared/business/utilities/DateHandler';
+import { petitionerUser } from '@shared/test/mockUsers';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { Case, getContactPrimary } from '@shared/business/entities/cases/Case';
@@ -1054,5 +1064,170 @@ describe('updateDocketEntryMetaInteractor', () => {
 
     expect(updatedDocketEntry).toBeDefined();
     expect(updatedDocketEntry?.numberOfPages).toBe(5);
+  });
+
+  describe('de-lodge motion visibility', () => {
+    const visibilityChangeDate = createISODateString(
+      '2023-08-01',
+      'yyyy-MM-dd',
+    );
+    const motionVisibilityChangeDate = calculateISODate({
+      dateString: createISODateString(),
+      howMuch: -60,
+      units: 'days',
+    });
+    const afterMotionFilingDate = calculateISODate({
+      dateString: motionVisibilityChangeDate,
+      howMuch: 1,
+      units: 'days',
+    });
+    const beforeMotionFilingDate = calculateISODate({
+      dateString: motionVisibilityChangeDate,
+      howMuch: -1,
+      units: 'days',
+    });
+
+    const motionDocketEntryId = 'c3c3c3c3-c3c3-c3c3-c3c3-c3c3c3c3c3c3';
+    const mispDocketEntryId = 'd4d4d4d4-d4d4-d4d4-d4d4-d4d4d4d4d4d4';
+    const brfDocketEntryId = 'e5e5e5e5-e5e5-e5e5-e5e5-e5e5e5e5e5e5';
+
+    const publicSiteUser = {
+      ...petitionerUser,
+      userId: '',
+    };
+
+    const buildLodgedPractitionerMotionEntries = (
+      filingDate: string,
+    ): RawDocketEntry[] => {
+      const motionDocument = {
+        documentTitle: 'Motion for Continuance',
+        documentType: 'Motion for Continuance',
+      };
+      const motionEntry: RawDocketEntry = {
+        ...MOCK_CASE.docketEntries[0],
+        ...baseDocketEntry,
+        ...motionDocument,
+        docketEntryId: motionDocketEntryId,
+        eventCode: 'M006',
+        filedByRole: ROLES.privatePractitioner,
+        filingDate,
+        index: 10,
+        isFileAttached: true,
+        isOnDocketRecord: true,
+        isPaper: false,
+        lodged: true,
+        processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+        servedAt: filingDate,
+        servedParties: [{ name: 'Some Party' }],
+      };
+      const previousDocument = {
+        docketEntryId: motionDocketEntryId,
+        ...motionDocument,
+      };
+
+      return [
+        motionEntry,
+        {
+          ...motionEntry,
+          docketEntryId: mispDocketEntryId,
+          documentTitle: 'Memorandum in Support',
+          documentType: 'Memorandum in Support',
+          eventCode: 'MISP',
+          index: 11,
+          lodged: undefined,
+          previousDocument,
+        },
+        {
+          ...motionEntry,
+          docketEntryId: brfDocketEntryId,
+          documentTitle: 'Brief in Support',
+          documentType: 'Brief in Support',
+          eventCode: 'BRF',
+          index: 12,
+          lodged: undefined,
+          previousDocument,
+        },
+      ];
+    };
+
+    const expectPublicDownloadable = (
+      entry: RawDocketEntry,
+      rawCase: RawCase,
+      expected: boolean,
+    ): void => {
+      expect(
+        DocketEntry.isDownloadable(
+          {
+            ...entry,
+            isFileAttached: true,
+            processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+          },
+          {
+            isTerminalUser: false,
+            motionVisibilityChangeDate,
+            rawCase,
+            user: publicSiteUser,
+            visibilityChangeDate,
+          },
+        ),
+      ).toEqual(expected);
+    };
+
+    it.each([
+      {
+        description: 'after the policy date',
+        expectedDownloadable: true,
+        filingDate: afterMotionFilingDate,
+      },
+      {
+        description: 'before the policy date',
+        expectedDownloadable: false,
+        filingDate: beforeMotionFilingDate,
+      },
+    ])(
+      'should persist lodged false on metadata de-lodge when filing $description',
+      async ({ expectedDownloadable, filingDate }) => {
+        const lodgedMotionEntries =
+          buildLodgedPractitionerMotionEntries(filingDate);
+        getCaseByDocketNumber.mockResolvedValueOnce({
+          ...MOCK_CASE,
+          docketEntries: lodgedMotionEntries,
+          status: CASE_STATUS_TYPES.generalDocket,
+        });
+
+        await updateDocketEntryMetaInteractor(
+          applicationContext,
+          {
+            docketEntryMeta: {
+              ...lodgedMotionEntries[0],
+              lodged: false,
+            },
+            docketNumber: MOCK_CASE.docketNumber,
+          },
+          mockDocketClerkUser,
+        );
+
+        const { caseToUpdate } = updateCaseAndAssociations.mock.calls[0][0];
+        const updatedMotion = caseToUpdate.docketEntries.find(
+          entry => entry.docketEntryId === motionDocketEntryId,
+        );
+        expect(updatedMotion?.lodged).toBe(false);
+
+        const rawCase: RawCase = {
+          ...caseToUpdate,
+          status: CASE_STATUS_TYPES.generalDocket,
+        };
+        const updatedMisp = caseToUpdate.docketEntries.find(
+          entry => entry.docketEntryId === mispDocketEntryId,
+        );
+        const updatedBrf = caseToUpdate.docketEntries.find(
+          entry => entry.docketEntryId === brfDocketEntryId,
+        );
+
+        expectPublicDownloadable(updatedMotion!, rawCase, expectedDownloadable);
+        expectPublicDownloadable(updatedMisp!, rawCase, expectedDownloadable);
+        expectPublicDownloadable(updatedBrf!, rawCase, expectedDownloadable);
+      },
+    );
   });
 });

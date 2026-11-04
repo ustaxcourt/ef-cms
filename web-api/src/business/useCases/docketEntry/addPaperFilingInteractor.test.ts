@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/users/mocks.jest';
@@ -11,9 +12,17 @@ jest.mock(
 jest.mock('@shared/sharedAppContext.ts');
 import {
   AUTOMATIC_BLOCKED_REASONS,
+  CASE_STATUS_TYPES,
+  DOCUMENT_PROCESSING_STATUS_OPTIONS,
   DOCUMENT_SERVED_MESSAGES,
+  ROLES,
   SERVICE_INDICATOR_TYPES,
 } from '@shared/business/entities/EntityConstants';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
+import {
+  calculateISODate,
+  createISODateString,
+} from '@shared/business/utilities/DateHandler';
 import {
   MOCK_CASE,
   MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
@@ -27,6 +36,7 @@ import {
 } from './addPaperFilingInteractor';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { docketClerkUser } from '@shared/test/mockUsers';
+import { getFeatureFlagValues as getFeatureFlagValuesMock } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
 import { getCaseDeadlinesByDocketNumber as getCaseDeadlinesByDocketNumberMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { upsertWorkItems as upsertWorkItemsMock } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
@@ -40,6 +50,7 @@ import { getUniqueId as getUniqueIdMock } from '@shared/sharedAppContext';
 
 const getUserById = jest.mocked(getUserByIdMock);
 const getUniqueId = jest.mocked(getUniqueIdMock);
+const getFeatureFlagValues = jest.mocked(getFeatureFlagValuesMock);
 
 describe('addPaperFilingInteractor', () => {
   const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
@@ -603,6 +614,107 @@ describe('addPaperFilingInteractor', () => {
     const queueWorkCallOrder = queueWorkMock.mock.invocationCallOrder[0];
 
     expect(paperServiceCallOrder).toBeLessThan(queueWorkCallOrder);
+  });
+
+  describe('paper-filed motion visibility', () => {
+    const visibilityChangeDate = createISODateString(
+      '2023-08-01',
+      'yyyy-MM-dd',
+    );
+    const motionVisibilityChangeDate = calculateISODate({
+      dateString: createISODateString(),
+      howMuch: -60,
+      units: 'days',
+    });
+    const afterMotionFilingDate = calculateISODate({
+      dateString: motionVisibilityChangeDate,
+      howMuch: 1,
+      units: 'days',
+    });
+    const mockPaperMotionDocumentStorageId =
+      'd4d4d4d4-d4d4-d4d4-d4d4-d4d4d4d4d4d4';
+
+    const publicSiteUser = {
+      email: '',
+      entityName: 'User',
+      name: '',
+      role: ROLES.petitioner,
+      userId: '',
+    };
+
+    beforeEach(() => {
+      getFeatureFlagValues.mockResolvedValue([
+        {
+          name: 'entity-locking-feature-flag',
+          value: {
+            current: true,
+          },
+        },
+        {
+          name: 'motion-visibility-policy-change-date',
+          value: {
+            current: motionVisibilityChangeDate,
+          },
+        },
+      ]);
+    });
+
+    it('should persist isPaper on a paper-filed motion and keep it non-downloadable for the public after the policy date', async () => {
+      await addPaperFilingInteractor(
+        applicationContext,
+        {
+          clientConnectionId: mockClientConnectionId,
+          consolidatedGroupDocketNumbers: [],
+          documentStorageId: mockPaperMotionDocumentStorageId,
+          documentMetadata: {
+            docketNumber: mockCase.docketNumber,
+            documentTitle: 'Motion for Continuance',
+            documentType: 'Motion for Continuance',
+            eventCode: 'M006',
+            filedBy: 'Test Practitioner',
+            isFileAttached: true,
+            isPaper: true,
+            receivedAt: afterMotionFilingDate,
+          },
+          isSavingForLater: false,
+        },
+        mockDocketClerkUser,
+      );
+
+      const savedCase = updateCaseAndAssociations.mock.calls[0][0]
+        .caseToUpdate as RawCase;
+      const savedMotion = savedCase.docketEntries.find(
+        entry => entry.docketEntryId === mockPaperMotionDocumentStorageId,
+      );
+
+      expect(savedMotion).toMatchObject({
+        eventCode: 'M006',
+        filingDate: afterMotionFilingDate,
+        isPaper: true,
+      });
+
+      const rawCase: RawCase = {
+        ...savedCase,
+        status: CASE_STATUS_TYPES.generalDocket,
+      };
+
+      expect(
+        DocketEntry.isDownloadable(
+          {
+            ...savedMotion!,
+            isFileAttached: true,
+            processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+          },
+          {
+            isTerminalUser: false,
+            motionVisibilityChangeDate,
+            rawCase,
+            user: publicSiteUser,
+            visibilityChangeDate,
+          },
+        ),
+      ).toEqual(false);
+    });
   });
 
   describe('consolidated groups', () => {

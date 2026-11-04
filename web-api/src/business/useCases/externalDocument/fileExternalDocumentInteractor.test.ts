@@ -8,11 +8,23 @@ import '@web-api/persistence/postgres/utils/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
+jest.mock('@shared/business/utilities/DateHandler', () => {
+  const mockDateHandler = jest.requireActual(
+    '@shared/business/utilities/DateHandler',
+  );
+  return {
+    __esModule: true,
+    ...mockDateHandler,
+    createISODateString: jest.fn(),
+  };
+});
 import {
   AUTOMATIC_BLOCKED_REASONS,
+  CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
   CONTACT_TYPES,
   COUNTRY_TYPES,
+  DOCUMENT_PROCESSING_STATUS_OPTIONS,
   OBJECTIONS_OPTIONS_MAP,
   PARTY_TYPES,
   ROLES,
@@ -27,6 +39,13 @@ import {
   UnauthorizedError,
 } from '@web-api/errors/errors';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
+import { ConsolidatedCaseSummary } from '@shared/business/dto/cases/ConsolidatedCaseSummary';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
+import {
+  calculateISODate,
+  createISODateString,
+} from '@shared/business/utilities/DateHandler';
+import { casePetitioner, petitionerUser } from '@shared/test/mockUsers';
 import { fileExternalDocumentInteractor } from './fileExternalDocumentInteractor';
 import { getCaseDeadlinesByDocketNumber as getCaseDeadlinesByDocketNumberMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import {
@@ -44,10 +63,15 @@ import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 import { verifyPendingCaseForUser as verifyPendingCaseForUserMock } from '@web-api/persistence/postgres/cases/pendingCases/verifyPendingCaseForUser';
+import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 const getUserById = jest.mocked(getUserByIdMock);
 const verifyPendingCaseForUser = jest.mocked(verifyPendingCaseForUserMock);
+const mockDateHandler = jest.requireActual(
+  '@shared/business/utilities/DateHandler',
+);
+const mockCreateIsoDateString = createISODateString as jest.Mock;
 
 describe('fileExternalDocumentInteractor', () => {
   const getCaseDeadlinesByDocketNumber = jest.mocked(
@@ -66,6 +90,10 @@ describe('fileExternalDocumentInteractor', () => {
   let caseRecord;
 
   beforeEach(() => {
+    mockCreateIsoDateString.mockImplementation(() =>
+      mockDateHandler.createISODateString(),
+    );
+
     caseRecord = {
       caseCaption: 'Caption',
       caseType: CASE_TYPES_MAP.deficiency,
@@ -809,6 +837,652 @@ describe('fileExternalDocumentInteractor', () => {
         documentStorageId: mockDocketEntryId,
       });
     });
+  });
+
+  describe('filing to visibility chain', () => {
+    const visibilityChangeDate = mockDateHandler.createISODateString(
+      '2023-08-01',
+      'yyyy-MM-dd',
+    );
+    const motionVisibilityChangeDate = calculateISODate({
+      dateString: mockDateHandler.createISODateString(),
+      howMuch: -60,
+      units: 'days',
+    });
+    const afterMotionFilingDate = calculateISODate({
+      dateString: motionVisibilityChangeDate,
+      howMuch: 1,
+      units: 'days',
+    });
+    const beforeMotionFilingDate = calculateISODate({
+      dateString: motionVisibilityChangeDate,
+      howMuch: -1,
+      units: 'days',
+    });
+    const laterBriefFilingDate = calculateISODate({
+      dateString: afterMotionFilingDate,
+      howMuch: 1,
+      units: 'days',
+    });
+
+    const publicSiteUser = {
+      email: '',
+      entityName: 'User',
+      name: '',
+      role: ROLES.petitioner,
+      userId: '',
+    };
+
+    const unassociatedPetitionerUser: AuthUser = {
+      ...petitionerUser,
+      userId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+    };
+
+    const memberDocketNumber = '45679-18';
+
+    const prepareEntryForDownload = (
+      entry: RawDocketEntry,
+    ): RawDocketEntry => ({
+      ...entry,
+      isFileAttached: true,
+      processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+    });
+
+    const withPartyContactIds = (petitioners: TPetitioner[]): TPetitioner[] =>
+      petitioners.map((petitioner, index) =>
+        index === 0 && !petitioner.contactId
+          ? { ...petitioner, contactId: casePetitioner.contactId }
+          : petitioner,
+      );
+
+    const buildRawCase = (
+      savedCase: RawCase,
+      {
+        allSavedCases = [],
+        consolidated = false,
+      }: { allSavedCases?: RawCase[]; consolidated?: boolean } = {},
+    ): RawCase => {
+      const rawCase = {
+        ...savedCase,
+        petitioners: withPartyContactIds(savedCase.petitioners),
+        status: CASE_STATUS_TYPES.generalDocket,
+      };
+
+      if (consolidated) {
+        return {
+          ...rawCase,
+          consolidatedCases: allSavedCases.map(memberCase =>
+            new ConsolidatedCaseSummary({
+              ...memberCase,
+              petitioners: withPartyContactIds(memberCase.petitioners),
+            }).toRawObject(),
+          ),
+        };
+      }
+
+      return {
+        ...rawCase,
+        leadDocketNumber: undefined,
+      };
+    };
+
+    const expectDownloadable = (
+      entry: RawDocketEntry,
+      rawCase: RawCase,
+      expected: boolean,
+      {
+        isTerminalUser = false,
+        user = publicSiteUser,
+      }: {
+        isTerminalUser?: boolean;
+        user?: AuthUser;
+      } = {},
+    ): void => {
+      expect(
+        DocketEntry.isDownloadable(prepareEntryForDownload(entry), {
+          isTerminalUser,
+          motionVisibilityChangeDate,
+          rawCase,
+          user,
+          visibilityChangeDate,
+        }),
+      ).toEqual(expected);
+    };
+
+    const expectDownloadabilityForViewers = (
+      entry: RawDocketEntry,
+      rawCase: RawCase,
+      expected: {
+        party: boolean;
+        public: boolean;
+        terminal: boolean;
+        unassociated: boolean;
+      },
+    ): void => {
+      expectDownloadable(entry, rawCase, expected.public, {
+        user: publicSiteUser,
+      });
+      expectDownloadable(entry, rawCase, expected.unassociated, {
+        user: unassociatedPetitionerUser,
+      });
+      expectDownloadable(entry, rawCase, expected.party, {
+        user: {
+          ...petitionerUser,
+          userId: rawCase.petitioners[0].contactId!,
+        },
+      });
+      expectDownloadable(entry, rawCase, expected.terminal, {
+        isTerminalUser: true,
+        user: publicSiteUser,
+      });
+    };
+
+    const setupConsolidatedMocks = (leadCase: RawCase = caseRecord): void => {
+      const memberCase = {
+        ...leadCase,
+        docketNumber: memberDocketNumber,
+        leadDocketNumber: leadCase.docketNumber,
+      };
+      const consolidatedCasesToFileAcross = [leadCase, memberCase].map(
+        consolidatedCase =>
+          new ConsolidatedCaseSummary({
+            ...consolidatedCase,
+            leadDocketNumber: leadCase.docketNumber,
+          }).toRawObject(),
+      );
+
+      getCaseByDocketNumber.mockResolvedValueOnce({
+        ...leadCase,
+        consolidatedCases: consolidatedCasesToFileAcross,
+      });
+      getCasesByDocketNumbers.mockResolvedValueOnce([leadCase, memberCase]);
+    };
+
+    const filePractitionerMotionBundle = async ({
+      consolidated = false,
+      filingDate,
+      filingUser = mockIrsPractitionerUser,
+      includeOtherSupportingDoc = false,
+      leadCase = caseRecord,
+    }: {
+      consolidated?: boolean;
+      filingDate: string;
+      filingUser?: typeof mockIrsPractitionerUser;
+      includeOtherSupportingDoc?: boolean;
+      leadCase?: RawCase;
+    }): Promise<{
+      brfEntry: RawDocketEntry;
+      mispEntry: RawDocketEntry;
+      motionEntry: RawDocketEntry;
+      otherSupportingEntry?: RawDocketEntry;
+      savedCases: RawCase[];
+    }> => {
+      mockCreateIsoDateString.mockImplementation(
+        (dateString?: string, inputFormat?: string) => {
+          if (dateString === undefined) {
+            return filingDate;
+          }
+          return mockDateHandler.createISODateString(dateString, inputFormat);
+        },
+      );
+      getUserById.mockResolvedValue(filingUser as DbUser);
+
+      const primaryDocumentId = applicationContext.getUniqueId();
+      const mispDocketEntryId = applicationContext.getUniqueId();
+      const brfDocketEntryId = applicationContext.getUniqueId();
+      const otherSupportingDocketEntryId = applicationContext.getUniqueId();
+
+      const supportingDocuments: Record<string, unknown>[] = [
+        {
+          docketEntryId: mispDocketEntryId,
+          documentTitle: 'Memorandum in Support of Motion for Continuance',
+          documentType: 'Memorandum in Support',
+          eventCode: 'MISP',
+          previousDocument: {
+            documentTitle: 'Motion for Continuance',
+            documentType: 'Motion for Continuance',
+          },
+        },
+        {
+          docketEntryId: brfDocketEntryId,
+          documentTitle: 'Brief in Support of Motion for Continuance',
+          documentType: 'Brief in Support',
+          eventCode: 'BRF',
+          previousDocument: {
+            documentTitle: 'Motion for Continuance',
+            documentType: 'Motion for Continuance',
+          },
+        },
+      ];
+
+      if (includeOtherSupportingDoc) {
+        supportingDocuments.push({
+          docketEntryId: otherSupportingDocketEntryId,
+          documentTitle: 'Civil Penalty Approval Form',
+          documentType: 'Civil Penalty Approval Form',
+          eventCode: 'CIVP',
+          previousDocument: {
+            documentTitle: 'Motion for Continuance',
+            documentType: 'Motion for Continuance',
+          },
+        });
+      }
+
+      const consolidatedCasesToFileAcross = consolidated
+        ? [
+            {
+              docketNumber: leadCase.docketNumber,
+              leadDocketNumber: leadCase.docketNumber,
+            },
+            {
+              docketNumber: memberDocketNumber,
+              leadDocketNumber: leadCase.docketNumber,
+            },
+          ]
+        : undefined;
+
+      if (consolidated) {
+        setupConsolidatedMocks(leadCase);
+      } else {
+        getCaseByDocketNumber.mockResolvedValue(leadCase);
+        getCasesByDocketNumbers.mockResolvedValue([leadCase]);
+      }
+
+      const updateCallsBeforeFiling =
+        updateCaseAndAssociations.mock.calls.length;
+
+      await fileExternalDocumentInteractor(
+        applicationContext,
+        {
+          documentMetadata: {
+            consolidatedCasesToFileAcross,
+            docketNumber: leadCase.docketNumber,
+            documentTitle: 'Motion for Continuance',
+            documentType: 'Motion for Continuance',
+            eventCode: 'M006',
+            filedBy: 'Test Practitioner',
+            objections: OBJECTIONS_OPTIONS_MAP.NO,
+            primaryDocumentId,
+            supportingDocuments,
+          },
+        },
+        filingUser,
+      );
+
+      const savedCases = updateCaseAndAssociations.mock.calls
+        .slice(updateCallsBeforeFiling)
+        .map(call => call[0].caseToUpdate);
+
+      const savedCase = savedCases[0];
+      const findEntry = (docketEntryId: string): RawDocketEntry =>
+        savedCase.docketEntries.find(de => de.docketEntryId === docketEntryId)!;
+
+      return {
+        brfEntry: findEntry(brfDocketEntryId),
+        mispEntry: findEntry(mispDocketEntryId),
+        motionEntry: findEntry(primaryDocumentId),
+        otherSupportingEntry: includeOtherSupportingDoc
+          ? findEntry(otherSupportingDocketEntryId)
+          : undefined,
+        savedCases,
+      };
+    };
+
+    const fileMotionForLeaveWithLodgedSecondary = async ({
+      consolidated = false,
+      filingDate,
+      leadCase = caseRecord,
+    }: {
+      consolidated?: boolean;
+      filingDate: string;
+      leadCase?: RawCase;
+    }): Promise<{
+      leaveEntry: RawDocketEntry;
+      lodgedBrfEntry: RawDocketEntry;
+      lodgedMispEntry: RawDocketEntry;
+      lodgedSecondaryEntry: RawDocketEntry;
+      savedCases: RawCase[];
+    }> => {
+      mockCreateIsoDateString.mockImplementation(
+        (dateString?: string, inputFormat?: string) => {
+          if (dateString === undefined) {
+            return filingDate;
+          }
+          return mockDateHandler.createISODateString(dateString, inputFormat);
+        },
+      );
+      getUserById.mockResolvedValue(mockIrsPractitionerUser as DbUser);
+
+      const primaryDocumentId = applicationContext.getUniqueId();
+      const secondaryDocumentId = applicationContext.getUniqueId();
+      const leaveMispId = applicationContext.getUniqueId();
+      const leaveBrfId = applicationContext.getUniqueId();
+      const lodgedMispId = applicationContext.getUniqueId();
+      const lodgedBrfId = applicationContext.getUniqueId();
+
+      const consolidatedCasesToFileAcross = consolidated
+        ? [
+            {
+              docketNumber: leadCase.docketNumber,
+              leadDocketNumber: leadCase.docketNumber,
+            },
+            {
+              docketNumber: memberDocketNumber,
+              leadDocketNumber: leadCase.docketNumber,
+            },
+          ]
+        : undefined;
+
+      if (consolidated) {
+        setupConsolidatedMocks(leadCase);
+      } else {
+        getCaseByDocketNumber.mockResolvedValue(leadCase);
+        getCasesByDocketNumbers.mockResolvedValue([leadCase]);
+      }
+
+      const updateCallsBeforeFiling =
+        updateCaseAndAssociations.mock.calls.length;
+
+      await fileExternalDocumentInteractor(
+        applicationContext,
+        {
+          documentMetadata: {
+            consolidatedCasesToFileAcross,
+            docketNumber: leadCase.docketNumber,
+            documentTitle: 'Motion for Leave to File',
+            documentType: 'Motion for Leave to File',
+            eventCode: 'M115',
+            filedBy: 'Test Practitioner',
+            objections: OBJECTIONS_OPTIONS_MAP.NO,
+            primaryDocumentId,
+            scenario: 'Nonstandard H',
+            secondaryDocument: {
+              docketEntryId: secondaryDocumentId,
+              documentTitle: 'Motion for Judgment on the Pleadings',
+              documentType: 'Motion for Judgment on the Pleadings',
+              eventCode: 'M121',
+              filedBy: 'Test Practitioner',
+              objections: OBJECTIONS_OPTIONS_MAP.NO,
+            },
+            secondarySupportingDocuments: [
+              {
+                docketEntryId: lodgedMispId,
+                documentTitle:
+                  'Memorandum in Support of Motion for Judgment on the Pleadings',
+                documentType: 'Memorandum in Support',
+                eventCode: 'MISP',
+                filedBy: 'Test Practitioner',
+                objections: OBJECTIONS_OPTIONS_MAP.NO,
+                previousDocument: {
+                  documentTitle: 'Motion for Judgment on the Pleadings',
+                  documentType: 'Motion for Judgment on the Pleadings',
+                },
+              },
+              {
+                docketEntryId: lodgedBrfId,
+                documentTitle:
+                  'Brief in Support of Motion for Judgment on the Pleadings',
+                documentType: 'Brief in Support',
+                eventCode: 'BRF',
+                filedBy: 'Test Practitioner',
+                objections: OBJECTIONS_OPTIONS_MAP.NO,
+                previousDocument: {
+                  documentTitle: 'Motion for Judgment on the Pleadings',
+                  documentType: 'Motion for Judgment on the Pleadings',
+                },
+              },
+            ],
+            supportingDocuments: [
+              {
+                docketEntryId: leaveMispId,
+                documentTitle:
+                  'Memorandum in Support of Motion for Leave to File',
+                documentType: 'Memorandum in Support',
+                eventCode: 'MISP',
+                previousDocument: {
+                  documentTitle: 'Motion for Leave to File',
+                  documentType: 'Motion for Leave to File',
+                },
+              },
+              {
+                docketEntryId: leaveBrfId,
+                documentTitle: 'Brief in Support of Motion for Leave to File',
+                documentType: 'Brief in Support',
+                eventCode: 'BRF',
+                previousDocument: {
+                  documentTitle: 'Motion for Leave to File',
+                  documentType: 'Motion for Leave to File',
+                },
+              },
+            ],
+          },
+        },
+        mockIrsPractitionerUser,
+      );
+
+      const savedCases = updateCaseAndAssociations.mock.calls
+        .slice(updateCallsBeforeFiling)
+        .map(call => call[0].caseToUpdate);
+
+      const savedCase = savedCases[0];
+      const findEntry = (docketEntryId: string): RawDocketEntry =>
+        savedCase.docketEntries.find(de => de.docketEntryId === docketEntryId)!;
+
+      return {
+        leaveEntry: findEntry(primaryDocumentId),
+        lodgedBrfEntry: findEntry(lodgedBrfId),
+        lodgedMispEntry: findEntry(lodgedMispId),
+        lodgedSecondaryEntry: findEntry(secondaryDocumentId),
+        savedCases,
+      };
+    };
+
+    const assertOnSavedCases = (
+      savedCases: RawCase[],
+      assertion: (rawCase: RawCase) => void,
+      consolidated = false,
+    ): void => {
+      savedCases.forEach(savedCase =>
+        assertion(
+          buildRawCase(savedCase, { allSavedCases: savedCases, consolidated }),
+        ),
+      );
+    };
+
+    it.each([
+      { consolidated: false, description: 'a single case' },
+      { consolidated: true, description: 'lead and member consolidated cases' },
+    ])(
+      'should make a practitioner-filed motion, MISP, and BRF public after the policy date on $description',
+      async ({ consolidated }) => {
+        const { brfEntry, mispEntry, motionEntry, savedCases } =
+          await filePractitionerMotionBundle({
+            consolidated,
+            filingDate: afterMotionFilingDate,
+          });
+
+        assertOnSavedCases(
+          savedCases,
+          rawCase => {
+            const expected = {
+              party: true,
+              public: true,
+              terminal: true,
+              unassociated: true,
+            };
+            expectDownloadabilityForViewers(motionEntry, rawCase, expected);
+            expectDownloadabilityForViewers(mispEntry, rawCase, expected);
+            expectDownloadabilityForViewers(brfEntry, rawCase, expected);
+          },
+          consolidated,
+        );
+      },
+    );
+
+    it.each([
+      { consolidated: false, description: 'a single case' },
+      { consolidated: true, description: 'lead and member consolidated cases' },
+    ])(
+      'should not make a practitioner-filed motion, MISP, or BRF public before the policy date on $description',
+      async ({ consolidated }) => {
+        const { brfEntry, mispEntry, motionEntry, savedCases } =
+          await filePractitionerMotionBundle({
+            consolidated,
+            filingDate: beforeMotionFilingDate,
+          });
+
+        assertOnSavedCases(
+          savedCases,
+          rawCase => {
+            const notPublic = {
+              party: true,
+              public: false,
+              terminal: true,
+              unassociated: false,
+            };
+            expectDownloadabilityForViewers(motionEntry, rawCase, notPublic);
+            expectDownloadabilityForViewers(mispEntry, rawCase, notPublic);
+            expectDownloadabilityForViewers(brfEntry, rawCase, notPublic);
+          },
+          consolidated,
+        );
+      },
+    );
+
+    it.each([
+      { consolidated: false, description: 'a single case' },
+      { consolidated: true, description: 'lead and member consolidated cases' },
+    ])(
+      'should keep a petitioner-filed motion from being public after the policy date on $description',
+      async ({ consolidated }) => {
+        const petitionerCase = {
+          ...caseRecord,
+          petitioners: [
+            {
+              ...caseRecord.petitioners[0],
+              contactId: mockPetitionerUser.userId,
+            },
+          ],
+        };
+
+        const { motionEntry, savedCases } = await filePractitionerMotionBundle({
+          consolidated,
+          filingDate: afterMotionFilingDate,
+          filingUser: mockPetitionerUser,
+          leadCase: petitionerCase,
+        });
+
+        assertOnSavedCases(
+          savedCases,
+          rawCase => {
+            expectDownloadabilityForViewers(motionEntry, rawCase, {
+              party: true,
+              public: false,
+              terminal: true,
+              unassociated: false,
+            });
+          },
+          consolidated,
+        );
+      },
+    );
+
+    it('should not make a non-MISP/BRF supporting document public after the policy date', async () => {
+      const { motionEntry, otherSupportingEntry, savedCases } =
+        await filePractitionerMotionBundle({
+          filingDate: afterMotionFilingDate,
+          includeOtherSupportingDoc: true,
+        });
+
+      assertOnSavedCases(savedCases, rawCase => {
+        expectDownloadabilityForViewers(motionEntry, rawCase, {
+          party: true,
+          public: true,
+          terminal: true,
+          unassociated: true,
+        });
+        expectDownloadabilityForViewers(otherSupportingEntry!, rawCase, {
+          party: true,
+          public: false,
+          terminal: true,
+          unassociated: false,
+        });
+      });
+    });
+
+    it('should not make a later-filed BRF public when the root motion is not public', async () => {
+      const { brfEntry, savedCases } = await filePractitionerMotionBundle({
+        filingDate: beforeMotionFilingDate,
+      });
+
+      const laterFiledBrf = {
+        ...brfEntry,
+        filingDate: laterBriefFilingDate,
+      };
+
+      assertOnSavedCases(savedCases, rawCase => {
+        expectDownloadabilityForViewers(laterFiledBrf, rawCase, {
+          party: true,
+          public: false,
+          terminal: true,
+          unassociated: false,
+        });
+      });
+    });
+
+    it.each([
+      { consolidated: false, description: 'a single case' },
+      { consolidated: true, description: 'lead and member consolidated cases' },
+    ])(
+      'should expose leave to the public but not lodged secondary documents on $description',
+      async ({ consolidated }) => {
+        const {
+          leaveEntry,
+          lodgedBrfEntry,
+          lodgedMispEntry,
+          lodgedSecondaryEntry,
+          savedCases,
+        } = await fileMotionForLeaveWithLodgedSecondary({
+          consolidated,
+          filingDate: afterMotionFilingDate,
+        });
+
+        assertOnSavedCases(
+          savedCases,
+          rawCase => {
+            expectDownloadabilityForViewers(leaveEntry, rawCase, {
+              party: true,
+              public: true,
+              terminal: true,
+              unassociated: true,
+            });
+
+            const lodgedGroup = {
+              party: true,
+              public: false,
+              terminal: true,
+              unassociated: false,
+            };
+            expectDownloadabilityForViewers(
+              lodgedSecondaryEntry,
+              rawCase,
+              lodgedGroup,
+            );
+            expectDownloadabilityForViewers(
+              lodgedMispEntry,
+              rawCase,
+              lodgedGroup,
+            );
+            expectDownloadabilityForViewers(
+              lodgedBrfEntry,
+              rawCase,
+              lodgedGroup,
+            );
+          },
+          consolidated,
+        );
+      },
+    );
   });
 
   it('should set secondary document and secondary supporting documents to lodged', async () => {
