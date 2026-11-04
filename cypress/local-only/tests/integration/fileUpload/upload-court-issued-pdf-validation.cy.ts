@@ -70,7 +70,7 @@ describe('upload court issued document validations', () => {
 
     attachFile({
       encoding,
-      filePath: '.readonly-pdf.pdf',
+      filePath: 'readonly-pdf.pdf',
       selector: '[data-testid="primary-document-file"]',
     });
     cy.wait('@logErrorRequest');
