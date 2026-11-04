@@ -15,19 +15,11 @@ export const DEFAULT_SUPPORTING_DOCUMENT_TYPES = [
   BRIEF_IN_SUPPORT_DOCUMENT_TYPE,
   MEMORANDUM_IN_SUPPORT_DOCUMENT_TYPE,
 ];
-export const PETITIONER_FIVE_SUPPORTING_DOCUMENT_TYPES = [
-  BRIEF_IN_SUPPORT_DOCUMENT_TYPE,
-  BRIEF_IN_SUPPORT_DOCUMENT_TYPE,
-  BRIEF_IN_SUPPORT_DOCUMENT_TYPE,
-  MEMORANDUM_IN_SUPPORT_DOCUMENT_TYPE,
-  MEMORANDUM_IN_SUPPORT_DOCUMENT_TYPE,
-];
 export const UNAUTHORIZED_PETITIONER_EMAIL = 'petitioner2@example.com';
 
 export {
   MOTION_VISIBILITY_POLICY_CHANGE_DATE_FLAG,
   restoreMotionVisibilityPolicyFlag,
-  setMotionVisibilityPolicyDateToToday,
   setMotionVisibilityPolicyDateToTomorrow,
   setMotionVisibilityPolicyDateToYesterday,
   setOriginalMotionVisibilityPolicyFlag,

@@ -14,30 +14,8 @@ import { externalUserSearchesDocketNumber } from '../advancedSearch/external-use
 import { selectTypeaheadInput } from '../components/typeAhead/select-typeahead-input';
 import { createAndServePaperPetition } from '../fileAPetition/create-and-serve-paper-petition';
 import {
-  getEFiledMotionOnCase,
-  getMotionAndSupportingEntriesForCase,
-  getMotionVisibilityDocketEntriesForCase,
-} from './motion-visibility-docket-entry-helpers';
-import {
   fileIrsAnswer,
   fileLeaveWithLodgedSecondaryOnGroup,
-  fileMotionOnGroup,
-  fileSupportInSupportOfMotionOnGroup,
-} from './file-motion-visibility';
-import {
-  MOTION_FOR_CONTINUANCE_EVENT_CODE,
-  MOTION_FOR_NEW_TRIAL_EVENT_CODE,
-} from './motion-visibility-constants';
-export {
-  fileLeaveWithLodgedSecondaryOnGroup,
-  fileSupportInSupportOfMotionOnGroup,
-  getEFiledMotionOnCase,
-  getMotionAndSupportingEntriesForCase,
-  getMotionVisibilityDocketEntriesForCase,
-};
-export type {
-  FileLeaveWithLodgedSecondaryOnGroupOptions,
-  FileSupportInSupportOfMotionOnGroupOptions,
 } from './file-motion-visibility';
 
 const DOJ_RESPONDENT_BAR_NUMBER = 'WN7777';
@@ -51,6 +29,8 @@ export type ConsolidatedGroupFixture = {
 
 export type ConsolidatedMotionFiler =
   'dojPractitioner' | 'irsPractitioner' | 'privatePractitioner';
+
+export { fileLeaveWithLodgedSecondaryOnGroup };
 
 export function createConsolidatedGroupWithOneMember(): Cypress.Chainable<ConsolidatedGroupFixture> {
   const leadPetitionerName = faker.person.firstName();
@@ -192,31 +172,4 @@ export function getFilerTestIdForConsolidatedFiler(
   }
 
   return getRespondentFilerTestId();
-}
-
-export function getMotionEventCodeForDocumentType(
-  documentType: string,
-): string {
-  if (documentType === 'Motion for a New Trial') {
-    return MOTION_FOR_NEW_TRIAL_EVENT_CODE;
-  }
-
-  return MOTION_FOR_CONTINUANCE_EVENT_CODE;
-}
-
-export function fileConsolidatedMotionOnGroup(
-  leadDocketNumber: string,
-  filer: ConsolidatedMotionFiler,
-  group: ConsolidatedGroupFixture,
-  options: {
-    documentType?: string;
-    supportingDocs?: string[];
-  } = {},
-): void {
-  loginConsolidatedFiler(filer);
-  fileMotionOnGroup(leadDocketNumber, {
-    documentType: options.documentType,
-    filerTestId: getFilerTestIdForConsolidatedFiler(filer, group),
-    supportingDocs: options.supportingDocs,
-  });
 }
