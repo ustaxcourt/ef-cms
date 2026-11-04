@@ -4,13 +4,13 @@
 
 ### After Deployment
 
-Initialize the `reporting-calendars` feature flag:
+The migration create the `reporting-calendars` flag and sets it to `false`. After deployment, set the flag to `true` to enable Reporting Trial Sessions.
+
+Script to add the flag and set it to `true`:
 
 ```bash
 ./scripts/postgres/featureFlags/setup-reporting-calendars.ts
 ```
-
-Set the flag to `true` to enable Reporting Trial Sessions.
 
 </details>
 
