@@ -1,4 +1,4 @@
-import { ClerkDashboardCaseTypeTotal } from '@web-api/business/useCases/reports/getClerkDashboardStatsInteractor';
+import { ClerkDashboardCaseTypeTotal } from '@web-api/business/useCases/reports/clerkDashboardStats';
 import { ClerkOfCourtTableRow } from '@web-client/presenter/clerkOfCourtDashboardState';
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
@@ -43,7 +43,7 @@ export const buildHtmlTableDocumentHelper = (
 ): { openCasesByTypeTable: ClerkOfCourtHtmlTable } => {
   // all open cases, so the YTD/FYTD option does not apply
   const openCasesByCaseType = get(
-    state.clerkOfCourtDashboardStats.openCasesByCaseType,
+    state.clerkOfCourtDashboardStats.cases.data.openCasesByCaseType,
   );
 
   return {

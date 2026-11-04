@@ -29,6 +29,14 @@ export type ClerkOfCourtTableRow = {
 
 export type ClerkOfCourtDashboardStatsStatus = 'error' | 'loaded' | 'loading';
 
+// each tab loads from its own endpoint, so each tab has its own data and status
+export type ClerkOfCourtDashboardTab = 'cases' | 'petitions';
+
+export type ClerkOfCourtDashboardTabStats<T> = {
+  data: T;
+  status: ClerkOfCourtDashboardStatsStatus;
+};
+
 export type DashboardClerkOfTheCourtHelper = {
   petitionsByMonthAndServiceTypeChartData: {
     color: string;

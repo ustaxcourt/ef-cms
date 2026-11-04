@@ -42,7 +42,7 @@ describe('Dashboard - Clerk of Court Accessibility', () => {
   describe('Petitions tab', () => {
     it('should be free of a11y issues when viewing petitions data', () => {
       // mock the call with minimal petitions data so we can guarentee the pie chart renders
-      cy.intercept('GET', '**/clerk-dashboard-stats', {
+      cy.intercept('GET', '**/clerk-dashboard-stats/petitions', {
         statusCode: 200,
         body: {
           calendarYearPetitionStats: {
@@ -94,7 +94,7 @@ describe('Dashboard - Clerk of Court Accessibility', () => {
       const months = [10, 10, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0].map(
         (total, i) => ({ month: i + 1, total }),
       );
-      cy.intercept('GET', '**/clerk-dashboard-stats', {
+      cy.intercept('GET', '**/clerk-dashboard-stats/cases', {
         statusCode: 200,
         body: {
           ...emptyCaseStats,
@@ -134,7 +134,7 @@ describe('Dashboard - Clerk of Court Accessibility', () => {
 
   describe('Chart error states', () => {
     it('should be free of a11y issues when the charts fail to load', () => {
-      cy.intercept('GET', '**/clerk-dashboard-stats', {
+      cy.intercept('GET', '**/clerk-dashboard-stats/*', {
         statusCode: 500,
       }).as('mockStats');
       loginAsClerkOfCourt();
