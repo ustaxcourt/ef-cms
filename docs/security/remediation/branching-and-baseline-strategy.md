@@ -135,7 +135,7 @@ Proposed:
 
 ## Emergency security fixes
 
-There is no documented hotfix path today. The [playbook](playbook.md#same-day-triage) already defines what counts as an emergency: a possible secret, a KEV-listed or publicly exploited vulnerability in T1 or T2, or a finding reported by a person. This section covers how the fix then reaches `staging` and `prod`. It is a proposal.
+There is no documented hotfix path today. The [playbook](playbook.md#same-day-triage) already defines what counts as an emergency: a possible secret, a KEV-listed or publicly exploited vulnerability in T1 or T2, or a finding reported by a person. This section covers how the fix then reaches `staging` and `prod`.
 
 **The gates are not bypassed.** No ruleset has a bypass actor, and the gates fail only on findings the PR adds, so a fix that removes one passes them.
 
