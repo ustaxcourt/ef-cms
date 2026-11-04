@@ -135,7 +135,7 @@ Proposed:
 
 ## Emergency security fixes
 
-There is no documented hotfix path today. The [playbook](playbook.md#same-day-triage) already defines what counts as an emergency: a possible secret, a KEV-listed or publicly exploited vulnerability in T1 or T2, or a finding reported by a person. This section covers how the fix then reaches `staging` and `prod`.
+The [playbook](playbook.md#same-day-triage) already defines what counts as an emergency: a possible secret, a KEV-listed or publicly exploited vulnerability in T1 or T2, or a finding reported by a person. This section covers how the fix then reaches `staging` and `prod`.
 
 **The gates are not bypassed.** No ruleset has a bypass actor, and the gates fail only on findings the PR adds, so a fix that removes one passes them.
 
@@ -144,10 +144,6 @@ There is no documented hotfix path today. The [playbook](playbook.md#same-day-tr
 3. **If the fix trips a gate,** fix that finding. If it cannot be fixed, the approver signs off on the PR the same day, the suppression goes on the branch, and the ticket is logged before merge. An emergency shortens the wait for sign-off, not what is recorded. See [Remediating or accepting a failure](#remediating-or-accepting-a-failure).
 4. **Ask for the earlier deploy** as soon as the PR merges. [Deploys follow the court's schedule](playbook.md#what-counts-as-resolved), and the playbook already has the owner ask the court for an earlier one for a Critical or High finding in T1. Court operations merge `staging` into `prod`.
 5. **Back-merge `staging` into `test`** afterwards so `test` carries the fix.
-
-Decisions needed:
-- **An out-of-band deploy ships everything on `staging`,** including work that was waiting for the next window. If that is not acceptable, the alternative is a branch from `prod` with a PR back into `prod`, then a merge into `staging`. That path would run no security checks on `prod` unless item 2 under [Protecting the baseline](#protecting-the-baseline) is done, and `pr-workflow.md` says Gunnison developers never touch `prod`.
-- **Whether skipping `test` is allowed at all.** `pr-workflow.md` has the product owner verify on `test`, or on an experimental environment.
 
 ## Remediating or accepting a failure
 
