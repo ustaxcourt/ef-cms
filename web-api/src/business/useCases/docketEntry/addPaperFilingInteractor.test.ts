@@ -631,9 +631,6 @@ describe('addPaperFilingInteractor', () => {
       howMuch: 1,
       units: 'days',
     });
-    const mockPaperMotionDocumentStorageId =
-      'd4d4d4d4-d4d4-d4d4-d4d4-d4d4d4d4d4d4';
-
     const publicSiteUser = {
       email: '',
       entityName: 'User',
@@ -660,6 +657,8 @@ describe('addPaperFilingInteractor', () => {
     });
 
     it('should persist isPaper on a paper-filed motion and keep it non-downloadable for the public after the policy date', async () => {
+      const mockPaperMotionDocumentStorageId = applicationContext.getUniqueId();
+
       await addPaperFilingInteractor(
         applicationContext,
         {

@@ -875,7 +875,7 @@ describe('fileExternalDocumentInteractor', () => {
 
     const unassociatedPetitionerUser: AuthUser = {
       ...petitionerUser,
-      userId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+      userId: applicationContext.getUniqueId(),
     };
 
     const memberDocketNumber = '45679-18';

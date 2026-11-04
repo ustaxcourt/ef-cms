@@ -984,8 +984,8 @@ describe('completeDocketEntryQCInteractor', () => {
       units: 'days',
     });
 
-    const mispDocketEntryId = 'a1a1a1a1-a1a1-a1a1-a1a1-a1a1a1a1a1a1';
-    const brfDocketEntryId = 'b2b2b2b2-b2b2-b2b2-b2b2-b2b2b2b2b2b2';
+    const mispDocketEntryId = applicationContext.getUniqueId();
+    const brfDocketEntryId = applicationContext.getUniqueId();
 
     const publicSiteUser = {
       ...petitionerUser,

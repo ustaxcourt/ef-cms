@@ -6,6 +6,8 @@ import {
   PARTY_TYPES,
   ROLES,
 } from '@shared/business/entities/EntityConstants';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
+import { createISODateString } from '@shared/business/utilities/DateHandler';
 import { findUnauthorizedPublicFields } from '@shared/business/utilities/publicDataValidation';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getContactPrimary } from '@shared/business/entities/cases/Case';
@@ -132,14 +134,15 @@ describe('getPublicCaseDocketEntriesInteractor', () => {
   });
 
   it('should retain motion visibility fields on public docket entries', async () => {
+    const filingDate = createISODateString();
     const motionVisibilityDocketEntry = {
       ...MOCK_CASE.docketEntries[0],
-      docketEntryId: '88888888-8888-4888-8888-888888888888',
+      docketEntryId: applicationContext.getUniqueId(),
       documentTitle: 'Motion for Continuance',
       documentType: 'Motion for Continuance',
       eventCode: 'M006',
       filedByRole: ROLES.privatePractitioner,
-      filingDate: '2028-05-16T00:00:00.000-04:00',
+      filingDate,
       isDraft: false,
       isOnDocketRecord: true,
       isPaper: true,
@@ -147,12 +150,12 @@ describe('getPublicCaseDocketEntriesInteractor', () => {
       isStricken: false,
       lodged: true,
       previousDocument: {
-        docketEntryId: '99999999-9999-4999-8999-999999999999',
+        docketEntryId: applicationContext.getUniqueId(),
         documentTitle: 'Motion for Leave to File',
         documentType: 'Motion for Leave to File',
       },
       processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
-      receivedAt: '2028-05-16T00:00:00.000-04:00',
+      receivedAt: filingDate,
       sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
     };
 

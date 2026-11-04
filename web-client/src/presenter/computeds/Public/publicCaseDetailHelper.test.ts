@@ -18,8 +18,13 @@ import {
 import { MOCK_ANSWER, MOCK_MINUTE_ENTRY } from '@shared/test/mockDocketEntry';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { applicationContextPublic } from '../../../applicationContextPublic';
+import {
+  calculateISODate,
+  createISODateString,
+} from '@shared/business/utilities/DateHandler';
 import { cloneDeep } from 'lodash';
 import { formatDocketEntry } from '@shared/business/utilities/getFormattedCaseDetail';
+import { getUniqueId } from '@shared/sharedAppContext';
 import {
   formatDocketEntryOnDocketRecord,
   publicCaseDetailHelper as publicCaseDetailHelperComputed,
@@ -1598,22 +1603,31 @@ describe('publicCaseDetailHelper', () => {
       });
 
       describe('motion visibility public docket record', () => {
-        const motionVisibilityPolicyDate = '2027-01-01T00:00:00.000-04:00';
-        const afterPolicyFilingDate = '2028-05-16T00:00:00.000-04:00';
-        const visibilityPolicyDate = '2023-08-01T00:00:00.000-04:00';
+        const motionVisibilityPolicyDate = calculateISODate({
+          dateString: createISODateString(),
+          howMuch: -60,
+          units: 'days',
+        });
+        const afterPolicyFilingDate = calculateISODate({
+          dateString: motionVisibilityPolicyDate,
+          howMuch: 1,
+          units: 'days',
+        });
+        const visibilityPolicyDate = calculateISODate({
+          dateString: motionVisibilityPolicyDate,
+          howMuch: -1,
+          units: 'years',
+        });
 
-        const motionDocketEntryId = '0a1b2c3d-4e5f-4678-8901-234567890abc';
-        const mispPublicDocketEntryId = '1b2c3d4e-5f60-4789-a012-345678901bcd';
-        const brfPublicDocketEntryId = '2c3d4e5f-6071-4890-b123-456789012cde';
-        const leaveDocketEntryId = '3d4e5f60-7182-4901-c234-567890123def';
-        const lodgedSecondaryDocketEntryId =
-          '4e5f6071-8293-4012-d345-678901234ef0';
-        const sealedMotionDocketEntryId =
-          '5f607182-93a4-4123-e456-789012345f01';
-        const sealedMispDocketEntryId = '60718293-a4b5-4234-f567-890123456012';
-        const strickenMotionDocketEntryId =
-          '718293a4-b5c6-4345-a678-901234567123';
-        const strickenBrfDocketEntryId = '8293a4b5-c6d7-4456-b789-012345678234';
+        const motionDocketEntryId = getUniqueId();
+        const mispPublicDocketEntryId = getUniqueId();
+        const brfPublicDocketEntryId = getUniqueId();
+        const leaveDocketEntryId = getUniqueId();
+        const lodgedSecondaryDocketEntryId = getUniqueId();
+        const sealedMotionDocketEntryId = getUniqueId();
+        const sealedMispDocketEntryId = getUniqueId();
+        const strickenMotionDocketEntryId = getUniqueId();
+        const strickenBrfDocketEntryId = getUniqueId();
 
         const publicMotionVisibilityDocketEntry = {
           attachments: false,

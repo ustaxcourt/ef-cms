@@ -1087,9 +1087,9 @@ describe('updateDocketEntryMetaInteractor', () => {
       units: 'days',
     });
 
-    const motionDocketEntryId = 'c3c3c3c3-c3c3-c3c3-c3c3-c3c3c3c3c3c3';
-    const mispDocketEntryId = 'd4d4d4d4-d4d4-d4d4-d4d4-d4d4d4d4d4d4';
-    const brfDocketEntryId = 'e5e5e5e5-e5e5-e5e5-e5e5-e5e5e5e5e5e5';
+    const motionDocketEntryId = applicationContext.getUniqueId();
+    const mispDocketEntryId = applicationContext.getUniqueId();
+    const brfDocketEntryId = applicationContext.getUniqueId();
 
     const publicSiteUser = {
       ...petitionerUser,
