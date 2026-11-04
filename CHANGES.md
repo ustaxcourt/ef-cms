@@ -4,7 +4,7 @@
 
 ### After Deployment
 
-The migration create the `reporting-calendars` flag and sets it to `false`. After deployment, set the flag to `true` to enable Reporting Trial Sessions.
+`2026-11-04T16_36_54Z-add-reporting-calendars-flag.ts` creates the `reporting-calendars` flag and sets it to `false`. After deployment, set the flag to `true` to enable Reporting Trial Sessions.
 
 Script to add the flag and set it to `true`:
 
