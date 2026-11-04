@@ -1,5 +1,6 @@
 /* eslint-disable max-lines */
 import {
+  ALLOWLIST_FEATURE_FLAGS,
   AMICUS_BRIEF_DOCUMENT_TYPE,
   AMICUS_BRIEF_EVENT_CODE,
   DOCKET_ENTRY_SEALED_TO_TYPES,
@@ -1594,6 +1595,215 @@ describe('publicCaseDetailHelper', () => {
         );
 
         expect(showLinkToDocument).toBe(true);
+      });
+
+      describe('motion visibility public docket record', () => {
+        const motionVisibilityPolicyDate = '2027-01-01T00:00:00.000-04:00';
+        const afterPolicyFilingDate = '2028-05-16T00:00:00.000-04:00';
+        const visibilityPolicyDate = '2023-08-01T00:00:00.000-04:00';
+
+        const motionDocketEntryId = '0a1b2c3d-4e5f-4678-8901-234567890abc';
+        const mispPublicDocketEntryId = '1b2c3d4e-5f60-4789-a012-345678901bcd';
+        const brfPublicDocketEntryId = '2c3d4e5f-6071-4890-b123-456789012cde';
+        const leaveDocketEntryId = '3d4e5f60-7182-4901-c234-567890123def';
+        const lodgedSecondaryDocketEntryId =
+          '4e5f6071-8293-4012-d345-678901234ef0';
+        const sealedMotionDocketEntryId =
+          '5f607182-93a4-4123-e456-789012345f01';
+        const sealedMispDocketEntryId = '60718293-a4b5-4234-f567-890123456012';
+        const strickenMotionDocketEntryId =
+          '718293a4-b5c6-4345-a678-901234567123';
+        const strickenBrfDocketEntryId = '8293a4b5-c6d7-4456-b789-012345678234';
+
+        const publicMotionVisibilityDocketEntry = {
+          attachments: false,
+          certificateOfService: false,
+          docketNumber: '123-45',
+          entityName: 'PublicDocketEntry',
+          filedByRole: ROLES.privatePractitioner,
+          filingDate: afterPolicyFilingDate,
+          isFileAttached: true,
+          isOnDocketRecord: true,
+          isPaper: false,
+          isSealed: false,
+          isStricken: false,
+          lodged: false,
+          numberOfPages: 1,
+          processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+          receivedAt: afterPolicyFilingDate,
+          servedAt: afterPolicyFilingDate,
+        };
+
+        const buildMotionVisibilityDocketRecord = () => [
+          {
+            ...publicMotionVisibilityDocketEntry,
+            docketEntryId: motionDocketEntryId,
+            documentTitle: 'Motion for Continuance',
+            documentType: 'Motion for Continuance',
+            eventCode: 'M006',
+            index: 1,
+          },
+          {
+            ...publicMotionVisibilityDocketEntry,
+            docketEntryId: mispPublicDocketEntryId,
+            documentTitle: 'Memorandum in Support of Motion for Continuance',
+            documentType: 'Memorandum in Support',
+            eventCode: 'MISP',
+            index: 2,
+            previousDocument: {
+              docketEntryId: motionDocketEntryId,
+              documentTitle: 'Motion for Continuance',
+              documentType: 'Motion for Continuance',
+            },
+          },
+          {
+            ...publicMotionVisibilityDocketEntry,
+            docketEntryId: brfPublicDocketEntryId,
+            documentTitle: 'Brief in Support of Motion for Continuance',
+            documentType: 'Brief in Support',
+            eventCode: 'BRF',
+            index: 3,
+            previousDocument: {
+              docketEntryId: motionDocketEntryId,
+              documentTitle: 'Motion for Continuance',
+              documentType: 'Motion for Continuance',
+            },
+          },
+          {
+            ...publicMotionVisibilityDocketEntry,
+            docketEntryId: leaveDocketEntryId,
+            documentTitle: 'Motion for Leave to File',
+            documentType: 'Motion for Leave to File',
+            eventCode: 'M115',
+            index: 4,
+          },
+          {
+            ...publicMotionVisibilityDocketEntry,
+            docketEntryId: lodgedSecondaryDocketEntryId,
+            documentTitle: 'Motion to Withdraw as Counsel',
+            documentType: 'Motion to Withdraw as Counsel',
+            eventCode: 'M112',
+            index: 5,
+            lodged: true,
+            previousDocument: {
+              docketEntryId: leaveDocketEntryId,
+              documentTitle: 'Motion for Leave to File',
+              documentType: 'Motion for Leave to File',
+            },
+          },
+          {
+            ...publicMotionVisibilityDocketEntry,
+            docketEntryId: sealedMotionDocketEntryId,
+            documentTitle: 'Motion for Summary Judgment',
+            documentType: 'Motion for Summary Judgment',
+            eventCode: 'M006',
+            index: 6,
+          },
+          {
+            ...publicMotionVisibilityDocketEntry,
+            docketEntryId: sealedMispDocketEntryId,
+            documentTitle:
+              'Memorandum in Support of Motion for Summary Judgment',
+            documentType: 'Memorandum in Support',
+            eventCode: 'MISP',
+            index: 7,
+            isSealed: true,
+            sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
+            previousDocument: {
+              docketEntryId: sealedMotionDocketEntryId,
+              documentTitle: 'Motion for Summary Judgment',
+              documentType: 'Motion for Summary Judgment',
+            },
+          },
+          {
+            ...publicMotionVisibilityDocketEntry,
+            docketEntryId: strickenMotionDocketEntryId,
+            documentTitle: 'Motion for Protective Order',
+            documentType: 'Motion for Protective Order',
+            eventCode: 'M006',
+            index: 8,
+          },
+          {
+            ...publicMotionVisibilityDocketEntry,
+            docketEntryId: strickenBrfDocketEntryId,
+            documentTitle: 'Brief in Support of Motion for Protective Order',
+            documentType: 'Brief in Support',
+            eventCode: 'BRF',
+            index: 9,
+            isStricken: true,
+            previousDocument: {
+              docketEntryId: strickenMotionDocketEntryId,
+              documentTitle: 'Motion for Protective Order',
+              documentType: 'Motion for Protective Order',
+            },
+          },
+        ];
+
+        const getShowLinkForEntry = (
+          formattedEntries: {
+            docketEntryId: string;
+            showLinkToDocument: boolean;
+          }[],
+          docketEntryId: string,
+        ): boolean | undefined =>
+          formattedEntries.find(entry => entry.docketEntryId === docketEntryId)
+            ?.showLinkToDocument;
+
+        beforeEach(() => {
+          state.caseDetail = {
+            ...mockCase,
+            docketEntries: buildMotionVisibilityDocketRecord(),
+          };
+          state.featureFlags = {
+            [ALLOWLIST_FEATURE_FLAGS.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE
+              .key]: visibilityPolicyDate,
+            [ALLOWLIST_FEATURE_FLAGS.MOTION_VISIBILITY_POLICY_CHANGE_DATE.key]:
+              motionVisibilityPolicyDate,
+          };
+        });
+
+        it('should set showLinkToDocument for public and terminal users across motion visibility docket entries', () => {
+          const publicResult = runCompute(publicCaseDetailHelper, {
+            state: { ...state, isTerminalUser: false },
+          });
+          const publicEntries =
+            publicResult.formattedDocketEntriesOnDocketRecord;
+
+          expect(getShowLinkForEntry(publicEntries, motionDocketEntryId)).toBe(
+            true,
+          );
+          expect(
+            getShowLinkForEntry(publicEntries, mispPublicDocketEntryId),
+          ).toBe(true);
+          expect(
+            getShowLinkForEntry(publicEntries, brfPublicDocketEntryId),
+          ).toBe(true);
+          expect(getShowLinkForEntry(publicEntries, leaveDocketEntryId)).toBe(
+            true,
+          );
+          expect(
+            getShowLinkForEntry(publicEntries, lodgedSecondaryDocketEntryId),
+          ).toBe(false);
+          expect(
+            getShowLinkForEntry(publicEntries, sealedMispDocketEntryId),
+          ).toBe(false);
+          expect(
+            getShowLinkForEntry(publicEntries, strickenBrfDocketEntryId),
+          ).toBe(false);
+
+          const terminalResult = runCompute(publicCaseDetailHelper, {
+            state: { ...state, isTerminalUser: true },
+          });
+          const terminalEntries =
+            terminalResult.formattedDocketEntriesOnDocketRecord;
+
+          expect(
+            getShowLinkForEntry(terminalEntries, lodgedSecondaryDocketEntryId),
+          ).toBe(true);
+          expect(
+            getShowLinkForEntry(terminalEntries, sealedMispDocketEntryId),
+          ).toBe(false);
+        });
       });
     });
   });
