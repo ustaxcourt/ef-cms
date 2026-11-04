@@ -17,7 +17,7 @@ import {
 } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('File a petition - Step 6 Review & Submit Case', () => {
-  const VALID_FILE = '../../helpers/file/sample.pdf';
+  const VALID_FILE = 'sample.pdf';
 
   describe('Petitioner', () => {
     beforeEach(() => {

@@ -51,7 +51,7 @@ describe('Docket Clerk paper-files and serves immediately — coversheet on dock
       cy.get('[data-testid="filed-by-option"]').contains('Petitioner').click();
       cy.get('[data-testid="upload-pdf-button"]').click();
       attachFile({
-        filePath: '../../helpers/file/sample.pdf',
+        filePath: 'sample.pdf',
         selector: '[data-testid="primaryDocumentFile-file-input"',
         selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
       });

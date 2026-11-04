@@ -20,7 +20,7 @@ describe('upload court issued document validations', () => {
 
     attachFile({
       encoding,
-      filePath: '../../helpers/file/non-pdf.txt',
+      filePath: 'non-pdf.txt',
       selector: '[data-testid="primary-document-file"]',
     });
     cy.wait('@logErrorRequest');
@@ -38,7 +38,7 @@ describe('upload court issued document validations', () => {
 
     attachFile({
       encoding,
-      filePath: '../../helpers/file/corrupt-pdf.pdf',
+      filePath: 'corrupt-pdf.pdf',
       selector: '[data-testid="primary-document-file"]',
     });
     cy.wait('@logErrorRequest');
@@ -54,7 +54,7 @@ describe('upload court issued document validations', () => {
 
     attachFile({
       encoding,
-      filePath: '../../helpers/file/password-protected-pdf.pdf',
+      filePath: 'password-protected-pdf.pdf',
       selector: '[data-testid="primary-document-file"]',
     });
     cy.wait('@logErrorRequest');
@@ -70,7 +70,7 @@ describe('upload court issued document validations', () => {
 
     attachFile({
       encoding,
-      filePath: '../../helpers/file/readonly-pdf.pdf',
+      filePath: '.readonly-pdf.pdf',
       selector: '[data-testid="primary-document-file"]',
     });
     cy.wait('@logErrorRequest');
@@ -110,7 +110,7 @@ describe('upload court issued document validations', () => {
   it('should see success on valid pdf upload', () => {
     attachFile({
       encoding,
-      filePath: '../../helpers/file/sample.pdf',
+      filePath: 'sample.pdf',
       selector: '[data-testid="primary-document-file"]',
     });
 
