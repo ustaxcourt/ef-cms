@@ -60,7 +60,7 @@ describe('Reporting trial sessions', () => {
     });
   });
 
-  it('should create, filter, refresh, and edit a Reporting session with a single due date', () => {
+  it('should create Reporting and let a docket clerk edit it with the feature flag enabled and disabled', () => {
     loginAsPetitionsClerk();
     cy.get('[data-testid="trial-session-link"]').click();
     cy.get('[data-testid="add-trial-session-button"]').click();
@@ -101,6 +101,7 @@ describe('Reporting trial sessions', () => {
       expect(request.body.estimatedEndDate).to.eq(request.body.startDate);
       expect(response?.body).to.have.property('trialSessionId');
       const trialSessionId = response?.body.trialSessionId;
+      cy.wrap(trialSessionId).as('reportingSessionId');
 
       cy.get('[data-testid="success-alert"]').should('be.visible');
       cy.location('pathname').should('eq', '/trial-sessions');
@@ -140,6 +141,13 @@ describe('Reporting trial sessions', () => {
     checkA11y();
     cy.contains('Trial clerk').should('not.exist');
     cy.contains('Court reporter').should('not.exist');
+    loginAsDocketClerk();
+    cy.get('[data-testid="trial-session-link"]').click();
+    cy.get('[data-testid="new-trial-sessions-tab"]').click();
+    cy.get('[data-testid="proceedingType-Reporting"]').click();
+    cy.get<string>('@reportingSessionId').then(trialSessionId => {
+      cy.get(`[data-testid="trial-location-link-${trialSessionId}"]`).click();
+    });
     cy.get('[data-testid="edit-trial-session"]').click();
     cy.get('#due-date-picker').should('have.value', '02/10/2099').clear();
     cy.get('#due-date-picker').type('02/11/2099');
@@ -161,6 +169,23 @@ describe('Reporting trial sessions', () => {
     });
     cy.get('[data-testid="success-alert"]').should('be.visible');
     cy.contains('Updated Calendar Admin').should('be.visible');
+
+    cy.task('toggleFeatureFlag', {
+      flag: ALLOWLIST_FEATURE_FLAGS.REPORTING_CALENDARS.key,
+      flagValue: false,
+    });
+    cy.intercept('GET', '**/system/feature-flag/', {
+      [ALLOWLIST_FEATURE_FLAGS.REPORTING_CALENDARS.key]: false,
+    });
+    cy.reload();
+    cy.get('[data-testid="edit-trial-session"]').click();
+    cy.get('#irs-calendar-administrator-info-name').clear();
+    cy.get('#irs-calendar-administrator-info-name').type('Flag Disabled Admin');
+    checkA11y();
+    cy.get('[data-testid="submit-edit-trial-session"]').click();
+    cy.wait('@editReporting');
+    cy.get('[data-testid="success-alert"]').should('be.visible');
+    cy.contains('Flag Disabled Admin').should('be.visible');
   });
 
   it('should clear incompatible data when the proceeding type changes', () => {

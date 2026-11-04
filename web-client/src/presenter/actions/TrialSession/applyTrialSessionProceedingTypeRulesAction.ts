@@ -3,6 +3,7 @@ import {
   SESSION_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
   TRIAL_SESSION_SCOPE_TYPES,
+  TrialSessionProceedingType,
 } from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
@@ -10,12 +11,18 @@ export const applyTrialSessionProceedingTypeRulesAction = ({
   get,
   props,
   store,
-}: ActionProps<{ key: string }>): void => {
+}: ActionProps<{
+  key: string;
+  previousProceedingType?: TrialSessionProceedingType;
+}>): void => {
   const form = get(state.form);
   const isReporting =
     form.proceedingType === TRIAL_SESSION_PROCEEDING_TYPES.reporting;
 
-  if (props.key !== 'proceedingType' && !isReporting) return;
+  const wasReporting =
+    props.previousProceedingType === TRIAL_SESSION_PROCEEDING_TYPES.reporting;
+
+  if (!isReporting && !wasReporting) return;
 
   for (const field of REPORTING_SESSION_EXCLUDED_FIELDS) {
     if (!isReporting && field === 'swingSessionId') continue;
