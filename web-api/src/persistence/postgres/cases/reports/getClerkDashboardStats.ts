@@ -66,43 +66,22 @@ export const caseStatusChangesByYear = async ({
     return reader
       .selectFrom(eb =>
         eb
-          .selectFrom(eb2 =>
-            eb2
-              .selectFrom('dwCase')
-              .crossJoinLateral(
-                sql`jsonb_array_elements(case_status_history) WITH ORDINALITY`.as<'history'>(
-                  sql`history(status_change, change_number)`,
-                ),
-              )
-              .select([
-                'procedureType',
-                sql<string>`status_change->>'updatedCaseStatus'`.as(
-                  'updatedCaseStatus',
-                ),
-                sql<Date>`(status_change->>'date')::timestamptz`.as(
-                  'changedAt',
-                ),
-                // the previous status is the latest earlier change by date, not the element before
-                // this one, because scripts can append back-dated changes to the end of the history;
-                // the array position breaks ties between changes with the same date
-                sql<string | null>`(
-                  SELECT earlier_change->>'updatedCaseStatus'
-                  FROM jsonb_array_elements(case_status_history) WITH ORDINALITY AS earlier(earlier_change, earlier_change_number)
-                  WHERE ((earlier_change->>'date')::timestamptz, earlier_change_number)
-                    < ((status_change->>'date')::timestamptz, change_number)
-                  ORDER BY (earlier_change->>'date')::timestamptz DESC, earlier_change_number DESC
-                  LIMIT 1
-                )`.as('previousCaseStatus'),
-              ])
-              .where(sql`jsonb_typeof(case_status_history)`, '=', 'array')
-              // filter here, so the previous status is only looked up for the changes that can count
-              .where(sql`status_change->>'updatedCaseStatus'`, 'in', [
-                ...CLOSED_CASE_STATUSES,
-                CASE_STATUS_TYPES.onAppeal,
-              ])
-              .where(sql`(status_change->>'date')::timestamptz`, '>=', begin)
-              .where(sql`(status_change->>'date')::timestamptz`, '<', end)
-              .as('statusChanges'),
+          .selectFrom('dwCase')
+          // each case's own changes, each with the status before it; the previous status comes
+          // from date order, not array order, because scripts can append back-dated changes to
+          // the end of the history, and the array position breaks ties between equal dates
+          .crossJoinLateral(
+            sql`(
+              SELECT
+                status_change->>'updatedCaseStatus' AS updated_case_status,
+                (status_change->>'date')::timestamptz AS changed_at,
+                LAG(status_change->>'updatedCaseStatus') OVER (
+                  ORDER BY (status_change->>'date')::timestamptz, change_number
+                ) AS previous_case_status
+              FROM jsonb_array_elements(case_status_history) WITH ORDINALITY AS history(status_change, change_number)
+            )`.as<'statusChanges'>(
+              sql`status_changes(updated_case_status, changed_at, previous_case_status)`,
+            ),
           )
           .select([
             'procedureType',
@@ -116,6 +95,9 @@ export const caseStatusChangesByYear = async ({
             isWithin(calendarYear).as('isInCalendarYear'),
             isWithin(fiscalYear).as('isInFiscalYear'),
           ])
+          .where(sql`jsonb_typeof(case_status_history)`, '=', 'array')
+          .where(sql`changed_at`, '>=', begin)
+          .where(sql`changed_at`, '<', end)
           .where(
             sql<boolean>`((
               updated_case_status IN (${sql.join(CLOSED_CASE_STATUSES)})
