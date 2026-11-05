@@ -550,17 +550,26 @@ describe('Reporting validation', () => {
     },
   );
 
-  it.each([
-    [undefined, 'Enter a valid estimated end date'],
-    ['invalid', 'Enter a valid estimated end date'],
-    ['3000-12-02T00:00:00.000Z', 'Reporting start and end date must match'],
-  ])('should reject end date %s', (estimatedEndDate, message) => {
-    expect(
-      new TrialSession({
-        ...reportingSession,
-        estimatedEndDate,
-      }).getFormattedValidationErrors(),
-    ).toHaveProperty('estimatedEndDate', message);
+  it.each([undefined, 'invalid', '3000-12-02T00:00:00.000Z'])(
+    'should reject end date %s',
+    estimatedEndDate => {
+      expect(
+        new TrialSession({
+          ...reportingSession,
+          estimatedEndDate,
+        }).getFormattedValidationErrors(),
+      ).toEqual({ startDate: 'Enter a valid due date' });
+    },
+  );
+
+  it('should use the due date message for an invalid Reporting start date', () => {
+    const entity = new TrialSession({
+      ...reportingSession,
+      startDate: 'invalid',
+    });
+    expect(entity.getValidationErrors()).toEqual({
+      startDate: 'Enter a valid due date',
+    });
   });
 
   it('should use the standard message when no session type is selected', () => {

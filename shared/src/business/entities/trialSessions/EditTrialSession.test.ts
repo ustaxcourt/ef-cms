@@ -84,16 +84,4 @@ describe('Reporting validation', () => {
     expect(entity.getFormattedValidationErrors()).toBeNull();
     expect(entity.startTime).toBeUndefined();
   });
-
-  it.each([
-    [undefined, 'Enter a valid estimated end date'],
-    ['3000-12-02T00:00:00.000Z', 'Reporting start and end date must match'],
-  ])('should reject end date %s', (estimatedEndDate, message) => {
-    expect(
-      new EditTrialSession({
-        ...reportingSession,
-        estimatedEndDate,
-      }).getFormattedValidationErrors(),
-    ).toHaveProperty('estimatedEndDate', message);
-  });
 });

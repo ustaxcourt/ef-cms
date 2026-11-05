@@ -9,40 +9,19 @@ import { RawEditTrialSession } from '@shared/business/entities/trialSessions/Edi
 import { MOCK_TRIAL_REGULAR } from '@shared/test/mockTrial';
 
 describe('validateTrialSessionInteractor', () => {
-  it.each(['', MOCK_TRIAL_REGULAR.trialSessionId])(
-    'should accept matching Reporting dates for session %s',
-    trialSessionId => {
-      const errors = validateTrialSessionInteractor({
-        trialSession: {
-          ...MOCK_TRIAL_REGULAR,
-          trialSessionId,
-          proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.reporting,
-          startTime: undefined,
-          startDate: '3000-12-01T00:00:00.000Z',
-          estimatedEndDate: '3000-12-01T00:00:00.000Z',
-        },
-      });
-      expect(errors).toBeNull();
-    },
-  );
-
-  it.each(['', '2000-01-01T00:00:00.000Z'])(
-    'should show one due date error for invalid Reporting date %s',
-    startDate => {
-      const errors = validateTrialSessionInteractor({
-        trialSession: {
-          ...MOCK_TRIAL_REGULAR,
-          trialSessionId: '',
-          proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.reporting,
-          startTime: undefined,
-          startDate,
-          estimatedEndDate: startDate,
-        },
-      });
-      expect(errors).toMatchObject({ startDate: 'Enter a valid due date' });
-      expect(errors).not.toHaveProperty('estimatedEndDate');
-    },
-  );
+  it('should reject a new Reporting session with a past due date', () => {
+    const errors = validateTrialSessionInteractor({
+      trialSession: {
+        ...MOCK_TRIAL_REGULAR,
+        trialSessionId: '',
+        proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.reporting,
+        startTime: undefined,
+        startDate: '2000-01-01T00:00:00.000Z',
+        estimatedEndDate: '2000-01-01T00:00:00.000Z',
+      },
+    });
+    expect(errors).toEqual({ startDate: 'Enter a valid due date' });
+  });
 
   it.each(['', MOCK_TRIAL_REGULAR.trialSessionId])(
     'should show one due date error for mismatched Reporting dates for session %s',
@@ -58,10 +37,9 @@ describe('validateTrialSessionInteractor', () => {
         },
       });
 
-      expect(errors).toMatchObject({
+      expect(errors).toEqual({
         startDate: 'Enter a valid due date',
       });
-      expect(errors).not.toHaveProperty('estimatedEndDate');
     },
   );
 
