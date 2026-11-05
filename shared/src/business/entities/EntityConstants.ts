@@ -657,6 +657,10 @@ export const MOTION_EVENT_CODES = [
   }),
 ];
 
+export const MOTION_DOCUMENT_TYPES = INTERNAL_FILING_EVENTS['Motion'].map(
+  entry => entry.documentType,
+);
+
 export const NOTICE_EVENT_CODES = [
   ...INTERNAL_FILING_EVENTS['Notice'].map(entry => {
     return entry.eventCode;
@@ -700,6 +704,15 @@ export const POLICY_DATE_IMPACTED_EVENTCODES = [
 ];
 
 export const PUBLIC_SUPPORTING_EVENT_CODES_FOR_MOTIONS = ['BRF', 'MISP'];
+
+export const PUBLIC_MOTION_RESPONSE_EVENT_CODES = [
+  'NNOB',
+  'NOB',
+  'OBJE',
+  'OBJN',
+  'OPPO',
+  'RSP',
+];
 
 export const SCENARIOS = [
   'Standard',
