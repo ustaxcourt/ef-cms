@@ -10,7 +10,11 @@ import {
   userIsDirectlyAssociated,
 } from '@shared/business/entities/cases/Case';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
-import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
+import {
+  InvalidRequest,
+  NotFoundError,
+  UnauthorizedError,
+} from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -22,6 +26,7 @@ import { aggregatePartiesForService } from '@shared/business/utilities/aggregate
 import { enqueueAddCoversheet } from '@web-api/business/useCaseHelper/coverSheet/enqueueAddCoversheet';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { pick } from 'lodash';
+import { validate as isUuid } from 'uuid';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
@@ -46,6 +51,8 @@ export const fileExternalDocument = async (
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.FILE_EXTERNAL_DOCUMENT)) {
     throw new UnauthorizedError('Unauthorized');
   }
+
+  validateSupportingDocumentParents({ documentMetadata });
 
   const user = await getUserById({ userId: authorizedUser.userId });
 
@@ -136,6 +143,10 @@ export const fileExternalDocument = async (
   if (supportingDocuments) {
     for (let i = 0; i < supportingDocuments.length; i++) {
       supportingDocuments[i].filedBy = primaryDocumentMetadata.filedBy;
+      supportingDocuments[i].previousDocument = {
+        ...supportingDocuments[i].previousDocument,
+        docketEntryId: documentMetadata.primaryDocumentId,
+      };
       documentsToAdd.push([
         supportingDocuments[i].docketEntryId,
         supportingDocuments[i],
@@ -156,6 +167,10 @@ export const fileExternalDocument = async (
 
   if (secondarySupportingDocuments) {
     for (let i = 0; i < secondarySupportingDocuments.length; i++) {
+      secondarySupportingDocuments[i].previousDocument = {
+        ...secondarySupportingDocuments[i].previousDocument,
+        docketEntryId: secondaryDocument.docketEntryId,
+      };
       documentsToAdd.push([
         secondarySupportingDocuments[i].docketEntryId,
         secondarySupportingDocuments[i],
@@ -323,3 +338,32 @@ export const fileExternalDocumentInteractor = withLocking(
     identifiers: [`case|${documentMetadata.docketNumber}`],
   }),
 );
+
+const validateSupportingDocumentParents = ({
+  documentMetadata,
+}: {
+  documentMetadata: {
+    primaryDocumentId?: string;
+    secondaryDocument?: { docketEntryId?: string };
+    secondarySupportingDocuments?: unknown[];
+    supportingDocuments?: unknown[];
+  };
+}): void => {
+  if (
+    documentMetadata.supportingDocuments?.length &&
+    !isUuid(documentMetadata.primaryDocumentId)
+  ) {
+    throw new InvalidRequest(
+      'Supporting documents require a valid primary document docketEntryId',
+    );
+  }
+
+  if (
+    documentMetadata.secondarySupportingDocuments?.length &&
+    !isUuid(documentMetadata.secondaryDocument?.docketEntryId)
+  ) {
+    throw new InvalidRequest(
+      'Secondary supporting documents require a valid secondary document docketEntryId',
+    );
+  }
+};

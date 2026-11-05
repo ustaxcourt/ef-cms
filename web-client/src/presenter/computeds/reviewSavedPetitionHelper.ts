@@ -78,6 +78,9 @@ export const reviewSavedPetitionHelper = (
         .getUtilities()
         .formatDateString(petitionPaymentWaivedDate, 'MMDDYY')}`;
       break;
+    case PAYMENT_STATUS.PENDING:
+      petitionPaymentStatusFormatted = PAYMENT_STATUS.PENDING;
+      break;
     default:
       petitionPaymentStatusFormatted = PAYMENT_STATUS.UNPAID;
   }

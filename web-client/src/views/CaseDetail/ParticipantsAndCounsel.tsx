@@ -86,6 +86,36 @@ export const ParticipantsAndCounsel = connect(
                   >
                     {petitioner.formattedPendingEmail}
                   </div>
+                  {petitioner.showContactEmailAddress && (
+                    <>
+                      <p className="semi-bold margin-bottom-0">
+                        Contact email address
+                      </p>
+                      <span
+                        data-testid="participant-contact-email"
+                        className={classNames(
+                          petitioner.isAddressSealed &&
+                            'margin-left-205 sealed-address',
+                          'margin-top-4 word-wrap-break-word',
+                        )}
+                      >
+                        {petitioner.isAddressSealed && (
+                          <span
+                            aria-label="sealed contact email"
+                            className="sealed-contact-icon"
+                            role="img"
+                          >
+                            <FontAwesomeIcon
+                              className="margin-right-05"
+                              icon={['fas', 'lock']}
+                              size="sm"
+                            />
+                          </span>
+                        )}
+                        {petitioner.formattedContactEmailAddress}
+                      </span>
+                    </>
+                  )}
                   {petitioner.serviceIndicator && (
                     <div className="margin-top-4">
                       <p className="semi-bold margin-bottom-0">

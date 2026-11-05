@@ -1269,6 +1269,16 @@ const router = {
       return app.getSequence('gotoIdleLogoutSequence')();
     });
 
+    registerRoute('/auth-code?..', () => {
+      const { code, state, error, error_description } = route.query();
+      return app.getSequence('authCodeSequence')({
+        authCode: code,
+        error,
+        errorDescription: error_description,
+        state,
+      });
+    });
+
     registerRoute('/login', () => {
       if (!app.getState('token')) {
         setPageTitle('Login');
@@ -1639,12 +1649,21 @@ const router = {
       return app.getSequence('gotoMaintenanceSequence')();
     });
 
-    registerRoute('/payment-success/*', docketNumber => {
-      return app.getSequence('paymentSuccessSequence')({ docketNumber });
+    registerRoute('/payment-success..', () => {
+      const { docketNumber, page } = route.query();
+      return app.getSequence('paymentSuccessSequence')({
+        docketNumber,
+        page,
+      });
     });
 
-    registerRoute('/payment-cancel/*', docketNumber => {
-      return app.getSequence('paymentCancelSequence')({ docketNumber });
+    registerRoute('/payment-cancel..', () => {
+      const { docketNumber, origin, page } = route.query();
+      return app.getSequence('paymentCancelSequence')({
+        docketNumber,
+        origin,
+        page,
+      });
     });
 
     registerRoute(

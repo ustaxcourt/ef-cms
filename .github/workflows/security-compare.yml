@@ -1,7 +1,8 @@
-name: Security - No Increase In Findings
+name: Security - No New Findings
 
-# Fails a pull request carrying more security findings than staging, like
-# typescript-error-check.yml does for type errors. Both sides are scanned in one job.
+# Fails a pull request that adds a security finding staging does not have, compared by
+# CVE, package and file. Both sides are scanned in one job, so a CVE newly published
+# against code already on staging shows on both sides and does not fail the PR.
 
 on:
   pull_request:

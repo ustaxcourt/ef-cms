@@ -1,7 +1,11 @@
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { externalUserCasesHelper as externalUserCasesHelperComputed } from './externalUserCasesHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
-import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
+import {
+  ALLOWLIST_FEATURE_FLAGS,
+  CASE_STATUS_TYPES,
+  PAYMENT_STATUS,
+} from '@shared/business/entities/EntityConstants';
 import { withAppContextDecorator } from '../../../withAppContext';
 
 const externalUserCasesHelper = withAppContextDecorator(
@@ -512,5 +516,55 @@ describe('externalUserCasesHelper', () => {
 
     expect(openCaseResults).toMatchObject(expectedOpenCasesResult);
     expect(closedCaseResults).toMatchObject(expectedClosedCasesResult);
+  });
+
+  describe('showMyCasesPayFilingFeeButton', () => {
+    it('should be true for unpaid associated cases when the payment portal flag is on', () => {
+      const { openCaseResults } = runCompute(externalUserCasesHelper, {
+        state: {
+          ...baseState,
+          featureFlags: {
+            [ALLOWLIST_FEATURE_FLAGS.ENABLE_PAYMENT_PORTAL_INTEGRATION.key]:
+              true,
+          },
+          openCases: [
+            {
+              caseCaption: 'Case Title for 101-24',
+              createdAt: '2019-12-22T12:49:10.949Z',
+              docketNumber: '101-24',
+              isRequestingUserAssociated: true,
+              petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
+              status: CASE_STATUS_TYPES.new,
+            },
+          ],
+        },
+      });
+
+      expect(openCaseResults[0].showMyCasesPayFilingFeeButton).toBe(true);
+    });
+
+    it('should be false when the payment portal flag is off', () => {
+      const { openCaseResults } = runCompute(externalUserCasesHelper, {
+        state: {
+          ...baseState,
+          featureFlags: {
+            [ALLOWLIST_FEATURE_FLAGS.ENABLE_PAYMENT_PORTAL_INTEGRATION.key]:
+              false,
+          },
+          openCases: [
+            {
+              caseCaption: 'Case Title for 101-24',
+              createdAt: '2019-12-22T12:49:10.949Z',
+              docketNumber: '101-24',
+              isRequestingUserAssociated: true,
+              petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
+              status: CASE_STATUS_TYPES.new,
+            },
+          ],
+        },
+      });
+
+      expect(openCaseResults[0].showMyCasesPayFilingFeeButton).toBe(false);
+    });
   });
 });

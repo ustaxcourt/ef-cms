@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-required_version="1.16.5"
+required_version="1.17.0"
 
 tf_version=$(terraform --version)
 tf_version_line=${tf_version%%$'\n'*}

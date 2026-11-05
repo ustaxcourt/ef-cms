@@ -44,7 +44,7 @@ export const getPractitionerDetailAction = async ({
   const practitionerDetail: PractitionerDetail | RawPublicContact | undefined =
     Array.isArray(practitionerResult)
       ? (practitionerResult[0] as RawPublicContact | undefined)
-      : (practitionerResult as PractitionerDetail | undefined);
+      : ((practitionerResult || undefined) as PractitionerDetail | undefined);
 
   if (
     isPractitionerForInternalUser(

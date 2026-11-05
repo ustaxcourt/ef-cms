@@ -22,10 +22,6 @@ jobs:
     steps:
       - name: Checkout Current Branch
         uses: actions/checkout@v7
-      - name: Collect Workflow Telemetry
-        uses: runforesight/workflow-telemetry-action@v2
-        with:
-          comment_on_pr: false
       - name: Build DAWSON container images
         uses: ./.github/actions/dawson-container-images
       - name: Run document generation tests

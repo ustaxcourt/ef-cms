@@ -12,6 +12,7 @@ const transformIgnoreModules = [
   'domhandler',
   'domutils',
   'entities',
+  'he',
   'htmlparser2',
   'kysely',
   'p-queue',
@@ -88,7 +89,7 @@ const config: Config = {
   testEnvironment: 'node',
   testPathIgnorePatterns: ['hostedEnvironmentTests'],
   transform: {
-    '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
+    '\\.m?[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
   },
   transformIgnorePatterns: [
     `node_modules/(?!(${transformIgnoreModules.join('|')})/)`,

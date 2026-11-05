@@ -84,7 +84,7 @@ export const EditDocketEntryMetaFormDocument = connect(
         <FormGroup errorText={validationErrors.eventCode}>
           <label
             className="usa-label"
-            htmlFor="react-select-2-input"
+            htmlFor="document-type-input"
             id="document-type-label"
           >
             Document type
@@ -93,6 +93,7 @@ export const EditDocketEntryMetaFormDocument = connect(
             aria-describedby="document-type-label"
             data-testid="edit-docket-entry-meta-document-type-search"
             id="document-type"
+            inputId="document-type-input"
             isClearable={true}
             name="eventCode"
             options={internalTypesHelper.internalDocumentTypesForSelectSorted}
@@ -124,7 +125,7 @@ export const EditDocketEntryMetaFormDocument = connect(
           >
             <label
               className="usa-label"
-              htmlFor="react-select-3-input"
+              htmlFor="secondary-document-type-input"
               id="secondary-document-type-label"
             >
               Which Document Is This Motion for Leave For?
@@ -134,9 +135,9 @@ export const EditDocketEntryMetaFormDocument = connect(
               </span>
             </label>
             <SelectSearch
-              aria-label="secondary-document-type-label"
               data-testid="edit-docket-entry-meta-secondary-document-type-search"
               id="secondary-document-type"
+              inputId="secondary-document-type-input"
               isClearable={true}
               name="secondaryDocument.eventCode"
               options={internalTypesHelper.internalDocumentTypesForSelectSorted}

@@ -22,13 +22,20 @@ import { CASE_LIST_PAGE_SIZE } from '@shared/business/entities/EntityConstants';
 export const CaseListTable = connect(
   {
     caseType: state.openClosedCases.caseType,
+    clearDashboardCaseListPageSequence:
+      sequences.clearDashboardCaseListPageSequence,
     clearOpenClosedCasesCurrentPageSequence:
       sequences.clearOpenClosedCasesCurrentPageSequence,
     closedTab: state.constants.EXTERNAL_USER_DASHBOARD_TABS.CLOSED,
+    dashboardCaseListPageIndex: state.dashboardCaseListPageIndex,
     dashboardExternalHelper: state.dashboardExternalHelper,
     externalUserCasesHelper: state.externalUserCasesHelper,
+    initMyCasesFilingFeePaymentSequence:
+      sequences.initMyCasesFilingFeePaymentSequence,
     openTab: state.constants.EXTERNAL_USER_DASHBOARD_TABS.OPEN,
     setCaseTypeToDisplaySequence: sequences.setCaseTypeToDisplaySequence,
+    setDashboardCaseListPageSequence:
+      sequences.setDashboardCaseListPageSequence,
     showMoreClosedCasesSequence: sequences.showMoreClosedCasesSequence,
     showMoreOpenCasesSequence: sequences.showMoreOpenCasesSequence,
     showCaseStatusInfoSequence: sequences.showCaseStatusInfoSequence,
@@ -38,12 +45,16 @@ export const CaseListTable = connect(
   },
   function CaseListTable({
     caseType,
+    clearDashboardCaseListPageSequence,
     clearOpenClosedCasesCurrentPageSequence,
     closedTab,
     dashboardExternalHelper,
+    dashboardCaseListPageIndex,
     externalUserCasesHelper,
+    initMyCasesFilingFeePaymentSequence,
     openTab,
     setCaseTypeToDisplaySequence,
+    setDashboardCaseListPageSequence,
     showCaseStatusInfoSequence,
     showModal,
     caseListTableSort,
@@ -57,11 +68,22 @@ export const CaseListTable = connect(
     const openPagination = useClientSidePaginator(
       externalUserCasesHelper.openCaseResults,
       CASE_LIST_PAGE_SIZE,
+      {
+        initialActivePage: dashboardCaseListPageIndex ?? 0,
+      },
     );
+
+    const handleOpenCasesPageChange = (pageIndex: number): void => {
+      openPagination.setActivePage(pageIndex);
+      setDashboardCaseListPageSequence({
+        dashboardCaseListPageIndex: pageIndex,
+      });
+    };
 
     useEffect(() => {
       return () => {
         clearOpenClosedCasesCurrentPageSequence();
+        clearDashboardCaseListPageSequence();
       };
     }, []);
 
@@ -112,7 +134,11 @@ export const CaseListTable = connect(
                     currentPageIndex={casePagination.activePage}
                     totalPages={casePagination.totalPages}
                     onPageChange={pageChange => {
-                      casePagination.setActivePage(pageChange);
+                      if (tabName === openTab) {
+                        handleOpenCasesPageChange(pageChange);
+                      } else {
+                        casePagination.setActivePage(pageChange);
+                      }
                     }}
                   />
                 </div>
@@ -181,6 +207,9 @@ export const CaseListTable = connect(
                   {cases.map(item => (
                     <CaseListRowExternal
                       formattedCase={item}
+                      initMyCasesFilingFeePaymentSequence={
+                        initMyCasesFilingFeePaymentSequence
+                      }
                       isNestedCase={false}
                       key={item.docketNumber}
                       showFilingFee={dashboardExternalHelper.showFilingFee}
@@ -199,7 +228,11 @@ export const CaseListTable = connect(
                     currentPageIndex={casePagination.activePage}
                     totalPages={casePagination.totalPages}
                     onPageChange={pageChange => {
-                      casePagination.setActivePage(pageChange);
+                      if (tabName === openTab) {
+                        handleOpenCasesPageChange(pageChange);
+                      } else {
+                        casePagination.setActivePage(pageChange);
+                      }
                       focusPaginatorTop(paginatorTop);
                     }}
                   />

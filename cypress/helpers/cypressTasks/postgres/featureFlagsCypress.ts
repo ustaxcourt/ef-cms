@@ -18,10 +18,22 @@ export const getRawFeatureFlagValue = async ({
 export async function toggleFeatureFlag({
   flag,
   flagValue,
+  readOnly = false,
 }: {
   flag: string;
-  flagValue: any;
-}): Promise<null> {
+  flagValue?: boolean | number | string | null;
+  readOnly?: boolean;
+}): Promise<null | boolean | number | string | null> {
+  if (readOnly) {
+    return getRawFeatureFlagValue({ flag });
+  }
+
+  if (flagValue === undefined) {
+    throw new Error(
+      'toggleFeatureFlag requires flagValue when readOnly is false',
+    );
+  }
+
   const POSTGRES_CLIENT = await getCypressPostgresDb();
 
   await POSTGRES_CLIENT.insertInto('dwFeatureFlag')

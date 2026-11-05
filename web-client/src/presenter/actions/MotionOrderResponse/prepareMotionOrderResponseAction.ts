@@ -9,9 +9,11 @@ import {
   isValidDateString,
   TimeFormats,
 } from '@shared/business/utilities/DateHandler';
+import { ConsolidatedCasesWithCheckboxInfoType } from '@web-client/presenter/actions/CaseConsolidation/setMultiDocketingCheckboxesAction';
 import { determineMovantAndNonMovant } from '@web-client/presenter/actions/utilities/determineMovantAndNonMovant';
 import { state } from '@web-client/presenter/app.cerebral';
 import { formatAdditionalOrderClauseForRichText } from '@web-client/utilities/formatAdditionalOrderClauseForRichText';
+import { getConsolidatedCasesWording } from '@web-client/utilities/getConsolidatedCasesWording';
 import {
   additionalOrderTextArrayWithRequiredFirstField,
   normalizeAdditionalOrderTextArray,
@@ -20,7 +22,7 @@ import {
 export const prepareMotionOrderResponseAction = ({
   get,
   store,
-}: ActionProps) => {
+}: ActionProps): void => {
   const {
     additionalOrderTextArray,
     dueDate,
@@ -80,13 +82,21 @@ export const prepareMotionOrderResponseAction = ({
     ? formatDateString(responseDate, FORMATS.MONTH_DAY_YEAR)
     : '';
 
-  let createOrderSelectedCases = [] as any;
+  let createOrderSelectedCases: Pick<
+    ConsolidatedCasesWithCheckboxInfoType,
+    'checked' | 'docketNumber' | 'docketNumberWithSuffix'
+  >[] = [];
   let documentNumberText = `(doc. no. ${index}).`;
 
-  if (
+  const isOnLeadCaseAndAllCases =
     isOnLeadCase &&
-    issueOrderFor === MOTION_ORDER_RESPONSE_OPTIONS.issueOrderOptions.ALL_CASES
-  ) {
+    issueOrderFor === MOTION_ORDER_RESPONSE_OPTIONS.issueOrderOptions.ALL_CASES;
+
+  const consolidatedCasesWording = getConsolidatedCasesWording(
+    isOnLeadCaseAndAllCases,
+  );
+
+  if (isOnLeadCaseAndAllCases) {
     const consolidatedCases = caseDetail.consolidatedCases.map(c => {
       return {
         docketNumber: c.docketNumber,
@@ -106,7 +116,7 @@ export const prepareMotionOrderResponseAction = ({
       trialDate,
       FORMATS.MONTH_DAY_YEAR,
     );
-    preamblePrepend = `This case is set for trial at the session of the Court commencing on ${formattedTrialDate}, in ${trialLocation}.`;
+    preamblePrepend = `${consolidatedCasesWording.calendaredPreamble} set for trial at the session of the Court commencing on ${formattedTrialDate}, in ${trialLocation}.`;
   }
 
   const orderVerbiage = `that by ${responseDateFormatted}, ${nonMovant} shall file a Response to the ${motionDocumentTitle}.`;
@@ -124,7 +134,7 @@ export const prepareMotionOrderResponseAction = ({
 
   if (hasStrickenFromTrialSessions) {
     orderSections.push(
-      '<p class="indent-paragraph">ORDERED that this case is stricken from the trial session. It is further</p> <p class="indent-paragraph">ORDERED that jurisdiction is retained by the undersigned.',
+      `<p class="indent-paragraph">ORDERED that ${consolidatedCasesWording.orderedSubject} stricken from the trial session. It is further</p> <p class="indent-paragraph">ORDERED that jurisdiction is retained by the undersigned.`,
     );
   }
 

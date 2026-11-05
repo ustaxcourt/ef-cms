@@ -125,11 +125,14 @@ describe('Practitioner files a Motion to Withdraw as Counsel (M112)', () => {
       .get('[data-testid="success-alert"]')
       .contains('a', 'Print receipt.')
       .invoke('attr', 'href')
-      .then(receiptUrl => {
+      .then((receiptUrl: string | undefined) => {
+        if (!receiptUrl) {
+          throw new Error('The "Print receipt." link has no href');
+        }
         const filePath = 'cypress/downloads/filing-receipt.pdf';
 
         return cy
-          .request({ encoding: 'binary', url: receiptUrl as string })
+          .request({ encoding: 'binary', url: receiptUrl })
           .then(({ body }) => cy.writeFile(filePath, body, 'binary'))
           .then(() => cy.task<string>('parsePdf', { filePath }));
       });

@@ -52,7 +52,6 @@ const config: Config = {
     '^@aws-sdk/(.*)/(.*)$':
       '<rootDir>/../node_modules/@aws-sdk/$1/dist-cjs/submodules/$2/index.js',
   },
-  setupFiles: ['core-js'],
   testEnvironment: path.resolve(
     process.cwd(),
     'web-client/JsdomWithTextEncoderEnvironment.ts',
@@ -63,7 +62,7 @@ const config: Config = {
     '^.+\\.html?$': path.resolve(process.cwd(), 'web-client/htmlLoader.js'), //this is to ignore imported html files
   },
   transformIgnorePatterns: [
-    '/node_modules/(?!uuid|sinon|aws-sdk-client-mock|export-to-csv|htmlparser2|dom-serializer|domhandler|domelementtype|domutils|entities|kysely)',
+    '/node_modules/(?!@joi/date|openid-client|oauth4webapi|jose|uuid|sinon|aws-sdk-client-mock|export-to-csv|htmlparser2|dom-serializer|domhandler|domelementtype|domutils|entities|kysely)',
   ],
   setupFilesAfterEnv: [
     '<rootDir>../web-api/src/persistence/postgres/featureFlag/mocks.jest.ts',

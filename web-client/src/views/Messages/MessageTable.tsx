@@ -5,6 +5,7 @@ import {
   SORT_DESCENDING_TEXT,
 } from '@shared/business/entities/EntityConstants';
 import { Button } from '../../ustc-ui/Button/Button';
+import { CaseLink } from '@web-client/ustc-ui/CaseLink/CaseLink';
 import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
 import { ErrorNotification } from '../ErrorNotification';
 import { Icon } from '../../ustc-ui/Icon/Icon';
@@ -293,11 +294,15 @@ const MessageRow = ({
         </td>
       )}
       {columns.map(columnData => {
-        return getOneCell({
-          columnData,
-          message,
-          messageListId,
-        });
+        return (
+          <React.Fragment key={columnData.sortFieldInfo.sortField}>
+            {getOneCell({
+              columnData,
+              message,
+              messageListId,
+            })}
+          </React.Fragment>
+        );
       })}
     </tr>
   );
@@ -341,7 +346,7 @@ const getMessageDocketNumberCell = ({
 }: {
   messageListId: string;
   message: any;
-}) => {
+}): React.ReactElement => {
   return (
     <>
       <td className="consolidated-case-column">
@@ -356,7 +361,7 @@ const getMessageDocketNumberCell = ({
         colSpan={2}
         data-testid={`${messageListId}-docketNumber-cell`}
       >
-        {message.docketNumberWithSuffix}
+        <CaseLink formattedCase={message} />
       </td>
     </>
   );

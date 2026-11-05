@@ -133,7 +133,7 @@ export const calculateISODate = ({
 }: {
   dateString?: string;
   howMuch?: number;
-  units?: 'days' | 'months' | 'years' | 'hours' | 'minutes';
+  units?: 'days' | 'months' | 'years' | 'hours' | 'minutes' | 'seconds';
 }): string => {
   if (!howMuch && dateString) return dateString;
 

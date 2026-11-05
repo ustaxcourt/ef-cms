@@ -43,10 +43,6 @@ jobs:
         uses: actions/checkout@v7
         with:
           fetch-depth: ${{ inputs.fetch_depth }}
-      - name: Collect Workflow Telemetry
-        uses: runforesight/workflow-telemetry-action@v2
-        with:
-          comment_on_pr: false
       - name: NPM Install in Current Branch
         uses: ./.github/actions/dawson-node-bootstrap
       - name: Restore historical test file timings

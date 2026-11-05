@@ -4,17 +4,6 @@ Sometimes a test fails for no good reason. Simply re-running it may get it to pa
 
 In order to combat flaky tests, we have introduced some tooling to help identify possible causes and zero in on solutions. 
 
-## Telemetry
-
-Whenever a Github action runs that performs one of our tests, we collect and report the behavior of the machine running the test. It shows CPU usage, memory allocation, and timing. This can be helpful to determine whether or not the runner may require additional resources in order to become more reliable. Look for CPU or memory maxing out while the tests are running as indicators that a more powerful runner or parallelism may be required improve test reliability.
-
-To review the telemetry, simply navigate to one of the action runs, and the telemetry will be available in the pane below Artifacts.
-
-1. Load up the repo https://github.com/ustaxcourt/ef-cms
-1. Click [Actions](https://github.com/ustaxcourt/ef-cms/actions)
-1. Type "`is:failure`" into the filter box and hit enter
-1. Click on one of those actions, and find the telemetry under the Artifacts pane
-
 ## Artifacts
 
 Every Cypress test produces a video that you can review to identify precisely where the test ran off track. This can help you pinpoint where to troubleshoot. Perhaps a click didn't fire and the subsequent expectation failed. Figuring out why that click didn't fire may be where you start. In any case, take a moment to review the video if it's available to see where it failed. 
@@ -50,10 +39,6 @@ jobs:
         with:
           stack-version: 7.10.2
           security-enabled: false
-      - name: Collect Workflow Telemetry
-        uses: runforesight/workflow-telemetry-action@v2
-        with:
-          comment_on_pr: false
       - name: Install Node Dependencies
         run: npm ci
       - name: Run E2E Cypress

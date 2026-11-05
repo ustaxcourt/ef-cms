@@ -2,8 +2,23 @@ import { loginAsAdmissionsClerk } from 'cypress/helpers/authentication/login-as-
 import { createAPractitioner } from 'cypress/helpers/accountCreation/create-a-practitioner';
 import { selectTypeaheadInput } from 'cypress/helpers/components/typeAhead/select-typeahead-input';
 import { assertExists, retry } from 'cypress/helpers/retry';
+import { checkA11y } from 'cypress/local-only/support/generalCommands/checkA11y';
 
 describe('Practitioner Search', () => {
+  ['FRED', 'K', 'PT0000'].forEach(invalidBarNumber => {
+    it(`should show no matches when an internal user searches by bar number "${invalidBarNumber}"`, () => {
+      loginAsAdmissionsClerk();
+      cy.get('[data-testid="search-link"]').click();
+      cy.get('[data-testid="practitioner-search-tab"]').click();
+      cy.get('[data-testid="bar-number-search-input"]').type(invalidBarNumber);
+      cy.get(
+        '[data-testid="practitioner-search-by-bar-number-button"]',
+      ).click();
+      cy.get('[data-testid="no-search-results"]').should('be.visible');
+      checkA11y();
+    });
+  });
+
   it('should return practitioner results when the user filters by original bar state', () => {
     loginAsAdmissionsClerk();
     createAPractitioner({ originalBarState: 'New Jersey' }).then(
