@@ -5,7 +5,7 @@ export async function up(db: Kysely<any>): Promise<void> {
   await sql`
       insert into dw_feature_flag (name, value)
       values ('motion-visibility-policy-change-date', '{"current": "2027-01-01"}')
-      on conflict(name) do update set value = excluded.value
+      on conflict(name) do nothing
     `.execute(db);
 }
 
