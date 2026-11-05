@@ -1,8 +1,9 @@
 import type { ClerkDashboardPetitionsTabStats } from '@web-api/business/useCases/reports/clerkDashboardStats';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 import { get } from '../requests';
 
 export const getClerkDashboardPetitionsStatsInteractor = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
 ): Promise<ClerkDashboardPetitionsTabStats> => {
   return get({
     applicationContext,
