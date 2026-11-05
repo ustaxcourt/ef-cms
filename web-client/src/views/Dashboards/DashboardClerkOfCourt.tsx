@@ -35,7 +35,7 @@ const calendarAndFiscalYearSelectors = ({
   isMobile?: boolean;
   optionKey: ClerkOfCourtDashboardYearOption;
   setClerkOfCourtDashboardOptionsSequence: Function;
-}) => {
+}): React.JSX.Element => {
   return (
     <div
       className={classNames(
@@ -120,7 +120,7 @@ const casesData = ({
   isMobile?: boolean;
   setClerkOfCourtDashboardOptionsSequence: Function;
   casesStatus: ClerkOfCourtDashboardStatsStatus;
-}) => {
+}): React.JSX.Element => {
   const {
     casesClosedAndOnAppealByMonthChartData,
     casesClosedAndOnAppealLegendTotals,

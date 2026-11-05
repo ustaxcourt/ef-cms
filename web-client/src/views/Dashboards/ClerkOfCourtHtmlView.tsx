@@ -11,7 +11,7 @@ const HtmlTableDocument = ({
   rows,
   title,
   totalHeader,
-}: ClerkOfCourtHtmlTable) => (
+}: ClerkOfCourtHtmlTable): React.JSX.Element => (
   <html lang="en">
     <head>
       <title>{title}</title>
@@ -56,7 +56,7 @@ export const ClerkOfCourtHtmlView = connect<
 >(
   clerkOfCourtHtmlViewDeps,
   function ClerkOfCourtHtmlView({ buildHtmlTableDocumentHelper, title }) {
-    const openHtmlTable = () => {
+    const openHtmlTable = (): void => {
       const html = `<!DOCTYPE html>${renderToStaticMarkup(
         <HtmlTableDocument
           {...buildHtmlTableDocumentHelper.openCasesByTypeTable}

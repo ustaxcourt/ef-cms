@@ -92,10 +92,15 @@ export type ClerkDashboardTimeframe = { begin: Date; end: Date };
 
 const FISCAL_YEAR_START_MONTH = Month.October;
 
-export const getMonthOrderCallback = (isFiscal: boolean) =>
-  isFiscal
-    ? ({ month }: { month: Month }) => FISCAL_MONTH_PRIORITY[month - 1]
-    : ({ month }: { month: Month }) => month;
+type MonthOrderCallback = ({ month }: { month: Month }) => number;
+
+const byCalendarMonth: MonthOrderCallback = ({ month }) => month;
+
+const byFiscalMonth: MonthOrderCallback = ({ month }) =>
+  FISCAL_MONTH_PRIORITY[month - 1];
+
+export const getMonthOrderCallback = (isFiscal: boolean): MonthOrderCallback =>
+  isFiscal ? byFiscalMonth : byCalendarMonth;
 
 export const authorizeClerkDashboard = (
   authorizedUser: UnknownAuthUser,

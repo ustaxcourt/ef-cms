@@ -14,7 +14,7 @@ export const ClerkOfCourtChartStatus = ({
 }: {
   children: React.ReactNode;
   status: ClerkOfCourtDashboardStatsStatus;
-}) => {
+}): React.JSX.Element => {
   if (status === 'loaded') {
     return <>{children}</>;
   }
