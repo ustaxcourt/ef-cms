@@ -12,6 +12,7 @@ type GroupedOptionsStructure = {
 
 type SelectParamsType = {
   defaultValue: { label: string; value: string };
+  id?: string;
   name: string;
   onChange: (value: string) => void;
   options: (FlatOptionsStructure | GroupedOptionsStructure)[];
@@ -28,6 +29,7 @@ function isGroupedOptionsStructure(obj: any): obj is GroupedOptionsStructure {
 
 export function Select({
   defaultValue,
+  id,
   name,
   onChange,
   options,
@@ -37,6 +39,7 @@ export function Select({
     <>
       <select
         className="usa-select margin-bottom-2"
+        id={id}
         name={name}
         value={value || ''}
         onChange={e => {

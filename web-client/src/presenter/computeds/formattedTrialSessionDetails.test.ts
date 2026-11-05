@@ -66,6 +66,19 @@ describe('formattedTrialSessionDetails', () => {
       );
   });
 
+  it('should allow docket clerks to edit future Reporting sessions', () => {
+    mockTrialSession = {
+      ...TRIAL_SESSION,
+      startDate: FUTURE_DATE,
+      isReportingSession: true,
+      sessionType: SESSION_TYPES.regular,
+    };
+    const result = runCompute(formattedTrialSessionDetails, {
+      state: { user: docketClerkUser, trialSession: mockTrialSession },
+    });
+    expect(result.editPermissions).toBe('all');
+  });
+
   it('should return false for isHybridSession when sessionType is set to Regular', () => {
     mockTrialSession = {
       ...TRIAL_SESSION,

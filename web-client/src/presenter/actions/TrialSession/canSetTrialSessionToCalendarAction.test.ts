@@ -31,6 +31,31 @@ describe('canSetTrialSessionToCalendarAction', () => {
     };
   });
 
+  it('should explain that Reporting sessions cannot be calendared yet', async () => {
+    applicationContext
+      .getUseCases()
+      .canSetTrialSessionAsCalendaredInteractor.mockReturnValue({
+        canSetAsCalendared: false,
+        emptyFields: [],
+      });
+
+    await runAction(canSetTrialSessionToCalendarAction, {
+      modules: { presenter },
+      state: {
+        trialSession: {
+          ...VALID_TRIAL_SESSION,
+          proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.reporting,
+        },
+      },
+    });
+
+    expect(pathNoStub).toHaveBeenCalledWith({
+      alertWarning: {
+        message: 'Reporting sessions cannot be calendared yet.',
+      },
+    });
+  });
+
   it('should return the no path when the trial session address is not valid and a judge has not been selected', async () => {
     applicationContext
       .getUseCases()
