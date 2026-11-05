@@ -737,7 +737,7 @@ describe('updateTrialSession Reporting', () => {
     const reporting = { ...reportingSession, estimatedEndDate: undefined };
     getTrialSessionById.mockResolvedValue(reporting);
     await expect(updateSession(reporting)).rejects.toThrow(
-      'Enter a valid estimated end date',
+      'Enter a valid due date',
     );
     expect(updateTrialSessionMocked).not.toHaveBeenCalled();
     expect(createWorkingCopyForNewUserOnSession).not.toHaveBeenCalled();

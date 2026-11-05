@@ -459,6 +459,19 @@ export class TrialSession extends JoiValidationEntity {
     },
   };
 
+  getValidationErrors(): Record<string, string> | null {
+    const errors: Record<string, string> | null = super.getValidationErrors();
+    if (
+      this.isReporting() &&
+      errors &&
+      (errors.startDate || errors.estimatedEndDate)
+    ) {
+      errors.startDate = 'Enter a valid due date';
+      delete errors.estimatedEndDate;
+    }
+    return errors;
+  }
+
   getValidationRules() {
     return {
       ...TrialSession.validationRules.COMMON,
