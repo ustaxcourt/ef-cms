@@ -186,8 +186,14 @@ const TrialSessionFilters = connect(
           <fieldset className="usa-fieldset">
             <legend className="usa-legend">Proceeding type</legend>
             <div className="usa-radio usa-radio__inline">
-              {['All', ...Object.values(TRIAL_SESSION_PROCEEDING_TYPES)].map(
-                proceedingOption => (
+              {['All', ...Object.values(TRIAL_SESSION_PROCEEDING_TYPES)]
+                .filter(
+                  proceedingOption =>
+                    proceedingOption !==
+                      TRIAL_SESSION_PROCEEDING_TYPES.reporting ||
+                    trialSessionsHelper.showReportingOption,
+                )
+                .map(proceedingOption => (
                   <React.Fragment key={proceedingOption}>
                     <input
                       checked={
@@ -214,8 +220,7 @@ const TrialSessionFilters = connect(
                       {proceedingOption}
                     </label>
                   </React.Fragment>
-                ),
-              )}
+                ))}
             </div>
           </fieldset>
           <DateRangePickerComponent

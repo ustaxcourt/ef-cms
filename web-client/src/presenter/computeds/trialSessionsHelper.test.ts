@@ -5,6 +5,7 @@ import {
   formatNow,
 } from '@shared/business/utilities/DateHandler';
 import {
+  ALLOWLIST_FEATURE_FLAGS,
   SESSION_STATUS_TYPES,
   SESSION_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
@@ -33,6 +34,26 @@ const trialSessionsHelper = withAppContextDecorator(
 );
 
 describe('trialSessionsHelper', () => {
+  it.each([true, false])(
+    'should gate the Reporting filter with flag %s',
+    enabled => {
+      const result = runCompute(trialSessionsHelper, {
+        state: {
+          featureFlags: {
+            [ALLOWLIST_FEATURE_FLAGS.REPORTING_CALENDARS.key]: enabled,
+          },
+          judges: [],
+          permissions: getUserPermissions(docketClerk1User),
+          trialSessionsPage: {
+            ...trialSessionsPageState,
+            trialSessions: [],
+          },
+        },
+      });
+      expect(result.showReportingOption).toBe(!!enabled);
+    },
+  );
+
   let trialSessionsPageState: typeof initialTrialSessionPageState;
   let trialSession1: TrialSessionInfoDTO;
   let trialSession2: TrialSessionInfoDTO;

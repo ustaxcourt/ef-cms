@@ -23,6 +23,22 @@ A second DOJ practitioner was added to local seed data:
 - email: `dojpractitioner2@example.com`
 - bar number: `DT2222`
 </details>
+<details><summary>10444 - Reporting Trial Sessions</summary>
+
+## Manual Deployment Steps
+
+### After Deployment
+
+`2026-11-04T16_36_54Z-add-reporting-calendars-flag.ts` creates the `reporting-calendars` flag and sets it to `false`. After deployment, set the flag to `true` to enable Reporting Trial Sessions.
+
+Script to add the flag and set it to `true`:
+
+```bash
+./scripts/postgres/featureFlags/setup-reporting-calendars.ts
+```
+
+</details>
+
 <details><summary>Dependency Updates - Week of 2026-10-26</summary>
 
 ## Local
