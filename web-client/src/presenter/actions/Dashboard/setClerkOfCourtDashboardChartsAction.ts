@@ -1,10 +1,14 @@
+import {
+  ClerkDashboardCasesTabStats,
+  ClerkDashboardPetitionsTabStats,
+} from '@web-api/business/useCases/reports/clerkDashboardStats';
 import { ClerkOfCourtDashboardTab } from '@web-client/presenter/clerkOfCourtDashboardState';
 import { state } from '@web-client/presenter/app.cerebral';
 
 const getTabStats = (
   applicationContext: ActionProps['applicationContext'],
   tab: ClerkOfCourtDashboardTab,
-) =>
+): Promise<ClerkDashboardCasesTabStats | ClerkDashboardPetitionsTabStats> =>
   tab === 'cases'
     ? applicationContext
         .getUseCases()
@@ -25,7 +29,7 @@ const latestRequestIds: Record<ClerkOfCourtDashboardTab, number> = {
  */
 export const setClerkOfCourtDashboardChartsAction =
   (tab: ClerkOfCourtDashboardTab) =>
-  async ({ applicationContext, store }: ActionProps) => {
+  async ({ applicationContext, store }: ActionProps): Promise<void> => {
     const requestId = ++latestRequestIds[tab];
     store.set(state.clerkOfCourtDashboardStats[tab].status, 'loading');
 

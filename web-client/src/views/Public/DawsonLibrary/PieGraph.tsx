@@ -17,7 +17,7 @@ export interface PieGraphData {
 
 const FULL_CIRCLE_DEGREES = 360;
 
-const PieSector = (props: PieSectorShapeProps) => {
+const PieSector = (props: PieSectorShapeProps): React.JSX.Element => {
   // recharts spreads each data entry into the shape props, so color is available directly.
   const fill = (props as unknown as PieGraphData).color;
   return (
@@ -119,7 +119,7 @@ export const PieGraph = ({
   tooltipTitle?: string;
   data: PieGraphData[];
   isAnimationActive?: boolean;
-}) => {
+}): React.JSX.Element => {
   const liveRegionRef = useRef<HTMLDivElement>(null);
   const [outerRadius, setOuterRadius] = useState<string>(() =>
     typeof window !== 'undefined' && window.innerWidth < XS_BREAKPOINT
@@ -139,7 +139,7 @@ export const PieGraph = ({
     if (liveRegionRef.current) liveRegionRef.current.textContent = text;
   };
 
-  const openHtmlTable = () => {
+  const openHtmlTable = (): void => {
     const total = data.reduce((sum, d) => sum + d.value, 0);
     const rows = data
       .map(d => {

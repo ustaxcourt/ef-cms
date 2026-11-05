@@ -3,7 +3,7 @@ import {
   CLOSED_CASE_STATUSES,
 } from '@shared/business/entities/EntityConstants';
 import { getDbReader } from '@web-api/persistence/postgres/database';
-import { sql } from 'kysely';
+import { RawBuilder, sql } from 'kysely';
 
 export type CaseStatusChangeGroup = 'closed' | 'onAppeal';
 
@@ -59,7 +59,7 @@ export const caseStatusChangesByYear = async ({
       : fiscalYear.begin;
   const end =
     calendarYear.end > fiscalYear.end ? calendarYear.end : fiscalYear.end;
-  const isWithin = (timeframe: Timeframe) =>
+  const isWithin = (timeframe: Timeframe): RawBuilder<boolean> =>
     sql<boolean>`changed_at >= ${timeframe.begin} AND changed_at < ${timeframe.end}`;
 
   return getDbReader(async reader => {
