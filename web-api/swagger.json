@@ -4756,6 +4756,67 @@
         }
       }
     },
+    "/users/email-practitioner-check": {
+      "post": {
+        "tags": ["user"],
+        "summary": "Checks whether an email address belongs to a practitioner",
+        "description": "Checks whether an email address belongs to a practitioner.\n",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "email",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "description": "the email address to check"
+                }
+              },
+              "required": ["email"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
     "/users/verify-email": {
       "put": {
         "tags": ["user"],
