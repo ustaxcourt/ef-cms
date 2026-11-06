@@ -2,7 +2,7 @@
 
 A baseline is a recorded set of accepted pre-existing findings, so a pull request fails only on findings it introduces.
 
-**The strategy.** Three workflows are required checks on PRs into `test`, as the first two already are on `staging`:
+**The strategy.** Three workflows are required checks on PRs into both `test` and `staging`. The first two already are on `staging`; `Findings vs staging` is the new one on both:
 
 | Workflow | Required check | Catches |
 |----------|----------------|---------|
@@ -10,16 +10,15 @@ A baseline is a recorded set of accepted pre-existing findings, so a pull reques
 | `security-secrets.yml` | `Security Gate (Secrets)` | New secrets in the PR's commits |
 | `security-compare.yml` ("Security - No New Findings") | `Findings vs staging` | New Trivy `fs` findings, including CVEs published since the code merged |
 
-A finding is caught on `test`, before it reaches `staging`, and `staging` stays the accepted baseline, so it doesn't grow. The other scans (dependency review, npm audit, lockfile-lint, container scans and ZAP) are out of scope.
+A finding is caught on `test` and again on `staging`, before it can merge to `staging`, and `staging` stays the accepted baseline, so it doesn't grow. The other scans (dependency review, npm audit, lockfile-lint, container scans and ZAP) are out of scope.
 
 In the table below, "PR gate (staging)" means the tool can block a merge into `staging`, according to the `staging` branch rulesets. Today no security check is required on `test`; see [Branch rules today](#branch-rules-today).
 
 ## Assumptions (READ FIRST)
 This document was written with the following assumptions in mind:
-1. **If a particular branch introduces a finding, that branch should fix it.** if it doesn't significantly increase scope, a branch should also fix any new finding detected.
-2. We want to prevent the baseline of findings `Staging` from growing larger, by ensuring new findings are resolved before they get merged there.
-3. We detect new findings on PRs into both `test` and `staging`, giving us two opportunities to catch them before they make it into `staging`.
-4. If a new CVE from Trivy FS is detected **unrelated** to a PR's changes and the required fix is small enough, go ahead and fix it now. If it require substantial changes and/or testing, defer it to a ticket for further investigation by the weekly scan team.
+1. **If a particular branch introduces a finding, that branch should fix it.** If it doesn't significantly increase scope, a branch should also fix any other new finding it detects, as long as the weekly scan team isn't already addressing it.
+2. We want to keep the baseline of findings on `staging` from growing with new blocking-severity findings, by requiring each one to be fixed or temporarily risk-accepted (advisory, sign-off and an expiring ignore) before it merges there. For Trivy `fs` that means new HIGH, CRITICAL and UNKNOWN vulnerabilities. CVEs published against unchanged code, and findings below the blocking thresholds, are handled by the weekly scan team.
+3. We detect new SAST, secrets and Trivy `fs` findings on PRs into both `test` and `staging`, giving us two opportunities to catch them before they make it into `staging`. CodeQL on `test` follows once its comparison step is built.
 
 ## Contents
 
@@ -47,7 +46,7 @@ This document was written with the following assumptions in mind:
 | ShellCheck | `security-sast.yml` | Yes. `Security Gate (SAST)` is required on `staging`. | No. `.shellcheckignore` holds one line (`node_modules/`), but nothing reads it: ShellCheck has no ignore file, and `run-shellcheck.sh` excludes paths in its own `find` command. The job fails on any error-level finding. | No. Not covered in the suppression table. | A baseline method, and the documentation for it. |
 | Gitleaks | `security-secrets.yml` | Yes. `Security Gate (Secrets)` is required on `staging`. | Yes. `.gitleaksignore` (6 entries) and `.gitleaks.toml`. The PR scan is limited to the PR's own commits. | Yes. Fingerprint in `.gitleaksignore`, or an `allowlist` entry. | Nothing. |
 | Trivy (`fs`), the `trivy` job that uploads from `staging` | `security-supply-chain.yml` | No. `continue-on-error`, and not a required check. | No. There is no `.trivyignore`. | Partly. Security tab dismissal only. | An in-repo baseline method (`.trivyignore` or equivalent), and its documentation. |
-| Trivy (`fs`) | `security-compare.yml` | No. The job fails if the branch has a finding that `staging` doesn't, but it is not a required check. | Yes, derived from a scan of `staging` in the same job on every run, so it needs no refresh. Findings are compared by identity (`ruleId`, package and file), not by count. | n/a, since staging is rescanned each run. | It isn't a required check. Also, the summary has no cap on the number of findings it lists. |
+| Trivy (`fs`) | `security-compare.yml` | Planned: required on `test` and `staging`. Today the job fails if the branch has a finding that `staging` doesn't, but it is not a required check. | Yes, derived from a scan of `staging` in the same job on every run, so it needs no refresh. Findings are compared by identity (`ruleId`, package and file), not by count. | n/a, since staging is rescanned each run. | A ruleset change to require it on `test` and `staging`, and the docs-only fix. Also, the summary has no cap on the number of findings it lists. |
 
 ## Branch rules today
 
@@ -74,24 +73,24 @@ Read from the repository's rulesets (`gh api repos/ustaxcourt/ef-cms/rulesets`) 
 | CodeQL | The alert is not already open on `staging`. The `staging` code-scanning rule blocks new high-or-higher alerts. | Alert state on `staging`. | Nothing. The job only has to complete, and its results aren't uploaded, so read the job log and fix what it reports rather than leaving it for the `staging` PR. | Decided: add a step to `Security Gate (SAST)` that diffs the local SARIF against `staging`'s open alerts ([CodeQL on `test`](#codeql-on-test)). |
 | ShellCheck | Any error-level finding. There is no baseline. | n/a | n/a | Nothing. Don't add paths to `.shellcheckignore`: nothing reads it. |
 | Gitleaks | It is in a commit that belongs to the PR and is not in `.gitleaksignore` or `.gitleaks.toml`. | The PR's own commits. | Same: `base.sha..head.sha`, with `base.sha` being `test`'s tip. A merge of `staging` into the branch also falls in the range. Those commits already passed the `staging` gate. | Nothing. A false positive goes in `.gitleaksignore` in a separate PR with the approver's sign-off ([Secrets scanning](../secrets-scanning.md#2-pr-ci-gate-blocking)). |
-| Trivy `fs` (`Findings vs staging`) | The rule, package and file combination is not in a Trivy scan of `staging` made in the same job. HIGH, CRITICAL and UNKNOWN, vulnerabilities only. | `staging`, scanned on every run. | Same, but the scan merges the PR into `test`, so another branch's unpromoted finding can show as new on yours. | Decided: require the check on `test` (item 2 below). |
+| Trivy `fs` (`Findings vs staging`) | The rule, package and file combination is not in a Trivy scan of `staging` made in the same job. HIGH, CRITICAL and UNKNOWN, vulnerabilities only. | `staging`, scanned on every run. | Same, but the scan merges the PR into `test`, so another branch's unpromoted finding can show as new on yours. | Decided: require the check on `test` and `staging` (item 2 below). |
 
 ### Required for `test` to catch new findings
 
 `test` requires approvals and the functional checks today, and no security check. To block PRs on new findings without uploading anything:
 
 1. Require `Security Gate (SAST)` and `Security Gate (Secrets)` on `test`, as on `staging`.
-2. Require `Findings vs staging` on `test`, so new Trivy `fs` findings block there too. This is decided. A person reads the result, so the developer fixes what their branch caused and logs what it didn't ([Findings on pull requests](playbook.md#findings-on-pull-requests)).
+2. Require `Findings vs staging` on `test` and `staging`, so a new Trivy `fs` finding must be fixed or temporarily risk-accepted before it merges to either. This is decided. A person reads the result, so the developer fixes what their branch caused and logs what it didn't ([Findings on pull requests](playbook.md#findings-on-pull-requests)).
 3. Add the CodeQL comparison step to `Security Gate (SAST)`, so CodeQL blocks new high-or-higher alerts on `test` as the code-scanning rule does on `staging` ([CodeQL on `test`](#codeql-on-test)). This is decided.
-4. Resolve the docs-only case. `security-sast.yml` and `security-compare.yml` skip PRs that change only Markdown, `.gitignore`, `.nvmrc` or `docs/**` (SAST also skips `.circleci/config.yml`). `security-secrets.yml` skips only `.gitignore` and `.nvmrc`. A required check that is skipped stays pending, so a docs-only PR cannot merge. Remove `paths-ignore` from the gate workflows, or add a gate that always reports a status.
+4. Resolve the docs-only case. `security-sast.yml` and `security-compare.yml` skip PRs that change only Markdown, `.gitignore`, `.nvmrc` or `docs/**` (SAST also skips `.circleci/config.yml`). `security-secrets.yml` skips only `.gitignore` and `.nvmrc`. A required check that is skipped stays pending, so a docs-only PR cannot merge. This applies to both `test` and `staging` once the checks are required on both. Remove `paths-ignore` from the gate workflows, or add a gate that always reports a status.
 
 None of these changes have been made. Each is a ruleset or workflow edit for a follow-up ticket.
 
 ### Trivy fs findings
 
-The required checks are the SAST and Secrets gates and `Findings vs staging` (Trivy `fs`). Container scans are not part of this strategy. Static code issues are caught before they reach `staging`, and so are CVEs published since the code last merged.
+The required checks are the SAST and Secrets gates and `Findings vs staging` (Trivy `fs`). Container scans are not part of this strategy. Static code issues are caught before they reach `staging`, and so are CVEs published since the code last merged, on both `test` and `staging`.
 
-When `Findings vs staging` fails, the developer follows [Trivy fs findings](playbook.md#trivy-fs-findings) in the playbook. If their change caused the finding, or the PR is the weekly scan work, they take the published fix if this week's dependency update doesn't already have it, or check whether the CVE applies, record it in VEX, open a draft security advisory and add an expiring `.trivyignore` line. If their change didn't cause it, for example a CVE published since the code merged, or another PR's unpromoted dependency on `test`, they first tell the weekly scan team and add the alert number to the weekly scan ticket, so the two efforts don't cover the same ground. If the fix is small and the team isn't already on it, they fix it in the PR. If the fix would blow the PR's scope, such as a package update that forces many API reference changes or needs testing well beyond what the story covers, they leave it with the weekly scan team and don't open a ticket or advisory. So that their PR isn't blocked, they add an expiring `.trivyignore` line themselves, set to the Saturday before the next weekly scan, since no ruleset has a bypass actor. The mechanics of that ignore line are under [Remediating or accepting a failure](#remediating-or-accepting-a-failure).
+When `Findings vs staging` fails, the developer follows [Trivy fs findings](playbook.md#trivy-fs-findings) in the playbook. If their change caused the finding, or the PR is the weekly scan work, they take the published fix if this week's dependency update doesn't already have it, or check whether the CVE applies, record it in VEX, open a draft security advisory and add an expiring `.trivyignore` line. If their change didn't cause it, for example a CVE published since the code merged, or another PR's unpromoted dependency on `test`, they first tell the weekly scan team and add the alert number to the weekly scan ticket, so the two efforts don't cover the same ground. If the fix is small and the team isn't already on it, they fix it in the PR. If the fix would blow the PR's scope, such as a package update that forces many API reference changes or needs testing well beyond what the story covers, they leave it with the weekly scan team and don't open a ticket or advisory. So that their PR isn't blocked, they add an expiring `.trivyignore` line themselves, set to the Saturday before the next weekly scan, since no ruleset has a bypass actor. Because the check also runs on the `staging` PR, a CVE published between the `test` PR and the `staging` PR can block the `staging` PR, and the same steps apply. The mechanics of that ignore line are under [Remediating or accepting a failure](#remediating-or-accepting-a-failure).
 
 ## Establishing the baseline
 
@@ -126,7 +125,7 @@ The accepted baseline grows whenever something stops a finding from failing or s
 
 | Way the baseline grows | Stopped by today | Gap |
 |------------------------|------------------|-----|
-| A PR merges to `staging` with a new finding | `Security Gate (SAST)`, `Security Gate (Secrets)` and the CodeQL rule. | Checkov findings outside the four hard-fail checks, and new Trivy `fs` findings, merge without failing. `Findings vs staging` is not required. |
+| A PR merges to `staging` with a new finding | `Security Gate (SAST)`, `Security Gate (Secrets)` and the CodeQL rule. | Checkov findings outside the four hard-fail checks merge without failing, and so do findings below the Trivy `fs` thresholds (HIGH, CRITICAL and UNKNOWN). `Findings vs staging` is not required yet; it is planned for `test` and `staging`. |
 | A PR adds a suppression or baseline entry: `nosemgrep`, `#checkov:skip`, `shellcheck disable`, `.checkov.baseline`, `.gitleaksignore`, `.gitleaks.toml`, `.trivyignore` | A reviewer noticing it. | Nothing enforces the approver's sign-off. |
 | A PR widens what the scans skip: `--exclude` or `--skip-check` in `security-sast.yml`, `paths-ignore` in a workflow or in `.github/codeql/codeql-config.yml` | Same. | Same. |
 | An alert is dismissed in the Security tab | Write access to the repository. | Dismissals are not reviewed anywhere in code. |
@@ -144,10 +143,10 @@ The [playbook](playbook.md#same-day-triage) already defines what counts as an em
 **The gates are not bypassed.** No ruleset has a bypass actor. Apart from ShellCheck, which scans every script, the gates fail only on findings the PR adds, so a fix that removes a finding passes them.
 
 1. **Triage the same day.** Follow [Same-day triage](playbook.md#same-day-triage). The approver opens the draft advisory and is told directly. For a secret, rotate first ([Secrets](playbook.md#secrets)); the code change is the clean-up, not the fix.
-2. **Branch from `staging`** and change only what the fix needs. Open the PR into `staging`. `test` may be skipped when the approver agrees on the PR, because `test` is a dry run for the same gates. Skipping it also skips the product owner's check in the `test` environment, and `Findings vs staging`, which is required only on `test` by design: it stops new findings early where it can. A new Trivy `fs` finding that reaches `staging` this way is handled by the normal flow for `staging` findings ([weekly triage](weekly-triage.md)).
+2. **Branch from `staging`** and change only what the fix needs. Open the PR into `staging`. `test` may be skipped when the approver agrees on the PR, because `test` is a dry run for the same gates. Skipping it loses the product owner's check in the `test` environment and the early warning, but not the Trivy check, which also runs on the `staging` PR. If an emergency PR hits a finding it didn't cause, the developer applies the same temporary acceptance on that PR (expiring `.trivyignore` line, as in [Trivy fs findings](#trivy-fs-findings)).
 3. **If the fix trips a gate,** fix that finding. If it cannot be fixed, the approver signs off on the PR the same day, the suppression goes on the branch, and the advisory is opened before merge. An emergency shortens the wait for sign-off, not what is recorded. See [Remediating or accepting a failure](#remediating-or-accepting-a-failure).
 4. **Ask for the earlier deploy** as soon as the PR merges. [Deploys follow the court's schedule](playbook.md#what-counts-as-resolved), and the playbook already has the owner ask the court for an earlier one for a Critical or High finding in T1.
-5. **Back-merge `staging` into `test`** afterwards so `test` carries the fix.
+5. **Back-merge `staging` into `test`** afterwards so `test` carries the fix, and any `.trivyignore` line that came with it.
 
 ## Remediating or accepting a failure
 
@@ -167,7 +166,7 @@ How to write the suppression for each scanner is in [scanner-reference.md](scann
 | CodeQL | No on `staging`: a new alert stays open until dismissed in the Security tab, and the `staging` rule blocks on it. On `test` the comparison step will block it once built. No suppression comment is verified. | The comparison step is not built ([CodeQL on `test`](#codeql-on-test)). |
 | ShellCheck | Yes. The `shellcheck disable` comment travels with the line. | None. |
 | Gitleaks | Yes, once `.gitleaksignore` is on the branch the PR is compared with. It goes in a separate PR, after rotation if the secret was real. | None. |
-| Trivy `fs` | Yes, for both the branch scan and the `staging` scan, while the `.trivyignore` entry has not expired. The deferred finding's issue or advisory is its record. When the entry expires the finding shows again, so an unfixed one comes back to attention. | Needs the ignore file below. |
+| Trivy `fs` | Yes, for both the branch scan and the `staging` scan, while the `.trivyignore` entry has not expired. The deferred finding's issue or advisory is its record. When the entry expires the finding shows again in the Security tab, so an unfixed one comes back to attention. Expiry doesn't block PRs: both scans read the same file, so the finding is on both sides and no longer new. | Needs the ignore file below. |
 
 **Trivy `fs` uses a `.trivyignore` file.** `aquasecurity/trivy-action@v0.36.0` takes a `trivyignores` input, a list of `.trivyignore` files or one `.trivyignore.yaml`. The plain `.trivyignore` takes an `exp:` date after the ID, as in `CVE-2022-1234 exp:2026-11-09`, and matches by ID only, so the advisory's GHSA ID and reason go in a comment above the entry. The playbook's [Trivy fs findings](playbook.md#trivy-fs-findings) sets the expiry to the Monday the next weekly dependency update starts. The YAML form can also scope an entry to a path or purl, but Trivy marks it experimental, so use the plain file unless scoping is needed. Pass the file to the branch scan in `security-compare.yml` so the finding stops being "new". The `trivy` job that uploads from `staging` also reads a root `.trivyignore` by default, which is intended: the point of the file is to catch a new finding early on `test`, and if it isn't caught there, the same check on `staging` catches it. A deferred finding drops off the Security tab until its entry expires, then reappears if it hasn't been fixed. This is not built yet: the file does not exist and the input is not passed. Confirm the format works with the pinned `trivy-action` version first.
 
