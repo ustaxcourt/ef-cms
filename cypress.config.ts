@@ -116,6 +116,12 @@ export default defineConfig({
         parsePdf({ filePath }) {
           return parsePdf({ filePath });
         },
+        setAllowedTerminalIpAddresses(ipAddresses) {
+          return toggleFeatureFlag({
+            flag: 'allowed-terminal-ips',
+            flagValue: ipAddresses,
+          });
+        },
         table(message) {
           console.table(message);
           return null;
