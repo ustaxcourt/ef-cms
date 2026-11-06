@@ -473,6 +473,14 @@ export const COURT_ISSUED_EVENTS: CourtIssuedEvent[] = [
     requiresSignature: false,
   },
   {
+    eventCode: 'NAJ',
+    documentType: 'Notice of Assignment of Judge',
+    documentTitle: 'Notice of Assignment of Judge to [Judge Name]',
+    scenario: 'Type I',
+    isNotice: true,
+    requiresSignature: false,
+  },
+  {
     eventCode: 'PTRL',
     documentType: 'Partial Trial before',
     documentTitle: 'Partial Trial before [Judge] at [Place]. [Anything]',

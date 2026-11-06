@@ -86,7 +86,7 @@ export const PrimaryDocumentForm = connect(
           <FormGroup errorText={validationErrors.eventCode}>
             <label
               className="usa-label"
-              htmlFor="react-select-2-input"
+              htmlFor="document-type-input"
               id="document-type-label"
             >
               Document type
@@ -96,6 +96,7 @@ export const PrimaryDocumentForm = connect(
               aria-describedby="document-type-label"
               data-testid="primary-document-type-search"
               id="document-type"
+              inputId="document-type-input"
               isClearable={true}
               name="eventCode"
               options={internalTypesHelper.internalDocumentTypesForSelectSorted}
@@ -129,7 +130,7 @@ export const PrimaryDocumentForm = connect(
             >
               <label
                 className="usa-label"
-                htmlFor="react-select-3-input"
+                htmlFor="secondary-document-type-input"
                 id="secondary-document-type-label"
               >
                 Which Document Is This Motion for Leave For?
@@ -142,6 +143,7 @@ export const PrimaryDocumentForm = connect(
                 aria-describedby="secondary-document-type-label"
                 data-testid="secondary-document-type-search"
                 id="secondary-document-type"
+                inputId="secondary-document-type-input"
                 isClearable={true}
                 name="secondaryDocument.eventCode"
                 options={

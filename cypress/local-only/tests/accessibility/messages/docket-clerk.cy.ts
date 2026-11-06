@@ -1,5 +1,22 @@
 import { checkA11y } from '../../../support/generalCommands/checkA11y';
+import {
+  completeMessageFromMyInbox,
+  sendMessageOnCase,
+} from '../../../../helpers/messages/send-message-on-case';
+import { getCurrentDateTimeInMillis } from '@shared/business/utilities/DateHandler';
 import { loginAsDocketClerk } from '../../../../helpers/authentication/login-as-helpers';
+
+// Seed data has no completed messages, so create one to ensure the
+// Completed tables render at least one row (with a docket number link).
+function createCompletedMessageAsDocketClerk(): void {
+  const subject = `Docket clerk a11y ${getCurrentDateTimeInMillis()}`;
+  sendMessageOnCase({
+    docketNumber: '103-20',
+    subject,
+    to: { recipient: 'Test Docketclerk', section: 'docket' },
+  });
+  completeMessageFromMyInbox(subject);
+}
 
 describe('Messages', () => {
   beforeEach(() => {
@@ -26,9 +43,13 @@ describe('Messages', () => {
 
     it('Completed - should be free of a11y issues', () => {
       loginAsDocketClerk();
+      createCompletedMessageAsDocketClerk();
 
       cy.visit('messages/my/completed');
       cy.get('[data-testid="completed-tab-content"]').should('exist');
+      cy.get(
+        '[data-testid="messages-individual-completed-docketNumber-cell"] a',
+      ).should('exist');
 
       checkA11y();
     });
@@ -55,9 +76,13 @@ describe('Messages', () => {
 
     it('Completed - should be free of a11y issues', () => {
       loginAsDocketClerk();
+      createCompletedMessageAsDocketClerk();
 
       cy.visit('messages/section/completed');
       cy.get('[data-testid="completed-tab-content"]').should('exist');
+      cy.get(
+        '[data-testid="messages-section-completed-docketNumber-cell"] a',
+      ).should('exist');
 
       checkA11y();
     });
