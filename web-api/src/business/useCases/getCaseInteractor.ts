@@ -8,8 +8,8 @@ import {
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getWorkItemsByDocketNumber } from '@web-api/persistence/postgres/workitems/getWorkItemsByDocketNumber';
 import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
-import { RestrictedCaseDTO } from '@shared/business/dto/cases/RestrictedCaseDTO';
-import { PublicCaseDTO } from '@shared/business/dto/cases/PublicCaseDTO';
+import { RestrictedCaseResponse } from '@shared/business/dto/cases/RestrictedCaseResponse';
+import { PublicCaseResponse } from '@shared/business/dto/cases/PublicCaseResponse';
 
 export const getCaseInteractor = async (
   {
@@ -17,7 +17,7 @@ export const getCaseInteractor = async (
     excludeDocketEntries,
   }: { docketNumber: string; excludeDocketEntries?: boolean },
   authorizedUser: UnknownAuthUser,
-): Promise<CaseDTO | RestrictedCaseDTO | PublicCaseDTO> => {
+): Promise<CaseDTO | RestrictedCaseResponse | PublicCaseResponse> => {
   if (!isAuthUser(authorizedUser)) {
     throw new UnauthorizedError(
       `Invalid User attempting to view docket Number: ${docketNumber}`,
@@ -46,9 +46,7 @@ export const getCaseInteractor = async (
 
   if (excludeDocketEntries) {
     return { ...theCase, docketEntries: [] } as
-      | CaseDTO
-      | RestrictedCaseDTO
-      | PublicCaseDTO;
+      CaseDTO | RestrictedCaseResponse | PublicCaseResponse;
   }
 
   const workItems = await getWorkItemsByDocketNumber({
@@ -71,7 +69,5 @@ export const getCaseInteractor = async (
   });
 
   return { ...theCase, docketEntries: docketEntriesWithUIInfo } as
-    | CaseDTO
-    | RestrictedCaseDTO
-    | PublicCaseDTO;
+    CaseDTO | RestrictedCaseResponse | PublicCaseResponse;
 };

@@ -1,10 +1,18 @@
 import { defineConfig } from 'cypress';
+import { assertCorrectNetworkData } from './cypress/helpers/cypressTasks/network/assertCorrectNetworkData';
 import { getExposedCypressEnv } from './cypress/helpers/env/exposedCypressEnv';
 
 export default defineConfig({
   defaultCommandTimeout: 60000,
   e2e: {
     specPattern: 'cypress/readonly/integration/public/*.cy.ts',
+    setupNodeEvents(on) {
+      on('task', {
+        assertCorrectNetworkData(payloads) {
+          return assertCorrectNetworkData(payloads);
+        },
+      });
+    },
     supportFile: 'cypress/readonly/support/index.ts',
     testIsolation: false,
   },

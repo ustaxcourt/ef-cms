@@ -66,6 +66,15 @@ describe('getPractitionersByNameInteractor', () => {
         mockPetitionsClerkUser,
       );
 
+      expect(results.searchResults.practitioners[0]).toHaveProperty(
+        'isValidated',
+        true,
+      );
+      expect(results.searchResults.practitioners[1]).toHaveProperty(
+        'isValidated',
+        true,
+      );
+
       expect(results).toMatchObject({
         searchResults: {
           lastKey: [1.23],
@@ -138,6 +147,15 @@ describe('getPractitionersByNameInteractor', () => {
           searchAfter: undefined as unknown as string[],
         },
         undefined,
+      );
+
+      expect(results.searchResults.practitioners[0]).toHaveProperty(
+        'isValidated',
+        true,
+      );
+      expect(results.searchResults.practitioners[1]).toHaveProperty(
+        'isValidated',
+        true,
       );
 
       expect(results).toMatchObject({

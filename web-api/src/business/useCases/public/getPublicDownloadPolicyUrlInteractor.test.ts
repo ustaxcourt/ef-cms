@@ -1,5 +1,6 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import {
+  ALLOWLIST_FEATURE_FLAGS,
   DOCKET_ENTRY_SEALED_TO_TYPES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
 } from '@shared/business/entities/EntityConstants';
@@ -23,7 +24,7 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
     getCaseByDocketNumber.mockReturnValue(mockCase);
     applicationContext
       .getPersistenceGateway()
-      .getDownloadPolicyUrl.mockResolvedValue({ url: 'localhost' });
+      .getDownloadPolicyUrl.mockResolvedValue({ url: 'localhost:5678' });
   });
 
   it('should throw an error for a document that is not publicly accessible', async () => {
@@ -59,7 +60,65 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
     ).toMatchObject({
       key: mockCase.docketEntries[0].documentStorageId,
     });
-    expect(result).toEqual({ url: 'localhost' });
+    expect(result).toEqual({
+      entityName: 'PublicDocumentDownloadUrl',
+      url: 'localhost:5678',
+    });
+  });
+
+  it('uses an empty visibility date when the feature flag is disabled', async () => {
+    applicationContext
+      .getUseCases()
+      .getAllFeatureFlagsInteractor.mockResolvedValueOnce({
+        [ALLOWLIST_FEATURE_FLAGS.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.key]:
+          false,
+      });
+    const isDownloadable = jest
+      .spyOn(DocketEntry, 'isDownloadable')
+      .mockReturnValueOnce(true);
+
+    await getPublicDownloadPolicyUrlInteractor(
+      applicationContext,
+      {
+        docketNumber: '123-20',
+        isTerminalUser: false,
+        key: mockCase.docketEntries[0].docketEntryId,
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(isDownloadable).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.objectContaining({ visibilityChangeDate: '' }),
+    );
+  });
+
+  it('passes the configured visibility date when the feature flag is enabled', async () => {
+    const visibilityChangeDate = '2024-01-01T00:00:00.000Z';
+    applicationContext
+      .getUseCases()
+      .getAllFeatureFlagsInteractor.mockResolvedValueOnce({
+        [ALLOWLIST_FEATURE_FLAGS.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.key]:
+          visibilityChangeDate,
+      });
+    const isDownloadable = jest
+      .spyOn(DocketEntry, 'isDownloadable')
+      .mockReturnValueOnce(true);
+
+    await getPublicDownloadPolicyUrlInteractor(
+      applicationContext,
+      {
+        docketNumber: '123-20',
+        isTerminalUser: false,
+        key: mockCase.docketEntries[0].docketEntryId,
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(isDownloadable).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.objectContaining({ visibilityChangeDate }),
+    );
   });
 
   it('should throw an error for a case that is not found', async () => {
@@ -138,7 +197,10 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
       } as any,
       mockDocketClerkUser,
     );
-    expect(result).toEqual({ url: 'localhost' });
+    expect(result).toEqual({
+      entityName: 'PublicDocumentDownloadUrl',
+      url: 'localhost:5678',
+    });
   });
 
   it('should return a url for a document that is publicly accessible', async () => {
@@ -166,7 +228,10 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
       } as any,
       mockDocketClerkUser,
     );
-    expect(result).toEqual({ url: 'localhost' });
+    expect(result).toEqual({
+      entityName: 'PublicDocumentDownloadUrl',
+      url: 'localhost:5678',
+    });
   });
 
   it('should throw a not found error for a document that is not found on the case', async () => {

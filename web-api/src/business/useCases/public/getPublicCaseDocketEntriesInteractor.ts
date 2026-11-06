@@ -2,6 +2,9 @@ import { Case } from '@shared/business/entities/cases/Case';
 import { CaseFactory } from '@web-api/business/entities/cases/CaseFactory';
 import { NotFoundError } from '@web-api/errors/errors';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { PublicCaseResponse } from '@shared/business/dto/cases/PublicCaseResponse';
+import { PublicDocketEntry } from '@shared/business/entities/cases/PublicDocketEntry';
+import { RestrictedCaseResponse } from '@shared/business/dto/cases/RestrictedCaseResponse';
 
 const PAGE_SIZE = 1000;
 const MAX_PAGE = 20;
@@ -12,7 +15,12 @@ export const getPublicCaseDocketEntriesInteractor = async ({
 }: {
   docketNumber: string;
   page?: number;
-}) => {
+}): Promise<{
+  docketEntries: PublicDocketEntry[];
+  page: number;
+  pageSize: number;
+  totalCount: number;
+}> => {
   if (!Number.isFinite(page) || page < 0 || page > MAX_PAGE) {
     throw new Error(
       `Invalid page '${page}'. Must be a number between 0 and ${MAX_PAGE}`,
@@ -34,12 +42,14 @@ export const getPublicCaseDocketEntriesInteractor = async ({
   const caseDTO = CaseFactory.getCaseDTO({
     rawCase: rawCaseRecord,
     user: undefined,
-  });
+  }) as PublicCaseResponse | RestrictedCaseResponse;
 
   const allDocketEntries = caseDTO.docketEntries;
   const totalCount = allDocketEntries.length;
   const start = page * PAGE_SIZE;
-  const docketEntries = allDocketEntries.slice(start, start + PAGE_SIZE);
+  const docketEntries = allDocketEntries
+    .slice(start, start + PAGE_SIZE)
+    .map(docketEntry => new PublicDocketEntry(docketEntry).validate());
 
   return {
     docketEntries,
