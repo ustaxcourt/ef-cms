@@ -582,6 +582,7 @@ import { updateStatusReportOrderFormValueSequence } from './sequences/StatusRepo
 import { updateStepIndicatorSequence } from '@web-client/presenter/sequences/updateStepIndicatorSequence';
 import { updateTrialSessionCompleteSequence } from './sequences/updateTrialSessionCompleteSequence';
 import { updateTrialSessionFormDataSequence } from './sequences/updateTrialSessionFormDataSequence';
+import { updateTrialSessionDateSequence } from './sequences/updateTrialSessionDateSequence';
 import { updateTrialSessionMinutesFormSequence } from '@web-client/presenter/sequences/TrialSessionMinutes/updateTrialSessionMinutesFormSequence';
 import { updateTrialSessionSequence } from './sequences/updateTrialSessionSequence';
 import { updateUserCaseNoteOnWorkingCopySequence } from './sequences/updateUserCaseNoteOnWorkingCopySequence';
@@ -1617,6 +1618,7 @@ export const presenterSequences = {
     updateTrialSessionCompleteSequence as unknown as Function,
   updateTrialSessionFormDataSequence:
     updateTrialSessionFormDataSequence as unknown as Function,
+  updateTrialSessionDateSequence,
   updateTrialSessionMinutesFormSequence,
   updateTrialSessionSequence: updateTrialSessionSequence as unknown as Function,
   updateUserCaseNoteOnWorkingCopySequence:

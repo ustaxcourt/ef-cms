@@ -2,7 +2,10 @@ import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { FORMATS } from '../../../../../shared/src/business/utilities/DateHandler';
 import { Get } from 'cerebral';
-import { SESSION_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
+import {
+  ALLOWLIST_FEATURE_FLAGS,
+  SESSION_STATUS_TYPES,
+} from '@shared/business/entities/EntityConstants';
 import { TrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
 import { TrialSessionInfoDTO } from '@shared/business/dto/trialSessions/TrialSessionInfoDTO';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -14,6 +17,10 @@ export const addTrialSessionInformationHelper = (
 ): {
   displayRemoteProceedingForm: boolean;
   isStandaloneSession: boolean;
+  isReportingSession: boolean;
+  showReportingOption: boolean;
+  startDateId: string;
+  startDateLabel: string;
   sessionTypes: string[];
   title: string;
   tomorrow: string;
@@ -30,6 +37,11 @@ export const addTrialSessionInformationHelper = (
   const currentTrialSessionId = get(state.trialSession.trialSessionId);
 
   const isStandaloneSession = TrialSession.isStandaloneRemote(sessionScope);
+  const isReportingSession =
+    proceedingType === TRIAL_SESSION_PROCEEDING_TYPES.reporting;
+  const showReportingOption = !!get(
+    state.featureFlags[ALLOWLIST_FEATURE_FLAGS.REPORTING_CALENDARS.key],
+  );
 
   const title = isStandaloneSession
     ? 'Remote Proceeding Information'
@@ -44,7 +56,7 @@ export const addTrialSessionInformationHelper = (
 
   let sessionTypes = Object.values(SESSION_TYPES);
 
-  if (isStandaloneSession) {
+  if (isStandaloneSession || isReportingSession) {
     sessionTypes = sessionTypes.filter(type => {
       return !DISALLOWED_STANDALONE_SESSION_TYPES.includes(type);
     });
@@ -52,7 +64,7 @@ export const addTrialSessionInformationHelper = (
 
   // NOTE: what happens if isStandaloneSession is true and user is docketclerk?
   const getSessionTypes = (user: AuthUser) => {
-    return user.role === 'docketclerk'
+    return user.role === 'docketclerk' && !isReportingSession
       ? DOCKETCLERK_EDITABLE_SESSION_TYPES
       : sessionTypes;
   };
@@ -71,6 +83,11 @@ export const addTrialSessionInformationHelper = (
     swingSessionText: string;
   }[] = trialSessions
     .filter(trialSession => trialSession.termYear === selectedTermYear)
+    .filter(
+      trialSession =>
+        trialSession.proceedingType !==
+        TRIAL_SESSION_PROCEEDING_TYPES.reporting,
+    )
     .filter(trialSession => trialSession.term === selectedTerm)
     .filter(
       trialSession =>
@@ -98,9 +115,14 @@ export const addTrialSessionInformationHelper = (
   return {
     displayRemoteProceedingForm,
     isStandaloneSession,
+    isReportingSession,
+    showReportingOption,
+    startDateId: isReportingSession ? 'due-date' : 'start-date',
+    startDateLabel: isReportingSession ? 'Due date' : 'Start date',
     sessionTypes: getSessionTypes(get(state.user)),
     showSwingSessionList: get(state.form.swingSession),
-    showSwingSessionOption: validSwingSessions.length > 0,
+    showSwingSessionOption:
+      !isReportingSession && validSwingSessions.length > 0,
     swingSessions: validSwingSessions,
     title,
     tomorrow,

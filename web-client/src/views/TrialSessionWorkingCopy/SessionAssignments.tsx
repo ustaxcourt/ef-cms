@@ -23,12 +23,14 @@ export const SessionAssignments = connect(
                   {formattedTrialSessionDetails.formattedChambersPhoneNumber}
                 </p>
               </div>
-              <div className="grid-col-6">
-                <p className="label">Trial clerk</p>
-                <p data-testid="assignments-sessions-trial-clerk">
-                  {formattedTrialSessionDetails.formattedTrialClerk}
-                </p>
-              </div>
+              {!formattedTrialSessionDetails.isReportingSession && (
+                <div className="grid-col-6">
+                  <p className="label">Trial clerk</p>
+                  <p data-testid="assignments-sessions-trial-clerk">
+                    {formattedTrialSessionDetails.formattedTrialClerk}
+                  </p>
+                </div>
+              )}
             </div>
 
             <div
@@ -38,15 +40,17 @@ export const SessionAssignments = connect(
                   'margin-bottom-8',
               )}
             >
-              <div className="grid-col-6">
-                <p className="label">Court reporter</p>
-                <p
-                  className="margin-bottom-0 word-wrap-break-word"
-                  data-testid="trial-session-court-reporter"
-                >
-                  {formattedTrialSessionDetails.formattedCourtReporter}
-                </p>
-              </div>
+              {!formattedTrialSessionDetails.isReportingSession && (
+                <div className="grid-col-6">
+                  <p className="label">Court reporter</p>
+                  <p
+                    className="margin-bottom-0 word-wrap-break-word"
+                    data-testid="trial-session-court-reporter"
+                  >
+                    {formattedTrialSessionDetails.formattedCourtReporter}
+                  </p>
+                </div>
+              )}
               <div className="grid-col-6">
                 <p className="label">IRS calendar administrator</p>
                 {!formattedTrialSessionDetails.formattedIrsCalendarAdministratorInfo && (
