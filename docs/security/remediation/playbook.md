@@ -523,10 +523,11 @@ that `staging` doesn't. Your change may have added the dependency. Or another PR
 the vulnerable dependency into `test` and not yet reached `staging`, so it shows as new on yours.
 A CVE newly published against code already on `staging` shows on both sides and doesn't fail the check.
 
-**Your change didn't cause it, and the PR isn't the weekly scan work.** Don't open a ticket or an
+**Your change didn't cause it, and the PR isn't the weekly scan work.** This happens when the
+vulnerable code is on `test` but not yet on `staging`, such as another PR's dependency. Don't open a ticket or an
 advisory, and don't work out the fix. Instead:
 
-1. Tell the weekly scan team in their channel, with a link to the failing run. The message must be acknowledged before you move on to the next step.
+1. Tell the weekly scan team in their channel, with a link to the failing run. You don't need to wait for a reply.
 2. Add the CVE to the ticket tracking the weekly scan work, using the Security tab alert number
    (for example `Alert #1234`). If the alert has no number yet, use the CVE ID.
 

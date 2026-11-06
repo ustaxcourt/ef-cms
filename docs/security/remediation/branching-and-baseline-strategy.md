@@ -14,6 +14,13 @@ A finding is caught on `test`, before it reaches `staging`, and `staging` stays 
 
 In the table below, "PR gate (staging)" means the tool can block a merge into `staging`, according to the `staging` branch rulesets. Today no security check is required on `test`; see [Branch rules today](#branch-rules-today).
 
+## Assumptions (READ FIRST)
+This document was written with the following assumptions in mind:
+1. **If a particular branch introduces a finding, that branch should fix it.** if it doesn't significantly increase scope, a branch should also fix any new finding detected.
+2. We want to prevent the baseline of findings `Staging` from growing larger, by ensuring new findings are resolved before they get merged there.
+3. We detect new findings on PRs into both `test` and `staging`, giving us two opportunities to catch them before they make it into `staging`.
+4. If a new CVE from Trivy FS is detected **unrelated** to a PR's changes and the required fix is small enough, go ahead and fix it now. If it require substantial changes and/or testing, defer it to a ticket for further investigation by the weekly scan team.
+
 ## Contents
 
 - [Per-tool baseline status](#per-tool-baseline-status)
@@ -84,7 +91,7 @@ None of these changes have been made. Each is a ruleset or workflow edit for a f
 
 The required checks are the SAST and Secrets gates and `Findings vs staging` (Trivy `fs`). Container scans are not part of this strategy. Static code issues are caught before they reach `staging`, and so are CVEs published since the code last merged.
 
-When `Findings vs staging` fails, the developer follows [Trivy fs findings](playbook.md#trivy-fs-findings) in the playbook. If their change caused the finding, or the PR is the weekly scan work, they take the published fix if this week's dependency update doesn't already have it, or check whether the CVE applies, record it in VEX, open a draft security advisory and add an expiring `.trivyignore` line. If their change didn't cause it, usually because another PR's unpromoted dependency is on `test`, they tell the weekly scan team and add the alert number to the weekly scan ticket. They don't open a ticket or advisory. So that their PR isn't blocked, they add an expiring `.trivyignore` line themselves, set to the Saturday before the next weekly scan, since no ruleset has a bypass actor. The mechanics of that ignore line are under [Remediating or accepting a failure](#remediating-or-accepting-a-failure).
+When `Findings vs staging` fails, the developer follows [Trivy fs findings](playbook.md#trivy-fs-findings) in the playbook. If their change caused the finding, or the PR is the weekly scan work, they take the published fix if this week's dependency update doesn't already have it, or check whether the CVE applies, record it in VEX, open a draft security advisory and add an expiring `.trivyignore` line. If their change didn't cause it, for example a CVE published since the code merged, or another PR's unpromoted dependency on `test`, they first tell the weekly scan team and add the alert number to the weekly scan ticket, so the two efforts don't cover the same ground. If the fix is small and the team isn't already on it, they fix it in the PR. If the fix would blow the PR's scope, such as a package update that forces many API reference changes or needs testing well beyond what the story covers, they leave it with the weekly scan team and don't open a ticket or advisory. So that their PR isn't blocked, they add an expiring `.trivyignore` line themselves, set to the Saturday before the next weekly scan, since no ruleset has a bypass actor. The mechanics of that ignore line are under [Remediating or accepting a failure](#remediating-or-accepting-a-failure).
 
 ## Establishing the baseline
 
