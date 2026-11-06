@@ -1,4 +1,5 @@
 import { checkA11y } from '../../../support/generalCommands/checkA11y';
+import { holdRequests } from '../../../../helpers/hold-requests';
 import { getCurrentDateTimeInMillis } from '@shared/business/utilities/DateHandler';
 import {
   loginAsClerkOfCourt,
@@ -142,12 +143,8 @@ describe('Dashboard - Clerk of Court Accessibility', () => {
 
   describe('Chart loading states', () => {
     it('should be free of a11y issues while the charts load', () => {
-      // hold the responses long enough for the check to run while the charts load
-      cy.intercept('GET', '**/clerk-dashboard-stats/*', req => {
-        req.on('response', res => {
-          res.setDelay(20000);
-        });
-      }).as('mockStats');
+      // hold the stats requests until the check is done, so the charts are still loading
+      const statsRequests = holdRequests('**/clerk-dashboard-stats/*');
       loginAsClerkOfCourt();
       cy.get('#tabButton-cases').click();
 
@@ -155,7 +152,7 @@ describe('Dashboard - Clerk of Court Accessibility', () => {
 
       checkA11y();
 
-      cy.get('[data-testid="chart-loading"]').should('exist');
+      cy.then(statsRequests.release);
     });
   });
 

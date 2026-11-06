@@ -27,12 +27,9 @@ import {
 import { logout } from '../../../../helpers/authentication/logout';
 import { petitionsClerkServesPetition } from '../../../../helpers/documentQC/petitionsclerk-serves-petition';
 import { externalUserCreatesElectronicCase } from '../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
+import { holdRequests } from '../../../../helpers/hold-requests';
 import { formatPositiveNumber } from '@web-client/business/utilities/formatPositiveNumber';
 
-// long enough to see the loading state before the stats arrive
-const STATS_LOADING_DELAY_MS = 3000;
-// holds the stats response well past NAVIGATION_TIMEOUT_MS
-const STATS_HELD_DELAY_MS = 10000;
 const NAVIGATION_TIMEOUT_MS = 5000;
 
 // HTML views open their table in a new tab from a Blob URL; stub window.open and read that document
@@ -514,11 +511,9 @@ describe('Clerk of Court Dashboard', () => {
   });
 
   it('should show one loading state for the tab until the stats arrive', () => {
-    cy.intercept('GET', '**/clerk-dashboard-stats/petitions', req => {
-      req.on('response', res => {
-        res.setDelay(STATS_LOADING_DELAY_MS);
-      });
-    }).as('clerkDashboardStats');
+    const petitionsRequests = holdRequests(
+      '**/clerk-dashboard-stats/petitions',
+    );
     loginAsClerkOfCourt();
 
     cy.get('[data-testid="chart-loading"]')
@@ -526,7 +521,7 @@ describe('Clerk of Court Dashboard', () => {
       .and('contain.text', 'Loading chart...');
     cy.get('[data-testid="petitions-data-div"]').should('not.exist');
 
-    cy.wait('@clerkDashboardStats');
+    cy.then(petitionsRequests.release);
     cy.get('[data-testid="chart-loading"]').should('not.exist');
     cy.get(
       '[data-testid="Petitions: Total Petitions by Month-bar-graph-div"]',
@@ -534,11 +529,7 @@ describe('Clerk of Court Dashboard', () => {
   });
 
   it('should navigate away from the dashboard while the stats are still loading', () => {
-    cy.intercept('GET', '**/clerk-dashboard-stats/*', req => {
-      req.on('response', res => {
-        res.setDelay(STATS_HELD_DELAY_MS);
-      });
-    }).as('clerkDashboardStats');
+    const statsRequests = holdRequests('**/clerk-dashboard-stats/*');
     loginAsClerkOfCourt();
     cy.get('[data-testid="chart-loading"]').should('exist');
 
@@ -551,6 +542,8 @@ describe('Clerk of Court Dashboard', () => {
     cy.get('[data-testid="add-trial-session-button"]', {
       timeout: NAVIGATION_TIMEOUT_MS,
     }).should('exist');
+
+    cy.then(statsRequests.release);
   });
 
   it('should show one error state for each tab when the stats fail to load', () => {
@@ -594,12 +587,10 @@ describe('Clerk of Court Dashboard', () => {
     ] as const
   ).forEach(({ heldTab, loadedTab }) => {
     it(`should render the ${loadedTab} tab while the ${heldTab} response is still pending`, () => {
-      // hold one tab's response well past the default command timeout, so the other tab must render first
-      cy.intercept('GET', `**/clerk-dashboard-stats/${heldTab}`, req => {
-        req.on('response', res => {
-          res.setDelay(STATS_HELD_DELAY_MS);
-        });
-      });
+      // hold one tab's request until the other tab renders
+      const heldTabRequests = holdRequests(
+        `**/clerk-dashboard-stats/${heldTab}`,
+      );
       cy.intercept('GET', `**/clerk-dashboard-stats/${loadedTab}`).as(
         'loadedTabStats',
       );
@@ -613,6 +604,9 @@ describe('Clerk of Court Dashboard', () => {
       cy.get(`#tabButton-${heldTab}`).click();
       cy.get('[data-testid="chart-loading"]').should('have.length', 1);
       cy.get(`[data-testid="${heldTab}-data-div"]`).should('not.exist');
+
+      cy.then(heldTabRequests.release);
+      cy.get(`[data-testid="${heldTab}-data-div"]`).should('exist');
     });
   });
 
