@@ -57,7 +57,9 @@ const getStatsWindows = (stats: ClerkDashboardStats) => ({
 const getMonth = (isoDate: string) => Number(deconstructDate(isoDate).month);
 
 const getClerkDashboardStats = () => {
-  cy.intercept('GET', '**/clerk-dashboard-stats').as('clerkDashboardStats');
+  cy.intercept('GET', '**/clerk-dashboard-stats/cases').as(
+    'clerkDashboardStats',
+  );
   loginAsClerkOfCourt();
   return cy
     .wait('@clerkDashboardStats')
@@ -229,6 +231,64 @@ describe('Clerk of Court Dashboard - case status change counts', () => {
 
         getClerkDashboardStats().then(after => {
           expect(openRegular(after) - openRegular(before)).to.equal(1);
+        });
+      });
+    });
+  });
+
+  describe('back-dated status history', () => {
+    // a script can append back-dated changes to the end of a case's history,
+    // so the history array is not always in date order
+    const docketNumbers = ['9104-97'];
+    const deleteBackDatedCase = () =>
+      cy.task('deleteCasesByDocketNumbers', { docketNumbers });
+
+    before(deleteBackDatedCase);
+    after(deleteBackDatedCase);
+
+    it('should find the previous status by date, not by position in the history', () => {
+      getClerkDashboardStats().then(before => {
+        const now = createISODateString();
+        const at = (howMuch: number, units: 'days' | 'hours') =>
+          calculateISODate({ dateString: now, howMuch, units });
+        const firstClosedAt = at(-3, 'days');
+        const reopenedAt = at(-2, 'days');
+        const closedAgainAt = at(-1, 'hours');
+
+        // by date: New, Closed, General Docket, Closed, so both closures count;
+        // by position, the back-dated Closed follows a Closed and would not count
+        cy.task('insertCasesWithStatusHistory', {
+          cases: [
+            {
+              docketNumber: docketNumbers[0],
+              procedureType: regular,
+              statusChanges: [
+                {
+                  date: '1997-06-16T16:00:00.000Z',
+                  updatedCaseStatus: CASE_STATUS_TYPES.new,
+                },
+                { date: closedAgainAt, updatedCaseStatus: closed },
+                { date: firstClosedAt, updatedCaseStatus: closed },
+                {
+                  date: reopenedAt,
+                  updatedCaseStatus: generalDocketReadyForTrial,
+                },
+              ],
+            },
+          ],
+        });
+
+        getClerkDashboardStats().then(after => {
+          expectIncreaseInBothTimeframes(
+            before,
+            after,
+            [firstClosedAt, closedAgainAt].map(date => ({
+              date,
+              month: getMonth(date),
+              procedureType: regular,
+              statusGroup: 'closed' as const,
+            })),
+          );
         });
       });
     });

@@ -8,7 +8,7 @@ import {
   GRAPH_COLORS,
   MONTH_LABELS,
 } from '@shared/business/entities/EntityConstants';
-import { Month } from '@web-api/business/useCases/reports/getClerkDashboardStatsInteractor';
+import { Month } from '@web-api/business/useCases/reports/clerkDashboardStats';
 import { sum } from 'lodash';
 
 const dashboardClerkOfTheCourtHelper = withAppContextDecorator(
@@ -57,109 +57,130 @@ describe('dashboardClerkOfTheCourtHelper', () => {
         petitionsByYearIsFiscal: false,
       },
       clerkOfCourtDashboardStats: {
-        calendarYearPetitionStats: {
-          petitionFullPaperMonths: toMonthTotals(
-            CALENDAR_MONTHS,
-            CALENDAR_PETITIONS_PAPER_BY_MONTH,
-          ).map(monthTotal => ({ ...monthTotal, isPaper: true })),
-          petitionFullElectronicMonths: toMonthTotals(
-            CALENDAR_MONTHS,
-            CALENDAR_PETITIONS_ELECTRONIC_BY_MONTH,
-          ).map(monthTotal => ({ ...monthTotal, isPaper: false })),
-          petitionsByServiceType: [
-            {
-              total: 7200,
-              isPaper: false,
+        petitions: {
+          status: 'loaded',
+          data: {
+            fiscalYear: '2027',
+            year: '2026',
+            calendarYearPetitionStats: {
+              petitionFullPaperMonths: toMonthTotals(
+                CALENDAR_MONTHS,
+                CALENDAR_PETITIONS_PAPER_BY_MONTH,
+              ).map(monthTotal => ({ ...monthTotal, isPaper: true })),
+              petitionFullElectronicMonths: toMonthTotals(
+                CALENDAR_MONTHS,
+                CALENDAR_PETITIONS_ELECTRONIC_BY_MONTH,
+              ).map(monthTotal => ({ ...monthTotal, isPaper: false })),
+              petitionsByServiceType: [
+                {
+                  total: 7200,
+                  isPaper: false,
+                },
+                {
+                  total: 6600,
+                  isPaper: true,
+                },
+              ],
+              petitionsByRepresentation: [
+                {
+                  total: 6800,
+                  isRepresenting: false,
+                },
+                {
+                  total: 7000,
+                  isRepresenting: true,
+                },
+              ],
             },
-            {
-              total: 6600,
-              isPaper: true,
+            fiscalYearPetitionStats: {
+              petitionFullPaperMonths: toMonthTotals(
+                FISCAL_MONTHS,
+                FISCAL_PETITIONS_PAPER_BY_MONTH,
+              ).map(monthTotal => ({ ...monthTotal, isPaper: true })),
+              petitionFullElectronicMonths: toMonthTotals(
+                FISCAL_MONTHS,
+                FISCAL_PETITIONS_ELECTRONIC_BY_MONTH,
+              ).map(monthTotal => ({ ...monthTotal, isPaper: false })),
+              petitionsByServiceType: [
+                {
+                  total: 9900,
+                  isPaper: false,
+                },
+                {
+                  total: 9300,
+                  isPaper: true,
+                },
+              ],
+              petitionsByRepresentation: [
+                {
+                  total: 11200,
+                  isRepresenting: false,
+                },
+                {
+                  total: 8000,
+                  isRepresenting: true,
+                },
+              ],
             },
-          ],
-          petitionsByRepresentation: [
-            {
-              total: 6800,
-              isRepresenting: false,
-            },
-            {
-              total: 7000,
-              isRepresenting: true,
-            },
-          ],
+          },
         },
-        fiscalYearPetitionStats: {
-          petitionFullPaperMonths: toMonthTotals(
-            FISCAL_MONTHS,
-            FISCAL_PETITIONS_PAPER_BY_MONTH,
-          ).map(monthTotal => ({ ...monthTotal, isPaper: true })),
-          petitionFullElectronicMonths: toMonthTotals(
-            FISCAL_MONTHS,
-            FISCAL_PETITIONS_ELECTRONIC_BY_MONTH,
-          ).map(monthTotal => ({ ...monthTotal, isPaper: false })),
-          petitionsByServiceType: [
-            {
-              total: 9900,
-              isPaper: false,
+        cases: {
+          status: 'loaded',
+          data: {
+            openCasesByCaseType: [
+              { caseType: 'Deficiency', total: 1798 },
+              {
+                caseType: 'Declaratory Judgment (Exempt Organization)',
+                total: 51,
+              },
+              { caseType: 'Declaratory Judgment (Retirement Plan)', total: 75 },
+              { caseType: 'Partnership (BBA Section 1101)', total: 26 },
+              { caseType: 'Partnership (Section 6226)', total: 48 },
+              { caseType: 'Partnership (Section 6228)', total: 75 },
+              { caseType: 'Passport', total: 0 },
+            ],
+            openCasesByProcedureType: [
+              { procedureType: 'Regular', total: OPEN_CASES.regular },
+              { procedureType: 'Small', total: OPEN_CASES.small },
+            ],
+            calendarYearCaseStats: {
+              casesClosedByMonth: toMonthTotals(
+                CALENDAR_MONTHS,
+                CALENDAR_CLOSED_BY_MONTH,
+              ),
+              casesClosedByProcedureType: [
+                {
+                  procedureType: 'Regular',
+                  total: CALENDAR_CLOSED_CASES.regular,
+                },
+                { procedureType: 'Small', total: CALENDAR_CLOSED_CASES.small },
+              ],
+              casesOnAppealByMonth: toMonthTotals(
+                CALENDAR_MONTHS,
+                CALENDAR_ON_APPEAL_BY_MONTH,
+              ),
             },
-            {
-              total: 9300,
-              isPaper: true,
+            fiscalYearCaseStats: {
+              casesClosedByMonth: toMonthTotals(
+                FISCAL_MONTHS,
+                FISCAL_CLOSED_BY_MONTH,
+              ),
+              casesClosedByProcedureType: [
+                {
+                  procedureType: 'Regular',
+                  total: FISCAL_CLOSED_CASES.regular,
+                },
+                { procedureType: 'Small', total: FISCAL_CLOSED_CASES.small },
+              ],
+              casesOnAppealByMonth: toMonthTotals(
+                FISCAL_MONTHS,
+                FISCAL_ON_APPEAL_BY_MONTH,
+              ),
             },
-          ],
-          petitionsByRepresentation: [
-            {
-              total: 11200,
-              isRepresenting: false,
-            },
-            {
-              total: 8000,
-              isRepresenting: true,
-            },
-          ],
+            fiscalYear: '2027',
+            year: '2026',
+          },
         },
-        openCasesByCaseType: [
-          { caseType: 'Deficiency', total: 1798 },
-          { caseType: 'Declaratory Judgment (Exempt Organization)', total: 51 },
-          { caseType: 'Declaratory Judgment (Retirement Plan)', total: 75 },
-          { caseType: 'Partnership (BBA Section 1101)', total: 26 },
-          { caseType: 'Partnership (Section 6226)', total: 48 },
-          { caseType: 'Partnership (Section 6228)', total: 75 },
-          { caseType: 'Passport', total: 0 },
-        ],
-        openCasesByProcedureType: [
-          { procedureType: 'Regular', total: OPEN_CASES.regular },
-          { procedureType: 'Small', total: OPEN_CASES.small },
-        ],
-        calendarYearCaseStats: {
-          casesClosedByMonth: toMonthTotals(
-            CALENDAR_MONTHS,
-            CALENDAR_CLOSED_BY_MONTH,
-          ),
-          casesClosedByProcedureType: [
-            { procedureType: 'Regular', total: CALENDAR_CLOSED_CASES.regular },
-            { procedureType: 'Small', total: CALENDAR_CLOSED_CASES.small },
-          ],
-          casesOnAppealByMonth: toMonthTotals(
-            CALENDAR_MONTHS,
-            CALENDAR_ON_APPEAL_BY_MONTH,
-          ),
-        },
-        fiscalYearCaseStats: {
-          casesClosedByMonth: toMonthTotals(
-            FISCAL_MONTHS,
-            FISCAL_CLOSED_BY_MONTH,
-          ),
-          casesClosedByProcedureType: [
-            { procedureType: 'Regular', total: FISCAL_CLOSED_CASES.regular },
-            { procedureType: 'Small', total: FISCAL_CLOSED_CASES.small },
-          ],
-          casesOnAppealByMonth: toMonthTotals(
-            FISCAL_MONTHS,
-            FISCAL_ON_APPEAL_BY_MONTH,
-          ),
-        },
-        fiscalYear: '2027',
-        year: '2026',
       },
     };
   });
@@ -288,12 +309,13 @@ describe('dashboardClerkOfTheCourtHelper', () => {
   });
 
   it('should handle empty data', () => {
-    baseState.clerkOfCourtDashboardStats.calendarYearPetitionStats = {
-      petitionFullPaperMonths: [],
-      petitionFullElectronicMonths: [],
-      petitionsByServiceType: [],
-      petitionsByRepresentation: [],
-    };
+    baseState.clerkOfCourtDashboardStats.petitions.data.calendarYearPetitionStats =
+      {
+        petitionFullPaperMonths: [],
+        petitionFullElectronicMonths: [],
+        petitionsByServiceType: [],
+        petitionsByRepresentation: [],
+      };
     const result = runCompute(dashboardClerkOfTheCourtHelper, {
       state: baseState,
     });
@@ -484,8 +506,10 @@ describe('dashboardClerkOfTheCourtHelper', () => {
     });
 
     it('should fall back to the current year before the stats have loaded', () => {
-      baseState.clerkOfCourtDashboardStats.year = '';
-      baseState.clerkOfCourtDashboardStats.fiscalYear = '';
+      for (const tab of ['cases', 'petitions']) {
+        baseState.clerkOfCourtDashboardStats[tab].data.year = '';
+        baseState.clerkOfCourtDashboardStats[tab].data.fiscalYear = '';
+      }
       baseState.clerkOfCourtDashboardOptions.petitionsByYearIsFiscal = true;
 
       const result = runCompute(dashboardClerkOfTheCourtHelper, {
@@ -499,11 +523,12 @@ describe('dashboardClerkOfTheCourtHelper', () => {
     });
 
     it('should return empty pie data when there are no cases', () => {
-      baseState.clerkOfCourtDashboardStats.openCasesByProcedureType = [
-        { procedureType: 'Regular', total: 0 },
-        { procedureType: 'Small', total: 0 },
-      ];
-      baseState.clerkOfCourtDashboardStats.calendarYearCaseStats = {
+      baseState.clerkOfCourtDashboardStats.cases.data.openCasesByProcedureType =
+        [
+          { procedureType: 'Regular', total: 0 },
+          { procedureType: 'Small', total: 0 },
+        ];
+      baseState.clerkOfCourtDashboardStats.cases.data.calendarYearCaseStats = {
         casesClosedByMonth: [],
         casesClosedByProcedureType: [],
         casesOnAppealByMonth: [],

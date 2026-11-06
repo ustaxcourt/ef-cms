@@ -3,7 +3,7 @@ import React from 'react';
 
 // ─── Custom legend renderer ───────────────────────────────────────────────────
 
-export const renderCustomLegend = (props: any) => {
+export const renderCustomLegend = (props: any): React.JSX.Element => {
   const { payload } = props;
   return (
     <div

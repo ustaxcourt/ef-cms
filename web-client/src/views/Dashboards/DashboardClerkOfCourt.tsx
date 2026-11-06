@@ -35,7 +35,7 @@ const calendarAndFiscalYearSelectors = ({
   isMobile?: boolean;
   optionKey: ClerkOfCourtDashboardYearOption;
   setClerkOfCourtDashboardOptionsSequence: Function;
-}) => {
+}): React.JSX.Element => {
   return (
     <div
       className={classNames(
@@ -113,14 +113,14 @@ const casesData = ({
   dashboardClerkOfTheCourtHelper,
   isMobile = false,
   setClerkOfCourtDashboardOptionsSequence,
-  statsStatus,
+  casesStatus,
 }: {
   casesByYearIsFiscal: boolean;
   dashboardClerkOfTheCourtHelper: DashboardClerkOfTheCourtHelper;
   isMobile?: boolean;
   setClerkOfCourtDashboardOptionsSequence: Function;
-  statsStatus: ClerkOfCourtDashboardStatsStatus;
-}) => {
+  casesStatus: ClerkOfCourtDashboardStatsStatus;
+}): React.JSX.Element => {
   const {
     casesClosedAndOnAppealByMonthChartData,
     casesClosedAndOnAppealLegendTotals,
@@ -133,7 +133,7 @@ const casesData = ({
   } = dashboardClerkOfTheCourtHelper;
 
   return (
-    <ClerkOfCourtChartStatus status={statsStatus}>
+    <ClerkOfCourtChartStatus status={casesStatus}>
       <div
         className={isMobile ? undefined : 'tw:mt-4'}
         data-testid="cases-data-div"
@@ -157,6 +157,7 @@ const casesData = ({
               <span className="tw:font-normal">{totalOpenCases}</span>
             </h2>
             <PieGraph
+              isAnimationActive={false}
               data={openCasesPieData}
               title={ALL_OPEN_CASES_TITLE}
               showTitle={false}
@@ -172,6 +173,7 @@ const casesData = ({
               <span className="tw:font-normal">{totalCasesClosed}</span>
             </h2>
             <PieGraph
+              isAnimationActive={false}
               data={casesClosedPieData}
               title={`Cases Changed to Closed/Closed - Dismissed in ${casesYearLabel}`}
               showTitle={false}
@@ -214,7 +216,8 @@ export const DashboardClerkOfCourt = connect(
       state.clerkOfCourtDashboardOptions.petitionsByYearIsFiscal,
     setClerkOfCourtDashboardOptionsSequence:
       sequences.setClerkOfCourtDashboardOptionsSequence,
-    statsStatus: state.clerkOfCourtDashboardStatsStatus,
+    casesStatus: state.clerkOfCourtDashboardStats.cases.status,
+    petitionsStatus: state.clerkOfCourtDashboardStats.petitions.status,
   },
   function DashboardClerkOfCourt({
     casesByYearIsFiscal,
@@ -223,7 +226,8 @@ export const DashboardClerkOfCourt = connect(
     user,
     petitionsByYearIsFiscal,
     setClerkOfCourtDashboardOptionsSequence,
-    statsStatus,
+    casesStatus,
+    petitionsStatus,
   }) {
     // load the chart stats outside the route's sequence, so navigation never waits for them
     useEffect(() => {
@@ -253,7 +257,7 @@ export const DashboardClerkOfCourt = connect(
             <NonMobile>
               <Tabs className="margin-top-6" marginBottom={false}>
                 <Tab tabName="petitions" title="Petitions">
-                  <ClerkOfCourtChartStatus status={statsStatus}>
+                  <ClerkOfCourtChartStatus status={petitionsStatus}>
                     <div className="tw:mt-4" data-testid="petitions-data-div">
                       {calendarAndFiscalYearSelectors({
                         isFiscal: petitionsByYearIsFiscal,
@@ -269,12 +273,14 @@ export const DashboardClerkOfCourt = connect(
                       </h2>
                       <div className="tw:flex tw:flex-wrap tw:gap-12">
                         <PieGraph
+                          isAnimationActive={false}
                           data={petitionsByServiceTypePieData}
                           title={`Petitions Created in ${petitionsYearLabel}`}
                           showTitle={false}
                           tooltipTitle="Petitions Created"
                         />
                         <PieGraph
+                          isAnimationActive={false}
                           data={petitionsByRepresentationPieData}
                           title={`Petitions Created in ${petitionsYearLabel}`}
                           showTitle={false}
@@ -301,7 +307,7 @@ export const DashboardClerkOfCourt = connect(
                     casesByYearIsFiscal,
                     dashboardClerkOfTheCourtHelper,
                     setClerkOfCourtDashboardOptionsSequence,
-                    statsStatus,
+                    casesStatus,
                   })}
                 </Tab>
                 <Tab tabName="recentMessages" title="Recent Messages">
@@ -334,10 +340,10 @@ export const DashboardClerkOfCourt = connect(
                   dashboardClerkOfTheCourtHelper,
                   isMobile: true,
                   setClerkOfCourtDashboardOptionsSequence,
-                  statsStatus,
+                  casesStatus,
                 })}
               {mobileSection === 'petitions' && (
-                <ClerkOfCourtChartStatus status={statsStatus}>
+                <ClerkOfCourtChartStatus status={petitionsStatus}>
                   <div>
                     {calendarAndFiscalYearSelectors({
                       isFiscal: petitionsByYearIsFiscal,
@@ -354,6 +360,7 @@ export const DashboardClerkOfCourt = connect(
                     </h2>
                     <div className="tw:mb-8">
                       <PieGraph
+                        isAnimationActive={false}
                         data={petitionsByServiceTypePieData}
                         title={`Petitions Created in ${petitionsYearLabel}`}
                         showTitle={false}
@@ -362,6 +369,7 @@ export const DashboardClerkOfCourt = connect(
                     </div>
                     <div className="tw:mb-6">
                       <PieGraph
+                        isAnimationActive={false}
                         data={petitionsByRepresentationPieData}
                         title={`Petitions Created in ${petitionsYearLabel}`}
                         showTitle={false}

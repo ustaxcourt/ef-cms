@@ -319,7 +319,7 @@ export const MultiBarGraph: React.FC<MultiBarGraphProps> = ({
   legendTotals,
   htmlTitle,
 }) => {
-  const openHtmlTable = () => {
+  const openHtmlTable = (): void => {
     const headerCells = [
       `<th>${xAxisLabel ?? 'Label'}</th>`,
       ...datasets.map(ds => `<th>${ds.label}</th>`),
