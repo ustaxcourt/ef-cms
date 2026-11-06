@@ -26,6 +26,7 @@ In the table below, "PR gate (staging)" means the tool can block a merge into `s
 - [Protecting the baseline](#protecting-the-baseline)
 - [Emergency security fixes](#emergency-security-fixes)
 - [Remediating or accepting a failure](#remediating-or-accepting-a-failure)
+  - [CodeQL on `test`](#codeql-on-test)
 
 ## Per-tool baseline status
 
@@ -63,7 +64,7 @@ Read from the repository's rulesets (`gh api repos/ustaxcourt/ef-cms/rulesets`) 
 |------|-----------------------|-------------------------------------|----------------------------------------|--------------------------------------|
 | Semgrep | It is on a line the PR changed since the merge base. | `staging`'s tip. | `test`'s tip, so it scores only the PR's own change, which is what the later `staging` PR will see. Pointing at `staging` would instead report other developers' unpromoted code. | Nothing, once the gates are required on `test`. If blocked, see [If your PR is blocked by Semgrep](../sast-scanning.md#if-your-pr-is-blocked-by-semgrep). |
 | Checkov | It is not in the directory's `.checkov.baseline`. Only the four hard-fail checks block. | The baseline file on the PR's branch. | Same. | Nothing. Fix the hard-fail checks rather than skipping them, and fix other findings your change adds too. |
-| CodeQL | The alert is not already open on `staging`. The `staging` code-scanning rule blocks new high-or-higher alerts. | Alert state on `staging`. | Nothing. The job only has to complete, and its results aren't uploaded, so read the job log and fix what it reports rather than leaving it for the `staging` PR. | A decision: leave ungated, or add a step that diffs the local SARIF against `staging`'s alerts. |
+| CodeQL | The alert is not already open on `staging`. The `staging` code-scanning rule blocks new high-or-higher alerts. | Alert state on `staging`. | Nothing. The job only has to complete, and its results aren't uploaded, so read the job log and fix what it reports rather than leaving it for the `staging` PR. | Decided: add a step to `Security Gate (SAST)` that diffs the local SARIF against `staging`'s open alerts ([CodeQL on `test`](#codeql-on-test)). |
 | ShellCheck | Any error-level finding. There is no baseline. | n/a | n/a | Nothing. Don't add paths to `.shellcheckignore`: nothing reads it. |
 | Gitleaks | It is in a commit that belongs to the PR and is not in `.gitleaksignore` or `.gitleaks.toml`. | The PR's own commits. | Same: `base.sha..head.sha`, with `base.sha` being `test`'s tip. A merge of `staging` into the branch also falls in the range. Those commits already passed the `staging` gate. | Nothing. A false positive goes in `.gitleaksignore` in a separate PR with the approver's sign-off ([Secrets scanning](../secrets-scanning.md#2-pr-ci-gate-blocking)). |
 | Trivy `fs` (`Findings vs staging`) | The rule, package and file combination is not in a Trivy scan of `staging` made in the same job. HIGH, CRITICAL and UNKNOWN, vulnerabilities only. | `staging`, scanned on every run. | Same, but the scan merges the PR into `test`, so another branch's unpromoted finding can show as new on yours. | Decided: require the check on `test` (item 2 below). |
@@ -74,7 +75,7 @@ Read from the repository's rulesets (`gh api repos/ustaxcourt/ef-cms/rulesets`) 
 
 1. Require `Security Gate (SAST)` and `Security Gate (Secrets)` on `test`, as on `staging`.
 2. Require `Findings vs staging` on `test`, so new Trivy `fs` findings block there too. This is decided. A person reads the result, so the developer fixes what their branch caused and logs what it didn't ([Findings on pull requests](playbook.md#findings-on-pull-requests)).
-3. Decide how CodeQL behaves on `test`, as described above.
+3. Add the CodeQL comparison step to `Security Gate (SAST)`, so CodeQL blocks new high-or-higher alerts on `test` as the code-scanning rule does on `staging` ([CodeQL on `test`](#codeql-on-test)). This is decided.
 4. Resolve the docs-only case. `security-sast.yml` and `security-compare.yml` skip PRs that change only Markdown, `.gitignore`, `.nvmrc` or `docs/**` (SAST also skips `.circleci/config.yml`). `security-secrets.yml` skips only `.gitignore` and `.nvmrc`. A required check that is skipped stays pending, so a docs-only PR cannot merge. Remove `paths-ignore` from the gate workflows, or add a gate that always reports a status.
 
 None of these changes have been made. Each is a ruleset or workflow edit for a follow-up ticket.
@@ -83,7 +84,7 @@ None of these changes have been made. Each is a ruleset or workflow edit for a f
 
 The required checks are the SAST and Secrets gates and `Findings vs staging` (Trivy `fs`). Container scans are not part of this strategy. Static code issues are caught before they reach `staging`, and so are CVEs published since the code last merged.
 
-When `Findings vs staging` fails, the developer follows [Trivy fs findings](playbook.md#trivy-fs-findings) in the playbook: take the published fix if this week's dependency update doesn't already have it, or check whether the CVE applies, record it in VEX, log a Jira ticket and add an expiring `.trivyignore` line. The mechanics of that ignore line are under [Remediating or accepting a failure](#remediating-or-accepting-a-failure).
+When `Findings vs staging` fails, the developer follows [Trivy fs findings](playbook.md#trivy-fs-findings) in the playbook. If their change caused the finding, or the PR is the weekly scan work, they take the published fix if this week's dependency update doesn't already have it, or check whether the CVE applies, record it in VEX, open a draft security advisory and add an expiring `.trivyignore` line. If their change didn't cause it, usually because another PR's unpromoted dependency is on `test`, they tell the weekly scan team and add the alert number to the weekly scan ticket. They don't open a ticket or advisory. So that their PR isn't blocked, they add an expiring `.trivyignore` line themselves, set to the Saturday before the next weekly scan, since no ruleset has a bypass actor. The mechanics of that ignore line are under [Remediating or accepting a failure](#remediating-or-accepting-a-failure).
 
 ## Establishing the baseline
 
@@ -137,7 +138,7 @@ The [playbook](playbook.md#same-day-triage) already defines what counts as an em
 
 1. **Triage the same day.** Follow [Same-day triage](playbook.md#same-day-triage). The approver opens the draft advisory and is told directly. For a secret, rotate first ([Secrets](playbook.md#secrets)); the code change is the clean-up, not the fix.
 2. **Branch from `staging`** and change only what the fix needs. Open the PR into `staging`. `test` may be skipped when the approver agrees on the PR, because `test` is a dry run for the same gates. Skipping it also skips the product owner's check in the `test` environment.
-3. **If the fix trips a gate,** fix that finding. If it cannot be fixed, the approver signs off on the PR the same day, the suppression goes on the branch, and the ticket is logged before merge. An emergency shortens the wait for sign-off, not what is recorded. See [Remediating or accepting a failure](#remediating-or-accepting-a-failure).
+3. **If the fix trips a gate,** fix that finding. If it cannot be fixed, the approver signs off on the PR the same day, the suppression goes on the branch, and the advisory is opened before merge. An emergency shortens the wait for sign-off, not what is recorded. See [Remediating or accepting a failure](#remediating-or-accepting-a-failure).
 4. **Ask for the earlier deploy** as soon as the PR merges. [Deploys follow the court's schedule](playbook.md#what-counts-as-resolved), and the playbook already has the owner ask the court for an earlier one for a Critical or High finding in T1.
 5. **Back-merge `staging` into `test`** afterwards so `test` carries the fix.
 
@@ -146,8 +147,8 @@ The [playbook](playbook.md#same-day-triage) already defines what counts as an em
 The policy is in the [playbook](playbook.md#findings-on-pull-requests). This section adds only what the baseline strategy changes: the suppression is committed on the developer's own branch, and the scan must then stay quiet for later PRs.
 
 1. **Fix it in the PR.** See [Fix it in the PR that caused it](playbook.md#fix-it-in-the-pr-that-caused-it).
-2. **If it cannot be fixed,** log the ticket, get the approver's sign-off, and record the decision in the [exception record](playbook.md#the-exception-record). The playbook's order is remove, patch, upgrade, suppress, then accept.
-3. **Commit the suppression on your branch,** after the ticket exists, in the form the tool reads. Put the Jira ticket key in the suppression's reason. For a sensitive finding, use the GHSA ID instead and keep the reasoning in the advisory ([Suppressing a finding](playbook.md#suppressing-a-finding)).
+2. **If it cannot be fixed,** open the advisory, get the approver's sign-off, and record the decision in the [exception record](playbook.md#the-exception-record). The playbook's order is remove, patch, upgrade, suppress, then accept.
+3. **Commit the suppression on your branch,** after the advisory exists, in the form the tool reads. Put the advisory's GHSA ID in the suppression's reason and keep the reasoning in the advisory ([Suppressing a finding](playbook.md#suppressing-a-finding)).
 4. **Re-run the checks.** For the tools marked "Yes" below, later PRs into `test` and `staging` then do not report the same finding at the same place.
 
 How to write the suppression for each scanner is in [scanner-reference.md](scanner-reference.md#suppression-mechanisms). This table covers only what the baseline strategy adds: whether the scan stays quiet for later PRs once the suppression is on your branch, and what is missing.
@@ -156,13 +157,20 @@ How to write the suppression for each scanner is in [scanner-reference.md](scann
 |------|---------------------|-----|
 | Semgrep | Yes. The `nosemgrep` comment travels with the line. | None. |
 | Checkov | Yes. | The four hard-fail checks should be fixed, not skipped. How to regenerate a `.checkov.baseline` is undocumented. |
-| CodeQL | No on `staging`: a new alert stays open until dismissed in the Security tab, and the `staging` rule blocks on it. On `test` nothing is gated yet. No suppression comment is verified. | A decision, below. |
+| CodeQL | No on `staging`: a new alert stays open until dismissed in the Security tab, and the `staging` rule blocks on it. On `test` the comparison step will block it once built. No suppression comment is verified. | The comparison step is not built ([CodeQL on `test`](#codeql-on-test)). |
 | ShellCheck | Yes. The `shellcheck disable` comment travels with the line. | None. |
 | Gitleaks | Yes, once `.gitleaksignore` is on the branch the PR is compared with. It goes in a separate PR, after rotation if the secret was real. | None. |
 | Trivy `fs` | Yes, for the branch scan, while the `.trivyignore` entry has not expired. It does not silence the `staging` scan, which keeps the alert open in the Security tab as the record. | Needs the ignore file below. |
 
-**Trivy `fs` uses a `.trivyignore` file.** `aquasecurity/trivy-action@v0.36.0` takes a `trivyignores` input, a list of `.trivyignore` files or one `.trivyignore.yaml`. The plain `.trivyignore` takes an `exp:` date after the ID, as in `CVE-2022-1234 exp:2026-11-09`, and matches by ID only, so the ticket key and reason go in a comment above the entry. The playbook's [Trivy fs findings](playbook.md#trivy-fs-findings) sets the expiry to the Monday the next weekly dependency update starts. The YAML form can also scope an entry to a path or purl, but Trivy marks it experimental, so use the plain file unless scoping is needed. Pass the file to the branch scan in `security-compare.yml` so the finding stops being "new". Leave it off the `trivy` job that uploads from `staging`, which keeps the alert open in the Security tab as the record. This is not built yet: the file does not exist and the input is not passed. Confirm the format works with the pinned `trivy-action` version first.
+**Trivy `fs` uses a `.trivyignore` file.** `aquasecurity/trivy-action@v0.36.0` takes a `trivyignores` input, a list of `.trivyignore` files or one `.trivyignore.yaml`. The plain `.trivyignore` takes an `exp:` date after the ID, as in `CVE-2022-1234 exp:2026-11-09`, and matches by ID only, so the advisory's GHSA ID and reason go in a comment above the entry. The playbook's [Trivy fs findings](playbook.md#trivy-fs-findings) sets the expiry to the Monday the next weekly dependency update starts. The YAML form can also scope an entry to a path or purl, but Trivy marks it experimental, so use the plain file unless scoping is needed. Pass the file to the branch scan in `security-compare.yml` so the finding stops being "new". Leave it off the `trivy` job that uploads from `staging`, which keeps the alert open in the Security tab as the record. This is not built yet: the file does not exist and the input is not passed. Confirm the format works with the pinned `trivy-action` version first.
 
-**VEX does not do this job.** No workflow passes `--vex`, `trivy-action@v0.36.0` has no VEX input, and Trivy applies only `not_affected` and `fixed` statements. An accepted finding is `affected`, so a VEX file cannot silence it. The playbook also keeps `affected` statements for T1 and T2 out of the public file.
 
-**CodeQL is undecided.** The options are: leave `test` ungated; add a gate step that diffs the local SARIF against `staging`'s open alerts; or an inline `// codeql[<rule-id>]` suppression comment. The syntax and whether our config reads it are unverified. Excluding a rule in `.github/codeql/codeql-config.yml` is not an option: the config is shared with the `staging` uploads, so it would close the `staging` alert as well.
+### CodeQL on `test`
+
+**Compare, don't upload.** Results from `test` are not uploaded to the Security tab, so the `staging` code-scanning rule can't judge them. Instead, add a step to `Security Gate (SAST)` that reads the SARIF the CodeQL job already produces locally and compares it with `staging`'s open and dismissed alerts (`gh api repos/ustaxcourt/ef-cms/code-scanning/alerts?ref=refs/heads/staging`, without a `state` filter, so a dismissed alert still counts as known). The step fails the gate on a high-or-higher result whose rule and location are not open on `staging`. It writes nothing to the Security tab, so `test` still has no alert state of its own.
+
+This is not built. Open points for the follow-up ticket:
+- **Matching.** Line numbers shift between branches, so match on rule ID and file, as `compare-security-findings.ts` does for Trivy, rather than on line.
+- **Token.** The gate needs `security-events: read` to list `staging`'s alerts.
+- **Severity.** Use the same threshold as the `staging` rule (high or higher), so a PR that passes on `test` passes on `staging`.
+- **Suppression.** An inline `// codeql[<rule-id>]` comment is unverified, and whether our config reads it is unknown. Excluding a rule in `.github/codeql/codeql-config.yml` is not an option: the config is shared with the `staging` uploads, so it would close the `staging` alert as well. Until this is settled, an accepted CodeQL finding is dismissed in the Security tab on `staging`, which the comparison still reads as known. That only works once the alert exists on `staging`, so a new finding can't be accepted on `test` ahead of the `staging` PR.
