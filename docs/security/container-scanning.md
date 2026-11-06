@@ -8,16 +8,18 @@ DAWSON uses [Trivy](https://trivy.dev/) to scan Dockerfiles and built container 
 |-----|--------------|---------|-----------|
 | `trivy-config` | Dockerfile misconfigurations (all Dockerfiles in repo) | PR or manual dispatch | No (warn-only) |
 | `trivy-image` | Built image: `ef-cms-us-east-1` | PR that changes image paths, or manual dispatch | No (warn-only) |
-| `trivy-runtime-base` | Base images of the puppeteer and batch Dockerfiles | PR that changes image paths, or manual dispatch | No (warn-only) |
+| `trivy-runtime-image` | Built images: puppeteer and batch, from their Dockerfiles | PR that changes image paths, or manual dispatch | No (warn-only) |
 | `trivy-baseline` | All three images above (full baseline) | Push to staging that changes image paths, and weekly (Monday 06:00 UTC) | No (informational) |
 | `containers-gate` | Aggregates above three PR/manual jobs | PR or manual dispatch | Yes (infra failures only) |
 
 All scans currently use `exit-code: '0'` (warn-only).
 
-"Image paths" are any `Dockerfile*`, this workflow, and the `dawson-container-images`,
+"Image paths" are any `Dockerfile*`, the batch image's build context
+(`web-api/terraform/modules/batch/docker-image/`), the puppeteer `package.json` and
+`package-lock.json`, this workflow, and the `dawson-container-images`, `dawson-runtime-image`,
 `dawson-trivy-image-scan`, `dawson-upload-sarif` and `dawson-sarif-summary` actions. Nothing else
 can change what the scanned images contain: `ef-cms-us-east-1` copies no application source or
-lockfile, and the two base images are pulled as published. The weekly run picks up CVEs published
+lockfile, and the batch and puppeteer images copy only those files. The weekly run picks up CVEs published
 against images that have not changed. It uploads to the same `trivy-baseline-*` categories as
 staging pushes, so an alert still present stays one alert and only a new CVE opens a new one.
 
@@ -37,11 +39,18 @@ Removing a scan does not clear alerts it already reported. Existing alerts have 
 |-------|-----------|---------|
 | `ef-cms-us-east-1` | `Dockerfile` | CircleCI build, test and deploy image |
 | `efcms-local` | `Dockerfile-local` (FROM ef-cms-us-east-1) | Local dev / CI test runner — **not scanned** |
-| `FROM` of `web-api/runtimes/puppeteer/Dockerfile` | Docker Hub | Puppeteer / PDF generation base |
-| `FROM` of `web-api/terraform/modules/batch/docker-image/Dockerfile` | Docker Hub | Batch processing base |
+| `puppeteer-layer` | `web-api/runtimes/puppeteer/Dockerfile` | Builds the puppeteer Lambda layer zip for deploys run outside CircleCI; the image itself is not deployed |
+| `docket-entry-zipper` | `web-api/terraform/modules/batch/docker-image/Dockerfile` | AWS Batch job that zips docket entries |
 
-The two base image tags are read from those Dockerfiles when the workflow runs, so they follow
-the weekly dependency updates without a second copy to keep in sync.
+The `dawson-runtime-image` action builds the puppeteer and batch images, so the scans include
+what their Dockerfiles add on top of the base image, such as `awscli` and the global
+`ts-node`/`typescript` in batch. Batch is built with placeholder `AWS_REGION` and
+`WEBSOCKET_API_GATEWAY_ID` build args; the scan needs no real values.
+
+Until October 2026 these two scans covered only the Docker Hub `node` base images. Alerts record
+the scanned image's name as their location, so the first scan of the built images is expected to
+close the old `library/node` alerts and report the same CVEs again under `docket-entry-zipper` and
+`puppeteer-layer`. Dismissals made on the old alerts would not carry over.
 
 `efcms-local` is `FROM ef-cms-us-east-1` plus `COPY . /home/app` and `npm ci`. It installs no OS
 packages, so the CVEs reported against the image itself restated the base image's, under a second
@@ -62,7 +71,7 @@ Checks for misconfigurations in Dockerfiles (e.g., running as root, using `lates
 
 Excluded directories: `node_modules`, `.terraform`, `web-api/terraform`, `coverage`, `dist`, `dist-public`, `dist-lambdas`, `cypress`.
 
-### Image vulnerability scan (`trivy-image`, `trivy-runtime-base`)
+### Image vulnerability scan (`trivy-image`, `trivy-runtime-image`)
 
 Scans OS packages and application libraries in the built image for known CVEs. Severity threshold: HIGH and CRITICAL, plus UNKNOWN.
 

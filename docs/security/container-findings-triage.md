@@ -19,7 +19,7 @@ Understanding where each image is used is the first step in evaluating its findi
 | Puppeteer image | Temporary environment for packaging dependencies into a Lambda layer | The Docker image is not deployed; the generated ZIP is |
 | `efcms-local` | Local development and CI testing | Runs on developer machines and in testing workflows |
 
-**Scanning coverage:** Trivy image scans for the batch and Puppeteer images examine their Node.js base images, not the built images. npm dependencies installed by `npm ci` come from each image's `package-lock.json`, which the full-tree Trivy scan in `.github/workflows/security-supply-chain.yml` covers (Security tab category `trivy`). Not covered by any scan: `awscli` (installed by `apt-get`) and the global `ts-node`/`typescript` installs in the batch image, and `zip` in the Puppeteer build image.
+**Scanning coverage:** Trivy builds each image from its Dockerfile and scans the result, so findings include packages the Dockerfiles add on top of the base image: `awscli` and the global `ts-node`/`typescript` in the batch image, and `zip` in the Puppeteer image. The images are built fresh in CI, so they can differ from what is deployed: CircleCI runs the `ef-cms-us-east-1` tag pinned in `.circleci/config.yml`, and batch runs the image last pushed to ECR.
 
 ## 2. Evaluating Container Findings
 
@@ -67,7 +67,7 @@ trivy image "${AWS_ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:
 
 For Debian packages, consult the [Debian Security Tracker](https://security-tracker.debian.org/tracker/) to verify whether fixes have been backported.
 
-**DAWSON example:** For the batch and Puppeteer images, check presence against the image built from the Dockerfile, not only the base-image scan, which misses the packages those Dockerfiles add (see **Scanning coverage** in [section 1](#1-dawson-container-image-inventory)).
+**DAWSON example:** The scans build images fresh in CI, so check presence against the image that actually runs when it may differ (see **Scanning coverage** in [section 1](#1-dawson-container-image-inventory)).
 
 **Outcome:**
 - Package absent or vulnerability already patched: document the evidence and classify the finding accordingly.
@@ -184,7 +184,7 @@ trivy image --vex .vex/ef-cms.openvex.json --show-suppressed <image>
 
 Review the results to confirm that only the intended findings are suppressed.
 
-**Example:** a minimal statement for [Example 1](#example-1-zlib-in-the-batch-base-image). Tested with Trivy 0.76 against `node:24.21.0`: both zlib findings were suppressed and every other finding was still reported.
+**Example:** a minimal statement for [Example 1](#example-1-zlib-in-the-batch-base-image). Tested with Trivy 0.76 against the built batch image (`docket-entry-zipper`): both zlib findings were suppressed and every other finding was still reported.
 
 ```json
 {
@@ -197,13 +197,8 @@ Review the results to confirm that only the intended findings are suppressed.
     {
       "vulnerability": { "name": "CVE-2023-45853" },
       "products": [
-        {
-          "@id": "pkg:oci/node?repository_url=index.docker.io%2Flibrary%2Fnode",
-          "subcomponents": [
-            { "@id": "pkg:deb/debian/zlib1g" },
-            { "@id": "pkg:deb/debian/zlib1g-dev" }
-          ]
-        }
+        { "@id": "pkg:deb/debian/zlib1g" },
+        { "@id": "pkg:deb/debian/zlib1g-dev" }
       ],
       "status": "not_affected",
       "justification": "vulnerable_code_not_present",
@@ -213,7 +208,7 @@ Review the results to confirm that only the intended findings are suppressed.
 }
 ```
 
-The product is the image as a package URL (purl), with the affected packages as `subcomponents`. Take each package's purl from Trivy's JSON output (`.PkgIdentifier.PURL`). Omit the version, as above, only when the justification holds for every version.
+Each product is an affected package's package URL (purl). Take it from Trivy's JSON output (`.PkgIdentifier.PURL`). Omit the version, as above, only when the justification holds for every version. Identify packages, not images: the scans build their images locally, so an image identifier such as `pkg:oci/node?...` does not match what CI scans.
 
 **Note:** DAWSON's existing container scans do not currently consume this VEX file. Integrating VEX into the CI/CD scanning workflow would require a separate change.
 
