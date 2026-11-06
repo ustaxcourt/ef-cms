@@ -72,22 +72,21 @@ suppression mechanisms and image rebuilds, see the [scanner reference](scanner-r
 
 ## Where findings are tracked
 
-The repository and its GitHub Issues are public. Every finding is tracked in a draft security
-advisory, which only its collaborators can see, so it can hold the full details, an assignee and a
-due date. Whether a finding is routine or sensitive decides what the PR, its commit messages and
-any public issue may say about it:
+The repository and its GitHub Issues are public. Every finding is tracked as a GitHub issue on
+the [ZenHub](../../zenhub.md) board, so all security work shows up in one place with an assignee and
+a due date. A finding also gets a draft security advisory when it is sensitive or expected to stay
+open for several weeks. What the issue may say depends on which it is:
 
-- **Routine:** an upgrade to a published fix for a public advisory, in any tier; T3 findings; false
-  positives; findings marked not affected. The PR can name the package and the advisory.
-- **Sensitive:** any other finding that affects T1 or T2, such as one in DAWSON's own code or
-  configuration (CodeQL, Semgrep, Checkov, ZAP) or a public CVE with no fixed version; any exposed
-  secret; any finding reported by a person. The PR and any public issue say only "Private security
-  finding" and the advisory's GHSA ID. No component, severity or CVE.
+| Finding | Tracking | What the public issue contains |
+| --- | --- | --- |
+| **Routine:** an upgrade to a published fix for a public advisory, in any tier; T3 findings; false positives; findings marked not affected | GitHub issue only | The full details |
+| **Sensitive:** any other finding that affects T1 or T2, such as one in DAWSON's own code or configuration (CodeQL, Semgrep, Checkov, ZAP) or a public CVE with no fixed version; any exposed secret; any finding reported by a person | Draft security advisory for the details, plus a GitHub issue that points to it | Only "Private security finding", the advisory's GHSA ID, the assignee and the due date. No component, severity or CVE. |
+| **Long-lived:** a routine finding expected to stay open for several weeks, such as a deferred `.trivyignore` entry that the weekly update can't fix | GitHub issue, plus a draft security advisory for the working notes | The full details, plus the GHSA ID |
 
 A dependency or base-image upgrade for a public advisory is routine even in T1 or T2: the advisory
 is already public, and the upgrade PR names the package anyway. When in doubt, treat a finding as
 sensitive. Never put details of a sensitive finding in a public issue, PR description or commit
-message.
+message. A short-lived routine finding doesn't need an advisory.
 
 **Draft security advisories** live under Security → Advisories. Only repository owners, admins and
 security managers can create one; everyone else can see and edit it only after being added to it as
@@ -188,7 +187,7 @@ severity, not on the scanner's. Work it out in three steps.
 | Checkov | Checkov does not report a severity. Checks in `--hard-fail-on` are High; every other check is Medium. |
 | Gitleaks | Critical, until the finding is confirmed to be a false positive |
 | OWASP ZAP | High, Medium and Low map directly. Informational alerts are not tracked. |
-| ShellCheck | Not tracked. It blocks the PR that introduces an error, through the required `Security Gate (SAST)` check, and the error is fixed there. |
+| ShellCheck | Not tracked. It scans every `.sh` file, so an error-level finding blocks whichever PR it first runs on, through the required `Security Gate (SAST)` check, and the error is fixed or suppressed on that PR. |
 | Lockfile lint | Not tracked, and it does not block: the step is `continue-on-error: true` and is not part of a required check. It fails when a package in `package-lock.json` is not from the npm registry, not over HTTPS, or has no integrity hash. That can mean a dependency is coming from somewhere unexpected, so the PR author fixes a failure before merging, and a reviewer who sees the failed step asks why. |
 
 Treat findings that share a CVE and a cause as one finding. For example, one CVE reported against
@@ -513,7 +512,13 @@ it to the weekly scan team and move on. For a Trivy `fs` finding, follow
 
 ### Trivy fs findings
 
-`Findings vs staging` is a required check on `test`. It fails when your branch has a vulnerability
+**This is the target process, not yet in effect.** It depends on work that is not built: making
+`Findings vs staging` a required check on `test`, creating `.trivyignore` and passing it to the
+branch scan in `security-compare.yml`, and creating the VEX file. See
+[the strategy](branching-and-baseline-strategy.md#protecting-the-baseline). Until then the check is
+not required, and a `.trivyignore` line does not unblock it.
+
+`Findings vs staging` will be a required check on `test`. It fails when your branch has a vulnerability
 that `staging` doesn't. Your change may have added the dependency. Or another PR may have merged
 the vulnerable dependency into `test` and not yet reached `staging`, so it shows as new on yours.
 A CVE newly published against code already on `staging` shows on both sides and doesn't fail the check.
@@ -546,22 +551,28 @@ so the finding is picked up in the next weekly scan even if nobody replies in ch
    don't use (see [Severity rubric](#severity-rubric), step 2).
    - **It doesn't apply.** Record a `not_affected` statement in the VEX file, with the justification
      ([VEX statements](#vex-statements)).
-   - **It does, or it can't be ruled out.** Record `under_investigation` in the VEX file, open a draft
-     security advisory with the alert information so it can be investigated, and add the CVE to `.trivyignore`
-     with an expiry of the Monday the next weekly dependency update starts, for example
-     `CVE-2026-1234 exp:2026-11-09`. Put the advisory's GHSA ID in a comment above the line. The ignore
-     lapses when that update begins, so the finding is looked at again then, and the line is
-     removed once it is fixed.
+   - **It applies.** The finding is confirmed `affected`. Open a draft security advisory and keep the
+     `affected` statement there ([What may be published](#what-may-be-published)). Don't put it in the
+     VEX file until the fix ships.
+   - **It can't be ruled out yet.** Open a draft security advisory with the alert information so it
+     can be investigated. For a T3 component, also record `under_investigation` in the VEX file.
+   - **To defer either one,** add the CVE to `.trivyignore` with an expiry of the Monday the next
+     weekly dependency update starts, for example `CVE-2026-1234 exp:2026-11-09`. Put the advisory's
+     GHSA ID in a comment above the line. The ignore lapses when that update begins, so the
+     finding is looked at again then, and the line is removed once it is fixed. For a T1 or T2
+     component, see the decision below first.
 
 Trivy applies only `not_affected` and `fixed` VEX statements, and no workflow passes `--vex` yet.
 Until it does, a not-affected finding still fails the check, so it also needs a `.trivyignore`
 line, with the exception's review date as the expiry ([Review dates](#review-dates)).
 
-Needs a decision: for a T1 or T2 component, an unfixed CVE that affects DAWSON is sensitive under
-[Where findings are tracked](#where-findings-are-tracked), and
-[What may be published](#what-may-be-published) keeps `affected` statements out of the public
-VEX file. `.trivyignore` and an `under_investigation` statement are both in the public repository
-and name the CVE.
+**Needs a decision before a T1 or T2 finding is deferred this way.** An unfixed CVE that affects
+DAWSON in a T1 or T2 component is sensitive under
+[Where findings are tracked](#where-findings-are-tracked). `.trivyignore` and an
+`under_investigation` statement are both in the public repository and name the CVE, which tells an
+attacker the dependency is vulnerable. Until the approver has agreed an approach, don't add a
+`.trivyignore` line or a VEX statement for such a finding. Keep the details in the draft advisory
+and ask the approver how the check should be cleared.
 
 ### When a fix can be deferred
 
@@ -581,8 +592,9 @@ If so:
 
 A real secret is never deferred. Rotate it the same business day and follow [Secrets](#secrets).
 
-A finding fixed before the PR merges never reaches `staging`, so nothing is tracked and there is
-no advisory.
+A routine finding fixed before the PR merges never reaches `staging`, so nothing is tracked and
+there is no advisory. A secret is the exception. It is exposed once it is pushed, even if the PR
+never merges, so it still gets a draft advisory and the record in [Secrets](#secrets).
 
 ### Keeping sensitive details out of the PR
 
