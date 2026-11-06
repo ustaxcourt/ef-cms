@@ -27,7 +27,7 @@ describe('Docket Clerk adds a Type I Court Issued document', () => {
         'Notice of Assignment of Judge',
       );
       attachFile({
-        filePath: '../../helpers/file/sample.pdf',
+        filePath: 'sample.pdf',
         selector: '[data-testid="primary-document-file"]',
         selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
       });
