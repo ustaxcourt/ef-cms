@@ -272,7 +272,7 @@ describe('View/Edit case detail', () => {
 
   it('should add deficiency statistics', () => {
     createFreshDeficiencyCaseWithStatistics().then(docketNumber => {
-      cy.get('[data-testid="statistics-deficiencies-table"] tbody tr').should(
+      cy.get('[data-testid^="statistics-table-"]').should(
         'have.length',
         getDeficiencyStatistics(docketNumber).length,
       );
@@ -282,51 +282,61 @@ describe('View/Edit case detail', () => {
   it('should show deficiency statistics in the correct order', () => {
     createFreshDeficiencyCaseWithStatistics().then(docketNumber => {
       const sortedStatistics = sortDeficiencyStatistics(docketNumber);
-      const expectedRows = sortedStatistics.map(s => ({
-        period: s.year || formatDateString(s.lastDateOfPeriod, FORMATS.MMDDYY),
-        notice: formatDollars(s.irsDeficiencyAmount),
-        determination: formatDollars(s.determinationDeficiencyAmount),
-      }));
 
-      cy.get('[data-testid="statistics-deficiencies-table"]').within(() => {
-        cy.get('thead th').should('have.length', 3);
-        cy.get('thead th').eq(0).should('contain', 'Year/Period');
-        cy.get('thead th').eq(1).should('contain', 'IRS Notice');
-        cy.get('thead th').eq(2).should('contain', 'Determination');
-        cy.get('tbody tr').should('have.length', sortedStatistics.length);
-        cy.get('tbody tr').each(($row, index) => {
-          const expected = expectedRows[index];
-          cy.wrap($row).within(() => {
-            cy.get('td').eq(0).should('contain', expected.period);
-            cy.get('td').eq(1).should('contain', expected.notice);
-            cy.get('td').eq(2).should('contain', expected.determination);
-          });
-        });
+      cy.get('[data-testid^="statistics-table-"]').each(($table, index) => {
+        const statistic = sortedStatistics[index];
+        const expectedPeriod =
+          statistic.year ||
+          formatDateString(statistic.lastDateOfPeriod, FORMATS.MMDDYY);
+        cy.wrap($table).prev('h4').should('contain', expectedPeriod);
       });
     });
   });
 
-  it('should show total penalties in the correct order', () => {
+  it('should show deficiency, penalties, and totals for each statistic', () => {
     createFreshDeficiencyCaseWithStatistics().then(docketNumber => {
-      const sortedStatistics = sortDeficiencyStatistics(docketNumber);
-      const expectedRows = sortedStatistics.map(s => ({
-        notice: formatDollars(s.irsTotalPenalties),
-        determination: formatDollars(s.determinationTotalPenalties),
-      }));
+      sortDeficiencyStatistics(docketNumber).forEach((statistic, index) => {
+        const expectedRows = [
+          {
+            deficiency: formatDollars(statistic.irsDeficiencyAmount),
+            label: 'IRS Notice',
+            penalties: formatDollars(statistic.irsTotalPenalties),
+            total: formatDollars(
+              Number(statistic.irsDeficiencyAmount) +
+                Number(statistic.irsTotalPenalties),
+            ),
+          },
+          {
+            deficiency: formatDollars(statistic.determinationDeficiencyAmount),
+            label: 'Determination',
+            penalties: formatDollars(statistic.determinationTotalPenalties),
+            total: formatDollars(
+              Number(statistic.determinationDeficiencyAmount) +
+                Number(statistic.determinationTotalPenalties),
+            ),
+          },
+        ];
 
-      cy.get('[data-testid="statistics-penalties-table"]').within(() => {
-        cy.get('thead th').should('have.length', 3);
-        cy.get('thead th').eq(0).should('contain', 'IRS Notice');
-        cy.get('thead th').eq(1).should('contain', 'Determination');
-        cy.get('thead th').eq(2).should('be.empty');
-        cy.get('tbody tr').should('have.length', sortedStatistics.length);
-        cy.get('tbody tr').each(($row, index) => {
-          const expected = expectedRows[index];
-          cy.wrap($row).within(() => {
-            cy.get('td').eq(0).should('contain', expected.notice);
-            cy.get('td').eq(1).should('contain', expected.determination);
+        // statisticIds are generated on save, so locate each table by its sorted position
+        cy.get('[data-testid^="statistics-table-"]')
+          .eq(index)
+          .within(() => {
+            cy.get('thead th').should('have.length', 4);
+            cy.get('thead th').eq(0).should('be.empty');
+            cy.get('thead th').eq(1).should('contain', 'Deficiency');
+            cy.get('thead th').eq(2).should('contain', 'Penalties');
+            cy.get('thead th').eq(3).should('contain', 'Total');
+            cy.get('tbody tr').should('have.length', expectedRows.length);
+            cy.get('tbody tr').each(($row, rowIndex) => {
+              const expected = expectedRows[rowIndex];
+              cy.wrap($row).within(() => {
+                cy.get('td').eq(0).should('contain', expected.label);
+                cy.get('td').eq(1).should('contain', expected.deficiency);
+                cy.get('td').eq(2).should('contain', expected.penalties);
+                cy.get('td').eq(3).should('contain', expected.total);
+              });
+            });
           });
-        });
       });
     });
   });
@@ -345,6 +355,7 @@ describe('View/Edit case detail', () => {
       }
 
       const statistic = sortedStatistics[statisticIndex];
+
       const irsPenalties = statistic.penalties.filter(
         (p: Penalty) => p.penaltyType === PENALTY_TYPES.IRS_PENALTY_AMOUNT,
       );
@@ -379,9 +390,10 @@ describe('View/Edit case detail', () => {
         determination: formatDollars(statistic.determinationTotalPenalties),
       });
 
-      cy.get(
-        `[data-testid="view-itemized-penalties-button-${statisticIndex}"]`,
-      ).click();
+      // statisticIds are generated on save, so locate the button by its sorted position
+      cy.get('[data-testid^="view-itemized-penalties-button-"]')
+        .eq(statisticIndex)
+        .click();
       cy.get('[data-testid="itemized-penalties-modal"]').within(() => {
         cy.get('thead th').should('have.length', 3);
         cy.get('tbody tr').should('have.length', statistic.penalties.length);
