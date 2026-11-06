@@ -126,8 +126,9 @@ describe('getClerkDashboardCasesStatsInteractor', () => {
   });
 
   it('should reject with a status change query error even while the open cases query is pending', async () => {
+    // the open cases query never settles
     (openCasesByProcedureTypeAndCaseType as jest.Mock).mockImplementation(
-      () => new Promise(resolve => setTimeout(() => resolve([]), 50)),
+      () => new Promise(() => {}),
     );
     (caseStatusChangesByYear as jest.Mock).mockRejectedValue(
       new Error('case query failed'),
