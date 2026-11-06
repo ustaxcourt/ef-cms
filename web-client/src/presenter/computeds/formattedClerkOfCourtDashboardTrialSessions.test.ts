@@ -131,21 +131,20 @@ describe('formattedClerkOfCourtDashboardTrialSessions', () => {
 
       const result = runCompute(formattedClerkOfCourtDashboardTrialSessions, {
         state: {
-          trialSessions: TRIAL_SESSIONS,
+          clerkOfCourtDashboardTrialSessions: {
+            data: TRIAL_SESSIONS,
+            status: 'loaded',
+          },
         },
       });
 
       expect(result.formattedCurrentWeekSessions.length).toBe(2);
       expect(result.formattedNextWeekSessions.length).toBe(1);
       expect(
-        result.formattedCurrentWeekSessions.some(
-          s => s.trialSessionId === '1',
-        ),
+        result.formattedCurrentWeekSessions.some(s => s.trialSessionId === '1'),
       ).toBe(true);
       expect(
-        result.formattedCurrentWeekSessions.some(
-          s => s.trialSessionId === '3',
-        ),
+        result.formattedCurrentWeekSessions.some(s => s.trialSessionId === '3'),
       ).toBe(true);
       expect(
         result.formattedNextWeekSessions.some(s => s.trialSessionId === '2'),
@@ -179,7 +178,10 @@ describe('formattedClerkOfCourtDashboardTrialSessions', () => {
 
       const result = runCompute(formattedClerkOfCourtDashboardTrialSessions, {
         state: {
-          trialSessions: TRIAL_SESSIONS,
+          clerkOfCourtDashboardTrialSessions: {
+            data: TRIAL_SESSIONS,
+            status: 'loaded',
+          },
         },
       });
 
@@ -233,7 +235,10 @@ describe('formattedClerkOfCourtDashboardTrialSessions', () => {
 
       const result = runCompute(formattedClerkOfCourtDashboardTrialSessions, {
         state: {
-          trialSessions: TRIAL_SESSIONS,
+          clerkOfCourtDashboardTrialSessions: {
+            data: TRIAL_SESSIONS,
+            status: 'loaded',
+          },
         },
       });
 
@@ -271,7 +276,10 @@ describe('formattedClerkOfCourtDashboardTrialSessions', () => {
 
       const result = runCompute(formattedClerkOfCourtDashboardTrialSessions, {
         state: {
-          trialSessions: TRIAL_SESSIONS,
+          clerkOfCourtDashboardTrialSessions: {
+            data: TRIAL_SESSIONS,
+            status: 'loaded',
+          },
         },
       });
 
@@ -306,7 +314,10 @@ describe('formattedClerkOfCourtDashboardTrialSessions', () => {
 
       const result = runCompute(formattedClerkOfCourtDashboardTrialSessions, {
         state: {
-          trialSessions: TRIAL_SESSIONS,
+          clerkOfCourtDashboardTrialSessions: {
+            data: TRIAL_SESSIONS,
+            status: 'loaded',
+          },
         },
       });
 
@@ -341,7 +352,10 @@ describe('formattedClerkOfCourtDashboardTrialSessions', () => {
 
       const result = runCompute(formattedClerkOfCourtDashboardTrialSessions, {
         state: {
-          trialSessions: TRIAL_SESSIONS,
+          clerkOfCourtDashboardTrialSessions: {
+            data: TRIAL_SESSIONS,
+            status: 'loaded',
+          },
         },
       });
 
@@ -364,7 +378,10 @@ describe('formattedClerkOfCourtDashboardTrialSessions', () => {
 
       const result = runCompute(formattedClerkOfCourtDashboardTrialSessions, {
         state: {
-          trialSessions: TRIAL_SESSIONS,
+          clerkOfCourtDashboardTrialSessions: {
+            data: TRIAL_SESSIONS,
+            status: 'loaded',
+          },
         },
       });
 
@@ -388,7 +405,10 @@ describe('formattedClerkOfCourtDashboardTrialSessions', () => {
 
       const result = runCompute(formattedClerkOfCourtDashboardTrialSessions, {
         state: {
-          trialSessions: TRIAL_SESSIONS,
+          clerkOfCourtDashboardTrialSessions: {
+            data: TRIAL_SESSIONS,
+            status: 'loaded',
+          },
         },
       });
 
@@ -432,7 +452,10 @@ describe('formattedClerkOfCourtDashboardTrialSessions', () => {
 
       const result = runCompute(formattedClerkOfCourtDashboardTrialSessions, {
         state: {
-          trialSessions: TRIAL_SESSIONS,
+          clerkOfCourtDashboardTrialSessions: {
+            data: TRIAL_SESSIONS,
+            status: 'loaded',
+          },
         },
       });
 
@@ -461,7 +484,10 @@ describe('formattedClerkOfCourtDashboardTrialSessions', () => {
 
       const result = runCompute(formattedClerkOfCourtDashboardTrialSessions, {
         state: {
-          trialSessions: TRIAL_SESSIONS,
+          clerkOfCourtDashboardTrialSessions: {
+            data: TRIAL_SESSIONS,
+            status: 'loaded',
+          },
         },
       });
 
@@ -472,7 +498,7 @@ describe('formattedClerkOfCourtDashboardTrialSessions', () => {
     it('handles empty trial sessions array', () => {
       const result = runCompute(formattedClerkOfCourtDashboardTrialSessions, {
         state: {
-          trialSessions: [],
+          clerkOfCourtDashboardTrialSessions: { data: [], status: 'loaded' },
         },
       });
 
@@ -483,7 +509,10 @@ describe('formattedClerkOfCourtDashboardTrialSessions', () => {
     it('handles undefined trial sessions', () => {
       const result = runCompute(formattedClerkOfCourtDashboardTrialSessions, {
         state: {
-          trialSessions: undefined,
+          clerkOfCourtDashboardTrialSessions: {
+            data: undefined,
+            status: 'loaded',
+          },
         },
       });
 

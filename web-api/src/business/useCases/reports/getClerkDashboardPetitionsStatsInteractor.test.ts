@@ -1,5 +1,5 @@
 /* eslint-disable max-lines */
-import { getClerkDashboardStatsInteractor } from './getClerkDashboardStatsInteractor';
+import { getClerkDashboardPetitionsStatsInteractor } from './getClerkDashboardPetitionsStatsInteractor';
 import {
   mockDocketClerkUser,
   mockPetitionerUser,
@@ -17,10 +17,10 @@ jest.mock('@shared/business/utilities/DateHandler', () => ({
   createISODateString: jest.fn(),
 }));
 
-import { petitionsDataByYear } from '@web-api/persistence/postgres/cases/reports/getClerkDashboardStats';
 import { createISODateString } from '@shared/business/utilities/DateHandler';
+import { petitionsDataByYear } from '@web-api/persistence/postgres/cases/reports/getClerkDashboardStats';
 
-describe('getClerkDashboardStatsInteractor', () => {
+describe('getClerkDashboardPetitionsStatsInteractor', () => {
   const mockStats = [
     { isPaper: false, isRepresenting: null, month: '10', total: '759' },
     { isPaper: true, isRepresenting: null, month: '12', total: '261' },
@@ -55,7 +55,7 @@ describe('getClerkDashboardStatsInteractor', () => {
 
   it('should throw an unauthorized error when the user does not have access', async () => {
     await expect(
-      getClerkDashboardStatsInteractor(mockPetitionerUser),
+      getClerkDashboardPetitionsStatsInteractor(mockPetitionerUser),
     ).rejects.toThrow('Unauthorized');
   });
 
@@ -121,10 +121,12 @@ describe('getClerkDashboardStatsInteractor', () => {
       { isPaper: null, isRepresenting: true, month: null, total: '8000' },
     ]);
 
-    const result = await getClerkDashboardStatsInteractor(mockDocketClerkUser);
+    const result =
+      await getClerkDashboardPetitionsStatsInteractor(mockDocketClerkUser);
 
-    expect(result).toEqual({
+    expect(result).toMatchObject({
       year: '2026',
+      fiscalYear: '2026',
       calendarYearPetitionStats: {
         petitionFullPaperMonths: [
           {
@@ -439,7 +441,8 @@ describe('getClerkDashboardStatsInteractor', () => {
       { isPaper: null, isRepresenting: false, month: null, total: '5000' },
       { isPaper: null, isRepresenting: true, month: null, total: '2200' },
     ]);
-    const result = await getClerkDashboardStatsInteractor(mockDocketClerkUser);
+    const result =
+      await getClerkDashboardPetitionsStatsInteractor(mockDocketClerkUser);
 
     expect(result.calendarYearPetitionStats).toEqual({
       petitionFullPaperMonths: [
@@ -592,7 +595,8 @@ describe('getClerkDashboardStatsInteractor', () => {
   it('should handle no data for the year', async () => {
     (petitionsDataByYear as jest.Mock).mockResolvedValue([]);
 
-    const result = await getClerkDashboardStatsInteractor(mockDocketClerkUser);
+    const result =
+      await getClerkDashboardPetitionsStatsInteractor(mockDocketClerkUser);
 
     expect(result.calendarYearPetitionStats).toEqual({
       petitionFullPaperMonths: [
@@ -722,5 +726,26 @@ describe('getClerkDashboardStatsInteractor', () => {
       petitionsByServiceType: [],
       petitionsByRepresentation: [],
     });
+  });
+
+  it('should query the petitions for the fiscal year ending next year from October 1 Eastern time', async () => {
+    // 12:01 AM on October 1 in Eastern time
+    (createISODateString as jest.Mock).mockReturnValue(
+      '2026-10-01T04:01:00.000Z',
+    );
+
+    const result =
+      await getClerkDashboardPetitionsStatsInteractor(mockDocketClerkUser);
+
+    expect(result.year).toEqual('2026');
+    expect(result.fiscalYear).toEqual('2027');
+    const [calendarBegin, calendarEnd] = (petitionsDataByYear as jest.Mock).mock
+      .calls[0];
+    expect(calendarBegin.toISOString()).toEqual('2026-01-01T05:00:00.000Z');
+    expect(calendarEnd.toISOString()).toEqual('2027-01-01T05:00:00.000Z');
+    const [fiscalBegin, fiscalEnd] = (petitionsDataByYear as jest.Mock).mock
+      .calls[1];
+    expect(fiscalBegin.toISOString()).toEqual('2026-10-01T04:00:00.000Z');
+    expect(fiscalEnd.toISOString()).toEqual('2027-10-01T04:00:00.000Z');
   });
 });
