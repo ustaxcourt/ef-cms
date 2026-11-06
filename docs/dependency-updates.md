@@ -475,13 +475,14 @@ Below is a list of dependencies that are locked down due to known issues with se
 - As of 10/26/2026: Updated from 6.3.289 to **6.4.299**. Verified in `exp5`: the upload form rejects corrupt and encrypted PDFs and accepts a valid PDF, the signing page renders the order PDF, and keyword order search finds text from a served order (Lambda scrape) with no `DOMMatrix` or `Error scraping PDF` errors in CloudWatch.
 
 ### DWT
-**Current Installed DWT: 19.4.4**
+**Current Installed DWT: 19.5.0**
 
 Minor and patch versions of DWT _should_ be updated, but require that Court IT update the Windows clients in concert with our app. Do not bump `dwt` during weekly dependency rotations even if a newer version appears on npm — upgrades require the coordination sequence below and a standalone PR to `test`, not a bundled rotation.
 
 - As of 8/10/2026: **Held at 19.4.2** during the 8/10/2026 dependency rotation per operator direction. 19.4.2 is both the pinned version in `package.json` and the latest published release on npm. Re-check each rotation; if a newer version appears, leave it alone until Court IT coordination is complete.
 - As of 9/17/2026: `package.json` pins **19.4.3** (bumped from 19.4.2 in the 8/31/2026 dependency rotation), which is the latest published release on npm.
 - As of 10/26/2026: `package.json` pins **19.4.4**, from a standalone DWT update (commit `56758f9420`), not a weekly rotation.
+- As of 11/03/2026: `package.json` pins **19.5.0**, updated in a standalone DWT PR.
 
 If an update is available for DWT:
 - Coordinate with Court IT to have the Dynamsoft client updated on Court-owned Windows machines.
