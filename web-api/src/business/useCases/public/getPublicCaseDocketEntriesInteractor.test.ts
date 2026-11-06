@@ -1,6 +1,13 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import { MOCK_CASE } from '@shared/test/mockCase';
-import { PARTY_TYPES } from '@shared/business/entities/EntityConstants';
+import {
+  DOCKET_ENTRY_SEALED_TO_TYPES,
+  DOCUMENT_PROCESSING_STATUS_OPTIONS,
+  PARTY_TYPES,
+  ROLES,
+} from '@shared/business/entities/EntityConstants';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
+import { createISODateString } from '@shared/business/utilities/DateHandler';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getContactPrimary } from '@shared/business/entities/cases/Case';
 import { getPublicCaseDocketEntriesInteractor } from './getPublicCaseDocketEntriesInteractor';
@@ -96,5 +103,53 @@ describe('getPublicCaseDocketEntriesInteractor', () => {
         page: NaN,
       }),
     ).rejects.toThrow("Invalid page 'NaN'. Must be a number between 0 and 20");
+  });
+
+  it('should retain motion visibility fields on public docket entries', async () => {
+    const filingDate = createISODateString();
+    const motionVisibilityDocketEntry = {
+      ...MOCK_CASE.docketEntries[0],
+      docketEntryId: applicationContext.getUniqueId(),
+      documentTitle: 'Motion for Continuance',
+      documentType: 'Motion for Continuance',
+      eventCode: 'M006',
+      filedByRole: ROLES.privatePractitioner,
+      filingDate,
+      isDraft: false,
+      isOnDocketRecord: true,
+      isPaper: true,
+      isSealed: true,
+      isStricken: false,
+      lodged: true,
+      previousDocument: {
+        docketEntryId: applicationContext.getUniqueId(),
+        documentTitle: 'Motion for Leave to File',
+        documentType: 'Motion for Leave to File',
+      },
+      processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+      receivedAt: filingDate,
+      sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
+    };
+
+    getCaseByDocketNumber.mockResolvedValue({
+      ...mockCase,
+      docketEntries: [motionVisibilityDocketEntry],
+    });
+
+    const result = await getPublicCaseDocketEntriesInteractor({
+      docketNumber: mockCase.docketNumber,
+    });
+
+    expect(result.docketEntries).toHaveLength(1);
+    expect(result.docketEntries[0]).toMatchObject({
+      filedByRole: ROLES.privatePractitioner,
+      filingDate: motionVisibilityDocketEntry.filingDate,
+      isPaper: true,
+      isSealed: true,
+      isStricken: false,
+      lodged: true,
+      previousDocument: motionVisibilityDocketEntry.previousDocument,
+      sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
+    });
   });
 });

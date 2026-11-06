@@ -179,6 +179,7 @@ const getRelatedDocketEntryDetails = (
   isExternalUser: boolean,
   user: RawUser,
   visibilityPolicyDateFormatted: string = '',
+  motionVisibilityPolicyDateFormatted: string = '',
 ): {
   index: number | undefined;
   showDocumentViewerLink: boolean;
@@ -201,6 +202,7 @@ const getRelatedDocketEntryDetails = (
     rawCase,
     user,
     visibilityChangeDate: visibilityPolicyDateFormatted,
+    motionVisibilityChangeDate: motionVisibilityPolicyDateFormatted,
   });
 
   const showDocumentViewerLink = isDownloadable && !isExternalUser;
@@ -218,12 +220,14 @@ const buildRelatedDocketEntries = ({
   isExternalUser,
   user,
   visibilityPolicyDateFormatted,
+  motionVisibilityPolicyDateFormatted,
 }: {
   entry: FormattedCaseDetailDocketEntry;
   rawCase: RawCase;
   isExternalUser: boolean;
   user: RawUser;
   visibilityPolicyDateFormatted: string;
+  motionVisibilityPolicyDateFormatted: string;
 }): RelatedDocketEntry[] => {
   const relatedDocketEntries: RelatedDocketEntry[] = [];
 
@@ -241,6 +245,7 @@ const buildRelatedDocketEntries = ({
           isExternalUser,
           user,
           visibilityPolicyDateFormatted,
+          motionVisibilityPolicyDateFormatted,
         );
 
       const dispositionLinkText = MOTION_DISPOSITION_VERBIAGE[
@@ -321,6 +326,7 @@ export const getFormattedDocketEntry = ({
   rawCase,
   user,
   visibilityPolicyDateFormatted,
+  motionVisibilityPolicyDateFormatted,
 }: {
   applicationContext: ClientApplicationContext;
   docketNumber: string;
@@ -330,6 +336,7 @@ export const getFormattedDocketEntry = ({
   rawCase: RawCase;
   user: RawUser;
   visibilityPolicyDateFormatted: string;
+  motionVisibilityPolicyDateFormatted: string;
 }): FormattedDocketEntry => {
   const isExternalUser = applicationContext
     .getUtilities()
@@ -344,6 +351,7 @@ export const getFormattedDocketEntry = ({
     isExternalUser,
     user,
     visibilityPolicyDateFormatted,
+    motionVisibilityPolicyDateFormatted,
   });
 
   const showDocumentLinks = DocketEntry.isDownloadable(entry, {
@@ -351,6 +359,7 @@ export const getFormattedDocketEntry = ({
     rawCase,
     user,
     visibilityChangeDate: visibilityPolicyDateFormatted,
+    motionVisibilityChangeDate: motionVisibilityPolicyDateFormatted,
   });
   const showDocumentProcessing =
     !permissions.UPDATE_CASE &&
@@ -433,10 +442,22 @@ export const formattedDocketEntries = (
       ALLOWLIST_FEATURE_FLAGS.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.key
     ],
   );
+
+  const MOTION_VISIBILITY_POLICY_CHANGE_DATE = get(
+    state.featureFlags[
+      ALLOWLIST_FEATURE_FLAGS.MOTION_VISIBILITY_POLICY_CHANGE_DATE.key
+    ],
+  );
+
   const visibilityPolicyDateFormatted =
     applicationContext
       .getUtilities()
       .prepareDateFromString(DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE)
+      .toISO() || '';
+  const motionVisibilityPolicyDateFormatted =
+    applicationContext
+      .getUtilities()
+      .prepareDateFromString(MOTION_VISIBILITY_POLICY_CHANGE_DATE)
       .toISO() || '';
   const formattedCase = formatCase(applicationContext, caseDetail, user);
   const documentsSelectedForDownload = get(state.documentsSelectedForDownload);
@@ -463,6 +484,7 @@ export const formattedDocketEntries = (
             rawCase: caseDetail,
             user,
             visibilityPolicyDateFormatted,
+            motionVisibilityPolicyDateFormatted,
           }),
         )
         .map(docketEntry => {

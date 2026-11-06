@@ -58,6 +58,7 @@ export const EditDocketEntryMetaFormDocument = connect(
                   }}
                 />
                 <label
+                  data-testid={`filing-status-${option}`}
                   className="usa-radio__label"
                   htmlFor={`filing-status-${option}`}
                 >

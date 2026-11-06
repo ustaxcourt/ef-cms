@@ -30,7 +30,7 @@ describe('fetchRootDocument', () => {
     });
   });
 
-  it('should return the closest to the parent if the chain is missing an entry', () => {
+  it('should return the closest previous document if the chain is missing an entry', () => {
     const theDocketEntry: any = {
       docketEntryId: '1',
       documentTitle: 'booba',
