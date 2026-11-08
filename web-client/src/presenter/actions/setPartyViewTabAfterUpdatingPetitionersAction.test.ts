@@ -80,4 +80,31 @@ describe('setPartyViewTabAfterUpdatingPetitionersAction', () => {
       PARTY_VIEW_TABS.petitionersAndCounsel,
     );
   });
+
+  it('sets state.currentViewMetadata.caseDetail.partyViewTab to participantsAndCounsel when the first participant is added to a case', async () => {
+    const { state } = await runAction(
+      setPartyViewTabAfterUpdatingPetitionersAction,
+      {
+        modules: { presenter },
+        props: {
+          caseDetail: {
+            petitioners: [
+              { contactType: CONTACT_TYPES.primary },
+              { contactType: CONTACT_TYPES.participant },
+            ],
+          },
+          contactType: CONTACT_TYPES.participant,
+        },
+        state: {
+          caseDetail: {
+            petitioners: [{ contactType: CONTACT_TYPES.primary }],
+          },
+        },
+      },
+    );
+
+    expect(state.currentViewMetadata.caseDetail.partyViewTab).toEqual(
+      PARTY_VIEW_TABS.participantsAndCounsel,
+    );
+  });
 });

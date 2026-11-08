@@ -1,8 +1,11 @@
 import { attachFile } from '../../../../../../helpers/file/upload-file';
+import { assertNoticeOfDocketChangeDoesNotExist } from 'cypress/helpers/caseDetail/docketRecord/assert-docket-entry-page-count';
+import { checkA11y } from 'cypress/local-only/support/generalCommands/checkA11y';
 import { externalUserCreatesElectronicCase } from '../../../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { externalUserSearchesDocketNumber } from '../../../../../../helpers/advancedSearch/external-user-searches-docket-number';
 import { goToCase } from '../../../../../../helpers/caseDetail/go-to-case';
 import {
+  loginAsDocketClerk,
   loginAsDocketClerk1,
   loginAsDojPractitioner,
   loginAsIrsPractitioner,
@@ -38,7 +41,12 @@ describe('Respondent-side practitioners file an Exhibit in Support (EXS)', () =>
       loginAsIrsPractitioner();
       externalUserSearchesDocketNumber(docketNumber);
       cy.get('[data-testid="button-file-document"]').click();
+      cy.get(
+        '.caseItem a[href="https://ustaxcourt.gov/dawson-user-guides/"]',
+      ).should('be.visible');
+      checkA11y();
       cy.get('[data-testid="ready-to-file"]').click();
+
       selectTypeaheadInput(
         'complete-doc-document-type-search',
         'Motion for Continuance',
@@ -50,6 +58,16 @@ describe('Respondent-side practitioners file an Exhibit in Support (EXS)', () =>
         selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
       });
       cy.get('[data-testid="primaryDocument-objections-No"]').click();
+
+      cy.get(
+        '[data-testid="primaryDocument-what-can-i-include-button"]',
+      ).click();
+      cy.get(
+        '.what-can-i-include a[href="https://ustaxcourt.gov/dawson-user-guides/"]',
+      ).should('be.visible');
+      checkA11y();
+      cy.contains('.what-can-i-include button', 'Close').click();
+      cy.get('.what-can-i-include').should('not.exist');
 
       cy.get('#add-supporting-document-button').click();
       cy.get('#supporting-document-0').select('Exhibit');
@@ -88,6 +106,33 @@ describe('Respondent-side practitioners file an Exhibit in Support (EXS)', () =>
 
       cy.get('#document-filter-by').select('Exhibits');
       cy.get('[data-testid="document-download-link-EXS"]').should('exist');
+
+      loginAsDocketClerk();
+      cy.task<{ docketEntryId: string }[]>(
+        'getDocketEntryIdsByDocketNumberAndEventCode',
+        { docketNumber, eventCode: 'EXS' },
+      ).then((entries: { docketEntryId: string }[]): void => {
+        expect(entries).to.have.length(1);
+        cy.visit(
+          `/case-detail/${docketNumber}/documents/${entries[0].docketEntryId}/edit`,
+        );
+      });
+      cy.get('[data-testid="previous-document-search"] option:selected').should(
+        'contain.text',
+        'Motion for Continuance',
+      );
+      checkA11y();
+      cy.get('[data-testid="save-and-finish-document-qc"]').click();
+      cy.get('[data-testid="success-alert"]').should('contain', 'QC Completed');
+
+      goToCase(docketNumber);
+      assertNoticeOfDocketChangeDoesNotExist();
+      cy.get('[data-testid="edit-EXS"]').click();
+      cy.get('[data-testid="previous-document-search"] option:selected').should(
+        'contain.text',
+        'Motion for Continuance',
+      );
+      checkA11y();
 
       // "Exhibit in Support" is also selectable as the primary e-filed
       // document type for a respondent-side practitioner, associated with
@@ -163,7 +208,12 @@ describe('Respondent-side practitioners file an Exhibit in Support (EXS)', () =>
       loginAsDojPractitioner();
       externalUserSearchesDocketNumber(docketNumber);
       cy.get('[data-testid="button-file-document"]').click();
+      cy.get(
+        '.caseItem a[href="https://ustaxcourt.gov/dawson-user-guides/"]',
+      ).should('be.visible');
+      checkA11y();
       cy.get('[data-testid="ready-to-file"]').click();
+
       selectTypeaheadInput(
         'complete-doc-document-type-search',
         'Motion for Continuance',
@@ -175,6 +225,16 @@ describe('Respondent-side practitioners file an Exhibit in Support (EXS)', () =>
         selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
       });
       cy.get('[data-testid="primaryDocument-objections-No"]').click();
+
+      cy.get(
+        '[data-testid="primaryDocument-what-can-i-include-button"]',
+      ).click();
+      cy.get(
+        '.what-can-i-include a[href="https://ustaxcourt.gov/dawson-user-guides/"]',
+      ).should('be.visible');
+      checkA11y();
+      cy.contains('.what-can-i-include button', 'Close').click();
+      cy.get('.what-can-i-include').should('not.exist');
 
       cy.get('#add-supporting-document-button').click();
       cy.get('#supporting-document-0').select('Exhibit');
@@ -213,6 +273,33 @@ describe('Respondent-side practitioners file an Exhibit in Support (EXS)', () =>
 
       cy.get('#document-filter-by').select('Exhibits');
       cy.get('[data-testid="document-download-link-EXS"]').should('exist');
+
+      loginAsDocketClerk();
+      cy.task<{ docketEntryId: string }[]>(
+        'getDocketEntryIdsByDocketNumberAndEventCode',
+        { docketNumber, eventCode: 'EXS' },
+      ).then((entries: { docketEntryId: string }[]): void => {
+        expect(entries).to.have.length(1);
+        cy.visit(
+          `/case-detail/${docketNumber}/documents/${entries[0].docketEntryId}/edit`,
+        );
+      });
+      cy.get('[data-testid="previous-document-search"] option:selected').should(
+        'contain.text',
+        'Motion for Continuance',
+      );
+      checkA11y();
+      cy.get('[data-testid="save-and-finish-document-qc"]').click();
+      cy.get('[data-testid="success-alert"]').should('contain', 'QC Completed');
+
+      goToCase(docketNumber);
+      assertNoticeOfDocketChangeDoesNotExist();
+      cy.get('[data-testid="edit-EXS"]').click();
+      cy.get('[data-testid="previous-document-search"] option:selected').should(
+        'contain.text',
+        'Motion for Continuance',
+      );
+      checkA11y();
 
       // "Exhibit in Support" is also selectable as the primary e-filed
       // document type for a respondent-side practitioner, associated with

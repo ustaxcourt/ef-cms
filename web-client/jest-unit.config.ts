@@ -52,7 +52,6 @@ const config: Config = {
     '^@aws-sdk/(.*)/(.*)$':
       '<rootDir>/../node_modules/@aws-sdk/$1/dist-cjs/submodules/$2/index.js',
   },
-  setupFiles: ['core-js'],
   testEnvironment: path.resolve(
     process.cwd(),
     'web-client/JsdomWithTextEncoderEnvironment.ts',

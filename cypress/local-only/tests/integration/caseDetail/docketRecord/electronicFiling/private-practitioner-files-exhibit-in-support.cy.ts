@@ -1,8 +1,12 @@
 import { attachFile } from '../../../../../../helpers/file/upload-file';
+import { assertNoticeOfDocketChangeDoesNotExist } from 'cypress/helpers/caseDetail/docketRecord/assert-docket-entry-page-count';
+import { checkA11y } from 'cypress/local-only/support/generalCommands/checkA11y';
+import { goToCase } from 'cypress/helpers/caseDetail/go-to-case';
 import { externalUserCreatesElectronicCase } from '../../../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { externalUserSearchesDocketNumber } from '../../../../../../helpers/advancedSearch/external-user-searches-docket-number';
 import { formatNow, FORMATS } from '@shared/business/utilities/DateHandler';
 import {
+  loginAsDocketClerk,
   loginAsPetitioner,
   loginAsPrivatePractitioner,
 } from '../../../../../../helpers/authentication/login-as-helpers';
@@ -31,6 +35,10 @@ describe('Private practitioner files a Motion with an Exhibit in Support (EXS)',
       cy.get('[data-testid="submit-represent-a-party-button"]').click();
 
       cy.get('[data-testid="button-file-document"]').click();
+      cy.get(
+        '.caseItem a[href="https://ustaxcourt.gov/dawson-user-guides/"]',
+      ).should('be.visible');
+      checkA11y();
       cy.get('[data-testid="ready-to-file"]').click();
 
       selectTypeaheadInput(
@@ -50,6 +58,16 @@ describe('Private practitioner files a Motion with an Exhibit in Support (EXS)',
       );
 
       cy.get('[data-testid="primaryDocument-objections-No"]').click();
+
+      cy.get(
+        '[data-testid="primaryDocument-what-can-i-include-button"]',
+      ).click();
+      cy.get(
+        '.what-can-i-include a[href="https://ustaxcourt.gov/dawson-user-guides/"]',
+      ).should('be.visible');
+      checkA11y();
+      cy.contains('.what-can-i-include button', 'Close').click();
+      cy.get('.what-can-i-include').should('not.exist');
 
       cy.get('#add-supporting-document-button').click();
       cy.contains('h2', 'Supporting Document 1').should('exist');
@@ -159,6 +177,33 @@ describe('Private practitioner files a Motion with an Exhibit in Support (EXS)',
 
       cy.get('#document-filter-by').select('Exhibits');
       cy.get('[data-testid="document-download-link-EXS"]').should('exist');
+
+      loginAsDocketClerk();
+      cy.task<{ docketEntryId: string }[]>(
+        'getDocketEntryIdsByDocketNumberAndEventCode',
+        { docketNumber, eventCode: 'EXS' },
+      ).then((entries: { docketEntryId: string }[]): void => {
+        expect(entries).to.have.length(1);
+        cy.visit(
+          `/case-detail/${docketNumber}/documents/${entries[0].docketEntryId}/edit`,
+        );
+      });
+      cy.get('[data-testid="previous-document-search"] option:selected').should(
+        'contain.text',
+        'Motion for Continuance',
+      );
+      checkA11y();
+      cy.get('[data-testid="save-and-finish-document-qc"]').click();
+      cy.get('[data-testid="success-alert"]').should('contain', 'QC Completed');
+
+      goToCase(docketNumber);
+      assertNoticeOfDocketChangeDoesNotExist();
+      cy.get('[data-testid="edit-EXS"]').click();
+      cy.get('[data-testid="previous-document-search"] option:selected').should(
+        'contain.text',
+        'Motion for Continuance',
+      );
+      checkA11y();
     });
   });
 
