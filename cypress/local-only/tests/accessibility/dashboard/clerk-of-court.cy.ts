@@ -171,6 +171,59 @@ describe('Dashboard - Clerk of Court Accessibility', () => {
     });
   });
 
+  describe('Trial sessions and messages loading states', () => {
+    it('should be free of a11y issues while the trial sessions and messages load', () => {
+      // hold the requests until the check is done, so the sections are still loading
+      const trialSessionsRequests = holdRequests(
+        '**/clerk-dashboard-stats/trial-sessions',
+      );
+      const messagesRequests = holdRequests('**/messages/inbox/*');
+      loginAsClerkOfCourt();
+      cy.get('#tabButton-recentMessages').click();
+
+      cy.get('[data-testid="trial-sessions-loading"]').should('exist');
+      cy.get('[data-testid="messages-loading"]').should('exist');
+
+      checkA11y();
+
+      cy.then(trialSessionsRequests.release);
+      cy.then(messagesRequests.release);
+    });
+
+    it('should be free of a11y issues while the trial sessions load on mobile', () => {
+      cy.viewport('iphone-x');
+      const trialSessionsRequests = holdRequests(
+        '**/clerk-dashboard-stats/trial-sessions',
+      );
+      loginAsClerkOfCourt();
+
+      cy.get('[data-testid="trial-sessions-loading"]').should('exist');
+
+      checkA11y();
+
+      cy.then(trialSessionsRequests.release);
+    });
+  });
+
+  describe('Trial sessions and messages error states', () => {
+    it('should be free of a11y issues when the trial sessions and messages fail to load', () => {
+      cy.intercept('GET', '**/clerk-dashboard-stats/trial-sessions', {
+        statusCode: 500,
+      }).as('trialSessions');
+      cy.intercept('GET', '**/messages/inbox/*', { statusCode: 500 }).as(
+        'inboxMessages',
+      );
+      loginAsClerkOfCourt();
+      cy.wait(['@trialSessions', '@inboxMessages']);
+      cy.get('#tabButton-recentMessages').click();
+
+      cy.get('[data-testid="trial-sessions-error"]').should('exist');
+      cy.get('[data-testid="messages-error"]').should('exist');
+
+      checkA11y();
+    });
+  });
+
   describe('Recent Messages tab', () => {
     it('should be free of a11y issues when viewing recent messages', () => {
       // ensure the Recent Messages table has at least one row with a docket number link
