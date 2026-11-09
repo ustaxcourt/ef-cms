@@ -340,7 +340,8 @@ risk. Both are recorded as [exceptions](#exceptions). A missed SLA is never left
 it appears in the weekly report until it is resolved.
 
 The SLAs apply to findings that already exist. New code is held to a stricter standard: it must
-not add medium- or high-severity findings at all ([Code Review](../../code-review.md)).
+not add High, Critical or Unknown findings at all, and should not add Medium or Low ones
+([Code Review](../../code-review.md)).
 
 ## Intake and ownership
 
@@ -492,7 +493,7 @@ in an image is in the [container findings triage guide](../container-findings-tr
 **This is whats planned, but not fully implemented as of Nov 6th, 2026.**
 
 The aim is to catch a vulnerability as early in the pipeline as possible, so the fix costs the
-least. A PR into `test` runs the same required security cƒhecks as a PR into `staging`, so the
+least. A PR into `test` runs the same required security checks as a PR into `staging`, so the
 developer sees a finding while the code is fresh and before it can reach `staging`. How those
 checks decide what is new is in the [branching and baseline strategy](branching-and-baseline-strategy.md).
 
@@ -500,8 +501,9 @@ checks decide what is new is in the [branching and baseline strategy](branching-
 
 A finding that appears **because of your change** is yours to fix in that PR. Don't wait for the
 weekly triage, and don't merge on the assumption that someone else will pick it up. New code is
-held to a stricter standard than existing findings: it must not add Medium or High findings
-(see [Missing an SLA](#missing-an-sla)).
+held to a stricter standard than existing findings: it must not add High, Critical or Unknown
+findings. A Medium or Low finding should be fixed in the PR too, but is less critical if it
+can't be, and then falls to the weekly scan team (see [Missing an SLA](#missing-an-sla)).
 
 Findings already on `staging` are not yours and don't block your PR. They follow the
 [SLAs](#remediation-slas).
@@ -514,12 +516,12 @@ people don't fix the same finding. If it can be fixed in your branch, you fix it
 ### Trivy fs findings
 
 **This is the target process, not yet in effect.** It depends on work that is not built: making
-`Findings vs staging` a required check on `test`, creating `.trivyignore` and passing it to the
+`Findings vs staging` a required check on `test` and `staging`, creating `.trivyignore` and passing it to the
 branch scan in `security-compare.yml`, and creating the VEX file. See
-[the strategy](branching-and-baseline-strategy.md#protecting-the-baseline). Until then the check is
+[the strategy](branching-and-baseline-strategy.md#required-for-test-to-catch-new-findings). Until then the check is
 not required, and a `.trivyignore` line does not unblock it.
 
-`Findings vs staging` will be a required check on `test`. It fails when your branch has a vulnerability
+`Findings vs staging` will be a required check on `test` and `staging`. It fails when your branch has a vulnerability
 that `staging` doesn't. Your change may have added the dependency. Or another PR may have merged
 the vulnerable dependency into `test` and not yet reached `staging`, so it shows as new on yours.
 A CVE newly published against code already on `staging` shows on both sides and doesn't fail the check.
@@ -585,8 +587,10 @@ attacker the dependency is vulnerable. Until the approver has agreed an approach
 
 Defer only when one of these is true:
 
-- The fix is too large for this PR and is not in scope for the branch's changes **Formal Approval Required**.
-- No fix exists yet, for example the package has no patched release.
+- No fix exists yet, for example the package has no patched release and there is no alternative
+  package to switch to.
+- The finding needs more investigation than the PR allows, such as working out whether it applies
+  to DAWSON. **Formal Approval Required.**
 
 If so:
 
