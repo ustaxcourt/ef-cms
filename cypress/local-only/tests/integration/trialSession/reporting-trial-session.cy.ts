@@ -59,6 +59,23 @@ describe('Reporting trial sessions', () => {
     });
   });
 
+  it('should allow Reporting creation after editing a calendared session', () => {
+    const calendaredTrialSessionId = 'e222f700-dead-4000-beef-0000000d01e5';
+    loginAsCaseServicesSupervisor();
+    cy.get('[data-testid="trial-session-link"]').click();
+    cy.get(
+      `[data-testid="trial-location-link-${calendaredTrialSessionId}"]`,
+    ).click();
+    cy.get('[data-testid="edit-trial-session"]').click();
+    cy.get('#reporting-proceeding').should('be.disabled');
+
+    cy.get('[data-testid="trial-session-link"]').click();
+    cy.get('[data-testid="add-trial-session-button"]').click();
+    cy.get('#reporting-proceeding').should('be.enabled');
+    cy.get('[data-testid="Reporting-proceeding-label"]').click();
+    cy.get('#due-date-picker').should('be.visible');
+  });
+
   it('should create Reporting and let a docket clerk edit it with the feature flag enabled and disabled', () => {
     loginAsPetitionsClerk();
     cy.get('[data-testid="trial-session-link"]').click();
