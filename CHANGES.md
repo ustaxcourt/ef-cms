@@ -14,11 +14,43 @@ Script to add the flag and set it to `true`:
 
 </details>
 
+<details><summary>Dependency Updates - Week of 2026-11-03</summary>
+
+## Local
+
+#### Upgrade Terraform to `1.17.1`
+
+Use either tfswitch or tfenv:
+
+```bash
+tfswitch 1.17.1
+```
+
+```bash
+tfenv install 1.17.1
+tfenv use 1.17.1
+```
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Deploy Docker container `4.3.104`
+
+This script will prompt for an environment to pull the image from; choose `exp2`.
+
+```bash
+npm run ecr:check-version
+```
+
+</details>
+
 <details><summary>Dependency Updates - Week of 2026-10-26</summary>
 
 ## Local
 
 #### Upgrade NodeJS to `24.22.1`
+
 ```bash
 nvm install
 nvm use

@@ -66,7 +66,7 @@ describe('Multidocket QC Process and Edit Docket Entry', () => {
       cy.get('[data-testid="submit-document"]').click();
 
       attachFile({
-        filePath: '../../helpers/file/sample.pdf',
+        filePath: 'sample.pdf',
         selector: '[data-testid="primary-document"]',
         selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
       });
@@ -90,7 +90,7 @@ describe('Multidocket QC Process and Edit Docket Entry', () => {
       cy.get('[data-testid="submit-document"]').click();
 
       attachFile({
-        filePath: '../../helpers/file/sample.pdf',
+        filePath: 'sample.pdf',
         selector: '[data-testid="primary-document"]',
         selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
       });
@@ -504,7 +504,7 @@ describe('Multidocket QC Process and Edit Docket Entry', () => {
       );
 
       attachFile({
-        filePath: '../../helpers/file/sample.pdf',
+        filePath: 'sample.pdf',
         selector: '[data-testid="primary-document-file"]',
         selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
       });

@@ -113,7 +113,7 @@ describe('File a petition: Step 1 - Petitioner Information', () => {
             {
               errorMessage: 'corporate-disclosure-file-error-message',
               input: 'corporate-disclosure-file',
-              uploadFile: '../../helpers/file/sample.pdf',
+              uploadFile: 'sample.pdf',
             },
           ];
 
@@ -182,7 +182,7 @@ describe('File a petition: Step 1 - Petitioner Information', () => {
             {
               errorMessage: 'corporate-disclosure-file-error-message',
               input: 'corporate-disclosure-file',
-              uploadFile: '../../helpers/file/sample.pdf',
+              uploadFile: 'sample.pdf',
             },
           ];
 
@@ -287,7 +287,7 @@ describe('File a petition: Step 1 - Petitioner Information', () => {
             {
               errorMessage: 'corporate-disclosure-file-error-message',
               input: 'corporate-disclosure-file',
-              uploadFile: '../../helpers/file/sample.pdf',
+              uploadFile: 'sample.pdf',
             },
           ];
 
@@ -356,7 +356,7 @@ describe('File a petition: Step 1 - Petitioner Information', () => {
             {
               errorMessage: 'corporate-disclosure-file-error-message',
               input: 'corporate-disclosure-file',
-              uploadFile: '../../helpers/file/sample.pdf',
+              uploadFile: 'sample.pdf',
             },
           ];
 
