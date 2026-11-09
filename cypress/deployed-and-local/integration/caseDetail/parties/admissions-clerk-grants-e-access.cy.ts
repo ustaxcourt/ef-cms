@@ -288,4 +288,36 @@ describe('Admissions Clerk Grants E-Access', () => {
       cy.get('[data-testid="modal-header"]').contains('Account is Unverified');
     });
   });
+
+  it('Should show a validation error if trying to give a petitioner a practitioner email', () => {
+    createAndServePaperPetitionMultipleParties().then(
+      ({ docketNumber, spouseName }) => {
+        const petitionerUsername = `privatePractitioner1`;
+        const petitionerEmail = `${petitionerUsername}@example.com`;
+        loginAsAdmissionsClerk('admissionsclerk1@example.com');
+        cy.get('[data-testid="messages-banner"]');
+        cy.get('[data-testid="docket-number-search-input"]').type(docketNumber);
+        cy.get('[data-testid="search-docket-number"]').click();
+        cy.get('[data-testid="tab-case-information"]').click();
+        cy.get('[data-testid="tab-parties"]').click();
+
+        cy.get(
+          `[data-testid="petitioner-card-${spouseName}"] [data-testid="edit-petitioner-button"]`,
+        ).click();
+        cy.get('[data-testid="internal-edit-petitioner-email-input"]').type(
+          petitionerEmail,
+        );
+        cy.get('[data-testid="internal-confirm-petitioner-email-input"]').type(
+          petitionerEmail,
+        );
+        cy.get(
+          '[data-testid="submit-edit-petitioner-information-button"]',
+        ).click();
+
+        cy.get('[data-testid="error-alert"]').contains(
+          'Email address is associated with a practitioner account.',
+        );
+      },
+    );
+  });
 });

@@ -57,7 +57,7 @@ describe('Edit Docket Entry no-regen edits leave the coversheet untouched', () =
       selectTypeaheadInput('complete-doc-document-type-search', 'Exhibit(s)');
       cy.get('[data-testid="submit-document"]').click();
       attachFile({
-        filePath: '../../helpers/file/sample.pdf',
+        filePath: 'sample.pdf',
         selector: '[data-testid="primary-document"]',
         selectorToAwaitOnSuccess:
           '[data-testid="upload-file-success-primary-document"]',

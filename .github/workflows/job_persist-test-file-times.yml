@@ -23,7 +23,7 @@ jobs:
       - name: NPM Install in Current Branch
         uses: ./.github/actions/dawson-node-bootstrap
       - name: Download historical test file times
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           pattern: ${{ inputs.workflow_filename }}-historical-test-file-times-shard-*
           merge-multiple: true

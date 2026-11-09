@@ -34,7 +34,7 @@ jest.mock('../../web-client/jest-unit.config', () => ({
 }));
 
 import fs from 'fs';
-import glob from 'glob';
+import * as glob from 'glob';
 import os from 'os';
 import path from 'path';
 import {
@@ -585,7 +585,7 @@ describe('split-tests.helpers', () => {
   describe('splitTestsGlob', () => {
     it('selects web client unit test files via glob and logs the delimited output', () => {
       const globSyncSpy = jest
-        .spyOn(glob, 'sync')
+        .spyOn(glob, 'globSync')
         .mockReturnValue([
           'web-client/src/beta.test.ts',
           'web-client/src/nested/alpha.test.ts',
@@ -627,7 +627,7 @@ describe('split-tests.helpers', () => {
 
     it('selects shared test files via glob', () => {
       const globSyncSpy = jest
-        .spyOn(glob, 'sync')
+        .spyOn(glob, 'globSync')
         .mockReturnValue([
           'shared/src/example.test.ts',
           'shared/src/nested/another.test.ts',
@@ -672,7 +672,7 @@ describe('split-tests.helpers', () => {
 
     it('selects document generator test files via glob (handling non-array testMatch)', () => {
       const globSyncSpy = jest
-        .spyOn(glob, 'sync')
+        .spyOn(glob, 'globSync')
         .mockReturnValue([
           'shared/src/business/utilities/documentGenerators/example.test.ts',
         ]);
@@ -711,7 +711,7 @@ describe('split-tests.helpers', () => {
 
     it('ignores empty testMatch entries', () => {
       const globSyncSpy = jest
-        .spyOn(glob, 'sync')
+        .spyOn(glob, 'globSync')
         .mockReturnValue(['web-api/src/example.test.ts']);
       const consoleSpy = jest
         .spyOn(console, 'log')
@@ -748,7 +748,7 @@ describe('split-tests.helpers', () => {
     });
 
     it('throws an error when the test type does not match a known glob', () => {
-      const globSyncSpy = jest.spyOn(glob, 'sync');
+      const globSyncSpy = jest.spyOn(glob, 'globSync');
       const consoleSpy = jest
         .spyOn(console, 'log')
         .mockImplementation((): void => undefined);
