@@ -35,7 +35,7 @@ describe('Docket Clerk adds a Court Issued document that has a coversheet', () =
       cy.visit(`/case-detail/${docketNumber}/upload-court-issued`);
       cy.get('[data-testid="upload-description"]').type('to petitioner');
       attachFile({
-        filePath: '../../helpers/file/sample.pdf',
+        filePath: 'sample.pdf',
         selector: '[data-testid="primary-document-file"]',
         selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
       });

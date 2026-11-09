@@ -150,7 +150,7 @@ describe('File a petition', () => {
           cy.get('[data-testid="petition-error-message-0"]').should('exist');
 
           attachFile({
-            filePath: '../../helpers/file/sample.pdf',
+            filePath: 'sample.pdf',
             selector: '#petition-file',
             selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
           });
@@ -162,7 +162,7 @@ describe('File a petition', () => {
 
         it('should be able to navigate to step 2 when the user uploads a petition correctly', () => {
           attachFile({
-            filePath: '../../helpers/file/sample.pdf',
+            filePath: 'sample.pdf',
             selector: '#petition-file',
             selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
           });

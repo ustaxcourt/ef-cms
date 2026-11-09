@@ -50,7 +50,7 @@ describe('Docket Clerk edits Court Issued no-coversheet doc to a coversheet doc'
       cy.visit(`/case-detail/${docketNumber}/upload-court-issued`);
       cy.get('[data-testid="upload-description"]').type(description);
       attachFile({
-        filePath: '../../helpers/file/sample.pdf',
+        filePath: 'sample.pdf',
         selector: '[data-testid="primary-document-file"]',
         selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
       });

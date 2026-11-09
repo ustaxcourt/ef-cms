@@ -23,7 +23,6 @@ const caveats: string[] = [
   '@types/node',
   'typescript',
   'websocket',
-  'p-queue',
   'dwt',
   'uuid',
   'aws-sigv4-sign',
@@ -41,6 +40,8 @@ const caveats: string[] = [
   '@recharts/devtools',
   '@joi/date',
   '@opensearch-project/opensearch',
+  'stylelint',
+  'stylelint-config-standard',
 ];
 
 // Function to run a shell command and capture output, even if it has a non-zero exit code

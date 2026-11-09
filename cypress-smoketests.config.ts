@@ -131,7 +131,7 @@ export default defineConfig({
     testIsolation: false,
   },
   expose: getExposedCypressEnv(),
-  fixturesFolder: 'cypress/deployed-and-local/fixtures',
+  fixturesFolder: 'cypress/helpers/file',
   reporter: 'spec',
   reporterOptions: {
     toConsole: true,
