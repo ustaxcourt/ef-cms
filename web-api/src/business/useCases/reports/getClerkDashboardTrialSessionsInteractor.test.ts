@@ -24,13 +24,15 @@ describe('getClerkDashboardTrialSessionsInteractor', () => {
   );
   const getWeeks = jest.mocked(getClerkOfCourtDashboardTrialSessionWeeks);
 
+  const mockWeeks = {
+    currentWeekEnd: '2026-11-08T04:59:59.999Z',
+    currentWeekStart: '2026-11-01T04:00:00.000Z',
+    nextWeekEnd: '2026-11-15T04:59:59.999Z',
+    nextWeekStart: '2026-11-08T05:00:00.000Z',
+  };
+
   beforeEach(() => {
-    getWeeks.mockReturnValue({
-      currentWeekEnd: '2026-11-08T04:59:59.999Z',
-      currentWeekStart: '2026-11-01T04:00:00.000Z',
-      nextWeekEnd: '2026-11-15T04:59:59.999Z',
-      nextWeekStart: '2026-11-08T05:00:00.000Z',
-    });
+    getWeeks.mockReturnValue(mockWeeks);
     getTrialSessionsStartingBetween.mockResolvedValue([]);
   });
 
@@ -50,7 +52,7 @@ describe('getClerkDashboardTrialSessionsInteractor', () => {
     });
   });
 
-  it('should return each trial session as a TrialSessionInfoDTO', async () => {
+  it('should return each trial session as a TrialSessionInfoDTO, with the weeks it used for the query', async () => {
     getTrialSessionsStartingBetween.mockResolvedValue([
       MOCK_TRIAL_INPERSON,
       MOCK_TRIAL_REGULAR,
@@ -60,8 +62,9 @@ describe('getClerkDashboardTrialSessionsInteractor', () => {
       mockClerkOfTheCourtUser,
     );
 
-    expect(result).toHaveLength(2);
-    result.forEach(trialSession => {
+    expect(result.weeks).toEqual(mockWeeks);
+    expect(result.trialSessions).toHaveLength(2);
+    result.trialSessions.forEach(trialSession => {
       expect(trialSession instanceof TrialSessionInfoDTO).toBe(true);
     });
   });
@@ -73,7 +76,7 @@ describe('getClerkDashboardTrialSessionsInteractor', () => {
       mockClerkOfTheCourtUser,
     );
 
-    expect(result).toEqual([]);
+    expect(result).toEqual({ trialSessions: [] });
     expect(getTrialSessionsStartingBetween).not.toHaveBeenCalled();
   });
 });

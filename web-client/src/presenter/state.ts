@@ -193,7 +193,7 @@ import {
   ClerkOfCourtDashboardStatsStatus,
   ClerkOfCourtDashboardTabStats,
 } from '@web-client/presenter/clerkOfCourtDashboardState';
-import { TrialSessionInfoDTO } from '@shared/business/dto/trialSessions/TrialSessionInfoDTO';
+import { ClerkDashboardTrialSessions } from '@web-api/business/useCases/reports/getClerkDashboardTrialSessionsInteractor';
 import { loginHelper } from '@web-client/presenter/computeds/Login/LoginHelper';
 
 const { ASCENDING, DOCKET_RECORD_FILTER_OPTIONS } = getConstants();
@@ -872,9 +872,9 @@ export const baseState = {
   clerkOfCourtDashboardMessagesStatus:
     'loading' as ClerkOfCourtDashboardStatsStatus,
   clerkOfCourtDashboardTrialSessions: {
-    data: [],
+    data: { trialSessions: [] },
     status: 'loading',
-  } as ClerkOfCourtDashboardTabStats<TrialSessionInfoDTO[]>,
+  } as ClerkOfCourtDashboardTabStats<ClerkDashboardTrialSessions>,
   clerkOfCourtDashboardOptions: {
     casesByYearIsFiscal: false,
     petitionsByYearIsFiscal: false,

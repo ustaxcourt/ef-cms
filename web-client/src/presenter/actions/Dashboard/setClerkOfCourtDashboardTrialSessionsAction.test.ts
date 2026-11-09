@@ -1,4 +1,5 @@
 import { MOCK_TRIAL_REGULAR } from '@shared/test/mockTrial';
+import { ClerkDashboardTrialSessions } from '@web-api/business/useCases/reports/getClerkDashboardTrialSessionsInteractor';
 import { TrialSessionInfoDTO } from '@shared/business/dto/trialSessions/TrialSessionInfoDTO';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { presenter } from '../../presenter-mock';
@@ -6,14 +7,26 @@ import { runAction } from '@web-client/presenter/test.cerebral';
 import { setClerkOfCourtDashboardTrialSessionsAction } from './setClerkOfCourtDashboardTrialSessionsAction';
 
 describe('setClerkOfCourtDashboardTrialSessionsAction', () => {
-  const mockTrialSessions = [new TrialSessionInfoDTO(MOCK_TRIAL_REGULAR)];
+  const mockTrialSessions: ClerkDashboardTrialSessions = {
+    trialSessions: [new TrialSessionInfoDTO(MOCK_TRIAL_REGULAR)],
+    weeks: {
+      currentWeekEnd: '2026-11-16T04:59:59.999Z',
+      currentWeekStart: '2026-11-09T05:00:00.000Z',
+      nextWeekEnd: '2026-11-23T04:59:59.999Z',
+      nextWeekStart: '2026-11-16T05:00:00.000Z',
+    },
+  };
+  const emptyTrialSessions: ClerkDashboardTrialSessions = { trialSessions: [] };
   let getClerkDashboardTrialSessionsInteractor: jest.Mock;
 
   const run = () =>
     runAction(setClerkOfCourtDashboardTrialSessionsAction, {
       modules: { presenter },
       state: {
-        clerkOfCourtDashboardTrialSessions: { data: [], status: 'loading' },
+        clerkOfCourtDashboardTrialSessions: {
+          data: emptyTrialSessions,
+          status: 'loading',
+        },
       },
     });
 
@@ -54,7 +67,7 @@ describe('setClerkOfCourtDashboardTrialSessionsAction', () => {
   });
 
   it('should ignore an older load that completes after a newer load', async () => {
-    let resolveOlder: (value: TrialSessionInfoDTO[]) => void = () => {};
+    let resolveOlder: (value: ClerkDashboardTrialSessions) => void = () => {};
     getClerkDashboardTrialSessionsInteractor
       .mockReturnValueOnce(
         new Promise(resolve => {
@@ -65,14 +78,14 @@ describe('setClerkOfCourtDashboardTrialSessionsAction', () => {
 
     const olderRun = run();
     const { state: newerState } = await run();
-    resolveOlder([]);
+    resolveOlder(emptyTrialSessions);
     const { state: olderState } = await olderRun;
 
     expect(newerState.clerkOfCourtDashboardTrialSessions.data).toEqual(
       mockTrialSessions,
     );
     expect(olderState.clerkOfCourtDashboardTrialSessions).toEqual({
-      data: [],
+      data: emptyTrialSessions,
       status: 'loading',
     });
   });

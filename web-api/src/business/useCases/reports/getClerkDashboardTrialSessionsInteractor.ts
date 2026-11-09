@@ -6,8 +6,17 @@ import { TrialSession } from '@shared/business/entities/trialSessions/TrialSessi
 import { TrialSessionInfoDTO } from '@shared/business/dto/trialSessions/TrialSessionInfoDTO';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { getClerkOfCourtDashboardTrialSessionWeeks } from '@shared/business/utilities/getClerkOfCourtDashboardTrialSessionWeeks';
+import {
+  ClerkOfCourtDashboardTrialSessionWeeks,
+  getClerkOfCourtDashboardTrialSessionWeeks,
+} from '@shared/business/utilities/getClerkOfCourtDashboardTrialSessionWeeks';
 import { getTrialSessionsStartingBetween } from '@web-api/persistence/postgres/trialSessions/getTrialSessionsStartingBetween';
+
+export type ClerkDashboardTrialSessions = {
+  trialSessions: TrialSessionInfoDTO[];
+  // the weeks the query used, so the client groups the sessions by the same weeks
+  weeks?: ClerkOfCourtDashboardTrialSessionWeeks;
+};
 
 /**
  * Gets the trial sessions that start in the current week or the next week, for
@@ -16,14 +25,14 @@ import { getTrialSessionsStartingBetween } from '@web-api/persistence/postgres/t
  */
 export const getClerkDashboardTrialSessionsInteractor = async (
   authorizedUser: UnknownAuthUser,
-): Promise<TrialSessionInfoDTO[]> => {
+): Promise<ClerkDashboardTrialSessions> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
   const weeks = getClerkOfCourtDashboardTrialSessionWeeks();
   if (!weeks) {
-    return [];
+    return { trialSessions: [] };
   }
 
   const trialSessions = await getTrialSessionsStartingBetween({
@@ -31,7 +40,10 @@ export const getClerkDashboardTrialSessionsInteractor = async (
     end: weeks.nextWeekEnd,
   });
 
-  return trialSessions
-    .map(trialSession => new TrialSession(trialSession).toRawObject())
-    .map(trialSession => new TrialSessionInfoDTO(trialSession));
+  return {
+    trialSessions: trialSessions
+      .map(trialSession => new TrialSession(trialSession).toRawObject())
+      .map(trialSession => new TrialSessionInfoDTO(trialSession)),
+    weeks,
+  };
 };
