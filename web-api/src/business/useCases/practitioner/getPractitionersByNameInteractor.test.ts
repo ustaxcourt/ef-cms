@@ -66,10 +66,12 @@ describe('getPractitionersByNameInteractor', () => {
         mockPetitionsClerkUser,
       );
 
-      expect((results.searchResults.practitioners[0] as any).isValidated).toBe(
+      expect(results.searchResults.practitioners[0]).toHaveProperty(
+        'isValidated',
         true,
       );
-      expect((results.searchResults.practitioners[1] as any).isValidated).toBe(
+      expect(results.searchResults.practitioners[1]).toHaveProperty(
+        'isValidated',
         true,
       );
 
@@ -147,10 +149,12 @@ describe('getPractitionersByNameInteractor', () => {
         undefined,
       );
 
-      expect((results.searchResults.practitioners[0] as any).isValidated).toBe(
+      expect(results.searchResults.practitioners[0]).toHaveProperty(
+        'isValidated',
         true,
       );
-      expect((results.searchResults.practitioners[1] as any).isValidated).toBe(
+      expect(results.searchResults.practitioners[1]).toHaveProperty(
+        'isValidated',
         true,
       );
 

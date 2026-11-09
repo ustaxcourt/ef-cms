@@ -13,7 +13,7 @@ export class PublicDocumentDownloadUrl extends JoiValidationEntity {
     url: JoiValidationConstants.STRING.uri().required(),
   };
 
-  getValidationRules() {
+  getValidationRules(): typeof PublicDocumentDownloadUrl.VALIDATION_RULES {
     return PublicDocumentDownloadUrl.VALIDATION_RULES;
   }
 }

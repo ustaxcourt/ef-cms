@@ -1,5 +1,4 @@
 import { RestrictedCase } from '@shared/business/entities/cases/RestrictedCase';
-import { removeServedParties } from '../helpers/removeServedParties';
 import {
   CASE_DOCKET_NUMBER_RULE,
   CASE_DOCKET_NUMBER_WITH_SUFFIX_RULE,
@@ -28,11 +27,11 @@ export class RestrictedCaseResponse extends JoiValidationEntity {
     this.isPaper = rawRestrictedCase.isPaper;
     this.isSealed = rawRestrictedCase.isSealed;
     this.leadDocketNumber = rawRestrictedCase.leadDocketNumber;
-    this.docketEntries = removeServedParties(rawRestrictedCase.docketEntries);
+    this.docketEntries = rawRestrictedCase.docketEntries;
   }
 
   static VALIDATION_RULES = {
-    docketEntries: joi.array().required(),
+    docketEntries: joi.array().max(0).required(),
     docketNumber: CASE_DOCKET_NUMBER_RULE,
     docketNumberSuffix: JoiValidationConstants.STRING.optional().allow(null),
     docketNumberWithSuffix: CASE_DOCKET_NUMBER_WITH_SUFFIX_RULE.optional(),
@@ -41,7 +40,7 @@ export class RestrictedCaseResponse extends JoiValidationEntity {
     leadDocketNumber: CASE_LEAD_DOCKET_NUMBER_RULE,
   };
 
-  getValidationRules() {
+  getValidationRules(): typeof RestrictedCaseResponse.VALIDATION_RULES {
     return RestrictedCaseResponse.VALIDATION_RULES;
   }
 }

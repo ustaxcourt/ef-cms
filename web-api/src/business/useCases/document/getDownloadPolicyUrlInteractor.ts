@@ -69,10 +69,14 @@ export const getDownloadPolicyUrlInteractor = async (
       .getUseCases()
       .getAllFeatureFlagsInteractor(applicationContext);
 
-    const documentVisibilityChangeDate =
-      featureFlags[
+    const documentVisibilityChangeDate: string =
+      typeof featureFlags[
         ALLOWLIST_FEATURE_FLAGS.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.key
-      ];
+      ] === 'string'
+        ? featureFlags[
+            ALLOWLIST_FEATURE_FLAGS.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.key
+          ]
+        : '';
 
     const motionVisibilityChangeDate =
       featureFlags[
