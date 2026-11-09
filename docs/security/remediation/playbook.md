@@ -507,8 +507,8 @@ Findings already on `staging` are not yours and don't block your PR. They follow
 [SLAs](#remediation-slas).
 
 A finding that appears on your PR but has nothing to do with your change, such as a newly
-published CVE in a dependency you didn't touch, is not yours to fix and not yours to track. Report
-it to the weekly scan team and move on. For a Trivy `fs` finding, follow
+published CVE in a dependency you didn't touch, goes to the weekly scan dev first, so that two
+people don't fix the same finding. If it can be fixed in your branch, you fix it there with approval from the weekly scan dev. If it can't be fixed now, it is tracked as a ticket and given a temporary ignore line. For a Trivy `fs` finding, follow
 [Trivy fs findings](#trivy-fs-findings).
 
 ### Trivy fs findings
@@ -525,22 +525,27 @@ the vulnerable dependency into `test` and not yet reached `staging`, so it shows
 A CVE newly published against code already on `staging` shows on both sides and doesn't fail the check.
 
 **Your change didn't cause it, and the PR isn't the weekly scan work.** This happens when the
-vulnerable code is on `test` but not yet on `staging`, such as another PR's dependency. Don't open a ticket or an
-advisory, and don't work out the fix. Instead:
+vulnerable code is on `test` but not yet on `staging`, such as another PR's dependency, or when a CVE
+was published since the code merged. The weekly scan dev is the point person for these findings, so
+that two people don't fix the same one and every finding gets a fix.
 
-1. Tell the weekly scan team in their channel, with a link to the failing run. You don't need to wait for a reply.
-2. Add the CVE to the ticket tracking the weekly scan work, using the Security tab alert number
-   (for example `Alert #1234`). If the alert has no number yet, use the CVE ID.
-
-3. So that your PR isn't blocked waiting for them, add the CVE to `.trivyignore` on your branch with
-   an expiry of the Saturday before the next weekly scan, for example `CVE-2026-1234 exp:2026-11-07`.
-   Put the alert number (or CVE ID) in a comment above the line, with a note that your change didn't
-   cause it. The ignore lapses before that scan, so the weekly scan team looks at the finding then.
-   Re-run the check. The approver signs off on the line like any other suppression
-   ([Suppressing a finding](#suppressing-a-finding)).
-
-The weekly scan team takes it from there with the steps below. The ticket is how it reaches them,
-so the finding is picked up in the next weekly scan even if nobody replies in chat.
+1. **Reach out to the weekly scan dev** on teams and report the finding.
+2. **If they are already on it,** leave the fix to them. **If they aren't,** work with them to get
+   the finding formally investigated, using the steps below.
+3. **If it can be fixed in your PR,** fix it there.
+4. **If it can't be fixed now,** it gets tracked and a temporary ignore line goes in, so the new
+   finding doesn't block every other PR while the fix is applied. The same applies when the weekly
+   scan dev is already applying the fix.
+   - Track it as in [Where findings are tracked](#where-findings-are-tracked), and add the alert
+     number (for example `Alert #1234`, or the CVE ID if there is no number yet) to the ticket
+     tracking the weekly scan work.
+   - Add the CVE to `.trivyignore` on your branch with an expiry of the Saturday before the next
+     weekly scan, for example `CVE-2026-1234 exp:2026-11-07`. Put the alert number or GHSA ID in a
+     comment above the line, with a note that your change didn't cause it. The ignore lapses before
+     that scan, so the finding is looked at again then, and the line is removed once it is fixed.
+   - The approver signs off on the line like any other suppression
+     ([Suppressing a finding](#suppressing-a-finding)). For a T1 or T2 component, see the decision
+     below before adding it.
 
 **Your change caused it, or your PR is for the weekly scan work.** The PR deals with it, in this order.
 
@@ -561,8 +566,8 @@ so the finding is picked up in the next weekly scan even if nobody replies in ch
    - **To defer either one,** first check the component's tier. **For a T1 or T2 component, don't
      add a `.trivyignore` line.** Ask the approver how to clear the check (see the decision below).
      For any other component, add the CVE to `.trivyignore` with an expiry of the Saturday before the next
-     weekly dependency update starts, for example `CVE-2026-1234 exp:2026-11-09`. Put the advisory's
-     GHSA ID in a comment above the line. The ignore lapses when that update begins, so the
+     weekly scan, for example `CVE-2026-1234 exp:2026-11-07`. Put the advisory's
+     GHSA ID in a comment above the line. The ignore lapses before that scan runs, so the
      finding is looked at again then, and the line is removed once it is fixed.
 
 Trivy applies only `not_affected` and `fixed` VEX statements, and no workflow passes `--vex` yet.
@@ -580,7 +585,7 @@ attacker the dependency is vulnerable. Until the approver has agreed an approach
 
 Defer only when one of these is true:
 
-- The fix is too large for this PR and is not in scope for the branch's changes.
+- The fix is too large for this PR and is not in scope for the branch's changes **Formal Approval Required**.
 - No fix exists yet, for example the package has no patched release.
 
 If so:
