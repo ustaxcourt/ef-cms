@@ -103,6 +103,32 @@ describe('formattedDocketEntries', () => {
     prepareDateFromString.mockClear();
   });
 
+  it('uses the motion visibility policy date when the feature flag is enabled', () => {
+    const prepareDateFromString = jest.spyOn(
+      applicationContext.getUtilities(),
+      'prepareDateFromString',
+    );
+
+    runCompute(formattedDocketEntries, {
+      state: {
+        ...getBaseState(petitionsClerkUser),
+        caseDetail: {
+          ...MOCK_CASE,
+          docketEntries: [],
+        },
+        featureFlags: {
+          [ALLOWLIST_FEATURE_FLAGS.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.key]:
+            '2023-05-01',
+          [ALLOWLIST_FEATURE_FLAGS.MOTION_VISIBILITY_POLICY_CHANGE_DATE.key]:
+            '2023-06-01',
+        },
+      },
+    });
+
+    expect(prepareDateFromString).toHaveBeenCalledWith('2023-06-01');
+    prepareDateFromString.mockClear();
+  });
+
   it('maps docket record dates', () => {
     const result = runCompute(formattedDocketEntries, {
       state: {

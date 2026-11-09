@@ -68,7 +68,7 @@ describe('getPublicDownloadPolicyUrlInteractor motion visibility', () => {
     });
     expect(isDownloadableMock.mock.calls[0][1]).toMatchObject({
       isTerminalUser: false,
-      visibilityChangeDate: false,
+      visibilityChangeDate: '',
       motionVisibilityChangeDate,
     });
   });
