@@ -65,7 +65,8 @@ export const LocationInformationForm = connect<
                           checked={form.proceedingType === value}
                           className="usa-radio__input"
                           disabled={
-                            (key === 'reporting' &&
+                            (!addingTrialSession &&
+                              key === 'reporting' &&
                               !addTrialSessionInformationHelper.isReportingSession &&
                               formattedTrialSessionDetails.isCalendared) ||
                             (!addingTrialSession &&
