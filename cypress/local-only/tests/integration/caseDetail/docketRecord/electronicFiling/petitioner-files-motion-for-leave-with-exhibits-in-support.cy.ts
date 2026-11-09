@@ -30,7 +30,7 @@ describe('Petitioner files a Motion for Leave to File with Exhibits in Support',
       cy.get('[data-testid="submit-document"]').click();
 
       attachFile({
-        filePath: '../../helpers/file/sample.pdf',
+        filePath: 'sample.pdf',
         selector: '[data-testid="primary-document"]',
         selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
       });
@@ -45,7 +45,7 @@ describe('Petitioner files a Motion for Leave to File with Exhibits in Support',
       cy.contains('h2', 'Supporting Document 1').should('exist');
       cy.get('#supporting-document-0').select('Exhibit');
       attachFile({
-        filePath: '../../helpers/file/sample.pdf',
+        filePath: 'sample.pdf',
         selector: '[data-testid="supporting-document-file-0"]',
         selectorToAwaitOnSuccess:
           '[data-testid="upload-file-success-supporting-document-file-0"]',
@@ -57,7 +57,7 @@ describe('Petitioner files a Motion for Leave to File with Exhibits in Support',
       cy.get('label[for="supportingDocuments-0-attachments"]').click();
 
       attachFile({
-        filePath: '../../helpers/file/sample.pdf',
+        filePath: 'sample.pdf',
         selector: '[data-testid="secondary-document"]',
         selectorToAwaitOnSuccess:
           '[data-testid="upload-file-success-secondary-document"]',
@@ -67,7 +67,7 @@ describe('Petitioner files a Motion for Leave to File with Exhibits in Support',
       cy.contains('h2', 'Secondary Supporting Document 1').should('exist');
       cy.get('#secondary-supporting-document-0').select('Exhibit');
       attachFile({
-        filePath: '../../helpers/file/sample.pdf',
+        filePath: 'sample.pdf',
         selector: '[data-testid="secondary-supporting-document-file-0"]',
         selectorToAwaitOnSuccess:
           '[data-testid="upload-file-success-secondary-supporting-document-file-0"]',

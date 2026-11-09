@@ -15,7 +15,7 @@ import {
 } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('File a petition - Step 4 Case Procedure & Trial Location', () => {
-  const VALID_FILE = '../../helpers/file/sample.pdf';
+  const VALID_FILE = 'sample.pdf';
 
   beforeEach(() => {
     loginAsPetitioner();

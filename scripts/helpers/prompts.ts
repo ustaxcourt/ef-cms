@@ -20,6 +20,7 @@ export const choose = async (
       choices,
       message: query,
       name: 'choice',
+      type: 'select',
     },
   ]);
 

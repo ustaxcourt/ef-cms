@@ -5,14 +5,14 @@ jest.mock('@shared/business/utilities/getDocumentTitleWithAdditionalInfo', () =>
     keepImplementation: true,
   }),
 );
-import { INITIAL_DOCUMENT_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
+import { INITIAL_DOCUMENT_TYPES } from '@shared/business/entities/EntityConstants';
 import {
   MAX_TITLE_LENGTH,
   getOptionsForCategory,
   getOrdinalValuesForUploadIteration,
   getValidPreviouslyFiledDocuments,
 } from './selectDocumentTypeHelper';
-import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
+import { MOCK_CASE } from '@shared/test/mockCase';
 import { MOCK_DOCUMENTS } from '@shared/test/mockDocketEntry';
 import { getDocumentTitleWithAdditionalInfo as getDocumentTitleWithAdditionalInfoMock } from '@shared/business/utilities/getDocumentTitleWithAdditionalInfo';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';

@@ -1,8 +1,8 @@
-import { Button } from '../../ustc-ui/Button/Button';
-import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
+import { Button } from '@web-client/ustc-ui/Button/Button';
+import { ConfirmModal } from '@web-client/ustc-ui/Modal/ConfirmModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
-import { Overlay } from '../../ustc-ui/Overlay/Overlay';
+import { Mobile, NonMobile } from '@web-client/ustc-ui/Responsive/Responsive';
+import { Overlay } from '@web-client/ustc-ui/Overlay/Overlay';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -15,47 +15,43 @@ export const WhatCanIIncludeModalOverlay = connect(
     const content = () => (
       <React.Fragment>
         <div className="includeItem">
-          <div className="includeItem__icon">
-            <FontAwesomeIcon icon="check-circle" />
-          </div>
           <h4 className="includeItem__heading">Include in a Single Upload</h4>
           <div className="includeItem__content">
             <h5>Attachment(s)</h5>
             <p>
-              An attachment is any other item you’re submitting with your
-              filing. If an attachment can’t be converted into a PDF and
+              An attachment is any other document you are submitting with your
+              filing that is not specifically mentioned as a Supporting
+              document. If an attachment can’t be converted into a PDF and
               uploaded with your primary document, you can mail it to the Court.
               For more information on mailing attachments, see the{' '}
               <a
                 className="usa-link--external"
-                href="https://ustaxcourt.gov/resources/dawson/DAWSON_Petitioner_Training_Guide.pdf"
+                href="https://ustaxcourt.gov/dawson-user-guides/"
                 rel="noopener noreferrer"
                 target="_blank"
               >
-                Petitioner’s Guide to E-filing
+                DAWSON User Guides
               </a>
               .
             </p>
             <h5>Certificate of Service</h5>
             <p>
-              If at least one party requires paper service, you must include a
+              If one or more parties requires paper service, you must include a
               certificate of service with your document. In most cases, the only
-              party you’ll need to serve is the IRS, and no certificate of
-              service is required for that.
+              party petitioners will need to serve is the IRS, and no
+              certificate of service is required because the IRS will be served
+              electronically.
             </p>
           </div>
         </div>
         <div className="includeItem">
-          <div className="includeItem__icon">
-            <FontAwesomeIcon icon="times-circle" />
-          </div>
           <h4 className="includeItem__heading">Include in a Separate Upload</h4>
           <div className="includeItem__content">
             <h5>Supporting Document(s)</h5>
             <p>
-              A supporting document is a document that supports and/or provides
+              A supporting document is a document that supports or provides
               depth to specific statements made in your primary document.
-              Examples include affidavits, briefs, memorandums, and
+              Examples include affidavits, exhibits, briefs, memoranda, and
               declarations.
               <br />
               <br />

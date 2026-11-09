@@ -1,10 +1,12 @@
 import { defineConfig } from 'cypress';
 import { getExposedCypressEnv } from './cypress/helpers/env/exposedCypressEnv';
 import {
+  getEmailVerificationToken,
   getOpenAndRecentCasesByEmail,
   getPractionerWithMostCasesEmail,
   getRecentEventsByCode,
 } from './cypress/helpers/cypressTasks/postgres/postgres-helpers';
+import { getUserByEmail } from './cypress/helpers/cypressTasks/cognito/cognito-helpers';
 
 export default defineConfig({
   chromeWebSecurity: true,
@@ -13,6 +15,10 @@ export default defineConfig({
     experimentalStudio: true,
     setupNodeEvents(on) {
       on('task', {
+        getEmailVerificationToken({ email }) {
+          return getEmailVerificationToken({ email });
+        },
+
         getPractionerWithMostCasesEmail() {
           return getPractionerWithMostCasesEmail();
         },
@@ -30,6 +36,9 @@ export default defineConfig({
         }) {
           return getRecentEventsByCode(eventCode, cases, dateStart);
         },
+        getUserByEmail(email: string) {
+          return getUserByEmail(email);
+        },
       });
     },
     specPattern: 'cypress/real-users/*.cy.{js,jsx,ts,tsx}',
@@ -37,7 +46,7 @@ export default defineConfig({
     testIsolation: false,
   },
   expose: getExposedCypressEnv(),
-  fixturesFolder: 'cypress/real-users/fixtures',
+  fixturesFolder: 'cypress/helpers/file',
   reporter: 'spec',
   reporterOptions: {
     toConsole: true,
