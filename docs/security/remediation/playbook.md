@@ -72,7 +72,7 @@ suppression mechanisms and image rebuilds, see the [scanner reference](scanner-r
 
 ## Where findings are tracked
 
-The repository and its GitHub Issues are public. Every finding is tracked as a GitHub issue on
+The repository and its GitHub Issues are public. Every finding (or group of related findings) is tracked as a GitHub issue on
 the [ZenHub](../../zenhub.md) board, so all security work shows up in one place with an assignee and
 a due date. A finding also gets a draft security advisory when it is sensitive or expected to stay
 open for several weeks. What the issue may say depends on which it is:
@@ -489,9 +489,10 @@ For container findings, the full method for deciding whether a package is presen
 in an image is in the [container findings triage guide](../container-findings-triage.md#2-evaluating-container-findings).
 
 ## Findings on pull requests
+**This is whats planned, but not fully implemented as of Nov 6th, 2026.**
 
 The aim is to catch a vulnerability as early in the pipeline as possible, so the fix costs the
-least. A PR into `test` runs the same required security checks as a PR into `staging`, so the
+least. A PR into `test` runs the same required security cƒhecks as a PR into `staging`, so the
 developer sees a finding while the code is fresh and before it can reach `staging`. How those
 checks decide what is new is in the [branching and baseline strategy](branching-and-baseline-strategy.md).
 
@@ -557,23 +558,23 @@ so the finding is picked up in the next weekly scan even if nobody replies in ch
      VEX file until the fix ships.
    - **It can't be ruled out yet.** Open a draft security advisory with the alert information so it
      can be investigated. For a T3 component, also record `under_investigation` in the VEX file.
-   - **To defer either one,** add the CVE to `.trivyignore` with an expiry of the Monday the next
+   - **To defer either one,** first check the component's tier. **For a T1 or T2 component, don't
+     add a `.trivyignore` line.** Ask the approver how to clear the check (see the decision below).
+     For any other component, add the CVE to `.trivyignore` with an expiry of the Saturday before the next
      weekly dependency update starts, for example `CVE-2026-1234 exp:2026-11-09`. Put the advisory's
      GHSA ID in a comment above the line. The ignore lapses when that update begins, so the
-     finding is looked at again then, and the line is removed once it is fixed. For a T1 or T2
-     component, see the decision below first.
+     finding is looked at again then, and the line is removed once it is fixed.
 
 Trivy applies only `not_affected` and `fixed` VEX statements, and no workflow passes `--vex` yet.
 Until it does, a not-affected finding still fails the check, so it also needs a `.trivyignore`
 line, with the exception's review date as the expiry ([Review dates](#review-dates)).
 
-**Needs a decision before a T1 or T2 finding is deferred this way.** An unfixed CVE that affects
-DAWSON in a T1 or T2 component is sensitive under
+**Needs a decision before a T1 or T2 finding is deferred this way.** An unfixed CVE that affects,
+or may affect, DAWSON in a T1 or T2 component is sensitive under
 [Where findings are tracked](#where-findings-are-tracked). `.trivyignore` and an
 `under_investigation` statement are both in the public repository and name the CVE, which tells an
 attacker the dependency is vulnerable. Until the approver has agreed an approach, don't add a
-`.trivyignore` line or a VEX statement for such a finding. Keep the details in the draft advisory
-and ask the approver how the check should be cleared.
+`.trivyignore` line or a VEX statement for such a finding. **Keep the details in the draft advisory and ask the approver how the check should be cleared.**
 
 ### When a fix can be deferred
 
@@ -595,7 +596,7 @@ A real secret is never deferred. Rotate it the same business day and follow [Sec
 
 A routine finding fixed before the PR merges never reaches `staging`, so nothing is tracked and
 there is no advisory. A secret is the exception. It is exposed once it is pushed, even if the PR
-never merges, so it still gets a draft advisory and the record in [Secrets](#secrets).
+never merges, so **it still gets a draft advisory and the record** in [Secrets](#secrets).
 
 ### Keeping sensitive details out of the PR
 
