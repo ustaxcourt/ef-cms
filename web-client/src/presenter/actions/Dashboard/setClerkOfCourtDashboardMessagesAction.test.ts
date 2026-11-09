@@ -7,11 +7,12 @@ describe('setClerkOfCourtDashboardMessagesAction', () => {
   const mockMessages = [{ messageId: '1', subject: 'Hello' }];
   let getInboxMessagesForUserInteractor: jest.Mock;
 
-  const run = () =>
+  const run = (currentPage = 'DashboardClerkOfCourt') =>
     runAction(setClerkOfCourtDashboardMessagesAction, {
       modules: { presenter },
       state: {
         clerkOfCourtDashboardMessagesStatus: 'loading',
+        currentPage,
         messages: [],
         user: { userId: 'clerk-of-court-id' },
       },
@@ -52,6 +53,13 @@ describe('setClerkOfCourtDashboardMessagesAction', () => {
       'failed',
     );
     consoleErrorSpy.mockRestore();
+  });
+
+  it('should not overwrite the messages when the user left the dashboard before the response', async () => {
+    const { state } = await run('Messages');
+
+    expect(state.messages).toEqual([]);
+    expect(state.clerkOfCourtDashboardMessagesStatus).toEqual('loaded');
   });
 
   it('should ignore an older load that completes after a newer load', async () => {

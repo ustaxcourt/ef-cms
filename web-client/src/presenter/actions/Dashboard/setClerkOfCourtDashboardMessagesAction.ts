@@ -23,8 +23,10 @@ export const setClerkOfCourtDashboardMessagesAction = async ({
       });
 
     if (requestId !== latestRequestId) return;
-    store.set(state.messages, messages);
     store.set(state.clerkOfCourtDashboardMessagesStatus, 'loaded');
+    // state.messages is shared with the Messages pages, so do not overwrite it after the user leaves
+    if (get(state.currentPage) !== 'DashboardClerkOfCourt') return;
+    store.set(state.messages, messages);
   } catch (e) {
     if (requestId !== latestRequestId) return;
     console.error('setClerkOfCourtDashboardMessagesAction failed:', e);
