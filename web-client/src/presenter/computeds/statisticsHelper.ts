@@ -1,9 +1,19 @@
 import { state } from '@web-client/presenter/app.cerebral';
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+import { RawStatistic } from '@shared/business/entities/Statistic';
+
+const isAmountEntered = (amount?: string | null): boolean =>
+  amount !== undefined && amount !== null;
 
 export const formatStatistic = ({
   applicationContext,
   docketNumber,
   statistic,
+}: {
+  applicationContext: ClientApplicationContext;
+  docketNumber: string;
+  statistic: RawStatistic;
 }) => {
   const formattedDate =
     statistic.year ||
@@ -13,25 +23,51 @@ export const formatStatistic = ({
 
   const formattedIrsDeficiencyAmount = applicationContext
     .getUtilities()
-    .formatDollars(statistic.irsDeficiencyAmount);
+    .formatDollars(Number(statistic.irsDeficiencyAmount));
 
   const formattedIrsTotalPenalties = applicationContext
     .getUtilities()
-    .formatDollars(statistic.irsTotalPenalties);
+    .formatDollars(Number(statistic.irsTotalPenalties));
+
+  const formattedIrsTotal = applicationContext
+    .getUtilities()
+    .formatDollars(
+      Number(statistic.irsDeficiencyAmount) +
+        Number(statistic.irsTotalPenalties),
+    );
+
+  const hasDeterminationDeficiencyAmount = isAmountEntered(
+    statistic.determinationDeficiencyAmount,
+  );
+
+  const hasDeterminationTotalPenalties = isAmountEntered(
+    statistic.determinationTotalPenalties,
+  );
 
   const formattedDeterminationDeficiencyAmount =
-    statistic.determinationDeficiencyAmount
+    hasDeterminationDeficiencyAmount
       ? applicationContext
           .getUtilities()
-          .formatDollars(statistic.determinationDeficiencyAmount)
+          .formatDollars(Number(statistic.determinationDeficiencyAmount))
       : 'TBD';
 
-  const formattedDeterminationTotalPenalties =
-    statistic.determinationTotalPenalties
-      ? applicationContext
-          .getUtilities()
-          .formatDollars(statistic.determinationTotalPenalties)
-      : 'TBD';
+  const formattedDeterminationTotalPenalties = hasDeterminationTotalPenalties
+    ? applicationContext
+        .getUtilities()
+        .formatDollars(Number(statistic.determinationTotalPenalties))
+    : 'TBD';
+
+  const hasDeterminationAmounts =
+    hasDeterminationDeficiencyAmount && hasDeterminationTotalPenalties;
+
+  const formattedDeterminationTotal = hasDeterminationAmounts
+    ? applicationContext
+        .getUtilities()
+        .formatDollars(
+          Number(statistic.determinationDeficiencyAmount) +
+            Number(statistic.determinationTotalPenalties),
+        )
+    : 'TBD';
 
   const editStatisticLink = `/case-detail/${docketNumber}/edit-deficiency-statistic/${statistic.statisticId}`;
 
@@ -41,8 +77,10 @@ export const formatStatistic = ({
     formattedDate,
     formattedDeterminationDeficiencyAmount,
     formattedDeterminationTotalPenalties,
+    formattedDeterminationTotal,
     formattedIrsDeficiencyAmount,
     formattedIrsTotalPenalties,
+    formattedIrsTotal,
   };
 };
 
@@ -53,8 +91,6 @@ export const formatStatistic = ({
  * @param {object} applicationContext the application context
  * @returns {object} formatted statistics
  */
-import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
 export const statisticsHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
