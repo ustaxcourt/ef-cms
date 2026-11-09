@@ -19,6 +19,7 @@ export const isValidRequest = ({
           requestHeaders: request.headers,
           responseBody: response.body,
           responseHeaders: response.headers,
+          statusCode: response.statusCode,
           url: request.url,
         },
       ],

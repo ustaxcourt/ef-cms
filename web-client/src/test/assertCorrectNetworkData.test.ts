@@ -36,6 +36,7 @@ describe('assertCorrectNetworkData', () => {
     const result = assertCorrectNetworkData([
       {
         method: 'GET',
+        statusCode: 200,
         responseBody: {
           entityName: 'PublicUser',
           name: 'Test User',
@@ -57,6 +58,106 @@ describe('assertCorrectNetworkData', () => {
         method: 'GET',
       }),
     ]);
+  });
+
+  it('rejects unsupported scalar payloads and primitive entity collection items', () => {
+    const result = assertCorrectNetworkData([
+      {
+        method: 'GET',
+        statusCode: 200,
+        responseBody: JSON.stringify({ privateField: 'do-not-leak' }),
+        responseHeaders: {
+          'content-type': 'application/json',
+        },
+        url: '/public-api/serialized',
+      },
+      {
+        method: 'GET',
+        statusCode: 200,
+        responseBody: ['synthetic-private-value'],
+        responseHeaders: {
+          'content-type': 'application/json',
+        },
+        url: '/public-api/users',
+      },
+    ]);
+
+    expect(result.passed).toBe(false);
+    expect(result.findings).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ fieldName: 'response' }),
+        expect.objectContaining({ fieldName: '[0]' }),
+      ]),
+    );
+  });
+
+  it('validates approved public scalar responses and feature flags on public API hosts', () => {
+    const result = assertCorrectNetworkData([
+      {
+        method: 'GET',
+        statusCode: 200,
+        responseBody: false,
+        responseHeaders: {
+          'content-type': 'application/json',
+        },
+        url: 'http://localhost:4001/public-api/maintenance-mode',
+      },
+      {
+        method: 'GET',
+        statusCode: 200,
+        responseBody: {
+          entityName: 'FeatureFlagResponseDTO',
+          'enable-payment-portal-integration': true,
+        },
+        responseHeaders: {
+          'content-type': 'application/json',
+        },
+        url: 'https://public-api-blue.example.gov/system/feature-flag',
+      },
+    ]);
+
+    expect(result).toEqual({
+      passed: true,
+      findings: [],
+    });
+  });
+
+  it('does not validate public error responses', () => {
+    const result = assertCorrectNetworkData([
+      {
+        method: 'GET',
+        statusCode: 404,
+        responseBody: 'Case not found',
+        responseHeaders: {
+          'content-type': 'application/json',
+        },
+        url: '/public-api/cases/not-found',
+      },
+    ]);
+
+    expect(result).toEqual({
+      passed: true,
+      findings: [],
+    });
+  });
+
+  it('does not validate bodyless HEAD responses', () => {
+    const result = assertCorrectNetworkData([
+      {
+        method: 'HEAD',
+        statusCode: 200,
+        responseBody: '',
+        responseHeaders: {
+          'content-type': 'application/json',
+        },
+        url: '/public-api/cases/103-20',
+      },
+    ]);
+
+    expect(result).toEqual({
+      passed: true,
+      findings: [],
+    });
   });
 
   it('allows serialized public entity arrays and approved response wrappers', () => {

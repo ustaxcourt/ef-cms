@@ -4,7 +4,11 @@ import { getHeaderValue } from '@shared/utils/headers';
 
 export type ApiGatewayLikeEvent = {
   headers?: Record<string, unknown>;
+  httpMethod?: string;
   path?: string;
+  requestContext?: {
+    httpMethod?: string;
+  };
   url?: string;
 };
 
@@ -41,6 +45,7 @@ export function findUnauthorizedPublicFields(args: {
   const path = getRequestPath(args.event);
   return findUnauthorizedPublicFieldsCore({
     data: args.response,
+    method: args.event.httpMethod ?? args.event.requestContext?.httpMethod,
     url: path,
   });
 }

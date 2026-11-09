@@ -235,6 +235,47 @@ describe('handle', () => {
 
   it.each([
     {
+      event: {
+        httpMethod: 'GET',
+        path: '/public-api/maintenance-mode',
+      },
+      response: false,
+    },
+    {
+      event: {
+        path: '/public-api/cases/101-20',
+        requestContext: { httpMethod: 'HEAD' },
+      },
+      response: true,
+    },
+  ])(
+    'should allow approved public boolean response $event',
+    async ({ event, response: responseData }) => {
+      const response = await handle(event, () => responseData);
+
+      expect(response.statusCode).toBe('200');
+      expect(response.body).toBe(JSON.stringify(responseData));
+    },
+  );
+
+  it.each([
+    JSON.stringify({ privateField: 'do-not-leak' }),
+    ['synthetic-private-value'],
+  ])('should reject unsupported public response values: %s', async data => {
+    const response = await handle(
+      {
+        httpMethod: 'GET',
+        path: '/public-api/some-endpoint',
+      },
+      () => data,
+    );
+
+    expect(response.statusCode).toBe(500);
+    expect(JSON.parse(response.body)).toContain('unauthorized field');
+  });
+
+  it.each([
+    {
       payload: { results: [] },
       path: '/public-api/search',
     },

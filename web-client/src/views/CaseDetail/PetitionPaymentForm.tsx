@@ -26,7 +26,7 @@ interface CerebralProps {
     petitionPaymentWaivedDate?: string;
   };
   formatAndUpdateDateFromDatePickerSequence: Function;
-  isPaymentPortalIntegrationEnabled: boolean;
+  isPaymentPortalIntegrationEnabled: boolean | undefined;
   paymentStatus: {
     PAID: string;
     UNPAID: string;
@@ -36,7 +36,7 @@ interface CerebralProps {
   validationErrors: Record<string, string | undefined>;
 }
 
-const PetitionPaymentFormComponent: React.FC<
+export const PetitionPaymentFormComponent: React.FC<
   ComponentProps & CerebralProps
 > = ({
   bind,
@@ -241,7 +241,7 @@ export const PetitionPaymentForm: React.FC<PetitionPaymentFormProps> = connect(
     isPaymentPortalIntegrationEnabled:
       state.featureFlags[
         ALLOWLIST_FEATURE_FLAGS.ENABLE_PAYMENT_PORTAL_INTEGRATION.key
-      ] === true,
+      ],
     paymentStatus: state.constants.PAYMENT_STATUS,
     validationErrors: state[props.validationErrorsBind],
   },

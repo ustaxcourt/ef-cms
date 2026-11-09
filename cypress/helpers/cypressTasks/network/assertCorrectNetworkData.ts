@@ -8,6 +8,7 @@ import { getHeaderValue } from '@shared/utils/headers';
 export type CapturedNetworkPayload = {
   url: string;
   method: string;
+  statusCode?: number;
   requestBody?: unknown;
   responseBody?: unknown;
   requestHeaders?: Record<string, unknown>;
@@ -32,9 +33,17 @@ function shouldValidateJsonBody(args: {
   body: unknown;
   headers: Record<string, unknown> | undefined;
   shouldRejectAssetUrls: boolean;
+  statusCode?: number;
   url: string;
 }): boolean {
-  if (!args.body) {
+  if (args.body === undefined) {
+    return false;
+  }
+
+  if (
+    args.statusCode !== undefined &&
+    (args.statusCode < 200 || args.statusCode >= 300)
+  ) {
     return false;
   }
 
@@ -47,16 +56,16 @@ function shouldValidateJsonBody(args: {
     return false;
   }
 
-  return isRecord(args.body) || Array.isArray(args.body);
-}
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null && !Array.isArray(value);
+  return true;
 }
 
 function isPublicApiUrl(url: string): boolean {
-  const { pathname } = new URL(url, 'http://localhost');
-  return pathname.startsWith('/public-api/');
+  const parsedUrl = new URL(url, 'http://localhost');
+  const isPublicApiHost =
+    /^public-api(?:-[a-z0-9-]+)?\./i.test(parsedUrl.hostname) ||
+    /^(?:localhost|127\.0\.0\.1):4001$/i.test(parsedUrl.host);
+
+  return parsedUrl.pathname.startsWith('/public-api/') || isPublicApiHost;
 }
 
 export function assertCorrectNetworkData(
@@ -69,11 +78,16 @@ export function assertCorrectNetworkData(
       continue;
     }
 
+    if (payload.method.toUpperCase() === 'HEAD') {
+      continue;
+    }
+
     if (
       shouldValidateJsonBody({
         body: payload.responseBody,
         headers: payload.responseHeaders,
         shouldRejectAssetUrls: true,
+        statusCode: payload.statusCode,
         url: payload.url,
       })
     ) {
@@ -101,6 +115,7 @@ function appendFindingsForBody(args: {
   const relevantFindings: UnauthorizedPublicFieldFinding[] =
     findUnauthorizedPublicFields({
       data: args.body,
+      method: args.method,
       url: args.url,
     }).filter(finding => finding.type !== 'not_validated');
 

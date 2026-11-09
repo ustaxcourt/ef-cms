@@ -66,6 +66,7 @@ Cypress.Commands.add('capturePublicPageNetworkTraffic', () => {
             responseBody: res.body,
             requestHeaders: req.headers,
             responseHeaders: res.headers,
+            statusCode: res.statusCode,
           });
         }
       });

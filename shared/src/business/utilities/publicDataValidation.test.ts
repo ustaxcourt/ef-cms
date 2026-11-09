@@ -1,5 +1,4 @@
 import { findUnauthorizedPublicFields } from '@shared/business/utilities/publicDataValidation';
-import { FeatureFlagResponseDTO } from '@shared/business/dto/system/FeatureFlagResponseDTO';
 import { PublicCaseResponse } from '@shared/business/dto/cases/PublicCaseResponse';
 import { HealthCheckResponse } from '@shared/business/dto/public/HealthCheckResponse';
 import { PublicContact } from '@shared/business/entities/cases/PublicContact';
@@ -25,24 +24,6 @@ const mockPublicCaseFields: RawPublicCase = {
 };
 
 describe('publicDataValidation', () => {
-  it('passes for feature-flag primitive payloads', () => {
-    const dto = new FeatureFlagResponseDTO({
-      'aws-batch-zipper-minimum-count': 5,
-      'chief-judge-name': 'Bootsy Collins',
-      'document-visibility-policy-change-date': '2023-05-01',
-      'e-consent-fields-enabled-feature-flag': true,
-      'restricted-event-codes': ['something'],
-      'use-change-of-address-lambda': false,
-    });
-    dto.validate();
-    const findings = findUnauthorizedPublicFields({
-      data: dto,
-      url: 'http://localhost:4001/system/feature-flag',
-    });
-
-    expect(findings).toEqual([]);
-  });
-
   it('fails top-level array items without entityName', () => {
     const findings = findUnauthorizedPublicFields({
       data: [
@@ -68,15 +49,6 @@ describe('publicDataValidation', () => {
         }),
       ]),
     );
-  });
-
-  it('passes for top-level array items that are URL-only objects', () => {
-    const findings = findUnauthorizedPublicFields({
-      data: [{ url: 'https://example.com/doc.pdf' }],
-      url: 'http://localhost:4001/public-api/documents',
-    });
-
-    expect(findings).toEqual([]);
   });
 
   it('rejects root numeric payloads without an approved response schema', () => {
@@ -378,11 +350,11 @@ describe('publicDataValidation', () => {
       docketNumber: '101-20',
       docketEntries: [],
     });
-    Object.assign(calendaredCase, { privateField: 'do-not-leak' });
     const trialSessionDetails = new PublicTrialSessionDetails({
       calendaredCases: [calendaredCase],
       startDate: '2026-01-01T00:00:00.000Z',
     }).validate();
+    Object.assign(calendaredCase, { privateField: 'do-not-leak' });
 
     const findings = findUnauthorizedPublicFields({
       data: trialSessionDetails,
