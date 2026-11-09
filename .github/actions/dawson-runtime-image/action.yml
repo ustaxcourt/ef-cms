@@ -1,0 +1,42 @@
+name: DAWSON Runtime Image
+description: Build the batch or puppeteer image from its Dockerfile, so Trivy scans what the Dockerfile installs and not only its base image.
+
+inputs:
+  image:
+    description: Which image to build, batch or puppeteer.
+    required: true
+
+outputs:
+  image_ref:
+    description: Local tag of the built image, to pass to dawson-trivy-image-scan.
+    value: ${{ steps.build.outputs.image_ref }}
+
+runs:
+  using: composite
+  steps:
+    - name: Build ${{ inputs.image }} image
+      id: build
+      shell: bash
+      env:
+        IMAGE: ${{ inputs.image }}
+      run: |
+        case "$IMAGE" in
+          batch)
+            # The Dockerfile requires these build args, but scanning needs no real values.
+            # deploy-to-ecr.sh passes the real ones when the image is deployed.
+            ref=docket-entry-zipper:latest
+            docker build --platform=linux/amd64 \
+              --build-arg AWS_REGION=us-east-1 \
+              --build-arg WEBSOCKET_API_GATEWAY_ID=scan-placeholder \
+              -t "$ref" web-api/terraform/modules/batch/docker-image
+            ;;
+          puppeteer)
+            ref=puppeteer-layer:latest
+            docker build --platform=linux/amd64 -t "$ref" web-api/runtimes/puppeteer
+            ;;
+          *)
+            echo "Unknown image '$IMAGE': expected batch or puppeteer" >&2
+            exit 1
+            ;;
+        esac
+        echo "image_ref=$ref" >> "$GITHUB_OUTPUT"

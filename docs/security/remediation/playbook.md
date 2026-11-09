@@ -231,10 +231,10 @@ docker run --rm --platform linux/amd64 node:24.21.0-slim \
 
 On 2026-10-16 this showed `deb12u4` in Debian's `bookworm-security` repository, while
 `node:24.21.0-slim` and the newest `node:24-slim` both still shipped `deb12u3`. So the fix is to
-bump the `FROM` tag once a `node` slim image includes `deb12u4`. Adding `apt-get upgrade` to the
-Dockerfile would not clear the alert, because this scan reads the image on the `FROM` line, not the
-built image (see [Scanner inventory](scanner-reference.md#scanner-inventory)). If no such tag ships
-before the due date, the finding goes to the approver as a wait-for-upstream exception.
+bump the `FROM` tag once a `node` slim image includes `deb12u4`. If no such tag ships before the
+due date, add `apt-get install --only-upgrade perl-base` to the Dockerfile instead. The scan builds
+the image from the Dockerfile, so that line clears the alert (see [Scanner
+inventory](scanner-reference.md#scanner-inventory)); remove it once the `FROM` bump lands.
 
 Had there been no fix at all, the affected check would have looked at each CVE's vulnerable code.
 The slim image ships `perl-base` but not `perl-modules-5.36`, so a CVE in a module from that
