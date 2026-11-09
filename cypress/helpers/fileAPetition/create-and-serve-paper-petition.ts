@@ -105,7 +105,7 @@ export function createAndServePaperPetition(
   cy.get('#upload-mode-upload').click();
   cy.get('#uploadMode').check();
   attachFile({
-    filePath: '../../helpers/file/sample.pdf',
+    filePath: 'sample.pdf',
     selector: '#petitionFile-file',
     selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
   });
@@ -114,7 +114,7 @@ export function createAndServePaperPetition(
   cy.get('#upload-mode-upload').click();
   cy.get('#uploadMode').check();
   attachFile({
-    filePath: '../../helpers/file/sample.pdf',
+    filePath: 'sample.pdf',
     selector: '#requestForPlaceOfTrialFile-file',
     selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
   });
@@ -122,7 +122,7 @@ export function createAndServePaperPetition(
   cy.get('[data-testid="tabButton-stinFile"]').click();
   cy.get('[data-testid="upload-pdf-button"]').click();
   attachFile({
-    filePath: '../../helpers/file/sample.pdf',
+    filePath: 'sample.pdf',
     selector: 'input#stinFile-file',
     selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
   });
@@ -130,7 +130,7 @@ export function createAndServePaperPetition(
   cy.get('[data-testid="tabButton-attachmentToPetitionFile"]').click();
   cy.get('[data-testid="upload-pdf-button"]').click();
   attachFile({
-    filePath: '../../helpers/file/sample.pdf',
+    filePath: 'sample.pdf',
     selector: 'input#attachmentToPetitionFile-file',
     selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
   });
@@ -139,7 +139,7 @@ export function createAndServePaperPetition(
   cy.get('[data-testid="tabButton-corporateDisclosureFile"]').click();
   cy.get('[data-testid="upload-pdf-button"]').click();
   attachFile({
-    filePath: '../../helpers/file/sample.pdf',
+    filePath: 'sample.pdf',
     selector: 'input#corporateDisclosureFile-file',
     selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
   });
@@ -151,7 +151,7 @@ export function createAndServePaperPetition(
     ).click();
     cy.get('[data-testid="upload-pdf-button"]').click();
     attachFile({
-      filePath: '../../helpers/file/sample.pdf',
+      filePath: 'sample.pdf',
       selector: 'input#applicationForWaiverOfFilingFeeFile-file',
       selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
     });
@@ -287,7 +287,7 @@ export function createAndServePaperPetitionMyselfAndSpouse(
 
   cy.get('#upload-mode-upload').click();
   attachFile({
-    filePath: '../../helpers/file/sample.pdf',
+    filePath: 'sample.pdf',
     selector: '#petitionFile-file',
     selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
   });
@@ -295,7 +295,7 @@ export function createAndServePaperPetitionMyselfAndSpouse(
   cy.get('#tabButton-requestForPlaceOfTrialFile > .button-text').click();
   cy.get('#upload-mode-upload').click();
   attachFile({
-    filePath: '../../helpers/file/sample.pdf',
+    filePath: 'sample.pdf',
     selector: '#requestForPlaceOfTrialFile-file',
     selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
   });
@@ -303,7 +303,7 @@ export function createAndServePaperPetitionMyselfAndSpouse(
   cy.get('[data-testid="tabButton-stinFile"]').click();
   cy.get('[data-testid="upload-pdf-button"]').click();
   attachFile({
-    filePath: '../../helpers/file/sample.pdf',
+    filePath: 'sample.pdf',
     selector: 'input#stinFile-file',
     selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
   });

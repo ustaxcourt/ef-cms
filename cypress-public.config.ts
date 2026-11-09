@@ -44,7 +44,7 @@ export default defineConfig({
     testIsolation: false,
   },
   expose: getExposedCypressEnv(),
-  fixturesFolder: 'cypress/local-only/fixtures',
+  fixturesFolder: 'cypress/helpers/file',
   injectDocumentDomain: true,
   reporter: 'spec',
   reporterOptions: {

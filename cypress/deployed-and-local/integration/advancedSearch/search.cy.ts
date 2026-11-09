@@ -209,7 +209,7 @@ describe('Advanced Search', () => {
         cy.get('[data-testid="menu-button-upload-pdf"]').click();
         cy.get('[data-testid="upload-description"]').type(opinionTitle);
         attachFile({
-          filePath: '../../helpers/file/sample.pdf',
+          filePath: 'sample.pdf',
           selector: '[data-testid="primary-document-file"]',
           selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
         });

@@ -38,7 +38,36 @@ Script to add the flag and set it to `true`:
 ```
 
 </details>
+<details><summary>Dependency Updates - Week of 2026-11-03</summary>
 
+## Local
+
+#### Upgrade Terraform to `1.17.1`
+
+Use either tfswitch or tfenv:
+
+```bash
+tfswitch 1.17.1
+```
+
+```bash
+tfenv install 1.17.1
+tfenv use 1.17.1
+```
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Deploy Docker container `4.3.104`
+
+This script will prompt for an environment to pull the image from; choose `exp2`.
+
+```bash
+npm run ecr:check-version
+```
+
+</details>
 <details><summary>Dependency Updates - Week of 2026-10-26</summary>
 
 ## Local
@@ -172,6 +201,7 @@ Once everything is deployed, set the feature flag to show the SSO button on the 
 
 If this feature is not needed, no updates are required. The terraform updates will not take place if `IDP_NAME` is not set.
 </details>
+
 <details><summary>Dependency Updates - Week of 2026-10-05</summary>
 
 ## Local
@@ -202,6 +232,7 @@ npm run ecr:check-version
 ```
 
 </details>
+
 <details><summary>Dependency Updates - Week of 2026-09-28</summary>
 
 ## Local
@@ -256,6 +287,10 @@ npm run ecr:check-version
 </details>
 <details><summary>Dependency Updates - Week of 2026-09-14</summary>
 
+## Manual Deployment Steps
+
+### Before Deployment
+
 ## Local
 
 #### Upgrade Terraform to `1.16.3`
@@ -267,10 +302,6 @@ tfswitch 1.16.3
 tfenv install 1.16.3
 tfenv use 1.16.3
 ```
-
-## Manual Deployment Steps
-
-### Before Deployment
 
 #### Deploy Docker container `4.3.97`
 
@@ -300,7 +331,6 @@ Blocked Cases Report. Run the following to recompute those cases:
 ./scripts/run-once-scripts/fix-stale-automatic-blocks.ts
 ```
 </details>
-
 <details><summary>Dependency Updates - Week of 2026-09-08</summary>
 
 ## Local
