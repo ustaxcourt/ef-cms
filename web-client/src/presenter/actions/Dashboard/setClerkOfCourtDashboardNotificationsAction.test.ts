@@ -12,6 +12,7 @@ describe('setClerkOfCourtDashboardNotificationsAction', () => {
     runAction(setClerkOfCourtDashboardNotificationsAction, {
       modules: { presenter },
       state: {
+        alertError: undefined,
         currentPage,
         judgeUser: {},
         messageBoxToDisplay: {},
@@ -39,7 +40,7 @@ describe('setClerkOfCourtDashboardNotificationsAction', () => {
     expect(state.notifications).toEqual(mockNotifications);
   });
 
-  it('should log the error and keep the current notifications when the request fails', async () => {
+  it('should log the error, keep the current notifications and show an alert when the request fails', async () => {
     const consoleErrorSpy = jest
       .spyOn(console, 'error')
       .mockImplementation(() => {});
@@ -48,11 +49,46 @@ describe('setClerkOfCourtDashboardNotificationsAction', () => {
     const { state } = await run();
 
     expect(state.notifications).toEqual(previousNotifications);
+    expect(state.alertError).toEqual({
+      message:
+        'Your notification counts may be out of date. Please refresh the page.',
+      title: 'Notifications could not be loaded',
+    });
     expect(consoleErrorSpy).toHaveBeenCalledWith(
       'setClerkOfCourtDashboardNotificationsAction failed:',
       'failed',
     );
     consoleErrorSpy.mockRestore();
+  });
+
+  it('should not show an alert when the request fails after the user left the dashboard', async () => {
+    jest.spyOn(console, 'error').mockImplementation(() => {});
+    getNotificationsInteractor.mockRejectedValue('failed');
+
+    const { state } = await run('Messages');
+
+    expect(state.alertError).toBeUndefined();
+    jest.restoreAllMocks();
+  });
+
+  it('should not show an alert when an older load fails after a newer load', async () => {
+    jest.spyOn(console, 'error').mockImplementation(() => {});
+    let rejectOlder: (reason: unknown) => void = () => {};
+    getNotificationsInteractor
+      .mockReturnValueOnce(
+        new Promise((_resolve, reject) => {
+          rejectOlder = reject;
+        }),
+      )
+      .mockResolvedValueOnce(mockNotifications);
+
+    const olderRun = run();
+    await run();
+    rejectOlder('failed');
+    const { state: olderState } = await olderRun;
+
+    expect(olderState.alertError).toBeUndefined();
+    jest.restoreAllMocks();
   });
 
   it('should not overwrite the notifications when the user left the dashboard before the response', async () => {

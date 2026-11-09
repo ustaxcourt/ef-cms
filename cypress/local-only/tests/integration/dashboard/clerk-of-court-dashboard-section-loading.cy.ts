@@ -65,13 +65,17 @@ describe('Clerk of Court Dashboard - section loading', () => {
     cy.get('[data-testid="error-alert"]').should('not.exist');
   });
 
-  it('should stay on the dashboard when the notifications fail to load', () => {
+  it('should stay on the dashboard and show an alert when the notifications fail to load', () => {
     cy.intercept('GET', '**/api/notifications*', { statusCode: 500 }).as(
       'notifications',
     );
     loginAsClerkOfCourt();
     cy.wait('@notifications');
 
+    cy.get('[data-testid="error-alert"]').should(
+      'contain.text',
+      'Notifications could not be loaded',
+    );
     cy.get('[data-testid="inbox-tab-content"]').should('exist');
     cy.get('[data-testid="current-week-trial-sessions-card"]').should('exist');
     cy.get('[data-testid="petitions-data-div"]').should('exist');

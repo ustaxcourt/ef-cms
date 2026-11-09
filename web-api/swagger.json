@@ -382,7 +382,7 @@
       "get": {
         "tags": [],
         "summary": "get clerk of court dashboard trial sessions",
-        "description": "get the trial sessions that start in the current week or the next week, for the clerk of court dashboard.\n",
+        "description": "get the trial sessions that start in the current week or the next week, for the clerk of court dashboard, with the week boundaries that the query used.\n",
         "produces": ["application/json"],
         "responses": {
           "200": {

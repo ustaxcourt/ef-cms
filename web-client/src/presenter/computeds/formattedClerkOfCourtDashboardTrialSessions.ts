@@ -2,7 +2,6 @@ import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import { TrialSessionInfoDTO } from '@shared/business/dto/trialSessions/TrialSessionInfoDTO';
-import { getClerkOfCourtDashboardTrialSessionWeeks } from '@shared/business/utilities/getClerkOfCourtDashboardTrialSessionWeeks';
 
 export type FormattedTrialSession = {
   trialSessionId?: string;
@@ -35,9 +34,11 @@ export const formattedClerkOfCourtDashboardTrialSessions = (
 } => {
   const { SESSION_STATUS_GROUPS } = applicationContext.getConstants();
 
-  const weeks = getClerkOfCourtDashboardTrialSessionWeeks();
-  const allTrialSessions = get(state.clerkOfCourtDashboardTrialSessions.data);
-  if (!weeks || !allTrialSessions || !Array.isArray(allTrialSessions)) {
+  // group by the weeks the API used for its query, not by the client's clock, so
+  // a response from just before a new week (or a wrong client clock) still fits
+  const { trialSessions: allTrialSessions, weeks } =
+    get(state.clerkOfCourtDashboardTrialSessions.data) ?? {};
+  if (!weeks || !Array.isArray(allTrialSessions)) {
     return {
       formattedCurrentWeekSessions: [],
       formattedNextWeekSessions: [],

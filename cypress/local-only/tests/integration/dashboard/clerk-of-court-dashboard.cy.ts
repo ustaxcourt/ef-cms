@@ -528,22 +528,36 @@ describe('Clerk of Court Dashboard', () => {
     ).should('exist');
   });
 
-  it('should navigate away from the dashboard while the stats are still loading', () => {
-    const statsRequests = holdRequests('**/clerk-dashboard-stats/*');
-    loginAsClerkOfCourt();
-    cy.get('[data-testid="chart-loading"]').should('exist');
+  // hold one request at a time: the local API uses HTTP/1.1, so holding them all would use up
+  // the browser's connections for the next page. Notifications are not here: the Trial Sessions
+  // page sends the same notifications request, and the client shares an identical pending GET
+  (
+    [
+      { name: 'petitions stats', url: '**/clerk-dashboard-stats/petitions' },
+      { name: 'cases stats', url: '**/clerk-dashboard-stats/cases' },
+      {
+        name: 'trial sessions',
+        url: '**/clerk-dashboard-stats/trial-sessions',
+      },
+      { name: 'inbox messages', url: '**/messages/inbox/*' },
+    ] as const
+  ).forEach(({ name, url }) => {
+    it(`should navigate away from the dashboard while the ${name} request is still loading`, () => {
+      const heldRequests = holdRequests(url);
+      loginAsClerkOfCourt();
 
-    cy.get('[data-testid="trial-session-link"]').click();
+      cy.get('[data-testid="trial-session-link"]').click();
 
-    cy.url({ timeout: NAVIGATION_TIMEOUT_MS }).should(
-      'include',
-      '/trial-sessions',
-    );
-    cy.get('[data-testid="add-trial-session-button"]', {
-      timeout: NAVIGATION_TIMEOUT_MS,
-    }).should('exist');
+      cy.url({ timeout: NAVIGATION_TIMEOUT_MS }).should(
+        'include',
+        '/trial-sessions',
+      );
+      cy.get('[data-testid="add-trial-session-button"]', {
+        timeout: NAVIGATION_TIMEOUT_MS,
+      }).should('exist');
 
-    cy.then(statsRequests.release);
+      cy.then(heldRequests.release);
+    });
   });
 
   it('should show one error state for each tab when the stats fail to load', () => {
