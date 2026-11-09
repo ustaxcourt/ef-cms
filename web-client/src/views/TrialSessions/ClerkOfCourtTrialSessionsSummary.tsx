@@ -1,4 +1,6 @@
 import { Accordion, AccordionItem } from '../../ustc-ui/Accordion/Accordion';
+import { ClerkOfCourtDashboardStatsStatus } from '@web-client/presenter/clerkOfCourtDashboardState';
+import { ClerkOfCourtSectionStatus } from '../Dashboards/ClerkOfCourtSectionStatus';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -9,6 +11,7 @@ import React from 'react';
 type WeekType = 'current' | 'next';
 
 type ClerkOfCourtTrialSessionsSummaryProps = {
+  trialSessionsStatus: ClerkOfCourtDashboardStatsStatus;
   formattedClerkOfCourtDashboardTrialSessions?: {
     formattedCurrentWeekSessions: FormattedTrialSession[];
     formattedNextWeekSessions: FormattedTrialSession[];
@@ -285,9 +288,11 @@ export const ClerkOfCourtTrialSessionsSummary = connect(
   {
     formattedClerkOfCourtDashboardTrialSessions:
       state.formattedClerkOfCourtDashboardTrialSessions,
+    trialSessionsStatus: state.clerkOfCourtDashboardTrialSessions.status,
   },
   function ClerkOfCourtTrialSessionsSummary({
     formattedClerkOfCourtDashboardTrialSessions,
+    trialSessionsStatus,
   }: ClerkOfCourtTrialSessionsSummaryProps) {
     const {
       formattedCurrentWeekSessions = [],
@@ -298,49 +303,59 @@ export const ClerkOfCourtTrialSessionsSummary = connect(
       <>
         <NonMobile>
           {renderTrialSessionsHeader()}
-          <div className="grid-row grid-gap">
-            <div className="grid-col-6">
-              {renderWeekSection(
-                CLERK_OF_COURT_DASHBOARD_LABELS.WEEK_CURRENT,
-                formattedCurrentWeekSessions,
-                'current',
-                CLERK_OF_COURT_DASHBOARD_LABELS.EMPTY_MESSAGE_CURRENT_WEEK,
-                'current-week-trial-sessions-card',
-              )}
+          <ClerkOfCourtSectionStatus
+            label="trial sessions"
+            status={trialSessionsStatus}
+          >
+            <div className="grid-row grid-gap">
+              <div className="grid-col-6">
+                {renderWeekSection(
+                  CLERK_OF_COURT_DASHBOARD_LABELS.WEEK_CURRENT,
+                  formattedCurrentWeekSessions,
+                  'current',
+                  CLERK_OF_COURT_DASHBOARD_LABELS.EMPTY_MESSAGE_CURRENT_WEEK,
+                  'current-week-trial-sessions-card',
+                )}
+              </div>
+              <div className="grid-col-6">
+                {renderWeekSection(
+                  CLERK_OF_COURT_DASHBOARD_LABELS.WEEK_NEXT,
+                  formattedNextWeekSessions,
+                  'next',
+                  CLERK_OF_COURT_DASHBOARD_LABELS.EMPTY_MESSAGE_NEXT_WEEK,
+                  'next-week-trial-sessions-card',
+                )}
+              </div>
             </div>
-            <div className="grid-col-6">
-              {renderWeekSection(
-                CLERK_OF_COURT_DASHBOARD_LABELS.WEEK_NEXT,
-                formattedNextWeekSessions,
-                'next',
-                CLERK_OF_COURT_DASHBOARD_LABELS.EMPTY_MESSAGE_NEXT_WEEK,
-                'next-week-trial-sessions-card',
-              )}
-            </div>
-          </div>
+          </ClerkOfCourtSectionStatus>
         </NonMobile>
         <Mobile>
           {renderTrialSessionsHeader()}
-          <div className="grid-row grid-gap">
-            <div className="grid-col-12">
-              {renderWeekSection(
-                CLERK_OF_COURT_DASHBOARD_LABELS.WEEK_CURRENT,
-                formattedCurrentWeekSessions,
-                'current',
-                CLERK_OF_COURT_DASHBOARD_LABELS.EMPTY_MESSAGE_CURRENT_WEEK,
-                'current-week-trial-sessions-card',
-              )}
+          <ClerkOfCourtSectionStatus
+            label="trial sessions"
+            status={trialSessionsStatus}
+          >
+            <div className="grid-row grid-gap">
+              <div className="grid-col-12">
+                {renderWeekSection(
+                  CLERK_OF_COURT_DASHBOARD_LABELS.WEEK_CURRENT,
+                  formattedCurrentWeekSessions,
+                  'current',
+                  CLERK_OF_COURT_DASHBOARD_LABELS.EMPTY_MESSAGE_CURRENT_WEEK,
+                  'current-week-trial-sessions-card',
+                )}
+              </div>
+              <div className="grid-col-12 margin-top-4">
+                {renderWeekSection(
+                  CLERK_OF_COURT_DASHBOARD_LABELS.WEEK_NEXT,
+                  formattedNextWeekSessions,
+                  'next',
+                  CLERK_OF_COURT_DASHBOARD_LABELS.EMPTY_MESSAGE_NEXT_WEEK,
+                  'next-week-trial-sessions-card',
+                )}
+              </div>
             </div>
-            <div className="grid-col-12 margin-top-4">
-              {renderWeekSection(
-                CLERK_OF_COURT_DASHBOARD_LABELS.WEEK_NEXT,
-                formattedNextWeekSessions,
-                'next',
-                CLERK_OF_COURT_DASHBOARD_LABELS.EMPTY_MESSAGE_NEXT_WEEK,
-                'next-week-trial-sessions-card',
-              )}
-            </div>
-          </div>
+          </ClerkOfCourtSectionStatus>
         </Mobile>
       </>
     );

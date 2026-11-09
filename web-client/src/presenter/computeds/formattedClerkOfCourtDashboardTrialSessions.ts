@@ -1,19 +1,8 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-import {
-  calculateISODate,
-  createDateAtStartOfWeekEST,
-  createEndOfDayISO,
-  createISODateAtStartOfDayEST,
-  deconstructDate,
-  FORMATS,
-} from '@shared/business/utilities/DateHandler';
-import {
-  DAYS_IN_WEEK,
-  DAYS_TO_WEEK_END,
-} from '@shared/business/entities/EntityConstants';
 import { TrialSessionInfoDTO } from '@shared/business/dto/trialSessions/TrialSessionInfoDTO';
+import { getClerkOfCourtDashboardTrialSessionWeeks } from '@shared/business/utilities/getClerkOfCourtDashboardTrialSessionWeeks';
 
 export type FormattedTrialSession = {
   trialSessionId?: string;
@@ -46,76 +35,17 @@ export const formattedClerkOfCourtDashboardTrialSessions = (
 } => {
   const { SESSION_STATUS_GROUPS } = applicationContext.getConstants();
 
-  const today = createISODateAtStartOfDayEST();
-  let currentWeekStart = createDateAtStartOfWeekEST(today, FORMATS.ISO);
-  currentWeekStart = applicationContext
-    .getUtilities()
-    .createISODateString(currentWeekStart, FORMATS.ISO);
-
-  const currentWeekEndDay = calculateISODate({
-    dateString: currentWeekStart,
-    howMuch: DAYS_TO_WEEK_END,
-    units: 'days',
-  });
-
-  const currentWeekEndISO = createEndOfDayISO(
-    deconstructDate(currentWeekEndDay),
-  );
-
-  if (!currentWeekEndISO) {
+  const weeks = getClerkOfCourtDashboardTrialSessionWeeks();
+  const allTrialSessions = get(state.clerkOfCourtDashboardTrialSessions.data);
+  if (!weeks || !allTrialSessions || !Array.isArray(allTrialSessions)) {
     return {
       formattedCurrentWeekSessions: [],
       formattedNextWeekSessions: [],
     };
   }
 
-  const currentWeekEnd = currentWeekEndISO;
-
-  const nextWeekAnyDayDateTimeISO = calculateISODate({
-    dateString: today,
-    howMuch: DAYS_IN_WEEK,
-    units: 'days',
-  });
-
-  if (!nextWeekAnyDayDateTimeISO) {
-    return {
-      formattedCurrentWeekSessions: [],
-      formattedNextWeekSessions: [],
-    };
-  }
-
-  let nextWeekStart = createDateAtStartOfWeekEST(
-    nextWeekAnyDayDateTimeISO,
-    FORMATS.ISO,
-  );
-  nextWeekStart = applicationContext
-    .getUtilities()
-    .createISODateString(nextWeekStart, FORMATS.ISO);
-
-  const nextWeekEndDay = calculateISODate({
-    dateString: nextWeekStart,
-    howMuch: DAYS_TO_WEEK_END,
-    units: 'days',
-  });
-
-  const nextWeekEndISO = createEndOfDayISO(deconstructDate(nextWeekEndDay));
-
-  if (!nextWeekEndISO) {
-    return {
-      formattedCurrentWeekSessions: [],
-      formattedNextWeekSessions: [],
-    };
-  }
-
-  const nextWeekEnd = nextWeekEndISO;
-
-  const allTrialSessions = get(state.trialSessions);
-  if (!allTrialSessions || !Array.isArray(allTrialSessions)) {
-    return {
-      formattedCurrentWeekSessions: [],
-      formattedNextWeekSessions: [],
-    };
-  }
+  const { currentWeekEnd, currentWeekStart, nextWeekEnd, nextWeekStart } =
+    weeks;
 
   const openTrialSessions = allTrialSessions.filter(
     session =>
