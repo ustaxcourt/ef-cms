@@ -60,10 +60,14 @@ export const getPublicDownloadPolicyUrlInteractor = async (
     .getUseCases()
     .getAllFeatureFlagsInteractor(applicationContext);
 
-  const documentVisibilityChangeDate =
-    featureFlags[
+  const documentVisibilityChangeDate: string =
+    typeof featureFlags[
       ALLOWLIST_FEATURE_FLAGS.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.key
-    ];
+    ] === 'string'
+      ? featureFlags[
+          ALLOWLIST_FEATURE_FLAGS.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.key
+        ]
+      : '';
 
   if (
     !DocketEntry.isDownloadable(docketEntryEntity, {
@@ -75,10 +79,7 @@ export const getPublicDownloadPolicyUrlInteractor = async (
         email: '',
         name: '',
       },
-      visibilityChangeDate:
-        typeof documentVisibilityChangeDate === 'string'
-          ? documentVisibilityChangeDate
-          : '',
+      visibilityChangeDate: documentVisibilityChangeDate,
     })
   ) {
     throw new UnauthorizedError('Unauthorized to access private document');
