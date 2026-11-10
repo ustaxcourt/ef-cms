@@ -19,8 +19,8 @@ type PublicDocketEntryRawProps = Pick<
     | 'numberOfPages'
     | 'previousDocument'
   > & {
-    affectedByDocketEntries?: PublicDocketEntryRelation[] | null;
-    affectedDocketEntries?: PublicDocketEntryRelation[] | null;
+    affectedByDocketEntries?: RawPublicDocketEntryRelation[] | null;
+    affectedDocketEntries?: RawPublicDocketEntryRelation[] | null;
     numberOfPages?: number | null;
     previousDocument?: {
       docketEntryId?: string;
@@ -32,6 +32,21 @@ type PublicDocketEntryRawProps = Pick<
 type PublicDocketEntryRelation = Omit<DocketEntryRelation, 'disposition'> & {
   disposition: string | null;
 };
+
+type RawPublicDocketEntryRelation = PublicDocketEntryRelation & {
+  entityName?: string;
+};
+
+function toPublicDocketEntryRelations(
+  relations: RawPublicDocketEntryRelation[] | null | undefined,
+): PublicDocketEntryRelation[] | null | undefined {
+  return (
+    relations?.map(({ entityName, ...relation }) => {
+      void entityName;
+      return relation;
+    }) ?? relations
+  );
+}
 
 export class PublicDocketEntry extends JoiValidationEntity {
   public action?: string;
@@ -108,8 +123,12 @@ export class PublicDocketEntry extends JoiValidationEntity {
     this.servedAt = rawProps.servedAt;
     this.servedPartiesCode = rawProps.servedPartiesCode;
     this.signedJudgeName = rawProps.signedJudgeName;
-    this.affectedByDocketEntries = rawProps.affectedByDocketEntries;
-    this.affectedDocketEntries = rawProps.affectedDocketEntries;
+    this.affectedByDocketEntries = toPublicDocketEntryRelations(
+      rawProps.affectedByDocketEntries,
+    );
+    this.affectedDocketEntries = toPublicDocketEntryRelations(
+      rawProps.affectedDocketEntries,
+    );
     if (rawProps.previousDocument) {
       this.previousDocument = {
         docketEntryId: rawProps.previousDocument.docketEntryId,

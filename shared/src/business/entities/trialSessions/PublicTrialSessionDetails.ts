@@ -51,7 +51,7 @@ export class PublicTrialSessionDetails extends JoiValidationEntity {
             entityName:
               JoiValidationConstants.STRING.valid(
                 'PublicCaseResponse',
-              ).required(),
+              ).optional(),
           })
           .unknown(false),
         joi
@@ -59,7 +59,7 @@ export class PublicTrialSessionDetails extends JoiValidationEntity {
             ...RestrictedCaseResponse.VALIDATION_RULES,
             entityName: JoiValidationConstants.STRING.valid(
               'RestrictedCaseResponse',
-            ).required(),
+            ).optional(),
           })
           .unknown(false),
       )

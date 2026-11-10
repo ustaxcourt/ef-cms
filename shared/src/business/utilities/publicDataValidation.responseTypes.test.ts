@@ -1,9 +1,13 @@
 import { findUnauthorizedPublicFields } from '@shared/business/utilities/publicDataValidation';
+import { PublicCaseResponse } from '@shared/business/dto/cases/PublicCaseResponse';
 import { FeatureFlagResponseDTO } from '@shared/business/dto/system/FeatureFlagResponseDTO';
+import { PublicCase } from '@shared/business/entities/cases/PublicCase';
 import { PublicCaseSearchResult } from '@shared/business/entities/cases/PublicCaseSearchResult';
 import { PublicContact } from '@shared/business/entities/cases/PublicContact';
 import { PublicDocketEntry } from '@shared/business/entities/cases/PublicDocketEntry';
 import { PublicDocumentSearchResult } from '@shared/business/entities/documents/PublicDocumentSearchResult';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { MOCK_DOCUMENTS } from '@shared/test/mockDocketEntry';
 
 describe('publicDataValidation response types', () => {
   it('passes for feature-flag primitive payloads', () => {
@@ -135,6 +139,102 @@ describe('publicDataValidation response types', () => {
         }),
       ).toEqual([]);
     }
+  });
+
+  it('passes public cases with docket entries that have disposition relationships', () => {
+    const docketEntryId = 'c7d90c05-f6cd-442c-a168-202db587f16f';
+    const docketEntry = {
+      ...MOCK_DOCUMENTS[0],
+      affectedByDocketEntries: [
+        {
+          disposition: 'GRANTED',
+          docketEntryId,
+          entityName: 'DocketEntry',
+        },
+      ],
+      affectedDocketEntries: [
+        {
+          disposition: 'DENIED',
+          docketEntryId,
+          entityName: 'DocketEntry',
+        },
+      ],
+      isDraft: false,
+      isOnDocketRecord: true,
+      previousDocument: {
+        docketEntryId,
+        documentTitle: 'Previous order',
+        documentType: 'Order',
+        entityName: 'DocketEntry',
+      },
+    };
+    const publicCase = new PublicCase(
+      {
+        ...MOCK_CASE,
+        docketEntries: [docketEntry],
+        irsPractitioners: [{ name: 'Public IRS practitioner' }],
+        privatePractitioners: [{ name: 'Public private practitioner' }],
+      },
+      { authorizedUser: undefined },
+    ).toRawObject();
+    const publicCaseResponse = new PublicCaseResponse(publicCase)
+      .validate()
+      .toRawObject();
+
+    expect(publicCaseResponse.docketEntries).toHaveLength(1);
+    expect(publicCaseResponse.docketEntries[0].affectedByDocketEntries).toEqual(
+      [{ disposition: 'GRANTED', docketEntryId }],
+    );
+    expect(publicCaseResponse.docketEntries[0].affectedDocketEntries).toEqual([
+      { disposition: 'DENIED', docketEntryId },
+    ]);
+    expect(publicCaseResponse.docketEntries[0].previousDocument).toEqual({
+      docketEntryId,
+      documentTitle: 'Previous order',
+      documentType: 'Order',
+    });
+    expect(
+      findUnauthorizedPublicFields({
+        data: publicCaseResponse,
+        url: 'http://localhost:4001/public-api/cases/101-18',
+      }),
+    ).toEqual([]);
+  });
+
+  it('rejects untyped nested data in public case responses', () => {
+    const publicCase = new PublicCase(
+      { ...MOCK_CASE, docketEntries: [] },
+      { authorizedUser: undefined },
+    ).toRawObject();
+    const publicCaseResponse = new PublicCaseResponse(publicCase)
+      .validate()
+      .toRawObject();
+    Object.assign(publicCaseResponse, {
+      consolidatedCases: [
+        { docketNumber: '102-18', privateField: 'do-not-leak' },
+      ],
+      irsPractitioners: [
+        { name: 'Public practitioner', privateField: 'do-not-leak' },
+      ],
+    });
+
+    const findings = findUnauthorizedPublicFields({
+      data: publicCaseResponse,
+      url: 'http://localhost:4001/public-api/cases/101-18',
+    });
+
+    expect(findings).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          fieldName: 'consolidatedCases',
+          matchPreview: '[invalid]',
+        }),
+        expect.objectContaining({
+          fieldName: 'irsPractitioners[0].privateField',
+          matchPreview: '[invalid]',
+        }),
+      ]),
+    );
   });
 
   it('rejects unsupported values in practitioner sort cursors', () => {

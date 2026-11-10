@@ -138,6 +138,42 @@ describe('PublicDocketEntry', () => {
     expect(docketEntry.isValid()).toBe(true);
   });
 
+  it('omits entity metadata from docket-entry relationships', () => {
+    const grantedRelation = {
+      disposition: 'GRANTED',
+      docketEntryId: 'e1d0b1c2-e531-4e07-ab82-851ee9acde64',
+      entityName: 'DocketEntry',
+    };
+    const deniedRelation = {
+      disposition: 'DENIED',
+      docketEntryId: 'e1d0b1c2-e531-4e07-ab82-851ee9acde64',
+      entityName: 'DocketEntry',
+    };
+    const docketEntry = new PublicDocketEntry({
+      affectedByDocketEntries: [grantedRelation],
+      affectedDocketEntries: [deniedRelation],
+      docketNumber: '101-21',
+      filingDate: '2020-05-27T09:23:43.007Z',
+      isSealed: false,
+      receivedAt: '2020-05-27T09:23:43.007Z',
+    });
+
+    expect(docketEntry.validate().toRawObject()).toMatchObject({
+      affectedByDocketEntries: [
+        {
+          disposition: 'GRANTED',
+          docketEntryId: 'e1d0b1c2-e531-4e07-ab82-851ee9acde64',
+        },
+      ],
+      affectedDocketEntries: [
+        {
+          disposition: 'DENIED',
+          docketEntryId: 'e1d0b1c2-e531-4e07-ab82-851ee9acde64',
+        },
+      ],
+    });
+  });
+
   it('allows null or empty relationship dispositions', () => {
     const docketEntry = new PublicDocketEntry({
       affectedByDocketEntries: [
