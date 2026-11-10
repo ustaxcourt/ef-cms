@@ -40,7 +40,6 @@ describe('Reporting trial sessions', () => {
 
   const creators = [
     { role: 'case services supervisor', login: loginAsCaseServicesSupervisor },
-    { role: 'docket clerk', login: loginAsDocketClerk },
     { role: 'clerk of court', login: loginAsClerkOfCourt },
     { role: 'trial clerk', login: loginAsTrialClerk },
     { role: 'admissions clerk', login: loginAsAdmissionsClerk },
@@ -49,6 +48,16 @@ describe('Reporting trial sessions', () => {
   ];
 
   creators.forEach(({ role, login }) => {
+    it(`should preserve the session type when ${role} switches away from Reporting`, () => {
+      login();
+      cy.get('[data-testid="trial-session-link"]').click();
+      cy.get('[data-testid="add-trial-session-button"]').click();
+      cy.get('[data-testid="Reporting-proceeding-label"]').click();
+      cy.get('[data-testid="session-type-Regular"]').click();
+      cy.get('[data-testid="Remote-proceeding-label"]').click();
+      cy.get('#session-type-Regular').should('be.checked');
+    });
+
     it(`should allow ${role} to access Reporting session creation`, () => {
       login();
       cy.get('[data-testid="trial-session-link"]').click();
@@ -59,6 +68,19 @@ describe('Reporting trial sessions', () => {
     });
   });
 
+  it('should only offer Special and Motion/Hearing creation to docket clerks', () => {
+    loginAsDocketClerk();
+    cy.get('[data-testid="trial-session-link"]').click();
+    cy.get('[data-testid="add-trial-session-button"]').click();
+    cy.get('#reporting-proceeding').should('not.exist');
+    cy.get('[data-testid="session-type-options"] input').should(
+      'have.length',
+      2,
+    );
+    cy.get('[data-testid="session-type-Special"]').should('be.visible');
+    cy.get('[data-testid="session-type-Motion/Hearing"]').should('be.visible');
+  });
+
   it('should allow Reporting creation after editing a calendared session', () => {
     const calendaredTrialSessionId = 'e222f700-dead-4000-beef-0000000d01e5';
     loginAsCaseServicesSupervisor();
@@ -67,7 +89,7 @@ describe('Reporting trial sessions', () => {
       `[data-testid="trial-location-link-${calendaredTrialSessionId}"]`,
     ).click();
     cy.get('[data-testid="edit-trial-session"]').click();
-    cy.get('#reporting-proceeding').should('be.disabled');
+    cy.get('#reporting-proceeding').should('not.exist');
 
     cy.get('[data-testid="trial-session-link"]').click();
     cy.get('[data-testid="add-trial-session-button"]').click();
@@ -76,7 +98,7 @@ describe('Reporting trial sessions', () => {
     cy.get('#due-date-picker').should('be.visible');
   });
 
-  it('should create Reporting and let a docket clerk edit it with the feature flag enabled and disabled', () => {
+  it('should let petitions clerks edit Reporting and prevent docket clerks from editing it', () => {
     loginAsPetitionsClerk();
     cy.get('[data-testid="trial-session-link"]').click();
     cy.get('[data-testid="add-trial-session-button"]').click();
@@ -162,6 +184,11 @@ describe('Reporting trial sessions', () => {
     cy.get<string>('@reportingSessionId').then(trialSessionId => {
       cy.get(`[data-testid="trial-location-link-${trialSessionId}"]`).click();
     });
+    cy.get('[data-testid="edit-trial-session"]').should('not.exist');
+    loginAsPetitionsClerk();
+    cy.get<string>('@reportingSessionId').then(trialSessionId => {
+      cy.visit(`/trial-session-detail/${trialSessionId}`);
+    });
     cy.get('[data-testid="edit-trial-session"]').click();
     cy.get('#due-date-picker').should('have.value', '02/10/2099').clear();
     cy.get('#due-date-picker').type('02/11/2099');
@@ -198,6 +225,21 @@ describe('Reporting trial sessions', () => {
     cy.wait('@editReporting');
     cy.get('[data-testid="success-alert"]').should('be.visible');
     cy.contains('Flag Disabled Admin').should('be.visible');
+
+    cy.get<string>('@reportingSessionId').then(trialSessionId => {
+      cy.intercept('GET', `**/trial-sessions/${trialSessionId}`, req => {
+        req.continue(res => {
+          res.body.isCalendared = true;
+        });
+      });
+    });
+    cy.reload();
+    cy.get('[data-testid="edit-trial-session"]').click();
+    cy.get('[data-testid="trial-session-proceeding-type"]')
+      .should('be.visible')
+      .find('input[type="radio"]')
+      .should('have.length', 1);
+    cy.get('#reporting-proceeding').should('be.checked');
   });
 
   it('should clear incompatible data when the proceeding type changes', () => {
