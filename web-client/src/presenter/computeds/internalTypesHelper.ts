@@ -3,28 +3,22 @@ import { orderBy } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 import {
   ALLOWLIST_FEATURE_FLAGS,
-  INTERNAL_DOCUMENTS_ARRAY,
+  INTERNAL_DOCKET_ENTRY_EDIT_FORM_DOCUMENT_TYPES,
+  InternalDocketEntryEditDocumentType,
   LODGED_EVENT_CODE,
 } from '@shared/business/entities/EntityConstants';
-import { InternalFilingEvent } from '@shared/business/entities/docketEntry/internalFilingEvents';
 
 export const internalTypesHelper = (
   get: Get,
 ): {
-  internalDocumentTypesForSelectSorted: (InternalFilingEvent & {
-    label: string;
-    value: string;
-  })[];
-  internalDocumentTypesForSelectWithLegacySorted: (InternalFilingEvent & {
-    label: string;
-    value: string;
-  })[];
+  internalDocumentTypesForSelectSorted: InternalDocketEntryEditDocumentType[];
+  internalDocumentTypesForSelectWithLegacySorted: InternalDocketEntryEditDocumentType[];
 } => {
   const searchText = get(state.screenMetadata.searchText) || '';
 
   const internalDocumentTypesForSelect = getDocumentTypesForSelect(
     get,
-    INTERNAL_DOCUMENTS_ARRAY,
+    INTERNAL_DOCKET_ENTRY_EDIT_FORM_DOCUMENT_TYPES,
   );
 
   const internalDocumentTypesForSelectWithLegacySorted =
