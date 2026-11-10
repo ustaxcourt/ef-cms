@@ -56,4 +56,40 @@ describe('generateTitleAction', () => {
         .documentType,
     ).toEqual('Motion for Entry of Decision');
   });
+
+  it('should set form.documentTitle to the generated title', async () => {
+    generateExternalDocumentTitle.mockReturnValue('Generated Title');
+    const { state } = await runAction(generateTitleAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        form: {
+          category: 'Motion',
+          documentTitle: 'Motion for [Free Text]',
+          documentType: 'Motion for Judgment on the Pleadings',
+        },
+      },
+    });
+
+    expect(state.form.documentTitle).toEqual('Generated Title');
+  });
+
+  it('should keep the existing form.documentTitle when a title cannot be generated', async () => {
+    generateExternalDocumentTitle.mockReturnValue(undefined);
+    const { state } = await runAction(generateTitleAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        form: {
+          documentTitle: 'Notice of Receipt of Petition',
+          documentType: 'Notice of Receipt of Petition',
+          eventCode: 'NOTR',
+        },
+      },
+    });
+
+    expect(state.form.documentTitle).toEqual('Notice of Receipt of Petition');
+  });
 });
