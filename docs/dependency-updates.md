@@ -20,6 +20,8 @@ At the moment, the only task we rotate is updating dependencies. As an open-sour
 
 1. Before running the `upgrade-npm-packages.ts` script, ensure that all packages listed in the caveats section below are in parity with the caveats list in the `upgrade-npm-packages.ts` file. Any package documented as held that is missing from the script's `caveats` array will be upgraded to its latest version. As of 10/13/2026, the script and docs are in sync; `@opensearch-project/opensearch` was added to the script this rotation after being documented as held on 10/2/2026 without a matching script entry.
 
+   - As of 11/09/2026, the script and docs are in sync; `recharts` and `@recharts/devtools` were removed from the script's `caveats` array after `@recharts/devtools@0.0.19` began accepting `recharts ^3.9.0` (which includes our pinned **3.10.1**).
+
 1. You can use the `upgrade-npm-packages.ts` script for this process if you would like. Run the script in each directory containing a package.json:
    ```bash
    # Run these in order to avoid having to manually navigate to each package.json location
@@ -59,6 +61,8 @@ This command informs us of known security vulnerabilities. If transitive depende
 > **Why am I seeing 19 high severity vulnerabilities for `braces`, `micromatch`, `stylelint`, `nodemon`, and the esbuild plugins?**
 > They all trace back to one advisory: `braces` <=3.0.3 can exhaust the call stack on deeply nested brace patterns ([GHSA-vfj7-8cjw-p6xm](https://github.com/advisories/GHSA-vfj7-8cjw-p6xm), CVE-2026-93687). As of 10/13/2026 there is no patched release, so an override can't fix it. `braces` is only reached through dev and build tooling (`stylelint`, `chokidar`/`nodemon` via the payment-portal test server, `esbuild-plugin-copy`, `esbuild-plugin-clean`), which expand glob patterns from our own configuration rather than user input; `npm ls braces --omit=dev` is empty. Check for a patched `braces` release each rotation and add an override once one ships.
 
+> **As of 11/09/2026:** Still no patched release; latest on npm remains **3.0.3**, so an override still can't fix it.
+
 #### 1.3 Approve or deny scripts as needed
 
 Once we upgrade to `npm` v12, package install scripts will be opt-in instead of automatically being allowed to run. As of v11, we can approve deny scripts using `npm approve-scripts <pkg>` or `npm deny-scripts <pkg>`, so for the week of 7/13/2026 we approved the following packages and denied the rest: `cypress` and `puppeteer`. Note the approvals are version-specific, so these packages will likely have to be reapproved when they are upgraded.
@@ -97,6 +101,8 @@ When updating Node.js, keep in mind:
 
  - If the Node.js upgrade stays within the published `@ustaxcourt/payment-portal` `engines.node` range (for example, a patch/minor update within the same major version), no `payment-portal` update is required.
  - If the Node.js upgrade falls outside the published `engines.node` range (for example, moving to a new major version), then `@ustaxcourt/payment-portal` must be updated and published with a compatible `engines.node` range before `npm ci` in ef-cms will succeed without engine workarounds.
+
+- As of 11/09/2026: Node **24.22.2** is available on nodejs.org, but there is no matching `cypress/browsers` tag on Docker Hub for **24.22.2** yet. Held at **24.22.1** in `.nvmrc` and the CI `Dockerfile` until a `node-24.22.2` (or compatible) `cypress/browsers` image is published.
 
 #### 2.2 Update `Dockerfile` as needed
 
@@ -159,6 +165,8 @@ Check if there is an update to the Terraform OpenSearch provider and update our 
 Check to see if there is an updated version of the Aurora RDS postgres engine available.
 
 > **Never get ahead of `prod` and `test`.** Local Docker, GitHub Actions service containers, the `RDS_ENGINE_VERSION` default, and experimental Aurora clusters must stay on the same Postgres version that `prod` and `test` run (as of 10/13/2026: **17.5**, pinned as `postgres:17.5-trixie`). A newer engine being available is not a reason to bump anything in a routine rotation; note it in the PR and leave every pin unchanged. An engine upgrade is a planned change that the team schedules for `test` and `prod` together, using the steps below.
+
+> **As of 11/09/2026:** No change — still **17.5** (`postgres:17.5-trixie`); leave every pin unchanged this rotation.
 
 When the team schedules an engine upgrade, we'll need to update postgres in deployed environments, locally, and in GitHub Actions together.
 
@@ -282,6 +290,8 @@ If an OpenSearch update is available, we'll need to update OpenSearch in github 
 
 > **As of 10/13/2026:** Amazon OpenSearch Service supports up to **OpenSearch_3.7** ([release notes, July 29, 2026](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/release-notes.html)). Upstream **3.8.0** and **3.9.0** are on Docker Hub but are not yet AWS engine options. From **dev** (`. scripts/env/set-env.zsh dev`), confirm with `aws opensearch list-versions` and compare to `aws opensearch describe-domain --domain-name "efcms-search-${ENV}-${SOURCE_TABLE_VERSION}" --query "DomainStatus.EngineVersion" --output text`. Repo pins already match the AWS maximum: `ES_ENGINE_VERSION` default `OpenSearch_3.7` in `scripts/secrets/create-env-secrets.ts`, local `opensearchproject/opensearch:3.7.0` in `docker-compose.yml` and `web-api/elasticsearch/docker-compose.yml`, and `opensearch-version: 3.7.0` in `.github/actions/dawson-app-setup/action.yml`. No §6.1 secret update, indices report, deploy, or local/GHA bump this rotation.
 
+> **As of 11/09/2026:** No change — AWS engine maximum still **OpenSearch_3.7**; repo pins unchanged; no §6.1 secret update, indices report, deploy, or local/GHA bump this rotation.
+
 ### 7. Wrap up
 
 - Check through the list of caveats to see if any of the documented issues have been resolved.
@@ -302,6 +312,8 @@ git log --format='%ad %an %s' --date=short -- .github/workflows .github/actions 
 ```
 
 As of 10/13/2026, these were last updated in the week of 10/12/2026 rotation.
+
+As of 11/09/2026, Semgrep and Checkov were bumped in `security-sast.yml` during the week of 11/09/2026 rotation; GitHub Actions `uses:` pins unchanged.
 
 #### 8.0 GitHub Actions `uses:` pins (manual — monthly)
 
@@ -336,6 +348,8 @@ These are the `uses: owner/action@vX.Y.Z` lines in every workflow file. Check an
 | `jpb06/coverage-badges-action` | `composite-coverage.yml` | [releases](https://github.com/jpb06/coverage-badges-action/releases) |
 
 > `composite-coverage.yml` only runs after a PR merges to `staging`, so PR checks can't validate changes to its actions. Update those in a separate PR and watch the next `staging` merge. As of 10/13/2026, `actions/create-github-app-token` (v1, latest v3) and `stefanzweifel/git-auto-commit-action` (v5, latest v7) are behind by major versions for this reason.
+
+> As of 11/09/2026, those `composite-coverage.yml` action pins are still behind by major versions for the same reason.
 
 **Steps to update a `uses:` pin:**
 
@@ -524,6 +538,7 @@ If an update is available for DWT:
 - As of 9/22/2026: Puppeteer **25.11.0** and `@sparticuz/chromium` **153.0.0** remain the latest on npm; versions already match in `package.json` and `web-api/runtimes/puppeteer/package.json`. No change.
 - As of 10/13/2026: Puppeteer **25.12.0** requires Chrome for Testing 154 and **25.13.0** requires 155, but `@sparticuz/chromium` latest on npm is still **153.0.0**. Held at **25.11.0**.
 - As of 11/03/2026: `@sparticuz/chromium` latest on npm is still **153.0.0**. Held at **25.11.0**. `npm audit` reports `zod` (via `chromium-bidi`), and the fix needs puppeteer 25.12+.
+- As of 11/09/2026: Puppeteer **25.17.0** is available upstream, but `@sparticuz/chromium` latest on npm is still **153.0.0**. Held at **25.11.0** in `package.json` and `web-api/runtimes/puppeteer/package.json`.
 
 ### ws, 3rd party dependency of Cerebral
 
@@ -567,6 +582,7 @@ If an update is available for DWT:
 - As of 8/10/2026: `@babel/core` **v8.x** is available on npm. Still blocked by `esbuild-plugin-babel-cached@0.2.3`, which publishes peer `@babel/core@^7.0.0` only.
 - As of 9/17/2026: `@babel/core` **8.0.5** is available. Tracked in DevEx ticket [#10428](https://github.com/ustaxcourt/ef-cms/issues/10428). The plugin is ~50 lines (`babel.loadOptions` + `babel.transform`) used solely by `esbuildHelper.mjs`, so it could be inlined into the repo rather than republished to npm.
 - As of 10/13/2026: `@babel/core` **8.0.7** is available. Still blocked; `esbuild-plugin-babel-cached@0.2.3` still peers `@babel/core@^7.0.0`.
+- As of 11/09/2026: `@babel/core` **8.0.7** is still the latest 8.x. Still blocked; `esbuild-plugin-babel-cached@0.2.3` still peers `@babel/core@^7.0.0`. Stay on **7.29.7**.
 
 ### @types/node
 **Installed Version: 24.19.2**
@@ -595,6 +611,7 @@ Use the latest compatible `@types/node` release within Node’s major version. T
 - As of 9/17/2026: updated to **24.13.5**, the latest published version under major `24`. No `24.14+` published yet, so it still does not match Node.js `v24.21.0` in `.nvmrc`. Updated in both `package.json` and `web-api/terraform/modules/batch/docker-image/package.json`.
 - As of 9/22/2026: updated to **24.13.6**, the latest published version under major `24`. No `24.14+` published yet. Updated in both `package.json` and `web-api/terraform/modules/batch/docker-image/package.json`.
 - As of 10/13/2026: updated to **24.19.2**, the latest published version under major `24` (`24.14+` releases appeared after 9/22, and 24.19.1 was adopted in the week of 10/5/2026). Updated in both `package.json` and `web-api/terraform/modules/batch/docker-image/package.json`.
+- As of 11/09/2026: **24.19.2** remains the latest published version under major `24`, aligned with Node **24.22.1** in `.nvmrc`. Confirmed in both `package.json` and `web-api/terraform/modules/batch/docker-image/package.json`.
 
 ### TypeScript
 **Installed Version: 7.0.2 and 6.0.2**
@@ -664,6 +681,7 @@ error: too many arguments. Expected 0 arguments but got 2.
 - As of 9/17/2026: eslint **10.10.0** is available. Still blocked as`eslint-plugin-jsx-a11y@6.10.2` and `eslint-plugin-react@7.37.5` are still the latest releases and neither accepts eslint 10. No DevEx ticket exists yet; a possible path is evaluating replacements for both plugins that support eslint 10. The other lint packages we use (`eslint-config-prettier`, `eslint-plugin-jest`, `typescript-eslint`) already accept eslint 10. Unblocking eslint 10 would also unblock `eslint-plugin-cypress` 7.x, which requires `eslint >=10`.
 - As of 9/22/2026: eslint **10.x** remains blocked by `eslint-plugin-jsx-a11y` and `eslint-plugin-react` peers. Latest 9.x patches remain **9.39.5** for both `eslint` and `@eslint/js`; already installed. TypeScript dual alias (`typescript@npm:@typescript/typescript6@6.0.2`, `@typescript/native@npm:typescript@7.0.2`) and batch `Dockerfile` global install unchanged — **7.0.2** / **6.0.2** are still latest on npm.
 - As of 10/13/2026: eslint **10.12.0** is available. Still blocked; `eslint-plugin-react@7.37.5` (peer `^9.7`) and `eslint-plugin-jsx-a11y@6.10.2` (peer `^9`) are still the latest releases. TypeScript **7.0.2** / **6.0.2** and `ts-node` **10.9.2** are still latest.
+- As of 11/09/2026: eslint **10.14.0** is available. Still blocked; `eslint-plugin-react@7.37.5` and `eslint-plugin-jsx-a11y@6.10.2` are still the latest releases and do not accept eslint 10. Stay on **9.39.5** for `eslint` and `@eslint/js`.
 
 ### eslint-plugin-cypress
 **Installed Version: 6.4.4**
@@ -727,6 +745,7 @@ The issue is with Jest. Jest doesn't work with mjs, so in our config we need to 
 - As of 8/10/2026: **@recharts/devtools 0.0.16** peers on `recharts: 3.9.0` exactly, and we are on **3.10.1**. Still pinned at **0.0.14**.
 - As of 10/13/2026: **@recharts/devtools 0.0.18** still peers on `recharts: 3.9.0` exactly; recharts **3.10.1** is still the latest. Still pinned at **0.0.14**.
 - Week of 11/03/2026 we updated to **@recharts/devtools 0.0.19**, this version relaxed the peer dependency. We can probably remove this caveat eventually.
+- As of 11/09/2026: **Resolved.** `@recharts/devtools@0.0.19` peers `recharts ^3.9.0`, which includes **3.10.1**. `recharts` and `@recharts/devtools` were removed from the upgrade script's `caveats` array; both are upgraded by `upgrade-npm-packages.ts` like other dependencies.
 
 ### aws-sigv4-sign
 **Installed Version: 2.0.1**
@@ -737,6 +756,7 @@ The issue is with Jest. Jest doesn't work with mjs, so in our config we need to 
 **Installed Version: 3.6.0**
 - 10/2/26 - Tried to update to 3.9.0 but got tests throwing new type errors about the search request object. Upon further investigation in this version they updated type definitions of the packages to match newer versions of the opensearch API (dated 2026-09-23). The updates changed how terms are used in aggregations in search requests. I am unsure if this affects our current version of opensearch, or will be an issue in a future release, or if this is just an issue with test data. For context the current version of opensearch is 3.9.0, but AWS currently only supports up to 3.7.0. Reverting for now
 - As of 10/13/2026: added to the upgrade script's `caveats` array. Before this, the script would upgrade it to 3.9.0 on every run even though this hold was documented. 3.9.0 is still the latest, and AWS OpenSearch Service still supports up to 3.7.
+- As of 11/09/2026: still held at **3.6.0** in the upgrade script's `caveats` array. **3.9.0** is still the latest on npm; AWS OpenSearch Service still supports up to **3.7**.
 
 ### he
 **Installed Version: 2.0.0**
@@ -754,6 +774,7 @@ The issue is with Jest. Jest doesn't work with mjs, so in our config we need to 
 **Installed Version: 17.16.0**
 
 - As of 11/03/2026, the next major version of `stylelint` `18.0.0` is available. `stylelint-config-standard` has an update to `41.0.0` that lists the new version of `stylelint` as a peer dependency, however, `stylelint-config-standard-scss` still lists version `17` as a peer, so they upgrade needs to wait until this package is updated as well. It appears to be updated often so we shouldn't have to wait too long. `stylelint-config-idiomatic-order` does not receive frequent updates, but it does not list a specific version of `stylelint` as a peer, so it shouldn't block the upgrade.
+- As of 11/09/2026: `stylelint` **18.0.0** is available. Still blocked — `stylelint-config-standard-scss@17.0.0` still peers `stylelint ^17.0.0`. Held at **17.16.0**.
 
 ## Troubleshooting
 
@@ -763,7 +784,7 @@ It's rare to need modify cache key. One reason you may want to do so is if a pac
 
 ## Appendix: CI images, scanning, and dev
 
-This section explains why dependency rotations publish the CircleCI image (`ef-cms-us-east-1`) to **dev** first, and why scans must use the **same image tag** that deploy will pull—not a fresh local rebuild. The discussion started in [PR #10552](https://github.com/ustaxcourt/ef-cms/pull/10552#pullrequestreview-5704786012).
+This section explains why dependency rotations publish the CircleCI image (`ef-cms-us-east-1`) to **dev** first, and why scans must use the **same image tag** that deploy will pull—not a fresh local rebuild.
 
 ### Why timing matters
 
