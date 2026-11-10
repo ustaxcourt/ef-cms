@@ -391,6 +391,42 @@ describe('publicDataValidation', () => {
     );
   });
 
+  it('accepts validated trial session details with serialized case responses', () => {
+    const calendaredCase = new PublicCaseResponse({
+      ...mockPublicCaseFields,
+      petitioners: [new PublicContact({ contactId: MOCK_UUID })],
+    }).validate();
+    const trialSessionDetails = new PublicTrialSessionDetails({
+      calendaredCases: [calendaredCase],
+      startDate: '2026-01-01T00:00:00.000Z',
+    })
+      .validate()
+      .toRawObject();
+
+    const findings = findUnauthorizedPublicFields({
+      data: trialSessionDetails,
+      url: 'http://localhost:4001/public-api/trial-sessions/abc',
+    });
+
+    expect(findings).toEqual([]);
+
+    delete trialSessionDetails.calendaredCases[0].entityName;
+
+    const findingsWithoutCaseEntityName = findUnauthorizedPublicFields({
+      data: trialSessionDetails,
+      url: 'http://localhost:4001/public-api/trial-sessions/abc',
+    });
+
+    expect(findingsWithoutCaseEntityName).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          fieldName: 'calendaredCases[0].entityName',
+          matchPreview: '[missing]',
+        }),
+      ]),
+    );
+  });
+
   it('passes for validated docket entries with optional previous-document fields omitted', () => {
     const docketEntry = new PublicDocketEntry({
       docketNumber: '101-20',

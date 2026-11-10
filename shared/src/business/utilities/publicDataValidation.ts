@@ -155,6 +155,16 @@ function getEntityValidationSchema(entity: JoiValidationEntity): joi.AnySchema {
     : joi.object(validationRules);
 }
 
+function getPublicCaseResponseValidationSchema(
+  entity: JoiValidationEntity,
+): joi.AnySchema {
+  return getEntityValidationSchema(entity)
+    .fork('consolidatedCases', fieldSchema => fieldSchema.forbidden())
+    .fork(['irsPractitioners', 'privatePractitioners'], () =>
+      joi.array().items(PublicContact.VALIDATION_RULES).optional(),
+    );
+}
+
 function getSchemaFields(schema: joi.AnySchema): string[] {
   const description = schema.describe();
   return Object.keys(description.keys ?? {});
@@ -171,6 +181,29 @@ function getFieldValidationSchema(
   return schema.extract(fieldName);
 }
 
+function schemaContainsEntityNameField(schema: joi.AnySchema): boolean {
+  const containsEntityName = (description: unknown): boolean => {
+    if (Array.isArray(description)) {
+      return description.some(containsEntityName);
+    }
+
+    if (!isRecord(description)) {
+      return false;
+    }
+
+    if (
+      isRecord(description.keys) &&
+      Object.hasOwn(description.keys, 'entityName')
+    ) {
+      return true;
+    }
+
+    return Object.values(description).some(containsEntityName);
+  };
+
+  return containsEntityName(schema.describe());
+}
+
 function extractPublicEntityValidationMetadata(): Map<
   string,
   PublicEntityValidationMetadata
@@ -183,7 +216,11 @@ function extractPublicEntityValidationMetadata(): Map<
   for (const [entityName, createEntity] of Object.entries(
     PUBLIC_ENTITY_FACTORIES,
   )) {
-    const schema = getEntityValidationSchema(createEntity());
+    const entity = createEntity();
+    const schema =
+      entityName === 'PublicCaseResponse'
+        ? getPublicCaseResponseValidationSchema(entity)
+        : getEntityValidationSchema(entity);
     const allowedFields = new Set<string>(getSchemaFields(schema));
     allowedFields.add('entityName');
     validationMetadataByEntityName.set(entityName, {
@@ -260,7 +297,7 @@ function validateValueWithSchema(args: {
   const { error } = args.schema.validate(args.value, {
     abortEarly: false,
     allowUnknown: args.allowUnknown,
-    convert: false,
+    convert: true,
   });
 
   if (!error) {
@@ -283,7 +320,7 @@ function validateEntityFieldValue(args: {
   const validationEntity = removeKnownEntityMetadata(args.entity);
   const { error } = args.schema.validate(validationEntity, {
     abortEarly: false,
-    convert: false,
+    convert: true,
   });
 
   if (!error) {
@@ -343,7 +380,7 @@ function getApprovedResponseWrapperSchema(
   return (
     matchingSchemas.find(
       ({ schema }) =>
-        schema.validate(obj, { abortEarly: false, convert: false }).error ===
+        schema.validate(obj, { abortEarly: false, convert: true }).error ===
         undefined,
     ) ?? matchingSchemas[0]
   );
@@ -506,7 +543,11 @@ function findUnauthorizedFieldsForEntity(args: {
       );
     }
 
-    if (containsNestedEntity || !fieldSchema) {
+    if (
+      containsNestedEntity ||
+      !fieldSchema ||
+      schemaContainsEntityNameField(fieldSchema)
+    ) {
       findings.push(
         ...findUnauthorizedPublicFieldsRecursive({
           data: value,
