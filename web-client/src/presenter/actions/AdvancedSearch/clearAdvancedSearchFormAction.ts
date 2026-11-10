@@ -24,7 +24,7 @@ export const clearAdvancedSearchFormAction = ({
     opinionTypes?: {
       [key: string]: boolean;
     };
-    lastKeysOfPages?: Array<string | number>;
+    lastKeysOfPages?: Array<string | number | null>;
     total?: number;
     practitionerType?: string;
     procedureType?: string;

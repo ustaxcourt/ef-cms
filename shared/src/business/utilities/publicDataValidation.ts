@@ -14,7 +14,16 @@ import { PublicDocumentSearchResult } from '@shared/business/entities/documents/
 import { PublicUser } from '@shared/business/entities/PublicUser';
 import { PublicTrialSessionDetails } from '@shared/business/entities/trialSessions/PublicTrialSessionDetails';
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
-import { ALLOWLIST_FEATURE_FLAGS } from '@shared/business/entities/EntityConstants';
+import {
+  PublicCaseSearchResponse,
+  PublicDocketEntriesPageResponse,
+  PublicDocumentSearchPageResponse,
+  PublicDocumentSearchResponse,
+  PublicPractitionerSearchResponse,
+  PublicPractitionerSearchResults,
+} from '@shared/business/dto/public/PublicResponseWrappers';
+import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
+import joi from 'joi';
 
 export type UnauthorizedPublicFieldFindingCore = {
   entityName?: string;
@@ -45,7 +54,14 @@ const PUBLIC_ENTITY_FACTORIES = {
       ).toRawObject(),
     ),
   PublicCaseSearchResult: (): PublicCaseSearchResult =>
-    new PublicCaseSearchResult({} as PublicCaseSearchResult),
+    new PublicCaseSearchResult({
+      caseCaption: '',
+      docketNumber: '',
+      docketNumberWithSuffix: '',
+      petitionerNames: [],
+      petitionerStateNames: [],
+      receivedAt: '',
+    }),
   PublicContact: (): PublicContact => new PublicContact({}),
   PublicDocketEntry: (): PublicDocketEntry =>
     new PublicDocketEntry({
@@ -94,189 +110,93 @@ const PUBLIC_ENTITY_FACTORIES = {
     }),
 } as const;
 
-const DYNAMIC_ALLOWED_FIELDS_BY_ENTITY_NAME: Map<string, Set<string>> = new Map(
-  [
-    [
-      'FeatureFlagResponseDTO',
-      new Set([
-        'entityName',
-        ...Object.values(ALLOWLIST_FEATURE_FLAGS).map(flag => flag.key),
-      ]),
-    ],
-  ],
-);
-
-const isNonNegativeInteger = (value: unknown): boolean =>
-  typeof value === 'number' && Number.isInteger(value) && value >= 0;
-const isPositiveInteger = (value: unknown): boolean =>
-  typeof value === 'number' && Number.isInteger(value) && value > 0;
-const isPrimitiveArray = (value: unknown): boolean =>
-  Array.isArray(value) &&
-  value.every(item => typeof item === 'string' || typeof item === 'number');
-const isPublicEntityArray =
-  (entityName: string): ((value: unknown) => boolean) =>
-  (value: unknown): boolean =>
-    Array.isArray(value) &&
-    value.every(item => isRecord(item) && item.entityName === entityName);
-const isPublicDocketEntryArray = (value: unknown): boolean =>
-  Array.isArray(value) &&
-  value.every(
-    item => isRecord(item) && item.entityName === 'PublicDocketEntry',
-  );
-
 type PublicResponseWrapperSchema = {
-  fields: Record<string, (value: unknown) => boolean>;
+  schema: joi.AnySchema;
   path: string;
 };
 
 const PUBLIC_RESPONSE_WRAPPER_SCHEMAS: PublicResponseWrapperSchema[] = [
   {
-    fields: {
-      docketEntries: isPublicDocketEntryArray,
-      page: isNonNegativeInteger,
-      pageSize: isPositiveInteger,
-      totalCount: isNonNegativeInteger,
-    },
+    schema: getEntityValidationSchema(new PublicDocketEntriesPageResponse()),
     path: '',
   },
   {
-    fields: {
-      results: isPublicEntityArray('PublicCaseSearchResult'),
-    },
+    schema: getEntityValidationSchema(new PublicCaseSearchResponse()),
     path: '',
   },
   {
-    fields: {
-      results: isPublicEntityArray('PublicDocumentSearchResult'),
-    },
+    schema: getEntityValidationSchema(new PublicDocumentSearchResponse()),
     path: '',
   },
   {
-    fields: {
-      results: isPublicEntityArray('PublicDocumentSearchResult'),
-      totalCount: isNonNegativeInteger,
-    },
+    schema: getEntityValidationSchema(new PublicDocumentSearchPageResponse()),
     path: '',
   },
   {
-    fields: {
-      searchResults: isRecord,
-    },
+    schema: getEntityValidationSchema(new PublicPractitionerSearchResponse()),
     path: '',
   },
   {
-    fields: {
-      lastKey: isPrimitiveArray,
-      practitioners: isPublicEntityArray('PublicContact'),
-      total: isNonNegativeInteger,
-    },
+    schema: getEntityValidationSchema(new PublicPractitionerSearchResults()),
     path: 'searchResults',
   },
 ];
 
-type NestedObjectSchema = {
-  allowNull?: boolean;
-  array?: boolean;
-  fields: Record<string, (value: unknown) => boolean>;
-  requiredFields?: string[];
+type PublicEntityValidationMetadata = {
+  allowedFields: Set<string>;
+  schema: joi.AnySchema;
 };
 
-const isBooleanValue = (value: unknown): boolean => typeof value === 'boolean';
-const isStringValue = (value: unknown): boolean => typeof value === 'string';
-const isStringArray = (value: unknown): boolean =>
-  Array.isArray(value) && value.every(isStringValue);
+function getEntityValidationSchema(entity: JoiValidationEntity): joi.AnySchema {
+  const validationRules = entity.getValidationRules();
 
-const PRIMITIVE_ARRAY_FIELDS_BY_ENTITY_NAME: Record<
+  return joi.isSchema(validationRules)
+    ? validationRules
+    : joi.object(validationRules);
+}
+
+function getSchemaFields(schema: joi.AnySchema): string[] {
+  const description = schema.describe();
+  return Object.keys(description.keys ?? {});
+}
+
+function getFieldValidationSchema(
+  schema: joi.AnySchema,
+  fieldName: string,
+): joi.AnySchema | undefined {
+  if (!getSchemaFields(schema).includes(fieldName)) {
+    return undefined;
+  }
+
+  return schema.extract(fieldName);
+}
+
+function extractPublicEntityValidationMetadata(): Map<
   string,
-  Record<string, (value: unknown) => boolean>
-> = {
-  FeatureFlagResponseDTO: {
-    'restricted-event-codes': isStringArray,
-  },
-  PublicCaseSearchResult: {
-    petitionerNames: isStringArray,
-    petitionerStateNames: isStringArray,
-  },
-};
-
-const NESTED_OBJECT_SCHEMAS_BY_ENTITY_NAME: Record<
-  string,
-  Record<string, NestedObjectSchema>
-> = {
-  HealthCheckResponse: {
-    s3: {
-      fields: {
-        app: isBooleanValue,
-        appFailover: isBooleanValue,
-        eastDocuments: isBooleanValue,
-        eastTempDocuments: isBooleanValue,
-        public: isBooleanValue,
-        publicFailover: isBooleanValue,
-        westDocuments: isBooleanValue,
-        westTempDocuments: isBooleanValue,
-      },
-    },
-  },
-  PublicDocketEntry: {
-    affectedByDocketEntries: {
-      allowNull: true,
-      array: true,
-      fields: {
-        disposition: isStringValue,
-        docketEntryId: isStringValue,
-      },
-    },
-    affectedDocketEntries: {
-      allowNull: true,
-      array: true,
-      fields: {
-        disposition: isStringValue,
-        docketEntryId: isStringValue,
-      },
-    },
-    previousDocument: {
-      fields: {
-        docketEntryId: isStringValue,
-        documentTitle: isStringValue,
-        documentType: isStringValue,
-      },
-      requiredFields: [],
-    },
-  },
-  PublicTrialSessionInfo: {
-    judge: {
-      fields: {
-        name: isStringValue,
-      },
-    },
-  },
-};
-
-function extractAllowedFieldsByEntityName(): Map<string, Set<string>> {
-  const allowedFieldsByEntityName = new Map<string, Set<string>>();
+  PublicEntityValidationMetadata
+> {
+  const validationMetadataByEntityName = new Map<
+    string,
+    PublicEntityValidationMetadata
+  >();
 
   for (const [entityName, createEntity] of Object.entries(
     PUBLIC_ENTITY_FACTORIES,
   )) {
-    const dynamicAllowedFields =
-      DYNAMIC_ALLOWED_FIELDS_BY_ENTITY_NAME.get(entityName);
-
-    // Use overridden allowed fields if available
-    if (dynamicAllowedFields !== undefined) {
-      allowedFieldsByEntityName.set(entityName, dynamicAllowedFields);
-      continue;
-    }
-
-    const instance = createEntity();
-    const allowedFields = new Set<string>(Object.keys(instance));
+    const schema = getEntityValidationSchema(createEntity());
+    const allowedFields = new Set<string>(getSchemaFields(schema));
     allowedFields.add('entityName');
-    allowedFieldsByEntityName.set(entityName, allowedFields);
+    validationMetadataByEntityName.set(entityName, {
+      allowedFields,
+      schema,
+    });
   }
 
-  return allowedFieldsByEntityName;
+  return validationMetadataByEntityName;
 }
 
-const ALLOWED_FIELDS_BY_ENTITY_NAME = extractAllowedFieldsByEntityName();
+const PUBLIC_ENTITY_VALIDATION_METADATA =
+  extractPublicEntityValidationMetadata();
 
 function redactPreview(value: string): string {
   if (value.length <= 8) return '[redacted]';
@@ -318,106 +238,115 @@ function createMissingEntityNameFinding(
   };
 }
 
-function createInvalidNestedObjectFinding(
-  path: string,
-): UnauthorizedPublicFieldFinding {
-  return {
-    fieldName: path,
-    matchPreview: '[invalid]',
-  };
+function formatValidationPath(
+  basePath: string,
+  relativePath: (string | number)[],
+): string {
+  return relativePath.reduce<string>((formattedPath, segment) => {
+    if (typeof segment === 'number') {
+      return `${formattedPath}[${segment}]`;
+    }
+
+    return formattedPath ? `${formattedPath}.${segment}` : segment;
+  }, basePath);
 }
 
-function validateNestedObjectRecord(args: {
-  obj: unknown;
+function validateValueWithSchema(args: {
+  allowUnknown?: boolean;
   path: string;
-  schema: NestedObjectSchema;
-}): UnauthorizedPublicFieldFinding[] {
-  if (!isRecord(args.obj)) {
-    return [createInvalidNestedObjectFinding(args.path)];
-  }
-
-  const findings: UnauthorizedPublicFieldFinding[] = [];
-  const requiredFields =
-    args.schema.requiredFields ?? Object.keys(args.schema.fields);
-
-  for (const requiredField of requiredFields) {
-    if (
-      !Object.prototype.hasOwnProperty.call(args.obj, requiredField) ||
-      args.obj[requiredField] === undefined
-    ) {
-      findings.push({
-        fieldName: `${args.path}.${requiredField}`,
-        matchPreview: '[missing]',
-      });
-    }
-  }
-
-  for (const [key, value] of Object.entries(args.obj)) {
-    const fieldPath = `${args.path}.${key}`;
-    const validateField = Object.hasOwn(args.schema.fields, key)
-      ? args.schema.fields[key]
-      : undefined;
-    const isValidFieldValue =
-      validateField && (value === undefined || validateField(value));
-
-    if (!isValidFieldValue) {
-      findings.push(createInvalidNestedObjectFinding(fieldPath));
-    }
-  }
-
-  return findings;
-}
-
-function validateNestedObjectValue(args: {
-  path: string;
-  schema: NestedObjectSchema;
+  schema: joi.AnySchema;
   value: unknown;
 }): UnauthorizedPublicFieldFinding[] {
-  if (
-    args.value === undefined ||
-    (args.schema.allowNull && args.value === null)
-  ) {
+  const { error } = args.schema.validate(args.value, {
+    abortEarly: false,
+    allowUnknown: args.allowUnknown,
+    convert: false,
+  });
+
+  if (!error) {
     return [];
   }
 
-  if (!args.schema.array) {
-    return validateNestedObjectRecord({
-      obj: args.value,
-      path: args.path,
-      schema: args.schema,
-    });
+  return error.details.map(detail => ({
+    fieldName: formatValidationPath(args.path, detail.path),
+    matchPreview: detail.type === 'any.required' ? '[missing]' : '[invalid]',
+  }));
+}
+
+function validateEntityFieldValue(args: {
+  candidateEntityName: string;
+  entity: Record<string, unknown>;
+  fieldName: string;
+  path: string;
+  schema: joi.AnySchema;
+}): UnauthorizedPublicFieldFinding[] {
+  const validationEntity = removeKnownEntityMetadata(args.entity);
+  const { error } = args.schema.validate(validationEntity, {
+    abortEarly: false,
+    convert: false,
+  });
+
+  if (!error) {
+    return [];
   }
 
-  if (!Array.isArray(args.value)) {
-    return [createInvalidNestedObjectFinding(args.path)];
+  return error.details
+    .filter(detail => detail.path[0] === args.fieldName)
+    .map(detail => ({
+      entityName: args.candidateEntityName,
+      fieldName: formatValidationPath(args.path, detail.path),
+      matchPreview: detail.type === 'any.required' ? '[missing]' : '[invalid]',
+    }));
+}
+
+function removeKnownEntityMetadata(value: unknown): unknown {
+  if (Array.isArray(value)) {
+    return value.map(removeKnownEntityMetadata);
   }
 
-  return args.value.flatMap((item, index) =>
-    validateNestedObjectRecord({
-      obj: item,
-      path: `${args.path}[${index}]`,
-      schema: args.schema,
-    }),
-  );
+  if (!isRecord(value)) {
+    return value;
+  }
+
+  const isKnownEntity =
+    typeof value.entityName === 'string' &&
+    PUBLIC_ENTITY_VALIDATION_METADATA.has(value.entityName);
+  const validationEntity: Record<string, unknown> = {};
+
+  for (const [key, nestedValue] of Object.entries(value)) {
+    if (isKnownEntity && (key === 'entityName' || key === 'isValidated')) {
+      continue;
+    }
+
+    validationEntity[key] = removeKnownEntityMetadata(nestedValue);
+  }
+
+  return validationEntity;
 }
 
 function getApprovedResponseWrapperSchema(
   obj: Record<string, unknown>,
   path: string,
 ): PublicResponseWrapperSchema | undefined {
-  return PUBLIC_RESPONSE_WRAPPER_SCHEMAS.find(schema => {
+  const matchingSchemas = PUBLIC_RESPONSE_WRAPPER_SCHEMAS.filter(schema => {
     if (schema.path !== path) {
       return false;
     }
 
-    const schemaFields = Object.keys(schema.fields);
+    const schemaFields = getSchemaFields(schema.schema);
     return (
       Object.keys(obj).length === schemaFields.length &&
-      schemaFields.every(
-        field => Object.hasOwn(obj, field) && schema.fields[field](obj[field]),
-      )
+      schemaFields.every(field => Object.hasOwn(obj, field))
     );
   });
+
+  return (
+    matchingSchemas.find(
+      ({ schema }) =>
+        schema.validate(obj, { abortEarly: false, convert: false }).error ===
+        undefined,
+    ) ?? matchingSchemas[0]
+  );
 }
 
 function validateObjectWithoutEntityName(args: {
@@ -435,20 +364,34 @@ function validateObjectWithoutEntityName(args: {
     : [createMissingEntityNameFinding(args.path)];
 
   for (const [key, value] of Object.entries(args.obj)) {
-    if (Array.isArray(value) || isRecord(value)) {
-      const isApprovedPrimitiveArray =
-        Array.isArray(value) &&
-        value.every(item => !isRecord(item) && !Array.isArray(item)) &&
-        responseWrapperSchema?.fields[key]?.(value) === true;
+    const fieldPath = `${args.path ? `${args.path}.` : ''}${key}`;
+    const fieldSchema = responseWrapperSchema
+      ? getFieldValidationSchema(responseWrapperSchema.schema, key)
+      : undefined;
 
-      if (isApprovedPrimitiveArray) {
+    if (Array.isArray(value) || isRecord(value)) {
+      if (fieldSchema) {
+        findings.push(
+          ...validateValueWithSchema({
+            path: fieldPath,
+            schema: fieldSchema,
+            value,
+          }),
+        );
+      }
+
+      const containsObjects = Array.isArray(value)
+        ? value.some(item => isRecord(item) || Array.isArray(item))
+        : true;
+
+      if (!containsObjects) {
         continue;
       }
 
       findings.push(
         ...findUnauthorizedPublicFieldsRecursive({
           data: value,
-          path: `${args.path ? `${args.path}.` : ''}${key}`,
+          path: fieldPath,
           url: args.url,
           method: args.method,
           isNestedInEntity: false,
@@ -462,24 +405,19 @@ function validateObjectWithoutEntityName(args: {
 
 function validateEntityMetadata(args: {
   path: string;
-  candidateEntityName?: string;
+  candidateEntityName: string;
 }): {
   findings: UnauthorizedPublicFieldFinding[];
   allowedFields?: Set<string>;
+  schema?: joi.AnySchema;
 } {
   const findings: UnauthorizedPublicFieldFinding[] = [];
 
-  if (!args.candidateEntityName) {
-    return {
-      findings,
-    };
-  }
-
-  const allowedFields = ALLOWED_FIELDS_BY_ENTITY_NAME.get(
+  const validationMetadata = PUBLIC_ENTITY_VALIDATION_METADATA.get(
     args.candidateEntityName,
   );
 
-  if (!allowedFields) {
+  if (!validationMetadata) {
     findings.push({
       entityName: args.candidateEntityName,
       fieldName: args.path || 'entityName',
@@ -488,9 +426,21 @@ function validateEntityMetadata(args: {
   }
 
   return {
-    allowedFields,
+    allowedFields: validationMetadata?.allowedFields,
     findings,
+    schema: validationMetadata?.schema,
   };
+}
+
+function containsEntityTaggedValue(value: unknown): boolean {
+  if (isRecord(value)) {
+    return typeof value.entityName === 'string';
+  }
+
+  return (
+    Array.isArray(value) &&
+    value.some(item => isRecord(item) && typeof item.entityName === 'string')
+  );
 }
 
 function findUnauthorizedFieldsForEntity(args: {
@@ -526,20 +476,6 @@ function findUnauthorizedFieldsForEntity(args: {
 
   for (const [key, value] of Object.entries(args.obj)) {
     const fieldPath = args.path ? `${args.path}.${key}` : key;
-    const nestedObjectSchema =
-      NESTED_OBJECT_SCHEMAS_BY_ENTITY_NAME[args.candidateEntityName]?.[key];
-
-    if (nestedObjectSchema) {
-      findings.push(
-        ...validateNestedObjectValue({
-          path: fieldPath,
-          schema: nestedObjectSchema,
-          value,
-        }),
-      );
-      continue;
-    }
-
     if (
       entityMetadata.allowedFields &&
       !entityMetadata.allowedFields.has(key)
@@ -551,13 +487,26 @@ function findUnauthorizedFieldsForEntity(args: {
       });
     }
 
-    const validatePrimitiveArray =
-      PRIMITIVE_ARRAY_FIELDS_BY_ENTITY_NAME[args.candidateEntityName]?.[key];
-    if (validatePrimitiveArray && validatePrimitiveArray(value)) {
+    if (value === null || typeof value !== 'object' || !entityMetadata.schema) {
       continue;
     }
 
-    if (typeof value === 'object' && value !== null) {
+    const fieldSchema = getFieldValidationSchema(entityMetadata.schema, key);
+    const containsNestedEntity = containsEntityTaggedValue(value);
+
+    if (fieldSchema) {
+      findings.push(
+        ...validateEntityFieldValue({
+          candidateEntityName: args.candidateEntityName,
+          entity: args.obj,
+          fieldName: key,
+          path: args.path,
+          schema: entityMetadata.schema,
+        }),
+      );
+    }
+
+    if (containsNestedEntity || !fieldSchema) {
       findings.push(
         ...findUnauthorizedPublicFieldsRecursive({
           data: value,
@@ -575,14 +524,14 @@ function findUnauthorizedFieldsForEntity(args: {
 
 function findUnauthorizedPublicFieldsRecursive({
   data,
-  path = '',
-  url = '',
+  path,
+  url,
   method,
   isNestedInEntity = false,
 }: {
   data: unknown;
-  path?: string;
-  url?: string;
+  path: string;
+  url: string;
   method?: string;
   isNestedInEntity?: boolean;
 }): UnauthorizedPublicFieldFinding[] {

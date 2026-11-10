@@ -51,6 +51,18 @@ export const getAllFeatureFlagsInteractor = async (
       if (candidateData[featureFlag] === undefined) {
         candidateData[featureFlag] = false;
       }
+
+      const featureFlagCandidate = new FeatureFlagResponseDTO({
+        [featureFlag]: candidateData[featureFlag],
+      });
+
+      if (!featureFlagCandidate.isValid()) {
+        applicationContext.logger.error(
+          'Invalid persisted feature flag value; using fallback',
+          { featureFlag },
+        );
+        candidateData[featureFlag] = allFeatureFlags[featureFlag] ?? false;
+      }
     });
 
     const candidateResponse = new FeatureFlagResponseDTO(

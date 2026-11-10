@@ -17,7 +17,7 @@ export const getPublicPractitionersByNameInteractor = (
     originalBarState?: string[];
     practiceType?: string[];
     practitionerType?: string;
-    searchAfter: (string | number)[];
+    searchAfter: (string | number | null)[];
   },
 ): Promise<PractitionersByName> => {
   return get({

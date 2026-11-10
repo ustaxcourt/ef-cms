@@ -12,7 +12,15 @@ type PublicDocketEntryRawProps = Pick<
   RawDocketEntry,
   'docketNumber' | 'filingDate' | 'receivedAt'
 > &
-  Omit<Partial<RawDocketEntry>, 'numberOfPages' | 'previousDocument'> & {
+  Omit<
+    Partial<RawDocketEntry>,
+    | 'affectedByDocketEntries'
+    | 'affectedDocketEntries'
+    | 'numberOfPages'
+    | 'previousDocument'
+  > & {
+    affectedByDocketEntries?: PublicDocketEntryRelation[] | null;
+    affectedDocketEntries?: PublicDocketEntryRelation[] | null;
     numberOfPages?: number | null;
     previousDocument?: {
       docketEntryId?: string;
@@ -20,6 +28,10 @@ type PublicDocketEntryRawProps = Pick<
       documentType?: string;
     };
   };
+
+type PublicDocketEntryRelation = Omit<DocketEntryRelation, 'disposition'> & {
+  disposition: string | null;
+};
 
 export class PublicDocketEntry extends JoiValidationEntity {
   public action?: string;
@@ -54,8 +66,8 @@ export class PublicDocketEntry extends JoiValidationEntity {
   public servedAt?: string;
   public servedPartiesCode?: string;
   public signedJudgeName?: string;
-  public affectedByDocketEntries?: DocketEntryRelation[] | null;
-  public affectedDocketEntries?: DocketEntryRelation[] | null;
+  public affectedByDocketEntries?: PublicDocketEntryRelation[] | null;
+  public affectedDocketEntries?: PublicDocketEntryRelation[] | null;
   public previousDocument?: {
     docketEntryId?: string;
     documentTitle?: string;
@@ -117,7 +129,10 @@ export class PublicDocketEntry extends JoiValidationEntity {
       .items(
         joi
           .object({
-            disposition: JoiValidationConstants.STRING.required(),
+            disposition: JoiValidationConstants.STRING.allow(
+              '',
+              null,
+            ).required(),
             docketEntryId: JoiValidationConstants.UUID.required(),
           })
           .unknown(false),
@@ -129,7 +144,10 @@ export class PublicDocketEntry extends JoiValidationEntity {
       .items(
         joi
           .object({
-            disposition: JoiValidationConstants.STRING.required(),
+            disposition: JoiValidationConstants.STRING.allow(
+              '',
+              null,
+            ).required(),
             docketEntryId: JoiValidationConstants.UUID.required(),
           })
           .unknown(false),

@@ -138,6 +138,43 @@ describe('PublicDocketEntry', () => {
     expect(docketEntry.isValid()).toBe(true);
   });
 
+  it('allows null or empty relationship dispositions', () => {
+    const docketEntry = new PublicDocketEntry({
+      affectedByDocketEntries: [
+        {
+          disposition: null,
+          docketEntryId: 'e1d0b1c2-e531-4e07-ab82-851ee9acde64',
+        },
+      ],
+      affectedDocketEntries: [
+        {
+          disposition: '',
+          docketEntryId: 'e1d0b1c2-e531-4e07-ab82-851ee9acde64',
+        },
+      ],
+      docketNumber: '101-21',
+      filingDate: '2020-05-27T09:23:43.007Z',
+      isSealed: false,
+      receivedAt: '2020-05-27T09:23:43.007Z',
+    });
+
+    expect(docketEntry.isValid()).toBe(true);
+    expect(docketEntry.validate().toRawObject()).toMatchObject({
+      affectedByDocketEntries: [
+        {
+          disposition: null,
+          docketEntryId: 'e1d0b1c2-e531-4e07-ab82-851ee9acde64',
+        },
+      ],
+      affectedDocketEntries: [
+        {
+          disposition: '',
+          docketEntryId: 'e1d0b1c2-e531-4e07-ab82-851ee9acde64',
+        },
+      ],
+    });
+  });
+
   it('allows previous documents without optional titles or types', () => {
     const docketEntry = new PublicDocketEntry({
       docketNumber: '101-21',

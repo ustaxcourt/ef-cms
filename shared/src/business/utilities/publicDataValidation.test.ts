@@ -219,6 +219,26 @@ describe('publicDataValidation', () => {
     expect(findings).toEqual([]);
   });
 
+  it('passes validated docket-entry relationships with null or empty dispositions', () => {
+    const docketEntry = new PublicDocketEntry({
+      affectedByDocketEntries: [
+        { docketEntryId: MOCK_UUID, disposition: null },
+      ],
+      affectedDocketEntries: [{ docketEntryId: MOCK_UUID, disposition: '' }],
+      docketNumber: '101-20',
+      filingDate: '2020-01-05T03:30:45.007Z',
+      isSealed: false,
+      receivedAt: '2020-01-05T03:30:45.007Z',
+    }).validate();
+
+    expect(
+      findUnauthorizedPublicFields({
+        data: docketEntry,
+        url: 'http://localhost:4001/public-api/cases/101-20/docket',
+      }),
+    ).toEqual([]);
+  });
+
   it('passes for the explicit public docket-entry page response schema', () => {
     const docketEntry = new PublicDocketEntry({
       docketNumber: '101-20',

@@ -18,7 +18,7 @@ export const getPractitionersByNameAction = async ({
     practitionerType,
   }: {
     admissionStatus;
-    lastKeysOfPages: Array<string | number>;
+    lastKeysOfPages: Array<string | number | null>;
     originalBarState;
     pageNum: number;
     practiceType;

@@ -69,13 +69,14 @@ export const getDownloadPolicyUrlInteractor = async (
       .getUseCases()
       .getAllFeatureFlagsInteractor(applicationContext);
 
-    const documentVisibilityChangeDate: string =
-      typeof featureFlags[
+    const rawDocumentVisibilityChangeDate =
+      featureFlags[
         ALLOWLIST_FEATURE_FLAGS.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.key
-      ] === 'string'
-        ? featureFlags[
-            ALLOWLIST_FEATURE_FLAGS.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.key
-          ]
+      ];
+
+    const documentVisibilityChangeDate: string =
+      typeof rawDocumentVisibilityChangeDate === 'string'
+        ? rawDocumentVisibilityChangeDate
         : '';
 
     if (
