@@ -6,7 +6,7 @@ Each week we rotate a few of the routine process and maintenance chores between 
 
 At the moment, the only task we rotate is updating dependencies. As an open-source project, we rely on external libraries which get updates frequently. These include JavaScript Library Updates and Infrastructure as Code Libraries as described below. Follow the [PR workflow](./pr-workflow.md) like any other change.
 
-> After changes are made to any dependencies, deploy to an experimental environment to verify that all tests pass!
+> After changes are made to any dependencies, deploy to the **dev** environment (`develop` in CircleCI) to verify that all tests pass!
 
 ## Dependency Update Steps
 
@@ -115,13 +115,13 @@ Check if updates are necessary for the main `Dockerfile`. We base this image on 
 
 #### 2.3 Publish new ECR docker image if needed
 
-If the `Dockerfile` has changed, you will need to build a new docker image and publish it to an experimental environment's ECR.
+If the `Dockerfile` has changed, you will need to build a new docker image and publish it to the **dev** environment's ECR first. We always publish CI images to dev before promoting them to other environments so vulnerability scanning can target the exact image tag that CircleCI will run—not a one-off rebuild that may not match what deploys. See [Appendix: CI images, scanning, and dev](#appendix-ci-images-scanning-and-dev).
 
 1. Increment the docker image version being used in `.circleci/config.yml` in the `&efcms-docker-image` variable. See [PR #5980](https://github.com/ustaxcourt/ef-cms/pull/5980/files#diff-78a8a19706dbd2a4425dd72bdab0502ed7a2cef16365ab7030a5a0588927bf47) for an example.
 1. Review previously accepted container vulnerability findings and reassess any that may be affected by dependency or image changes. Refer to [Container Finding Triage](./security/container-findings-triage.md) for guidance.
-1. Use the [environment switcher](./additional-resources/environment-switcher.md) to point to an experimental environment:
+1. Select the **dev** environment. Use the [environment switcher](./additional-resources/environment-switcher.md) to load AWS credentials for dev (`develop` in CircleCI; `dev` or `develop` both work with the switcher):
    ```bash
-   . scripts/env/set-env.zsh expN
+   . scripts/env/set-env.zsh dev
    ```
 1. Publish a docker image tagged with the incremented version number to ECR:
    ```bash
@@ -135,7 +135,7 @@ If the `Dockerfile` has changed, you will need to build a new docker image and p
 
    > Refer to [ci-cd.md](ci-cd.md#docker) for more info on this as needed
 
-1. Update the `CHANGES.md` file with instructions for deploying this new docker image to other environments. Be sure to indicate the experimental environment to which you just deployed the image. See [df83cf3](https://github.com/ustaxcourt/ef-cms/commit/df83cf3db69f2c6149cbef3ae213db488822cc2b) for an example.
+1. Update the `CHANGES.md` file with instructions for promoting this new docker image from **dev** to other environments (for example with `npm run deploy:ci-image:from dev`). See [df83cf3](https://github.com/ustaxcourt/ef-cms/commit/df83cf3db69f2c6149cbef3ae213db488822cc2b) for an example.
 
 ### 3. Update Terraform AWS provider
 
@@ -162,9 +162,9 @@ Check to see if there is an updated version of the Aurora RDS postgres engine av
 
 When the team schedules an engine upgrade, we'll need to update postgres in deployed environments, locally, and in GitHub Actions together.
 
-1. Use the [environment switcher](./additional-resources/environment-switcher.md) to point to an experimental environment and to retrieve a fresh AWS access key:
+1. Select the **dev** environment. Use the [environment switcher](./additional-resources/environment-switcher.md) to load AWS credentials for dev and retrieve a fresh access key:
    ```bash
-   . scripts/env/set-env.zsh expN
+   . scripts/env/set-env.zsh dev
    ```
 1. Determine the current Aurora RDS postgres engine version in this environment:
    ```bash
@@ -183,9 +183,9 @@ If a postgres engine update is available, we'll need to update the postgres engi
    ```bash
    scripts/secrets/update-secret.ts --key "RDS_ENGINE_VERSION" --value "99.9"
    ```
-1. Run a deployment to the experimental environment (e.g. by pushing your code changes to the experimental branch). Click on the `deploy` job and watch its output. Keep this CircleCI tab open.
-1. In a new tab, log in to this experimental environment's AWS console, navigate to Aurora RDS, and keep an eye on the progress of the blue/green deployment. Keep this AWS console tab open.
-1. Wait until the data is copying and then, in a new tab, log in to this DAWSON experimental environment and create or edit some data (file a document to an existing case, edit case metadata, edit a docket entry, etc.)
+1. Run a deployment to **dev** (for example by pushing your code changes to the `develop` branch). Click on the `deploy` job and watch its output. Keep this CircleCI tab open.
+1. In a new tab, log in to the **dev** AWS console, navigate to Aurora RDS, and keep an eye on the progress of the blue/green deployment. Keep this AWS console tab open.
+1. Wait until the data is copying and then, in a new tab, log in to the DAWSON **dev** environment and create or edit some data (file a document to an existing case, edit case metadata, edit a docket entry, etc.)
 1. In the same DAWSON tab, prepare a similar edit that does not overwrite the previous edit. Do not submit it yet, and keep this DAWSON tab open.
 1. Once the blue/green deployment is nearly complete in the AWS console tab, closely watch the output of the `upgrade-rds-engine-version.sh` script in CircleCI.
 1. When you see the log messages "`Status: AVAILABLE`" and "`Blue/Green deployment is available. Initiating switchover...`", submit your edit in the DAWSON tab.
@@ -206,7 +206,7 @@ We run postgres via Docker locally and in GitHub Actions. The postgres image we 
    ```bash
    curl -s "https://registry.hub.docker.com/v2/repositories/library/postgres/tags?page_size=100" | jq -r '.results[].name' | sort -V
    ```
-1. The correct tag to use is the target version of postgres plus the Debian codename from step 1 (e.g. `17.5-trixie` when the CI `cypress/browsers` base is Debian trixie). Generally, the `postgres` images in Dockerhub will have newer versions of postgres than Aurora RDS has available, so don't be alarmed by this discrepancy. Keep local Docker, GHA service containers, and Aurora `RDS_ENGINE_VERSION` on the same major.minor as prod/test — do not advance local or experimental ahead of deployed environments.
+1. The correct tag to use is the target version of postgres plus the Debian codename from step 1 (e.g. `17.5-trixie` when the CI `cypress/browsers` base is Debian trixie). Generally, the `postgres` images in Dockerhub will have newer versions of postgres than Aurora RDS has available, so don't be alarmed by this discrepancy. Keep local Docker, GHA service containers, and Aurora `RDS_ENGINE_VERSION` on the same major.minor as prod/test — do not advance local or **dev** ahead of deployed environments.
 
 #### 5.3 Update PostgreSQL to the latest version locally
 
@@ -227,9 +227,9 @@ If a postgres update is available, we'll need to update postgres in github actio
 ### 6. Update OpenSearch
 Check to see if there is an updated version of OpenSearch available. If an update is available, we'll need to update OpenSearch locally, in github actions, and in deployed environments.
 
-1. Use the [environment switcher](./additional-resources/environment-switcher.md) to point to an experimental environment and to retrieve a fresh AWS access key:
+1. Select the **dev** environment. Use the [environment switcher](./additional-resources/environment-switcher.md) to load AWS credentials for dev and retrieve a fresh access key:
    ```bash
-   . scripts/env/set-env.zsh expN
+   . scripts/env/set-env.zsh dev
    ```
 1. Determine the current OpenSearch engine version in this environment:
    ```bash
@@ -252,7 +252,7 @@ If an OpenSearch update is available, we'll need to update OpenSearch in deploye
    ```bash
    scripts/secrets/update-secret.ts --key "ES_ENGINE_VERSION" --value "OpenSearch_99.9"
    ```
-1. Run a deployment to the experimental environment.
+1. Run a deployment to **dev**.
 1. While the OpenSearch upgrade is being performed (during the `allColors` terraform deployment), verify cluster is still functional by running search smoketests against current color:
    ```bash
    scripts/tests/run-cypress.ts --file cypress/deployed-and-local/integration/advancedSearch/search.cy.ts
@@ -280,13 +280,13 @@ If an OpenSearch update is available, we'll need to update OpenSearch in github 
 
 1. Search the project for `opensearch-version:` and make sure it's set to the latest version in `.github/actions/dawson-app-setup/action.yml`.
 
-> **As of 10/13/2026:** Amazon OpenSearch Service supports up to **OpenSearch_3.7** ([release notes, July 29, 2026](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/release-notes.html)). Upstream **3.8.0** and **3.9.0** are on Docker Hub but are not yet AWS engine options. From an experimental environment (`. scripts/env/set-env.zsh expN`), confirm with `aws opensearch list-versions` and compare to `aws opensearch describe-domain --domain-name "efcms-search-${ENV}-${SOURCE_TABLE_VERSION}" --query "DomainStatus.EngineVersion" --output text`. Repo pins already match the AWS maximum: `ES_ENGINE_VERSION` default `OpenSearch_3.7` in `scripts/secrets/create-env-secrets.ts`, local `opensearchproject/opensearch:3.7.0` in `docker-compose.yml` and `web-api/elasticsearch/docker-compose.yml`, and `opensearch-version: 3.7.0` in `.github/actions/dawson-app-setup/action.yml`. No §6.1 secret update, indices report, deploy, or local/GHA bump this rotation.
+> **As of 10/13/2026:** Amazon OpenSearch Service supports up to **OpenSearch_3.7** ([release notes, July 29, 2026](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/release-notes.html)). Upstream **3.8.0** and **3.9.0** are on Docker Hub but are not yet AWS engine options. From **dev** (`. scripts/env/set-env.zsh dev`), confirm with `aws opensearch list-versions` and compare to `aws opensearch describe-domain --domain-name "efcms-search-${ENV}-${SOURCE_TABLE_VERSION}" --query "DomainStatus.EngineVersion" --output text`. Repo pins already match the AWS maximum: `ES_ENGINE_VERSION` default `OpenSearch_3.7` in `scripts/secrets/create-env-secrets.ts`, local `opensearchproject/opensearch:3.7.0` in `docker-compose.yml` and `web-api/elasticsearch/docker-compose.yml`, and `opensearch-version: 3.7.0` in `.github/actions/dawson-app-setup/action.yml`. No §6.1 secret update, indices report, deploy, or local/GHA bump this rotation.
 
 ### 7. Wrap up
 
 - Check through the list of caveats to see if any of the documented issues have been resolved.
 
-- Validate updates by deploying to an experimental environment
+- Validate updates by deploying to **dev**
 
 ### 8. Update CI security tool versions
 
@@ -422,7 +422,7 @@ Reviewers use the dependency PR description to plan testing, so it has a consist
 - **Package tables**, grouped by `package.json` location (main runtime dependencies, main development dependencies, Puppeteer runtime, Batch docker image). For each package, give the version change, bump type, purpose, where it's used in DAWSON, and what to test. `@aws-sdk/*` packages can share one row.
 - **Infrastructure updates**: Dockerfile base image, AWS CLI, Terraform, CI image, Terraform providers, and CI tool versions.
 - **Manual deployment steps**, matching the new `CHANGES.md` block.
-- **Manual verification results**: the application flows you exercised locally and in the experimental environment, each naming the dependencies it covers, checked off as you complete them.
+- **Manual verification results**: the application flows you exercised locally and in **dev**, each naming the dependencies it covers, checked off as you complete them.
 - **The dependencies checklist** below, in place of the default PR template checklist.
 
 ```markdown
@@ -431,10 +431,10 @@ Reviewers use the dependency PR description to plan testing, so it has a consist
 - [ ] I have listed the updated packages, their purpose, where they are used, and the plain-language application areas to test (packages under @aws-sdk are optional to list for brevity).
 - [ ] Mandatory manual testing: I have exercised the affected application areas listed above:
   - [ ] Locally
-  - [ ] In an experimental environment after deploying this branch
-- [ ] I have built and pushed a new Docker image from the Dockerfile to the experimental environment's ECR if needed, and updated CHANGES.md with the environment where it is deployed.
+  - [ ] In **dev** after deploying this branch
+- [ ] I have built and pushed a new Docker image from the `Dockerfile` to **dev**'s ECR if needed, and updated `CHANGES.md` with instructions to promote the image from dev.
 - [ ] I have reviewed and updated caveats/hand-managed dependencies as needed.
-- [ ] I have successfully deployed the dependencies branch to an experimental environment.
+- [ ] I have successfully deployed the dependencies branch to **dev**.
 - [ ] I have created new Devex/Opex tickets addressing further issues for examination as needed.
 ```
 
@@ -760,3 +760,47 @@ The issue is with Jest. Jest doesn't work with mjs, so in our config we need to 
 ### Incrementing the Node Cache Key Version
 
 It's rare to need modify cache key. One reason you may want to do so is if a package fails to install properly, and CircleCI, unaware of the failed installation, stores the corrupted cache. In this case, we will need to increment the cache key version so that CircleCI is forced to reinstall the node dependencies and save them using the new key. To update the cache key, locate `vX-npm` and `vX-cypress` (where X represents the current cache key version) in the config.yml file, and then increment the identified version.
+
+## Appendix: CI images, scanning, and dev
+
+This section explains why dependency rotations publish the CircleCI image (`ef-cms-us-east-1`) to **dev** first, and why scans must use the **same image tag** that deploy will pull—not a fresh local rebuild. The discussion started in [PR #10552](https://github.com/ustaxcourt/ef-cms/pull/10552#pullrequestreview-5704786012).
+
+### Why timing matters
+
+Our Dockerfiles install OS packages with `apt-get` without pinning every Debian package version. Two builds from the same `Dockerfile` git commit at different times can therefore contain **different installed package versions**, even when the image tag is the same.
+
+DAWSON promotes a given CI image tag from environment to environment (for example dev → staging → test → prod). CircleCI always pulls that tag from the environment's ECR. **The image digest for a tag should match everywhere** once it has been published—but a scanner that **rebuilds** the image instead of pulling the tag from ECR may not be looking at what deploy will actually run.
+
+### Missed vulnerability (scan looks clean, deployed image is not)
+
+| When | What happens |
+|------|----------------|
+| Friday | Dependencies PR finishes; Trivy on the PR rebuilds the image and passes. |
+| Monday | PR merges to `staging`. |
+| Friday (next week) | A new CVE is published against a Debian package already in the image. |
+| Saturday | We build and publish the CI image to **prod**'s ECR. The build still has the **vulnerable** package (no fix in the repos yet). |
+| Sunday (midday) | Debian publishes a patched package. |
+| Sunday night | The scheduled scan **rebuilds** the image. This time `apt-get` installs the **fixed** package. Trivy reports no issue. |
+
+**Result:** Prod runs a vulnerable image, but the scan saw a newer build that already picked up the fix. The gate gave a false sense of safety.
+
+### False alarm (deployed image is fine, scan reports a problem)
+
+| When | What happens |
+|------|----------------|
+| Friday | Dependencies PR finishes; PR Trivy passes. |
+| Monday | PR merges. |
+| Saturday | We build and publish the CI image to **prod**. The image has the **current** (still safe) package version. |
+| Sunday (morning) | An unrelated Debian security update lands; a new package version introduces a flaw. |
+| Sunday (midday) | A CVE is filed against that new version. |
+| Sunday night | The scheduled scan **rebuilds** and pulls the **newer vulnerable** package. Trivy opens an alert. |
+
+**Result:** The image already in ECR is not affected, but the scan built a different image and reported a vulnerability we are not actually running.
+
+### What we do instead
+
+1. **Publish to dev first** — After changing the CI `Dockerfile` or bumping the `efcms-docker-image` tag, run `npm run deploy:ci-image` with `. scripts/env/set-env.zsh dev` so the new tag exists in a known environment before broader promotion.
+2. **Scan what we deploy** — Vulnerability workflows should target the **image tag in that environment's ECR** (the same tag CircleCI uses), not an ad hoc rebuild on a runner. That keeps scan results aligned with the artifact that will move toward test and prod.
+3. **Promote deliberately** — Use `CHANGES.md` and `npm run deploy:ci-image:from dev` (or equivalent) so other environments receive the same tag after dev has been exercised and scanned.
+
+Longer term, **pinning OS packages** in Dockerfiles would make rebuilds more reproducible; until then, dev-first publish plus scanning the deployed tag is how we catch issues on the build that will actually ship.
