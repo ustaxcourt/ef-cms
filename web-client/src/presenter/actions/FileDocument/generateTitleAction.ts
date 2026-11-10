@@ -19,7 +19,9 @@ export const generateTitleAction = ({
     .generateExternalDocumentTitle(applicationContext, {
       documentMetadata,
     });
-  store.set(state.form.documentTitle, documentTitle);
+  if (documentTitle) {
+    store.set(state.form.documentTitle, documentTitle);
+  }
 
   if (!isEmpty(documentMetadata.secondaryDocument)) {
     documentTitle = applicationContext
