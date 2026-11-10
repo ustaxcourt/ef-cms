@@ -6,7 +6,7 @@ import {
 import { TrialSessionInfoDTO } from '@shared/business/dto/trialSessions/TrialSessionInfoDTO';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { getClerkDashboardTrialSessionsInteractor } from './getClerkDashboardTrialSessionsInteractor';
-import { getClerkOfCourtDashboardTrialSessionWeeks } from '@shared/business/utilities/getClerkOfCourtDashboardTrialSessionWeeks';
+import { getClerkOfCourtDashboardTrialSessionWeeks } from '@web-api/business/utilities/getClerkOfCourtDashboardTrialSessionWeeks';
 import { getTrialSessionsStartingBetween as getTrialSessionsStartingBetweenMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessionsStartingBetween';
 import {
   mockClerkOfTheCourtUser,
@@ -14,7 +14,7 @@ import {
 } from '@shared/test/mockAuthUsers';
 
 jest.mock(
-  '@shared/business/utilities/getClerkOfCourtDashboardTrialSessionWeeks',
+  '@web-api/business/utilities/getClerkOfCourtDashboardTrialSessionWeeks',
   () => ({ getClerkOfCourtDashboardTrialSessionWeeks: jest.fn() }),
 );
 

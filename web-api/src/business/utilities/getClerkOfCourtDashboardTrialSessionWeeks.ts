@@ -22,7 +22,7 @@ export type ClerkOfCourtDashboardTrialSessionWeeks = {
 /**
  * The current week and the next week (Eastern time) that the clerk of court
  * dashboard shows trial sessions for. The API uses the weeks to read only those
- * sessions, and the client uses them to put each session in its week.
+ * sessions, and returns them so the client puts each session in the same week.
  */
 export const getClerkOfCourtDashboardTrialSessionWeeks = ():
   ClerkOfCourtDashboardTrialSessionWeeks | undefined => {
