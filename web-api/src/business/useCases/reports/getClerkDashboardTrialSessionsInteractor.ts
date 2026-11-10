@@ -9,7 +9,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import {
   ClerkOfCourtDashboardTrialSessionWeeks,
   getClerkOfCourtDashboardTrialSessionWeeks,
-} from '@shared/business/utilities/getClerkOfCourtDashboardTrialSessionWeeks';
+} from '@web-api/business/utilities/getClerkOfCourtDashboardTrialSessionWeeks';
 import { getTrialSessionsStartingBetween } from '@web-api/persistence/postgres/trialSessions/getTrialSessionsStartingBetween';
 
 export type ClerkDashboardTrialSessions = {
