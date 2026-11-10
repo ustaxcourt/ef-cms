@@ -1,6 +1,9 @@
 import { findUnauthorizedPublicFields } from '@shared/business/utilities/publicDataValidation';
 import { FeatureFlagResponseDTO } from '@shared/business/dto/system/FeatureFlagResponseDTO';
 import { PublicCaseSearchResult } from '@shared/business/entities/cases/PublicCaseSearchResult';
+import { PublicContact } from '@shared/business/entities/cases/PublicContact';
+import { PublicDocketEntry } from '@shared/business/entities/cases/PublicDocketEntry';
+import { PublicDocumentSearchResult } from '@shared/business/entities/documents/PublicDocumentSearchResult';
 
 describe('publicDataValidation response types', () => {
   it('passes for feature-flag primitive payloads', () => {
@@ -78,6 +81,103 @@ describe('publicDataValidation response types', () => {
         matchPreview: '[invalid]',
       }),
     ]);
+  });
+
+  it('passes each response wrapper with its expected validated entity type', () => {
+    const docketEntry = new PublicDocketEntry({
+      docketNumber: '101-20',
+      filingDate: '2020-01-05T03:30:45.007Z',
+      isSealed: false,
+      receivedAt: '2020-01-05T03:30:45.007Z',
+    }).validate();
+    const caseSearchResult = new PublicCaseSearchResult({
+      caseCaption: 'Test Petitioner, Petitioner',
+      docketNumber: '101-20',
+      docketNumberWithSuffix: '101-20',
+      petitionerNames: ['Test Petitioner'],
+      petitionerStateNames: ['California'],
+      receivedAt: '2020-01-05T03:30:45.007Z',
+    }).validate();
+    const documentSearchResult = new PublicDocumentSearchResult({
+      caseCaption: 'Test Petitioner, Petitioner',
+      docketEntryId: 'c7d90c05-f6cd-442c-a168-202db587f16f',
+      docketNumber: '101-20',
+      documentTitle: 'Order',
+      filingDate: '2020-01-05T03:30:45.007Z',
+    }).validate();
+    const practitioner = new PublicContact({
+      contactId: 'c7d90c05-f6cd-442c-a168-202db587f16f',
+    }).validate();
+    const responses = [
+      {
+        docketEntries: [docketEntry],
+        page: 0,
+        pageSize: 1000,
+        totalCount: 1,
+      },
+      { results: [caseSearchResult] },
+      { results: [documentSearchResult] },
+      { results: [documentSearchResult], totalCount: 1 },
+      {
+        searchResults: {
+          lastKey: [null, 'smith', 'SB1234'],
+          practitioners: [practitioner],
+          total: 1,
+        },
+      },
+    ];
+
+    for (const data of responses) {
+      expect(
+        findUnauthorizedPublicFields({
+          data,
+          url: 'http://localhost:4001/public-api/search',
+        }),
+      ).toEqual([]);
+    }
+  });
+
+  it('rejects unsupported values in practitioner sort cursors', () => {
+    const findings = findUnauthorizedPublicFields({
+      data: {
+        searchResults: {
+          lastKey: [null, { invalid: true }],
+          practitioners: [],
+          total: 0,
+        },
+      },
+      url: 'http://localhost:4001/public-api/practitioners',
+    });
+
+    expect(findings).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          fieldName: 'searchResults.lastKey[1]',
+          matchPreview: '[invalid]',
+        }),
+      ]),
+    );
+  });
+
+  it('reports missing required fields in public response wrappers', () => {
+    const findings = findUnauthorizedPublicFields({
+      data: {
+        searchResults: {
+          lastKey: [],
+          practitioners: [],
+        },
+      },
+      url: 'http://localhost:4001/public-api/practitioners',
+    });
+
+    expect(findings).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          fieldName: 'searchResults.total',
+          matchPreview: '[missing]',
+        }),
+      ]),
+    );
   });
 
   it.each([

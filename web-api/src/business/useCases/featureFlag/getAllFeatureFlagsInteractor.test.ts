@@ -14,7 +14,7 @@ describe('getAllFeatureFlagsInteractor', () => {
     jest.resetAllMocks();
   });
 
-  it('retries an invalid initial load instead of caching it', async () => {
+  it('uses disabled defaults for invalid initial values and keeps valid flags', async () => {
     jest.resetModules();
     const isolatedInteractorModule =
       await import('@web-api/business/useCases/featureFlag/getAllFeatureFlagsInteractor');
@@ -27,29 +27,39 @@ describe('getAllFeatureFlagsInteractor', () => {
     const FEATURE_FLAG_KEY =
       ALLOWLIST_FEATURE_FLAGS.AWS_BATCH_ZIPPER_MINIMUM_COUNT.key;
     const isolatedPersistenceMock = jest.mocked(isolatedGetFeatureFlagValues);
-    isolatedPersistenceMock
-      .mockResolvedValueOnce([
-        {
-          name: FEATURE_FLAG_KEY,
-          value: { current: { privateField: 'invalid-value' } },
-        },
-      ])
-      .mockResolvedValueOnce([
-        {
-          name: FEATURE_FLAG_KEY,
-          value: { current: 50 },
-        },
-      ]);
+    isolatedPersistenceMock.mockResolvedValueOnce([
+      {
+        name: FEATURE_FLAG_KEY,
+        value: { current: '50' },
+      },
+      {
+        name: ALLOWLIST_FEATURE_FLAGS.RESTRICTED_EVENT_CODES.key,
+        value: { current: null },
+      },
+      {
+        name: ALLOWLIST_FEATURE_FLAGS.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key,
+        value: { current: true },
+      },
+    ]);
 
-    await expect(isolatedInteractor(applicationContext)).rejects.toThrow(
-      'FeatureFlagResponseDTO',
-    );
+    const result = await isolatedInteractor(applicationContext, true);
 
-    const result = await isolatedInteractor(applicationContext);
-
-    expect(result).toMatchObject({ [FEATURE_FLAG_KEY]: 50 });
+    expect(result).toMatchObject({
+      [FEATURE_FLAG_KEY]: false,
+      [ALLOWLIST_FEATURE_FLAGS.RESTRICTED_EVENT_CODES.key]: false,
+      [ALLOWLIST_FEATURE_FLAGS.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key]: true,
+    });
     expect(result).toHaveProperty('isValidated', true);
-    expect(isolatedPersistenceMock).toHaveBeenCalledTimes(2);
+    expect(isolatedPersistenceMock).toHaveBeenCalledTimes(1);
+    expect(applicationContext.logger.error).toHaveBeenCalledTimes(2);
+    expect(applicationContext.logger.error).toHaveBeenCalledWith(
+      'Invalid persisted feature flag value; using fallback',
+      { featureFlag: FEATURE_FLAG_KEY },
+    );
+    expect(applicationContext.logger.error).toHaveBeenCalledWith(
+      'Invalid persisted feature flag value; using fallback',
+      { featureFlag: ALLOWLIST_FEATURE_FLAGS.RESTRICTED_EVENT_CODES.key },
+    );
   });
 
   it('should return the value of the feature flag', async () => {
@@ -127,20 +137,44 @@ describe('getAllFeatureFlagsInteractor', () => {
     expect(getFeatureFlagValuesCalls.length).toEqual(1);
   });
 
-  it('rejects invalid persisted feature flag values', async () => {
+  it('retains the last valid value when a hard reload contains an invalid value', async () => {
+    jest.resetModules();
+    const isolatedInteractorModule =
+      await import('@web-api/business/useCases/featureFlag/getAllFeatureFlagsInteractor');
+    const isolatedPersistenceModule =
+      await import('@web-api/persistence/postgres/featureFlag/getFeatureFlagValues');
+    const isolatedInteractor =
+      isolatedInteractorModule.getAllFeatureFlagsInteractor;
+    const isolatedGetFeatureFlagValues =
+      isolatedPersistenceModule.getFeatureFlagValues;
     const FEATURE_FLAG_KEY =
       ALLOWLIST_FEATURE_FLAGS.AWS_BATCH_ZIPPER_MINIMUM_COUNT.key;
+    const isolatedPersistenceMock = jest.mocked(isolatedGetFeatureFlagValues);
+    isolatedPersistenceMock
+      .mockResolvedValueOnce([
+        {
+          name: FEATURE_FLAG_KEY,
+          value: { current: 50 },
+        },
+      ])
+      .mockResolvedValueOnce([
+        {
+          name: FEATURE_FLAG_KEY,
+          value: { current: '50' },
+        },
+      ]);
 
-    getFeatureFlagValues.mockResolvedValueOnce([
-      {
-        name: FEATURE_FLAG_KEY,
-        value: { current: { privateField: 'invalid-value' } },
-      },
-    ]);
+    const initialResult = await isolatedInteractor(applicationContext, true);
+    const reloadedResult = await isolatedInteractor(applicationContext, true);
 
-    await expect(
-      getAllFeatureFlagsInteractor(applicationContext, true),
-    ).rejects.toThrow('FeatureFlagResponseDTO');
+    expect(initialResult).toMatchObject({ [FEATURE_FLAG_KEY]: 50 });
+    expect(reloadedResult).toMatchObject({ [FEATURE_FLAG_KEY]: 50 });
+    expect(reloadedResult).toHaveProperty('isValidated', true);
+    expect(isolatedPersistenceMock).toHaveBeenCalledTimes(2);
+    expect(applicationContext.logger.error).toHaveBeenCalledWith(
+      'Invalid persisted feature flag value; using fallback',
+      { featureFlag: FEATURE_FLAG_KEY },
+    );
   });
 
   it('rejects feature flags that are not in the persistence allowlist', async () => {

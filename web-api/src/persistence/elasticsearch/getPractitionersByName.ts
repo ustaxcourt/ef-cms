@@ -23,7 +23,7 @@ export type PractitionerSearchResultType = {
   practitionerType: string;
   practiceType: string;
   _score?: number;
-  sort: string[];
+  sort?: (string | number | null)[];
 };
 
 export const getPractitionersByName = async (
@@ -41,10 +41,10 @@ export const getPractitionersByName = async (
     practiceType?: string[];
     admissionStatus?: string[];
     originalBarState?: string[];
-    searchAfter?: string[];
+    searchAfter?: (string | number | null)[];
   },
 ): Promise<{
-  lastKey: (string | number)[];
+  lastKey: (string | number | null)[];
   total: number;
   results: PractitionerSearchResultType[];
 }> => {
@@ -100,7 +100,7 @@ export const getPractitionersByName = async (
           must: searchClause,
         },
       },
-      search_after: searchAfter,
+      search_after: searchAfter?.map(value => value ?? undefined),
       sort: [
         { 'firstName.S': 'asc' },
         { 'lastName.S': 'asc' },
@@ -108,6 +108,7 @@ export const getPractitionersByName = async (
       ],
     },
     index: 'efcms-user',
+    // The OpenSearch request types omit null; JSON serializes undefined array slots as null.
     size: PRACTITIONER_SEARCH_PAGE_SIZE,
     track_total_hits: true,
   };
@@ -119,10 +120,7 @@ export const getPractitionersByName = async (
     applicationContext,
     searchParameters,
   });
-  const lastKey =
-    results.length > 0 && results[results.length - 1].sort
-      ? results[results.length - 1].sort!
-      : [];
+  const lastKey = results[results.length - 1]?.sort ?? [];
 
   return { lastKey, results, total };
 };
