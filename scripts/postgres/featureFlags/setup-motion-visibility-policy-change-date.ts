@@ -12,7 +12,7 @@ const scriptConfig: ScriptConfig = {
     'setup-motion-visibility-policy-change-date - Sets the motion visibility policy change date',
   parameters: {
     policyChangeDate: {
-      default: '', // Pass in a comma-separated string of event codes when calling the script
+      default: '', // Pass in the policy date as yyyy-MM-dd
       position: 0,
       required: true,
       type: 'string',
