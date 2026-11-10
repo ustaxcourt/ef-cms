@@ -53,11 +53,20 @@ export const LocationInformationForm = connect<
                     Proceeding type
                   </legend>
                   {Object.entries(TRIAL_SESSION_PROCEEDING_TYPES)
-                    .filter(
-                      ([key]) =>
+                    .filter(([key]) => {
+                      if (
+                        !addingTrialSession &&
+                        formattedTrialSessionDetails.isCalendared
+                      ) {
+                        return formattedTrialSessionDetails.isReportingSession
+                          ? key === 'reporting'
+                          : key !== 'reporting';
+                      }
+                      return (
                         key !== 'reporting' ||
-                        addTrialSessionInformationHelper.showReportingOption,
-                    )
+                        addTrialSessionInformationHelper.showReportingOption
+                      );
+                    })
                     .map(([key, value]) => (
                       <div className="usa-radio usa-radio__inline" key={key}>
                         <input
@@ -65,13 +74,9 @@ export const LocationInformationForm = connect<
                           checked={form.proceedingType === value}
                           className="usa-radio__input"
                           disabled={
-                            (!addingTrialSession &&
-                              key === 'reporting' &&
-                              !addTrialSessionInformationHelper.isReportingSession &&
-                              formattedTrialSessionDetails.isCalendared) ||
-                            (!addingTrialSession &&
-                              formattedTrialSessionDetails.editPermissions ===
-                                'limited')
+                            !addingTrialSession &&
+                            formattedTrialSessionDetails.editPermissions ===
+                              'limited'
                           }
                           id={`${key}-proceeding`}
                           name="proceedingType"

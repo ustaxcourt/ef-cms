@@ -44,8 +44,8 @@ const getTrialSessionEditPermissions = ({
   ];
   if (
     userRole === ROLES.docketClerk &&
-    !trialSession.isReportingSession &&
-    !docketClerkSessionTypes.includes(trialSession.sessionType)
+    (trialSession.isReportingSession ||
+      !docketClerkSessionTypes.includes(trialSession.sessionType))
   ) {
     return 'none';
   }

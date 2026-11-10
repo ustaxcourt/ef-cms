@@ -4,6 +4,7 @@ import { FORMATS } from '../../../../../shared/src/business/utilities/DateHandle
 import { Get } from 'cerebral';
 import {
   ALLOWLIST_FEATURE_FLAGS,
+  ROLES,
   SESSION_STATUS_TYPES,
 } from '@shared/business/entities/EntityConstants';
 import { TrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
@@ -39,9 +40,9 @@ export const addTrialSessionInformationHelper = (
   const isStandaloneSession = TrialSession.isStandaloneRemote(sessionScope);
   const isReportingSession =
     proceedingType === TRIAL_SESSION_PROCEEDING_TYPES.reporting;
-  const showReportingOption = !!get(
-    state.featureFlags[ALLOWLIST_FEATURE_FLAGS.REPORTING_CALENDARS.key],
-  );
+  const showReportingOption =
+    get(state.user.role) !== ROLES.docketClerk &&
+    !!get(state.featureFlags[ALLOWLIST_FEATURE_FLAGS.REPORTING_CALENDARS.key]);
 
   const title = isStandaloneSession
     ? 'Remote Proceeding Information'
@@ -63,8 +64,8 @@ export const addTrialSessionInformationHelper = (
   }
 
   // NOTE: what happens if isStandaloneSession is true and user is docketclerk?
-  const getSessionTypes = (user: AuthUser) => {
-    return user.role === 'docketclerk' && !isReportingSession
+  const getSessionTypes = (user: AuthUser): string[] => {
+    return user.role === ROLES.docketClerk
       ? DOCKETCLERK_EDITABLE_SESSION_TYPES
       : sessionTypes;
   };
