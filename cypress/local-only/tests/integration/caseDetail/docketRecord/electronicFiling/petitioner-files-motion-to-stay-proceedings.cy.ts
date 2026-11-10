@@ -48,7 +48,7 @@ describe('Private Practitioner requests to represent a party to a case', () => {
 
       cy.get('[data-testid="upload-pdf-button"]').click();
       attachFile({
-        filePath: '../../helpers/file/sample.pdf',
+        filePath: 'sample.pdf',
         selector: 'input#primaryDocumentFile-file',
         selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
       });
@@ -94,7 +94,7 @@ describe('Petitioner files motion to lift stay of proceedings', () => {
     selectTypeaheadInput('complete-doc-document-type-search', 'MLSP');
     cy.get('[data-testid="submit-document"]').click();
     attachFile({
-      filePath: '../../helpers/file/sample.pdf',
+      filePath: 'sample.pdf',
       selector: '[data-testid="primary-document"]',
       selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
     });

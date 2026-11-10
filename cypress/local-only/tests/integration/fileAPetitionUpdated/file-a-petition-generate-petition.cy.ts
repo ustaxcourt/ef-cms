@@ -19,7 +19,7 @@ import {
 } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('File a petition', () => {
-  const VALID_FILE = '../../helpers/file/sample.pdf';
+  const VALID_FILE = 'sample.pdf';
 
   describe('Generate petition file', () => {
     it('should generate petition for filing type Myself', () => {

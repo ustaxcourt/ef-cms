@@ -14,7 +14,7 @@ import {
 } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('File an Electronic Petition', () => {
-  const VALID_FILE = '../../helpers/file/sample.pdf';
+  const VALID_FILE = 'sample.pdf';
 
   describe('Petitioner generates a petition', () => {
     it('should allow Petitions Clerk to serve an electronic generated petition', () => {

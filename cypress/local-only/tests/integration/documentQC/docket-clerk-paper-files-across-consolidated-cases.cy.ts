@@ -48,7 +48,7 @@ describe('Docket clerk paper-files across consolidated cases', () => {
 
         cy.get('[data-testid="upload-pdf-button"]').click();
         attachFile({
-          filePath: '../../helpers/file/sample.pdf',
+          filePath: 'sample.pdf',
           selector: '[data-testid="primaryDocumentFile-file-input"',
           selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
         });

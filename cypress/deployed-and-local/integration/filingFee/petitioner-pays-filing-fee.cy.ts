@@ -27,7 +27,7 @@ import { petitionsClerkQcsAndServesElectronicCase } from 'cypress/helpers/docume
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 
 describe('Pay Filing Fee Through pay.gov', () => {
-  const VALID_FILE = '../../helpers/file/sample.pdf';
+  const VALID_FILE = 'sample.pdf';
 
   before(skipUnlessPaymentPortalIntegrationEnabled);
 

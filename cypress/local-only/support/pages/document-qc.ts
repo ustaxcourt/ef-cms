@@ -63,7 +63,7 @@ export const uploadCourtIssuedDocumentAndEditViaDocumentQC = () => {
   cy.get('#upload-description').clear();
   cy.get('#upload-description').type(freeText);
   attachFile({
-    filePath: '../../helpers/file/sample.pdf',
+    filePath: 'sample.pdf',
     selector: 'input#primary-document-file',
     selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
   });

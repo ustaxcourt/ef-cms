@@ -42,7 +42,7 @@ describe('Edit Docket Entry Service / Action(s) tab edits do not regenerate the 
       selectTypeaheadInput('complete-doc-document-type-search', 'Exhibit(s)');
       cy.get('[data-testid="submit-document"]').click();
       attachFile({
-        filePath: '../../helpers/file/sample.pdf',
+        filePath: 'sample.pdf',
         selector: '[data-testid="primary-document"]',
         selectorToAwaitOnSuccess:
           '[data-testid="upload-file-success-primary-document"]',

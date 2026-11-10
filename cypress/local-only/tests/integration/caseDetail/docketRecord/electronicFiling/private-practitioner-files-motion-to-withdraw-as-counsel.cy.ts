@@ -82,7 +82,7 @@ describe('Practitioner files a Motion to Withdraw as Counsel (M112)', () => {
     ).click();
     cy.get(selectId).select('Exhibit');
     attachFile({
-      filePath: '../../helpers/file/sample.pdf',
+      filePath: 'sample.pdf',
       selector: `[data-testid="${fileTestId}"]`,
       selectorToAwaitOnSuccess: `[data-testid="upload-file-success-${fileTestId}"]`,
     });
@@ -110,7 +110,7 @@ describe('Practitioner files a Motion to Withdraw as Counsel (M112)', () => {
     cy.get('[data-testid="submit-document"]').click();
 
     attachFile({
-      filePath: '../../helpers/file/sample.pdf',
+      filePath: 'sample.pdf',
       selector: '[data-testid="primary-document"]',
       selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
     });
@@ -195,7 +195,7 @@ describe('Practitioner files a Motion to Withdraw as Counsel (M112)', () => {
       cy.get('[data-testid="submit-document"]').click();
 
       attachFile({
-        filePath: '../../helpers/file/sample.pdf',
+        filePath: 'sample.pdf',
         selector: '[data-testid="primary-document"]',
         selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
       });
@@ -203,7 +203,7 @@ describe('Practitioner files a Motion to Withdraw as Counsel (M112)', () => {
       attachSupportingExhibit('supporting');
 
       attachFile({
-        filePath: '../../helpers/file/sample.pdf',
+        filePath: 'sample.pdf',
         selector: '[data-testid="secondary-document"]',
         selectorToAwaitOnSuccess:
           '[data-testid="upload-file-success-secondary-document"]',

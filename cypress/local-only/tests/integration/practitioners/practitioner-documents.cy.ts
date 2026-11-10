@@ -10,18 +10,24 @@ describe('Admissions Clerk - Practitioner Documents', () => {
       cy.get('[data-testid="practitioner-search-tab"]').click();
 
       cy.get('[data-testid="bar-number-search-input"]').type(barNumber);
-      cy.get('[data-testid="practitioner-search-by-bar-number-button"]').click();
+      cy.get(
+        '[data-testid="practitioner-search-by-bar-number-button"]',
+      ).click();
 
       cy.url().should('include', `/practitioner-detail/${barNumber}`);
 
       cy.get('#tabButton-practitionerDocumentation').click();
-      cy.get('[data-testid="add-practitioner-document-button"]').should('exist');
+      cy.get('[data-testid="add-practitioner-document-button"]').should(
+        'exist',
+      );
 
       cy.get('[data-testid="add-practitioner-document-button"]').click();
-      cy.get('[data-testid="add-edit-practitioner-document-header"]').should('exist');
+      cy.get('[data-testid="add-edit-practitioner-document-header"]').should(
+        'exist',
+      );
 
       attachFile({
-        filePath: '../../helpers/file/sample.pdf',
+        filePath: 'sample.pdf',
         selector: 'input#practitioner-document-file',
         selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
       });
@@ -40,7 +46,9 @@ describe('Admissions Clerk - Practitioner Documents', () => {
         cy.contains('Edit').click();
       });
 
-      cy.get('[data-testid="add-edit-practitioner-document-header"]').should('exist');
+      cy.get('[data-testid="add-edit-practitioner-document-header"]').should(
+        'exist',
+      );
       cy.get('#documentation-notes').clear();
       cy.get('#documentation-notes').type(descriptionText);
       cy.contains('button', 'Update File').click();
@@ -53,5 +61,3 @@ describe('Admissions Clerk - Practitioner Documents', () => {
     });
   });
 });
-
-
