@@ -51,6 +51,7 @@ export function toKyselyNewCase(rawCase: RawCase): NewCaseKysely {
       : null,
     isPaper: rawCase.isPaper,
     isSealed: rawCase.isSealed,
+    isStjEligible: rawCase.isStjEligible,
     leadDocketNumber: rawCase.leadDocketNumber ?? null,
     litigationCosts: rawCase.litigationCosts,
     mailingDate: rawCase.mailingDate,

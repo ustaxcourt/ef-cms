@@ -21,6 +21,7 @@ import {
   PAYMENT_STATUS,
   PETITIONER_CONTACT_TYPES,
   PROCEDURE_TYPES,
+  PROCEDURE_TYPES_MAP,
   ROLES,
   SYSTEM_ROLE,
   TRIAL_CITY_STRINGS,
@@ -152,6 +153,7 @@ export class Case extends JoiValidationEntity {
   public archivedCorrespondences?: RawCorrespondence[];
   public hasPendingItems?: boolean;
   public consolidatedCases: RawConsolidatedCaseSummary[] = [];
+  public isStjEligible?: boolean;
 
   constructor(
     rawCase: any,
@@ -187,6 +189,7 @@ export class Case extends JoiValidationEntity {
     this.sortableDocketNumber =
       rawCase.sortableDocketNumber ||
       Case.getSortableDocketNumber(rawCase.docketNumber);
+    this.isStjEligible = rawCase.isStjEligible ?? Case.isStjEligible(rawCase);
 
     // assignContacts needs to come first before assignDocketEntries
     this.assignConsolidatedCases({ rawCase });
@@ -1538,6 +1541,47 @@ export class Case extends JoiValidationEntity {
   setAssociatedJudgeId(associatedJudgeId) {
     this.associatedJudgeId = associatedJudgeId;
     return this;
+  }
+
+  static isStjEligible(caseDetail: Case) {
+    const caseIsSmall = caseDetail.procedureType === PROCEDURE_TYPES_MAP.small;
+
+    const caseIsAllowedType = (
+      [
+        CASE_TYPES_MAP.cdp,
+        CASE_TYPES_MAP.djExemptOrg,
+        CASE_TYPES_MAP.djRetirementPlan,
+        CASE_TYPES_MAP.disclosure,
+        CASE_TYPES_MAP.other,
+        CASE_TYPES_MAP.whistleblower,
+        CASE_TYPES_MAP.interestAbatement,
+      ] as string[]
+    ).includes(caseDetail.caseType);
+
+    const caseIsDisallowedType = (
+      [
+        CASE_TYPES_MAP.passport,
+        CASE_TYPES_MAP.workerClassification,
+        CASE_TYPES_MAP.partnershipSection1101,
+        CASE_TYPES_MAP.partnershipSection6226,
+        CASE_TYPES_MAP.partnershipSection6228,
+      ] as string[]
+    ).includes(caseDetail.caseType);
+
+    const penaltiesBelowThreshold =
+      caseDetail.caseType === CASE_TYPES_MAP.deficiency &&
+      !caseDetail.statistics?.find(
+        stat =>
+          Number(stat.irsDeficiencyAmount ?? 0) +
+            Number(stat.irsTotalPenalties ?? 0) >=
+          50000,
+      );
+
+    const isStjEligible =
+      (caseIsSmall || caseIsAllowedType || penaltiesBelowThreshold) &&
+      !caseIsDisallowedType;
+
+    return isStjEligible;
   }
 
   /**

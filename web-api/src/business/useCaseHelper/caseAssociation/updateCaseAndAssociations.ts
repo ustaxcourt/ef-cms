@@ -21,7 +21,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getMessagesByDocketNumber } from '@web-api/persistence/postgres/messages/getMessagesByDocketNumber';
 import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
-import { isEmpty, omit } from 'lodash';
+import { isEmpty, isEqual, omit } from 'lodash';
 import { upsertCaseCorrespondences } from '@web-api/persistence/postgres/caseCorrespondences/upsertCaseCorrespondences';
 import { upsertCaseDeadlines } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
 import diff from 'diff-arrays-of-objects';
@@ -61,6 +61,14 @@ export const updateCaseAndAssociations = async ({
     }));
 
   newCaseEntity.recomputeHasPendingItems();
+  if (
+    !isEqual(newCaseEntity.statistics, oldCaseEntity.statistics) ||
+    newCaseEntity.caseType !== oldCaseEntity.caseType ||
+    newCaseEntity.procedureType !== oldCaseEntity.procedureType
+  ) {
+    newCaseEntity.isStjEligible = Case.isStjEligible(newCaseEntity);
+  }
+
   const validNewRawCaseEntity = newCaseEntity.validate().toRawObject();
 
   const validRawOldCaseEntity = new Case(oldCaseEntity, {

@@ -43,6 +43,7 @@ export class CaseDTO {
   public hasVerifiedIrsNotice?: boolean;
   public irsNoticeDate?: string;
   public isPaper?: boolean;
+  public isStjEligible?: boolean;
   public leadDocketNumber?: string;
   public mailingDate?: string;
   public partyType: string;
@@ -141,6 +142,7 @@ export class CaseDTO {
     this.hasVerifiedIrsNotice = rawCase.hasVerifiedIrsNotice;
     this.irsNoticeDate = rawCase.irsNoticeDate;
     this.isPaper = rawCase.isPaper;
+    this.isStjEligible = rawCase.isStjEligible;
     this.leadDocketNumber = rawCase.leadDocketNumber;
     this.mailingDate = rawCase.mailingDate;
     this.partyType = rawCase.partyType;

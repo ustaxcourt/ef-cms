@@ -91,6 +91,70 @@ export const EditCaseDetails = connect(
               validationErrorsBind="validationErrors"
               onUpdate={updateFormValueSequence}
             />
+
+            <div className="margin-bottom-5">
+              <h4 className="margin-bottom-2">Special Trial Judge</h4>
+              <FormGroup
+                className="margin-bottom-3"
+                errorText={validationErrors.isStjEligible}
+              >
+                <label className="usa-label" htmlFor="preferred-trial-city">
+                  STJ Eligibility
+                </label>
+                <div className="usa-radio usa-radio__inline">
+                  <input
+                    aria-describedby="has-irs-verified-notice-Eligible"
+                    checked={form.isStjEligible === true}
+                    className="usa-radio__input"
+                    data-testid="isStjEligible-Eligible-radio"
+                    id="isStjEligible-Eligible"
+                    name="isStjEligible"
+                    type="radio"
+                    value="eligible"
+                    onChange={e => {
+                      updateFormValueSequence({
+                        key: e.target.name,
+                        value: true,
+                      });
+                    }}
+                  />
+                  <label
+                    className="usa-radio__label"
+                    data-testid="lbl-Is-Stj-Eligible"
+                    htmlFor="isStjEligible-Eligible"
+                    id="has-irs-verified-notice-Eligible"
+                  >
+                    Eligible
+                  </label>
+                </div>
+                <div className="usa-radio usa-radio__inline">
+                  <input
+                    aria-describedby="has-irs-verified-notice-Not-Eligible"
+                    checked={form.isStjEligible === false}
+                    className="usa-radio__input"
+                    data-testid="isStjEligible-Not-Eligible-radio"
+                    id="isStjEligible-Not-Eligible"
+                    name="isStjEligible"
+                    type="radio"
+                    value="not-eligible"
+                    onChange={e => {
+                      updateFormValueSequence({
+                        key: e.target.name,
+                        value: false,
+                      });
+                    }}
+                  />
+                  <label
+                    className="usa-radio__label"
+                    data-testid="lbl-Is-Stj-Not-Eligible"
+                    htmlFor="isStjEligible-Not-Eligible"
+                    id="has-irs-verified-notice-Not-Eligible"
+                  >
+                    Not Eligible
+                  </label>
+                </div>
+              </FormGroup>
+            </div>
           </div>
 
           <div className="button-container">
