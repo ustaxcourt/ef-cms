@@ -52,8 +52,22 @@ export const LocationInformationForm = connect<
                   <legend className="usa-legend" id="proceeding-type-legend">
                     Proceeding type
                   </legend>
-                  {Object.entries(TRIAL_SESSION_PROCEEDING_TYPES).map(
-                    ([key, value]) => (
+                  {Object.entries(TRIAL_SESSION_PROCEEDING_TYPES)
+                    .filter(([key]) => {
+                      if (
+                        !addingTrialSession &&
+                        formattedTrialSessionDetails.isCalendared
+                      ) {
+                        return formattedTrialSessionDetails.isReportingSession
+                          ? key === 'reporting'
+                          : key !== 'reporting';
+                      }
+                      return (
+                        key !== 'reporting' ||
+                        addTrialSessionInformationHelper.showReportingOption
+                      );
+                    })
+                    .map(([key, value]) => (
                       <div className="usa-radio usa-radio__inline" key={key}>
                         <input
                           aria-describedby="proceeding-type-legend"
@@ -88,8 +102,7 @@ export const LocationInformationForm = connect<
                           {value}
                         </label>
                       </div>
-                    ),
-                  )}
+                    ))}
                 </fieldset>
               </FormGroup>
 

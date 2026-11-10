@@ -5,6 +5,7 @@ import { getSetJudgesSequence } from './getSetJudgesSequence';
 import { getTrialSessionsAction } from '../actions/TrialSession/getTrialSessionsAction';
 import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
 import { parallel } from 'cerebral/factories';
+import { resetTrialSessionAction } from '../actions/TrialSession/resetTrialSessionAction';
 import { setDefaultTrialSessionFormValuesAction } from '../actions/setDefaultTrialSessionFormValuesAction';
 import { setIrsPractitionerUsersAction } from '@web-client/presenter/actions/TrialSession/setIrsPractitionerUsersAction';
 import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
@@ -18,6 +19,7 @@ export const gotoAddTrialSessionSequence =
     setupCurrentPageAction('Interstitial'),
     stopShowValidationAction,
     clearFormAction,
+    resetTrialSessionAction,
     clearScreenMetadataAction,
     parallel([
       [getTrialSessionsAction, setTrialSessionsAction],

@@ -108,7 +108,9 @@ export const MULTI_SELECT_PLACEHOLDER = '- Select one or more -';
 export const TRIAL_SESSION_PROCEEDING_TYPES = {
   inPerson: 'In Person',
   remote: 'Remote',
+  reporting: 'Reporting',
 } as const;
+
 export type TrialSessionProceedingType =
   (typeof TRIAL_SESSION_PROCEEDING_TYPES)[keyof typeof TRIAL_SESSION_PROCEEDING_TYPES];
 
@@ -116,6 +118,7 @@ export const TRIAL_SESSION_SCOPE_TYPES = {
   locationBased: 'Location-based',
   standaloneRemote: 'Standalone Remote',
 } as const;
+
 export type TrialSessionScope =
   (typeof TRIAL_SESSION_SCOPE_TYPES)[keyof typeof TRIAL_SESSION_SCOPE_TYPES];
 
@@ -179,6 +182,9 @@ export const ALLOWLIST_FEATURE_FLAGS = {
   },
   NEW_TRIAL_CITIES: {
     key: 'new-trial-cities',
+  },
+  REPORTING_CALENDARS: {
+    key: 'reporting-calendars',
   },
   RESTRICTED_EVENT_CODES: {
     key: 'restricted-event-codes',
