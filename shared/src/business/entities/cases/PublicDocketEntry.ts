@@ -31,21 +31,59 @@ type PublicDocketEntryRawProps = Pick<
 
 type PublicDocketEntryRelation = Omit<DocketEntryRelation, 'disposition'> & {
   disposition: string | null;
+  entityName: 'DocketEntry';
 };
 
-type RawPublicDocketEntryRelation = PublicDocketEntryRelation & {
+type RawPublicDocketEntryRelation = Omit<
+  PublicDocketEntryRelation,
+  'entityName'
+> & {
   entityName?: string;
+};
+
+type PublicDocketEntryReferenceProps = {
+  disposition?: string | null;
+  docketEntryId?: string;
+  documentTitle?: string;
+  documentType?: string;
 };
 
 function toPublicDocketEntryRelations(
   relations: RawPublicDocketEntryRelation[] | null | undefined,
 ): PublicDocketEntryRelation[] | null | undefined {
-  return (
-    relations?.map(({ entityName, ...relation }) => {
-      void entityName;
-      return relation;
-    }) ?? relations
-  );
+  if (!relations) return relations;
+
+  return relations.map(relation => ({
+    ...relation,
+    entityName: 'DocketEntry',
+  }));
+}
+
+export class PublicDocketEntryReference extends JoiValidationEntity {
+  public disposition?: string | null;
+  public docketEntryId?: string;
+  public documentTitle?: string;
+  public documentType?: string;
+
+  constructor(rawProps: PublicDocketEntryReferenceProps) {
+    super('DocketEntry');
+    this.disposition = rawProps.disposition;
+    this.docketEntryId = rawProps.docketEntryId;
+    this.documentTitle = rawProps.documentTitle;
+    this.documentType = rawProps.documentType;
+  }
+
+  static VALIDATION_RULES = {
+    disposition: JoiValidationConstants.STRING.optional().allow('', null),
+    docketEntryId: JoiValidationConstants.UUID.optional(),
+    documentTitle: JoiValidationConstants.DOCUMENT_TITLE.optional(),
+    documentType: JoiValidationConstants.STRING.optional(),
+    entityName: JoiValidationConstants.STRING.valid('DocketEntry').required(),
+  };
+
+  getValidationRules(): typeof PublicDocketEntryReference.VALIDATION_RULES {
+    return PublicDocketEntryReference.VALIDATION_RULES;
+  }
 }
 
 export class PublicDocketEntry extends JoiValidationEntity {
@@ -87,6 +125,7 @@ export class PublicDocketEntry extends JoiValidationEntity {
     docketEntryId?: string;
     documentTitle?: string;
     documentType?: string;
+    entityName: 'DocketEntry';
   };
 
   constructor(rawProps: PublicDocketEntryRawProps) {
@@ -134,6 +173,7 @@ export class PublicDocketEntry extends JoiValidationEntity {
         docketEntryId: rawProps.previousDocument.docketEntryId,
         documentTitle: rawProps.previousDocument.documentTitle,
         documentType: rawProps.previousDocument.documentType,
+        entityName: 'DocketEntry',
       };
     }
   }
@@ -148,6 +188,7 @@ export class PublicDocketEntry extends JoiValidationEntity {
       .items(
         joi
           .object({
+            ...PublicDocketEntryReference.VALIDATION_RULES,
             disposition: JoiValidationConstants.STRING.allow(
               '',
               null,
@@ -163,6 +204,7 @@ export class PublicDocketEntry extends JoiValidationEntity {
       .items(
         joi
           .object({
+            ...PublicDocketEntryReference.VALIDATION_RULES,
             disposition: JoiValidationConstants.STRING.allow(
               '',
               null,
@@ -210,11 +252,7 @@ export class PublicDocketEntry extends JoiValidationEntity {
     objections: DOCKET_ENTRY_VALIDATION_RULE_KEYS.objections,
     processingStatus: JoiValidationConstants.STRING.optional(),
     previousDocument: joi
-      .object({
-        docketEntryId: JoiValidationConstants.UUID.optional(),
-        documentTitle: JoiValidationConstants.DOCUMENT_TITLE.optional(),
-        documentType: JoiValidationConstants.STRING.optional(),
-      })
+      .object(PublicDocketEntryReference.VALIDATION_RULES)
       .unknown(false)
       .optional(),
     receivedAt: JoiValidationConstants.ISO_DATE.max('now').required(),

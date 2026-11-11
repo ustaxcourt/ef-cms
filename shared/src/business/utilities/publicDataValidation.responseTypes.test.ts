@@ -6,6 +6,7 @@ import { PublicCaseSearchResult } from '@shared/business/entities/cases/PublicCa
 import { PublicContact } from '@shared/business/entities/cases/PublicContact';
 import { PublicDocketEntry } from '@shared/business/entities/cases/PublicDocketEntry';
 import { PublicDocumentSearchResult } from '@shared/business/entities/documents/PublicDocumentSearchResult';
+import { PublicTrialSessionDetails } from '@shared/business/entities/trialSessions/PublicTrialSessionDetails';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { MOCK_DOCUMENTS } from '@shared/test/mockDocketEntry';
 
@@ -183,15 +184,16 @@ describe('publicDataValidation response types', () => {
 
     expect(publicCaseResponse.docketEntries).toHaveLength(1);
     expect(publicCaseResponse.docketEntries[0].affectedByDocketEntries).toEqual(
-      [{ disposition: 'GRANTED', docketEntryId }],
+      [{ disposition: 'GRANTED', docketEntryId, entityName: 'DocketEntry' }],
     );
     expect(publicCaseResponse.docketEntries[0].affectedDocketEntries).toEqual([
-      { disposition: 'DENIED', docketEntryId },
+      { disposition: 'DENIED', docketEntryId, entityName: 'DocketEntry' },
     ]);
     expect(publicCaseResponse.docketEntries[0].previousDocument).toEqual({
       docketEntryId,
       documentTitle: 'Previous order',
       documentType: 'Order',
+      entityName: 'DocketEntry',
     });
     expect(
       findUnauthorizedPublicFields({
@@ -199,6 +201,27 @@ describe('publicDataValidation response types', () => {
         url: 'http://localhost:4001/public-api/cases/101-18',
       }),
     ).toEqual([]);
+
+    const relatedDocketEntry =
+      publicCaseResponse.docketEntries[0].affectedByDocketEntries?.[0];
+    if (!relatedDocketEntry) {
+      throw new Error('Expected an affected docket entry relation');
+    }
+    Object.assign(relatedDocketEntry, { entityName: undefined });
+
+    expect(
+      findUnauthorizedPublicFields({
+        data: publicCaseResponse,
+        url: 'http://localhost:4001/public-api/cases/101-18',
+      }),
+    ).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          fieldName: 'docketEntries[0].affectedByDocketEntries[0].entityName',
+          matchPreview: '[missing]',
+        }),
+      ]),
+    );
   });
 
   it('rejects untyped nested data in public case responses', () => {
@@ -232,6 +255,46 @@ describe('publicDataValidation response types', () => {
         expect.objectContaining({
           fieldName: 'irsPractitioners[0].privateField',
           matchPreview: '[invalid]',
+        }),
+      ]),
+    );
+  });
+
+  it('validates case payloads and malformed values inside trial session details', () => {
+    const publicCase = new PublicCase(
+      { ...MOCK_CASE, docketEntries: [] },
+      { authorizedUser: undefined },
+    );
+    const calendaredCase = new PublicCaseResponse(
+      publicCase.toRawObject(),
+    ).validate();
+    const trialSessionDetails = new PublicTrialSessionDetails({
+      calendaredCases: [calendaredCase],
+      startDate: '2026-01-01T00:00:00.000Z',
+    })
+      .validate()
+      .toRawObject();
+    Object.assign(trialSessionDetails, {
+      calendaredCases: [
+        null,
+        { ...trialSessionDetails.calendaredCases[0], docketNumber: undefined },
+      ],
+    });
+
+    const findings = findUnauthorizedPublicFields({
+      data: trialSessionDetails,
+      url: 'http://localhost:4001/public-api/trial-sessions/abc',
+    });
+
+    expect(findings).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          fieldName: 'calendaredCases[0]',
+          matchPreview: '[invalid]',
+        }),
+        expect.objectContaining({
+          fieldName: 'calendaredCases[1].docketNumber',
+          matchPreview: '[missing]',
         }),
       ]),
     );

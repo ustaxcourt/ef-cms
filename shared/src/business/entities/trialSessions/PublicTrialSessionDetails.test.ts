@@ -59,6 +59,24 @@ describe('PublicTrialSessionDetails', () => {
     expect(entity.isValid()).toBe(true);
   });
 
+  it('requires an entity name on calendared case responses', () => {
+    const calendaredCase = new RestrictedCaseResponse({
+      docketNumber: '101-20',
+      docketEntries: [],
+    });
+    calendaredCase.entityName = undefined;
+    const entity = new PublicTrialSessionDetails({
+      calendaredCases: [calendaredCase],
+      startDate: '2026-01-01T00:00:00.000Z',
+    });
+
+    expect(entity.getValidationErrors()).toEqual(
+      expect.objectContaining({
+        'calendaredCases-0': expect.any(String),
+      }),
+    );
+  });
+
   it('accepts an approved public case response in calendaredCases', () => {
     const calendaredCase = new PublicCaseResponse({
       caseCaption: 'Test Petitioner, Petitioner',
