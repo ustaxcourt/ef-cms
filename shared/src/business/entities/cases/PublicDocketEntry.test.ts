@@ -65,12 +65,14 @@ describe('PublicDocketEntry', () => {
         {
           disposition: 'GRANTED',
           docketEntryId: 'e1d0b1c2-e531-4e07-ab82-851ee9acde64',
+          entityName: 'DocketEntry',
         },
       ],
       affectedDocketEntries: [
         {
           disposition: 'DENIED',
           docketEntryId: 'e1d0b1c2-e531-4e07-ab82-851ee9acde64',
+          entityName: 'DocketEntry',
         },
       ],
       attachments: true,
@@ -101,6 +103,7 @@ describe('PublicDocketEntry', () => {
         docketEntryId: 'something else else',
         documentTitle: 'blah',
         documentType: 'fhqwhgads',
+        entityName: 'DocketEntry',
       },
       processingStatus: 'testing',
       receivedAt: '2020-05-27T09:23:43.007Z',
@@ -138,7 +141,7 @@ describe('PublicDocketEntry', () => {
     expect(docketEntry.isValid()).toBe(true);
   });
 
-  it('omits entity metadata from docket-entry relationships', () => {
+  it('preserves entity metadata on docket-entry relationships', () => {
     const grantedRelation = {
       disposition: 'GRANTED',
       docketEntryId: 'e1d0b1c2-e531-4e07-ab82-851ee9acde64',
@@ -163,12 +166,14 @@ describe('PublicDocketEntry', () => {
         {
           disposition: 'GRANTED',
           docketEntryId: 'e1d0b1c2-e531-4e07-ab82-851ee9acde64',
+          entityName: 'DocketEntry',
         },
       ],
       affectedDocketEntries: [
         {
           disposition: 'DENIED',
           docketEntryId: 'e1d0b1c2-e531-4e07-ab82-851ee9acde64',
+          entityName: 'DocketEntry',
         },
       ],
     });

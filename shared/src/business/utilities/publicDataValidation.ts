@@ -8,7 +8,10 @@ import { PublicDocketRecordPdfJobResponse } from '@shared/business/dto/public/Pu
 import { PublicCase } from '@shared/business/entities/cases/PublicCase';
 import { PublicCaseSearchResult } from '@shared/business/entities/cases/PublicCaseSearchResult';
 import { PublicContact } from '@shared/business/entities/cases/PublicContact';
-import { PublicDocketEntry } from '@shared/business/entities/cases/PublicDocketEntry';
+import {
+  PublicDocketEntry,
+  PublicDocketEntryReference,
+} from '@shared/business/entities/cases/PublicDocketEntry';
 import { RestrictedCase } from '@shared/business/entities/cases/RestrictedCase';
 import { PublicDocumentSearchResult } from '@shared/business/entities/documents/PublicDocumentSearchResult';
 import { PublicUser } from '@shared/business/entities/PublicUser';
@@ -69,6 +72,8 @@ const PUBLIC_ENTITY_FACTORIES = {
       filingDate: '',
       receivedAt: '',
     }),
+  DocketEntry: (): PublicDocketEntryReference =>
+    new PublicDocketEntryReference({}),
   PublicDocumentSearchResult: (): PublicDocumentSearchResult =>
     new PublicDocumentSearchResult({}),
   PublicTrialSessionDetails: (): PublicTrialSessionDetails =>
@@ -310,6 +315,70 @@ function validateValueWithSchema(args: {
   }));
 }
 
+function validateTrialSessionCaseResponses(args: {
+  cases: unknown[];
+  path: string;
+}): UnauthorizedPublicFieldFinding[] {
+  const allowedEntityNames = new Set([
+    'PublicCaseResponse',
+    'RestrictedCaseResponse',
+  ]);
+  const findings: UnauthorizedPublicFieldFinding[] = [];
+
+  args.cases.forEach((caseResponse, index) => {
+    const casePath = formatValidationPath(args.path, [
+      'calendaredCases',
+      index,
+    ]);
+
+    if (!isRecord(caseResponse)) {
+      findings.push(createInvalidResponseValueFinding(casePath));
+      return;
+    }
+
+    const caseEntityName = caseResponse.entityName;
+    if (typeof caseEntityName !== 'string') {
+      return;
+    }
+
+    if (!allowedEntityNames.has(caseEntityName)) {
+      findings.push({
+        fieldName: `${casePath}.entityName`,
+        matchPreview: '[invalid]',
+      });
+      return;
+    }
+
+    const validationMetadata =
+      PUBLIC_ENTITY_VALIDATION_METADATA.get(caseEntityName);
+    if (!validationMetadata) {
+      findings.push({
+        fieldName: `${casePath}.entityName`,
+        matchPreview: '[invalid]',
+      });
+      return;
+    }
+
+    const { error } = validationMetadata.schema.validate(
+      removeKnownEntityMetadata(caseResponse),
+      { abortEarly: false, convert: true },
+    );
+
+    error?.details
+      .filter(detail => detail.path[detail.path.length - 1] !== 'entityName')
+      .forEach(detail => {
+        findings.push({
+          entityName: caseEntityName,
+          fieldName: formatValidationPath(casePath, detail.path),
+          matchPreview:
+            detail.type === 'any.required' ? '[missing]' : '[invalid]',
+        });
+      });
+  });
+
+  return findings;
+}
+
 function validateEntityFieldValue(args: {
   candidateEntityName: string;
   entity: Record<string, unknown>;
@@ -317,6 +386,18 @@ function validateEntityFieldValue(args: {
   path: string;
   schema: joi.AnySchema;
 }): UnauthorizedPublicFieldFinding[] {
+  if (
+    args.candidateEntityName === 'PublicTrialSessionDetails' &&
+    args.fieldName === 'calendaredCases' &&
+    Array.isArray(args.entity.calendaredCases)
+  ) {
+    // The Joi copy omits metadata; validate cases by schema, then check original tags recursively.
+    return validateTrialSessionCaseResponses({
+      cases: args.entity.calendaredCases,
+      path: args.path,
+    });
+  }
+
   const validationEntity = removeKnownEntityMetadata(args.entity);
   const { error } = args.schema.validate(validationEntity, {
     abortEarly: false,
@@ -328,7 +409,11 @@ function validateEntityFieldValue(args: {
   }
 
   return error.details
-    .filter(detail => detail.path[0] === args.fieldName)
+    .filter(
+      detail =>
+        detail.path[0] === args.fieldName &&
+        detail.path[detail.path.length - 1] !== 'entityName',
+    )
     .map(detail => ({
       entityName: args.candidateEntityName,
       fieldName: formatValidationPath(args.path, detail.path),

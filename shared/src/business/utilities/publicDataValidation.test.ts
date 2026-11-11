@@ -425,6 +425,21 @@ describe('publicDataValidation', () => {
         }),
       ]),
     );
+
+    trialSessionDetails.calendaredCases[0].entityName = 'PublicCase';
+    const findingsWithUnexpectedCaseEntityName = findUnauthorizedPublicFields({
+      data: trialSessionDetails,
+      url: 'http://localhost:4001/public-api/trial-sessions/abc',
+    });
+
+    expect(findingsWithUnexpectedCaseEntityName).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          fieldName: 'calendaredCases[0].entityName',
+          matchPreview: '[invalid]',
+        }),
+      ]),
+    );
   });
 
   it('passes for validated docket entries with optional previous-document fields omitted', () => {
