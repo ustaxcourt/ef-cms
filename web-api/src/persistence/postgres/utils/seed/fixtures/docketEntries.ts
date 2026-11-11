@@ -1,5 +1,7 @@
 /* eslint-disable max-lines */
-export const docketEntrySeeds: RawDocketEntry[] = [
+import type { NewDocketEntryOrderMotionKysely } from '@web-api/persistence/postgres/docketEntries/schema';
+
+const docketEntrySeedBase: RawDocketEntry[] = [
   {
     isStricken: false,
     documentType: 'Request for Place of Trial',
@@ -19517,3 +19519,96 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     originallyFiledDocketNumber: '999-15',
   },
 ];
+
+const dispositionRelationshipDocketEntrySeeds: RawDocketEntry[] = [
+  ...docketEntrySeedBase
+    .filter(
+      entry =>
+        entry.docketNumber === '999-15' &&
+        entry.docketEntryId === '15b5ee1c-2cf7-4ca3-afb2-e82b39a92ac5',
+    )
+    .map(entry => ({
+      ...entry,
+      docketEntryId: '8c05d0c0-482a-4f69-bfdd-84dbbc873651',
+      docketNumber: '103-20',
+      documentStorageId: '8c05d0c0-482a-4f69-bfdd-84dbbc873651',
+      documentTitle: 'Motion for Assignment of Judge',
+      eventCode: 'M004',
+      createdAt: '2024-01-02T18:00:00.000Z',
+      filedBy: 'Reuben Blair',
+      filedByRole: 'petitioner',
+      filingDate: '2024-01-02T18:00:00.000Z',
+      index: 7,
+      isFileAttached: false,
+      isLegacy: false,
+      isLegacySealed: false,
+      isOnDocketRecord: true,
+      isPaper: false,
+      isSealed: false,
+      isStricken: false,
+      multiDocketedOn: [],
+      originallyFiledDocketNumber: '103-20',
+      pending: false,
+      receivedAt: '2024-01-02T18:00:00.000Z',
+      servedAt: '2024-01-02T18:00:00.000Z',
+      servedParties: [],
+      userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    })),
+  ...docketEntrySeedBase
+    .filter(
+      entry =>
+        entry.docketNumber === '999-15' &&
+        entry.docketEntryId === '6d83425c-8ef3-4c66-b776-6c7957c53f4d',
+    )
+    .map(entry => ({
+      ...entry,
+      docketEntryId: '9a802625-124a-4a2d-b9a0-3c065b9d14f7',
+      docketNumber: '103-20',
+      documentIdBeforeSignature: undefined,
+      documentStorageId: '9a802625-124a-4a2d-b9a0-3c065b9d14f7',
+      documentTitle: 'Order Denying Motion for Assignment of Judge',
+      eventCode: 'O',
+      createdAt: '2024-01-03T18:00:00.000Z',
+      filedBy: 'Test Docketclerk',
+      filedByRole: 'docketclerk',
+      filingDate: '2024-01-03T18:00:00.000Z',
+      freeText: 'Motion denied',
+      editState: '{}',
+      index: 8,
+      isFileAttached: false,
+      isLegacy: false,
+      isLegacySealed: false,
+      isOnDocketRecord: true,
+      isSealed: false,
+      isStricken: false,
+      multiDocketedOn: [],
+      originallyFiledDocketNumber: '103-20',
+      receivedAt: '2024-01-03T18:00:00.000Z',
+      servedAt: '2024-01-03T18:00:00.000Z',
+      servedParties: [],
+      signedAt: '2024-01-03T17:59:00.000Z',
+    })),
+];
+
+export const docketEntrySeeds: RawDocketEntry[] = [
+  ...docketEntrySeedBase,
+  ...dispositionRelationshipDocketEntrySeeds,
+];
+
+export const docketEntryRelatedEntriesSeeds: NewDocketEntryOrderMotionKysely[] =
+  [
+    {
+      docketNumber: '999-15',
+      primaryDocketEntryId: '6d83425c-8ef3-4c66-b776-6c7957c53f4d',
+      secondaryDocketEntryId: '15b5ee1c-2cf7-4ca3-afb2-e82b39a92ac5',
+      disposition: 'GRANTED',
+      served: true,
+    },
+    {
+      docketNumber: '103-20',
+      primaryDocketEntryId: '9a802625-124a-4a2d-b9a0-3c065b9d14f7',
+      secondaryDocketEntryId: '8c05d0c0-482a-4f69-bfdd-84dbbc873651',
+      disposition: 'DENIED',
+      served: true,
+    },
+  ];
