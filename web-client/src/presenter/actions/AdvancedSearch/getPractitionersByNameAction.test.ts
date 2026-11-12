@@ -21,7 +21,7 @@ describe('getPractitionersByNameAction', () => {
       state: {
         advancedSearchForm: {
           practitionerSearchByName: {
-            lastKeysOfPages: ['1234'],
+            lastKeysOfPages: [['1234']],
             practitionerName: 'Ricky',
           },
         },
@@ -57,7 +57,7 @@ describe('getPractitionersByNameAction', () => {
       state: {
         advancedSearchForm: {
           practitionerSearchByName: {
-            lastKeysOfPages: ['1234'],
+            lastKeysOfPages: [['1234']],
             practitionerName: 'Ricky',
             practiceType: 'IRS',
             practitionerType: 'Attorney',
@@ -87,7 +87,7 @@ describe('getPractitionersByNameAction', () => {
     expect(results.output).toEqual({ searchResults: [{ barNumber: '11111' }] });
   });
 
-  it('passes a null cursor value through to the next practitioner search', async () => {
+  it('passes the full cursor, including null values, to the next practitioner search', async () => {
     applicationContext
       .getUseCases()
       .getPractitionersByNameInteractor.mockReturnValue({
@@ -106,7 +106,7 @@ describe('getPractitionersByNameAction', () => {
       state: {
         advancedSearchForm: {
           practitionerSearchByName: {
-            lastKeysOfPages: [null],
+            lastKeysOfPages: [[null, 'smith', 'SB1234']],
             practitionerName: 'Ricky',
           },
         },
@@ -116,7 +116,7 @@ describe('getPractitionersByNameAction', () => {
     expect(
       applicationContext.getUseCases().getPractitionersByNameInteractor.mock
         .calls[0][1].searchAfter,
-    ).toEqual([null]);
+    ).toEqual([null, 'smith', 'SB1234']);
   });
 
   it('omits the default practitioner type from the search request', async () => {
@@ -149,6 +149,10 @@ describe('getPractitionersByNameAction', () => {
     expect(
       applicationContext.getUseCases().getPractitionersByNameInteractor.mock
         .calls[0][1].practitionerType,
+    ).toBeUndefined();
+    expect(
+      applicationContext.getUseCases().getPractitionersByNameInteractor.mock
+        .calls[0][1].searchAfter,
     ).toBeUndefined();
   });
 });

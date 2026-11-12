@@ -17,7 +17,7 @@ export const getPractitionersByNameInteractor = (
     originalBarState?: string;
     practiceType?: string;
     practitionerType?: string;
-    searchAfter: (string | number | null)[];
+    searchAfter?: (string | number | null)[];
   },
 ): Promise<PractitionersByName> => {
   return get({
@@ -27,7 +27,9 @@ export const getPractitionersByNameInteractor = (
       admissionStatus,
       name,
       originalBarState,
-      searchAfter,
+      searchAfter: searchAfter?.length
+        ? JSON.stringify(searchAfter)
+        : undefined,
       practiceType,
       practitionerType,
     },
