@@ -55,7 +55,7 @@ describe('Docket Clerk save-for-later then serve paper filing — coversheet onl
       cy.get('[data-testid="filed-by-option"]').contains('Petitioner').click();
       cy.get('[data-testid="upload-pdf-button"]').click();
       attachFile({
-        filePath: '../../helpers/file/sample.pdf',
+        filePath: 'sample.pdf',
         selector: '[data-testid="primaryDocumentFile-file-input"',
         selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
       });
