@@ -81,6 +81,7 @@ describe('sendBulkTemplatedEmail', () => {
   });
 
   it('should retry a failed mailing', async () => {
+    applicationContext.logger.info.mockClear();
     applicationContext
       .getEmailClient()
       .send.mockReturnValueOnce(
@@ -130,13 +131,16 @@ describe('sendBulkTemplatedEmail', () => {
     await sendWithRetry({
       applicationContext,
       params: {
-        DefaultTemplateData: undefined,
+        DefaultTemplateData: JSON.stringify({
+          docketNumber: '456-20L',
+        }),
         Destinations: [
           {
             Destination: {
               ToAddresses: ['test.email@example.net'],
             },
             ReplacementTemplateData: JSON.stringify({
+              docketNumber: '123-20L',
               name: 'Roslindis Angelino',
               welcomeMessage: 'Welcome to Flavortown',
               whoAmI: 'The Sauce Boss',
@@ -147,6 +151,7 @@ describe('sendBulkTemplatedEmail', () => {
               ToAddresses: ['test.email2@example.net'],
             },
             ReplacementTemplateData: JSON.stringify({
+              emailContent: 'Rendered email body',
               name: 'Roslindis Angelino',
               welcomeMessage: 'Welcome to Flavortown',
               whoAmI: 'The Sauce Boss',
@@ -157,6 +162,7 @@ describe('sendBulkTemplatedEmail', () => {
               ToAddresses: ['test.email3@example.net'],
             },
             ReplacementTemplateData: JSON.stringify({
+              docketNumber: '123-21S',
               name: 'Roslindis Angelino',
               welcomeMessage: 'Welcome to Flavortown',
               whoAmI: 'The Sauce Boss',
@@ -169,6 +175,50 @@ describe('sendBulkTemplatedEmail', () => {
       retryCount: 0,
     });
     expect(applicationContext.getEmailClient().send).toHaveBeenCalledTimes(2);
+
+    const responseLogs = applicationContext.logger.info.mock.calls.filter(
+      ([message]) => message === 'Bulk Email Response',
+    );
+    expect(responseLogs).toHaveLength(2);
+    expect(responseLogs[0][1].Status).toMatchObject([
+      {
+        MessageId:
+          '01000176a9ec8d81-a80255bb-8ab4-4049-ba1f-6abd5b7a8098-000000',
+        Status: 'Success',
+        docketNumber: '123-20L',
+        recipientEmails: ['test.email@example.net'],
+      },
+      {
+        Error: 'Unknown error occurred. Please try again later',
+        Status: 'Failed',
+        docketNumber: '456-20L',
+        recipientEmails: ['test.email2@example.net'],
+      },
+      {
+        Error: 'Unknown error occurred. Please try again later',
+        Status: 'Failed',
+        docketNumber: '123-21S',
+        recipientEmails: ['test.email3@example.net'],
+      },
+    ]);
+    expect(responseLogs[1][1].Status).toMatchObject([
+      {
+        MessageId:
+          '01000176a9ec8d81-a80255bb-8ab4-4049-ba1f-6abd5b7a8098-000000',
+        Status: 'Success',
+        docketNumber: '456-20L',
+        recipientEmails: ['test.email2@example.net'],
+      },
+      {
+        MessageId:
+          '01000176a9ec8d81-a80255bb-8ab4-4049-ba1f-6abd5b7a8098-000000',
+        Status: 'Success',
+        docketNumber: '123-21S',
+        recipientEmails: ['test.email3@example.net'],
+      },
+    ]);
+    expect(JSON.stringify(responseLogs)).not.toContain('emailContent');
+    expect(JSON.stringify(responseLogs)).not.toContain('Rendered email body');
   });
 
   it('should retry a failed mailing MAX_SES_RETRIES times (MAX_SES_RETRIES + 1 total attempts), and then log an error', async () => {
@@ -233,6 +283,7 @@ describe('sendBulkTemplatedEmail', () => {
   }, 30000);
 
   it('should filter emails to specific domains', async () => {
+    applicationContext.logger.info.mockClear();
     applicationContext.getEmailClient().send.mockReturnValueOnce(
       Promise.resolve({
         ResponseMetadata: {
@@ -252,7 +303,9 @@ describe('sendBulkTemplatedEmail', () => {
     await sendWithRetry({
       applicationContext,
       params: {
-        DefaultTemplateData: undefined,
+        DefaultTemplateData: JSON.stringify({
+          docketNumber: '456-20L',
+        }),
         Destinations: [
           {
             Destination: {
@@ -269,6 +322,7 @@ describe('sendBulkTemplatedEmail', () => {
               ToAddresses: ['test.email@example.net'],
             },
             ReplacementTemplateData: JSON.stringify({
+              docketNumber: '123-20L',
               name: 'Roslindis Angelino',
               welcomeMessage: 'Welcome to Flavortown',
               whoAmI: 'The Sauce Boss',
@@ -282,6 +336,133 @@ describe('sendBulkTemplatedEmail', () => {
     });
 
     expect(applicationContext.getEmailClient().send).toHaveBeenCalledTimes(1);
+    const responseLog = applicationContext.logger.info.mock.calls.find(
+      ([message]) => message === 'Bulk Email Response',
+    );
+    expect(responseLog?.[1].Status).toMatchObject([
+      {
+        Status: 'Success',
+        docketNumber: '123-20L',
+        recipientEmails: ['test.email@example.net'],
+      },
+    ]);
+  });
+
+  it('should log response metadata without a docket number for generic emails', async () => {
+    applicationContext.logger.info.mockClear();
+    applicationContext.getEmailClient().send.mockResolvedValueOnce({
+      Status: [
+        { Status: 'Success' },
+        { Status: 'Success' },
+        { Error: 'No matching destination', Status: 'Failed' },
+      ],
+    });
+
+    await sendWithRetry({
+      applicationContext,
+      params: {
+        DefaultTemplateData: JSON.stringify({}),
+        Destinations: [
+          {
+            Destination: {
+              ToAddresses: ['test.email@example.net'],
+            },
+            ReplacementTemplateData: JSON.stringify({ emailContent: 'sent' }),
+          },
+          {
+            Destination: {
+              ToAddresses: ['test.email2@example.net'],
+            },
+            ReplacementTemplateData: JSON.stringify({ docketNumber: 123 }),
+          },
+        ],
+        Source: 'jest@example.com',
+        Template: 'case_served',
+      },
+      retryCount: 0,
+    });
+
+    const responseLog = applicationContext.logger.info.mock.calls.find(
+      ([message]) => message === 'Bulk Email Response',
+    );
+    expect(responseLog?.[1].Status).toMatchObject([
+      {
+        Status: 'Success',
+        recipientEmails: ['test.email@example.net'],
+      },
+      {
+        Status: 'Success',
+        recipientEmails: ['test.email2@example.net'],
+      },
+      {
+        Error: 'No matching destination',
+        Status: 'Failed',
+      },
+    ]);
+    expect(responseLog?.[1].Status[0]).not.toHaveProperty('docketNumber');
+    expect(responseLog?.[1].Status[1]).not.toHaveProperty('docketNumber');
+    expect(responseLog?.[1].Status[2]).not.toHaveProperty('recipientEmails');
+    expect(responseLog?.[1].Status[2]).not.toHaveProperty('docketNumber');
+  });
+
+  it('should log template data parsing errors without interrupting email handling', async () => {
+    applicationContext.logger.info.mockClear();
+    applicationContext.logger.warn.mockClear();
+    applicationContext.getEmailClient().send.mockResolvedValueOnce({
+      Status: [{ Status: 'Success' }],
+    });
+
+    await sendWithRetry({
+      applicationContext,
+      params: {
+        DefaultTemplateData: JSON.stringify({}),
+        Destinations: [
+          {
+            Destination: {
+              ToAddresses: ['test.email@example.net'],
+            },
+            ReplacementTemplateData: '{',
+          },
+        ],
+        Source: 'jest@example.com',
+        Template: 'case_served',
+      },
+      retryCount: 0,
+    });
+
+    expect(applicationContext.logger.warn).toHaveBeenCalledWith(
+      'Unable to parse template data for bulk email response log',
+      expect.any(SyntaxError),
+    );
+    const responseLog = applicationContext.logger.info.mock.calls.find(
+      ([message]) => message === 'Bulk Email Response',
+    );
+    expect(responseLog?.[1].Status).toMatchObject([
+      {
+        Status: 'Success',
+        recipientEmails: ['test.email@example.net'],
+      },
+    ]);
+  });
+
+  it('should report undefined when a failed destination has no recipient address', async () => {
+    const { MAX_SES_RETRIES } = applicationContext.getConstants();
+    applicationContext.getEmailClient().send.mockResolvedValueOnce({
+      Status: [{ Error: 'Unknown error occurred', Status: 'Failed' }],
+    });
+
+    await expect(
+      sendWithRetry({
+        applicationContext,
+        params: {
+          DefaultTemplateData: undefined,
+          Destinations: [{ Destination: {} }],
+          Source: 'jest@example.com',
+          Template: 'case_served',
+        },
+        retryCount: MAX_SES_RETRIES,
+      }),
+    ).rejects.toEqual('Could not complete service to undefined');
   });
 
   it('should not send emails to specific domains', async () => {
