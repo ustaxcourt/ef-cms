@@ -31,6 +31,7 @@ describe('batchDownloadTrialSessionInteractor', () => {
   const pollAWSBatchProgress = jest.mocked(mockPollAWSBatchProgress);
 
   beforeEach(() => {
+    applicationContext.environment.stage = 'local';
     mockCase = {
       ...MOCK_CASE,
     };
@@ -428,4 +429,45 @@ describe('batchDownloadTrialSessionInteractor', () => {
       ),
     ).rejects.toThrow(`Error starting AWS batch job: Error: ${err}`);
   });
+
+  it.each([
+    ['zero threshold', 0, 'not-local', true],
+    ['disabled threshold', false, 'not-local', false],
+    ['missing threshold', undefined, 'not-local', false],
+    ['exact threshold', 3, 'not-local', false],
+    ['local stage', 0, 'local', false],
+  ] as const)(
+    'uses AWS Batch for %s only when the document count exceeds the configured threshold',
+    async (_description, threshold, stage, shouldUseBatch) => {
+      applicationContext.environment.stage = stage;
+      applicationContext
+        .getUseCases()
+        .getAllFeatureFlagsInteractor.mockResolvedValueOnce(
+          threshold === undefined
+            ? {}
+            : {
+                [ALLOWLIST_FEATURE_FLAGS.AWS_BATCH_ZIPPER_MINIMUM_COUNT.key]:
+                  threshold,
+              },
+        );
+      applicationContext.getDispatchers().sendZipperBatchJob = jest
+        .fn()
+        .mockResolvedValue({ jobId: 'batch-job-id' });
+
+      await batchDownloadTrialSessionInteractor(
+        applicationContext,
+        { trialSessionId: 'test-123', clientConnectionId: 'abc-123' },
+        mockJudgeUser,
+      );
+
+      expect(
+        applicationContext.getDispatchers().sendZipperBatchJob.mock.calls
+          .length > 0,
+      ).toBe(shouldUseBatch);
+      expect(
+        applicationContext.getPersistenceGateway().zipDocuments.mock.calls
+          .length > 0,
+      ).toBe(!shouldUseBatch);
+    },
+  );
 });

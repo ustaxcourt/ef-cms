@@ -69,10 +69,15 @@ export const getDownloadPolicyUrlInteractor = async (
       .getUseCases()
       .getAllFeatureFlagsInteractor(applicationContext);
 
-    const documentVisibilityChangeDate =
+    const rawDocumentVisibilityChangeDate =
       featureFlags[
         ALLOWLIST_FEATURE_FLAGS.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.key
       ];
+
+    const documentVisibilityChangeDate: string =
+      typeof rawDocumentVisibilityChangeDate === 'string'
+        ? rawDocumentVisibilityChangeDate
+        : '';
 
     if (
       !DocketEntry.isDownloadable(docketEntryEntity, {

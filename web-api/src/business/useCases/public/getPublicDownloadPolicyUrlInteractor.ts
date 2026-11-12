@@ -7,6 +7,7 @@ import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { PublicDocumentDownloadUrl } from '@shared/business/dto/public/PublicDocumentDownloadUrl';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 
 export const getPublicDownloadPolicyUrlInteractor = async (
@@ -17,7 +18,7 @@ export const getPublicDownloadPolicyUrlInteractor = async (
     key,
   }: { docketNumber: string; isTerminalUser: boolean; key: string },
   authorizdeUser: UnknownAuthUser,
-): Promise<{ url: string }> => {
+): Promise<PublicDocumentDownloadUrl> => {
   const caseToCheck: any = await getCaseByDocketNumber({
     docketNumber,
   });
@@ -59,10 +60,15 @@ export const getPublicDownloadPolicyUrlInteractor = async (
     .getUseCases()
     .getAllFeatureFlagsInteractor(applicationContext);
 
-  const documentVisibilityChangeDate =
+  const rawDocumentVisibilityChangeDate =
     featureFlags[
       ALLOWLIST_FEATURE_FLAGS.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.key
     ];
+
+  const documentVisibilityChangeDate: string =
+    typeof rawDocumentVisibilityChangeDate === 'string'
+      ? rawDocumentVisibilityChangeDate
+      : '';
 
   if (
     !DocketEntry.isDownloadable(docketEntryEntity, {
@@ -80,8 +86,12 @@ export const getPublicDownloadPolicyUrlInteractor = async (
     throw new UnauthorizedError('Unauthorized to access private document');
   }
 
-  return await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
-    applicationContext,
-    key: docketEntryEntity.documentStorageId,
-  });
+  const downloadUrl = await applicationContext
+    .getPersistenceGateway()
+    .getDownloadPolicyUrl({
+      applicationContext,
+      key: docketEntryEntity.documentStorageId,
+    });
+
+  return new PublicDocumentDownloadUrl(downloadUrl).validate();
 };

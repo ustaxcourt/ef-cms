@@ -2,8 +2,8 @@ import { Case } from '@shared/business/entities/cases/Case';
 import { CaseFactory } from '@web-api/business/entities/cases/CaseFactory';
 import { NotFoundError } from '@web-api/errors/errors';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { PublicCaseDTO } from '@shared/business/dto/cases/PublicCaseDTO';
-import { RestrictedCaseDTO } from '@shared/business/dto/cases/RestrictedCaseDTO';
+import { PublicCaseResponse } from '@shared/business/dto/cases/PublicCaseResponse';
+import { RestrictedCaseResponse } from '@shared/business/dto/cases/RestrictedCaseResponse';
 
 export const getPublicCaseInteractor = async ({
   docketNumber,
@@ -11,7 +11,7 @@ export const getPublicCaseInteractor = async ({
 }: {
   docketNumber: string;
   excludeDocketEntries?: boolean;
-}): Promise<PublicCaseDTO | RestrictedCaseDTO> => {
+}): Promise<PublicCaseResponse | RestrictedCaseResponse> => {
   const rawCaseRecord = await getCaseByDocketNumber({
     docketNumber: Case.formatDocketNumber(docketNumber),
   });
@@ -25,11 +25,11 @@ export const getPublicCaseInteractor = async ({
   const caseDTO = CaseFactory.getCaseDTO({
     rawCase: rawCaseRecord,
     user: undefined,
-  }) as PublicCaseDTO | RestrictedCaseDTO;
+  }) as PublicCaseResponse | RestrictedCaseResponse;
 
   if (excludeDocketEntries) {
-    return { ...caseDTO, docketEntries: [] };
+    caseDTO.docketEntries = [];
   }
 
-  return caseDTO;
+  return caseDTO.validate();
 };

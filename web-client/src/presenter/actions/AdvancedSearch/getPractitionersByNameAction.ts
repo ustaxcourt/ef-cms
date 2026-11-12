@@ -18,7 +18,7 @@ export const getPractitionersByNameAction = async ({
     practitionerType,
   }: {
     admissionStatus;
-    lastKeysOfPages: Array<string | number>;
+    lastKeysOfPages: Array<(string | number | null)[] | undefined>;
     originalBarState;
     pageNum: number;
     practiceType;
@@ -40,7 +40,7 @@ export const getPractitionersByNameAction = async ({
       practiceType,
       practitionerType:
         practitionerType === ALL_SELECTION ? undefined : practitionerType,
-      searchAfter: [lastKeysOfPages[selectedPage]],
+      searchAfter: lastKeysOfPages[selectedPage],
     });
 
   store.set(

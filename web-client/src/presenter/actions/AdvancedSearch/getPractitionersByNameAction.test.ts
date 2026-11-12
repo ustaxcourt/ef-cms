@@ -1,3 +1,4 @@
+import { ALL_SELECTION } from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { getPractitionersByNameAction } from './getPractitionersByNameAction';
 import { presenter } from '../../presenter-mock';
@@ -20,7 +21,7 @@ describe('getPractitionersByNameAction', () => {
       state: {
         advancedSearchForm: {
           practitionerSearchByName: {
-            lastKeysOfPages: ['1234'],
+            lastKeysOfPages: [['1234']],
             practitionerName: 'Ricky',
           },
         },
@@ -56,7 +57,7 @@ describe('getPractitionersByNameAction', () => {
       state: {
         advancedSearchForm: {
           practitionerSearchByName: {
-            lastKeysOfPages: ['1234'],
+            lastKeysOfPages: [['1234']],
             practitionerName: 'Ricky',
             practiceType: 'IRS',
             practitionerType: 'Attorney',
@@ -84,5 +85,74 @@ describe('getPractitionersByNameAction', () => {
     });
 
     expect(results.output).toEqual({ searchResults: [{ barNumber: '11111' }] });
+  });
+
+  it('passes the full cursor, including null values, to the next practitioner search', async () => {
+    applicationContext
+      .getUseCases()
+      .getPractitionersByNameInteractor.mockReturnValue({
+        searchResults: {
+          lastKey: [],
+          practitioners: [],
+          total: 0,
+        },
+      });
+
+    await runAction(getPractitionersByNameAction, {
+      modules: {
+        presenter,
+      },
+      props: { selectedPage: 0 },
+      state: {
+        advancedSearchForm: {
+          practitionerSearchByName: {
+            lastKeysOfPages: [[null, 'smith', 'SB1234']],
+            practitionerName: 'Ricky',
+          },
+        },
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().getPractitionersByNameInteractor.mock
+        .calls[0][1].searchAfter,
+    ).toEqual([null, 'smith', 'SB1234']);
+  });
+
+  it('omits the default practitioner type from the search request', async () => {
+    applicationContext
+      .getUseCases()
+      .getPractitionersByNameInteractor.mockReturnValue({
+        searchResults: {
+          lastKey: [],
+          practitioners: [],
+          total: 0,
+        },
+      });
+
+    await runAction(getPractitionersByNameAction, {
+      modules: {
+        presenter,
+      },
+      props: { selectedPage: 0 },
+      state: {
+        advancedSearchForm: {
+          practitionerSearchByName: {
+            lastKeysOfPages: [],
+            practitionerName: 'Ricky',
+            practitionerType: ALL_SELECTION,
+          },
+        },
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().getPractitionersByNameInteractor.mock
+        .calls[0][1].practitionerType,
+    ).toBeUndefined();
+    expect(
+      applicationContext.getUseCases().getPractitionersByNameInteractor.mock
+        .calls[0][1].searchAfter,
+    ).toBeUndefined();
   });
 });

@@ -1,4 +1,5 @@
 import { getCypressEnv } from '../../../helpers/env/cypressEnvironment';
+import { isValidRequest } from '../../support/helpers';
 
 const HEALTH_CHECK_IDS = [
   'cognito',
@@ -19,7 +20,9 @@ describe('Health check', () => {
     if (getCypressEnv().isLocal) {
       this.skip();
     }
+    cy.intercept('GET', '**/public-api/health').as('getHealthCheck');
     cy.visit('/health');
+    cy.wait('@getHealthCheck').then(isValidRequest);
     cy.url().should('include', '/health');
     for (const id of HEALTH_CHECK_IDS) {
       cy.get(`#${id} svg[data-icon="circle-check"]`).should('exist');

@@ -35,7 +35,7 @@ export const getTodaysOrdersInteractor = async (
     });
 
   const formattedResults = results.map(order => {
-    return new PublicDocumentSearchResult(order).toRawObject();
+    return new PublicDocumentSearchResult(order).validate().toRawObject();
   });
 
   return { results: formattedResults, totalCount };

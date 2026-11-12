@@ -1,4 +1,5 @@
 import { defineConfig } from 'cypress';
+import { assertCorrectNetworkData } from './cypress/helpers/cypressTasks/network/assertCorrectNetworkData';
 import { getExposedCypressEnv } from './cypress/helpers/env/exposedCypressEnv';
 
 export default defineConfig({
@@ -7,7 +8,11 @@ export default defineConfig({
     excludeSpecPattern: 'cypress/readonly/integration/public/*.cy.ts',
     experimentalStudio: true,
     setupNodeEvents(on) {
-      on('task', {});
+      on('task', {
+        assertCorrectNetworkData(payloads) {
+          return assertCorrectNetworkData(payloads);
+        },
+      });
     },
     specPattern: 'cypress/readonly/integration/**/*.cy.ts',
     supportFile: 'cypress/readonly/support/index.ts',

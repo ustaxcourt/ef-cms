@@ -428,11 +428,17 @@ export const formattedDocketEntries = (
     state[STATE_KEYS.DOCKET_RECORD_TABLE_SORT].sortOrder,
   );
 
-  const DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE = get(
+  const rawDocumentVisibilityPolicyChangeDate = get(
     state.featureFlags[
       ALLOWLIST_FEATURE_FLAGS.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.key
     ],
   );
+
+  const DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE =
+    typeof rawDocumentVisibilityPolicyChangeDate === 'string'
+      ? rawDocumentVisibilityPolicyChangeDate
+      : undefined;
+
   const visibilityPolicyDateFormatted =
     applicationContext
       .getUtilities()
