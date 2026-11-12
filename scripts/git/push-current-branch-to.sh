@@ -5,7 +5,7 @@ set -e
 SOURCE=$(git branch --show-current)
 TARGET="$1"
 [[ "$TARGET" == "$SOURCE" ]] && echo "Source and target branches are the same" && exit 1
-PROTECTED_BRANCHES="develop prod staging test"
+PROTECTED_BRANCHES="prod staging test"
 # shellcheck disable=SC2076
 [[ " $PROTECTED_BRANCHES " =~ " $TARGET " ]] && echo "Unable to force push to ${TARGET}" && exit 1
 [[ -n $(git diff) ]] && echo "Stash or commit local changes first" && exit 1
