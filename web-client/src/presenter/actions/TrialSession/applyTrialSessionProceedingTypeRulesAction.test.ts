@@ -49,12 +49,13 @@ describe('applyTrialSessionProceedingTypeRulesAction', () => {
     },
   );
 
-  it('should reset proceeding data and restore time when switching away from Reporting', async () => {
+  it('should clear Reporting-only data, restore time, and preserve the session type when leaving Reporting', async () => {
     const result = await runAction(applyTrialSessionProceedingTypeRulesAction, {
       props: { key: 'proceedingType', previousProceedingType: 'Reporting' },
       state: {
         form: {
           proceedingType: 'Remote',
+          sessionType: 'Regular',
           address1: 'old address',
           meetingId: 'old meeting',
           trialClerkId: 'old clerk',
@@ -63,6 +64,7 @@ describe('applyTrialSessionProceedingTypeRulesAction', () => {
     });
     expect(result.state.form).toEqual({
       proceedingType: 'Remote',
+      sessionType: 'Regular',
       startTime: '10:00',
       startTimeHours: '10',
       startTimeMinutes: '00',
@@ -78,6 +80,7 @@ describe('applyTrialSessionProceedingTypeRulesAction', () => {
     async (previousProceedingType, proceedingType) => {
       const form = {
         proceedingType,
+        sessionType: 'Regular',
         address1: '123 Main Street',
         meetingId: '123',
         trialClerkId: 'clerk-id',
