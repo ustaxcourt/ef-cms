@@ -366,6 +366,44 @@ describe('generateDocketRecordPdfInteractor', () => {
     },
   );
 
+  it('should ignore passed in isIndirectlyAssociated and includePartyDetail flags', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .verifyCaseForUser.mockReturnValue(false);
+    getCaseByDocketNumber.mockResolvedValueOnce({
+      ...caseDetail,
+      isSealed: true,
+    });
+    getCaseByDocketNumber.mockResolvedValueOnce({
+      ...caseDetail,
+    });
+
+    await expect(
+      generateDocketRecordPdfInteractor(
+        applicationContext,
+        {
+          docketNumber: caseDetail.docketNumber,
+          isIndirectlyAssociated: true,
+        } as any,
+        undefined as UnknownAuthUser,
+      ),
+    ).rejects.toThrow('Unauthorized to view sealed case.');
+
+    await generateDocketRecordPdfInteractor(
+      applicationContext,
+      {
+        docketNumber: caseDetail.docketNumber,
+        includePartyDetails: true,
+      } as any,
+      undefined as UnknownAuthUser,
+    );
+
+    expect(
+      applicationContext.getDocumentGenerators().docketRecord.mock.calls[0][0]
+        .data.includePartyDetail,
+    ).toEqual(false);
+  });
+
   describe('sorting', () => {
     it('should pass in entries sorted by the provided property and orderType "asc"', async () => {
       caseDetail.docketEntries = [
