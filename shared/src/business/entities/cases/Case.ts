@@ -2354,6 +2354,9 @@ export const isUserPartOfGroup = function ({
  * @returns {boolean} true if the user is a party of the case
  */
 export const userIsDirectlyAssociated = function ({ aCase, userId }): boolean {
+  if (!userId) {
+    return false;
+  }
   const userIsPartyToCase = [
     ...(aCase.petitioners || []),
     ...(aCase.privatePractitioners || []),

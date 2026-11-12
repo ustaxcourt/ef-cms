@@ -1,6 +1,7 @@
 import {
   Case,
   getPractitionersRepresenting,
+  isUserPartOfGroup,
 } from '@shared/business/entities/cases/Case';
 import {
   ROLE_PERMISSIONS,
@@ -24,6 +25,7 @@ import {
 } from '@shared/business/utilities/getFormattedCaseDetail';
 import { addPageNumbersToPdf } from '@shared/business/utilities/pdfs/addPageNumbersToPdf';
 import { PDFDocument } from 'pdf-lib';
+import { User } from '@shared/business/entities/User';
 
 type DocketRecordPdfCaseDetail = Omit<
   FormattedCaseDetail,
@@ -54,14 +56,10 @@ export const generateDocketRecordPdfInteractor = async (
     docketNumber,
     docketRecordSort,
     docketRecordTableSort,
-    includePartyDetail = false,
-    isIndirectlyAssociated = false,
   }: {
     docketNumber: string;
     docketRecordSort?: string;
     docketRecordTableSort?: { sortField: string; sortOrder: 'asc' | 'desc' };
-    includePartyDetail: boolean;
-    isIndirectlyAssociated?: boolean;
   },
   authorizedUser: UnknownAuthUser,
 ): Promise<{
@@ -76,6 +74,16 @@ export const generateDocketRecordPdfInteractor = async (
   const caseSource = await getCaseByDocketNumber({
     docketNumber,
   });
+
+  const isIndirectlyAssociated = isUserPartOfGroup({
+    consolidatedCases: caseSource.consolidatedCases,
+    userId: authorizedUser?.userId,
+  });
+
+  const includePartyDetail =
+    User.isInternalUser(authorizedUser?.role) ||
+    isDirectlyAssociated ||
+    isIndirectlyAssociated;
 
   let caseEntity;
 
