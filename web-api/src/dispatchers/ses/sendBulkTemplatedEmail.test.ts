@@ -151,6 +151,7 @@ describe('sendBulkTemplatedEmail', () => {
               ToAddresses: ['test.email2@example.net'],
             },
             ReplacementTemplateData: JSON.stringify({
+              emailContent: 'Rendered email body',
               name: 'Roslindis Angelino',
               welcomeMessage: 'Welcome to Flavortown',
               whoAmI: 'The Sauce Boss',
@@ -217,6 +218,7 @@ describe('sendBulkTemplatedEmail', () => {
       },
     ]);
     expect(JSON.stringify(responseLogs)).not.toContain('emailContent');
+    expect(JSON.stringify(responseLogs)).not.toContain('Rendered email body');
   });
 
   it('should retry a failed mailing MAX_SES_RETRIES times (MAX_SES_RETRIES + 1 total attempts), and then log an error', async () => {
@@ -377,6 +379,7 @@ describe('sendBulkTemplatedEmail', () => {
         Source: 'jest@example.com',
         Template: 'case_served',
       },
+      retryCount: 0,
     });
 
     const responseLog = applicationContext.logger.info.mock.calls.find(
