@@ -22,6 +22,21 @@ export type ClerkOfCourtPieChartData = {
   color?: string;
 };
 
+export type ClerkOfCourtTableRow = {
+  label: string;
+  total: string;
+};
+
+export type ClerkOfCourtDashboardStatsStatus = 'error' | 'loaded' | 'loading';
+
+// each tab loads from its own endpoint, so each tab has its own data and status
+export type ClerkOfCourtDashboardTab = 'cases' | 'petitions';
+
+export type ClerkOfCourtDashboardTabStats<T> = {
+  data: T;
+  status: ClerkOfCourtDashboardStatsStatus;
+};
+
 export type DashboardClerkOfTheCourtHelper = {
   petitionsByMonthAndServiceTypeChartData: {
     color: string;
@@ -40,5 +55,13 @@ export type DashboardClerkOfTheCourtHelper = {
   }[];
   totalPetitions: string;
   months: string[];
-  year: string;
+  casesYearLabel: string;
+  petitionsYearLabel: string;
+  openCasesPieData: ClerkOfCourtPieChartData[];
+  totalOpenCases: string;
+  casesClosedPieData: ClerkOfCourtPieChartData[];
+  totalCasesClosed: string;
+  casesClosedAndOnAppealByMonthChartData: ClerkOfCourtBarChartDataset[];
+  casesClosedAndOnAppealLegendTotals: number[];
+  casesMonths: string[];
 };

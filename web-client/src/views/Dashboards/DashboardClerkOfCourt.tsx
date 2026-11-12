@@ -1,5 +1,11 @@
 import { BigHeader } from '../BigHeader';
+import { ClerkOfCourtSectionStatus } from './ClerkOfCourtSectionStatus';
+import { ClerkOfCourtHtmlView } from './ClerkOfCourtHtmlView';
 import { ClerkOfCourtTrialSessionsSummary } from '../TrialSessions/ClerkOfCourtTrialSessionsSummary';
+import {
+  ClerkOfCourtDashboardStatsStatus,
+  DashboardClerkOfTheCourtHelper,
+} from '@web-client/presenter/clerkOfCourtDashboardState';
 import { ErrorNotification } from '../ErrorNotification';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { MultiBarGraph } from '@web-client/views/Public/DawsonLibrary/BarGraph';
@@ -9,20 +15,27 @@ import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '@web-client/ustc-ui/Tabs/Tabs';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
 
 const CHART_WIDTH = 1300;
 
+type ClerkOfCourtDashboardYearOption =
+  'casesByYearIsFiscal' | 'petitionsByYearIsFiscal';
+
 const calendarAndFiscalYearSelectors = ({
-  petitionsByYearIsFiscal,
-  setClerkOfCourtDashboardOptionsSequence,
+  idPrefix = '',
+  isFiscal,
   isMobile = false,
+  optionKey,
+  setClerkOfCourtDashboardOptionsSequence,
 }: {
-  petitionsByYearIsFiscal: boolean;
-  setClerkOfCourtDashboardOptionsSequence: Function;
+  idPrefix?: string;
+  isFiscal: boolean;
   isMobile?: boolean;
-}) => {
+  optionKey: ClerkOfCourtDashboardYearOption;
+  setClerkOfCourtDashboardOptionsSequence: Function;
+}): React.JSX.Element => {
   return (
     <div
       className={classNames(
@@ -33,48 +46,48 @@ const calendarAndFiscalYearSelectors = ({
     >
       <div>
         <input
-          checked={!petitionsByYearIsFiscal}
+          checked={!isFiscal}
           type="radio"
           className="usa-radio__input"
-          id="calendar-year-to-date"
-          name="is-fiscal"
+          id={`${idPrefix}calendar-year-to-date`}
+          name={`${idPrefix}is-fiscal`}
           value="false"
           onChange={() =>
             setClerkOfCourtDashboardOptionsSequence({
-              key: 'petitionsByYearIsFiscal',
+              key: optionKey,
               value: false,
             })
           }
         ></input>
         <label
           className="usa-radio__label tw:mt-0 tw:xs:text-lg/6 tw:text-base"
-          htmlFor="calendar-year-to-date"
-          id="calendar-year-to-date-label"
-          data-testid="calendar-year-to-date"
+          htmlFor={`${idPrefix}calendar-year-to-date`}
+          id={`${idPrefix}calendar-year-to-date-label`}
+          data-testid={`${idPrefix}calendar-year-to-date`}
         >
           YTD
         </label>
       </div>
       <div className={`${isMobile ? 'tw:pl-8' : 'tw:pl-10'}`}>
         <input
-          checked={petitionsByYearIsFiscal}
+          checked={isFiscal}
           type="radio"
           className="usa-radio__input"
-          id="fiscal-year-to-date"
-          name="is-fiscal"
+          id={`${idPrefix}fiscal-year-to-date`}
+          name={`${idPrefix}is-fiscal`}
           value="true"
           onChange={() =>
             setClerkOfCourtDashboardOptionsSequence({
-              key: 'petitionsByYearIsFiscal',
+              key: optionKey,
               value: true,
             })
           }
         ></input>
         <label
           className="usa-radio__label tw:mt-0 tw:xs:text-lg/6 tw:text-base"
-          htmlFor="fiscal-year-to-date"
-          id="fiscal-year-to-date-label"
-          data-testid="fiscal-year-to-date"
+          htmlFor={`${idPrefix}fiscal-year-to-date`}
+          id={`${idPrefix}fiscal-year-to-date-label`}
+          data-testid={`${idPrefix}fiscal-year-to-date`}
         >
           FYTD
         </label>
@@ -83,28 +96,151 @@ const calendarAndFiscalYearSelectors = ({
   );
 };
 
+const CASES_CLOSED_AND_ON_APPEAL_TITLE =
+  'Closed/Closed - Dismissed & Changed to On Appeal';
+
+const ALL_OPEN_CASES_TITLE = 'All Open Cases';
+
+const ALL_OPEN_CASES_BY_TYPE_TITLE = 'All Open Cases by type';
+
+const PETITIONS_BY_MONTH_TITLE = 'Petitions: Total Petitions by Month';
+
+// pie chart columns match the PieGraph's width, so the flex gap is the whole space between the charts
+const PIE_COLUMN_CLASS = 'tw:xs:w-160 tw:w-105 tw:max-w-full';
+
+const casesData = ({
+  casesByYearIsFiscal,
+  dashboardClerkOfTheCourtHelper,
+  isMobile = false,
+  setClerkOfCourtDashboardOptionsSequence,
+  casesStatus,
+}: {
+  casesByYearIsFiscal: boolean;
+  dashboardClerkOfTheCourtHelper: DashboardClerkOfTheCourtHelper;
+  isMobile?: boolean;
+  setClerkOfCourtDashboardOptionsSequence: Function;
+  casesStatus: ClerkOfCourtDashboardStatsStatus;
+}): React.JSX.Element => {
+  const {
+    casesClosedAndOnAppealByMonthChartData,
+    casesClosedAndOnAppealLegendTotals,
+    casesClosedPieData,
+    casesMonths,
+    openCasesPieData,
+    totalCasesClosed,
+    totalOpenCases,
+    casesYearLabel,
+  } = dashboardClerkOfTheCourtHelper;
+
+  return (
+    <ClerkOfCourtSectionStatus status={casesStatus}>
+      <div
+        className={isMobile ? undefined : 'tw:mt-4'}
+        data-testid="cases-data-div"
+      >
+        {/* the year toggle applies to the closed and On Appeal data; All Open Cases counts every open case */}
+        {calendarAndFiscalYearSelectors({
+          idPrefix: 'cases-',
+          isFiscal: casesByYearIsFiscal,
+          isMobile,
+          optionKey: 'casesByYearIsFiscal',
+          setClerkOfCourtDashboardOptionsSequence,
+        })}
+        {/* heading margins account for the PieGraph's built-in top padding so the heading-to-legend gap is 2rem */}
+        <div className="tw:flex tw:flex-wrap tw:gap-x-12 tw:xs:gap-y-12 tw:gap-y-8">
+          <div className={PIE_COLUMN_CLASS}>
+            <h2
+              className="tw:xs:text-2xl tw:text-lg tw:xs:mb-4.75 tw:mb-2"
+              data-testid="open-cases-header"
+            >
+              {ALL_OPEN_CASES_TITLE}:{' '}
+              <span className="tw:font-normal">{totalOpenCases}</span>
+            </h2>
+            <PieGraph
+              isAnimationActive={false}
+              data={openCasesPieData}
+              title={ALL_OPEN_CASES_TITLE}
+              showTitle={false}
+              tooltipTitle={ALL_OPEN_CASES_TITLE}
+            />
+          </div>
+          <div className={PIE_COLUMN_CLASS}>
+            <h2
+              className="tw:xs:text-2xl tw:text-lg tw:xs:mb-4.75 tw:mb-2"
+              data-testid="cases-closed-header"
+            >
+              Cases changed to Closed/Closed - Dismissed:{' '}
+              <span className="tw:font-normal">{totalCasesClosed}</span>
+            </h2>
+            <PieGraph
+              isAnimationActive={false}
+              data={casesClosedPieData}
+              title={`Cases Changed to Closed/Closed - Dismissed in ${casesYearLabel}`}
+              showTitle={false}
+              tooltipTitle="Cases Changed"
+            />
+          </div>
+        </div>
+        {/* open cases by type has no chart, only an HTML view of all open cases */}
+        {/* on desktop the pie's SVG already leaves space under the circle, so only 8px more goes under the pie charts */}
+        <div className="tw:xs:mt-2 tw:mt-8">
+          <ClerkOfCourtHtmlView title={ALL_OPEN_CASES_BY_TYPE_TITLE} />
+        </div>
+        {/* margins account for the MultiBarGraph's built-in top padding so the gap above it is 48px on desktop and 32px on mobile */}
+        <div className="tw:xs:mt-10 tw:mt-6">
+          <MultiBarGraph
+            showLabels={false}
+            width={CHART_WIDTH}
+            datasets={casesClosedAndOnAppealByMonthChartData}
+            labels={casesMonths}
+            legendTotals={casesClosedAndOnAppealLegendTotals}
+            htmlTitle={`${CASES_CLOSED_AND_ON_APPEAL_TITLE} in ${casesYearLabel}`}
+            title={CASES_CLOSED_AND_ON_APPEAL_TITLE}
+            xLabelRotation={45}
+            xAxisLabel="Months"
+          />
+        </div>
+      </div>
+    </ClerkOfCourtSectionStatus>
+  );
+};
+
 export const DashboardClerkOfCourt = connect(
   {
     dashboardClerkOfTheCourtHelper: state.dashboardClerkOfTheCourtHelper,
     user: state.user,
+    casesByYearIsFiscal: state.clerkOfCourtDashboardOptions.casesByYearIsFiscal,
+    loadClerkOfCourtDashboardSequence:
+      sequences.loadClerkOfCourtDashboardSequence,
     petitionsByYearIsFiscal:
       state.clerkOfCourtDashboardOptions.petitionsByYearIsFiscal,
     setClerkOfCourtDashboardOptionsSequence:
       sequences.setClerkOfCourtDashboardOptionsSequence,
+    casesStatus: state.clerkOfCourtDashboardStats.cases.status,
+    petitionsStatus: state.clerkOfCourtDashboardStats.petitions.status,
   },
   function DashboardClerkOfCourt({
+    casesByYearIsFiscal,
     dashboardClerkOfTheCourtHelper,
+    loadClerkOfCourtDashboardSequence,
     user,
     petitionsByYearIsFiscal,
     setClerkOfCourtDashboardOptionsSequence,
+    casesStatus,
+    petitionsStatus,
   }) {
+    // load the sections outside the route's sequence, so the page renders at once and navigation never waits for them
+    useEffect(() => {
+      loadClerkOfCourtDashboardSequence();
+    }, []);
+
     const {
       petitionsByMonthAndServiceTypeChartData,
       petitionsByRepresentationPieData,
       petitionsByServiceTypePieData,
       totalPetitions,
       months,
-      year,
+      petitionsYearLabel,
     } = dashboardClerkOfTheCourtHelper;
 
     const [mobileSection, setMobileSection] = useState('petitions');
@@ -121,46 +257,58 @@ export const DashboardClerkOfCourt = connect(
             <NonMobile>
               <Tabs className="margin-top-6" marginBottom={false}>
                 <Tab tabName="petitions" title="Petitions">
-                  <div className="tw:mt-4" data-testid="petitions-data-div">
-                    {calendarAndFiscalYearSelectors({
-                      petitionsByYearIsFiscal,
-                      setClerkOfCourtDashboardOptionsSequence,
-                    })}
-                    <h2
-                      className="tw:xs:text-2xl tw:text-lg tw:mb-5"
-                      data-testid="petitions-data-header"
-                    >
-                      Total petitions created in{' '}
-                      {petitionsByYearIsFiscal ? 'FYTD' : 'YTD'} {year}:{' '}
-                      <span className="tw:font-normal">{totalPetitions}</span>
-                    </h2>
-                    <div className="tw:flex tw:flex-wrap tw:gap-12">
-                      <PieGraph
-                        data={petitionsByServiceTypePieData}
-                        title={`Petitions Created in ${petitionsByYearIsFiscal ? 'FYTD' : 'YTD'} ${year}`}
-                        showTitle={false}
-                        tooltipTitle="Petitions Created"
-                      />
-                      <PieGraph
-                        data={petitionsByRepresentationPieData}
-                        title={`Petitions Created in ${petitionsByYearIsFiscal ? 'FYTD' : 'YTD'} ${year}`}
-                        showTitle={false}
-                        tooltipTitle="Petitions Created"
-                      />
+                  <ClerkOfCourtSectionStatus status={petitionsStatus}>
+                    <div className="tw:mt-4" data-testid="petitions-data-div">
+                      {calendarAndFiscalYearSelectors({
+                        isFiscal: petitionsByYearIsFiscal,
+                        optionKey: 'petitionsByYearIsFiscal',
+                        setClerkOfCourtDashboardOptionsSequence,
+                      })}
+                      <h2
+                        className="tw:xs:text-2xl tw:text-lg tw:mb-5"
+                        data-testid="petitions-data-header"
+                      >
+                        Total petitions created in {petitionsYearLabel}:{' '}
+                        <span className="tw:font-normal">{totalPetitions}</span>
+                      </h2>
+                      <div className="tw:flex tw:flex-wrap tw:gap-12">
+                        <PieGraph
+                          isAnimationActive={false}
+                          data={petitionsByServiceTypePieData}
+                          title={`Petitions Created in ${petitionsYearLabel}`}
+                          showTitle={false}
+                          tooltipTitle="Petitions Created"
+                        />
+                        <PieGraph
+                          isAnimationActive={false}
+                          data={petitionsByRepresentationPieData}
+                          title={`Petitions Created in ${petitionsYearLabel}`}
+                          showTitle={false}
+                          tooltipTitle="Petitions Created"
+                        />
+                      </div>
+                      <div>
+                        <MultiBarGraph
+                          showLabels={false}
+                          width={CHART_WIDTH}
+                          datasets={petitionsByMonthAndServiceTypeChartData}
+                          labels={months}
+                          stacked={true}
+                          title={PETITIONS_BY_MONTH_TITLE}
+                          xLabelRotation={45}
+                          xAxisLabel="Months"
+                        />
+                      </div>
                     </div>
-                    <div>
-                      <MultiBarGraph
-                        showLabels={false}
-                        width={CHART_WIDTH}
-                        datasets={petitionsByMonthAndServiceTypeChartData}
-                        labels={months}
-                        stacked={true}
-                        title="Petitions: Total Petitions by Month"
-                        xLabelRotation={45}
-                        xAxisLabel="Months"
-                      />
-                    </div>
-                  </div>
+                  </ClerkOfCourtSectionStatus>
+                </Tab>
+                <Tab tabName="cases" title="Cases">
+                  {casesData({
+                    casesByYearIsFiscal,
+                    dashboardClerkOfTheCourtHelper,
+                    setClerkOfCourtDashboardOptionsSequence,
+                    casesStatus,
+                  })}
                 </Tab>
                 <Tab tabName="recentMessages" title="Recent Messages">
                   <RecentMessagesCotC />
@@ -177,6 +325,7 @@ export const DashboardClerkOfCourt = connect(
                   onChange={e => setMobileSection(e.target.value)}
                 >
                   <option value="petitions">Petitions</option>
+                  <option value="cases">Cases</option>
                   <option value="recentMessages">Recent Messages</option>
                 </select>
               </div>
@@ -185,49 +334,61 @@ export const DashboardClerkOfCourt = connect(
                   <RecentMessagesCotC />
                 </div>
               )}
+              {mobileSection === 'cases' &&
+                casesData({
+                  casesByYearIsFiscal,
+                  dashboardClerkOfTheCourtHelper,
+                  isMobile: true,
+                  setClerkOfCourtDashboardOptionsSequence,
+                  casesStatus,
+                })}
               {mobileSection === 'petitions' && (
-                <div>
-                  {calendarAndFiscalYearSelectors({
-                    petitionsByYearIsFiscal,
-                    setClerkOfCourtDashboardOptionsSequence,
-                    isMobile: true,
-                  })}
-                  <h2
-                    className="tw:xs:text-2xl tw:text-lg tw:mb-2"
-                    data-testid="petitions-data-header"
-                  >
-                    Total petitions created in{' '}
-                    {petitionsByYearIsFiscal ? 'FYTD' : 'YTD'} {year}:{' '}
-                    <span className="tw:font-normal">{totalPetitions}</span>
-                  </h2>
-                  <div className="tw:mb-8">
-                    <PieGraph
-                      data={petitionsByServiceTypePieData}
-                      title={`Petitions Created in ${petitionsByYearIsFiscal ? 'FYTD' : 'YTD'} ${year}`}
-                      showTitle={false}
-                      tooltipTitle="Petitions Created"
-                    />
-                  </div>
-                  <div className="tw:mb-6">
-                    <PieGraph
-                      data={petitionsByRepresentationPieData}
-                      title={`Petitions Created in ${petitionsByYearIsFiscal ? 'FYTD' : 'YTD'} ${year}`}
-                      showTitle={false}
-                      tooltipTitle="Petitions Created"
-                    />
-                  </div>
+                <ClerkOfCourtSectionStatus status={petitionsStatus}>
                   <div>
-                    <MultiBarGraph
-                      showLabels={false}
-                      width={CHART_WIDTH}
-                      datasets={petitionsByMonthAndServiceTypeChartData}
-                      labels={months}
-                      stacked={true}
-                      xLabelRotation={45}
-                      title="Petitions: Total Petitions by Month"
-                    />
+                    {calendarAndFiscalYearSelectors({
+                      isFiscal: petitionsByYearIsFiscal,
+                      isMobile: true,
+                      optionKey: 'petitionsByYearIsFiscal',
+                      setClerkOfCourtDashboardOptionsSequence,
+                    })}
+                    <h2
+                      className="tw:xs:text-2xl tw:text-lg tw:mb-2"
+                      data-testid="petitions-data-header"
+                    >
+                      Total petitions created in {petitionsYearLabel}:{' '}
+                      <span className="tw:font-normal">{totalPetitions}</span>
+                    </h2>
+                    <div className="tw:mb-8">
+                      <PieGraph
+                        isAnimationActive={false}
+                        data={petitionsByServiceTypePieData}
+                        title={`Petitions Created in ${petitionsYearLabel}`}
+                        showTitle={false}
+                        tooltipTitle="Petitions Created"
+                      />
+                    </div>
+                    <div className="tw:mb-6">
+                      <PieGraph
+                        isAnimationActive={false}
+                        data={petitionsByRepresentationPieData}
+                        title={`Petitions Created in ${petitionsYearLabel}`}
+                        showTitle={false}
+                        tooltipTitle="Petitions Created"
+                      />
+                    </div>
+                    <div>
+                      <MultiBarGraph
+                        showLabels={false}
+                        width={CHART_WIDTH}
+                        datasets={petitionsByMonthAndServiceTypeChartData}
+                        labels={months}
+                        stacked={true}
+                        xLabelRotation={45}
+                        title={PETITIONS_BY_MONTH_TITLE}
+                      />
+                    </div>
                   </div>
-                </div>
+                </ClerkOfCourtSectionStatus>
               )}
             </Mobile>
           </div>

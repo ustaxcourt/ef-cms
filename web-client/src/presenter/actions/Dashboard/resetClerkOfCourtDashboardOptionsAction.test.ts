@@ -6,6 +6,7 @@ describe('resetClerkOfCourtDashboardOptionsAction', () => {
     const result = await runAction(resetClerkOfCourtDashboardOptionsAction, {
       state: {
         clerkOfCourtDashboardOptions: {
+          casesByYearIsFiscal: true,
           petitionsByYearIsFiscal: true,
         },
       },
@@ -13,6 +14,7 @@ describe('resetClerkOfCourtDashboardOptionsAction', () => {
 
     expect(result.state).toMatchObject({
       clerkOfCourtDashboardOptions: {
+        casesByYearIsFiscal: false,
         petitionsByYearIsFiscal: false,
       },
     });
