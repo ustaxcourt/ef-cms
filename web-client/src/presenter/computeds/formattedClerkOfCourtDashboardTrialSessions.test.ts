@@ -83,6 +83,13 @@ describe('formattedClerkOfCourtDashboardTrialSessions', () => {
     return createEndOfDayISO(deconstructDate(nextWeekEndDay));
   };
 
+  const getWeeks = () => ({
+    currentWeekEnd: getCurrentWeekEnd(),
+    currentWeekStart: getCurrentWeekStart(),
+    nextWeekEnd: getNextWeekEnd(),
+    nextWeekStart: getNextWeekStart(),
+  });
+
   const createTrialSession = (
     overrides: Partial<TrialSessionInfoDTO> = {},
   ): TrialSessionInfoDTO => ({
@@ -131,21 +138,20 @@ describe('formattedClerkOfCourtDashboardTrialSessions', () => {
 
       const result = runCompute(formattedClerkOfCourtDashboardTrialSessions, {
         state: {
-          trialSessions: TRIAL_SESSIONS,
+          clerkOfCourtDashboardTrialSessions: {
+            data: { trialSessions: TRIAL_SESSIONS, weeks: getWeeks() },
+            status: 'loaded',
+          },
         },
       });
 
       expect(result.formattedCurrentWeekSessions.length).toBe(2);
       expect(result.formattedNextWeekSessions.length).toBe(1);
       expect(
-        result.formattedCurrentWeekSessions.some(
-          s => s.trialSessionId === '1',
-        ),
+        result.formattedCurrentWeekSessions.some(s => s.trialSessionId === '1'),
       ).toBe(true);
       expect(
-        result.formattedCurrentWeekSessions.some(
-          s => s.trialSessionId === '3',
-        ),
+        result.formattedCurrentWeekSessions.some(s => s.trialSessionId === '3'),
       ).toBe(true);
       expect(
         result.formattedNextWeekSessions.some(s => s.trialSessionId === '2'),
@@ -179,7 +185,10 @@ describe('formattedClerkOfCourtDashboardTrialSessions', () => {
 
       const result = runCompute(formattedClerkOfCourtDashboardTrialSessions, {
         state: {
-          trialSessions: TRIAL_SESSIONS,
+          clerkOfCourtDashboardTrialSessions: {
+            data: { trialSessions: TRIAL_SESSIONS, weeks: getWeeks() },
+            status: 'loaded',
+          },
         },
       });
 
@@ -233,7 +242,10 @@ describe('formattedClerkOfCourtDashboardTrialSessions', () => {
 
       const result = runCompute(formattedClerkOfCourtDashboardTrialSessions, {
         state: {
-          trialSessions: TRIAL_SESSIONS,
+          clerkOfCourtDashboardTrialSessions: {
+            data: { trialSessions: TRIAL_SESSIONS, weeks: getWeeks() },
+            status: 'loaded',
+          },
         },
       });
 
@@ -271,7 +283,10 @@ describe('formattedClerkOfCourtDashboardTrialSessions', () => {
 
       const result = runCompute(formattedClerkOfCourtDashboardTrialSessions, {
         state: {
-          trialSessions: TRIAL_SESSIONS,
+          clerkOfCourtDashboardTrialSessions: {
+            data: { trialSessions: TRIAL_SESSIONS, weeks: getWeeks() },
+            status: 'loaded',
+          },
         },
       });
 
@@ -306,7 +321,10 @@ describe('formattedClerkOfCourtDashboardTrialSessions', () => {
 
       const result = runCompute(formattedClerkOfCourtDashboardTrialSessions, {
         state: {
-          trialSessions: TRIAL_SESSIONS,
+          clerkOfCourtDashboardTrialSessions: {
+            data: { trialSessions: TRIAL_SESSIONS, weeks: getWeeks() },
+            status: 'loaded',
+          },
         },
       });
 
@@ -341,7 +359,10 @@ describe('formattedClerkOfCourtDashboardTrialSessions', () => {
 
       const result = runCompute(formattedClerkOfCourtDashboardTrialSessions, {
         state: {
-          trialSessions: TRIAL_SESSIONS,
+          clerkOfCourtDashboardTrialSessions: {
+            data: { trialSessions: TRIAL_SESSIONS, weeks: getWeeks() },
+            status: 'loaded',
+          },
         },
       });
 
@@ -364,7 +385,10 @@ describe('formattedClerkOfCourtDashboardTrialSessions', () => {
 
       const result = runCompute(formattedClerkOfCourtDashboardTrialSessions, {
         state: {
-          trialSessions: TRIAL_SESSIONS,
+          clerkOfCourtDashboardTrialSessions: {
+            data: { trialSessions: TRIAL_SESSIONS, weeks: getWeeks() },
+            status: 'loaded',
+          },
         },
       });
 
@@ -388,7 +412,10 @@ describe('formattedClerkOfCourtDashboardTrialSessions', () => {
 
       const result = runCompute(formattedClerkOfCourtDashboardTrialSessions, {
         state: {
-          trialSessions: TRIAL_SESSIONS,
+          clerkOfCourtDashboardTrialSessions: {
+            data: { trialSessions: TRIAL_SESSIONS, weeks: getWeeks() },
+            status: 'loaded',
+          },
         },
       });
 
@@ -432,7 +459,10 @@ describe('formattedClerkOfCourtDashboardTrialSessions', () => {
 
       const result = runCompute(formattedClerkOfCourtDashboardTrialSessions, {
         state: {
-          trialSessions: TRIAL_SESSIONS,
+          clerkOfCourtDashboardTrialSessions: {
+            data: { trialSessions: TRIAL_SESSIONS, weeks: getWeeks() },
+            status: 'loaded',
+          },
         },
       });
 
@@ -461,7 +491,10 @@ describe('formattedClerkOfCourtDashboardTrialSessions', () => {
 
       const result = runCompute(formattedClerkOfCourtDashboardTrialSessions, {
         state: {
-          trialSessions: TRIAL_SESSIONS,
+          clerkOfCourtDashboardTrialSessions: {
+            data: { trialSessions: TRIAL_SESSIONS, weeks: getWeeks() },
+            status: 'loaded',
+          },
         },
       });
 
@@ -472,7 +505,59 @@ describe('formattedClerkOfCourtDashboardTrialSessions', () => {
     it('handles empty trial sessions array', () => {
       const result = runCompute(formattedClerkOfCourtDashboardTrialSessions, {
         state: {
-          trialSessions: [],
+          clerkOfCourtDashboardTrialSessions: {
+            data: { trialSessions: [], weeks: getWeeks() },
+            status: 'loaded',
+          },
+        },
+      });
+
+      expect(result.formattedCurrentWeekSessions).toEqual([]);
+      expect(result.formattedNextWeekSessions).toEqual([]);
+    });
+
+    it('groups the sessions by the weeks from the response, not by the client clock', () => {
+      const result = runCompute(formattedClerkOfCourtDashboardTrialSessions, {
+        state: {
+          clerkOfCourtDashboardTrialSessions: {
+            data: {
+              trialSessions: [
+                createTrialSession({
+                  startDate: '2020-03-02T05:00:00.000Z',
+                  trialSessionId: 'current-week',
+                }),
+                createTrialSession({
+                  startDate: '2020-03-09T04:00:00.000Z',
+                  trialSessionId: 'next-week',
+                }),
+              ],
+              weeks: {
+                currentWeekEnd: '2020-03-09T03:59:59.999Z',
+                currentWeekStart: '2020-03-02T05:00:00.000Z',
+                nextWeekEnd: '2020-03-16T03:59:59.999Z',
+                nextWeekStart: '2020-03-09T04:00:00.000Z',
+              },
+            },
+            status: 'loaded',
+          },
+        },
+      });
+
+      expect(
+        result.formattedCurrentWeekSessions.map(s => s.trialSessionId),
+      ).toEqual(['current-week']);
+      expect(
+        result.formattedNextWeekSessions.map(s => s.trialSessionId),
+      ).toEqual(['next-week']);
+    });
+
+    it('returns empty arrays when the response has no weeks', () => {
+      const result = runCompute(formattedClerkOfCourtDashboardTrialSessions, {
+        state: {
+          clerkOfCourtDashboardTrialSessions: {
+            data: { trialSessions: [createTrialSession()] },
+            status: 'loaded',
+          },
         },
       });
 
@@ -483,7 +568,10 @@ describe('formattedClerkOfCourtDashboardTrialSessions', () => {
     it('handles undefined trial sessions', () => {
       const result = runCompute(formattedClerkOfCourtDashboardTrialSessions, {
         state: {
-          trialSessions: undefined,
+          clerkOfCourtDashboardTrialSessions: {
+            data: undefined,
+            status: 'loaded',
+          },
         },
       });
 

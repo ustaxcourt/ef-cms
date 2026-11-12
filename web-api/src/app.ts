@@ -23,6 +23,7 @@ import { closeTrialSessionLambda } from './lambdas/trialSessions/closeTrialSessi
 import { coldCaseReportLambda } from './lambdas/reports/coldCaseReportLambda';
 import { getClerkDashboardCasesStatsLambda } from './lambdas/reports/getClerkDashboardCasesStatsLambda';
 import { getClerkDashboardPetitionsStatsLambda } from './lambdas/reports/getClerkDashboardPetitionsStatsLambda';
+import { getClerkDashboardTrialSessionsLambda } from './lambdas/reports/getClerkDashboardTrialSessionsLambda';
 import { completeDocketEntryQCLambda } from './lambdas/documents/completeDocketEntryQCLambda';
 import { completeMessageLambda } from './lambdas/messages/completeMessageLambda';
 import { completeWorkItemLambda } from './lambdas/workitems/completeWorkItemLambda';
@@ -930,6 +931,10 @@ app.delete(
   app.get(
     '/reports/clerk-dashboard-stats/petitions',
     lambdaWrapper(getClerkDashboardPetitionsStatsLambda),
+  );
+  app.get(
+    '/reports/clerk-dashboard-stats/trial-sessions',
+    lambdaWrapper(getClerkDashboardTrialSessionsLambda),
   );
   app.post(
     '/reports/trial-calendar-pdf',
