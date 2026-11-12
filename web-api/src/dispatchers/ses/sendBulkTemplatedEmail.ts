@@ -59,6 +59,39 @@ export const sendBulkTemplatedEmail = async ({
   }
 };
 
+const getDocketNumber = ({
+  applicationContext,
+  templateData,
+}: {
+  applicationContext: ServerApplicationContext;
+  templateData?: string;
+}): string | undefined => {
+  if (!templateData) return undefined;
+
+  let parsedTemplateData: unknown;
+  try {
+    parsedTemplateData = JSON.parse(templateData);
+  } catch (error) {
+    applicationContext.logger.warn(
+      'Unable to parse template data for bulk email response log',
+      error,
+    );
+    return undefined;
+  }
+
+  if (
+    typeof parsedTemplateData !== 'object' ||
+    parsedTemplateData === null ||
+    !('docketNumber' in parsedTemplateData)
+  ) {
+    return undefined;
+  }
+
+  return typeof parsedTemplateData.docketNumber === 'string'
+    ? parsedTemplateData.docketNumber
+    : undefined;
+};
+
 export const sendWithRetry = async ({
   applicationContext,
   params,
@@ -100,7 +133,34 @@ export const sendWithRetry = async ({
 
   const cmd = new SendBulkTemplatedEmailCommand(params);
   const response = await sesClient.send(cmd);
-  applicationContext.logger.info('Bulk Email Response', response);
+  const defaultDocketNumber = getDocketNumber({
+    applicationContext,
+    templateData: params.DefaultTemplateData,
+  });
+  const responseWithDestinationDetails = {
+    ...response,
+    Status: response.Status?.map((attempt, index) => {
+      const destination = params.Destinations?.[index];
+      if (!destination) return attempt;
+
+      const docketNumber =
+        getDocketNumber({
+          applicationContext,
+          templateData: destination.ReplacementTemplateData,
+        }) ?? defaultDocketNumber;
+      const recipientEmails = destination.Destination?.ToAddresses;
+
+      return {
+        ...attempt,
+        ...(recipientEmails && { recipientEmails }),
+        ...(docketNumber && { docketNumber }),
+      };
+    }),
+  };
+  applicationContext.logger.info(
+    'Bulk Email Response',
+    responseWithDestinationDetails,
+  );
 
   // parse response from AWS
   const needToRetry: BulkEmailDestination[] = [];
