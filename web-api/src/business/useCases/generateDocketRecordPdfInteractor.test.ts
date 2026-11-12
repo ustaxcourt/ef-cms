@@ -309,36 +309,47 @@ describe('generateDocketRecordPdfInteractor', () => {
       user: mockDocketClerkUser,
       result: true,
       description: 'an internal user',
+      isDirectlyAssociated: false,
     },
     {
       user: directlyAssociatedIrsPractitioner,
       result: true,
       description: 'a directly associated external user',
+      isDirectlyAssociated: true,
     },
     {
       user: indirectlyAssociatedPrivatePractitioner,
       result: true,
       description: 'an indirectly associated external user',
+      isDirectlyAssociated: false,
     },
     {
       user: mockPrivatePractitionerUser,
       result: false,
       description: 'an unassociated external user',
+      isDirectlyAssociated: false,
     },
     {
       user: undefined,
       result: false,
       description: 'a public user',
+      isDirectlyAssociated: false,
     },
   ])(
     'should set includePartyDetail to $result for $description',
     async scenario => {
-      console.log(scenario);
       getCaseByDocketNumber.mockResolvedValue({
         ...MOCK_CONSOLIDATED_CASE,
+        consolidatedCases: scenario.isDirectlyAssociated
+          ? []
+          : MOCK_CONSOLIDATED_CASE.consolidatedCases,
+        leadDocketNumber: scenario.isDirectlyAssociated
+          ? undefined
+          : MOCK_CONSOLIDATED_CASE.leadDocketNumber,
         userId: petitionerUser.userId,
         privatePractitioners: [],
       });
+      verifyCaseForUser.mockReturnValue(scenario.isDirectlyAssociated);
 
       await generateDocketRecordPdfInteractor(
         applicationContext,
