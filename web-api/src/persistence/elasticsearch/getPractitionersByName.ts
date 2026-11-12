@@ -100,6 +100,7 @@ export const getPractitionersByName = async (
           must: searchClause,
         },
       },
+      // The OpenSearch request types omit null; JSON serializes undefined array slots as null.
       search_after: searchAfter?.map(value => value ?? undefined),
       sort: [
         { 'firstName.S': 'asc' },
@@ -108,7 +109,6 @@ export const getPractitionersByName = async (
       ],
     },
     index: 'efcms-user',
-    // The OpenSearch request types omit null; JSON serializes undefined array slots as null.
     size: PRACTITIONER_SEARCH_PAGE_SIZE,
     track_total_hits: true,
   };
