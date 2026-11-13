@@ -62,6 +62,7 @@ export class PublicDocumentSearchResult extends JoiValidationEntity {
       .messages({
         '*': 'Sealed documents cannot be returned in public searches unless they are of type opinion',
       }),
+    filingDate: JoiValidationConstants.ISO_DATE.optional(),
     isSealed: joi.boolean(),
     isStricken: joi.boolean().invalid(true).messages({
       '*': 'Stricken documents cannot be returned in public searches.',

@@ -35,7 +35,7 @@ describe('getPractitionersByNameInteractor', () => {
       applicationContext
         .getPersistenceGateway()
         .getPractitionersByName.mockReturnValue({
-          lastKey: [1.23],
+          lastKey: [null, 'smith', 'SB1234'],
           results: [
             {
               barNumber: 'PT1234',
@@ -61,21 +61,23 @@ describe('getPractitionersByNameInteractor', () => {
         applicationContext,
         {
           name: 'Test Practitioner',
-          searchAfter: undefined as unknown as string[],
+          searchAfter: undefined,
         },
         mockPetitionsClerkUser,
       );
 
-      expect((results.searchResults.practitioners[0] as any).isValidated).toBe(
+      expect(results.searchResults.practitioners[0]).toHaveProperty(
+        'isValidated',
         true,
       );
-      expect((results.searchResults.practitioners[1] as any).isValidated).toBe(
+      expect(results.searchResults.practitioners[1]).toHaveProperty(
+        'isValidated',
         true,
       );
 
       expect(results).toMatchObject({
         searchResults: {
-          lastKey: [1.23],
+          lastKey: [null, 'smith', 'SB1234'],
           practitioners: [
             {
               barNumber: 'PT1234',
@@ -129,7 +131,7 @@ describe('getPractitionersByNameInteractor', () => {
         applicationContext,
         {
           name: 'Test Practitioner',
-          searchAfter: undefined as unknown as string[],
+          searchAfter: undefined,
         },
         mockPetitionsClerkUser,
       );
@@ -142,15 +144,17 @@ describe('getPractitionersByNameInteractor', () => {
         applicationContext,
         {
           name: 'Test Practitioner',
-          searchAfter: undefined as unknown as string[],
+          searchAfter: undefined,
         },
         undefined,
       );
 
-      expect((results.searchResults.practitioners[0] as any).isValidated).toBe(
+      expect(results.searchResults.practitioners[0]).toHaveProperty(
+        'isValidated',
         true,
       );
-      expect((results.searchResults.practitioners[1] as any).isValidated).toBe(
+      expect(results.searchResults.practitioners[1]).toHaveProperty(
+        'isValidated',
         true,
       );
 

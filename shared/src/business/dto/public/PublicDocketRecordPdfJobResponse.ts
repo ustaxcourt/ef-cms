@@ -36,7 +36,7 @@ export class PublicDocketRecordPdfJobResponse extends JoiValidationEntity {
     url: JoiValidationConstants.STRING.uri().optional(),
   };
 
-  getValidationRules() {
+  getValidationRules(): typeof PublicDocketRecordPdfJobResponse.VALIDATION_RULES {
     return PublicDocketRecordPdfJobResponse.VALIDATION_RULES;
   }
 }

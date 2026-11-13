@@ -5,6 +5,48 @@ import { assertExists, retry } from 'cypress/helpers/retry';
 import { checkA11y } from 'cypress/local-only/support/generalCommands/checkA11y';
 
 describe('Practitioner Search', () => {
+  it('preserves null values in the cursor when moving to the next page', () => {
+    const cursor = [null, 'smith', 'SB1234'];
+    const searchResponse = {
+      searchResults: {
+        lastKey: cursor,
+        practitioners: [
+          {
+            admissionsDate: '2000-01-01',
+            admissionsStatus: 'Active',
+            barNumber: 'SB1234',
+            name: 'Smith Practitioner',
+            originalBarState: 'CA',
+            practiceType: 'Private',
+            practitionerType: 'Attorney',
+          },
+        ],
+        total: 101,
+      },
+    };
+    let requestCount = 0;
+
+    loginAsAdmissionsClerk();
+    cy.intercept('GET', '/practitioners*', request => {
+      requestCount += 1;
+      expect(request.query.searchAfter).to.equal(
+        requestCount === 1 ? undefined : JSON.stringify(cursor),
+      );
+      request.reply({ body: searchResponse });
+    }).as('practitionerSearch');
+
+    cy.get('[data-testid="search-link"]').click();
+    cy.get('[data-testid="practitioner-search-tab"]').click();
+    cy.get('[data-testid="practitioner-name-input"]').type('smith');
+    cy.get('[data-testid="practitioner-search-by-name-button"]').click();
+    cy.wait('@practitionerSearch');
+
+    cy.get('button[aria-label="Next page"]').first().click();
+    cy.wait('@practitionerSearch');
+    cy.get('[data-testid="practitioner-row-SB1234"]').should('be.visible');
+    checkA11y();
+  });
+
   ['FRED', 'K', 'PT0000'].forEach(invalidBarNumber => {
     it(`should show no matches when an internal user searches by bar number "${invalidBarNumber}"`, () => {
       loginAsAdmissionsClerk();

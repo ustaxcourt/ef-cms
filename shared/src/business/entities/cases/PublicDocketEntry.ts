@@ -2,10 +2,89 @@ import {
   ALL_EVENT_CODES,
   DOCKET_ENTRY_SEALED_TO_TYPES,
 } from '../EntityConstants';
+import type { DocketEntryRelation } from '../EntityConstants';
 import { DOCKET_ENTRY_VALIDATION_RULE_KEYS } from '../EntityValidationConstants';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import joi from 'joi';
+
+type PublicDocketEntryRawProps = Pick<
+  RawDocketEntry,
+  'docketNumber' | 'filingDate' | 'receivedAt'
+> &
+  Omit<
+    Partial<RawDocketEntry>,
+    | 'affectedByDocketEntries'
+    | 'affectedDocketEntries'
+    | 'numberOfPages'
+    | 'previousDocument'
+  > & {
+    affectedByDocketEntries?: RawPublicDocketEntryRelation[] | null;
+    affectedDocketEntries?: RawPublicDocketEntryRelation[] | null;
+    numberOfPages?: number | null;
+    previousDocument?: {
+      docketEntryId?: string;
+      documentTitle?: string;
+      documentType?: string;
+    };
+  };
+
+type PublicDocketEntryRelation = Omit<DocketEntryRelation, 'disposition'> & {
+  disposition: string | null;
+  entityName: 'DocketEntry';
+};
+
+type RawPublicDocketEntryRelation = Omit<
+  PublicDocketEntryRelation,
+  'entityName'
+> & {
+  entityName?: string;
+};
+
+type PublicDocketEntryReferenceProps = {
+  disposition?: string | null;
+  docketEntryId?: string;
+  documentTitle?: string;
+  documentType?: string;
+};
+
+function toPublicDocketEntryRelations(
+  relations: RawPublicDocketEntryRelation[] | null | undefined,
+): PublicDocketEntryRelation[] | null | undefined {
+  if (!relations) return relations;
+
+  return relations.map(relation => ({
+    ...relation,
+    entityName: 'DocketEntry',
+  }));
+}
+
+export class PublicDocketEntryReference extends JoiValidationEntity {
+  public disposition?: string | null;
+  public docketEntryId?: string;
+  public documentTitle?: string;
+  public documentType?: string;
+
+  constructor(rawProps: PublicDocketEntryReferenceProps) {
+    super('DocketEntry');
+    this.disposition = rawProps.disposition;
+    this.docketEntryId = rawProps.docketEntryId;
+    this.documentTitle = rawProps.documentTitle;
+    this.documentType = rawProps.documentType;
+  }
+
+  static VALIDATION_RULES = {
+    disposition: JoiValidationConstants.STRING.optional().allow('', null),
+    docketEntryId: JoiValidationConstants.UUID.optional(),
+    documentTitle: JoiValidationConstants.DOCUMENT_TITLE.optional(),
+    documentType: JoiValidationConstants.STRING.optional(),
+    entityName: JoiValidationConstants.STRING.valid('DocketEntry').required(),
+  };
+
+  getValidationRules(): typeof PublicDocketEntryReference.VALIDATION_RULES {
+    return PublicDocketEntryReference.VALIDATION_RULES;
+  }
+}
 
 export class PublicDocketEntry extends JoiValidationEntity {
   public action?: string;
@@ -32,7 +111,7 @@ export class PublicDocketEntry extends JoiValidationEntity {
   public isStricken?: boolean;
   public judge?: string;
   public lodged?: boolean;
-  public numberOfPages?: number;
+  public numberOfPages?: number | null;
   public objections?: string;
   public processingStatus?: string;
   public receivedAt: string;
@@ -40,15 +119,16 @@ export class PublicDocketEntry extends JoiValidationEntity {
   public servedAt?: string;
   public servedPartiesCode?: string;
   public signedJudgeName?: string;
-  public affectedByDocketEntries?: any[];
-  public affectedDocketEntries?: any[];
+  public affectedByDocketEntries?: PublicDocketEntryRelation[] | null;
+  public affectedDocketEntries?: PublicDocketEntryRelation[] | null;
   public previousDocument?: {
-    docketEntryId: string;
-    documentTitle: string;
-    documentType: string;
+    docketEntryId?: string;
+    documentTitle?: string;
+    documentType?: string;
+    entityName: 'DocketEntry';
   };
 
-  constructor(rawProps) {
+  constructor(rawProps: PublicDocketEntryRawProps) {
     super('PublicDocketEntry');
     this.action = rawProps.action;
     this.additionalInfo = rawProps.additionalInfo;
@@ -82,13 +162,18 @@ export class PublicDocketEntry extends JoiValidationEntity {
     this.servedAt = rawProps.servedAt;
     this.servedPartiesCode = rawProps.servedPartiesCode;
     this.signedJudgeName = rawProps.signedJudgeName;
-    this.affectedByDocketEntries = rawProps.affectedByDocketEntries;
-    this.affectedDocketEntries = rawProps.affectedDocketEntries;
+    this.affectedByDocketEntries = toPublicDocketEntryRelations(
+      rawProps.affectedByDocketEntries,
+    );
+    this.affectedDocketEntries = toPublicDocketEntryRelations(
+      rawProps.affectedDocketEntries,
+    );
     if (rawProps.previousDocument) {
       this.previousDocument = {
         docketEntryId: rawProps.previousDocument.docketEntryId,
         documentTitle: rawProps.previousDocument.documentTitle,
         documentType: rawProps.previousDocument.documentType,
+        entityName: 'DocketEntry',
       };
     }
   }
@@ -97,13 +182,43 @@ export class PublicDocketEntry extends JoiValidationEntity {
     additionalInfo: DOCKET_ENTRY_VALIDATION_RULE_KEYS.additionalInfo,
     additionalInfo2: DOCKET_ENTRY_VALIDATION_RULE_KEYS.additionalInfo2,
     attachments: DOCKET_ENTRY_VALIDATION_RULE_KEYS.attachments,
+    action: DOCKET_ENTRY_VALIDATION_RULE_KEYS.action,
+    affectedByDocketEntries: joi
+      .array()
+      .items(
+        joi
+          .object({
+            ...PublicDocketEntryReference.VALIDATION_RULES,
+            disposition: JoiValidationConstants.STRING.allow(
+              '',
+              null,
+            ).required(),
+            docketEntryId: JoiValidationConstants.UUID.required(),
+          })
+          .unknown(false),
+      )
+      .optional()
+      .allow(null),
+    affectedDocketEntries: joi
+      .array()
+      .items(
+        joi
+          .object({
+            ...PublicDocketEntryReference.VALIDATION_RULES,
+            disposition: JoiValidationConstants.STRING.allow(
+              '',
+              null,
+            ).required(),
+            docketEntryId: JoiValidationConstants.UUID.required(),
+          })
+          .unknown(false),
+      )
+      .optional()
+      .allow(null),
     certificateOfService:
       DOCKET_ENTRY_VALIDATION_RULE_KEYS.certificateOfService,
     certificateOfServiceDate:
       DOCKET_ENTRY_VALIDATION_RULE_KEYS.certificateOfServiceDate,
-    createdAt: JoiValidationConstants.ISO_DATE.optional().description(
-      'When the Document was added to the system.',
-    ),
     docketEntryId: JoiValidationConstants.UUID.optional(),
     docketNumber: DOCKET_ENTRY_VALIDATION_RULE_KEYS.docketNumber,
     documentTitle: DOCKET_ENTRY_VALIDATION_RULE_KEYS.documentTitle,
@@ -114,6 +229,7 @@ export class PublicDocketEntry extends JoiValidationEntity {
       ...ALL_EVENT_CODES,
     ).optional(),
     filedBy: JoiValidationConstants.STRING.optional().allow('', null),
+    filedByRole: JoiValidationConstants.STRING.optional(),
     filingDate: JoiValidationConstants.ISO_DATE.max('now')
       .required()
       .description('Date that this Document was filed.'),
@@ -121,6 +237,7 @@ export class PublicDocketEntry extends JoiValidationEntity {
     index: DOCKET_ENTRY_VALIDATION_RULE_KEYS.index,
     isFileAttached: DOCKET_ENTRY_VALIDATION_RULE_KEYS.isFileAttached,
     isLegacyServed: DOCKET_ENTRY_VALIDATION_RULE_KEYS.isLegacyServed,
+    isOnDocketRecord: joi.boolean().optional(),
     isPaper: DOCKET_ENTRY_VALIDATION_RULE_KEYS.isPaper,
     isSealed: joi.boolean().required(),
     isStricken: joi
@@ -129,10 +246,15 @@ export class PublicDocketEntry extends JoiValidationEntity {
       .description(
         'Indicates the item has been removed from the docket record.',
       ),
+    judge: JoiValidationConstants.STRING.max(100).optional().allow(null),
     lodged: DOCKET_ENTRY_VALIDATION_RULE_KEYS.lodged,
     numberOfPages: DOCKET_ENTRY_VALIDATION_RULE_KEYS.numberOfPages,
     objections: DOCKET_ENTRY_VALIDATION_RULE_KEYS.objections,
     processingStatus: JoiValidationConstants.STRING.optional(),
+    previousDocument: joi
+      .object(PublicDocketEntryReference.VALIDATION_RULES)
+      .unknown(false)
+      .optional(),
     receivedAt: JoiValidationConstants.ISO_DATE.max('now').required(),
     sealedTo: JoiValidationConstants.STRING.when('isSealed', {
       is: true,
@@ -143,9 +265,12 @@ export class PublicDocketEntry extends JoiValidationEntity {
     }).description("If sealed, the type of users who it's sealed from."),
     servedAt: JoiValidationConstants.ISO_DATE.max('now').optional(),
     servedPartiesCode: DOCKET_ENTRY_VALIDATION_RULE_KEYS.servedPartiesCode,
+    signedJudgeName: JoiValidationConstants.STRING.max(100)
+      .optional()
+      .allow(null),
   } as const;
 
-  getValidationRules() {
+  getValidationRules(): typeof PublicDocketEntry.VALIDATION_RULES {
     return PublicDocketEntry.VALIDATION_RULES;
   }
 }

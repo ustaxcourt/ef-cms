@@ -127,6 +127,30 @@ describe('lambdaWrapper', () => {
     expect(res.send).toHaveBeenCalledWith(null);
   });
 
+  it('does not pass decoded token claims to public API handlers', async () => {
+    req.headers.host = 'public-api-green.example.gov';
+    req.path = '/practitioners';
+    req.method = 'HEAD';
+    const lambda = jest.fn().mockReturnValue({
+      body: '{}',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      statusCode: '200',
+    });
+
+    await lambdaWrapper(lambda)(req, res);
+
+    expect(getUserFromAuthHeader).not.toHaveBeenCalled();
+    expect(lambda).toHaveBeenCalledWith(
+      expect.objectContaining({
+        httpMethod: 'HEAD',
+        path: '/practitioners',
+      }),
+      undefined,
+    );
+  });
+
   it('calls res.redirect if header Location is set', async () => {
     await lambdaWrapper(() => {
       return {

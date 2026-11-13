@@ -60,15 +60,23 @@ export const getPublicDownloadPolicyUrlInteractor = async (
     .getUseCases()
     .getAllFeatureFlagsInteractor(applicationContext);
 
-  const documentVisibilityChangeDate =
+  const rawDocumentVisibilityChangeDate =
     featureFlags[
       ALLOWLIST_FEATURE_FLAGS.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.key
     ];
+  const documentVisibilityChangeDate =
+    typeof rawDocumentVisibilityChangeDate === 'string'
+      ? rawDocumentVisibilityChangeDate
+      : '';
 
-  const motionVisibilityChangeDate =
+  const rawMotionVisibilityChangeDate =
     featureFlags[
       ALLOWLIST_FEATURE_FLAGS.MOTION_VISIBILITY_POLICY_CHANGE_DATE.key
     ];
+  const motionVisibilityChangeDate =
+    typeof rawMotionVisibilityChangeDate === 'string'
+      ? rawMotionVisibilityChangeDate
+      : '';
 
   if (
     !DocketEntry.isDownloadable(docketEntryEntity, {
