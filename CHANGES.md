@@ -1,3 +1,46 @@
+<details><summary>DAW-20 - Read-only AWS access for GitHub Actions image scans</summary>
+
+## Manual Deployment Steps
+
+These steps apply only to `dev` (for testing) and `prod`. Other accounts need nothing: without the secret below, the account-specific deployment creates none of the new resources.
+
+### Before Deployment
+
+#### Check for an existing GitHub OIDC provider
+
+```bash
+aws iam list-open-id-connect-providers
+```
+
+If a provider for `token.actions.githubusercontent.com` is listed, stop. AWS allows only one per account, so the apply would fail. The existing provider has to be imported into the account-specific state as `module.ci-cd.aws_iam_openid_connect_provider.github_actions[0]` first, using the backend settings in `web-api/terraform/bin/deploy-account-specific.sh`.
+
+#### DEV & PROD ONLY! Set `GITHUB_IMAGE_SCAN_ENVIRONMENT` in the `account_deploy` secrets
+
+Use `image-scan-dev` in `dev` and `image-scan-prod` in `prod`.
+
+```bash
+ENV=account scripts/secrets/update-secret.ts --key "GITHUB_IMAGE_SCAN_ENVIRONMENT" --value "image-scan-<env>"
+```
+
+#### DEV & PROD ONLY! Run an `account-specific` terraform deployment
+
+Before approving, confirm the plan adds only the OIDC provider, the `github_actions_image_scan` role, its policy and the policy attachment. Stop if it changes anything else.
+
+```bash
+npm run deploy:account-specific
+```
+
+### After Deployment
+
+#### Create the GitHub Environment (repo admin)
+
+In the repository settings, create an environment with the same name as the secret (`image-scan-dev` or `image-scan-prod`):
+
+- Deployment branches: selected branches, `staging` only.
+- No required reviewers.
+- Environment variable `AWS_IMAGE_SCAN_ROLE_ARN`: the `github_image_scan_role_arn` output of the deployment.
+
+</details>
 <details><summary>Dependency Updates - Week of 2026-11-03</summary>
 
 ## Local

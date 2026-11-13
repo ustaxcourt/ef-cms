@@ -36,8 +36,9 @@ module "api-gateway-global-logging-permissions" {
 }
 
 module "ci-cd" {
-  source                  = "../../modules/ci-cd"
-  lower_env_restore_roles = var.lower_env_restore_roles
+  source                        = "../../modules/ci-cd"
+  github_image_scan_environment = var.github_image_scan_environment
+  lower_env_restore_roles       = var.lower_env_restore_roles
 }
 
 module "kibana" {

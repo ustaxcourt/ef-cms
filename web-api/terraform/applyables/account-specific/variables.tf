@@ -42,6 +42,11 @@ variable "es_logs_instance_type" {
   default = "t2.medium.elasticsearch"
 }
 
+variable "github_image_scan_environment" {
+  type    = string
+  default = null
+}
+
 variable "log_group_environments" {
   description = "deployment environments"
   type        = list(string)
