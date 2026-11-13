@@ -1,6 +1,6 @@
 name: Security - No New Findings
 
-# Fails a pull request that adds a security finding staging does not have, compared by
+# Fails a pull request that adds a security finding the comparison branch does not have, compared by
 # CVE, package and file. Both sides are scanned in one job, so a CVE newly published
 # against code already on staging shows on both sides and does not fail the PR.
 
@@ -26,7 +26,7 @@ env:
 
 jobs:
   compare:
-    name: Findings vs staging
+    name: Findings vs comparison branch
     if: ${{ !github.event.pull_request.draft }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
@@ -43,11 +43,11 @@ jobs:
         with:
           path: branchToBeCompared
 
-      - name: Checkout USTC staging
+      - name: Checkout staging or prod comparison branch
         uses: actions/checkout@v7
         with:
           path: stagingBranch
-          ref: staging
+          ref: ${{ github.event.pull_request.base.ref == 'prod' && 'prod' || 'staging' }}
           repository: ustaxcourt/ef-cms
 
       - name: Trivy full tree (this branch)
@@ -62,7 +62,7 @@ jobs:
           scanners: vuln
           severity: HIGH,CRITICAL,UNKNOWN
 
-      - name: Trivy full tree (staging)
+      - name: Trivy full tree (comparison branch)
         uses: aquasecurity/trivy-action@v0.36.0
         with:
           exit-code: '0'
@@ -89,7 +89,7 @@ jobs:
           save-cache: 'false'
           working-directory: ./branchToBeCompared
 
-      - name: Compare findings with staging
+      - name: Compare findings with comparison branch
         working-directory: ./branchToBeCompared
         run: |
           npx ts-node scripts/github-actions/compare-security-findings.ts \
