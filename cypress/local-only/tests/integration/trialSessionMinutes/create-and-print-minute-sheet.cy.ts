@@ -36,7 +36,7 @@ const createCalendaredMinuteSheetFixture =
           'validated',
         );
         attachFile({
-          filePath: '../../helpers/file/sample.pdf',
+          filePath: 'sample.pdf',
           selector: '#primary-document',
           selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
         });

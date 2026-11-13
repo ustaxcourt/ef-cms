@@ -1,11 +1,14 @@
 import { attachFile } from '../../../../helpers/file/upload-file';
 import { externalUserCreatesElectronicCase } from '../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
-import { loginAsDocketClerk1, loginAsPetitioner } from '../../../../helpers/authentication/login-as-helpers';
+import {
+  loginAsDocketClerk1,
+  loginAsPetitioner,
+} from '../../../../helpers/authentication/login-as-helpers';
 import { goToCase } from '../../../../helpers/caseDetail/go-to-case';
 
 describe('StateDrivenFileInput', () => {
   const encoding = 'binary';
-  const VALID_FILE = '../../helpers/file/sample.pdf';
+  const VALID_FILE = 'sample.pdf';
 
   beforeEach(() => {
     loginAsPetitioner();
@@ -31,7 +34,8 @@ describe('StateDrivenFileInput', () => {
       encoding,
       filePath: VALID_FILE,
       selector: '[data-testid="primary-document-file"]',
-      selectorToAwaitOnSuccess: '[data-testid="upload-file-success-primary-document-file"]',
+      selectorToAwaitOnSuccess:
+        '[data-testid="upload-file-success-primary-document-file"]',
     });
   });
 
@@ -40,7 +44,7 @@ describe('StateDrivenFileInput', () => {
 
     attachFile({
       encoding,
-      filePath: '../../helpers/file/non-pdf.txt',
+      filePath: 'non-pdf.txt',
       selector: '[data-testid="primary-document-file"]',
     });
     cy.wait('@logErrorRequest');
@@ -54,7 +58,8 @@ describe('StateDrivenFileInput', () => {
       encoding,
       filePath: VALID_FILE,
       selector: '[data-testid="primary-document-file"]',
-      selectorToAwaitOnSuccess: '[data-testid="upload-file-success-primary-document-file"]',
+      selectorToAwaitOnSuccess:
+        '[data-testid="upload-file-success-primary-document-file"]',
     });
   });
 
@@ -63,7 +68,8 @@ describe('StateDrivenFileInput', () => {
       encoding,
       filePath: VALID_FILE,
       selector: '[data-testid="primary-document-file"]',
-      selectorToAwaitOnSuccess: '[data-testid="upload-file-success-primary-document-file"]',
+      selectorToAwaitOnSuccess:
+        '[data-testid="upload-file-success-primary-document-file"]',
     });
 
     cy.get('[data-testid="change-file-button-primary-document-file"]').click();

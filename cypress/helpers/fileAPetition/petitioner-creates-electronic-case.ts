@@ -301,9 +301,7 @@ export function petitionerAttemptsToUploadCorruptPdf() {
   cy.get('[data-testid="preferred-trial-city"]').select('Mobile, Alabama');
   cy.get('[data-testid="step-4-next-button"]').click();
 
-  cy.get('[data-testid="stin-file"]').attachFile(
-    '../../helpers/file/corrupt-pdf.pdf',
-  );
+  cy.get('[data-testid="stin-file"]').attachFile('corrupt-pdf.pdf');
   cy.get('[data-testid="step-5-next-button"]').click();
 
   cy.get('[data-testid="atp-preview-button"]').should('exist');
