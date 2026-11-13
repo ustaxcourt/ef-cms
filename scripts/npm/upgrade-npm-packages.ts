@@ -36,8 +36,6 @@ const caveats: string[] = [
   '@babel/preset-env',
   '@babel/preset-react',
   '@babel/preset-typescript',
-  'recharts',
-  '@recharts/devtools',
   '@joi/date',
   '@opensearch-project/opensearch',
   'stylelint',
