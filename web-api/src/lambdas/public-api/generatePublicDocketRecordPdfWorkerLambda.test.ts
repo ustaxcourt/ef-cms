@@ -34,7 +34,6 @@ describe('generatePublicDocketRecordPdfWorkerLambda', () => {
     expect(generateInteractor).toHaveBeenCalledTimes(1);
     const [, args, authorizedUser] = generateInteractor.mock.calls[0];
     expect(args.docketNumber).toBe('101-20');
-    expect(args.includePartyDetail).toBe(false);
     expect(authorizedUser).toBeUndefined();
 
     const markerWrite = saveDocumentFromLambda.mock.calls.find(

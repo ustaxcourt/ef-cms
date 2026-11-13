@@ -8,6 +8,7 @@ import {
   PARTY_TYPES,
 } from '@shared/business/entities/EntityConstants';
 import {
+  irsPractitionerUser,
   MOCK_PRACTITIONER,
   petitionerUser,
   privatePractitionerUser,
@@ -22,13 +23,29 @@ import {
   mockPrivatePractitionerUser,
 } from '@shared/test/mockAuthUsers';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { verifyCaseForUser as verifyCaseForUserMock } from '@web-api/persistence/postgres/cases/userOnCase/verifyCaseForUser';
+import { MOCK_CONSOLIDATED_CASE } from '@shared/test/mockConsolidatedCase';
 
 describe('generateDocketRecordPdfInteractor', () => {
   const mockId = '12345';
   const mockPdfUrlAndID = { fileId: mockId, url: 'www.example.com' };
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const verifyCaseForUser = verifyCaseForUserMock as jest.Mock;
 
   let caseDetail;
+
+  const indirectlyAssociatedPrivatePractitioner = {
+    ...mockPrivatePractitionerUser,
+    userId:
+      MOCK_CONSOLIDATED_CASE.consolidatedCases[0].privatePractitioners[0][
+        'userId'
+      ],
+  };
+
+  const directlyAssociatedIrsPractitioner = {
+    ...irsPractitionerUser,
+    userId: MOCK_CONSOLIDATED_CASE.irsPractitioners![0].userId,
+  };
 
   beforeEach(() => {
     caseDetail = {
@@ -65,11 +82,10 @@ describe('generateDocketRecordPdfInteractor', () => {
         },
       ],
       privatePractitioners: [],
+      consolidatedCases: [],
     };
 
-    applicationContext
-      .getPersistenceGateway()
-      .verifyCaseForUser.mockReturnValue(true);
+    verifyCaseForUser.mockReturnValue(false);
     getCaseByDocketNumber.mockResolvedValue(caseDetail);
     applicationContext
       .getUseCases()
@@ -87,7 +103,6 @@ describe('generateDocketRecordPdfInteractor', () => {
       applicationContext,
       {
         docketNumber: caseDetail.docketNumber,
-        includePartyDetail: true,
       },
       mockDocketClerkUser,
     );
@@ -111,7 +126,6 @@ describe('generateDocketRecordPdfInteractor', () => {
       applicationContext,
       {
         docketNumber: caseDetail.docketNumber,
-        includePartyDetail: true,
       },
       mockDocketClerkUser,
     );
@@ -136,7 +150,6 @@ describe('generateDocketRecordPdfInteractor', () => {
       applicationContext,
       {
         docketNumber: caseDetail.docketNumber,
-        includePartyDetail: true,
       },
       mockDocketClerkUser,
     );
@@ -164,7 +177,6 @@ describe('generateDocketRecordPdfInteractor', () => {
       applicationContext,
       {
         docketNumber: caseDetail.docketNumber,
-        includePartyDetail: true,
       },
       mockPractitionerOnCase,
     );
@@ -182,7 +194,6 @@ describe('generateDocketRecordPdfInteractor', () => {
       applicationContext,
       {
         docketNumber: caseDetail.docketNumber,
-        includePartyDetail: true,
       },
       mockDocketClerkUser,
     );
@@ -191,21 +202,6 @@ describe('generateDocketRecordPdfInteractor', () => {
       applicationContext.getUseCaseHelpers().saveFileAndGenerateUrl,
     ).toHaveBeenCalled();
     expect(result).toEqual(mockPdfUrlAndID);
-  });
-
-  it('defaults includePartyDetail to false when a value has not been provided', async () => {
-    await generateDocketRecordPdfInteractor(
-      applicationContext,
-      {
-        docketNumber: caseDetail.docketNumber,
-      } as any,
-      mockDocketClerkUser,
-    );
-
-    expect(
-      applicationContext.getDocumentGenerators().docketRecord.mock.calls[0][0]
-        .data,
-    ).toMatchObject({ includePartyDetail: false });
   });
 
   it('throws an Unauthorized error for an unassociated user attempting to view a sealed case', async () => {
@@ -245,7 +241,7 @@ describe('generateDocketRecordPdfInteractor', () => {
         {
           docketNumber: caseDetail.docketNumber,
         } as any,
-        {} as UnknownAuthUser,
+        undefined as UnknownAuthUser,
       ),
     ).rejects.toThrow('Unauthorized to view sealed case.');
   });
@@ -271,12 +267,11 @@ describe('generateDocketRecordPdfInteractor', () => {
   });
 
   it('returns a PDF url for an external, associated user attempting to view a sealed case', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .verifyCaseForUser.mockReturnValue(true);
+    verifyCaseForUser.mockReturnValue(true);
     getCaseByDocketNumber.mockResolvedValue({
       ...caseDetail,
       userId: petitionerUser.userId,
+      sealedDate: '2019-08-25T05:00:00.000Z',
     });
 
     const result = await generateDocketRecordPdfInteractor(
@@ -291,24 +286,122 @@ describe('generateDocketRecordPdfInteractor', () => {
   });
 
   it('returns a PDF url for an external, indirectly associated user attempting to view a sealed case', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .verifyCaseForUser.mockReturnValue(false);
     getCaseByDocketNumber.mockResolvedValue({
-      ...caseDetail,
+      ...MOCK_CONSOLIDATED_CASE,
       userId: petitionerUser.userId,
+      isSealed: true,
+      privatePractitioners: [],
     });
 
     const result = await generateDocketRecordPdfInteractor(
       applicationContext,
       {
         docketNumber: caseDetail.docketNumber,
-        isIndirectlyAssociated: true,
       } as any,
-      mockPetitionerUser,
+      indirectlyAssociatedPrivatePractitioner,
     );
 
     expect(result).toEqual(mockPdfUrlAndID);
+  });
+
+  it.each([
+    {
+      user: mockDocketClerkUser,
+      result: true,
+      description: 'an internal user',
+      isDirectlyAssociated: false,
+    },
+    {
+      user: directlyAssociatedIrsPractitioner,
+      result: true,
+      description: 'a directly associated external user',
+      isDirectlyAssociated: true,
+    },
+    {
+      user: indirectlyAssociatedPrivatePractitioner,
+      result: true,
+      description: 'an indirectly associated external user',
+      isDirectlyAssociated: false,
+    },
+    {
+      user: mockPrivatePractitionerUser,
+      result: false,
+      description: 'an unassociated external user',
+      isDirectlyAssociated: false,
+    },
+    {
+      user: undefined,
+      result: false,
+      description: 'a public user',
+      isDirectlyAssociated: false,
+    },
+  ])(
+    'should set includePartyDetail to $result for $description',
+    async scenario => {
+      getCaseByDocketNumber.mockResolvedValue({
+        ...MOCK_CONSOLIDATED_CASE,
+        consolidatedCases: scenario.isDirectlyAssociated
+          ? []
+          : MOCK_CONSOLIDATED_CASE.consolidatedCases,
+        leadDocketNumber: scenario.isDirectlyAssociated
+          ? undefined
+          : MOCK_CONSOLIDATED_CASE.leadDocketNumber,
+        userId: petitionerUser.userId,
+        privatePractitioners: [],
+      });
+      verifyCaseForUser.mockReturnValue(scenario.isDirectlyAssociated);
+
+      await generateDocketRecordPdfInteractor(
+        applicationContext,
+        {
+          docketNumber: caseDetail.docketNumber,
+        } as any,
+        scenario.user as UnknownAuthUser,
+      );
+
+      expect(
+        applicationContext.getDocumentGenerators().docketRecord.mock.calls[0][0]
+          .data.includePartyDetail,
+      ).toEqual(scenario.result);
+    },
+  );
+
+  it('should ignore passed in isIndirectlyAssociated and includePartyDetail flags', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .verifyCaseForUser.mockReturnValue(false);
+    getCaseByDocketNumber.mockResolvedValueOnce({
+      ...caseDetail,
+      isSealed: true,
+    });
+    getCaseByDocketNumber.mockResolvedValueOnce({
+      ...caseDetail,
+    });
+
+    await expect(
+      generateDocketRecordPdfInteractor(
+        applicationContext,
+        {
+          docketNumber: caseDetail.docketNumber,
+          isIndirectlyAssociated: true,
+        } as any,
+        undefined as UnknownAuthUser,
+      ),
+    ).rejects.toThrow('Unauthorized to view sealed case.');
+
+    await generateDocketRecordPdfInteractor(
+      applicationContext,
+      {
+        docketNumber: caseDetail.docketNumber,
+        includePartyDetails: true,
+      } as any,
+      undefined as UnknownAuthUser,
+    );
+
+    expect(
+      applicationContext.getDocumentGenerators().docketRecord.mock.calls[0][0]
+        .data.includePartyDetail,
+    ).toEqual(false);
   });
 
   describe('sorting', () => {
