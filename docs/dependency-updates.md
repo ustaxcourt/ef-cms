@@ -821,7 +821,7 @@ DAWSON promotes a given CI image tag from environment to environment (for exampl
 ### What we do instead
 
 1. **Publish to dev first** — After changing the CI `Dockerfile` or bumping the `efcms-docker-image` tag, run `npm run deploy:ci-image` with `. scripts/env/set-env.zsh dev` so the new tag exists in a known environment before broader promotion.
-2. **Scan what we deploy** — Vulnerability workflows should target the **image tag in that environment's ECR** (the same tag CircleCI uses), not an ad hoc rebuild on a runner. That keeps scan results aligned with the artifact that will move toward test and prod.
+2. **Manually scan what we deploy** — After publishing to dev, run the ECR-image Trivy commands in [Container Finding Triage](./security/container-findings-triage.md#step-1-confirm-the-vulnerable-package-is-present) using dev credentials and the tag pinned in `.circleci/config.yml`. Review and record the results before promotion. The current container workflows rebuild the CI image and scan local `ef-cms-us-east-1:latest`; passing those checks does not verify the published artifact.
 3. **Promote deliberately** — Use `CHANGES.md` and `npm run deploy:ci-image:from dev` (or equivalent) so other environments receive the same tag after dev has been exercised and scanned.
 
-Longer term, **pinning OS packages** in Dockerfiles would make rebuilds more reproducible; until then, dev-first publish plus scanning the deployed tag is how we catch issues on the build that will actually ship.
+Automated scanning of the published ECR image remains a follow-up; until then, the manual scan above is required to verify the artifact being promoted. Longer term, **pinning OS packages** in Dockerfiles would also make rebuilds more reproducible.
