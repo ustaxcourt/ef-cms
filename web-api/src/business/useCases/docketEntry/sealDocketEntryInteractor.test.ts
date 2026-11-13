@@ -15,6 +15,7 @@ import {
   mockDocketClerkUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
+import { upsertDocketEntries as upsertDocketEntriesMock } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
 import { sealDocketEntryInteractor } from './sealDocketEntryInteractor';
 
 describe('sealDocketEntryInteractor', () => {
@@ -22,6 +23,7 @@ describe('sealDocketEntryInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const getDocketEntriesByDocketNumberAndDocketEntryId =
     getDocketEntriesByDocketNumberAndDocketEntryIdMock as jest.Mock;
+  const upsertDocketEntries = jest.mocked(upsertDocketEntriesMock);
   getCaseByDocketNumber.mockResolvedValue({});
 
   it('should require a value for dockeEntrySealedTo', async () => {
@@ -106,5 +108,11 @@ describe('sealDocketEntryInteractor', () => {
     expect(sealedDocketEntry.sealedTo).toEqual(
       DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
     );
+    expect(upsertDocketEntries).toHaveBeenCalledWith([
+      expect.objectContaining({
+        isSealed: true,
+        sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
+      }),
+    ]);
   });
 });

@@ -1,11 +1,13 @@
 import {
   CASE_STATUS_TYPES,
   DOCKET_ENTRY_SEALED_TO_TYPES,
+  DOCUMENT_PROCESSING_STATUS_OPTIONS,
   ROLES,
   STIN_DOCKET_ENTRY_TYPE,
   UNSERVABLE_EVENT_CODES,
 } from '@shared/business/entities/EntityConstants';
 import { DocketEntry } from './DocketEntry';
+import { calculateISODate } from '@shared/business/utilities/DateHandler';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import {
   casePetitioner,
@@ -20,11 +22,19 @@ import { getPetitionDocketEntry } from './cases/Case';
 let baseDocketEntry: RawDocketEntry;
 let rawCase: RawCase;
 const visibilityChangeDate = '2018-11-21T20:49:28.192Z';
+const motionVisibilityChangeDate = '2027-01-01T00:00:00.000Z';
+const afterMotionVisibilityChangeDate = calculateISODate({
+  dateString: motionVisibilityChangeDate,
+  howMuch: 1,
+  units: 'days',
+});
 
 describe('isDownloadable', () => {
   const isPublic = jest.spyOn(DocketEntry, 'isPublic');
 
   beforeEach(() => {
+    isPublic.mockReset();
+
     rawCase = cloneDeep(MOCK_CASE);
     rawCase.status = CASE_STATUS_TYPES.generalDocket;
     rawCase.docketEntries[0].servedAt = '2018-11-21T20:49:28.192Z';
@@ -39,6 +49,7 @@ describe('isDownloadable', () => {
         rawCase,
         user: docketClerk1User,
         visibilityChangeDate,
+        motionVisibilityChangeDate,
       };
     });
 
@@ -75,6 +86,7 @@ describe('isDownloadable', () => {
         rawCase,
         user: petitionerUser,
         visibilityChangeDate,
+        motionVisibilityChangeDate,
       };
     });
 
@@ -103,6 +115,24 @@ describe('isDownloadable', () => {
         false,
       );
     });
+
+    it('should pass proper options to isPublic', () => {
+      const entry = {
+        ...baseDocketEntry,
+        isFileAttached: true,
+      };
+      DocketEntry.isDownloadable(entry, options);
+
+      expect(isPublic).toHaveBeenLastCalledWith(entry, {
+        caseIsSealed: false,
+        rootDocument: DocketEntry.fetchRootDocument(
+          baseDocketEntry,
+          rawCase.docketEntries,
+        ),
+        visibilityChangeDate,
+        motionVisibilityChangeDate,
+      });
+    });
   });
 
   describe('External user with access to the case', () => {
@@ -118,6 +148,7 @@ describe('isDownloadable', () => {
           userId: casePetitioner.contactId,
         },
         visibilityChangeDate,
+        motionVisibilityChangeDate,
       };
 
       rawCase.petitioners = [casePetitioner];
@@ -381,6 +412,7 @@ describe('isDownloadable', () => {
           userId: '',
         },
         visibilityChangeDate,
+        motionVisibilityChangeDate,
       };
     });
 
@@ -421,6 +453,38 @@ describe('isDownloadable', () => {
         ),
       ).toEqual(false);
     });
+
+    describe('lodged practitioner motion after motion visibility change date', () => {
+      const lodgedPractitionerMotion: RawDocketEntry = {
+        ...baseDocketEntry,
+        eventCode: 'M006',
+        filingDate: afterMotionVisibilityChangeDate,
+        filedByRole: ROLES.privatePractitioner,
+        isFileAttached: true,
+        isOnDocketRecord: true,
+        isPaper: false,
+        lodged: true,
+        processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+        servedAt: afterMotionVisibilityChangeDate,
+      };
+
+      it('returns true for a terminal user without relying on isPublic', () => {
+        expect(
+          DocketEntry.isDownloadable(lodgedPractitionerMotion, options),
+        ).toEqual(true);
+        expect(isPublic).not.toHaveBeenCalled();
+      });
+
+      it('returns false for a public user without case access because the motion is not public', () => {
+        expect(
+          DocketEntry.isDownloadable(lodgedPractitionerMotion, {
+            ...options,
+            isTerminalUser: false,
+            user: petitionerUser,
+          }),
+        ).toEqual(false);
+      });
+    });
   });
 
   describe('IRS Superuser', () => {
@@ -433,6 +497,7 @@ describe('isDownloadable', () => {
         rawCase,
         user: irsSuperuserUser,
         visibilityChangeDate,
+        motionVisibilityChangeDate,
       };
     });
 
@@ -487,6 +552,7 @@ describe('isDownloadable', () => {
         rawCase,
         user: caseServicesSupervisorUser,
         visibilityChangeDate,
+        motionVisibilityChangeDate,
       };
     });
 
