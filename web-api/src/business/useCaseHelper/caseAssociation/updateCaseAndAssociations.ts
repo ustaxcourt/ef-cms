@@ -21,7 +21,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getMessagesByDocketNumber } from '@web-api/persistence/postgres/messages/getMessagesByDocketNumber';
 import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
-import { isEmpty, isEqual, omit } from 'lodash';
+import { isEmpty, isEqualWith, omit } from 'lodash';
 import { upsertCaseCorrespondences } from '@web-api/persistence/postgres/caseCorrespondences/upsertCaseCorrespondences';
 import { upsertCaseDeadlines } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
 import diff from 'diff-arrays-of-objects';
@@ -30,7 +30,11 @@ import { settlePromises } from '@web-api/utilities/settlePromises';
 import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
 import { associateUsersWithCases } from '@web-api/persistence/postgres/cases/userOnCase/associateUsersWithCases';
 import { disassociateUsersFromCases } from '@web-api/persistence/postgres/cases/userOnCase/disassociateUsersFromCases';
-import { Role, ROLES } from '@shared/business/entities/EntityConstants';
+import {
+  CASE_TYPES_MAP,
+  Role,
+  ROLES,
+} from '@shared/business/entities/EntityConstants';
 import { removeCasesFromHearings } from '@web-api/persistence/postgres/trialSessions/removeCasesFromHearings';
 import { upsertMessages } from '@web-api/persistence/postgres/messages/upsertMessages';
 import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
@@ -62,7 +66,14 @@ export const updateCaseAndAssociations = async ({
 
   newCaseEntity.recomputeHasPendingItems();
   if (
-    !isEqual(newCaseEntity.statistics, oldCaseEntity.statistics) ||
+    (newCaseEntity.caseType == CASE_TYPES_MAP.deficiency &&
+      !isEqualWith(
+        newCaseEntity.statistics,
+        oldCaseEntity.statistics,
+        (a, b) =>
+          a.irsDeficiencyAmount === b.irsDeficiencyAmount &&
+          a.irsTotalPenalties === b.irsTotalPenalties,
+      )) ||
     newCaseEntity.caseType !== oldCaseEntity.caseType ||
     newCaseEntity.procedureType !== oldCaseEntity.procedureType
   ) {
