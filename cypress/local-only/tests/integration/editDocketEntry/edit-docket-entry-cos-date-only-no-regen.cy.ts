@@ -40,7 +40,7 @@ describe('Edit Docket Entry Certificate of Service date edit alone leaves the co
       selectTypeaheadInput('complete-doc-document-type-search', 'Exhibit(s)');
       cy.get('[data-testid="submit-document"]').click();
       attachFile({
-        filePath: '../../helpers/file/sample.pdf',
+        filePath: 'sample.pdf',
         selector: '[data-testid="primary-document"]',
         selectorToAwaitOnSuccess:
           '[data-testid="upload-file-success-primary-document"]',

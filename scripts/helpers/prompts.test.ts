@@ -1,10 +1,7 @@
 jest.mock('node:readline/promises', () => ({
   createInterface: jest.fn(),
 }));
-jest.mock('inquirer', () => ({
-  __esModule: true,
-  default: { prompt: jest.fn() },
-}));
+import { PassThrough } from 'node:stream';
 import { ask, choose } from './prompts';
 
 describe('prompts', () => {
@@ -36,23 +33,61 @@ describe('prompts', () => {
   });
 
   describe('choose', () => {
-    it('should show choices and return the selected choice', async () => {
-      const inquirer = (await import('inquirer')).default as unknown as {
-        prompt: jest.Mock;
-      };
-      inquirer.prompt.mockResolvedValue({ choice: 'Option 2' });
+    // Drives the real inquirer prompt through a fake stdin/stdout so these
+    // tests exercise what a CLI user actually sees and presses
+    const DOWN_ARROW = '\x1B[B';
+    const UP_ARROW = '\x1B[A';
+    const ENTER = '\r';
+    const QUERY = 'Select an option';
+    const CHOICES = ['Option 1', 'Option 2', 'Option 3'];
+    const originalStdin = process.stdin;
+    let fakeStdin: PassThrough;
+    let renderedOutput: string;
 
-      const choices = ['Option 1', 'Option 2'];
-      const result = await choose('Select an option', choices);
+    beforeEach(() => {
+      fakeStdin = new PassThrough();
+      Object.defineProperty(process, 'stdin', {
+        configurable: true,
+        value: fakeStdin,
+      });
+      renderedOutput = '';
+      jest.spyOn(process.stdout, 'write').mockImplementation(chunk => {
+        renderedOutput += chunk.toString();
+        return true;
+      });
+    });
 
-      expect(inquirer.prompt).toHaveBeenCalledWith([
-        {
-          choices,
-          message: 'Select an option',
-          name: 'choice',
-        },
-      ]);
-      expect(result).toBe('Option 2');
+    afterEach(() => {
+      Object.defineProperty(process, 'stdin', {
+        configurable: true,
+        value: originalStdin,
+      });
+      jest.restoreAllMocks();
+    });
+
+    const waitForPrompt = async () => {
+      while (!renderedOutput.includes(QUERY)) {
+        await new Promise(resolve => setTimeout(resolve, 5));
+      }
+    };
+
+    const answerPrompt = async (...keys: string[]) => {
+      await waitForPrompt();
+      keys.forEach(key => fakeStdin.write(key));
+    };
+
+    it('should return the first choice when the user presses enter', async () => {
+      const result = choose(QUERY, CHOICES);
+      await answerPrompt(ENTER);
+
+      await expect(result).resolves.toBe('Option 1');
+    });
+
+    it('should return the highlighted choice after the user arrows down then up', async () => {
+      const result = choose(QUERY, CHOICES);
+      await answerPrompt(DOWN_ARROW, DOWN_ARROW, UP_ARROW, ENTER);
+
+      await expect(result).resolves.toBe('Option 2');
     });
   });
 });

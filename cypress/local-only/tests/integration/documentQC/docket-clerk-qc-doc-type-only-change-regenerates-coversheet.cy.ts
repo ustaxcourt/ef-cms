@@ -42,7 +42,7 @@ describe('Docket Clerk QC Document Type change regenerates the coversheet', () =
       selectTypeaheadInput('complete-doc-document-type-search', 'Exhibit(s)');
       cy.get('[data-testid="submit-document"]').click();
       attachFile({
-        filePath: '../../helpers/file/sample.pdf',
+        filePath: 'sample.pdf',
         selector: '[data-testid="primary-document"]',
         selectorToAwaitOnSuccess:
           '[data-testid="upload-file-success-primary-document"]',

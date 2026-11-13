@@ -5,12 +5,17 @@ import { loadTsConfigPaths } from '../utils/load-tsconfig-paths.mjs';
 const tsConfigPaths = loadTsConfigPaths('tsconfig.json');
 
 const transformIgnoreModules = [
+  '@inquirer',
   'dom-serializer',
   'domelementtype',
   'domhandler',
   'domutils',
   'entities',
+  'fast-string-truncated-width',
+  'fast-string-width',
+  'fast-wrap-ansi',
   'htmlparser2',
+  'inquirer',
   'kysely',
   'uuid',
 ];

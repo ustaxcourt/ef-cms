@@ -31,7 +31,7 @@ describe('Docket Clerk adds a Type B Court Issued document', () => {
         'Standing Scheduling Order',
       );
       attachFile({
-        filePath: '../../helpers/file/sample.pdf',
+        filePath: 'sample.pdf',
         selector: '[data-testid="primary-document-file"]',
         selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
       });

@@ -9,8 +9,8 @@ import {
 import { loginAsPetitioner } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('File a petition - Corrupted Files', () => {
-  const CORRUPTED_FILE = '../../helpers/file/corrupt-pdf.pdf';
-  const VALID_FILE = '../../helpers/file/sample.pdf';
+  const CORRUPTED_FILE = 'corrupt-pdf.pdf';
+  const VALID_FILE = 'sample.pdf';
 
   beforeEach(() => {
     loginAsPetitioner();
@@ -78,23 +78,25 @@ describe('File a petition - Corrupted Files', () => {
 
     cy.get('[data-testid="step-6-next-button"]').click();
 
-
     cy.wait('@postCase').then(interception => {
-
-       if (!interception.response?.body?.docketNumber) {
+      if (!interception.response?.body?.docketNumber) {
         throw new Error('Missing docket number in response');
       }
 
-      const {docketNumber} = interception.response.body;
-      
+      const { docketNumber } = interception.response.body;
+
       cy.get('[data-testid^="alert-success-"]', { timeout: 10000 })
-        .should('contain.text', `Your case has been assigned docket number ${docketNumber}`)
-        .and('contain.text', 'Your case has been created and your documents were sent to the U.S. Tax Court.');
+        .should(
+          'contain.text',
+          `Your case has been assigned docket number ${docketNumber}`,
+        )
+        .and(
+          'contain.text',
+          'Your case has been created and your documents were sent to the U.S. Tax Court.',
+        );
     });
 
     // cy.get('[data-testid^="alert-success-"]', { timeout: 10000 })
     // .should("contain.text", `Your case has been assigned docket number ${docketNumber}Your case has been created and your documents were sent to the U.S. Tax Court.`);
-
-    
   });
 });

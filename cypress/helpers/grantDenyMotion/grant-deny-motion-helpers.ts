@@ -90,7 +90,7 @@ const addAndServeMotion = ({
   selectTypeaheadInput('primary-document-type-search', motionType);
   cy.get('[data-testid="upload-pdf-button"]').click();
   attachFile({
-    filePath: '../../helpers/file/sample.pdf',
+    filePath: 'sample.pdf',
     selector: 'input#primaryDocumentFile-file',
     selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
   });
