@@ -7,9 +7,7 @@ export function attachSamplePdfFile(testId: string) {
     'not.have.class',
     'validated',
   );
-  cy.get(`[data-testid="${testId}"]`).attachFile(
-    '../../helpers/file/sample.pdf',
-  );
+  cy.get(`[data-testid="${testId}"]`).attachFile('sample.pdf');
   cy.get('[data-testid^="upload-file-success"]').should('exist');
 }
 

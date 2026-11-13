@@ -51,7 +51,7 @@ describe('Practitioner files a SIAB across consolidated cases and a docket clerk
           cy.get('[data-testid="submit-document"]').click();
           cy.get('[data-testid="primary-document-label"]').scrollIntoView();
           attachFile({
-            filePath: '../../helpers/file/sample.pdf',
+            filePath: 'sample.pdf',
             selector: '[data-testid="primary-document"]',
             selectorToAwaitOnSuccess:
               '[data-testid="upload-file-success-primary-document"]',
@@ -77,7 +77,7 @@ describe('Practitioner files a SIAB across consolidated cases and a docket clerk
         );
         cy.get('[data-testid="submit-document"]').click();
         attachFile({
-          filePath: '../../helpers/file/sample.pdf',
+          filePath: 'sample.pdf',
           selector: '[data-testid="primary-document"]',
           selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
         });
