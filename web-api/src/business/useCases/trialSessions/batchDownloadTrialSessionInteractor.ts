@@ -156,7 +156,6 @@ export const batchDownloadTrialSessionInteractorHelper = async (
         applicationContext,
         {
           docketNumber: sessionCase.docketNumber,
-          includePartyDetail: true,
         },
         authorizedUser,
       );
