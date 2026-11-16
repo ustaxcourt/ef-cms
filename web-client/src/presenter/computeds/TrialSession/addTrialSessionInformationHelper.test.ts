@@ -38,7 +38,7 @@ describe('addTrialSessionInformationHelper', () => {
     },
   );
 
-  it.each(['petitionsclerk', 'docketclerk'])(
+  it.each(['petitionsclerk'])(
     'should keep existing Reporting sessions editable with restricted session types and no swing option for %s',
     role => {
       const result = runCompute(
@@ -66,6 +66,29 @@ describe('addTrialSessionInformationHelper', () => {
       ]);
       expect(result.displayRemoteProceedingForm).toBe(false);
       expect(result.showSwingSessionOption).toBe(false);
+    },
+  );
+
+  it.each([true, false])(
+    'should hide Reporting and restrict session types for docket clerks with flag %s',
+    (enabled: boolean): void => {
+      const result = runCompute(
+        withAppContextDecorator(
+          addTrialSessionInformationHelperComputed,
+          applicationContext,
+        ),
+        {
+          state: {
+            featureFlags: {
+              [ALLOWLIST_FEATURE_FLAGS.REPORTING_CALENDARS.key]: enabled,
+            },
+            form: { proceedingType: 'Remote' },
+            user: docketClerk1User,
+          },
+        },
+      );
+      expect(result.showReportingOption).toBe(false);
+      expect(result.sessionTypes).toEqual(['Special', 'Motion/Hearing']);
     },
   );
 

@@ -179,7 +179,7 @@ describe('handle', () => {
       name: 'Bad User',
       role: 'petitioner',
     }).validate();
-    (user as any).privateField = 'this is bad!';
+    Object.assign(user, { privateField: 'this is bad!' });
     const response = await handle(
       {
         path: '/public-api/some-endpoint',
@@ -232,6 +232,76 @@ describe('handle', () => {
       statusCode: '200',
     });
   });
+
+  it.each([
+    {
+      event: {
+        httpMethod: 'GET',
+        path: '/public-api/maintenance-mode',
+      },
+      response: false,
+    },
+    {
+      event: {
+        path: '/public-api/cases/101-20',
+        requestContext: { httpMethod: 'HEAD' },
+      },
+      response: true,
+    },
+  ])(
+    'should allow approved public boolean response $event',
+    async ({ event, response: responseData }) => {
+      const response = await handle(event, () => responseData);
+
+      expect(response.statusCode).toBe('200');
+      expect(response.body).toBe(JSON.stringify(responseData));
+    },
+  );
+
+  it.each([
+    JSON.stringify({ privateField: 'do-not-leak' }),
+    ['synthetic-private-value'],
+  ])('should reject unsupported public response values: %s', async data => {
+    const response = await handle(
+      {
+        httpMethod: 'GET',
+        path: '/public-api/some-endpoint',
+      },
+      () => data,
+    );
+
+    expect(response.statusCode).toBe(500);
+    expect(JSON.parse(response.body)).toContain('unauthorized field');
+  });
+
+  it.each([
+    {
+      payload: { results: [] },
+      path: '/public-api/search',
+    },
+    {
+      payload: { results: [], totalCount: 0 },
+      path: '/public-api/todays-orders/1/date',
+    },
+    {
+      payload: {
+        searchResults: {
+          lastKey: [],
+          practitioners: [],
+          total: 0,
+        },
+      },
+      path: '/public-api/practitioners',
+    },
+  ])(
+    'allows approved public response wrapper for $path',
+    async ({ payload, path }) => {
+      const response = await handle({ path }, () => payload);
+
+      expect(response.statusCode).toBe('200');
+      expect(JSON.parse(response.body)).toEqual(payload);
+    },
+  );
 
   it('should return 200 status if response is undefined', async () => {
     const response = await handle({}, () => undefined);
@@ -319,7 +389,7 @@ describe('handle', () => {
 
   it('should enforce public validation for pre-formed responses without skipPublicValidation', async () => {
     const user = new PublicUser({ name: 'Bad User', role: 'petitioner' });
-    (user as any).privateField = 'bad';
+    Object.assign(user, { privateField: 'bad' });
     user.validate();
     const response = await handle(
       { path: '/public-api/some-endpoint' },

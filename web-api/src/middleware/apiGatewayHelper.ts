@@ -10,6 +10,7 @@ import {
   findUnauthorizedPublicFields,
   isPublicSiteRequest,
 } from './publicDataSanitizer';
+import type { ApiGatewayLikeEvent } from './publicDataSanitizer';
 import { X_MANUAL_REFRESH_REQUIRED } from '@shared/utils/headers';
 import { pick } from 'lodash';
 import jwt from 'jsonwebtoken';
@@ -19,7 +20,10 @@ type LoggedError = ErrorWithStatusCode & {
   skipLogging?: boolean;
 };
 
-const validatePublicResponse = (event, response) => {
+export const validatePublicResponse = (
+  event: ApiGatewayLikeEvent,
+  response: unknown,
+): void => {
   if (isPublicSiteRequest(event)) {
     const unauthorizedFindings = findUnauthorizedPublicFields({
       event,

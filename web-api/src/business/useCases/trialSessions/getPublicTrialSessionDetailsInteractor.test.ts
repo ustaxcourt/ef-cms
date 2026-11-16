@@ -4,6 +4,7 @@ import { PublicCaseResponse } from '@shared/business/dto/cases/PublicCaseRespons
 import type { RawPublicTrialSessionDetails } from '@shared/business/entities/trialSessions/PublicTrialSessionDetails';
 import { NotFoundError } from '@web-api/errors/errors';
 import {
+  PARTY_TYPES,
   SESSION_STATUS_TYPES,
   SESSION_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
@@ -111,17 +112,36 @@ describe('getPublicTrialSessionDetailsInteractor', () => {
       },
     ]);
 
+    const caseDTO = new PublicCaseResponse({
+      caseCaption: 'Test Petitioner, Petitioner',
+      docketEntries: [],
+      docketNumber: '101-20',
+      docketNumberWithSuffix: '101-20',
+      entityName: 'PublicCase',
+      hasIrsPractitioner: false,
+      isSealed: false,
+      partyType: PARTY_TYPES.petitioner,
+      petitioners: [],
+      receivedAt: '2020-01-05T03:30:45.007Z',
+    });
+    const caseDTOValidateSpy = jest.spyOn(caseDTO, 'validate');
     const getCaseDTOSpy = jest
       .spyOn(CaseFactory, 'getCaseDTO')
-      .mockReturnValue({} as PublicCaseResponse);
+      .mockReturnValue(caseDTO);
 
     const result = await getPublicTrialSessionDetailsInteractor({
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
     expect(result.swingSessionLocation).toEqual('Helena, Montana');
-    expect(result.calendaredCases).toEqual([{}]);
+    expect(result.calendaredCases).toEqual([
+      expect.objectContaining({
+        docketNumber: '101-20',
+        entityName: 'PublicCaseResponse',
+      }),
+    ]);
     expect(getCaseDTOSpy).toHaveBeenCalledTimes(1);
+    expect(caseDTOValidateSpy).toHaveBeenCalledTimes(1);
     expect(getCaseDTOSpy).toHaveBeenCalledWith({
       rawCase: expect.objectContaining({
         docketEntries: [],

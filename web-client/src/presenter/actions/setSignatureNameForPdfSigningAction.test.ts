@@ -44,6 +44,27 @@ describe('setSignatureNameForPdfSigningAction', () => {
     expect(result.state.pdfForSigning.nameForSigningLine2).toEqual(CHIEF_JUDGE);
   });
 
+  it('uses an empty name when the Chief Judge name flag is disabled', async () => {
+    applicationContext
+      .getUseCases()
+      .getAllFeatureFlagsInteractor.mockReturnValueOnce({
+        [ALLOWLIST_FEATURE_FLAGS.CHIEF_JUDGE_NAME.key]: false,
+      });
+
+    const result = await runAction(setSignatureNameForPdfSigningAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        user: {
+          section: 'docketclerk',
+        },
+      },
+    });
+
+    expect(result.state.pdfForSigning.nameForSigning).toEqual('');
+  });
+
   it('sets the chamber judge for chamber users', async () => {
     judgeUser.judgeFullName = 'John O. Colvin';
     judgeUser.judgeTitle = 'Judge';

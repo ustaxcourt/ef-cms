@@ -129,7 +129,7 @@ export class PublicCaseResponse extends JoiValidationEntity {
     }),
   };
 
-  getValidationRules() {
+  getValidationRules(): typeof PublicCaseResponse.VALIDATION_RULES {
     return PublicCaseResponse.VALIDATION_RULES;
   }
 }

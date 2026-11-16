@@ -20,7 +20,10 @@ import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgIn
 import { getDbWriter } from '@web-api/persistence/postgres/database';
 import { Case } from '@shared/business/entities/cases/Case';
 import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
-import { docketEntrySeeds } from '@web-api/persistence/postgres/utils/seed/fixtures/docketEntries';
+import {
+  docketEntryRelatedEntriesSeeds,
+  docketEntrySeeds,
+} from '@web-api/persistence/postgres/utils/seed/fixtures/docketEntries';
 import { OPENSEARCH_SYNC_ACTIONS } from '@web-api/lambdas/openSearch/openSearchSyncHandler';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import {
@@ -167,6 +170,16 @@ export const seed = async () => {
     insertWorkItem,
     insertMinuteSheet,
   ]);
+
+  await pgInsertInto({
+    table: 'dwDocketEntryRelatedDocketEntry',
+    values: docketEntryRelatedEntriesSeeds,
+    onConflictColumns: [
+      'primaryDocketEntryId',
+      'docketNumber',
+      'secondaryDocketEntryId',
+    ],
+  });
 };
 
 seed()

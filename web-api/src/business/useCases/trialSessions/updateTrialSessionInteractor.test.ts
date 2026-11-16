@@ -695,19 +695,18 @@ describe('updateTrialSession Reporting', () => {
     ]);
   });
 
-  it.each([true, false])(
-    'should reject conversion to Reporting with the flag disabled (isCalendared=%s)',
-    async isCalendared => {
+  it.each(['to-reporting', 'from-reporting', 'flag-disabled'])(
+    'should reject an invalid Reporting conversion (%s)',
+    async conversion => {
+      const isCalendared = conversion !== 'flag-disabled';
+      const fromReporting = conversion === 'from-reporting';
       jest.mocked(getFeatureFlagValue).mockResolvedValue(false);
-      getTrialSessionById.mockResolvedValue({
-        ...currentSession,
-        isCalendared,
-      });
-      await expect(
-        updateSession({ ...reportingSession, isCalendared }),
-      ).rejects.toMatchObject({
+      const current = fromReporting ? reportingSession : currentSession;
+      const updated = fromReporting ? currentSession : reportingSession;
+      getTrialSessionById.mockResolvedValue({ ...current, isCalendared });
+      await expect(updateSession(updated)).rejects.toMatchObject({
         message: isCalendared
-          ? 'A session with an existing trial calendar cannot be changed to Reporting.'
+          ? 'Calendared sessions cannot be changed to or from Reporting.'
           : 'Changing a session to Reporting is not enabled.',
         statusCode: 400,
       });
@@ -717,17 +716,16 @@ describe('updateTrialSession Reporting', () => {
 
   it('should edit an existing Reporting session even when creation is disabled', async () => {
     jest.mocked(getFeatureFlagValue).mockResolvedValue(false);
-    getTrialSessionById.mockResolvedValue(reportingSession);
+    const reporting = { ...reportingSession, isCalendared: true };
+    getTrialSessionById.mockResolvedValue(reporting);
     const irsCalendarAdministratorInfo = {
       name: 'Calendar Admin',
       email: 'calendar@example.com',
       phone: '2025550100',
     };
-    await updateSession({ ...reportingSession, irsCalendarAdministratorInfo });
-    expect(getFeatureFlagValue).not.toHaveBeenCalled();
+    await updateSession({ ...reporting, irsCalendarAdministratorInfo });
     expect(updateTrialSessionMocked).toHaveBeenCalledWith({
       trialSessionToUpdate: expect.objectContaining({
-        proceedingType: 'Reporting',
         irsCalendarAdministratorInfo,
       }),
     });

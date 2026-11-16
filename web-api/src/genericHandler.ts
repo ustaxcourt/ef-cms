@@ -12,7 +12,9 @@ import {
   getConnectionIdFromEvent,
   getUserFromAuthHeader,
   handle,
+  validatePublicResponse,
 } from './middleware/apiGatewayHelper';
+import { isPublicSiteRequest } from './middleware/publicDataSanitizer';
 import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 import { getMaintenanceMode } from '@web-api/persistence/postgres/featureFlag/getMaintenanceMode';
 import { getEntityByName } from '@web-api/business/getEntityByName';
@@ -35,7 +37,7 @@ export const dataSecurityFilter = (
           authorizedUser,
           filtered: true,
         });
-        if ((result as any).isValidated === true) {
+        if (result.isValidated === true) {
           Object.defineProperty(entity, 'isValidated', {
             enumerable: false,
             value: true,
@@ -53,7 +55,7 @@ export const dataSecurityFilter = (
         authorizedUser,
         filtered: true,
       });
-      if ((data as any).isValidated === true) {
+      if (data.isValidated === true) {
         Object.defineProperty(returnData, 'isValidated', {
           enumerable: false,
           value: true,
@@ -97,7 +99,9 @@ export const genericHandler = (
   } = {},
 ) => {
   return handle(awsEvent, async () => {
-    const user = getUserFromAuthHeader(awsEvent);
+    const user = isPublicSiteRequest(awsEvent)
+      ? undefined
+      : getUserFromAuthHeader(awsEvent);
     const clientConnectionId = getConnectionIdFromEvent(awsEvent);
     getDawsonLogger().addUser({ user });
 
@@ -141,6 +145,7 @@ export const genericHandler = (
         applicationContext,
         clientConnectionId,
       });
+      validatePublicResponse(awsEvent, results);
       const returnResults = dataSecurityFilter(results, {
         authorizedUser: user,
       });

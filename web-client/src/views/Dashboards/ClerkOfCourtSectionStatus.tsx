@@ -4,15 +4,17 @@ import React from 'react';
 import classNames from 'classnames';
 
 /**
- * Renders a dashboard tab's charts once their data has loaded. All the charts
- * in a tab share the tab's request, so until then the tab shows one loading or
- * error state, centered on the page.
+ * Renders a dashboard section once its data has loaded. Each section (a chart
+ * tab, the trial sessions or the recent messages) has its own request, so until
+ * then the section shows its own loading or error state.
  */
-export const ClerkOfCourtChartStatus = ({
+export const ClerkOfCourtSectionStatus = ({
   children,
+  label = 'chart',
   status,
 }: {
   children: React.ReactNode;
+  label?: string;
   status: ClerkOfCourtDashboardStatsStatus;
 }): React.JSX.Element => {
   if (status === 'loaded') {
@@ -25,7 +27,7 @@ export const ClerkOfCourtChartStatus = ({
     <div
       aria-live="polite"
       className="tw:flex tw:flex-col tw:items-center tw:pt-8 tw:pb-12 tw:text-center tw:text-[#71767a]"
-      data-testid={`chart-${status}`}
+      data-testid={`${label.replace(/ /g, '-')}-${status}`}
       role="status"
     >
       <FontAwesomeIcon
@@ -35,7 +37,7 @@ export const ClerkOfCourtChartStatus = ({
       />
       <p className="tw:mt-8 tw:mb-0 tw:max-w-80">
         {isLoading
-          ? 'Loading chart...'
+          ? `Loading ${label}...`
           : 'Something went wrong, please refresh the page.'}
       </p>
     </div>

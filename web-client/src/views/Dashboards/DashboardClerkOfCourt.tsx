@@ -1,5 +1,5 @@
 import { BigHeader } from '../BigHeader';
-import { ClerkOfCourtChartStatus } from './ClerkOfCourtChartStatus';
+import { ClerkOfCourtSectionStatus } from './ClerkOfCourtSectionStatus';
 import { ClerkOfCourtHtmlView } from './ClerkOfCourtHtmlView';
 import { ClerkOfCourtTrialSessionsSummary } from '../TrialSessions/ClerkOfCourtTrialSessionsSummary';
 import {
@@ -133,7 +133,7 @@ const casesData = ({
   } = dashboardClerkOfTheCourtHelper;
 
   return (
-    <ClerkOfCourtChartStatus status={casesStatus}>
+    <ClerkOfCourtSectionStatus status={casesStatus}>
       <div
         className={isMobile ? undefined : 'tw:mt-4'}
         data-testid="cases-data-div"
@@ -201,7 +201,7 @@ const casesData = ({
           />
         </div>
       </div>
-    </ClerkOfCourtChartStatus>
+    </ClerkOfCourtSectionStatus>
   );
 };
 
@@ -210,8 +210,8 @@ export const DashboardClerkOfCourt = connect(
     dashboardClerkOfTheCourtHelper: state.dashboardClerkOfTheCourtHelper,
     user: state.user,
     casesByYearIsFiscal: state.clerkOfCourtDashboardOptions.casesByYearIsFiscal,
-    loadClerkOfCourtDashboardChartsSequence:
-      sequences.loadClerkOfCourtDashboardChartsSequence,
+    loadClerkOfCourtDashboardSequence:
+      sequences.loadClerkOfCourtDashboardSequence,
     petitionsByYearIsFiscal:
       state.clerkOfCourtDashboardOptions.petitionsByYearIsFiscal,
     setClerkOfCourtDashboardOptionsSequence:
@@ -222,16 +222,16 @@ export const DashboardClerkOfCourt = connect(
   function DashboardClerkOfCourt({
     casesByYearIsFiscal,
     dashboardClerkOfTheCourtHelper,
-    loadClerkOfCourtDashboardChartsSequence,
+    loadClerkOfCourtDashboardSequence,
     user,
     petitionsByYearIsFiscal,
     setClerkOfCourtDashboardOptionsSequence,
     casesStatus,
     petitionsStatus,
   }) {
-    // load the chart stats outside the route's sequence, so navigation never waits for them
+    // load the sections outside the route's sequence, so the page renders at once and navigation never waits for them
     useEffect(() => {
-      loadClerkOfCourtDashboardChartsSequence();
+      loadClerkOfCourtDashboardSequence();
     }, []);
 
     const {
@@ -257,7 +257,7 @@ export const DashboardClerkOfCourt = connect(
             <NonMobile>
               <Tabs className="margin-top-6" marginBottom={false}>
                 <Tab tabName="petitions" title="Petitions">
-                  <ClerkOfCourtChartStatus status={petitionsStatus}>
+                  <ClerkOfCourtSectionStatus status={petitionsStatus}>
                     <div className="tw:mt-4" data-testid="petitions-data-div">
                       {calendarAndFiscalYearSelectors({
                         isFiscal: petitionsByYearIsFiscal,
@@ -300,7 +300,7 @@ export const DashboardClerkOfCourt = connect(
                         />
                       </div>
                     </div>
-                  </ClerkOfCourtChartStatus>
+                  </ClerkOfCourtSectionStatus>
                 </Tab>
                 <Tab tabName="cases" title="Cases">
                   {casesData({
@@ -343,7 +343,7 @@ export const DashboardClerkOfCourt = connect(
                   casesStatus,
                 })}
               {mobileSection === 'petitions' && (
-                <ClerkOfCourtChartStatus status={petitionsStatus}>
+                <ClerkOfCourtSectionStatus status={petitionsStatus}>
                   <div>
                     {calendarAndFiscalYearSelectors({
                       isFiscal: petitionsByYearIsFiscal,
@@ -388,7 +388,7 @@ export const DashboardClerkOfCourt = connect(
                       />
                     </div>
                   </div>
-                </ClerkOfCourtChartStatus>
+                </ClerkOfCourtSectionStatus>
               )}
             </Mobile>
           </div>

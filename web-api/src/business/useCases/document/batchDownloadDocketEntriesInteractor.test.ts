@@ -55,6 +55,7 @@ describe('batchDownloadDocketEntriesInteractor', () => {
   });
 
   beforeEach(() => {
+    applicationContext.environment.stage = 'local';
     requestParams = {
       clientConnectionId: mockClientConnectionId,
       docketNumber: MOCK_CASE.docketNumber,
@@ -295,4 +296,45 @@ describe('batchDownloadDocketEntriesInteractor', () => {
       applicationContext.getNotificationGateway().sendNotificationToUser,
     ).toHaveBeenCalled();
   });
+
+  it.each([
+    ['zero threshold', 0, 'not-local', true],
+    ['disabled threshold', false, 'not-local', false],
+    ['missing threshold', undefined, 'not-local', false],
+    ['exact threshold', 3, 'not-local', false],
+    ['local stage', 0, 'local', false],
+  ] as const)(
+    'uses AWS Batch for %s only when the document count exceeds the configured threshold',
+    async (_description, threshold, stage, shouldUseBatch) => {
+      applicationContext.environment.stage = stage;
+      applicationContext
+        .getUseCases()
+        .getAllFeatureFlagsInteractor.mockResolvedValueOnce(
+          threshold === undefined
+            ? {}
+            : {
+                [ALLOWLIST_FEATURE_FLAGS.AWS_BATCH_ZIPPER_MINIMUM_COUNT.key]:
+                  threshold,
+              },
+        );
+      applicationContext
+        .getDispatchers()
+        .sendZipperBatchJob.mockResolvedValue({ jobId: 'batch-job-id' });
+
+      await batchDownloadDocketEntriesInteractor(
+        applicationContext,
+        requestParams,
+        mockDocketClerkUser,
+      );
+
+      expect(
+        applicationContext.getDispatchers().sendZipperBatchJob.mock.calls
+          .length > 0,
+      ).toBe(shouldUseBatch);
+      expect(
+        applicationContext.getPersistenceGateway().zipDocuments.mock.calls
+          .length > 0,
+      ).toBe(!shouldUseBatch);
+    },
+  );
 });

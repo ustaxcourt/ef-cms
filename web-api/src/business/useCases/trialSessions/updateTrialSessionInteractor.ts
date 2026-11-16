@@ -213,17 +213,18 @@ export const updateTrialSession = async (
   });
 
   updatedTrialSessionEntity.validate();
-  if (
-    updatedTrialSessionEntity.isReporting() &&
-    currentTrialSession.proceedingType !==
-      TRIAL_SESSION_PROCEEDING_TYPES.reporting
-  ) {
+  const isChangingToOrFromReporting =
+    updatedTrialSessionEntity.isReporting() !==
+    (currentTrialSession.proceedingType ===
+      TRIAL_SESSION_PROCEEDING_TYPES.reporting);
+  if (isChangingToOrFromReporting) {
     if (currentTrialSession.isCalendared) {
       throw new InvalidRequest(
-        'A session with an existing trial calendar cannot be changed to Reporting.',
+        'Calendared sessions cannot be changed to or from Reporting.',
       );
     }
     if (
+      updatedTrialSessionEntity.isReporting() &&
       !(await getFeatureFlagValue<boolean>(
         ALLOWLIST_FEATURE_FLAGS.REPORTING_CALENDARS.key,
       ))

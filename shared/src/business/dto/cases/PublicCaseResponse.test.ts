@@ -33,7 +33,7 @@ describe('PublicCaseResponse', () => {
     authorizedUser: mockIrsPractitionerUser,
   });
 
-  const getValidUnsealedRawPublicCase = () => ({
+  const getValidUnsealedRawPublicCase = (): RawPublicCase => ({
     ...mock_publicCase.toRawObject(),
     docketEntries: [],
     isSealed: false,
@@ -67,13 +67,13 @@ describe('PublicCaseResponse', () => {
   });
 
   it('should require partyType and petitioners for unsealed cases', () => {
-    const rawPublicCase = {
-      ...getValidUnsealedRawPublicCase(),
+    const rawPublicCase = getValidUnsealedRawPublicCase();
+    Object.assign(rawPublicCase, {
       partyType: undefined,
       petitioners: undefined,
-    };
+    });
 
-    const publicCaseDTO = new PublicCaseResponse(rawPublicCase as any);
+    const publicCaseDTO = new PublicCaseResponse(rawPublicCase);
 
     expect(publicCaseDTO.isValid()).toBe(false);
     expect(publicCaseDTO.getValidationErrors()).toEqual(

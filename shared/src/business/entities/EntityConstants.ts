@@ -203,7 +203,7 @@ export const ALLOWLIST_FEATURE_FLAGS = {
   ALLOW_IDP_LOGIN: {
     key: 'allow-idp-login',
   },
-};
+} as const;
 
 type FeatureFlags = typeof ALLOWLIST_FEATURE_FLAGS;
 export type FeatureFlagKeys = FeatureFlags[keyof FeatureFlags]['key'];

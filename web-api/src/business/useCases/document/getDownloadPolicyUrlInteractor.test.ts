@@ -1,6 +1,7 @@
 /* eslint-disable max-lines */
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import {
+  ALLOWLIST_FEATURE_FLAGS,
   CASE_STATUS_TYPES,
   DOCKET_ENTRY_SEALED_TO_TYPES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
@@ -10,6 +11,7 @@ import {
   TRANSCRIPT_EVENT_CODE,
 } from '@shared/business/entities/EntityConstants';
 import { ConsolidatedCaseSummary } from '@shared/business/dto/cases/ConsolidatedCaseSummary';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import {
   UNAUTHORIZED_DOCUMENT_MESSAGE,
@@ -328,6 +330,60 @@ describe('getDownloadPolicyUrlInteractor', () => {
         mockPetitionerUser,
       );
       expect(url).toEqual('localhost');
+    });
+
+    it('uses an empty visibility date when the feature flag is disabled', async () => {
+      applicationContext
+        .getUseCases()
+        .getAllFeatureFlagsInteractor.mockResolvedValueOnce({
+          [ALLOWLIST_FEATURE_FLAGS.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.key]:
+            false,
+        });
+      const isDownloadable = jest
+        .spyOn(DocketEntry, 'isDownloadable')
+        .mockReturnValueOnce(true);
+
+      const url = await getDownloadPolicyUrlInteractor(
+        applicationContext,
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+          key: baseDocketEntry.docketEntryId,
+        },
+        mockPetitionerUser,
+      );
+
+      expect(url).toEqual('localhost');
+      expect(isDownloadable).toHaveBeenCalledWith(
+        expect.anything(),
+        expect.objectContaining({ visibilityChangeDate: '' }),
+      );
+    });
+
+    it('passes the configured visibility date when the feature flag is enabled', async () => {
+      const visibilityChangeDate = '2024-01-01T00:00:00.000Z';
+      applicationContext
+        .getUseCases()
+        .getAllFeatureFlagsInteractor.mockResolvedValueOnce({
+          [ALLOWLIST_FEATURE_FLAGS.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.key]:
+            visibilityChangeDate,
+        });
+      const isDownloadable = jest
+        .spyOn(DocketEntry, 'isDownloadable')
+        .mockReturnValueOnce(true);
+
+      await getDownloadPolicyUrlInteractor(
+        applicationContext,
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+          key: baseDocketEntry.docketEntryId,
+        },
+        mockPetitionerUser,
+      );
+
+      expect(isDownloadable).toHaveBeenCalledWith(
+        expect.anything(),
+        expect.objectContaining({ visibilityChangeDate }),
+      );
     });
 
     it('should return the policy url when the document requested is a document that has been sealed to the public', async () => {

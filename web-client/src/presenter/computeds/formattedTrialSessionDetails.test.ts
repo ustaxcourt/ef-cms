@@ -66,7 +66,7 @@ describe('formattedTrialSessionDetails', () => {
       );
   });
 
-  it('should allow docket clerks to edit future Reporting sessions', () => {
+  it('should prevent docket clerks from editing future Reporting sessions', () => {
     mockTrialSession = {
       ...TRIAL_SESSION,
       startDate: FUTURE_DATE,
@@ -76,7 +76,7 @@ describe('formattedTrialSessionDetails', () => {
     const result = runCompute(formattedTrialSessionDetails, {
       state: { user: docketClerkUser, trialSession: mockTrialSession },
     });
-    expect(result.editPermissions).toBe('all');
+    expect(result.editPermissions).toBe('none');
   });
 
   it('should return false for isHybridSession when sessionType is set to Regular', () => {
