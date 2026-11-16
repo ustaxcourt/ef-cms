@@ -385,7 +385,7 @@ describe('generateDocketRecordPdfInteractor', () => {
           docketNumber: caseDetail.docketNumber,
           isIndirectlyAssociated: true,
         } as any,
-        undefined as UnknownAuthUser,
+        mockPrivatePractitionerUser as UnknownAuthUser,
       ),
     ).rejects.toThrow('Unauthorized to view sealed case.');
 
@@ -393,7 +393,7 @@ describe('generateDocketRecordPdfInteractor', () => {
       applicationContext,
       {
         docketNumber: caseDetail.docketNumber,
-        includePartyDetails: true,
+        includePartyDetail: true,
       } as any,
       undefined as UnknownAuthUser,
     );
