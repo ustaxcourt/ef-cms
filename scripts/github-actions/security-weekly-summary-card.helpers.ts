@@ -5,15 +5,26 @@ import {
   type ScanHealthStatus,
   type Scanner,
   type Severity,
-  toMillis,
 } from './security-weekly-summary.helpers';
 import { DateTime } from 'luxon';
 import { FORMATS, USTC_TZ } from '@shared/business/utilities/DateHandler';
 
-export const isListedInTable = (finding: NewFinding): boolean =>
-  finding.severity === 'Critical' || finding.severity === 'High';
+export type RuleGroup = {
+  alertCount: number;
+  categories: string[];
+  firstUrl: string;
+  ruleId: string;
+  scanner: Scanner;
+  severity: Severity;
+};
+
+export const isListedInTable = (group: { severity: Severity }): boolean =>
+  group.severity === 'Critical' || group.severity === 'High';
 
 export const SEVERITY_ORDER: Severity[] = ['Critical', 'High', 'Medium', 'Low'];
+
+const severityRank = (severity: Severity): number =>
+  SEVERITY_ORDER.indexOf(severity);
 
 const SCANNER_NAMES: Record<Scanner, string> = {
   checkov: 'Checkov',
@@ -22,6 +33,14 @@ const SCANNER_NAMES: Record<Scanner, string> = {
   semgrep: 'Semgrep',
   trivy: 'Trivy',
   unknown: 'Unknown',
+};
+
+const TRIVY_LOCATIONS: Record<string, string> = {
+  trivy: 'repo',
+  'trivy-baseline-base': 'base',
+  'trivy-baseline-batch': 'batch',
+  'trivy-baseline-puppeteer': 'puppeteer',
+  'trivy-config': 'config',
 };
 
 const HEALTH_MESSAGES: Record<Exclude<ScanHealthStatus, 'ok'>, string> = {
@@ -33,14 +52,69 @@ const HEALTH_MESSAGES: Record<Exclude<ScanHealthStatus, 'ok'>, string> = {
 
 export const FOOTNOTE =
   "Severity is the scanner's; the DAWSON severity is set at triage. " +
+  'One row per rule; Alerts counts how many places it was found. ' +
   'ZAP (DAST) findings are not included yet. ' +
   'trivy-config results only update after the manual Monday run.';
 
 export const DEFAULT_MAX_BYTES = 24_000;
 export const DEFAULT_MAX_ROWS = 25;
 
+export const groupByRule = (findings: NewFinding[]): RuleGroup[] => {
+  const groups = new Map<string, RuleGroup>();
+  for (const finding of findings) {
+    const key = `${finding.scanner}|${finding.ruleId}`;
+    const group = groups.get(key);
+    if (!group) {
+      groups.set(key, {
+        alertCount: 1,
+        categories: [finding.category],
+        firstUrl: finding.url,
+        ruleId: finding.ruleId,
+        scanner: finding.scanner,
+        severity: finding.severity,
+      });
+      continue;
+    }
+    group.alertCount += 1;
+    if (!group.categories.includes(finding.category)) {
+      group.categories.push(finding.category);
+    }
+    if (severityRank(finding.severity) < severityRank(group.severity)) {
+      group.severity = finding.severity;
+    }
+  }
+  return [...groups.values()].sort(
+    (a, b) =>
+      severityRank(a.severity) - severityRank(b.severity) ||
+      b.alertCount - a.alertCount ||
+      a.ruleId.localeCompare(b.ruleId),
+  );
+};
+
+export const whereFound = (group: RuleGroup): string =>
+  group.scanner === 'trivy'
+    ? `Trivy: ${group.categories
+        .map(category => TRIVY_LOCATIONS[category] ?? category)
+        .sort()
+        .join(', ')}`
+    : SCANNER_NAMES[group.scanner];
+
+export const ruleLink = (group: RuleGroup): string => {
+  if (group.alertCount === 1) {
+    return group.firstUrl;
+  }
+  const rule = encodeURIComponent(group.ruleId).replace(
+    /[()]/g,
+    character => `%${character.charCodeAt(0).toString(16).toUpperCase()}`,
+  );
+  return `${group.firstUrl.replace(/\/\d+$/, '')}?query=is%3Aopen+branch%3Astaging+rule%3A${rule}`;
+};
+
 export const escapeMarkdown = (text: string): string =>
   text.replace(/[\\`*[\]]/g, character => `\\${character}`);
+
+const plural = (count: number, word: string): string =>
+  `${count} ${word}${count === 1 ? '' : 's'}`;
 
 const formatEastern = (isoDateTime: string, format: string): string =>
   DateTime.fromISO(isoDateTime, { zone: 'utc' })
@@ -71,20 +145,19 @@ const SEVERITY_COLORS: Partial<Record<Severity, string>> = {
   High: 'Warning',
 };
 
-const findingRow = (finding: NewFinding): Record<string, unknown> =>
+const groupRow = (group: RuleGroup): Record<string, unknown> =>
   tableRow([
-    textBlock(finding.severity, {
-      color: SEVERITY_COLORS[finding.severity],
+    textBlock(group.severity, {
+      color: SEVERITY_COLORS[group.severity],
       weight: 'Bolder',
     }),
-    textBlock(SCANNER_NAMES[finding.scanner]),
-    textBlock(escapeMarkdown(finding.ruleId)),
-    textBlock(formatEastern(finding.createdAt, FORMATS.MD)),
-    textBlock(`[#${finding.number}](${finding.url})`),
+    textBlock(`[${escapeMarkdown(group.ruleId)}](${ruleLink(group)})`),
+    textBlock(String(group.alertCount)),
+    textBlock(whereFound(group)),
   ]);
 
 const HEADER_ROW = tableRow(
-  ['Severity', 'Scanner', 'Rule', 'First seen', 'Alert'].map(text =>
+  ['Severity', 'Rule', 'Alerts', 'Where'].map(text =>
     textBlock(text, { weight: 'Bolder' }),
   ),
   { style: 'accent' },
@@ -118,14 +191,9 @@ export const buildSummaryCard = ({
   runUrl?: string;
   window: AlertWindow;
 }): SummaryCard => {
-  const listed = findings
-    .filter(isListedInTable)
-    .sort(
-      (a, b) =>
-        SEVERITY_ORDER.indexOf(a.severity) -
-          SEVERITY_ORDER.indexOf(b.severity) ||
-        toMillis(a.createdAt) - toMillis(b.createdAt),
-    );
+  const groups = groupByRule(findings);
+  const listed = groups.filter(isListedInTable);
+  const since = formatEastern(window.since, FORMATS.DATE_TIME_TZ);
 
   const build = (rowCount: number): SummaryCard => {
     const body: Record<string, unknown>[] = [
@@ -144,7 +212,9 @@ export const buildSummaryCard = ({
           ),
         ),
       textBlock(
-        `**New findings since ${formatEastern(window.since, FORMATS.DATE_TIME_TZ)}: ${findings.length}**`,
+        findings.length === 0
+          ? `**New findings since ${since}: 0**`
+          : `**New findings since ${since}: ${plural(findings.length, 'alert')} (${plural(groups.length, 'rule')})**`,
         { spacing: 'Medium' },
       ),
     ];
@@ -154,28 +224,34 @@ export const buildSummaryCard = ({
     } else {
       body.push(
         textBlock(
-          SEVERITY_ORDER.map(
+          `Alerts by severity: ${SEVERITY_ORDER.map(
             severity =>
               `${severity} ${findings.filter(f => f.severity === severity).length}`,
-          ).join(' · '),
+          ).join(' · ')}`,
         ),
       );
       if (listed.length === 0) {
         body.push(textBlock('No new High or Critical findings.'));
       } else {
-        body.push({
-          columns: [1, 1, 3, 1, 1].map(width => ({ width })),
-          firstRowAsHeaders: true,
-          rows: [HEADER_ROW, ...listed.slice(0, rowCount).map(findingRow)],
-          showGridLines: true,
-          spacing: 'Medium',
-          type: 'Table',
-        });
-        const hidden = listed.length - rowCount;
-        if (hidden > 0) {
+        if (rowCount > 0) {
+          body.push({
+            columns: [1, 3, 1, 2].map(width => ({ width })),
+            firstRowAsHeaders: true,
+            rows: [HEADER_ROW, ...listed.slice(0, rowCount).map(groupRow)],
+            showGridLines: true,
+            spacing: 'Medium',
+            type: 'Table',
+          });
+        }
+        const hidden = listed.slice(rowCount);
+        if (hidden.length > 0) {
+          const hiddenAlerts = hidden.reduce(
+            (total, group) => total + group.alertCount,
+            0,
+          );
           body.push(
             textBlock(
-              `…and ${hidden} more High or Critical finding${hidden === 1 ? '' : 's'} on the dashboard.`,
+              `…and ${plural(hidden.length, 'more High or Critical rule')} (${plural(hiddenAlerts, 'alert')}) on the dashboard.`,
             ),
           );
         }
