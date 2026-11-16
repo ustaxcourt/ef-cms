@@ -4,6 +4,7 @@ import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { ATP_DOCKET_ENTRY } from '@shared/test/mockDocketEntry';
+import { LODGED_EVENT_CODE } from '@shared/business/entities/EntityConstants';
 
 const editDocketEntryMetaHelper = withAppContextDecorator(
   editDocketEntryMetaHelperComputed,
@@ -443,6 +444,45 @@ describe('editDocketEntryMetaHelper', () => {
           docketNumber: '103-20',
         },
       ]);
+    });
+  });
+
+  describe('documentTypeOptions', () => {
+    const baseState = {
+      caseDetail: {
+        docketNumber: '101-20',
+        partyType: PARTY_TYPES.petitioner,
+      },
+      form: {
+        docketEntryId: '123',
+        multiDocketedOn: [],
+      },
+      formattedCaseDetail: {
+        consolidatedCases: [],
+      },
+    };
+
+    it('should include internal document types and Notice of Receipt of Petition', () => {
+      const result = runCompute(editDocketEntryMetaHelper, {
+        state: baseState,
+      });
+
+      const eventCodes = result.documentTypeOptions.map(d => d.eventCode);
+      expect(eventCodes).toContain('NOTR');
+      expect(eventCodes).toContain('M071');
+    });
+
+    it('should exclude the lodged event code and deprecated document types', () => {
+      const result = runCompute(editDocketEntryMetaHelper, {
+        state: baseState,
+      });
+
+      expect(
+        result.documentTypeOptions.find(d => d.eventCode === LODGED_EVENT_CODE),
+      ).toBeUndefined();
+      expect(result.documentTypeOptions.filter(d => d.deprecated)).toHaveLength(
+        0,
+      );
     });
   });
 });
