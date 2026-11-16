@@ -51,6 +51,7 @@ const getCsv = (data: PendingItemFormatted[]) => {
     bom: true,
     columns: [
       { header: 'Docket No.', key: 'docketNumberWithSuffix' },
+      { header: 'No.', key: 'index' },
       { header: 'Date Filed', key: 'formattedFiledDate' },
       { header: 'Case Title', key: 'caseTitle' },
       { header: 'Filings and Proceedings', key: 'formattedName' },

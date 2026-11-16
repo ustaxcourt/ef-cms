@@ -20,6 +20,7 @@ export type PendingItemFormatted = {
   isLeadCase: boolean;
   docketNumberWithSuffix: string;
   receivedAt: string;
+  index?: number;
 };
 
 export const formatPendingItem = (item: PendingItem): PendingItemFormatted => {
@@ -56,6 +57,7 @@ export const formatPendingItem = (item: PendingItem): PendingItemFormatted => {
     formattedName,
     formattedStatus,
     inConsolidatedGroup: pendingItemWithConsolidatedFlags.inConsolidatedGroup,
+    index: item.index,
     isLeadCase: pendingItemWithConsolidatedFlags.isLeadCase,
     receivedAt: item.receivedAt,
     shouldIndent: pendingItemWithConsolidatedFlags.shouldIndent,
