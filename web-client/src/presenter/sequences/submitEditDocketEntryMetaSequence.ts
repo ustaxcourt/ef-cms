@@ -5,7 +5,7 @@ import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { clearOtherIterationAction } from '../actions/clearOtherIterationAction';
 import { computeJudgeNameWithTitleAction } from '../actions/computeJudgeNameWithTitleAction';
 import { generateCourtIssuedDocumentTitleAction } from '../actions/CourtIssuedDocketEntry/generateCourtIssuedDocumentTitleAction';
-import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
+import { generateEditDocketEntryTitleAction } from '../actions/EditDocketRecordEntry/generateEditDocketEntryTitleAction';
 import { getEditDocketEntryMetaAlertSuccessAction } from '../actions/EditDocketRecordEntry/getEditDocketEntryMetaAlertSuccessAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { primePropsFromEditDocketEntryMetaModalAction } from '../actions/EditDocketRecordEntry/primePropsFromEditDocketEntryMetaModalAction';
@@ -37,7 +37,7 @@ export const submitEditDocketEntryMetaSequence = [
     ],
     document: [
       refreshExternalDocumentTitleFromEventCodeAction,
-      generateTitleAction,
+      generateEditDocketEntryTitleAction,
     ],
     noDocument: [],
   },

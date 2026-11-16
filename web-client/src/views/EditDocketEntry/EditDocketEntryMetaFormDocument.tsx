@@ -97,7 +97,7 @@ export const EditDocketEntryMetaFormDocument = connect(
             inputId="document-type-input"
             isClearable={true}
             name="eventCode"
-            options={internalTypesHelper.internalDocumentTypesForSelectSorted}
+            options={editDocketEntryMetaHelper.documentTypeOptions}
             value={reactSelectValue({
               documentTypes: INTERNAL_DOCKET_ENTRY_EDIT_FORM_DOCUMENT_TYPES,
               selectedEventCode: form.eventCode,
