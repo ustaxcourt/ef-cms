@@ -38,7 +38,7 @@ budget and performance.
    1. Cases filed in fiscal year (aggregate stats):
       ```bash
       scripts/reports/cases-filed-in-year.ts -f "$FISCAL_YEAR" -s \
-        > "~/Documents/cases-filed-in-fy-${FISCAL_YEAR}_stats.txt"
+        > "${HOME}/Documents/cases-filed-in-fy-${FISCAL_YEAR}_stats.txt"
       ```
    1. Closed dates of cases filed in fiscal year:
       ```bash
@@ -64,30 +64,32 @@ budget and performance.
          ```
       1. Open a new file in nano, paste the stats into the file, then save the file:
          ```bash
-         nano "~/Documents/lea-stats-fy-${FISCAL_YEAR}.txt"
+         nano "${HOME}/Documents/lea-stats-fy-${FISCAL_YEAR}.txt"
          ```
-   1. Non-attorney practitioners' activity in fiscal year:
+   1. Non-attorney practitioners:
       ```bash
-      scripts/reports/non-attorney-practitioners.ts > "~/Documents/non-attorney-practitioners-fy-${FISCAL_YEAR}.csv"
+      scripts/reports/non-attorney-practitioners.ts \
+        > "${HOME}/Documents/non-attorney-practitioners-as-of-fy-${FISCAL_YEAR}.csv"
       ```
-   1. Non-attorney practitioners' activity in fiscal year (aggregate stats):
+   1. Non-attorney practitioners (aggregate stats):
       ```bash
       scripts/reports/non-attorney-practitioners.ts --stats \
-        > "~/Documents/non-attorney-practitioners-stats-fy-${FISCAL_YEAR}.csv"
+        > "${HOME}/Documents/non-attorney-practitioners-stats-as-of-fy-${FISCAL_YEAR}.csv"
       ```
    1. Practitioner stats:
       ```bash
-      scripts/reports/practitioner-stats.ts -f "$FISCAL_YEAR" > "~/Documents/practitioner-stats-fy-${FISCAL_YEAR}.txt"
+      scripts/reports/practitioner-stats.ts -f "$FISCAL_YEAR" \
+        > "${HOME}/Documents/practitioner-stats-fy-${FISCAL_YEAR}.txt"
       ```
    1. Count of cases filed in fiscal year with private practitioners representing the petitioner:
       ```bash
       scripts/reports/represented-count-by-year.ts -f "$FISCAL_YEAR" \
-        > "~/Documents/represented-counts-fy-${FISCAL_YEAR}.txt"
+        > "${HOME}/Documents/represented-counts-fy-${FISCAL_YEAR}.txt"
       ```
    1. Count of all currently-open cases with private practitioners representing the petitioner:
       ```bash
       scripts/reports/represented-count-in-all-open-cases.ts \
-        > "~/Documents/represented-counts-in-all-open-cases-fy-${FISCAL_YEAR}.txt"
+        > "${HOME}/Documents/represented-counts-in-all-open-cases-fy-${FISCAL_YEAR}.txt"
       ```
    1. Trial sessions conducted in fiscal year:
       ```bash
@@ -95,7 +97,8 @@ budget and performance.
       ```
    1. Trial sessions conducted in fiscal year (aggregate stats):
       ```bash
-      scripts/reports/trial-sessions.ts -f "$FISCAL_YEAR" -s > "~/Documents/trial-sessions-stats-fy-${FISCAL_YEAR}.txt"
+      scripts/reports/trial-sessions.ts -f "$FISCAL_YEAR" -s \
+        > "${HOME}/Documents/trial-sessions-stats-fy-${FISCAL_YEAR}.txt"
       ```
 1. Numerous files will have been generated in your `~/Documents` directory. Send all of the generated files to the
 DAWSON Product Owner and the Case Services Manager. They will synthesize the data into the Congressional Budget
