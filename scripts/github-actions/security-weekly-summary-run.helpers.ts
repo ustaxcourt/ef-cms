@@ -1,0 +1,123 @@
+import { type CommandRunner } from '../git/github-client';
+import {
+  type SummaryCard,
+  buildSummaryCard,
+} from './security-weekly-summary-card.helpers';
+import {
+  computeWindow,
+  getScheduledRunHealth,
+  listNewFindings,
+  shouldPostForSchedule,
+} from './security-weekly-summary.helpers';
+import { runCommand } from '../helpers/runCommand';
+
+export const TEAMS_TIMEOUT_MS = 30_000;
+export const DEFAULT_REPO = 'ustaxcourt/ef-cms';
+
+export type FetchFn = (
+  url: string,
+  init: {
+    body: string;
+    headers: Record<string, string>;
+    method: 'POST';
+    signal: AbortSignal;
+  },
+) => Promise<{ ok: boolean; status: number }>;
+
+export type SummaryEnv = {
+  DASHBOARD_URL?: string;
+  EVENT_SCHEDULE?: string;
+  GITHUB_ACTIONS?: string;
+  GITHUB_REPOSITORY?: string;
+  RUN_URL?: string;
+  SINCE?: string;
+  TEAMS_WEBHOOK_URL?: string;
+};
+
+export const defaultDashboardUrl = (repo: string): string =>
+  `https://github.com/${repo}/security/code-scanning?query=is%3Aopen+branch%3Astaging`;
+
+export const postToTeams = async ({
+  fetchFn = fetch,
+  payload,
+  webhookUrl,
+}: {
+  fetchFn?: FetchFn;
+  payload: SummaryCard;
+  webhookUrl: string;
+}): Promise<number> => {
+  let response: { ok: boolean; status: number };
+  try {
+    response = await fetchFn(webhookUrl, {
+      body: JSON.stringify(payload),
+      headers: { 'Content-Type': 'application/json' },
+      method: 'POST',
+      signal: AbortSignal.timeout(TEAMS_TIMEOUT_MS),
+    });
+  } catch {
+    throw new Error('Teams webhook request failed before a response');
+  }
+  if (!response.ok) {
+    throw new Error(`Teams webhook returned HTTP ${response.status}`);
+  }
+  return response.status;
+};
+
+export const runWeeklySummary = async ({
+  commandRunner = runCommand,
+  dryRun = false,
+  env,
+  fetchFn = fetch,
+  log = console.log,
+  now,
+  print = console.log,
+}: {
+  commandRunner?: CommandRunner;
+  dryRun?: boolean;
+  env: SummaryEnv;
+  fetchFn?: FetchFn;
+  log?: (message: string) => void;
+  now: string;
+  print?: (output: string) => void;
+}): Promise<void> => {
+  if (dryRun && env.GITHUB_ACTIONS === 'true') {
+    throw new Error(
+      '--dry-run prints findings, so it is not allowed in GitHub Actions (logs are public)',
+    );
+  }
+  const webhookUrl = env.TEAMS_WEBHOOK_URL;
+  if (!dryRun && !webhookUrl?.startsWith('https://')) {
+    throw new Error('TEAMS_WEBHOOK_URL must be set to an https URL');
+  }
+
+  if (!shouldPostForSchedule({ now, schedule: env.EVENT_SCHEDULE })) {
+    log('Not the 8am Eastern run for today; skipping.');
+    return;
+  }
+
+  const repo = env.GITHUB_REPOSITORY || DEFAULT_REPO;
+  const window = computeWindow({ now, since: env.SINCE || undefined });
+  const [findings, health] = await Promise.all([
+    listNewFindings({ commandRunner, repo, window }),
+    getScheduledRunHealth({ commandRunner, now, repo }),
+  ]);
+  const payload = buildSummaryCard({
+    dashboardUrl: env.DASHBOARD_URL || defaultDashboardUrl(repo),
+    findings,
+    health,
+    runUrl: env.RUN_URL || undefined,
+    window,
+  });
+
+  if (dryRun) {
+    print(JSON.stringify(payload, null, 2));
+    return;
+  }
+
+  const status = await postToTeams({
+    fetchFn,
+    payload,
+    webhookUrl: webhookUrl as string,
+  });
+  log(`Posted the weekly security summary (HTTP ${status}).`);
+};

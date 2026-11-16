@@ -52,6 +52,7 @@ const config: Config = {
     '!github-actions/compile-suite-coverage.ts',
     '!github-actions/download-historical-test-file-times.ts',
     '!github-actions/emit-coverage-summary.ts',
+    '!github-actions/security-weekly-summary.ts',
     '!github-actions/split-tests.ts',
     '!github-actions/split-tests-cypress.ts',
     '!github-actions/split-tests-glob.ts',
