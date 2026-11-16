@@ -966,6 +966,46 @@ describe('formattedDocketEntries', () => {
 
       expect(result.formattedDocketEntriesOnDocketRecord.length).toBe(2);
     });
+
+    it('should sort pending docket entries by receivedAt', () => {
+      const pendingMotion = {
+        ...mockDocketEntry,
+        docketEntryId: 'b8dd9fa0-46bd-4a2a-a1d1-7bcbc2c78d0d',
+        documentTitle: 'Motion to Dismiss',
+        documentType: 'Motion to Dismiss',
+        eventCode: 'M070',
+        isFileAttached: true,
+        pending: true,
+        servedAt: '2026-11-01T00:00:00.000Z',
+        servedParties: [
+          { email: petitionerUser.email, name: petitionerUser.name },
+        ],
+      };
+
+      const pendingDocketEntries = [
+        { ...pendingMotion, index: 3, receivedAt: '2026-11-03T00:00:00.000Z' },
+        { ...pendingMotion, index: 2, receivedAt: '2026-11-02T00:00:00.000Z' },
+        { ...pendingMotion, index: 1, receivedAt: '2026-11-01T00:00:00.000Z' },
+      ];
+
+      const caseDetail = {
+        ...MOCK_CASE,
+        docketEntries: pendingDocketEntries,
+      };
+
+      const result = runCompute(formattedDocketEntries, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail,
+        },
+      });
+
+      expect(
+        result.formattedPendingDocketEntriesOnDocketRecord.map(d => {
+          return d.index;
+        }),
+      ).toEqual([1, 2, 3]);
+    });
   });
 
   describe('qcNeeded', () => {

@@ -20,6 +20,7 @@ describe('formatPendingItem', () => {
       docketNumberWithSuffix: '103-19L',
       documentTitle: 'Affidavit of Bob in Support of Petition',
       documentType: 'Affidavit in Support',
+      index: 1,
       leadDocketNumber: undefined,
       receivedAt: '2018-01-20',
       status: CASE_STATUS_TYPES.calendared,
@@ -37,6 +38,7 @@ describe('formatPendingItem', () => {
         docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
         documentTitle: 'Bop dop baboo',
         documentType: 'Administrative Record',
+        index: 1,
         receivedAt: '2019-01-10',
         status: CASE_STATUS_TYPES.new,
       },
@@ -49,6 +51,7 @@ describe('formatPendingItem', () => {
         docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
         documentTitle: 'Affidavit of Sally in Support of Petition',
         documentType: 'Affidavit in Support',
+        index: 1,
         receivedAt: '2018-01-20',
         status: CASE_STATUS_TYPES.new,
       },
@@ -61,6 +64,7 @@ describe('formatPendingItem', () => {
         docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
         documentTitle: 'Affidavit of Bob in Support of Petition',
         documentType: 'Affidavit in Support',
+        index: 1,
         receivedAt: '2018-01-20',
         status: CASE_STATUS_TYPES.new,
       },
@@ -77,6 +81,7 @@ describe('formatPendingItem', () => {
           '/case-detail/101-19/document-view?docketEntryId=33ddbf4f-90f8-417c-8967-57851b0b9069',
         formattedFiledDate: '01/10/19',
         formattedName: 'Bop dop baboo',
+        index: 1,
       },
       {
         associatedJudgeFormatted: CHIEF_JUDGE,
@@ -84,6 +89,7 @@ describe('formatPendingItem', () => {
           '/case-detail/101-19/document-view?docketEntryId=dd956ab1-5cde-4e78-bae0-fff4aee40426',
         formattedFiledDate: '01/20/18',
         formattedName: 'Affidavit of Sally in Support of Petition',
+        index: 1,
       },
       {
         associatedJudgeFormatted: 'A',
@@ -91,6 +97,7 @@ describe('formatPendingItem', () => {
           '/case-detail/103-19/document-view?docketEntryId=dd956ab1-5cde-4e78-bae0-ac7faee40426',
         formattedFiledDate: '01/20/18',
         formattedName: 'Affidavit of Bob in Support of Petition',
+        index: 1,
       },
     ]);
   });
