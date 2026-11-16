@@ -186,6 +186,7 @@ import { confirmPaperServiceModalHelper } from './computeds/confirmPaperServiceM
 import { ProcessPaymentResponse } from '@ustaxcourt/payment-portal/dist';
 import { ClerkDashboardStats } from '@web-api/business/useCases/reports/getClerkDashboardStatsInteractor';
 import { loginHelper } from '@web-client/presenter/computeds/Login/LoginHelper';
+import { editCaseDetailsHelper } from '@web-client/presenter/computeds/editCaseDetailsHelper';
 
 const { ASCENDING, DOCKET_RECORD_FILTER_OPTIONS } = getConstants();
 
@@ -358,6 +359,9 @@ export const computeds = {
   >,
   draftDocumentViewerHelper: draftDocumentViewerHelper as unknown as ReturnType<
     typeof draftDocumentViewerHelper
+  >,
+  editCaseDetailsHelper: editCaseDetailsHelper as unknown as ReturnType<
+    typeof editCaseDetailsHelper
   >,
   editDocketEntryMetaHelper: editDocketEntryMetaHelper as unknown as ReturnType<
     typeof editDocketEntryMetaHelper
