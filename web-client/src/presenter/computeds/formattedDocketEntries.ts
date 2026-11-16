@@ -517,12 +517,18 @@ export const formattedDocketEntries = (
           ),
         );
 
-  const formattedPendingDocketEntriesOnDocketRecord =
+  let formattedPendingDocketEntriesOnDocketRecord =
     formattedDocketEntriesForPendingList.filter(
       docketEntry =>
         docketEntry.isOnDocketRecord &&
         applicationContext.getUtilities().isPending(docketEntry),
     );
+
+  formattedPendingDocketEntriesOnDocketRecord = sortDocketEntryTable(
+    formattedPendingDocketEntriesOnDocketRecord,
+    'receivedAt',
+    'asc',
+  );
 
   const formattedDraftDocuments = formattedCase.draftDocuments.map(draftDoc => {
     return {
