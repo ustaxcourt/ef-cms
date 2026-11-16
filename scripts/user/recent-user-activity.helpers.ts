@@ -28,8 +28,9 @@ import { performQuery } from '../cloudwatch/perform-query';
  */
 
 const API_COLORS = ['blue', 'green'] as const;
-const STAFF_EMAIL_PATTERN = String.raw`/(?i)ustaxcourt\.gov$/`;
+const STAFF_EMAIL_PATTERN = String.raw`/(?i)@ustaxcourt\.gov$/`;
 const LONG_WINDOW_MINUTES = 12 * 60;
+export const QUERY_LIMIT = 1000;
 
 export type InsightsRecord = { [field: string]: string };
 
@@ -82,7 +83,7 @@ export const buildLoginsQuery = ({
     '| parse body /"email":"(?<loginEmail>[^"]+)"/',
     ...(staffOnly ? [`| filter loginEmail like ${STAFF_EMAIL_PATTERN}`] : []),
     '| sort @timestamp desc',
-    '| limit 1000',
+    `| limit ${QUERY_LIMIT}`,
   ].join('\n');
 
 export const buildActivityQuery = ({
@@ -96,7 +97,7 @@ export const buildActivityQuery = ({
     '| stats count(*) as requests, min(@timestamp) as firstSeen, max(@timestamp) as lastSeen' +
       ' by user.email as email, user.name as name, user.role as role',
     '| sort lastSeen desc',
-    '| limit 1000',
+    `| limit ${QUERY_LIMIT}`,
   ].join('\n');
 
 export const SAMPLE_QUERY: string = [
@@ -228,6 +229,15 @@ export const sanitizeSampleMessage = (message: string): string => {
   }
 };
 
+/**
+ * The summary queries return at most QUERY_LIMIT rows, so a full result set
+ * means the counts may not cover the whole window.
+ */
+export const capNote = (count: number): string =>
+  count >= QUERY_LIMIT
+    ? ` (capped at the most recent ${QUERY_LIMIT}; use a shorter --minutes for complete counts)`
+    : '';
+
 const printRows = (rows: LoginRow[] | ActivityRow[]): void => {
   if (rows.length === 0) {
     console.log('  (none)');
@@ -300,7 +310,8 @@ export const getRecentUserActivity = async ({
     );
     const succeeded = result.logins.filter(row => row.Result === 'ok').length;
     console.log(
-      `Logins: ${result.logins.length} attempts, ${succeeded} succeeded`,
+      `Logins: ${result.logins.length} attempts, ${succeeded} succeeded` +
+        capNote(result.logins.length),
     );
     printRows(result.logins);
 
@@ -308,7 +319,9 @@ export const getRecentUserActivity = async ({
       await runQuery(buildActivityQuery({ staffOnly })),
       includeDate,
     );
-    console.log(`\nActive users: ${result.activity.length}`);
+    console.log(
+      `\nActive users: ${result.activity.length}${capNote(result.activity.length)}`,
+    );
     printRows(result.activity);
 
     return result;

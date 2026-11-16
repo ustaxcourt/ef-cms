@@ -20,7 +20,6 @@ const scriptConfig: ScriptConfig = {
       default: '15',
       description: 'look-back window in minutes',
       short: 'm',
-      transform: 'number',
       type: 'string',
     },
     sample: {
@@ -42,10 +41,18 @@ const { env, minutes, region, sample, staffOnly } = parseArgsAndEnvVars(
   scriptConfig,
 ) as {
   env: string;
-  minutes: number;
+  minutes: string;
   region: string;
   sample: boolean;
   staffOnly: boolean;
 };
 
-void getRecentUserActivity({ env, minutes, region, sample, staffOnly });
+// Not the shared 'number' transform: it uses parseInt, which would quietly
+// turn values like '1.5' or '60,90' into integers instead of rejecting them.
+void getRecentUserActivity({
+  env,
+  minutes: Number(minutes),
+  region,
+  sample,
+  staffOnly,
+});

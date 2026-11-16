@@ -8,9 +8,11 @@ import {
 import {
   type ActivityRow,
   type LoginRow,
+  QUERY_LIMIT,
   SAMPLE_QUERY,
   buildActivityQuery,
   buildLoginsQuery,
+  capNote,
   findApiLogGroups,
   formatInsightsTimestamp,
   getQueryWindow,
@@ -96,7 +98,7 @@ describe('recent-user-activity helpers', () => {
 
     it('filters to ustaxcourt.gov emails when staffOnly is true', () => {
       expect(buildLoginsQuery({ staffOnly: true })).toContain(
-        String.raw`| filter loginEmail like /(?i)ustaxcourt\.gov$/`,
+        String.raw`| filter loginEmail like /(?i)@ustaxcourt\.gov$/`,
       );
     });
   });
@@ -116,7 +118,19 @@ describe('recent-user-activity helpers', () => {
 
     it('filters to ustaxcourt.gov emails when staffOnly is true', () => {
       expect(buildActivityQuery({ staffOnly: true })).toContain(
-        String.raw`| filter user.email like /(?i)ustaxcourt\.gov$/`,
+        String.raw`| filter user.email like /(?i)@ustaxcourt\.gov$/`,
+      );
+    });
+  });
+
+  describe('capNote', () => {
+    it('is empty when fewer rows than the query limit came back', () => {
+      expect(capNote(QUERY_LIMIT - 1)).toBe('');
+    });
+
+    it('warns that the counts are capped when the query limit was reached', () => {
+      expect(capNote(QUERY_LIMIT)).toBe(
+        ` (capped at the most recent ${QUERY_LIMIT}; use a shorter --minutes for complete counts)`,
       );
     });
   });
@@ -463,6 +477,30 @@ describe('recent-user-activity helpers', () => {
       );
       expect(console.log).toHaveBeenCalledWith('  (none)');
       expect(console.table).toHaveBeenCalledTimes(1);
+    });
+
+    it('notes in both summaries when the results reached the query limit', async () => {
+      mockLogGroups(logGroupNames);
+      mockQueryResults([
+        Array.from({ length: QUERY_LIMIT }, () => ({
+          '@timestamp': '2026-11-15 16:50:00.000',
+          status: '200',
+          url: '/auth/code',
+        })),
+        Array.from({ length: QUERY_LIMIT }, (_, i) => ({
+          email: `user${i}@example.com`,
+          requests: '1',
+        })),
+      ]);
+
+      await getRecentUserActivity(baseOptions);
+
+      expect(console.log).toHaveBeenCalledWith(
+        `Logins: ${QUERY_LIMIT} attempts, ${QUERY_LIMIT} succeeded${capNote(QUERY_LIMIT)}`,
+      );
+      expect(console.log).toHaveBeenCalledWith(
+        `\nActive users: ${QUERY_LIMIT}${capNote(QUERY_LIMIT)}`,
+      );
     });
 
     it('prints sanitized raw log lines and skips the summary queries in sample mode', async () => {
