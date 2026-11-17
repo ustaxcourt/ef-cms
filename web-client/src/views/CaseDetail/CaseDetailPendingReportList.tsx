@@ -62,7 +62,7 @@ export const CaseDetailPendingReportList = connect(
                 >
                   <td>{entry.index}</td>
                   <td>
-                    <span className="no-wrap">{entry.createdAtFormatted}</span>
+                    <span className="no-wrap">{entry.receivedAtFormatted}</span>
                   </td>
                   <td>
                     <FilingsAndProceedings entry={entry} />

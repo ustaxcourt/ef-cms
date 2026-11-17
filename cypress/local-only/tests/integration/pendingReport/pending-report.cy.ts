@@ -17,6 +17,25 @@ describe('Pending report', () => {
       cy.get('[data-testid="dropdown-select-report"]').click();
       cy.get('[data-testid="select-pending-report"]').click();
       cy.get('[data-testid="dropdown-select-judge"]').select('Chief Judge');
+
+      const headerTitles = [
+        'Docket No.',
+        'No.',
+        'Filed Date',
+        'Case Title',
+        'Filings and Proceedings',
+        'Case Status',
+      ];
+
+      cy.get('[data-testid$="-sortable-button"]').each((header, index) => {
+        cy.wrap(header.children('.margin-right-1')).should(
+          'contain.text',
+          headerTitles[index],
+        );
+      });
+
+      cy.get('th').eq(7).should('contain.text', 'Judge');
+
       cy.get('[data-testid="export-pending-report"]').click();
       cy.readFile(path.join(downloadsFolder, fileName));
       cy.get('[data-testid="print-pending-report"]').click();

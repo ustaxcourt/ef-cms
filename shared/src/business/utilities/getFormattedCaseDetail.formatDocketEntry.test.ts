@@ -5,6 +5,7 @@ import {
 } from '../entities/EntityConstants';
 import { applicationContext } from '../../business/test/createTestApplicationContext';
 import { formatDocketEntry } from './getFormattedCaseDetail';
+import { MOCK_ANSWER } from '@shared/test/mockDocketEntry';
 
 describe('formatDocketEntry', () => {
   it('should format the servedAt date', () => {
@@ -329,6 +330,26 @@ describe('formatDocketEntry', () => {
         isOnDocketRecord: false,
       } as RawDocketEntry);
       expect(result.sortingFilingDate).toEqual('20200301');
+    });
+  });
+
+  describe('receivedAtFormatted', () => {
+    it('should format receivedAt', () => {
+      const result = formatDocketEntry(applicationContext, {
+        ...MOCK_ANSWER,
+        receivedAt: '2026-11-01T04:00:00.000Z',
+      });
+
+      expect(result.receivedAtFormatted).toEqual('11/01/26');
+    });
+
+    it('should handle undefined receivedAt', () => {
+      const result = formatDocketEntry(applicationContext, {
+        ...MOCK_ANSWER,
+        receivedAt: undefined as any,
+      });
+
+      expect(result.receivedAtFormatted).toEqual('');
     });
   });
 });
