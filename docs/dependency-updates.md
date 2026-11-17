@@ -6,7 +6,7 @@ Each week we rotate a few of the routine process and maintenance chores between 
 
 At the moment, the only task we rotate is updating dependencies. As an open-source project, we rely on external libraries which get updates frequently. These include JavaScript Library Updates and Infrastructure as Code Libraries as described below. Follow the [PR workflow](./pr-workflow.md) like any other change.
 
-> After changes are made to any dependencies, deploy to an experimental environment to verify that all tests pass!
+> After changes are made to any dependencies, deploy to the **dev** environment (`develop` in CircleCI) to verify that all tests pass!
 
 ## Dependency Update Steps
 
@@ -19,6 +19,8 @@ At the moment, the only task we rotate is updating dependencies. As an open-sour
 - `./web-api/terraform/modules/batch/docker-image/package.json`
 
 1. Before running the `upgrade-npm-packages.ts` script, ensure that all packages listed in the caveats section below are in parity with the caveats list in the `upgrade-npm-packages.ts` file. Any package documented as held that is missing from the script's `caveats` array will be upgraded to its latest version. As of 10/13/2026, the script and docs are in sync; `@opensearch-project/opensearch` was added to the script this rotation after being documented as held on 10/2/2026 without a matching script entry.
+
+   - As of 11/09/2026, the script and docs are in sync; `recharts` and `@recharts/devtools` were removed from the script's `caveats` array after `@recharts/devtools@0.0.19` began accepting `recharts ^3.9.0` (which includes our pinned **3.10.1**).
 
 1. You can use the `upgrade-npm-packages.ts` script for this process if you would like. Run the script in each directory containing a package.json:
    ```bash
@@ -59,6 +61,8 @@ This command informs us of known security vulnerabilities. If transitive depende
 > **Why am I seeing 19 high severity vulnerabilities for `braces`, `micromatch`, `stylelint`, `nodemon`, and the esbuild plugins?**
 > They all trace back to one advisory: `braces` <=3.0.3 can exhaust the call stack on deeply nested brace patterns ([GHSA-vfj7-8cjw-p6xm](https://github.com/advisories/GHSA-vfj7-8cjw-p6xm), CVE-2026-93687). As of 10/13/2026 there is no patched release, so an override can't fix it. `braces` is only reached through dev and build tooling (`stylelint`, `chokidar`/`nodemon` via the payment-portal test server, `esbuild-plugin-copy`, `esbuild-plugin-clean`), which expand glob patterns from our own configuration rather than user input; `npm ls braces --omit=dev` is empty. Check for a patched `braces` release each rotation and add an override once one ships.
 
+> **As of 11/09/2026:** Still no patched release; latest on npm remains **3.0.3**, so an override still can't fix it.
+
 #### 1.3 Approve or deny scripts as needed
 
 Once we upgrade to `npm` v12, package install scripts will be opt-in instead of automatically being allowed to run. As of v11, we can approve deny scripts using `npm approve-scripts <pkg>` or `npm deny-scripts <pkg>`, so for the week of 7/13/2026 we approved the following packages and denied the rest: `cypress` and `puppeteer`. Note the approvals are version-specific, so these packages will likely have to be reapproved when they are upgraded.
@@ -98,6 +102,8 @@ When updating Node.js, keep in mind:
  - If the Node.js upgrade stays within the published `@ustaxcourt/payment-portal` `engines.node` range (for example, a patch/minor update within the same major version), no `payment-portal` update is required.
  - If the Node.js upgrade falls outside the published `engines.node` range (for example, moving to a new major version), then `@ustaxcourt/payment-portal` must be updated and published with a compatible `engines.node` range before `npm ci` in ef-cms will succeed without engine workarounds.
 
+- As of 11/09/2026: Node **24.22.2** is available on nodejs.org, but there is no matching `cypress/browsers` tag on Docker Hub for **24.22.2** yet. Held at **24.22.1** in `.nvmrc` and the CI `Dockerfile` until a `node-24.22.2` (or compatible) `cypress/browsers` image is published.
+
 #### 2.2 Update `Dockerfile` as needed
 
 Check if updates are necessary for the main `Dockerfile`. We base this image on `cypress/browsers`, a debian linux image that contains the latest (headless) versions of Chrome, Firefox, and Edge.
@@ -115,13 +121,13 @@ Check if updates are necessary for the main `Dockerfile`. We base this image on 
 
 #### 2.3 Publish new ECR docker image if needed
 
-If the `Dockerfile` has changed, you will need to build a new docker image and publish it to an experimental environment's ECR.
+If the `Dockerfile` has changed, you will need to build a new docker image and publish it to the **dev** environment's ECR first. We always publish CI images to dev before promoting them to other environments so vulnerability scanning can target the exact image tag that CircleCI will run—not a one-off rebuild that may not match what deploys. See [Appendix: CI images, scanning, and dev](#appendix-ci-images-scanning-and-dev).
 
 1. Increment the docker image version being used in `.circleci/config.yml` in the `&efcms-docker-image` variable. See [PR #5980](https://github.com/ustaxcourt/ef-cms/pull/5980/files#diff-78a8a19706dbd2a4425dd72bdab0502ed7a2cef16365ab7030a5a0588927bf47) for an example.
 1. Review previously accepted container vulnerability findings and reassess any that may be affected by dependency or image changes. Refer to [Container Finding Triage](./security/container-findings-triage.md) for guidance.
-1. Use the [environment switcher](./additional-resources/environment-switcher.md) to point to an experimental environment:
+1. Select the **dev** environment. Use the [environment switcher](./additional-resources/environment-switcher.md) to load AWS credentials for dev (`develop` in CircleCI; `dev` or `develop` both work with the switcher):
    ```bash
-   . scripts/env/set-env.zsh expN
+   . scripts/env/set-env.zsh dev
    ```
 1. Publish a docker image tagged with the incremented version number to ECR:
    ```bash
@@ -135,7 +141,7 @@ If the `Dockerfile` has changed, you will need to build a new docker image and p
 
    > Refer to [ci-cd.md](ci-cd.md#docker) for more info on this as needed
 
-1. Update the `CHANGES.md` file with instructions for deploying this new docker image to other environments. Be sure to indicate the experimental environment to which you just deployed the image. See [df83cf3](https://github.com/ustaxcourt/ef-cms/commit/df83cf3db69f2c6149cbef3ae213db488822cc2b) for an example.
+1. Update the `CHANGES.md` file with instructions for promoting this new docker image from **dev** to other environments (for example with `npm run deploy:ci-image:from dev`). See [df83cf3](https://github.com/ustaxcourt/ef-cms/commit/df83cf3db69f2c6149cbef3ae213db488822cc2b) for an example.
 
 ### 3. Update Terraform AWS provider
 
@@ -160,11 +166,13 @@ Check to see if there is an updated version of the Aurora RDS postgres engine av
 
 > **Never get ahead of `prod` and `test`.** Local Docker, GitHub Actions service containers, the `RDS_ENGINE_VERSION` default, and experimental Aurora clusters must stay on the same Postgres version that `prod` and `test` run (as of 10/13/2026: **17.5**, pinned as `postgres:17.5-trixie`). A newer engine being available is not a reason to bump anything in a routine rotation; note it in the PR and leave every pin unchanged. An engine upgrade is a planned change that the team schedules for `test` and `prod` together, using the steps below.
 
+> **As of 11/09/2026:** No change — still **17.5** (`postgres:17.5-trixie`); leave every pin unchanged this rotation.
+
 When the team schedules an engine upgrade, we'll need to update postgres in deployed environments, locally, and in GitHub Actions together.
 
-1. Use the [environment switcher](./additional-resources/environment-switcher.md) to point to an experimental environment and to retrieve a fresh AWS access key:
+1. Select the **dev** environment. Use the [environment switcher](./additional-resources/environment-switcher.md) to load AWS credentials for dev and retrieve a fresh access key:
    ```bash
-   . scripts/env/set-env.zsh expN
+   . scripts/env/set-env.zsh dev
    ```
 1. Determine the current Aurora RDS postgres engine version in this environment:
    ```bash
@@ -183,9 +191,9 @@ If a postgres engine update is available, we'll need to update the postgres engi
    ```bash
    scripts/secrets/update-secret.ts --key "RDS_ENGINE_VERSION" --value "99.9"
    ```
-1. Run a deployment to the experimental environment (e.g. by pushing your code changes to the experimental branch). Click on the `deploy` job and watch its output. Keep this CircleCI tab open.
-1. In a new tab, log in to this experimental environment's AWS console, navigate to Aurora RDS, and keep an eye on the progress of the blue/green deployment. Keep this AWS console tab open.
-1. Wait until the data is copying and then, in a new tab, log in to this DAWSON experimental environment and create or edit some data (file a document to an existing case, edit case metadata, edit a docket entry, etc.)
+1. Run a deployment to **dev** (for example by pushing your code changes to the `develop` branch). Click on the `deploy` job and watch its output. Keep this CircleCI tab open.
+1. In a new tab, log in to the **dev** AWS console, navigate to Aurora RDS, and keep an eye on the progress of the blue/green deployment. Keep this AWS console tab open.
+1. Wait until the data is copying and then, in a new tab, log in to the DAWSON **dev** environment and create or edit some data (file a document to an existing case, edit case metadata, edit a docket entry, etc.)
 1. In the same DAWSON tab, prepare a similar edit that does not overwrite the previous edit. Do not submit it yet, and keep this DAWSON tab open.
 1. Once the blue/green deployment is nearly complete in the AWS console tab, closely watch the output of the `upgrade-rds-engine-version.sh` script in CircleCI.
 1. When you see the log messages "`Status: AVAILABLE`" and "`Blue/Green deployment is available. Initiating switchover...`", submit your edit in the DAWSON tab.
@@ -206,7 +214,7 @@ We run postgres via Docker locally and in GitHub Actions. The postgres image we 
    ```bash
    curl -s "https://registry.hub.docker.com/v2/repositories/library/postgres/tags?page_size=100" | jq -r '.results[].name' | sort -V
    ```
-1. The correct tag to use is the target version of postgres plus the Debian codename from step 1 (e.g. `17.5-trixie` when the CI `cypress/browsers` base is Debian trixie). Generally, the `postgres` images in Dockerhub will have newer versions of postgres than Aurora RDS has available, so don't be alarmed by this discrepancy. Keep local Docker, GHA service containers, and Aurora `RDS_ENGINE_VERSION` on the same major.minor as prod/test — do not advance local or experimental ahead of deployed environments.
+1. The correct tag to use is the target version of postgres plus the Debian codename from step 1 (e.g. `17.5-trixie` when the CI `cypress/browsers` base is Debian trixie). Generally, the `postgres` images in Dockerhub will have newer versions of postgres than Aurora RDS has available, so don't be alarmed by this discrepancy. Keep local Docker, GHA service containers, and Aurora `RDS_ENGINE_VERSION` on the same major.minor as prod/test — do not advance local or **dev** ahead of deployed environments.
 
 #### 5.3 Update PostgreSQL to the latest version locally
 
@@ -227,9 +235,9 @@ If a postgres update is available, we'll need to update postgres in github actio
 ### 6. Update OpenSearch
 Check to see if there is an updated version of OpenSearch available. If an update is available, we'll need to update OpenSearch locally, in github actions, and in deployed environments.
 
-1. Use the [environment switcher](./additional-resources/environment-switcher.md) to point to an experimental environment and to retrieve a fresh AWS access key:
+1. Select the **dev** environment. Use the [environment switcher](./additional-resources/environment-switcher.md) to load AWS credentials for dev and retrieve a fresh access key:
    ```bash
-   . scripts/env/set-env.zsh expN
+   . scripts/env/set-env.zsh dev
    ```
 1. Determine the current OpenSearch engine version in this environment:
    ```bash
@@ -252,7 +260,7 @@ If an OpenSearch update is available, we'll need to update OpenSearch in deploye
    ```bash
    scripts/secrets/update-secret.ts --key "ES_ENGINE_VERSION" --value "OpenSearch_99.9"
    ```
-1. Run a deployment to the experimental environment.
+1. Run a deployment to **dev**.
 1. While the OpenSearch upgrade is being performed (during the `allColors` terraform deployment), verify cluster is still functional by running search smoketests against current color:
    ```bash
    scripts/tests/run-cypress.ts --file cypress/deployed-and-local/integration/advancedSearch/search.cy.ts
@@ -280,13 +288,15 @@ If an OpenSearch update is available, we'll need to update OpenSearch in github 
 
 1. Search the project for `opensearch-version:` and make sure it's set to the latest version in `.github/actions/dawson-app-setup/action.yml`.
 
-> **As of 10/13/2026:** Amazon OpenSearch Service supports up to **OpenSearch_3.7** ([release notes, July 29, 2026](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/release-notes.html)). Upstream **3.8.0** and **3.9.0** are on Docker Hub but are not yet AWS engine options. From an experimental environment (`. scripts/env/set-env.zsh expN`), confirm with `aws opensearch list-versions` and compare to `aws opensearch describe-domain --domain-name "efcms-search-${ENV}-${SOURCE_TABLE_VERSION}" --query "DomainStatus.EngineVersion" --output text`. Repo pins already match the AWS maximum: `ES_ENGINE_VERSION` default `OpenSearch_3.7` in `scripts/secrets/create-env-secrets.ts`, local `opensearchproject/opensearch:3.7.0` in `docker-compose.yml` and `web-api/elasticsearch/docker-compose.yml`, and `opensearch-version: 3.7.0` in `.github/actions/dawson-app-setup/action.yml`. No §6.1 secret update, indices report, deploy, or local/GHA bump this rotation.
+> **As of 10/13/2026:** Amazon OpenSearch Service supports up to **OpenSearch_3.7** ([release notes, July 29, 2026](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/release-notes.html)). Upstream **3.8.0** and **3.9.0** are on Docker Hub but are not yet AWS engine options. From **dev** (`. scripts/env/set-env.zsh dev`), confirm with `aws opensearch list-versions` and compare to `aws opensearch describe-domain --domain-name "efcms-search-${ENV}-${SOURCE_TABLE_VERSION}" --query "DomainStatus.EngineVersion" --output text`. Repo pins already match the AWS maximum: `ES_ENGINE_VERSION` default `OpenSearch_3.7` in `scripts/secrets/create-env-secrets.ts`, local `opensearchproject/opensearch:3.7.0` in `docker-compose.yml` and `web-api/elasticsearch/docker-compose.yml`, and `opensearch-version: 3.7.0` in `.github/actions/dawson-app-setup/action.yml`. No §6.1 secret update, indices report, deploy, or local/GHA bump this rotation.
+
+> **As of 11/09/2026:** No change — AWS engine maximum still **OpenSearch_3.7**; repo pins unchanged; no §6.1 secret update, indices report, deploy, or local/GHA bump this rotation.
 
 ### 7. Wrap up
 
 - Check through the list of caveats to see if any of the documented issues have been resolved.
 
-- Validate updates by deploying to an experimental environment
+- Validate updates by deploying to **dev**
 
 ### 8. Update CI security tool versions
 
@@ -302,6 +312,8 @@ git log --format='%ad %an %s' --date=short -- .github/workflows .github/actions 
 ```
 
 As of 10/13/2026, these were last updated in the week of 10/12/2026 rotation.
+
+As of 11/09/2026, Semgrep and Checkov were bumped in `security-sast.yml` during the week of 11/09/2026 rotation; GitHub Actions `uses:` pins unchanged.
 
 #### 8.0 GitHub Actions `uses:` pins (manual — monthly)
 
@@ -336,6 +348,8 @@ These are the `uses: owner/action@vX.Y.Z` lines in every workflow file. Check an
 | `jpb06/coverage-badges-action` | `composite-coverage.yml` | [releases](https://github.com/jpb06/coverage-badges-action/releases) |
 
 > `composite-coverage.yml` only runs after a PR merges to `staging`, so PR checks can't validate changes to its actions. Update those in a separate PR and watch the next `staging` merge. As of 10/13/2026, `actions/create-github-app-token` (v1, latest v3) and `stefanzweifel/git-auto-commit-action` (v5, latest v7) are behind by major versions for this reason.
+
+> As of 11/09/2026, those `composite-coverage.yml` action pins are still behind by major versions for the same reason.
 
 **Steps to update a `uses:` pin:**
 
@@ -422,7 +436,7 @@ Reviewers use the dependency PR description to plan testing, so it has a consist
 - **Package tables**, grouped by `package.json` location (main runtime dependencies, main development dependencies, Puppeteer runtime, Batch docker image). For each package, give the version change, bump type, purpose, where it's used in DAWSON, and what to test. `@aws-sdk/*` packages can share one row.
 - **Infrastructure updates**: Dockerfile base image, AWS CLI, Terraform, CI image, Terraform providers, and CI tool versions.
 - **Manual deployment steps**, matching the new `CHANGES.md` block.
-- **Manual verification results**: the application flows you exercised locally and in the experimental environment, each naming the dependencies it covers, checked off as you complete them.
+- **Manual verification results**: the application flows you exercised locally and in **dev**, each naming the dependencies it covers, checked off as you complete them.
 - **The dependencies checklist** below, in place of the default PR template checklist.
 
 ```markdown
@@ -431,10 +445,10 @@ Reviewers use the dependency PR description to plan testing, so it has a consist
 - [ ] I have listed the updated packages, their purpose, where they are used, and the plain-language application areas to test (packages under @aws-sdk are optional to list for brevity).
 - [ ] Mandatory manual testing: I have exercised the affected application areas listed above:
   - [ ] Locally
-  - [ ] In an experimental environment after deploying this branch
-- [ ] I have built and pushed a new Docker image from the Dockerfile to the experimental environment's ECR if needed, and updated CHANGES.md with the environment where it is deployed.
+  - [ ] In **dev** after deploying this branch
+- [ ] I have built and pushed a new Docker image from the `Dockerfile` to **dev**'s ECR if needed, and updated `CHANGES.md` with instructions to promote the image from dev.
 - [ ] I have reviewed and updated caveats/hand-managed dependencies as needed.
-- [ ] I have successfully deployed the dependencies branch to an experimental environment.
+- [ ] I have successfully deployed the dependencies branch to **dev**.
 - [ ] I have created new Devex/Opex tickets addressing further issues for examination as needed.
 ```
 
@@ -524,6 +538,7 @@ If an update is available for DWT:
 - As of 9/22/2026: Puppeteer **25.11.0** and `@sparticuz/chromium` **153.0.0** remain the latest on npm; versions already match in `package.json` and `web-api/runtimes/puppeteer/package.json`. No change.
 - As of 10/13/2026: Puppeteer **25.12.0** requires Chrome for Testing 154 and **25.13.0** requires 155, but `@sparticuz/chromium` latest on npm is still **153.0.0**. Held at **25.11.0**.
 - As of 11/03/2026: `@sparticuz/chromium` latest on npm is still **153.0.0**. Held at **25.11.0**. `npm audit` reports `zod` (via `chromium-bidi`), and the fix needs puppeteer 25.12+.
+- As of 11/09/2026: Puppeteer **25.17.0** is available upstream, but `@sparticuz/chromium` latest on npm is still **153.0.0**. Held at **25.11.0** in `package.json` and `web-api/runtimes/puppeteer/package.json`.
 
 ### ws, 3rd party dependency of Cerebral
 
@@ -567,6 +582,7 @@ If an update is available for DWT:
 - As of 8/10/2026: `@babel/core` **v8.x** is available on npm. Still blocked by `esbuild-plugin-babel-cached@0.2.3`, which publishes peer `@babel/core@^7.0.0` only.
 - As of 9/17/2026: `@babel/core` **8.0.5** is available. Tracked in DevEx ticket [#10428](https://github.com/ustaxcourt/ef-cms/issues/10428). The plugin is ~50 lines (`babel.loadOptions` + `babel.transform`) used solely by `esbuildHelper.mjs`, so it could be inlined into the repo rather than republished to npm.
 - As of 10/13/2026: `@babel/core` **8.0.7** is available. Still blocked; `esbuild-plugin-babel-cached@0.2.3` still peers `@babel/core@^7.0.0`.
+- As of 11/09/2026: `@babel/core` **8.0.7** is still the latest 8.x. Still blocked; `esbuild-plugin-babel-cached@0.2.3` still peers `@babel/core@^7.0.0`. Stay on **7.29.7**.
 
 ### @types/node
 **Installed Version: 24.19.2**
@@ -595,6 +611,7 @@ Use the latest compatible `@types/node` release within Node’s major version. T
 - As of 9/17/2026: updated to **24.13.5**, the latest published version under major `24`. No `24.14+` published yet, so it still does not match Node.js `v24.21.0` in `.nvmrc`. Updated in both `package.json` and `web-api/terraform/modules/batch/docker-image/package.json`.
 - As of 9/22/2026: updated to **24.13.6**, the latest published version under major `24`. No `24.14+` published yet. Updated in both `package.json` and `web-api/terraform/modules/batch/docker-image/package.json`.
 - As of 10/13/2026: updated to **24.19.2**, the latest published version under major `24` (`24.14+` releases appeared after 9/22, and 24.19.1 was adopted in the week of 10/5/2026). Updated in both `package.json` and `web-api/terraform/modules/batch/docker-image/package.json`.
+- As of 11/09/2026: **24.19.2** remains the latest published version under major `24`, aligned with Node **24.22.1** in `.nvmrc`. Confirmed in both `package.json` and `web-api/terraform/modules/batch/docker-image/package.json`.
 
 ### TypeScript
 **Installed Version: 7.0.2 and 6.0.2**
@@ -664,6 +681,7 @@ error: too many arguments. Expected 0 arguments but got 2.
 - As of 9/17/2026: eslint **10.10.0** is available. Still blocked as`eslint-plugin-jsx-a11y@6.10.2` and `eslint-plugin-react@7.37.5` are still the latest releases and neither accepts eslint 10. No DevEx ticket exists yet; a possible path is evaluating replacements for both plugins that support eslint 10. The other lint packages we use (`eslint-config-prettier`, `eslint-plugin-jest`, `typescript-eslint`) already accept eslint 10. Unblocking eslint 10 would also unblock `eslint-plugin-cypress` 7.x, which requires `eslint >=10`.
 - As of 9/22/2026: eslint **10.x** remains blocked by `eslint-plugin-jsx-a11y` and `eslint-plugin-react` peers. Latest 9.x patches remain **9.39.5** for both `eslint` and `@eslint/js`; already installed. TypeScript dual alias (`typescript@npm:@typescript/typescript6@6.0.2`, `@typescript/native@npm:typescript@7.0.2`) and batch `Dockerfile` global install unchanged — **7.0.2** / **6.0.2** are still latest on npm.
 - As of 10/13/2026: eslint **10.12.0** is available. Still blocked; `eslint-plugin-react@7.37.5` (peer `^9.7`) and `eslint-plugin-jsx-a11y@6.10.2` (peer `^9`) are still the latest releases. TypeScript **7.0.2** / **6.0.2** and `ts-node` **10.9.2** are still latest.
+- As of 11/09/2026: eslint **10.14.0** is available. Still blocked; `eslint-plugin-react@7.37.5` and `eslint-plugin-jsx-a11y@6.10.2` are still the latest releases and do not accept eslint 10. Stay on **9.39.5** for `eslint` and `@eslint/js`.
 
 ### eslint-plugin-cypress
 **Installed Version: 6.4.4**
@@ -727,6 +745,7 @@ The issue is with Jest. Jest doesn't work with mjs, so in our config we need to 
 - As of 8/10/2026: **@recharts/devtools 0.0.16** peers on `recharts: 3.9.0` exactly, and we are on **3.10.1**. Still pinned at **0.0.14**.
 - As of 10/13/2026: **@recharts/devtools 0.0.18** still peers on `recharts: 3.9.0` exactly; recharts **3.10.1** is still the latest. Still pinned at **0.0.14**.
 - Week of 11/03/2026 we updated to **@recharts/devtools 0.0.19**, this version relaxed the peer dependency. We can probably remove this caveat eventually.
+- As of 11/09/2026: **Resolved.** `@recharts/devtools@0.0.19` peers `recharts ^3.9.0`, which includes **3.10.1**. `recharts` and `@recharts/devtools` were removed from the upgrade script's `caveats` array; both are upgraded by `upgrade-npm-packages.ts` like other dependencies.
 
 ### aws-sigv4-sign
 **Installed Version: 2.0.1**
@@ -737,6 +756,7 @@ The issue is with Jest. Jest doesn't work with mjs, so in our config we need to 
 **Installed Version: 3.6.0**
 - 10/2/26 - Tried to update to 3.9.0 but got tests throwing new type errors about the search request object. Upon further investigation in this version they updated type definitions of the packages to match newer versions of the opensearch API (dated 2026-09-23). The updates changed how terms are used in aggregations in search requests. I am unsure if this affects our current version of opensearch, or will be an issue in a future release, or if this is just an issue with test data. For context the current version of opensearch is 3.9.0, but AWS currently only supports up to 3.7.0. Reverting for now
 - As of 10/13/2026: added to the upgrade script's `caveats` array. Before this, the script would upgrade it to 3.9.0 on every run even though this hold was documented. 3.9.0 is still the latest, and AWS OpenSearch Service still supports up to 3.7.
+- As of 11/09/2026: still held at **3.6.0** in the upgrade script's `caveats` array. **3.9.0** is still the latest on npm; AWS OpenSearch Service still supports up to **3.7**.
 
 ### he
 **Installed Version: 2.0.0**
@@ -754,9 +774,54 @@ The issue is with Jest. Jest doesn't work with mjs, so in our config we need to 
 **Installed Version: 17.16.0**
 
 - As of 11/03/2026, the next major version of `stylelint` `18.0.0` is available. `stylelint-config-standard` has an update to `41.0.0` that lists the new version of `stylelint` as a peer dependency, however, `stylelint-config-standard-scss` still lists version `17` as a peer, so they upgrade needs to wait until this package is updated as well. It appears to be updated often so we shouldn't have to wait too long. `stylelint-config-idiomatic-order` does not receive frequent updates, but it does not list a specific version of `stylelint` as a peer, so it shouldn't block the upgrade.
+- As of 11/09/2026: `stylelint` **18.0.0** is available. Still blocked — `stylelint-config-standard-scss@17.0.0` still peers `stylelint ^17.0.0`. Held at **17.16.0**.
 
 ## Troubleshooting
 
 ### Incrementing the Node Cache Key Version
 
 It's rare to need modify cache key. One reason you may want to do so is if a package fails to install properly, and CircleCI, unaware of the failed installation, stores the corrupted cache. In this case, we will need to increment the cache key version so that CircleCI is forced to reinstall the node dependencies and save them using the new key. To update the cache key, locate `vX-npm` and `vX-cypress` (where X represents the current cache key version) in the config.yml file, and then increment the identified version.
+
+## Appendix: CI images, scanning, and dev
+
+This section explains why dependency rotations publish the CircleCI image (`ef-cms-us-east-1`) to **dev** first, and why scans must use the **same image tag** that deploy will pull—not a fresh local rebuild.
+
+### Why timing matters
+
+Our Dockerfiles install OS packages with `apt-get` without pinning every Debian package version. Two builds from the same `Dockerfile` git commit at different times can therefore contain **different installed package versions**, even when the image tag is the same.
+
+DAWSON promotes a given CI image tag from environment to environment (for example dev → staging → test → prod). CircleCI always pulls that tag from the environment's ECR. **The image digest for a tag should match everywhere** once it has been published—but a scanner that **rebuilds** the image instead of pulling the tag from ECR may not be looking at what deploy will actually run.
+
+### Missed vulnerability (scan looks clean, deployed image is not)
+
+| When | What happens |
+|------|----------------|
+| Friday | Dependencies PR finishes; Trivy on the PR rebuilds the image and passes. |
+| Monday | PR merges to `staging`. |
+| Friday (next week) | A new CVE is published against a Debian package already in the image. |
+| Saturday | We build and publish the CI image to **prod**'s ECR. The build still has the **vulnerable** package (no fix in the repos yet). |
+| Sunday (midday) | Debian publishes a patched package. |
+| Sunday night | The scheduled scan **rebuilds** the image. This time `apt-get` installs the **fixed** package. Trivy reports no issue. |
+
+**Result:** Prod runs a vulnerable image, but the scan saw a newer build that already picked up the fix. The gate gave a false sense of safety.
+
+### False alarm (deployed image is fine, scan reports a problem)
+
+| When | What happens |
+|------|----------------|
+| Friday | Dependencies PR finishes; PR Trivy passes. |
+| Monday | PR merges. |
+| Saturday | We build and publish the CI image to **prod**. The image has the **current** (still safe) package version. |
+| Sunday (morning) | An unrelated Debian security update lands; a new package version introduces a flaw. |
+| Sunday (midday) | A CVE is filed against that new version. |
+| Sunday night | The scheduled scan **rebuilds** and pulls the **newer vulnerable** package. Trivy opens an alert. |
+
+**Result:** The image already in ECR is not affected, but the scan built a different image and reported a vulnerability we are not actually running.
+
+### What we do instead
+
+1. **Publish to dev first** — After changing the CI `Dockerfile` or bumping the `efcms-docker-image` tag, run `npm run deploy:ci-image` with `. scripts/env/set-env.zsh dev` so the new tag exists in a known environment before broader promotion.
+2. **Manually scan what we deploy** — After publishing to dev, run the ECR-image Trivy commands in [Container Finding Triage](./security/container-findings-triage.md#step-1-confirm-the-vulnerable-package-is-present) using dev credentials and the tag pinned in `.circleci/config.yml`. Review and record the results before promotion. The current container workflows rebuild the CI image and scan local `ef-cms-us-east-1:latest`; passing those checks does not verify the published artifact.
+3. **Promote deliberately** — Use `CHANGES.md` and `npm run deploy:ci-image:from dev` (or equivalent) so other environments receive the same tag after dev has been exercised and scanned.
+
+Automated scanning of the published ECR image remains a follow-up; until then, the manual scan above is required to verify the artifact being promoted. Longer term, **pinning OS packages** in Dockerfiles would also make rebuilds more reproducible.
