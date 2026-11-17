@@ -582,6 +582,7 @@ export class Case extends JoiValidationEntity {
     irsPractitioners: CASE_IRS_PRACTITIONERS_RULE,
     isPaper: joi.boolean().optional(),
     isSealed: CASE_IS_SEALED_RULE,
+    isStjEligible: joi.boolean().optional(),
     leadDocketNumber: CASE_LEAD_DOCKET_NUMBER_RULE,
     litigationCosts: joi
       .number()
