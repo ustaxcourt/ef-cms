@@ -53,7 +53,7 @@ export const getCaseAssociationAction = async ({
   if (caseDetail.leadDocketNumber) {
     isAssociated = applicationContext.getUtilities().isUserPartOfGroup({
       consolidatedCases: caseDetail.consolidatedCases,
-      userId: user[`${idName}`],
+      userId: user.userId,
     });
   } else {
     isAssociated = caseParties.some(party => party[idName] === user.userId);

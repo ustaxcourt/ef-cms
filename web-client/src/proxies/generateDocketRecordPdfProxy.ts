@@ -3,13 +3,7 @@ import { ClientApplicationContext } from '@web-client/applicationContext';
 
 export const generateDocketRecordPdfInteractor = (
   applicationContext: ClientApplicationContext,
-  {
-    docketNumber,
-    docketRecordSort,
-    docketRecordTableSort,
-    includePartyDetail,
-    isIndirectlyAssociated,
-  },
+  { docketNumber, docketRecordSort, docketRecordTableSort },
 ) => {
   return asyncSyncHandler(
     applicationContext,
@@ -21,8 +15,6 @@ export const generateDocketRecordPdfInteractor = (
           docketNumber,
           docketRecordSort,
           docketRecordTableSort,
-          includePartyDetail,
-          isIndirectlyAssociated,
         },
         endpoint: '/async/docket-record-pdf',
       }),
