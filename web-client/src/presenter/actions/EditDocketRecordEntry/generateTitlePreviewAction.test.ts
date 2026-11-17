@@ -63,4 +63,27 @@ describe('generateTitlePreviewAction', () => {
       'Certificate of Service 01/01/20',
     );
   });
+
+  it('should fall back to form.documentTitle when a title cannot be generated', async () => {
+    applicationContext
+      .getUtilities()
+      .generateExternalDocumentTitle.mockReturnValue(undefined);
+
+    const result = await runAction(generateTitlePreviewAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        form: {
+          documentTitle: 'Notice of Receipt of Petition',
+          documentType: 'Notice of Receipt of Petition',
+          eventCode: 'NOTR',
+        },
+      },
+    });
+
+    expect(result.state.screenMetadata.documentTitlePreview).toEqual(
+      'Notice of Receipt of Petition',
+    );
+  });
 });

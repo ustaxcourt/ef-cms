@@ -1,10 +1,17 @@
+import {
+  getDocumentTypesForSelect,
+  getSortFunction,
+} from './internalTypesHelper';
 import { getOptionsForCategory } from './selectDocumentTypeHelper';
 import { state } from '@web-client/presenter/app.cerebral';
 import { Get } from 'cerebral';
 import {
   AMENDMENT_EVENT_CODES,
+  INTERNAL_DOCKET_ENTRY_EDIT_FORM_DOCUMENT_TYPES,
   INTERNAL_DOCUMENT_TYPES_REQUIRING_OBJECTION,
   INTERNAL_DOCUMENTS_ARRAY,
+  InternalDocketEntryEditDocumentType,
+  LODGED_EVENT_CODE,
 } from '@shared/business/entities/EntityConstants';
 import { formatDateString } from '@shared/business/utilities/DateHandler';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
@@ -13,6 +20,7 @@ import { isEmpty } from 'lodash';
 export const editDocketEntryMetaHelper = (
   get: Get,
 ): {
+  documentTypeOptions: InternalDocketEntryEditDocumentType[];
   multiDocketedOn: {
     docketNumber: string;
     caseTitle: string;
@@ -74,7 +82,16 @@ export const editDocketEntryMetaHelper = (
 
   const showEditHelpText = !isEmpty(form) && DocketEntry.isMultiDocketed(form);
 
+  const searchText = get(state.screenMetadata.searchText) || '';
+  const documentTypeOptions = getDocumentTypesForSelect(
+    get,
+    INTERNAL_DOCKET_ENTRY_EDIT_FORM_DOCUMENT_TYPES,
+  )
+    .sort(getSortFunction(searchText))
+    .filter(d => d.eventCode !== LODGED_EVENT_CODE && !d.deprecated);
+
   return {
+    documentTypeOptions,
     multiDocketedOn,
     isStricken,
     primary: optionsForCategory,

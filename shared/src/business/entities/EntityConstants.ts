@@ -12,7 +12,10 @@ import {
 } from 'lodash';
 import { COURT_ISSUED_EVENTS } from '@shared/business/entities/docketEntry/courtIssuedEventCodes';
 import { EXTERNAL_FILING_EVENTS } from '@shared/business/entities/docketEntry/externalFilingEvents';
-import { INTERNAL_FILING_EVENTS } from '@shared/business/entities/docketEntry/internalFilingEvents';
+import {
+  INTERNAL_FILING_EVENTS,
+  InternalFilingEvent,
+} from '@shared/business/entities/docketEntry/internalFilingEvents';
 
 export const STATE_KEYS = {
   DOCKET_RECORD_TABLE_SORT: 'DOCKET_RECORD_TABLE_SORT',
@@ -1086,18 +1089,24 @@ export const SYSTEM_GENERATED_DOCUMENT_TYPES = {
   ...AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES_WITH_NAMES,
 };
 
-export const INTERNAL_DOCUMENT_TYPES_AND_NOTR = [
-  ...INTERNAL_DOCUMENTS_ARRAY.map(doc => ({
+export type InternalDocketEntryEditDocumentType = Pick<
+  InternalFilingEvent,
+  'documentTitle' | 'documentType' | 'eventCode'
+> &
+  Partial<InternalFilingEvent> & {
+    label: string;
+    value: string;
+  };
+
+export const INTERNAL_DOCKET_ENTRY_EDIT_FORM_DOCUMENT_TYPES: InternalDocketEntryEditDocumentType[] =
+  [
+    ...INTERNAL_DOCUMENTS_ARRAY,
+    SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfReceiptOfPetition,
+  ].map(doc => ({
     ...doc,
     label: doc.documentType,
     value: doc.eventCode,
-  })),
-  {
-    ...SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfReceiptOfPetition,
-    label:
-      SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfReceiptOfPetition.documentType,
-  },
-];
+  }));
 
 export const AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES = flatten(
   Object.values(AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES_WITH_NAMES),

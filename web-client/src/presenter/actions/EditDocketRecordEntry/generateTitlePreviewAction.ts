@@ -27,11 +27,12 @@ export const generateTitlePreviewAction = ({
     .getUtilities()
     .formatDocketEntry(applicationContext, documentMetadata);
 
-  let updatedDocumentTitle = applicationContext
-    .getUtilities()
-    .generateExternalDocumentTitle(applicationContext, {
-      documentMetadata,
-    });
+  let updatedDocumentTitle =
+    applicationContext
+      .getUtilities()
+      .generateExternalDocumentTitle(applicationContext, {
+        documentMetadata,
+      }) || documentMetadata.documentTitle;
 
   if (formattedDocketEntry.additionalInfo) {
     updatedDocumentTitle += ` ${formattedDocketEntry.additionalInfo}`;

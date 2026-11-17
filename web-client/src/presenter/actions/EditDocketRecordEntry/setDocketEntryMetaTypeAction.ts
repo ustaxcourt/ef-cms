@@ -24,9 +24,10 @@ export const setDocketEntryMetaTypeAction = ({
     courtIssuedEvent => courtIssuedEvent.eventCode,
   );
 
-  COURT_ISSUED_EVENT_CODES_LIST.push(
+  const COURT_ISSUED_AND_SELECT_SYSTEM_GENERATED_EVENT_CODES_LIST = [
+    ...COURT_ISSUED_EVENT_CODES_LIST,
     SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfDocketChange.eventCode,
-  );
+  ];
 
   const isInternalFilingEvent = INTERNAL_DOCUMENTS_ARRAY.some(
     internalFilingEvent =>
@@ -36,16 +37,18 @@ export const setDocketEntryMetaTypeAction = ({
 
   const hasDocument = !DocketEntry.isMinuteEntry({ eventCode });
 
-  const isCourtIssuedDocument =
+  const isCourtIssuedOrSystemGeneratedDocument =
     hasDocument &&
-    COURT_ISSUED_EVENT_CODES_LIST.includes(eventCode) &&
+    COURT_ISSUED_AND_SELECT_SYSTEM_GENERATED_EVENT_CODES_LIST.includes(
+      eventCode,
+    ) &&
     !isInternalFilingEvent;
 
   let editType;
 
   if (!hasDocument) {
     editType = 'NoDocument';
-  } else if (isCourtIssuedDocument) {
+  } else if (isCourtIssuedOrSystemGeneratedDocument) {
     editType = 'CourtIssued';
   } else {
     editType = 'Document';
