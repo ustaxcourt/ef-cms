@@ -71,8 +71,8 @@ export const updateCaseAndAssociations = async ({
         newCaseEntity.statistics,
         oldCaseEntity.statistics,
         (a, b) =>
-          a.irsDeficiencyAmount === b.irsDeficiencyAmount &&
-          a.irsTotalPenalties === b.irsTotalPenalties,
+          a?.irsDeficiencyAmount === b?.irsDeficiencyAmount &&
+          a?.irsTotalPenalties === b?.irsTotalPenalties,
       )) ||
     newCaseEntity.caseType !== oldCaseEntity.caseType ||
     newCaseEntity.procedureType !== oldCaseEntity.procedureType

@@ -5,6 +5,7 @@ import {
   AUTOMATIC_BLOCKED_REASONS,
   CASE_CAPTION_POSTFIX,
   CASE_STATUS_TYPES,
+  CASE_STJ_THRESHOLD,
   CASE_TYPES,
   CASE_TYPES_MAP,
   CHIEF_JUDGE,
@@ -1574,7 +1575,7 @@ export class Case extends JoiValidationEntity {
         stat =>
           Number(stat.irsDeficiencyAmount ?? 0) +
             Number(stat.irsTotalPenalties ?? 0) >=
-          50000,
+          CASE_STJ_THRESHOLD,
       );
 
     const isStjEligible =
