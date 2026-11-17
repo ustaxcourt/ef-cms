@@ -1033,9 +1033,24 @@ describe('formattedDocketEntries', () => {
       };
 
       const pendingDocketEntries = [
-        { ...pendingMotion, index: 3, receivedAt: '2026-11-03T00:00:00.000Z' },
-        { ...pendingMotion, index: 2, receivedAt: '2026-11-02T00:00:00.000Z' },
-        { ...pendingMotion, index: 1, receivedAt: '2026-11-01T00:00:00.000Z' },
+        {
+          ...pendingMotion,
+          filingDate: '2026-11-01T00:00:00.000Z',
+          index: 3,
+          receivedAt: '2026-11-03T00:00:00.000Z',
+        },
+        {
+          ...pendingMotion,
+          filingDate: '2026-11-02T00:00:00.000Z',
+          index: 2,
+          receivedAt: '2026-11-02T00:00:00.000Z',
+        },
+        {
+          ...pendingMotion,
+          filingDate: '2026-11-03T00:00:00.000Z',
+          index: 1,
+          receivedAt: '2026-11-01T00:00:00.000Z',
+        },
       ];
 
       const caseDetail = {

@@ -290,6 +290,15 @@ describe('exportPendingReportInteractor', () => {
         shouldIndent: false,
       },
     ]);
+    expect(stringifyCalls[0][1].columns).toEqual([
+      { header: 'Docket No.', key: 'docketNumberWithSuffix' },
+      { header: 'No.', key: 'index' },
+      { header: 'Date Filed', key: 'formattedFiledDate' },
+      { header: 'Case Title', key: 'caseTitle' },
+      { header: 'Filings and Proceedings', key: 'formattedName' },
+      { header: 'Case Status', key: 'formattedStatus' },
+      { header: 'Judge', key: 'associatedJudgeFormatted' },
+    ]);
     expect(results).toEqual('MOCK_CSV_STRING');
   });
 });
