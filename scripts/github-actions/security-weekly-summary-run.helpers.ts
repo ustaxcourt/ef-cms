@@ -3,12 +3,9 @@ import {
   type SummaryCard,
   buildSummaryCard,
 } from './security-weekly-summary-card.helpers';
-import {
-  computeWindow,
-  getScheduledRunHealth,
-  listNewFindings,
-  shouldPostForSchedule,
-} from './security-weekly-summary.helpers';
+import { computeWindow, listNewFindings } from './code-scanning-alerts.helpers';
+import { getScheduledRunHealth } from './scheduled-scan-health.helpers';
+import { shouldPostForSchedule } from './security-weekly-summary.helpers';
 import { runCommand } from '../helpers/runCommand';
 
 export const TEAMS_TIMEOUT_MS = 30_000;

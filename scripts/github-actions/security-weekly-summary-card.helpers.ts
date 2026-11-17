@@ -1,11 +1,13 @@
 import {
   type AlertWindow,
   type NewFinding,
-  type ScanHealth,
-  type ScanHealthStatus,
   type Scanner,
   type Severity,
-} from './security-weekly-summary.helpers';
+} from './code-scanning-alerts.helpers';
+import {
+  type ScanHealth,
+  type ScanHealthStatus,
+} from './scheduled-scan-health.helpers';
 import { DateTime } from 'luxon';
 import { FORMATS, USTC_TZ } from '@shared/business/utilities/DateHandler';
 

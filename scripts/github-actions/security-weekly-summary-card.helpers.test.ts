@@ -9,10 +9,8 @@ import {
   ruleLink,
   whereFound,
 } from './security-weekly-summary-card.helpers';
-import {
-  type NewFinding,
-  type ScanHealth,
-} from './security-weekly-summary.helpers';
+import { type NewFinding } from './code-scanning-alerts.helpers';
+import { type ScanHealth } from './scheduled-scan-health.helpers';
 
 const BASE = 'https://github.com/example/repo/security/code-scanning';
 const FILTER = `${BASE}?query=is%3Aopen+branch%3Astaging+rule%3A`;
