@@ -21,12 +21,18 @@ import {
   FILING_TYPES_DICT,
   PARTY_TYPES,
   PAYMENT_STATUS,
+  PETITIONER_ROLE_OPTIONS,
   PROCEDURE_TYPES_MAP,
+  REGULAR_TRIAL_CITY_STRINGS,
+  SERVICE_INDICATOR_TYPES,
 } from '@shared/business/entities/EntityConstants';
 import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { generateCsv as generateCsvMock } from '../helpers/generate-csv';
 import { getDbReader as getDbReaderMock } from '@web-api/persistence/postgres/database';
 import { getJsDateFromIso } from '@shared/business/utilities/DateHandler';
+
+const [birminghamAlabama, mobileAlabama, anchorageAlaska] =
+  REGULAR_TRIAL_CITY_STRINGS;
 
 type QueryCall = {
   args: unknown[];
@@ -45,6 +51,7 @@ type MockReader = {
 
 type DocketNumberRecord = {
   docketNumber: string;
+  filingDate: Date;
 };
 
 const getDbReader = jest.mocked(getDbReaderMock);
@@ -84,12 +91,15 @@ const setupDatabaseMock = (
   return calls;
 };
 
-const createCase = (overrides: Partial<RawCase> = {}): RawCase =>
-  ({
-    docketNumber: '100-25',
+const createCase = (overrides: Partial<RawCase> = {}): RawCase => {
+  const docketNumber = overrides.docketNumber ?? '100-25';
+  return {
+    docketNumber,
+    docketNumberWithSuffix: docketNumber,
     sortableDocketNumber: 100,
     ...overrides,
-  }) as RawCase;
+  } as RawCase;
+};
 
 const reportParameters = {
   begin: '2025-01-01T05:00:00Z',
@@ -103,7 +113,12 @@ describe('getDocketNumbersOfPetitionsFiledInTimeframe', () => {
   });
 
   it('queries petition docket numbers in the requested timeframe', async () => {
-    const calls = setupDatabaseMock([{ docketNumber: '100-25' }]);
+    const calls = setupDatabaseMock([
+      {
+        docketNumber: '100-25',
+        filingDate: getJsDateFromIso('2025-01-01T05:00:00Z'),
+      },
+    ]);
 
     await expect(
       getDocketNumbersOfPetitionsFiledInTimeframe(reportParameters),
@@ -111,7 +126,7 @@ describe('getDocketNumbersOfPetitionsFiledInTimeframe', () => {
 
     expect(calls).toEqual([
       { args: ['dwDocketEntry as de'], method: 'selectFrom' },
-      { args: ['de.docketNumber'], method: 'select' },
+      { args: [['de.docketNumber', 'de.filingDate']], method: 'select' },
       { args: ['de.eventCode', '=', 'P'], method: 'where' },
       {
         args: ['de.filingDate', '>=', getJsDateFromIso(reportParameters.begin)],
@@ -144,7 +159,12 @@ describe('getDocketNumbersOfPetitionsFiledInTimeframe', () => {
 describe('casesFiledInYear', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    setupDatabaseMock([{ docketNumber: '100-25' }]);
+    setupDatabaseMock([
+      {
+        docketNumber: '100-25',
+        filingDate: getJsDateFromIso('2025-01-01T05:00:00Z'),
+      },
+    ]);
   });
 
   afterEach(() => {
@@ -164,28 +184,28 @@ describe('casesFiledInYear', () => {
         isSealed: true,
         partyType: PARTY_TYPES.petitioner,
         petitionPaymentStatus: PAYMENT_STATUS.PAID,
-        preferredTrialCity: 'Birmingham, Alabama',
+        preferredTrialCity: birminghamAlabama,
         privatePractitioners: [{}],
         procedureType: PROCEDURE_TYPES_MAP.regular,
         receivedAt: '2025-01-02T05:00:00Z',
-        sortableDocketNumber: 2,
+        sortableDocketNumber: 202500002,
         status: CASE_STATUS_TYPES.new,
       }),
       createCase({
         associatedJudge: 'Dredd',
-        caseCaption: undefined,
+        caseCaption: 'Beta and Gamma,\nPetitioners',
         caseType: CASE_TYPES_MAP.other,
         docketNumber: '100-25',
-        filingType: '',
+        filingType: FILING_TYPES_DICT.PETITIONER_SPOUSE,
         isPaper: false,
         isSealed: false,
-        partyType: PARTY_TYPES.corporation,
+        partyType: PARTY_TYPES.petitionerSpouse,
         petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
-        preferredTrialCity: 'Anchorage, Alaska',
+        preferredTrialCity: anchorageAlaska,
         privatePractitioners: undefined,
         procedureType: PROCEDURE_TYPES_MAP.small,
         receivedAt: '2025-01-01T05:00:00Z',
-        sortableDocketNumber: 1,
+        sortableDocketNumber: 202500001,
         status: CASE_STATUS_TYPES.new,
       }),
     ];
@@ -210,11 +230,16 @@ describe('casesFiledInYear', () => {
         { header: 'Date Filed', key: 'dateFiled' },
         { header: 'Filing Method', key: 'filingMethod' },
         { header: 'Filing Type', key: 'filingType' },
+        { header: 'Has Intervenor', key: 'hasIntervenor' },
+        { header: 'Has Participant', key: 'hasParticipant' },
+        { header: 'In Consolidated Group', key: 'isInConsolidatedGroup' },
+        { header: 'Is Lead Case in Consolidated Group', key: 'isLeadCase' },
         { header: 'Judge', key: 'judge' },
         { header: 'Party Type', key: 'partyType' },
         { header: 'Payment Status', key: 'petitionPaymentStatus' },
         { header: 'Preferred Trial City', key: 'preferredTrialCity' },
         { header: 'Procedure Type', key: 'procedureType' },
+        { header: 'Remote Trial Granted', key: 'remoteTrialGranted' },
         { header: 'Represented', key: 'represented' },
         { header: 'Sealed', key: 'isSealed' },
         { header: 'Status', key: 'status' },
@@ -222,18 +247,26 @@ describe('casesFiledInYear', () => {
       filename: reportParameters.filename,
       rows: [
         expect.objectContaining({
-          caseCaption: '',
+          caseCaption: 'Beta and Gamma, Petitioners',
+          caseType: CASE_TYPES_MAP.other,
+          dateFiled: '01-01-2025',
           docketNumber: '100-25',
-          filingMethod: 'Electronic',
-          filingType: '',
+          filingMethod: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+          filingType: FILING_TYPES_DICT.PETITIONER_SPOUSE,
+          hasIntervenor: 'No',
+          hasParticipant: 'No',
+          isInConsolidatedGroup: 'No',
+          isLeadCase: 'No',
           isSealed: 'No',
           judge: 'Dredd',
-          represented: 'Pro Se',
+          preferredTrialCity: anchorageAlaska,
+          remoteTrialGranted: 'No',
+          represented: PETITIONER_ROLE_OPTIONS.proSe,
         }),
         expect.objectContaining({
           caseCaption: 'Alpha Petitioner, Petitioner',
           docketNumber: '101-25',
-          filingMethod: 'Paper',
+          filingMethod: SERVICE_INDICATOR_TYPES.SI_PAPER,
           filingType: FILING_TYPES_DICT.MYSELF,
           isSealed: 'Yes',
           judge: 'Judy',
@@ -256,7 +289,7 @@ describe('casesFiledInYear', () => {
         isSealed: true,
         partyType: PARTY_TYPES.corporation,
         petitionPaymentStatus: PAYMENT_STATUS.PAID,
-        preferredTrialCity: 'Mobile, Alabama',
+        preferredTrialCity: mobileAlabama,
         privatePractitioners: [{}],
         procedureType: PROCEDURE_TYPES_MAP.regular,
         status: CASE_STATUS_TYPES.new,
@@ -269,7 +302,7 @@ describe('casesFiledInYear', () => {
         isSealed: false,
         partyType: PARTY_TYPES.petitioner,
         petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
-        preferredTrialCity: 'Birmingham, Alabama',
+        preferredTrialCity: birminghamAlabama,
         privatePractitioners: [],
         procedureType: PROCEDURE_TYPES_MAP.small,
         status: CASE_STATUS_TYPES.closed,
@@ -282,7 +315,7 @@ describe('casesFiledInYear', () => {
         isSealed: false,
         partyType: PARTY_TYPES.corporation,
         petitionPaymentStatus: PAYMENT_STATUS.PAID,
-        preferredTrialCity: 'Anchorage, Alaska',
+        preferredTrialCity: anchorageAlaska,
         privatePractitioners: [],
         procedureType: PROCEDURE_TYPES_MAP.regular,
         status: CASE_STATUS_TYPES.new,
@@ -297,42 +330,62 @@ describe('casesFiledInYear', () => {
     await casesFiledInYear({ ...reportParameters, stats: true });
     expect(logSpy).toHaveBeenCalledWith({
       caseTypes: {
-        'CDP (Lien/Levy)': 1,
-        Deficiency: 1,
-        Other: 1,
+        [CASE_TYPES_MAP.cdp]: 1,
+        [CASE_TYPES_MAP.deficiency]: 1,
+        [CASE_TYPES_MAP.other]: 1,
       },
+      consolidatedGroups: 0,
       filingMethods: { electronic: 3, paper: 1 },
-      filingTypes: { 'A business': 1, Myself: 1, '': 1 },
-      judges: { '': 1, Dredd: 1, Judy: 1 },
-      partyTypes: { Corporation: 2, Petitioner: 1 },
-      paymentStatuses: { 'Not paid': 1, Paid: 2 },
-      preferredTrialCities: {
-        'Anchorage, Alaska': 1,
-        'Birmingham, Alabama': 1,
-        'Mobile, Alabama': 1,
+      filingTypes: {
+        [FILING_TYPES_DICT.BUSINESS]: 1,
+        [FILING_TYPES_DICT.MYSELF]: 1,
+        '': 1,
       },
-      procedureTypes: { Regular: 2, Small: 1 },
+      hasIntervenor: 0,
+      hasParticipant: 0,
+      judges: { '': 1, Dredd: 1, Judy: 1 },
+      partyTypes: {
+        [PARTY_TYPES.corporation]: 2,
+        [PARTY_TYPES.petitioner]: 1,
+      },
+      paymentStatuses: {
+        [PAYMENT_STATUS.UNPAID]: 1,
+        [PAYMENT_STATUS.PAID]: 2,
+      },
+      preferredTrialCities: {
+        [anchorageAlaska]: 1,
+        [birminghamAlabama]: 1,
+        [mobileAlabama]: 1,
+      },
+      procedureTypes: {
+        [PROCEDURE_TYPES_MAP.regular]: 2,
+        [PROCEDURE_TYPES_MAP.small]: 1,
+      },
+      remoteTrialGranted: 0,
       representation: { proSe: 3, represented: 1 },
       sealed: 1,
-      statuses: { Closed: 1, New: 2 },
+      statuses: {
+        [CASE_STATUS_TYPES.closed]: 1,
+        [CASE_STATUS_TYPES.new]: 2,
+      },
       total: 4,
     });
     const stats = logSpy.mock.calls[0][0];
     expect(Object.keys(stats.caseTypes)).toEqual([
-      'CDP (Lien/Levy)',
-      'Deficiency',
-      'Other',
+      CASE_TYPES_MAP.cdp,
+      CASE_TYPES_MAP.deficiency,
+      CASE_TYPES_MAP.other,
     ]);
     expect(Object.keys(stats.filingTypes)).toEqual([
-      'A business',
-      'Myself',
+      FILING_TYPES_DICT.BUSINESS,
+      FILING_TYPES_DICT.MYSELF,
       '',
     ]);
     expect(Object.keys(stats.judges)).toEqual(['Dredd', 'Judy', '']);
     expect(Object.keys(stats.preferredTrialCities)).toEqual([
-      'Birmingham, Alabama',
-      'Mobile, Alabama',
-      'Anchorage, Alaska',
+      birminghamAlabama,
+      mobileAlabama,
+      anchorageAlaska,
     ]);
   });
 });
