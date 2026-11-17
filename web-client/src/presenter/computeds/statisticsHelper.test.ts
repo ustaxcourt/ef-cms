@@ -63,6 +63,96 @@ describe('statisticsHelper', () => {
     });
   });
 
+  describe('determination amounts', () => {
+    const getFormattedStatistic = determinationAmounts =>
+      runCompute(statisticsHelper, {
+        state: {
+          caseDetail: {
+            statistics: [
+              {
+                irsDeficiencyAmount: 123,
+                irsTotalPenalties: 30000,
+                year: '2012',
+                yearOrPeriod: 'Year',
+                ...determinationAmounts,
+              },
+            ],
+          },
+          permissions: {},
+        },
+      }).formattedStatistics[0];
+
+    it.each([
+      ['undefined', undefined],
+      ['null', null],
+    ])(
+      'returns TBD for all determination values when both are %s',
+      (_, value) => {
+        const result = getFormattedStatistic({
+          determinationDeficiencyAmount: value,
+          determinationTotalPenalties: value,
+        });
+
+        expect(result).toMatchObject({
+          formattedDeterminationDeficiencyAmount: 'TBD',
+          formattedDeterminationTotal: 'TBD',
+          formattedDeterminationTotalPenalties: 'TBD',
+        });
+      },
+    );
+
+    it('returns a total of $0.00 when both determination values are 0', () => {
+      const result = getFormattedStatistic({
+        determinationDeficiencyAmount: 0,
+        determinationTotalPenalties: 0,
+      });
+
+      expect(result).toMatchObject({
+        formattedDeterminationDeficiencyAmount: '$0.00',
+        formattedDeterminationTotal: '$0.00',
+        formattedDeterminationTotalPenalties: '$0.00',
+      });
+    });
+
+    it('calculates the total when only the determination deficiency amount is 0', () => {
+      const result = getFormattedStatistic({
+        determinationDeficiencyAmount: 0,
+        determinationTotalPenalties: 33.45,
+      });
+
+      expect(result).toMatchObject({
+        formattedDeterminationDeficiencyAmount: '$0.00',
+        formattedDeterminationTotal: '$33.45',
+        formattedDeterminationTotalPenalties: '$33.45',
+      });
+    });
+
+    it('calculates the total when only the determination total penalties are 0', () => {
+      const result = getFormattedStatistic({
+        determinationDeficiencyAmount: 1234,
+        determinationTotalPenalties: 0,
+      });
+
+      expect(result).toMatchObject({
+        formattedDeterminationDeficiencyAmount: '$1,234.00',
+        formattedDeterminationTotal: '$1,234.00',
+        formattedDeterminationTotalPenalties: '$0.00',
+      });
+    });
+
+    it('returns TBD for the total and the missing value when only one determination value is entered', () => {
+      const result = getFormattedStatistic({
+        determinationDeficiencyAmount: 1234,
+      });
+
+      expect(result).toMatchObject({
+        formattedDeterminationDeficiencyAmount: '$1,234.00',
+        formattedDeterminationTotal: 'TBD',
+        formattedDeterminationTotalPenalties: 'TBD',
+      });
+    });
+  });
+
   it('returns an editStatisticLink with each formatted statistic', () => {
     const DOCKET_NUMBER = '101-20';
     const STATISTIC_ID_1 = '7b6603d6-bef4-43e1-b013-b7f7fd340fa5';
