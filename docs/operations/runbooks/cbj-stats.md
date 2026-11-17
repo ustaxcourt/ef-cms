@@ -28,9 +28,15 @@ budget and performance.
       scripts/reports/attorneys-admitted-in-year.ts -f "$FISCAL_YEAR"
       ```
    1. Cases closed in fiscal year:
-      ```bash
-      scripts/reports/cases-closed-in-year.ts -f "$FISCAL_YEAR"
-      ```
+      1. This report generates a CSV file **and** outputs to the console the average number of days the cases were open.
+      1. Run the report, then copy the console output to your clipboard:
+         ```bash
+         scripts/reports/cases-closed-in-year.ts -f "$FISCAL_YEAR"
+         ```
+      1. Open a new file in nano, paste the console output into the file, then save the file:
+         ```bash
+         nano "${HOME}/Documents/average-age-of-cases-closed-in-fy-${FISCAL_YEAR}.txt"
+         ```
    1. Cases filed in fiscal year:
       ```bash
       scripts/reports/cases-filed-in-year.ts -f "$FISCAL_YEAR"
