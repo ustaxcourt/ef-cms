@@ -1,3 +1,26 @@
+<details><summary>DAW-30 - Monday security summary to Teams</summary>
+
+## Manual Deployment Steps
+
+### After Deployment
+
+#### Add the Teams webhook secrets (repository admin)
+
+In GitHub, under **Settings → Secrets and variables → Actions**, add these repository secrets.
+See [Monday summary card](docs/security/remediation/weekly-triage.md#monday-summary-card) for how to
+create each webhook.
+
+- `TEAMS_SECURITY_SUMMARY_WEBHOOK_URL`: the Tech channel webhook
+- `TEAMS_SECURITY_SUMMARY_TEST_WEBHOOK_URL`: a test channel webhook
+
+Optionally, add a repository variable `SECURITY_DASHBOARD_URL` for the card's dashboard button.
+
+Then check that it posts:
+
+```bash
+gh workflow run security-weekly-summary.yml --ref staging -f target=test
+```
+</details>
 <details><summary>Dependency Updates - Week of 2026-11-03</summary>
 
 ## Local
