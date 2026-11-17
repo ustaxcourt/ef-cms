@@ -9,7 +9,7 @@ import {
 import { loginAsPetitioner } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('Petition generation - step 7', () => {
-  const VALID_FILE = '../../helpers/file/sample.pdf';
+  const VALID_FILE = 'sample.pdf';
 
   beforeEach(() => {
     loginAsPetitioner();

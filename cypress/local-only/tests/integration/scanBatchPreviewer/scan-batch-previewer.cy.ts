@@ -2,7 +2,7 @@ import { attachFile } from '../../../../helpers/file/upload-file';
 import { loginAsPetitionsClerk } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('ScanBatchPreviewer', () => {
-  const VALID_FILE = '../../helpers/file/sample.pdf';
+  const VALID_FILE = 'sample.pdf';
 
   beforeEach(() => {
     cy.on('uncaught:exception', err => {
@@ -95,7 +95,7 @@ describe('ScanBatchPreviewer', () => {
     cy.get('[data-testid="upload-pdf-button"]').click();
     cy.get('[data-testid="upload-mode-radio"]').should('be.checked');
     attachFile({
-      filePath: '../../helpers/file/non-pdf.txt',
+      filePath: 'non-pdf.txt',
       selector: '[data-testid="petitionFile-file-input"]',
     });
     cy.wait('@logErrorRequest');

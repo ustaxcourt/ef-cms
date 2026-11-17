@@ -8,7 +8,7 @@ import {
 import { loginAsPetitioner } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('File a petition', () => {
-  const VALID_FILE = '../../helpers/file/sample.pdf';
+  const VALID_FILE = 'sample.pdf';
 
   describe('File a petition', () => {
     const caseTypes = [
@@ -43,7 +43,11 @@ describe('File a petition', () => {
         cy.wait('@postCase').then(({ response }) => {
           if (!response) throw Error('Did not find response');
           expect(response.body).to.have.property('docketNumber');
-          cy.get(`[data-testid^="alert-success"]`).should('exist').contains(`Your case has been assigned docket number ${response.body.docketNumber}`);
+          cy.get(`[data-testid^="alert-success"]`)
+            .should('exist')
+            .contains(
+              `Your case has been assigned docket number ${response.body.docketNumber}`,
+            );
         });
       });
     });

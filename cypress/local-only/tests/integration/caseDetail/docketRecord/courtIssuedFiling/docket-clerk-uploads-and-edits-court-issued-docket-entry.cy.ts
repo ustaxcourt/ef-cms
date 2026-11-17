@@ -17,7 +17,7 @@ describe('Docket clerk uploads and edits court-issued docket entries', () => {
       const title = `${faker.word.adjective()} ${faker.word.noun()}`;
       cy.get('[data-testid="upload-description"]').type(title);
       attachFile({
-        filePath: '../../helpers/file/sample.pdf',
+        filePath: 'sample.pdf',
         selector: '[data-testid="primary-document-file"]',
         selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
       });
@@ -51,7 +51,7 @@ describe('Docket clerk uploads and edits court-issued docket entries', () => {
       const title = `${faker.word.adjective()} ${faker.word.noun()}`;
       cy.get('[data-testid="upload-description"]').type(title);
       attachFile({
-        filePath: '../../helpers/file/sample.pdf',
+        filePath: 'sample.pdf',
         selector: '[data-testid="primary-document-file"]',
         selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
       });
@@ -91,7 +91,7 @@ describe('Docket clerk uploads and edits court-issued docket entries', () => {
       const title = `${faker.word.adjective()} ${faker.word.noun()}`;
       cy.get('[data-testid="upload-description"]').type(title);
       attachFile({
-        filePath: '../../helpers/file/sample.pdf',
+        filePath: 'sample.pdf',
         selector: '[data-testid="primary-document-file"]',
         selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
       });
@@ -146,7 +146,7 @@ describe('Docket clerk uploads and edits court-issued docket entries', () => {
       const title = `${faker.word.adjective()} ${faker.word.noun()}`;
       cy.get('[data-testid="upload-description"]').type(title);
       attachFile({
-        filePath: '../../helpers/file/sample.pdf',
+        filePath: 'sample.pdf',
         selector: '[data-testid="primary-document-file"]',
         selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
       });

@@ -62,7 +62,7 @@ describe('Private practitioner files an Exhibit in Support across a consolidated
             );
             cy.get('[data-testid="submit-document"]').click();
             attachFile({
-              filePath: '../../helpers/file/sample.pdf',
+              filePath: 'sample.pdf',
               selector: '[data-testid="primary-document"]',
               selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
             });
@@ -71,7 +71,7 @@ describe('Private practitioner files an Exhibit in Support across a consolidated
             cy.get('#add-supporting-document-button').click();
             cy.get('#supporting-document-0').select('Exhibit');
             attachFile({
-              filePath: '../../helpers/file/sample.pdf',
+              filePath: 'sample.pdf',
               selector: '[data-testid="supporting-document-file-0"]',
               selectorToAwaitOnSuccess:
                 '[data-testid="upload-file-success-supporting-document-file-0"]',
