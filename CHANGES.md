@@ -24,7 +24,15 @@ A second DOJ practitioner was added to local seed data:
 - bar number: `DT2222`
 
 </details>
+<details><summary>Dependency Updates - Week of 2026-11-09</summary>
 
+#### Deploy Docker container `4.3.105` from dev
+
+```bash
+npm run deploy:ci-image:from dev
+```
+
+</details>
 <details><summary>Dependency Updates - Week of 2026-11-03</summary>
 
 ## Local
