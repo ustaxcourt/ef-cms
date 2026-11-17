@@ -1,18 +1,19 @@
 import { type CommandRunner } from '../git/github-client';
 import { DateTime } from 'luxon';
 import { USTC_TZ } from '@shared/business/utilities/DateHandler';
+import { isoToMillis, toEasternTime } from './eastern-time.helpers';
 import { runCommand } from '../helpers/runCommand';
 
-export type AlertWindow = { since: string; until: string };
+export type TriageWindow = { since: string; until: string };
 
-export const computeWindow = ({
+export const getTriageWindow = ({
   now,
   since,
 }: {
   now: string;
   since?: string;
-}): AlertWindow => {
-  const nowEastern = toEastern(now);
+}): TriageWindow => {
+  const nowEastern = toEasternTime(now);
 
   if (since) {
     const start = DateTime.fromISO(since, { zone: USTC_TZ });
@@ -43,16 +44,10 @@ export const computeWindow = ({
   };
 };
 
-export const toEastern = (isoDateTime: string): DateTime =>
-  DateTime.fromISO(isoDateTime, { zone: 'utc' }).setZone(USTC_TZ);
-
 const toUtcIso = (dateTime: DateTime): string =>
   dateTime.toUTC().toISO() as string;
 
-export const toMillis = (isoDateTime: string): number =>
-  DateTime.fromISO(isoDateTime, { zone: 'utc' }).toMillis();
-
-export const TRIAGED_CATEGORY_PATTERN =
+export const TRIAGE_SCOPE_PATTERN =
   /^(trivy-baseline-(base|puppeteer|batch)|trivy|trivy-config|semgrep|checkov|\/language:.*|gitleaks-baseline)$/;
 
 export const CHECKOV_HARD_FAIL_CHECKS = [
@@ -80,7 +75,7 @@ export type CodeScanningAlert = {
   };
 };
 
-export type NewFinding = {
+export type Finding = {
   category: string;
   createdAt: string;
   number: number;
@@ -95,7 +90,7 @@ export const ALERTS_PER_PAGE = 100;
 export const ALERT_JQ_FILTER =
   '.[] | {number, created_at, html_url, category: .most_recent_instance.category, rule: {id: .rule.id, severity: .rule.severity, security_severity_level: .rule.security_severity_level, tags: .rule.tags}} | @json';
 
-export const listAlertsInWindow = async ({
+export const listOpenStagingAlertsCreatedIn = async ({
   commandRunner = runCommand,
   maxPages = 100,
   repo,
@@ -104,10 +99,10 @@ export const listAlertsInWindow = async ({
   commandRunner?: CommandRunner;
   maxPages?: number;
   repo: string;
-  window: AlertWindow;
+  window: TriageWindow;
 }): Promise<CodeScanningAlert[]> => {
-  const since = toMillis(window.since);
-  const until = toMillis(window.until);
+  const since = isoToMillis(window.since);
+  const until = isoToMillis(window.until);
   const alerts: CodeScanningAlert[] = [];
 
   for (let page = 1; page <= maxPages; page++) {
@@ -124,7 +119,7 @@ export const listAlertsInWindow = async ({
     const pageAlerts = parseAlertLines(output);
 
     for (const alert of pageAlerts) {
-      const createdAt = toMillis(alert.created_at);
+      const createdAt = isoToMillis(alert.created_at);
       if (createdAt >= since && createdAt < until) {
         alerts.push(alert);
       }
@@ -132,7 +127,7 @@ export const listAlertsInWindow = async ({
 
     if (
       pageAlerts.length < ALERTS_PER_PAGE ||
-      toMillis(pageAlerts[pageAlerts.length - 1].created_at) < since
+      isoToMillis(pageAlerts[pageAlerts.length - 1].created_at) < since
     ) {
       return alerts;
     }
@@ -171,8 +166,8 @@ export const scannerForCategory = (category: string | null): Scanner => {
   return 'unknown';
 };
 
-export const isTriaged = (alert: CodeScanningAlert): boolean => {
-  if (!alert.category || !TRIAGED_CATEGORY_PATTERN.test(alert.category)) {
+export const isInTriageScope = (alert: CodeScanningAlert): boolean => {
+  if (!alert.category || !TRIAGE_SCOPE_PATTERN.test(alert.category)) {
     return false;
   }
   return !(
@@ -217,7 +212,7 @@ export const toScannerSeverity = (alert: CodeScanningAlert): Severity => {
       const level = fromLevel(rule.security_severity_level);
       if (!level) {
         throw new Error(
-          'A CodeQL alert has no security severity; filter alerts with isTriaged first',
+          'A CodeQL alert has no security severity; filter alerts with isInTriageScope first',
         );
       }
       return level;
@@ -229,7 +224,7 @@ export const toScannerSeverity = (alert: CodeScanningAlert): Severity => {
   }
 };
 
-export const toNewFinding = (alert: CodeScanningAlert): NewFinding => {
+export const toFinding = (alert: CodeScanningAlert): Finding => {
   const severity = toScannerSeverity(alert);
   return {
     category: alert.category as string,
@@ -246,6 +241,8 @@ export const listNewFindings = async (options: {
   commandRunner?: CommandRunner;
   maxPages?: number;
   repo: string;
-  window: AlertWindow;
-}): Promise<NewFinding[]> =>
-  (await listAlertsInWindow(options)).filter(isTriaged).map(toNewFinding);
+  window: TriageWindow;
+}): Promise<Finding[]> =>
+  (await listOpenStagingAlertsCreatedIn(options))
+    .filter(isInTriageScope)
+    .map(toFinding);

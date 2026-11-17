@@ -3,9 +3,12 @@ import {
   type SummaryCard,
   buildSummaryCard,
 } from './security-weekly-summary-card.helpers';
-import { computeWindow, listNewFindings } from './code-scanning-alerts.helpers';
-import { getScheduledRunHealth } from './scheduled-scan-health.helpers';
-import { shouldPostForSchedule } from './security-weekly-summary.helpers';
+import {
+  getTriageWindow,
+  listNewFindings,
+} from './code-scanning-alerts.helpers';
+import { getScheduledScanHealth } from './scheduled-scan-health.helpers';
+import { shouldPostForSchedule } from './security-weekly-summary-schedule.helpers';
 import { runCommand } from '../helpers/runCommand';
 
 export const TEAMS_TIMEOUT_MS = 30_000;
@@ -93,10 +96,10 @@ export const runWeeklySummary = async ({
   }
 
   const repo = env.GITHUB_REPOSITORY || DEFAULT_REPO;
-  const window = computeWindow({ now, since: env.SINCE || undefined });
+  const window = getTriageWindow({ now, since: env.SINCE || undefined });
   const [findings, health] = await Promise.all([
     listNewFindings({ commandRunner, repo, window }),
-    getScheduledRunHealth({ commandRunner, now, repo }),
+    getScheduledScanHealth({ commandRunner, now, repo }),
   ]);
   const payload = buildSummaryCard({
     dashboardUrl: env.DASHBOARD_URL || defaultDashboardUrl(repo),

@@ -8,7 +8,7 @@ import {
   postToTeams,
   runWeeklySummary,
 } from './security-weekly-summary-run.helpers';
-import { EASTERN_CRONS } from './security-weekly-summary.helpers';
+import { EASTERN_CRONS } from './security-weekly-summary-schedule.helpers';
 import { runCommand } from '../helpers/runCommand';
 
 const WEBHOOK = 'https://example.invalid/webhook?sig=fake-signature';
