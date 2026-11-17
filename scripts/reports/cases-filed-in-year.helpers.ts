@@ -128,7 +128,7 @@ const outputCaseStats = ({ cases }: { cases: CaseReportCase[] }): void => {
     }
     for (const key of Object.keys(unsortedValues)) {
       if (key in aCase) {
-        const value = String(aCase[key]);
+        const value = String(aCase[key] ?? '');
         const counts = unsortedValues[key];
         counts[value] = (counts[value] ?? 0) + 1;
       }

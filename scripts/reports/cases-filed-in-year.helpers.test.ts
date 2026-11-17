@@ -18,6 +18,7 @@ import {
 import {
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
+  CONTACT_TYPES,
   FILING_TYPES_DICT,
   PARTY_TYPES,
   PAYMENT_STATUS,
@@ -30,9 +31,17 @@ import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api
 import { generateCsv as generateCsvMock } from '../helpers/generate-csv';
 import { getDbReader as getDbReaderMock } from '@web-api/persistence/postgres/database';
 import { getJsDateFromIso } from '@shared/business/utilities/DateHandler';
+import { MOCK_CASE } from '@shared/test/mockCase';
 
 const [birminghamAlabama, mobileAlabama, anchorageAlaska] =
   REGULAR_TRIAL_CITY_STRINGS;
+
+const createPetitioner = (
+  contactType: string,
+): RawCase['petitioners'][number] => ({
+  ...MOCK_CASE.petitioners[0],
+  contactType,
+});
 
 type QueryCall = {
   args: unknown[];
@@ -182,11 +191,18 @@ describe('casesFiledInYear', () => {
         filingType: FILING_TYPES_DICT.MYSELF,
         isPaper: true,
         isSealed: true,
+        leadDocketNumber: '100-25',
         partyType: PARTY_TYPES.petitioner,
         petitionPaymentStatus: PAYMENT_STATUS.PAID,
+        petitioners: [
+          createPetitioner(CONTACT_TYPES.primary),
+          createPetitioner(CONTACT_TYPES.intervenor),
+          createPetitioner(CONTACT_TYPES.participant),
+        ],
         preferredTrialCity: birminghamAlabama,
         privatePractitioners: [{}],
         procedureType: PROCEDURE_TYPES_MAP.regular,
+        remoteTrialGranted: true,
         receivedAt: '2025-01-02T05:00:00Z',
         sortableDocketNumber: 202500002,
         status: CASE_STATUS_TYPES.new,
@@ -199,6 +215,7 @@ describe('casesFiledInYear', () => {
         filingType: FILING_TYPES_DICT.PETITIONER_SPOUSE,
         isPaper: false,
         isSealed: false,
+        leadDocketNumber: '100-25',
         partyType: PARTY_TYPES.petitionerSpouse,
         petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
         preferredTrialCity: anchorageAlaska,
@@ -207,6 +224,12 @@ describe('casesFiledInYear', () => {
         receivedAt: '2025-01-01T05:00:00Z',
         sortableDocketNumber: 202500001,
         status: CASE_STATUS_TYPES.new,
+      }),
+      createCase({
+        caseCaption: 'Gamma Petitioner,\nPetitioner',
+        docketNumber: '102-25',
+        filingType: '',
+        sortableDocketNumber: 202500003,
       }),
     ];
     getCasesByDocketNumbers.mockResolvedValue(cases);
@@ -255,8 +278,8 @@ describe('casesFiledInYear', () => {
           filingType: FILING_TYPES_DICT.PETITIONER_SPOUSE,
           hasIntervenor: 'No',
           hasParticipant: 'No',
-          isInConsolidatedGroup: 'No',
-          isLeadCase: 'No',
+          isInConsolidatedGroup: 'Yes',
+          isLeadCase: 'Yes',
           isSealed: 'No',
           judge: 'Dredd',
           preferredTrialCity: anchorageAlaska,
@@ -268,9 +291,21 @@ describe('casesFiledInYear', () => {
           docketNumber: '101-25',
           filingMethod: SERVICE_INDICATOR_TYPES.SI_PAPER,
           filingType: FILING_TYPES_DICT.MYSELF,
+          hasIntervenor: 'Yes',
+          hasParticipant: 'Yes',
+          isInConsolidatedGroup: 'Yes',
+          isLeadCase: 'No',
           isSealed: 'Yes',
           judge: 'Judy',
           represented: 'Represented',
+          remoteTrialGranted: 'Yes',
+        }),
+        expect.objectContaining({
+          caseCaption: 'Gamma Petitioner, Petitioner',
+          docketNumber: '102-25',
+          filingType: '',
+          isInConsolidatedGroup: 'No',
+          isLeadCase: 'No',
         }),
       ],
     });
@@ -287,11 +322,18 @@ describe('casesFiledInYear', () => {
         filingType: FILING_TYPES_DICT.MYSELF,
         isPaper: true,
         isSealed: true,
+        leadDocketNumber: '100-25',
         partyType: PARTY_TYPES.corporation,
         petitionPaymentStatus: PAYMENT_STATUS.PAID,
+        petitioners: [
+          createPetitioner(CONTACT_TYPES.primary),
+          createPetitioner(CONTACT_TYPES.intervenor),
+          createPetitioner(CONTACT_TYPES.participant),
+        ],
         preferredTrialCity: mobileAlabama,
         privatePractitioners: [{}],
         procedureType: PROCEDURE_TYPES_MAP.regular,
+        remoteTrialGranted: true,
         status: CASE_STATUS_TYPES.new,
       }),
       createCase({
@@ -300,8 +342,10 @@ describe('casesFiledInYear', () => {
         filingType: '',
         isPaper: false,
         isSealed: false,
+        leadDocketNumber: '99-25',
         partyType: PARTY_TYPES.petitioner,
         petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
+        petitioners: [createPetitioner(CONTACT_TYPES.primary)],
         preferredTrialCity: birminghamAlabama,
         privatePractitioners: [],
         procedureType: PROCEDURE_TYPES_MAP.small,
@@ -315,14 +359,18 @@ describe('casesFiledInYear', () => {
         isSealed: false,
         partyType: PARTY_TYPES.corporation,
         petitionPaymentStatus: PAYMENT_STATUS.PAID,
+        petitioners: [],
         preferredTrialCity: anchorageAlaska,
         privatePractitioners: [],
         procedureType: PROCEDURE_TYPES_MAP.regular,
         status: CASE_STATUS_TYPES.new,
       }),
       createCase({
+        associatedJudge: undefined,
+        filingType: undefined,
         isPaper: false,
         isSealed: false,
+        preferredTrialCity: undefined,
       }),
     ];
     getCasesByDocketNumbers.mockResolvedValue(cases);
@@ -334,16 +382,16 @@ describe('casesFiledInYear', () => {
         [CASE_TYPES_MAP.deficiency]: 1,
         [CASE_TYPES_MAP.other]: 1,
       },
-      consolidatedGroups: 0,
+      consolidatedGroups: 1,
       filingMethods: { electronic: 3, paper: 1 },
       filingTypes: {
         [FILING_TYPES_DICT.BUSINESS]: 1,
         [FILING_TYPES_DICT.MYSELF]: 1,
-        '': 1,
+        '': 2,
       },
-      hasIntervenor: 0,
-      hasParticipant: 0,
-      judges: { '': 1, Dredd: 1, Judy: 1 },
+      hasIntervenor: 1,
+      hasParticipant: 1,
+      judges: { '': 2, Dredd: 1, Judy: 1 },
       partyTypes: {
         [PARTY_TYPES.corporation]: 2,
         [PARTY_TYPES.petitioner]: 1,
@@ -356,12 +404,13 @@ describe('casesFiledInYear', () => {
         [anchorageAlaska]: 1,
         [birminghamAlabama]: 1,
         [mobileAlabama]: 1,
+        '': 1,
       },
       procedureTypes: {
         [PROCEDURE_TYPES_MAP.regular]: 2,
         [PROCEDURE_TYPES_MAP.small]: 1,
       },
-      remoteTrialGranted: 0,
+      remoteTrialGranted: 1,
       representation: { proSe: 3, represented: 1 },
       sealed: 1,
       statuses: {
@@ -386,6 +435,7 @@ describe('casesFiledInYear', () => {
       birminghamAlabama,
       mobileAlabama,
       anchorageAlaska,
+      '',
     ]);
   });
 });
