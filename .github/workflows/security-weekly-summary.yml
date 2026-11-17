@@ -1,0 +1,80 @@
+name: Security - Weekly Summary
+
+on:
+  schedule:
+    - cron: '55 11 * * 1'
+    - cron: '55 12 * * 1'
+  workflow_dispatch:
+    inputs:
+      target:
+        description: Where to post. "test" uses the test webhook; "team" posts to the Tech channel.
+        type: choice
+        options: [test, team]
+        default: test
+      since:
+        description: Optional start date (YYYY-MM-DD, Eastern) to cover more than the last week.
+        type: string
+        required: false
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  post-summary:
+    name: Post weekly security summary
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: read
+    timeout-minutes: 15
+    env:
+      WEBHOOK_SECRET_NAME: ${{ (github.event_name == 'schedule' || inputs.target == 'team') && 'TEAMS_SECURITY_SUMMARY_WEBHOOK_URL' || 'TEAMS_SECURITY_SUMMARY_TEST_WEBHOOK_URL' }}
+      RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Node bootstrap
+        uses: ./.github/actions/dawson-node-bootstrap
+
+      - name: Post summary to Teams
+        env:
+          DASHBOARD_URL: ${{ vars.SECURITY_DASHBOARD_URL }}
+          EVENT_SCHEDULE: ${{ github.event.schedule }}
+          GH_TOKEN: ${{ github.token }}
+          SINCE: ${{ inputs.since }}
+          TEAMS_WEBHOOK_URL: ${{ secrets[env.WEBHOOK_SECRET_NAME] }}
+        run: npx ts-node --transpile-only scripts/github-actions/security-weekly-summary.ts
+
+      - name: Notify Teams that the summary failed
+        if: failure()
+        env:
+          TEAMS_WEBHOOK_URL: ${{ secrets[env.WEBHOOK_SECRET_NAME] }}
+        run: |
+          if [ -z "$TEAMS_WEBHOOK_URL" ]; then
+            echo "No webhook configured; cannot send a failure notice."
+            exit 1
+          fi
+          jq -n --arg run "$RUN_URL" '{
+            type: "message",
+            attachments: [{
+              contentType: "application/vnd.microsoft.card.adaptive",
+              content: {
+                type: "AdaptiveCard",
+                version: "1.5",
+                body: [{
+                  type: "TextBlock",
+                  wrap: true,
+                  color: "Warning",
+                  text: "⚠️ The weekly security summary could not be posted this week."
+                }],
+                actions: [{ type: "Action.OpenUrl", title: "View run", url: $run }]
+              }
+            }]
+          }' | curl --fail --silent --show-error --max-time 30 \
+            -H 'Content-Type: application/json' --data @- "$TEAMS_WEBHOOK_URL" > /dev/null

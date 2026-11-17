@@ -77,6 +77,14 @@ describe('shouldPostForSchedule', () => {
   ])('%s', (_, now, schedule, expected) => {
     expect(shouldPostForSchedule({ now, schedule })).toBe(expected);
   });
+
+  it('matches the crons in security-weekly-summary.yml', () => {
+    const workflow = readRepoFile(
+      '.github/workflows/security-weekly-summary.yml',
+    );
+    const crons = [...workflow.matchAll(/cron: '([^']+)'/g)].map(m => m[1]);
+    expect(crons.sort()).toEqual([edt, est].sort());
+  });
 });
 
 describe('computeWindow', () => {
