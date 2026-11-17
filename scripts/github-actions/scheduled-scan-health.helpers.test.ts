@@ -1,8 +1,8 @@
 jest.mock('../helpers/runCommand', () => ({ runCommand: jest.fn() }));
 
 import {
-  RUN_JQ_FILTER,
-  getScheduledRunHealth,
+  LATEST_RUN_JQ_FILTER,
+  getScheduledScanHealth,
   toScanHealth,
 } from './scheduled-scan-health.helpers';
 import { runCommand } from '../helpers/runCommand';
@@ -13,7 +13,7 @@ const runnerReturning = (...outputs: string[]) => {
   return runner;
 };
 
-describe('scan health', () => {
+describe('scheduled scan health', () => {
   const now = '2026-11-16T12:55:00Z';
   const url = 'https://github.com/example/repo/actions/runs/1';
   const run = (overrides: Record<string, unknown> = {}) => ({
@@ -65,7 +65,7 @@ describe('scan health', () => {
   it('checks the latest scheduled staging run of each weekly scan', async () => {
     const runner = runnerReturning(JSON.stringify(run()), 'null');
 
-    const health = await getScheduledRunHealth({
+    const health = await getScheduledScanHealth({
       commandRunner: runner,
       now,
       repo: 'example/repo',
@@ -81,7 +81,7 @@ describe('scan health', () => {
         'api',
         'repos/example/repo/actions/workflows/security-containers.yml/runs?event=schedule&branch=staging&per_page=1',
         '--jq',
-        RUN_JQ_FILTER,
+        LATEST_RUN_JQ_FILTER,
       ],
       { GH_PAGER: 'cat', PAGER: 'cat' },
     );
@@ -94,7 +94,7 @@ describe('scan health', () => {
       .mockRejectedValueOnce(new Error('gh failed'))
       .mockResolvedValueOnce('');
 
-    const health = await getScheduledRunHealth({
+    const health = await getScheduledScanHealth({
       commandRunner: runner,
       now,
       repo: 'example/repo',
@@ -106,7 +106,7 @@ describe('scan health', () => {
   it('uses runCommand by default', async () => {
     (runCommand as jest.Mock).mockResolvedValue('null');
 
-    await getScheduledRunHealth({ now, repo: 'example/repo' });
+    await getScheduledScanHealth({ now, repo: 'example/repo' });
 
     expect(runCommand).toHaveBeenCalledTimes(2);
   });

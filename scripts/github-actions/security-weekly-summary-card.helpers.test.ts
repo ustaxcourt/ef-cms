@@ -7,9 +7,9 @@ import {
   groupByRule,
   payloadBytes,
   ruleLink,
-  whereFound,
+  formatWhereFound,
 } from './security-weekly-summary-card.helpers';
-import { type NewFinding } from './code-scanning-alerts.helpers';
+import { type Finding } from './code-scanning-alerts.helpers';
 import { type ScanHealth } from './scheduled-scan-health.helpers';
 
 const BASE = 'https://github.com/example/repo/security/code-scanning';
@@ -19,7 +19,7 @@ const ALL_OK: ScanHealth[] = [
   { name: 'DAST scan', status: 'ok' },
 ];
 
-const finding = (overrides: Partial<NewFinding> = {}): NewFinding => ({
+const finding = (overrides: Partial<Finding> = {}): Finding => ({
   category: 'trivy-baseline-base',
   createdAt: '2026-11-12T15:00:00Z',
   number: 1,
@@ -30,7 +30,7 @@ const finding = (overrides: Partial<NewFinding> = {}): NewFinding => ({
   ...overrides,
 });
 
-const distinctRules = (count: number, overrides: Partial<NewFinding> = {}) =>
+const distinctRules = (count: number, overrides: Partial<Finding> = {}) =>
   Array.from({ length: count }, (_, i) =>
     finding({ number: i, ruleId: `CVE-0000-${1000 + i}`, ...overrides }),
   );
@@ -117,7 +117,7 @@ describe('groupByRule', () => {
   });
 });
 
-describe('whereFound', () => {
+describe('formatWhereFound', () => {
   it.each<[Partial<RuleGroup>, string]>([
     [
       { categories: ['trivy-baseline-batch', 'trivy-baseline-base'] },
@@ -127,7 +127,7 @@ describe('whereFound', () => {
     [{ categories: ['trivy-new-image'] }, 'Trivy: trivy-new-image'],
     [{ categories: ['gitleaks-baseline'], scanner: 'gitleaks' }, 'Gitleaks'],
   ])('%j → %s', (overrides, expected) => {
-    expect(whereFound(group(overrides))).toBe(expected);
+    expect(formatWhereFound(group(overrides))).toBe(expected);
   });
 });
 

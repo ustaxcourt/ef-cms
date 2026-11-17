@@ -1,6 +1,6 @@
 import {
-  type AlertWindow,
-  type NewFinding,
+  type TriageWindow,
+  type Finding,
   type Scanner,
   type Severity,
 } from './code-scanning-alerts.helpers';
@@ -20,7 +20,7 @@ export type RuleGroup = {
   severity: Severity;
 };
 
-export const isListedInTable = (group: { severity: Severity }): boolean =>
+export const isHighOrCritical = (group: { severity: Severity }): boolean =>
   group.severity === 'Critical' || group.severity === 'High';
 
 export const SEVERITY_ORDER: Severity[] = ['Critical', 'High', 'Medium', 'Low'];
@@ -61,7 +61,7 @@ export const FOOTNOTE =
 export const DEFAULT_MAX_BYTES = 24_000;
 export const DEFAULT_MAX_ROWS = 25;
 
-export const groupByRule = (findings: NewFinding[]): RuleGroup[] => {
+export const groupByRule = (findings: Finding[]): RuleGroup[] => {
   const groups = new Map<string, RuleGroup>();
   for (const finding of findings) {
     const key = `${finding.scanner}|${finding.ruleId}`;
@@ -93,7 +93,7 @@ export const groupByRule = (findings: NewFinding[]): RuleGroup[] => {
   );
 };
 
-export const whereFound = (group: RuleGroup): string =>
+export const formatWhereFound = (group: RuleGroup): string =>
   group.scanner === 'trivy'
     ? `Trivy: ${group.categories
         .map(category => TRIVY_LOCATIONS[category] ?? category)
@@ -155,7 +155,7 @@ const groupRow = (group: RuleGroup): Record<string, unknown> =>
     }),
     textBlock(`[${escapeMarkdown(group.ruleId)}](${ruleLink(group)})`),
     textBlock(String(group.alertCount)),
-    textBlock(whereFound(group)),
+    textBlock(formatWhereFound(group)),
   ]);
 
 const HEADER_ROW = tableRow(
@@ -186,15 +186,15 @@ export const buildSummaryCard = ({
   window,
 }: {
   dashboardUrl: string;
-  findings: NewFinding[];
+  findings: Finding[];
   health: ScanHealth[];
   maxBytes?: number;
   maxRows?: number;
   runUrl?: string;
-  window: AlertWindow;
+  window: TriageWindow;
 }): SummaryCard => {
   const groups = groupByRule(findings);
-  const listed = groups.filter(isListedInTable);
+  const listed = groups.filter(isHighOrCritical);
   const since = formatEastern(window.since, FORMATS.DATE_TIME_TZ);
 
   const build = (rowCount: number): SummaryCard => {

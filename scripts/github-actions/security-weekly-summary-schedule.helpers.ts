@@ -1,4 +1,4 @@
-import { toEastern } from './code-scanning-alerts.helpers';
+import { toEasternTime } from './eastern-time.helpers';
 
 export const EASTERN_CRONS = {
   edt: '55 11 * * 1',
@@ -15,6 +15,6 @@ export const shouldPostForSchedule = ({
   if (!schedule) {
     return true;
   }
-  const isDaylightTime = toEastern(now).isInDST;
+  const isDaylightTime = toEasternTime(now).isInDST;
   return schedule === (isDaylightTime ? EASTERN_CRONS.edt : EASTERN_CRONS.est);
 };

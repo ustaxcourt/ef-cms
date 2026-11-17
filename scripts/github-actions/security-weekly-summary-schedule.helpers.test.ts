@@ -1,7 +1,7 @@
 import {
   EASTERN_CRONS,
   shouldPostForSchedule,
-} from './security-weekly-summary.helpers';
+} from './security-weekly-summary-schedule.helpers';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
 

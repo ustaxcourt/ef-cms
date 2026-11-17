@@ -4,13 +4,13 @@ import {
   ALERTS_PER_PAGE,
   CHECKOV_HARD_FAIL_CHECKS,
   type CodeScanningAlert,
-  TRIAGED_CATEGORY_PATTERN,
-  computeWindow,
-  isTriaged,
-  listAlertsInWindow,
+  TRIAGE_SCOPE_PATTERN,
+  getTriageWindow,
+  isInTriageScope,
+  listOpenStagingAlertsCreatedIn,
   listNewFindings,
   scannerForCategory,
-  toNewFinding,
+  toFinding,
   toScannerSeverity,
 } from './code-scanning-alerts.helpers';
 import { readFileSync } from 'fs';
@@ -55,7 +55,7 @@ const runnerReturning = (...outputs: string[]) => {
   return runner;
 };
 
-describe('computeWindow', () => {
+describe('getTriageWindow', () => {
   it.each([
     ['winter', '2026-11-16T12:55:00Z', '2026-11-09T12:00', '2026-11-16T12:00'],
     ['summer', '2026-07-13T11:55:00Z', '2026-07-06T11:00', '2026-07-13T11:00'],
@@ -84,7 +84,7 @@ describe('computeWindow', () => {
       '2026-11-09T12:00',
     ],
   ])('runs Monday 07:00 ET to Monday 07:00 ET (%s)', (_, now, since, until) => {
-    expect(computeWindow({ now })).toEqual({
+    expect(getTriageWindow({ now })).toEqual({
       since: `${since}:00.000Z`,
       until: `${until}:00.000Z`,
     });
@@ -92,7 +92,7 @@ describe('computeWindow', () => {
 
   it('uses a SINCE override, read as Eastern time, and ends at now', () => {
     expect(
-      computeWindow({ now: '2026-11-16T15:30:00Z', since: '2026-11-02' }),
+      getTriageWindow({ now: '2026-11-16T15:30:00Z', since: '2026-11-02' }),
     ).toEqual({
       since: '2026-11-02T05:00:00.000Z',
       until: '2026-11-16T15:30:00.000Z',
@@ -103,9 +103,9 @@ describe('computeWindow', () => {
     ['last week', 'SINCE must be an ISO date'],
     ['2026-12-01', 'SINCE must be in the past'],
   ])('rejects SINCE=%s', (since, message) => {
-    expect(() => computeWindow({ now: '2026-11-16T15:30:00Z', since })).toThrow(
-      message,
-    );
+    expect(() =>
+      getTriageWindow({ now: '2026-11-16T15:30:00Z', since }),
+    ).toThrow(message);
   });
 });
 
@@ -123,7 +123,7 @@ describe('category and Checkov lists', () => {
     ['trivy-baseline-local', false],
     ['zap-web', false],
   ])('treats %s as triaged: %s', (category, expected) => {
-    expect(TRIAGED_CATEGORY_PATTERN.test(category)).toBe(expected);
+    expect(TRIAGE_SCOPE_PATTERN.test(category)).toBe(expected);
   });
 
   it('matches both copies of the regex in the weekly-triage runbook', () => {
@@ -131,7 +131,7 @@ describe('category and Checkov lists', () => {
     const copies = [...runbook.matchAll(/\^\(trivy-baseline[^"']*\)\$/g)];
     expect(copies).toHaveLength(2);
     copies.forEach(([copy]) =>
-      expect(copy).toBe(TRIAGED_CATEGORY_PATTERN.source.replace(/\\\//g, '/')),
+      expect(copy).toBe(TRIAGE_SCOPE_PATTERN.source.replace(/\\\//g, '/')),
     );
   });
 
@@ -158,7 +158,7 @@ describe('scannerForCategory', () => {
   });
 });
 
-describe('isTriaged', () => {
+describe('isInTriageScope', () => {
   it.each<[string, AlertOverrides, boolean]>([
     ['a triaged category', { category: 'checkov' }, true],
     ['a duplicate category', { category: 'trivy-image-base' }, false],
@@ -170,7 +170,7 @@ describe('isTriaged', () => {
       true,
     ],
   ])('%s: %s', (_, overrides, expected) => {
-    expect(isTriaged(alert(overrides))).toBe(expected);
+    expect(isInTriageScope(alert(overrides))).toBe(expected);
   });
 });
 
@@ -222,12 +222,10 @@ describe('toScannerSeverity', () => {
   });
 });
 
-describe('toNewFinding', () => {
+describe('toFinding', () => {
   it('keeps only the fields the summary needs', () => {
     expect(
-      toNewFinding(
-        alert({ category: 'gitleaks-baseline', id: null, number: 42 }),
-      ),
+      toFinding(alert({ category: 'gitleaks-baseline', id: null, number: 42 })),
     ).toEqual({
       category: 'gitleaks-baseline',
       createdAt: '2026-11-12T15:00:00Z',
@@ -240,13 +238,13 @@ describe('toNewFinding', () => {
   });
 });
 
-describe('listAlertsInWindow', () => {
+describe('listOpenStagingAlertsCreatedIn', () => {
   const fullPage = (createdAt: string) =>
     Array.from({ length: ALERTS_PER_PAGE }, (_, i) =>
       alert({ created_at: createdAt, number: i }),
     );
   const list = (commandRunner: jest.Mock, maxPages?: number) =>
-    listAlertsInWindow({
+    listOpenStagingAlertsCreatedIn({
       commandRunner,
       maxPages,
       repo: 'example/repo',
@@ -310,7 +308,10 @@ describe('listAlertsInWindow', () => {
   it('uses runCommand by default', async () => {
     (runCommand as jest.Mock).mockResolvedValue('');
 
-    await listAlertsInWindow({ repo: 'example/repo', window: WINDOW });
+    await listOpenStagingAlertsCreatedIn({
+      repo: 'example/repo',
+      window: WINDOW,
+    });
 
     expect(runCommand).toHaveBeenCalledTimes(1);
   });
