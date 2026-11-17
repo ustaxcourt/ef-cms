@@ -9,8 +9,7 @@ import { getRecentUserActivity } from './recent-user-activity.helpers';
 const scriptConfig: ScriptConfig = {
   description:
     'recent-user-activity - Lists recent logins and active users in a deployed DAWSON environment, ' +
-    "based on the API lambda's CloudWatch logs. --staff limits results to ustaxcourt.gov users " +
-    '(and drops SSO logins, which are logged without an email). --sample prints a few raw log lines.',
+    "based on the API lambda's CloudWatch logs.",
   environment: {
     env: 'ENV',
     region: 'REGION',
@@ -28,6 +27,7 @@ const scriptConfig: ScriptConfig = {
     },
     staffOnly: {
       default: false,
+      description: 'ustaxcourt.gov users only (omits SSO logins)',
       long: 'staff',
       short: 's',
       type: 'boolean',
@@ -47,8 +47,6 @@ const { env, minutes, region, sample, staffOnly } = parseArgsAndEnvVars(
   staffOnly: boolean;
 };
 
-// Not the shared 'number' transform: it uses parseInt, which would quietly
-// turn values like '1.5' or '60,90' into integers instead of rejecting them.
 void getRecentUserActivity({
   env,
   minutes: Number(minutes),

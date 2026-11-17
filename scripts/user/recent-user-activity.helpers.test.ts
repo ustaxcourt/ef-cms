@@ -1,6 +1,5 @@
 import {
   CloudWatchLogsClient,
-  DescribeLogGroupsCommand,
   GetQueryResultsCommand,
   type ResultField,
   StartQueryCommand,
@@ -13,7 +12,6 @@ import {
   buildActivityQuery,
   buildLoginsQuery,
   capNote,
-  findApiLogGroups,
   formatInsightsTimestamp,
   getQueryWindow,
   getRecentUserActivity,
@@ -33,14 +31,6 @@ const NOW = calculateDate({ dateString: '2026-11-15T17:00:00.000Z' });
 
 const toResultFields = (record: { [field: string]: string }): ResultField[] =>
   Object.entries(record).map(([field, value]) => ({ field, value }));
-
-const mockLogGroups = (names: string[]): void => {
-  cloudwatchMock.on(DescribeLogGroupsCommand).callsFake(input => ({
-    logGroups: names
-      .filter(name => name.startsWith(input.logGroupNamePrefix))
-      .map(logGroupName => ({ logGroupName })),
-  }));
-};
 
 /**
  * Mocks StartQuery/GetQueryResults so the Nth query started gets the Nth
@@ -104,7 +94,7 @@ describe('recent-user-activity helpers', () => {
   });
 
   describe('buildActivityQuery', () => {
-    it('aggregates authenticated requests by user', () => {
+    it('aggregates authenticated requests by user, busiest first', () => {
       const query = buildActivityQuery({ staffOnly: false });
 
       expect(query).toContain(
@@ -113,6 +103,7 @@ describe('recent-user-activity helpers', () => {
       expect(query).toContain(
         'by user.email as email, user.name as name, user.role as role',
       );
+      expect(query).toContain('| sort requests desc');
       expect(query).not.toContain('ustaxcourt');
     });
 
@@ -130,7 +121,7 @@ describe('recent-user-activity helpers', () => {
 
     it('warns that the counts are capped when the query limit was reached', () => {
       expect(capNote(QUERY_LIMIT)).toBe(
-        ` (capped at the most recent ${QUERY_LIMIT}; use a shorter --minutes for complete counts)`,
+        ` (capped at ${QUERY_LIMIT} rows; use a shorter --minutes for complete counts)`,
       );
     });
   });
@@ -143,38 +134,6 @@ describe('recent-user-activity helpers', () => {
       expect(window.startTime).toBe(NOW_EPOCH_SECONDS - 15 * 60);
       expect(window.endIso).toBe('2026-11-15T17:00:00.000Z');
       expect(window.startIso).toBe('2026-11-15T16:45:00.000Z');
-    });
-  });
-
-  describe('findApiLogGroups', () => {
-    it('returns only the API log groups that exist with an exact name match', async () => {
-      mockLogGroups([
-        '/aws/lambda/api_prod_blue-old',
-        '/aws/lambda/api_prod_green',
-      ]);
-
-      const logGroups = await findApiLogGroups({
-        cloudwatchClient: new CloudWatchLogsClient({ region: 'us-east-1' }),
-        env: 'prod',
-      });
-
-      expect(logGroups).toEqual(['/aws/lambda/api_prod_green']);
-      expect(
-        cloudwatchMock
-          .commandCalls(DescribeLogGroupsCommand)
-          .map(call => call.args[0].input.logGroupNamePrefix),
-      ).toEqual(['/aws/lambda/api_prod_blue', '/aws/lambda/api_prod_green']);
-    });
-
-    it('returns an empty array when DescribeLogGroups returns no logGroups', async () => {
-      cloudwatchMock.on(DescribeLogGroupsCommand).resolves({});
-
-      const logGroups = await findApiLogGroups({
-        cloudwatchClient: new CloudWatchLogsClient({ region: 'us-east-1' }),
-        env: 'prod',
-      });
-
-      expect(logGroups).toEqual([]);
     });
   });
 
@@ -359,7 +318,6 @@ describe('recent-user-activity helpers', () => {
     };
 
     it('queries both API log groups and returns and prints logins and active users', async () => {
-      mockLogGroups(logGroupNames);
       mockQueryResults([
         // logins query
         [
@@ -444,7 +402,6 @@ describe('recent-user-activity helpers', () => {
     });
 
     it('uses the staff-only queries, includes dates for long windows, and prints (none) for empty results', async () => {
-      mockLogGroups(logGroupNames);
       mockQueryResults([
         // logins query
         [
@@ -461,7 +418,6 @@ describe('recent-user-activity helpers', () => {
 
       const result = await getRecentUserActivity({
         ...baseOptions,
-        cloudwatchClient: new CloudWatchLogsClient({ region: 'us-east-1' }),
         minutes: 24 * 60,
         staffOnly: true,
       });
@@ -480,7 +436,6 @@ describe('recent-user-activity helpers', () => {
     });
 
     it('notes in both summaries when the results reached the query limit', async () => {
-      mockLogGroups(logGroupNames);
       mockQueryResults([
         Array.from({ length: QUERY_LIMIT }, () => ({
           '@timestamp': '2026-11-15 16:50:00.000',
@@ -504,7 +459,6 @@ describe('recent-user-activity helpers', () => {
     });
 
     it('prints sanitized raw log lines and skips the summary queries in sample mode', async () => {
-      mockLogGroups(['/aws/lambda/api_prod_green']);
       mockQueryResults([
         [
           {
@@ -530,7 +484,7 @@ describe('recent-user-activity helpers', () => {
       expect(result.activity).toEqual([]);
       expect(startQueryInputs()).toEqual([
         expect.objectContaining({
-          logGroupNames: ['/aws/lambda/api_prod_green'],
+          logGroupNames,
           queryString: SAMPLE_QUERY,
         }),
       ]);
@@ -538,21 +492,6 @@ describe('recent-user-activity helpers', () => {
         `2026-11-15 16:59:00.000\n${result.samples[0]}\n`,
       );
       expect(console.table).not.toHaveBeenCalled();
-    });
-
-    it('reports an error and exits when no API log groups exist', async () => {
-      mockLogGroups([]);
-
-      await getRecentUserActivity(baseOptions);
-
-      expect(console.error).toHaveBeenCalledWith(
-        'Error:',
-        new Error(
-          'No /aws/lambda/api_prod_<blue|green> log groups found in us-east-1.',
-        ),
-      );
-      expect(process.exit).toHaveBeenCalledWith(1);
-      expect(cloudwatchMock.commandCalls(StartQueryCommand)).toHaveLength(0);
     });
 
     it.each([0, -5, 1.5, NaN])(
@@ -571,7 +510,7 @@ describe('recent-user-activity helpers', () => {
 
     it('reports an error and exits when a CloudWatch call fails', async () => {
       const accessDenied = new Error('AccessDeniedException');
-      cloudwatchMock.on(DescribeLogGroupsCommand).rejects(accessDenied);
+      cloudwatchMock.on(StartQueryCommand).rejects(accessDenied);
 
       await getRecentUserActivity(baseOptions);
 

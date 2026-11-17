@@ -1,8 +1,4 @@
-import {
-  CloudWatchLogsClient,
-  DescribeLogGroupsCommand,
-  type ResultField,
-} from '@aws-sdk/client-cloudwatch-logs';
+import { type ResultField } from '@aws-sdk/client-cloudwatch-logs';
 import {
   FORMATS,
   calculateISODate,
@@ -12,22 +8,6 @@ import {
 } from '@shared/business/utilities/DateHandler';
 import { performQuery } from '../cloudwatch/perform-query';
 
-/**
- * Recent DAWSON logins and per-user activity, read from the API lambda's
- * CloudWatch logs.
- *
- * Postgres has no login / last-seen data, and Cognito does not expose a
- * usable login history, but the API lambda (`/aws/lambda/api_<env>_<color>`)
- * logs a JSON "Request ended: <METHOD> <URL>" line for every request (see
- * web-api/src/logger.ts). Authenticated requests also carry
- * `user.{userId,email,name,role}`, added by genericHandler.
- *
- * Logins are `POST /auth/login` (email/password; the email is in the
- * request body) and `POST /auth/code` (SSO code exchange; no identity is
- * logged, so these have no email).
- */
-
-const API_COLORS = ['blue', 'green'] as const;
 const STAFF_EMAIL_PATTERN = String.raw`/(?i)@ustaxcourt\.gov$/`;
 const LONG_WINDOW_MINUTES = 12 * 60;
 export const QUERY_LIMIT = 1000;
@@ -62,7 +42,6 @@ type RecentUserActivityOptions = {
   region: string;
   sample: boolean;
   staffOnly: boolean;
-  cloudwatchClient?: CloudWatchLogsClient;
 };
 
 type QueryWindow = {
@@ -96,7 +75,7 @@ export const buildActivityQuery = ({
     ...(staffOnly ? [`| filter user.email like ${STAFF_EMAIL_PATTERN}`] : []),
     '| stats count(*) as requests, min(@timestamp) as firstSeen, max(@timestamp) as lastSeen' +
       ' by user.email as email, user.name as name, user.role as role',
-    '| sort lastSeen desc',
+    '| sort requests desc',
     `| limit ${QUERY_LIMIT}`,
   ].join('\n');
 
@@ -129,26 +108,6 @@ export const getQueryWindow = ({
   };
 };
 
-export const findApiLogGroups = async ({
-  cloudwatchClient,
-  env,
-}: {
-  cloudwatchClient: CloudWatchLogsClient;
-  env: string;
-}): Promise<string[]> => {
-  const logGroupNames: string[] = [];
-  for (const color of API_COLORS) {
-    const name = `/aws/lambda/api_${env}_${color}`;
-    const response = await cloudwatchClient.send(
-      new DescribeLogGroupsCommand({ logGroupNamePrefix: name }),
-    );
-    if (response.logGroups?.some(group => group.logGroupName === name)) {
-      logGroupNames.push(name);
-    }
-  }
-  return logGroupNames;
-};
-
 export const toRecords = (rows: ResultField[][]): InsightsRecord[] =>
   rows.map(row => {
     const record: InsightsRecord = {};
@@ -160,10 +119,6 @@ export const toRecords = (rows: ResultField[][]): InsightsRecord[] =>
     return record;
   });
 
-/**
- * Logs Insights returns timestamps like "2026-11-13 18:04:05.123" in UTC.
- * Returns them in Eastern time, or the original value if it can't be parsed.
- */
 export const formatInsightsTimestamp = (
   value: string | undefined,
   includeDate: boolean,
@@ -211,10 +166,7 @@ export const toActivityRows = (
 const isObject = (value: unknown): value is { [key: string]: unknown } =>
   typeof value === 'object' && value !== null && !Array.isArray(value);
 
-/**
- * Pretty-prints a raw log line, dropping `request.headers` (they include the
- * refresh token cookie and the bearer token).
- */
+// Headers include the refresh token cookie and the bearer token.
 export const sanitizeSampleMessage = (message: string): string => {
   const jsonStart = message.indexOf('{');
   if (jsonStart === -1) return message;
@@ -229,13 +181,9 @@ export const sanitizeSampleMessage = (message: string): string => {
   }
 };
 
-/**
- * The summary queries return at most QUERY_LIMIT rows, so a full result set
- * means the counts may not cover the whole window.
- */
 export const capNote = (count: number): string =>
   count >= QUERY_LIMIT
-    ? ` (capped at the most recent ${QUERY_LIMIT}; use a shorter --minutes for complete counts)`
+    ? ` (capped at ${QUERY_LIMIT} rows; use a shorter --minutes for complete counts)`
     : '';
 
 const printRows = (rows: LoginRow[] | ActivityRow[]): void => {
@@ -247,7 +195,6 @@ const printRows = (rows: LoginRow[] | ActivityRow[]): void => {
 };
 
 export const getRecentUserActivity = async ({
-  cloudwatchClient,
   env,
   minutes,
   region,
@@ -260,17 +207,9 @@ export const getRecentUserActivity = async ({
       throw new Error(`--minutes must be a positive integer (got ${minutes})`);
     }
 
-    const client = cloudwatchClient ?? new CloudWatchLogsClient({ region });
-    const logGroupNames = await findApiLogGroups({
-      cloudwatchClient: client,
-      env,
-    });
-    if (logGroupNames.length === 0) {
-      throw new Error(
-        `No /aws/lambda/api_${env}_<blue|green> log groups found in ${region}.`,
-      );
-    }
-
+    const logGroupNames = ['blue', 'green'].map(
+      color => `/aws/lambda/api_${env}_${color}`,
+    );
     const { endIso, endTime, startIso, startTime } = getQueryWindow({
       minutes,
     });
