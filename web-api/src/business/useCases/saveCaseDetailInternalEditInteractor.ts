@@ -140,6 +140,7 @@ export const saveCaseDetailInternalEdit = async (
   const caseEntity = new Case(caseEntityWithFormEdits, {
     authorizedUser,
   });
+  caseEntity.updateStjEligibility(originalCaseEntity);
 
   if (caseEntity.isPaper) {
     await applicationContext.getUseCaseHelpers().updateInitialFilingDocuments({

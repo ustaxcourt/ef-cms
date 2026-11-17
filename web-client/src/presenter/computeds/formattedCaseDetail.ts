@@ -15,6 +15,7 @@ export type ComputedFormattedCaseDetail = Omit<
 > & {
   consolidatedCases: FormattedCase[];
   petitioners: tPetitioner[];
+  formattedStjEligibility: string;
   trialSessionNotes?: string;
   userIsAssignedToSession?: boolean;
 };
@@ -98,6 +99,12 @@ const getCalendarDetailsForTrialSession = ({
   return { addedAt, note };
 };
 
+const formatStjEligibility = (stjEligible?: boolean | null): string => {
+  if (stjEligible === true) return 'Eligible';
+  if (stjEligible === false) return 'Not eligible';
+  return '';
+};
+
 export const formattedCaseDetail = (
   get: Get,
   applicationContext: ClientApplicationContext,
@@ -161,11 +168,14 @@ export const formattedCaseDetail = (
     trialSessionId: caseDetail.trialSessionId,
   });
 
+  const formattedStjEligibility = formatStjEligibility(caseDetail.stjEligible);
+
   return {
     ...setServiceIndicatorsForPetitionersOnCase(caseDetail),
     ...formattedCase,
     consolidatedCases,
     petitioners,
+    formattedStjEligibility,
     trialSessionNotes,
     userIsAssignedToSession,
   };

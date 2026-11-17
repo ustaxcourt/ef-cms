@@ -62,6 +62,7 @@ export const addDeficiencyStatistic = async (
 
   const newCase = new Case(oldCase, { authorizedUser });
   newCase.addStatistic(statisticEntity);
+  newCase.updateStjEligibility(oldCase);
 
   const validRawCase = newCase.validate().toRawObject();
 
