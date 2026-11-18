@@ -45,12 +45,18 @@ const TRIVY_LOCATIONS: Record<string, string> = {
   'trivy-config': 'config',
 };
 
-const HEALTH_MESSAGES: Record<Exclude<ScanHealthStatus, 'ok'>, string> = {
+type UnhealthyStatus = Exclude<ScanHealthStatus, 'ok'>;
+
+const HEALTH_MESSAGES: Record<UnhealthyStatus, string> = {
   failed: 'failed',
   in_progress: 'was still running',
   missing: 'did not run this week',
   unknown: 'could not be checked',
 };
+
+const isUnhealthy = (
+  scan: ScanHealth,
+): scan is ScanHealth & { status: UnhealthyStatus } => scan.status !== 'ok';
 
 export const FOOTNOTE =
   "Severity is the scanner's; the DAWSON severity is set at triage. " +
@@ -204,10 +210,10 @@ export const buildSummaryCard = ({
         { size: 'Large', weight: 'Bolder' },
       ),
       ...health
-        .filter(scan => scan.status !== 'ok')
+        .filter(isUnhealthy)
         .map(scan =>
           textBlock(
-            `⚠️ ${scan.name} ${HEALTH_MESSAGES[scan.status as Exclude<ScanHealthStatus, 'ok'>]}` +
+            `⚠️ ${scan.name} ${HEALTH_MESSAGES[scan.status]}` +
               (scan.url ? ` ([view run](${scan.url}))` : '') +
               '. Counts below may be incomplete.',
             { color: 'Warning' },

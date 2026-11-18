@@ -68,25 +68,24 @@ export const getScheduledScanHealth = async ({
   repo: string;
 }): Promise<ScanHealth[]> =>
   Promise.all(
-    SCHEDULED_SCAN_WORKFLOWS.map(async ({ file, name }) => {
-      try {
-        const output = await commandRunner(
-          'gh',
-          [
-            'api',
-            `repos/${repo}/actions/workflows/${file}/runs?event=schedule&branch=staging&per_page=1`,
-            '--jq',
-            LATEST_RUN_JQ_FILTER,
-          ],
-          { GH_PAGER: 'cat', PAGER: 'cat' },
-        );
-        return toScanHealth({
-          name,
-          now,
-          run: JSON.parse(output || 'null') as WorkflowRun,
-        });
-      } catch {
-        return { name, status: 'unknown' as const };
-      }
-    }),
+    SCHEDULED_SCAN_WORKFLOWS.map(
+      async ({ file, name }): Promise<ScanHealth> => {
+        try {
+          const output = await commandRunner(
+            'gh',
+            [
+              'api',
+              `repos/${repo}/actions/workflows/${file}/runs?event=schedule&branch=staging&per_page=1`,
+              '--jq',
+              LATEST_RUN_JQ_FILTER,
+            ],
+            { GH_PAGER: 'cat', PAGER: 'cat' },
+          );
+          const run: WorkflowRun = JSON.parse(output || 'null');
+          return toScanHealth({ name, now, run });
+        } catch {
+          return { name, status: 'unknown' };
+        }
+      },
+    ),
   );

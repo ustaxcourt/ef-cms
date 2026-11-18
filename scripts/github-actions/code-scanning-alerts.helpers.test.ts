@@ -5,6 +5,7 @@ import {
   CHECKOV_HARD_FAIL_CHECKS,
   type CodeScanningAlert,
   TRIAGE_SCOPE_PATTERN,
+  type TriageScopedAlert,
   getTriageWindow,
   isInTriageScope,
   listOpenStagingAlertsCreatedIn,
@@ -45,6 +46,10 @@ const alert = ({
   number,
   rule: { id, security_severity_level, severity, tags },
 });
+
+const scopedAlert = (
+  overrides: AlertOverrides & { category: string },
+): TriageScopedAlert => ({ ...alert(overrides), category: overrides.category });
 
 const toLines = (alerts: CodeScanningAlert[]) =>
   alerts.map(a => JSON.stringify(a)).join('\n');
@@ -227,7 +232,9 @@ describe('toScannerSeverity', () => {
 describe('toFinding', () => {
   it('keeps only the fields the summary needs', () => {
     expect(
-      toFinding(alert({ category: 'gitleaks-baseline', id: null, number: 42 })),
+      toFinding(
+        scopedAlert({ category: 'gitleaks-baseline', id: null, number: 42 }),
+      ),
     ).toEqual({
       category: 'gitleaks-baseline',
       createdAt: '2026-11-12T15:00:00Z',

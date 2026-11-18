@@ -19,7 +19,7 @@ const scriptConfig: ScriptConfig = {
     },
   },
 };
-const { dryRun } = parseArgsAndEnvVars(scriptConfig) as { dryRun: boolean };
+const dryRun = parseArgsAndEnvVars(scriptConfig).dryRun === true;
 
 runWeeklySummary({
   dryRun,

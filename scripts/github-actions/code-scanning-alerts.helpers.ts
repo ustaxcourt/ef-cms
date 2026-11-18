@@ -49,8 +49,7 @@ export const getTriageWindow = ({
   };
 };
 
-const toUtcIso = (dateTime: DateTime): string =>
-  dateTime.toUTC().toISO() as string;
+const toUtcIso = (dateTime: DateTime<true>): string => dateTime.toUTC().toISO();
 
 export const TRIAGE_SCOPE_PATTERN =
   /^(trivy-baseline-(base|puppeteer|batch)|trivy|trivy-config|semgrep|checkov|\/language:.*|gitleaks-baseline)$/;
@@ -147,7 +146,7 @@ export const parseAlertLines = (output: string): CodeScanningAlert[] =>
   output
     .split('\n')
     .filter(line => line.trim() !== '')
-    .map(line => JSON.parse(line) as CodeScanningAlert);
+    .map((line): CodeScanningAlert => JSON.parse(line));
 
 export const scannerForCategory = (category: string | null): Scanner => {
   if (!category) {
@@ -171,7 +170,11 @@ export const scannerForCategory = (category: string | null): Scanner => {
   return 'unknown';
 };
 
-export const isInTriageScope = (alert: CodeScanningAlert): boolean => {
+export type TriageScopedAlert = CodeScanningAlert & { category: string };
+
+export const isInTriageScope = (
+  alert: CodeScanningAlert,
+): alert is TriageScopedAlert => {
   if (!alert.category || !TRIAGE_SCOPE_PATTERN.test(alert.category)) {
     return false;
   }
@@ -229,10 +232,10 @@ export const toScannerSeverity = (alert: CodeScanningAlert): Severity => {
   }
 };
 
-export const toFinding = (alert: CodeScanningAlert): Finding => {
+export const toFinding = (alert: TriageScopedAlert): Finding => {
   const severity = toScannerSeverity(alert);
   return {
-    category: alert.category as string,
+    category: alert.category,
     createdAt: alert.created_at,
     number: alert.number,
     ruleId: alert.rule.id ?? '(none)',

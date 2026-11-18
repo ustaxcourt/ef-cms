@@ -35,6 +35,13 @@ export type SummaryEnv = {
 export const defaultDashboardUrl = (repo: string): string =>
   `https://github.com/${repo}/security/code-scanning?query=is%3Aopen+branch%3Astaging`;
 
+const requireHttpsWebhookUrl = (url: string | undefined): string => {
+  if (!url?.startsWith('https://')) {
+    throw new Error('TEAMS_WEBHOOK_URL must be set to an https URL');
+  }
+  return url;
+};
+
 export const postToTeams = async ({
   fetchFn = fetch,
   payload,
@@ -83,10 +90,9 @@ export const runWeeklySummary = async ({
       '--dry-run prints findings, so it is not allowed in GitHub Actions (logs are public)',
     );
   }
-  const webhookUrl = env.TEAMS_WEBHOOK_URL;
-  if (!dryRun && !webhookUrl?.startsWith('https://')) {
-    throw new Error('TEAMS_WEBHOOK_URL must be set to an https URL');
-  }
+  const webhookUrl = dryRun
+    ? undefined
+    : requireHttpsWebhookUrl(env.TEAMS_WEBHOOK_URL);
 
   const repo = env.GITHUB_REPOSITORY || DEFAULT_REPO;
   const window = getTriageWindow({ now, since: env.SINCE || undefined });
@@ -102,15 +108,11 @@ export const runWeeklySummary = async ({
     window,
   });
 
-  if (dryRun) {
+  if (webhookUrl === undefined) {
     print(JSON.stringify(payload, null, 2));
     return;
   }
 
-  const status = await postToTeams({
-    fetchFn,
-    payload,
-    webhookUrl: webhookUrl as string,
-  });
+  const status = await postToTeams({ fetchFn, payload, webhookUrl });
   log(`Posted the weekly security summary (HTTP ${status}).`);
 };
