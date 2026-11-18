@@ -683,6 +683,11 @@ error: too many arguments. Expected 0 arguments but got 2.
 - As of 10/13/2026: eslint **10.12.0** is available. Still blocked; `eslint-plugin-react@7.37.5` (peer `^9.7`) and `eslint-plugin-jsx-a11y@6.10.2` (peer `^9`) are still the latest releases. TypeScript **7.0.2** / **6.0.2** and `ts-node` **10.9.2** are still latest.
 - As of 11/09/2026: eslint **10.14.0** is available. Still blocked; `eslint-plugin-react@7.37.5` and `eslint-plugin-jsx-a11y@6.10.2` are still the latest releases and do not accept eslint 10. Stay on **9.39.5** for `eslint` and `@eslint/js`.
 
+### cypress
+**Installed Version: 16.2.1**
+
+- As of 11/18/2026: Attempted to update to **16.3.0** as part of routine dependency bumps, but reverted to **16.2.1**. On **16.3.0**, `cy.task()` calls made from inside the global `afterEach` hook (`cypress/local-only/support/index.ts`) and from `cypress-axe`'s `violationCallback` (`terminalLog` in `cypress/helpers/cypressTasks/logs.ts`) fail with `CypressError: cy.task() must only be invoked from the spec file or support file`, breaking every public-facing spec on CI: `integration/public/terminal-user.cy.ts`, `integration/public/caseDetail/amended-and-redacted-brief-visibility.cy.ts`, `accessibility/public/maintenance/no-user.cy.ts`, and `accessibility/public/trialSessions/trial-session-details.cy.ts`. Verified all 4 specs pass on **16.2.1**. Revisit upgrading past **16.2.1** once the `cy.task()` regression is fixed upstream.
+
 ### eslint-plugin-cypress
 **Installed Version: 6.4.4**
 
