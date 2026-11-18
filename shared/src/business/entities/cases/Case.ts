@@ -1575,7 +1575,7 @@ export class Case extends JoiValidationEntity {
       !caseDetail.statistics?.find(
         stat =>
           Number(stat.irsDeficiencyAmount ?? 0) +
-            Number(stat.irsTotalPenalties ?? 0) >=
+            Number(stat.irsTotalPenalties ?? 0) >
           CASE_STJ_THRESHOLD,
       );
 

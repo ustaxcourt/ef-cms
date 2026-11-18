@@ -34,7 +34,7 @@ SET
           AND "status" NOT IN ('Closed', 'Closed - Dismissed')
           AND (
             procedure_type = 'Small'
-            OR case_type IN ('CDP (Lien/Levy)', 'Declaratory Judgment (Exempt Organization)', 'Declaratory Judgment (Retirement Plan)', 'Disclosure', 'Whistleblower', 'Interest Abatement')
+            OR case_type IN ('CDP (Lien/Levy)', 'Declaratory Judgment (Exempt Organization)', 'Declaratory Judgment (Retirement Plan)', 'Other', 'Disclosure', 'Whistleblower', 'Interest Abatement')
             OR (
               case_type = 'Deficiency'
               AND stats.docket_number IS NULL
