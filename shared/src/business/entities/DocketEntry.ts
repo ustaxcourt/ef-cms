@@ -30,6 +30,8 @@ import {
   TRANSCRIPT_EVENT_CODE,
   UNSERVABLE_EVENT_CODES,
   PUBLIC_SUPPORTING_EVENT_CODES_FOR_MOTIONS,
+  PUBLIC_MOTION_RESPONSE_EVENT_CODES,
+  MOTION_DOCUMENT_TYPES,
 } from './EntityConstants';
 import {
   Case,
@@ -544,20 +546,66 @@ export class DocketEntry extends JoiValidationEntity {
     );
   }
 
+  // uses the direct previous document, not the root: an opposition to a
+  // response has a motion as its root, but its target is not a motion
+  static isMotionResponse(
+    entry: RawDocketEntry,
+    docketEntries: RawDocketEntry[],
+  ): boolean {
+    if (
+      !PUBLIC_MOTION_RESPONSE_EVENT_CODES.includes(entry.eventCode) ||
+      !entry.previousDocument
+    ) {
+      return false;
+    }
+
+    const targetDocument = DocketEntry.fetchPreviousDocument(
+      entry,
+      docketEntries,
+    );
+
+    // a response filed across a consolidated group can target a motion that
+    // is only on one case; fall back to the target type saved at filing time
+    return targetDocument
+      ? DocketEntry.isMotion(targetDocument.eventCode)
+      : MOTION_DOCUMENT_TYPES.includes(entry.previousDocument.documentType);
+  }
+
+  static isMotionResponseSupport(
+    entry: RawDocketEntry,
+    docketEntries: RawDocketEntry[],
+  ): boolean {
+    const parentDocument = DocketEntry.fetchPreviousDocument(
+      entry,
+      docketEntries,
+    );
+
+    return (
+      !!parentDocument &&
+      PUBLIC_SUPPORTING_EVENT_CODES_FOR_MOTIONS.includes(entry.eventCode) &&
+      entry.filingDate === parentDocument.filingDate &&
+      DocketEntry.isMotionResponse(parentDocument, docketEntries)
+    );
+  }
+
   static isNonPublicLodged(
     entry: RawDocketEntry,
-    rootDocument?: RawDocketEntry,
+    rootDocument: RawDocketEntry | undefined,
+    docketEntries: RawDocketEntry[],
   ): boolean {
     return (
       !!entry.lodged ||
       (!!rootDocument?.lodged &&
-        DocketEntry.isMotionSupport(entry, rootDocument))
+        DocketEntry.isMotionSupport(entry, rootDocument)) ||
+      (!!DocketEntry.fetchPreviousDocument(entry, docketEntries)?.lodged &&
+        DocketEntry.isMotionResponseSupport(entry, docketEntries))
     );
   }
 
   static isMotionPublic(
     entry: RawDocketEntry,
     rootDocument: RawDocketEntry | undefined,
+    docketEntries: RawDocketEntry[],
     motionVisibilityChangeDate: string,
   ): boolean {
     return (
@@ -565,7 +613,9 @@ export class DocketEntry extends JoiValidationEntity {
       entry.filingDate >= createISODateString(motionVisibilityChangeDate) &&
       !entry.isPaper &&
       (DocketEntry.isMotion(entry.eventCode) ||
-        DocketEntry.isMotionSupport(entry, rootDocument)) &&
+        DocketEntry.isMotionSupport(entry, rootDocument) ||
+        DocketEntry.isMotionResponse(entry, docketEntries) ||
+        DocketEntry.isMotionResponseSupport(entry, docketEntries)) &&
       DocketEntry.isFiledByPractitioner(entry.filedByRole)
     );
   }
@@ -574,11 +624,13 @@ export class DocketEntry extends JoiValidationEntity {
     entry: RawDocketEntry,
     {
       caseIsSealed = false,
+      docketEntries = [],
       rootDocument,
       visibilityChangeDate,
       motionVisibilityChangeDate,
     }: {
       caseIsSealed?: boolean;
+      docketEntries?: RawDocketEntry[];
       rootDocument?: RawDocketEntry;
       visibilityChangeDate: string;
       motionVisibilityChangeDate: string;
@@ -598,7 +650,7 @@ export class DocketEntry extends JoiValidationEntity {
     if (DocketEntry.isPublicEventCode(entry.eventCode)) {
       return true;
     }
-    if (DocketEntry.isNonPublicLodged(entry, rootDocument)) {
+    if (DocketEntry.isNonPublicLodged(entry, rootDocument, docketEntries)) {
       return false;
     }
 
@@ -610,6 +662,7 @@ export class DocketEntry extends JoiValidationEntity {
         DocketEntry.isMotionPublic(
           entry,
           rootDocument,
+          docketEntries,
           motionVisibilityChangeDate,
         )
       ) {
@@ -814,6 +867,7 @@ export class DocketEntry extends JoiValidationEntity {
 
     const isPublicDocument = DocketEntry.isPublic(entry, {
       caseIsSealed: isSealedCase(rawCase),
+      docketEntries: rawCase.docketEntries,
       rootDocument: DocketEntry.fetchRootDocument(entry, rawCase.docketEntries),
       visibilityChangeDate,
       motionVisibilityChangeDate,
@@ -959,6 +1013,18 @@ export class DocketEntry extends JoiValidationEntity {
     if (!previousEntry) return entry;
 
     return DocketEntry.fetchRootDocument(previousEntry, docketEntries);
+  };
+
+  static fetchPreviousDocument = (
+    entry: RawDocketEntry,
+    docketEntries: RawDocketEntry[],
+  ): RawDocketEntry | undefined => {
+    const { previousDocument } = entry;
+    if (!previousDocument) return undefined;
+
+    return docketEntries.find(
+      e => e.docketEntryId === previousDocument.docketEntryId,
+    );
   };
 
   documentTypeForStampedDocketEntry(): string {
