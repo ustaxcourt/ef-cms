@@ -10,7 +10,6 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const generateDocketRecordPdfUrlAction = async ({
   applicationContext,
   get,
-  props,
 }: ActionProps) => {
   const caseDetail = get(state.caseDetail);
   const docketRecordSort = get(
@@ -24,15 +23,6 @@ export const generateDocketRecordPdfUrlAction = async ({
     state[STATE_KEYS.DOCKET_RECORD_TABLE_SORT].sortOrder,
   );
 
-  const { isAssociated } = props;
-
-  let includePartyDetail = false;
-  let isIndirectlyAssociated = false;
-  if (isAssociated) {
-    includePartyDetail = true;
-    isIndirectlyAssociated = true;
-  }
-
   const { fileId, url } = await applicationContext
     .getUseCases()
     .generateDocketRecordPdfInteractor(applicationContext, {
@@ -42,8 +32,6 @@ export const generateDocketRecordPdfUrlAction = async ({
         sortField: docketRecordSortField,
         sortOrder: docketRecordSortOrder,
       },
-      includePartyDetail,
-      isIndirectlyAssociated,
     });
 
   return { fileId, pdfUrl: url };
