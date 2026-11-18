@@ -402,7 +402,7 @@ describe('getUserFromAuthHeader', () => {
     expect(user?.userId).toEqual(mockUser['custom:userId']);
   });
 
-  it('should use the authorization header identity when a query token is also present', () => {
+  it('should not allow multiple tokens', () => {
     const petitionerUser = {
       'custom:role': ROLES.petitioner,
       'custom:userId': 'petitioner-user-id',
@@ -418,19 +418,38 @@ describe('getUserFromAuthHeader', () => {
       'secret',
     );
 
-    const user = getUserFromAuthHeader({
-      headers: {
-        Authorization: `Bearer ${petitionerToken}`,
-      },
-      queryStringParameters: {
-        token: otherUserToken,
-      },
-    });
+    expect(() =>
+      getUserFromAuthHeader({
+        headers: {
+          Authorization: `Bearer ${petitionerToken}`,
+        },
+        queryStringParameters: {
+          token: otherUserToken,
+        },
+      }),
+    ).toThrow(UnauthorizedError);
 
-    expect(user).toMatchObject({
-      role: petitionerUser['custom:role'],
-      userId: petitionerUser['custom:userId'],
-    });
+    expect(() =>
+      getUserFromAuthHeader({
+        headers: {
+          Authorization: `Bearer ${petitionerToken}`,
+        },
+        query: {
+          token: otherUserToken,
+        },
+      }),
+    ).toThrow(UnauthorizedError);
+
+    expect(() =>
+      getUserFromAuthHeader({
+        queryStringParameters: {
+          token: otherUserToken,
+        },
+        query: {
+          token: otherUserToken,
+        },
+      }),
+    ).toThrow(UnauthorizedError);
   });
 
   describe('redirect', () => {
