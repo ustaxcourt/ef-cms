@@ -8,6 +8,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { get } from 'lodash';
 import { getCurrentInvoke } from '@codegenie/serverless-express';
 import { getUserFromAuthHeader } from '@web-api/middleware/apiGatewayHelper';
+import { isPublicSiteRequest } from '@web-api/middleware/publicDataSanitizer';
 
 export const getHeaderOverride = (): Record<string, string> => {
   return {
@@ -49,6 +50,7 @@ export const lambdaWrapper = (
 
     const event = {
       headers: req.headers,
+      httpMethod: req.method,
       isTerminalUser,
       path: req.path,
       pathParameters: req.params,
@@ -58,7 +60,9 @@ export const lambdaWrapper = (
       },
     };
 
-    const user = getUserFromAuthHeader(event);
+    const user = isPublicSiteRequest(event)
+      ? undefined
+      : getUserFromAuthHeader(event);
 
     if (shouldMimicApiGatewayAsyncEndpoint) {
       // we return immediately before we try running the lambda because that is how

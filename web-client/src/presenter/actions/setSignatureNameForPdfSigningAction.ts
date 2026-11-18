@@ -31,8 +31,10 @@ export const setSignatureNameForPdfSigningAction = async ({
       .getUseCases()
       .getAllFeatureFlagsInteractor(applicationContext);
 
-    nameForPdfSigning =
+    const chiefJudgeName =
       featureFlags[ALLOWLIST_FEATURE_FLAGS.CHIEF_JUDGE_NAME.key];
+    nameForPdfSigning =
+      typeof chiefJudgeName === 'string' ? chiefJudgeName : '';
 
     nameForSigningLine2 = CHIEF_JUDGE;
   }

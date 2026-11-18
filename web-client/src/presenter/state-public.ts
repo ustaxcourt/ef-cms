@@ -3,10 +3,10 @@ import {
   PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
   PUBLIC_TRIAL_SESSIONS_DATA_KEY,
   STATE_KEYS,
-} from '../../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { RawUser } from '@shared/business/entities/User';
 import type { RawPublicTrialSessionDetails } from '@shared/business/entities/trialSessions/PublicTrialSessionDetails';
-import { TrialSessionInfoDTO } from '@shared/business/dto/trialSessions/TrialSessionInfoDTO';
+import { PublicTrialSessionInfo } from '@shared/business/dto/trialSessions/PublicTrialSessionInfo';
 import { advancedDocumentSearchHelper } from './computeds/AdvancedSearch/advancedDocumentSearchHelper';
 import { advancedSearchHelper } from './computeds/AdvancedSearch/advancedSearchHelper';
 import { caseSearchByNameHelper } from './computeds/AdvancedSearch/caseSearchByNameHelper';
@@ -166,7 +166,7 @@ export const baseState = {
     trialSession: {} as RawPublicTrialSessionDetails,
   },
   trialSessionsPage: { trialSessions: [] } as {
-    trialSessions: TrialSessionInfoDTO[];
+    trialSessions: PublicTrialSessionInfo[];
   },
   user: {},
   validationErrors: {},

@@ -22,6 +22,7 @@ import {
   X_DEPLOYMENT_TIMESTAMP,
   X_MANUAL_REFRESH_REQUIRED,
 } from '@shared/utils/headers';
+import { PublicUser } from '@shared/business/entities/PublicUser';
 import { getEntityByName as getEntityByNameMock } from '@web-api/business/getEntityByName';
 import { getDawsonLogger as getLoggerMock } from '@web-api/utilities/logger/getDawsonLogger';
 import { getMaintenanceMode as getMaintenanceModeMock } from '@web-api/persistence/postgres/featureFlag/getMaintenanceMode';
@@ -123,6 +124,18 @@ describe('genericHandler', () => {
     );
   });
 
+  it('does not decode token claims for public API requests', async () => {
+    await genericHandler(
+      {
+        ...MOCK_EVENT,
+        path: '/public-api/practitioners',
+      },
+      () => null,
+    );
+
+    expect(getLoggerMock().addUser).toHaveBeenCalledWith({ user: undefined });
+  });
+
   it('should not log `results` when disabled in options', async () => {
     const callback = () => null;
 
@@ -162,6 +175,55 @@ describe('genericHandler', () => {
     const result = await genericHandler(MOCK_EVENT, callback);
 
     expect(JSON.parse(result.body)).toEqual({ public: 'public data' });
+  });
+
+  it('rejects unsanitized public data before the entity filter reconstructs it', async () => {
+    const user = new PublicUser({
+      name: 'Bad User',
+      role: 'petitioner',
+    }).validate();
+    Object.assign(user, { privateField: 'this is bad!' });
+
+    const result = await genericHandler(
+      {
+        ...MOCK_EVENT,
+        path: '/public-api/users',
+      },
+      () => user,
+    );
+
+    expect(result.statusCode).toBe(500);
+    expect(JSON.parse(result.body)).toContain(
+      'unauthorized field privateField',
+    );
+  });
+
+  it('rejects unsanitized array items before the public entity filter reconstructs them', async () => {
+    const firstUser = new PublicUser({
+      name: 'First User',
+      role: 'petitioner',
+    }).validate();
+    const secondUser = new PublicUser({
+      name: 'Second User',
+      role: 'petitioner',
+    }).validate();
+    Object.assign(secondUser, { privateField: 'this is bad!' });
+
+    const result = await genericHandler(
+      {
+        ...MOCK_EVENT,
+        headers: {
+          ...MOCK_EVENT.headers,
+          host: 'public-api-blue.example.gov',
+        },
+      },
+      () => [firstUser, secondUser],
+    );
+
+    expect(result.statusCode).toBe(500);
+    expect(JSON.parse(result.body)).toContain(
+      'unauthorized field [1].privateField',
+    );
   });
 
   it('returns a manual refresh response when the client deployment timestamp does not match', async () => {
@@ -211,6 +273,20 @@ describe('genericHandler', () => {
       expect(result).toEqual({
         public: 'public',
       });
+    });
+
+    it('propagates isValidated to the reconstructed entity when the source data was validated', () => {
+      const data = {
+        entityName: 'MockEntity',
+        public: 'public',
+      };
+      Object.defineProperty(data, 'isValidated', {
+        enumerable: false,
+        value: true,
+        writable: false,
+      });
+      const result = dataSecurityFilter(data, { authorizedUser: undefined });
+      expect(result).toHaveProperty('isValidated', true);
     });
 
     it('returns data without passing through entity constructor if entityName is not present in getEntityConstructors', () => {

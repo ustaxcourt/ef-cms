@@ -1,12 +1,12 @@
-import { RestrictedCaseDTO } from '@shared/business/dto/cases/RestrictedCaseDTO';
+import { RestrictedCaseResponse } from '@shared/business/dto/cases/RestrictedCaseResponse';
 import { get } from './requests';
 import { ClientApplicationContext } from '@web-client/applicationContext';
-import { PublicCaseDTO } from '@shared/business/dto/cases/PublicCaseDTO';
+import { PublicCaseResponse } from '@shared/business/dto/cases/PublicCaseResponse';
 
 export const getPublicCaseInteractor = (
   applicationContext: ClientApplicationContext,
   { docketNumber },
-): Promise<PublicCaseDTO | RestrictedCaseDTO> => {
+): Promise<PublicCaseResponse | RestrictedCaseResponse> => {
   return get({
     applicationContext,
     endpoint: `/public-api/cases/${docketNumber}`,

@@ -44,7 +44,11 @@ describe('getPractitionersByName', () => {
       Promise.resolve({
         results: [
           { barNumber: '009', name: 'other' },
-          { barNumber: '005', name: 'matches', sort: 'SOME_RANDOM_SORT_KEY' },
+          {
+            barNumber: '005',
+            name: 'matches',
+            sort: [null, 'smith', 'SB1234'],
+          },
         ],
         total: 2,
       }),
@@ -55,7 +59,29 @@ describe('getPractitionersByName', () => {
       searchAfter: [],
     });
 
-    expect(lastKey).toBe('SOME_RANDOM_SORT_KEY');
+    expect(lastKey).toEqual([null, 'smith', 'SB1234']);
+  });
+
+  it('preserves null sort values in the search_after cursor', async () => {
+    (search as jest.Mock).mockResolvedValue({
+      results: [],
+      total: 0,
+    });
+
+    await getPractitionersByName(applicationContext, {
+      name: 'some practitioner name',
+      searchAfter: [null, 'smith', 'SB1234'],
+    });
+
+    const { searchParameters } = (search as jest.Mock).mock.calls[0][0];
+    expect(searchParameters.body.search_after).toEqual([
+      undefined,
+      'smith',
+      'SB1234',
+    ]);
+    expect(JSON.stringify(searchParameters.body.search_after)).toBe(
+      '[null,"smith","SB1234"]',
+    );
   });
 
   it('should return an empty lastKey when no results are returned', async () => {

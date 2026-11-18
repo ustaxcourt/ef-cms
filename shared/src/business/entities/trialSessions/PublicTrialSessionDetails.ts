@@ -1,10 +1,10 @@
 import { JoiValidationConstants } from '@shared/business/entities/JoiValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
-import type { PublicCaseDTO } from '@shared/business/dto/cases/PublicCaseDTO';
-import type { RestrictedCaseDTO } from '@shared/business/dto/cases/RestrictedCaseDTO';
+import { PublicCaseResponse } from '@shared/business/dto/cases/PublicCaseResponse';
+import { RestrictedCaseResponse } from '@shared/business/dto/cases/RestrictedCaseResponse';
 import joi from 'joi';
 
-type PublicCalendaredCase = PublicCaseDTO | RestrictedCaseDTO;
+type PublicCalendaredCase = PublicCaseResponse | RestrictedCaseResponse;
 
 export class PublicTrialSessionDetails extends JoiValidationEntity {
   public address1?: string;
@@ -19,7 +19,11 @@ export class PublicTrialSessionDetails extends JoiValidationEntity {
   public swingSessionLocation?: string;
   public trialLocation?: string;
 
-  constructor(rawTrialSession) {
+  constructor(
+    rawTrialSession: Partial<RawPublicTrialSessionDetails> & {
+      startDate: string;
+    },
+  ) {
     super('PublicTrialSessionDetails');
 
     this.address1 = rawTrialSession.address1;
@@ -38,7 +42,28 @@ export class PublicTrialSessionDetails extends JoiValidationEntity {
   static VALIDATION_RULES = {
     address1: JoiValidationConstants.STRING.optional().allow(''),
     address2: JoiValidationConstants.STRING.optional().allow(''),
-    calendaredCases: joi.array().items(joi.object()).required(),
+    calendaredCases: joi
+      .array()
+      .items(
+        joi
+          .object({
+            ...PublicCaseResponse.VALIDATION_RULES,
+            entityName:
+              JoiValidationConstants.STRING.valid(
+                'PublicCaseResponse',
+              ).required(),
+          })
+          .unknown(false),
+        joi
+          .object({
+            ...RestrictedCaseResponse.VALIDATION_RULES,
+            entityName: JoiValidationConstants.STRING.valid(
+              'RestrictedCaseResponse',
+            ).required(),
+          })
+          .unknown(false),
+      )
+      .required(),
     city: JoiValidationConstants.STRING.optional().allow(''),
     courthouseName: JoiValidationConstants.STRING.optional().allow(''),
     postalCode: JoiValidationConstants.STRING.optional().allow(''),
@@ -49,7 +74,7 @@ export class PublicTrialSessionDetails extends JoiValidationEntity {
     trialLocation: JoiValidationConstants.STRING.optional().allow(''),
   } as const;
 
-  getValidationRules() {
+  getValidationRules(): typeof PublicTrialSessionDetails.VALIDATION_RULES {
     return PublicTrialSessionDetails.VALIDATION_RULES;
   }
 }

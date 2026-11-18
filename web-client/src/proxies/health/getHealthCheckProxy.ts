@@ -1,9 +1,9 @@
-import { ApplicationHealth } from '@web-api/business/useCases/health/getHealthCheckInteractor';
+import { HealthCheckResponse } from '@shared/business/dto/public/HealthCheckResponse';
 import { get } from '../requests';
 
 export const getHealthCheckInteractor = (
   applicationContext,
-): Promise<ApplicationHealth> => {
+): Promise<HealthCheckResponse> => {
   return get({
     applicationContext,
     endpoint: '/public-api/health',

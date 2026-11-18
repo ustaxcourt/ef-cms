@@ -79,6 +79,30 @@ describe('formattedDocketEntries', () => {
     });
   });
 
+  it('uses no visibility policy date when the feature flag is disabled', () => {
+    const prepareDateFromString = jest.spyOn(
+      applicationContext.getUtilities(),
+      'prepareDateFromString',
+    );
+
+    runCompute(formattedDocketEntries, {
+      state: {
+        ...getBaseState(petitionsClerkUser),
+        caseDetail: {
+          ...MOCK_CASE,
+          docketEntries: [],
+        },
+        featureFlags: {
+          [ALLOWLIST_FEATURE_FLAGS.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.key]:
+            false,
+        },
+      },
+    });
+
+    expect(prepareDateFromString).toHaveBeenCalledWith(undefined);
+    prepareDateFromString.mockClear();
+  });
+
   it('maps docket record dates', () => {
     const result = runCompute(formattedDocketEntries, {
       state: {

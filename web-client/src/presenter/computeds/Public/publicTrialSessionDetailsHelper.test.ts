@@ -16,25 +16,25 @@ describe('publicTrialSessionDetailsHelper', () => {
   );
 
   const MOCK_CASE_DTO = cloneDeep(MOCK_CASE);
-  MOCK_CASE_DTO.entityName = 'PublicCaseDTO';
+  MOCK_CASE_DTO.entityName = 'PublicCaseResponse';
 
   const MOCK_SEALED_CASE_DTO = cloneDeep(MOCK_CASE);
   MOCK_SEALED_CASE_DTO.isSealed = true;
   MOCK_SEALED_CASE_DTO.docketNumber = '101-23';
   MOCK_SEALED_CASE_DTO.docketNumberWithSuffix = '101-23';
-  MOCK_SEALED_CASE_DTO.entityName = 'RestrictedCaseDTO';
+  MOCK_SEALED_CASE_DTO.entityName = 'RestrictedCaseResponse';
 
   const MOCK_LEAD_CASE_DTO = cloneDeep(MOCK_CASE);
   MOCK_LEAD_CASE_DTO.docketNumber = '100-23';
   MOCK_LEAD_CASE_DTO.docketNumberWithSuffix = MOCK_LEAD_CASE_DTO.docketNumber;
   MOCK_LEAD_CASE_DTO.leadDocketNumber = MOCK_LEAD_CASE_DTO.docketNumber;
-  MOCK_LEAD_CASE_DTO.entityName = 'PublicCaseDTO';
+  MOCK_LEAD_CASE_DTO.entityName = 'PublicCaseResponse';
 
   const MOCK_CONSOLIDATED_CASE_DTO = cloneDeep(MOCK_CASE);
   MOCK_CONSOLIDATED_CASE_DTO.docketNumber = '102-23';
   MOCK_CONSOLIDATED_CASE_DTO.docketNumberWithSuffix = '102-23L';
   MOCK_CONSOLIDATED_CASE_DTO.leadDocketNumber = MOCK_LEAD_CASE_DTO.docketNumber;
-  MOCK_CONSOLIDATED_CASE_DTO.entityName = 'PublicCaseDTO';
+  MOCK_CONSOLIDATED_CASE_DTO.entityName = 'PublicCaseResponse';
 
   let state;
 

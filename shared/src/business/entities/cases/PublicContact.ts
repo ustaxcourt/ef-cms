@@ -12,7 +12,7 @@ export class PublicContact extends JoiValidationEntity {
   public admissionsDate?: string;
   public admissionsStatus?: string;
   public barNumber?: string;
-  public contactId: string;
+  public contactId?: string;
   public contactType?: string;
   public name?: string;
   public originalBarState?: string;
@@ -43,7 +43,7 @@ export class PublicContact extends JoiValidationEntity {
       ...ADMISSIONS_STATUS_OPTIONS,
     ).optional(),
     barNumber: JoiValidationConstants.STRING.max(100).optional(),
-    contactId: JoiValidationConstants.UUID.required(),
+    contactId: JoiValidationConstants.UUID.optional(),
     contactType: JoiValidationConstants.STRING.valid(
       ...Object.values(CONTACT_TYPES),
     ).optional(),

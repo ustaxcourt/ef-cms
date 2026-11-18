@@ -5,8 +5,8 @@ import type { RawPublicTrialSessionDetails } from '@shared/business/entities/tri
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 import { getCalendaredCasesForTrialSession } from '@web-api/persistence/postgres/trialSessions/getCalendaredCasesForTrialSession';
 import { CaseFactory } from '@web-api/business/entities/cases/CaseFactory';
-import type { PublicCaseDTO } from '@shared/business/dto/cases/PublicCaseDTO';
-import type { RestrictedCaseDTO } from '@shared/business/dto/cases/RestrictedCaseDTO';
+import type { PublicCaseResponse } from '@shared/business/dto/cases/PublicCaseResponse';
+import type { RestrictedCaseResponse } from '@shared/business/dto/cases/RestrictedCaseResponse';
 
 export const getPublicTrialSessionDetailsInteractor = async ({
   trialSessionId,
@@ -41,11 +41,12 @@ export const getPublicTrialSessionDetailsInteractor = async ({
     .filter(aCase => !aCase.removedFromTrial)
     .map(aCase => {
       // No need to see docket entries
-
-      return CaseFactory.getCaseDTO({
+      const caseDTO = CaseFactory.getCaseDTO({
         rawCase: { ...aCase, docketEntries: [] },
         user: undefined,
-      }) as PublicCaseDTO | RestrictedCaseDTO;
+      }) as PublicCaseResponse | RestrictedCaseResponse;
+
+      return caseDTO.validate();
     });
 
   const publicTrialSessionData = new PublicTrialSessionDetails({

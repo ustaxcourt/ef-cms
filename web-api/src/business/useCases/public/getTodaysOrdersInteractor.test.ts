@@ -122,6 +122,7 @@ describe('getTodaysOrdersInteractor', () => {
 
     expect(result.totalCount).toEqual(mockOrderSearchResults.totalCount);
     expect(result.results).toHaveLength(1);
+    expect(result.results[0].isValidated).toEqual(true);
     expect(result.results[0].docketEntryId).toEqual(
       mockOrderSearchResults.results[0].docketEntryId,
     );

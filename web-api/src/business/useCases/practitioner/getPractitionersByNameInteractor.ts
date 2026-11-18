@@ -12,7 +12,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
 export type PractitionerByNameParams = {
   name: string;
-  searchAfter: string[];
+  searchAfter?: (string | number | null)[];
   practitionerType?: string;
   practiceType?: string[];
   admissionStatus?: string[];
@@ -21,7 +21,7 @@ export type PractitionerByNameParams = {
 
 export type PractitionersByName = {
   searchResults: {
-    lastKey: (string | number)[];
+    lastKey: (string | number | null)[];
     practitioners: RawPublicContact[];
     total: number;
   };
@@ -67,7 +67,9 @@ export const getPractitionersByNameInteractor = async (
     new PublicContact({
       ...foundUser,
       state: isLoggedInUser ? foundUser.contact?.state : undefined,
-    }).toRawObject(),
+    })
+      .validate()
+      .toRawObject(),
   );
 
   return {

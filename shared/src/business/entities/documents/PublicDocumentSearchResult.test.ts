@@ -30,6 +30,30 @@ describe('Public Document Search Result entity', () => {
     expect(validationErrors).toEqual(null);
   });
 
+  it('validates filingDate when it is included in the search result', () => {
+    const validSearchResult = new PublicDocumentSearchResult({
+      caseCaption: 'This is a case caption',
+      docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
+      docketNumber: '12345-67',
+      documentTitle: 'This is a matching document',
+      filingDate: '2020-05-27T09:23:43.007Z',
+    });
+    const invalidSearchResult = new PublicDocumentSearchResult({
+      caseCaption: 'This is a case caption',
+      docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
+      docketNumber: '12345-67',
+      documentTitle: 'This is a matching document',
+      filingDate: 'not-a-date',
+    });
+
+    expect(validSearchResult.getFormattedValidationErrors()).toBeNull();
+    expect(invalidSearchResult.getFormattedValidationErrors()).toEqual(
+      expect.objectContaining({
+        filingDate: expect.any(String),
+      }),
+    );
+  });
+
   it('fails validation if the search result is stricken', () => {
     const searchResult = new PublicDocumentSearchResult({ isStricken: true });
     const validationErrors = searchResult.getFormattedValidationErrors();
