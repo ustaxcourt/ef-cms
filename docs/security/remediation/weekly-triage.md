@@ -217,6 +217,10 @@ The card shows:
   where they were found. A rule with one alert links to it; a rule with several links to the
   Security tab filtered to that rule. Past 25 rows the card says how many more there are.
 
+"Created" is the date GitHub first saw the alert on any branch. An alert first found on a pull
+request branch, or reopened after a fix, can reach `staging` this week without counting as new on
+the card. Alerts fixed or dismissed before Monday are not counted either.
+
 The severity on the card comes from the scanner, mapped with the playbook's
 [step 1](playbook.md#1-start-from-the-scanners-severity). The DAWSON severity is still set at
 triage. ZAP findings are not on the card until
@@ -227,8 +231,8 @@ The links only open for people with write or security access to the repository.
 ### Rerunning it
 
 To repost, for example after a missed Monday, run it by hand. `target=test` (the default) posts to
-the test webhook; `target=team` posts to the Tech channel. `since` is optional and widens the window
-to start at 07:00 Eastern on that date:
+the test webhook; `target=team` posts to the Tech channel. `since` is optional, takes a `YYYY-MM-DD`
+date, and widens the window to start at 07:00 Eastern on that date:
 
 ```sh
 gh workflow run security-weekly-summary.yml --ref staging -f target=test

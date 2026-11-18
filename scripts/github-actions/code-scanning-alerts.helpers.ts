@@ -6,6 +6,8 @@ import { runCommand } from '../helpers/runCommand';
 
 export type TriageWindow = { since: string; until: string };
 
+export const TRIAGE_START_HOUR = 7;
+
 export const getTriageWindow = ({
   now,
   since,
@@ -16,12 +18,15 @@ export const getTriageWindow = ({
   const nowEastern = toEasternTime(now);
 
   if (since) {
-    const start = DateTime.fromISO(since, { zone: USTC_TZ });
-    if (!start.isValid) {
+    const sinceDate = DateTime.fromFormat(since, 'yyyy-MM-dd', {
+      zone: USTC_TZ,
+    });
+    if (!sinceDate.isValid) {
       throw new Error(
         `SINCE must be an ISO date such as 2026-11-09 (got "${since}")`,
       );
     }
+    const start = sinceDate.set({ hour: TRIAGE_START_HOUR });
     if (start >= nowEastern) {
       throw new Error('SINCE must be in the past');
     }
@@ -29,7 +34,7 @@ export const getTriageWindow = ({
   }
 
   let until = nowEastern.set({
-    hour: 7,
+    hour: TRIAGE_START_HOUR,
     millisecond: 0,
     minute: 0,
     second: 0,

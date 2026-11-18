@@ -90,21 +90,23 @@ describe('getTriageWindow', () => {
     });
   });
 
-  it('uses a SINCE override, read as Eastern time, and ends at now', () => {
+  it('starts a SINCE override at 07:00 Eastern on that date and ends at now', () => {
     expect(
       getTriageWindow({ now: '2026-11-16T15:30:00Z', since: '2026-11-02' }),
     ).toEqual({
-      since: '2026-11-02T05:00:00.000Z',
+      since: '2026-11-02T12:00:00.000Z',
       until: '2026-11-16T15:30:00.000Z',
     });
   });
 
   it.each([
     ['last week', 'SINCE must be an ISO date'],
+    ['2026-11-02T10:00', 'SINCE must be an ISO date'],
     ['2026-12-01', 'SINCE must be in the past'],
+    ['2026-11-16', 'SINCE must be in the past'],
   ])('rejects SINCE=%s', (since, message) => {
     expect(() =>
-      getTriageWindow({ now: '2026-11-16T15:30:00Z', since }),
+      getTriageWindow({ now: '2026-11-16T11:30:00Z', since }),
     ).toThrow(message);
   });
 });

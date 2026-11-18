@@ -138,7 +138,7 @@ describe('runWeeklySummary', () => {
       'https://dash.example',
       'https://run.example',
     ]);
-    expect(JSON.stringify(card.body)).toContain('since 11/02/26');
+    expect(JSON.stringify(card.body)).toContain('since 11/02/26 7:00 AM ET');
   });
 
   it('falls back to the court repo and the default dashboard', async () => {
