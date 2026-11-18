@@ -187,6 +187,9 @@ export const sendOk = (response, statusCode = '200', headers = {}) => {
  * @returns {string} the token found in the header or, when absent, the query string
  */
 export const getAuthHeader = event => {
+  let authorizationHeaderToken;
+  let queryStringToken;
+  let queryToken;
   const authorizationHeader =
     event.headers?.Authorization ?? event.headers?.authorization;
   if (authorizationHeader !== undefined && authorizationHeader !== null) {
@@ -196,15 +199,23 @@ export const getAuthHeader = event => {
         'Error: Authorization Bearer token is required',
       ); //temp until actual authorization is added
     }
-    return usernameTokenArray[1];
+    authorizationHeaderToken = usernameTokenArray[1];
   }
   if (event.queryStringParameters && event.queryStringParameters.token) {
-    return event.queryStringParameters.token;
+    queryStringToken = event.queryStringParameters.token;
   }
   if (event.query && event.query.token) {
-    return event.query.token;
+    queryToken = event.query.token;
   }
-  return null;
+  if (
+    (authorizationHeaderToken && (queryStringToken || queryToken)) ||
+    (queryStringToken && queryToken)
+  ) {
+    throw new UnauthorizedError(
+      'Error: Maximum of 1 authorization token exceeded',
+    );
+  }
+  return authorizationHeaderToken || queryStringToken || queryToken || null;
 };
 
 export const getUserFromAuthHeader = (event): UnknownAuthUser => {
