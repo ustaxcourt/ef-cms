@@ -4,21 +4,17 @@
 
 ### After Deployment
 
-#### Add the Teams webhook secrets (repository admin)
+#### Check the Teams webhook secret
 
-In GitHub, under **Settings → Secrets and variables → Actions**, add these repository secrets.
-See [Monday summary card](docs/security/remediation/weekly-triage.md#monday-summary-card) for how to
-create each webhook.
+The repository secret `TEAMS_SECURITY_SUMMARY_WEBHOOK_URL` (the Tech channel webhook) should already
+be set under **Settings → Secrets and variables → Actions**. See
+[Monday summary card](docs/security/remediation/weekly-triage.md#monday-summary-card) for how to
+create the webhook.
 
-- `TEAMS_SECURITY_SUMMARY_WEBHOOK_URL`: the Tech channel webhook
-- `TEAMS_SECURITY_SUMMARY_TEST_WEBHOOK_URL`: a test channel webhook
-
-Optionally, add a repository variable `SECURITY_DASHBOARD_URL` for the card's dashboard button.
-
-Then check that it posts:
+Then check that it posts to the Tech channel:
 
 ```bash
-gh workflow run security-weekly-summary.yml --ref staging -f target=test
+gh workflow run security-weekly-summary.yml --ref staging
 ```
 </details>
 <details><summary>Dependency Updates - Week of 2026-11-03</summary>

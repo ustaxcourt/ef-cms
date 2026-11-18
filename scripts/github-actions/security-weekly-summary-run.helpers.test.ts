@@ -4,9 +4,9 @@ import {
   DEFAULT_REPO,
   type SummaryEnv,
   TEAMS_TIMEOUT_MS,
-  defaultDashboardUrl,
   postToTeams,
   runWeeklySummary,
+  securityDashboardUrl,
 } from './security-weekly-summary-run.helpers';
 import { runCommand } from '../helpers/runCommand';
 
@@ -118,16 +118,15 @@ describe('runWeeklySummary', () => {
     expect(fetchFn).toHaveBeenCalledTimes(1);
     expect(fetchFn.mock.calls[0][0]).toBe(WEBHOOK);
     expect(postedCard(fetchFn).actions[0].url).toBe(
-      defaultDashboardUrl('example/repo'),
+      securityDashboardUrl('example/repo'),
     );
     expect(log.mock.calls).toEqual([
       ['Posted the weekly security summary (HTTP 202).'],
     ]);
   });
 
-  it('passes DASHBOARD_URL, RUN_URL and SINCE through', async () => {
+  it('passes RUN_URL and SINCE through', async () => {
     const { done, fetchFn } = run({
-      DASHBOARD_URL: 'https://dash.example',
       RUN_URL: 'https://run.example',
       SINCE: '2026-11-02',
     });
@@ -135,19 +134,19 @@ describe('runWeeklySummary', () => {
 
     const card = postedCard(fetchFn);
     expect(card.actions.map((a: { url: string }) => a.url)).toEqual([
-      'https://dash.example',
+      securityDashboardUrl('example/repo'),
       'https://run.example',
     ]);
     expect(JSON.stringify(card.body)).toContain('since 11/02/26 7:00 AM ET');
   });
 
-  it('falls back to the court repo and the default dashboard', async () => {
+  it('falls back to the court repo and its dashboard', async () => {
     const { done, fetchFn } = run({ GITHUB_REPOSITORY: '' });
     await done;
 
     expect(commandRunner.mock.calls.at(-1)?.[1]?.[1]).toContain(DEFAULT_REPO);
     expect(postedCard(fetchFn).actions[0].url).toBe(
-      defaultDashboardUrl(DEFAULT_REPO),
+      securityDashboardUrl(DEFAULT_REPO),
     );
   });
 

@@ -9,7 +9,7 @@ import { runWeeklySummary } from './security-weekly-summary-run.helpers';
 
 const scriptConfig: ScriptConfig = {
   description:
-    'security-weekly-summary - Post the Monday security summary to Teams. Reads GITHUB_REPOSITORY, SINCE, DASHBOARD_URL, RUN_URL and TEAMS_WEBHOOK_URL from the environment.',
+    'security-weekly-summary - Post the Monday security summary to Teams. Reads GITHUB_REPOSITORY, SINCE, RUN_URL and TEAMS_WEBHOOK_URL from the environment.',
   parameters: {
     dryRun: {
       description:

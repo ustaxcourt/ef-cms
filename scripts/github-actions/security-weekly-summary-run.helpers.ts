@@ -24,7 +24,6 @@ export type FetchFn = (
 ) => Promise<{ ok: boolean; status: number }>;
 
 export type SummaryEnv = {
-  DASHBOARD_URL?: string;
   GITHUB_ACTIONS?: string;
   GITHUB_REPOSITORY?: string;
   RUN_URL?: string;
@@ -32,7 +31,7 @@ export type SummaryEnv = {
   TEAMS_WEBHOOK_URL?: string;
 };
 
-export const defaultDashboardUrl = (repo: string): string =>
+export const securityDashboardUrl = (repo: string): string =>
   `https://github.com/${repo}/security/code-scanning?query=is%3Aopen+branch%3Astaging`;
 
 const requireHttpsWebhookUrl = (url: string | undefined): string => {
@@ -101,7 +100,7 @@ export const runWeeklySummary = async ({
     getScheduledScanHealth({ commandRunner, now, repo }),
   ]);
   const payload = buildSummaryCard({
-    dashboardUrl: env.DASHBOARD_URL || defaultDashboardUrl(repo),
+    dashboardUrl: securityDashboardUrl(repo),
     findings,
     health,
     runUrl: env.RUN_URL || undefined,

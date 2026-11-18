@@ -230,13 +230,13 @@ The links only open for people with write or security access to the repository.
 
 ### Rerunning it
 
-To repost, for example after a missed Monday, run it by hand. `target=test` (the default) posts to
-the test webhook; `target=team` posts to the Tech channel. `since` is optional, takes a `YYYY-MM-DD`
-date, and widens the window to start at 07:00 Eastern on that date:
+To repost, for example after a missed Monday, run it by hand. It posts to the Tech channel.
+`since` is optional, takes a `YYYY-MM-DD` date, and widens the window to start at 07:00 Eastern on
+that date:
 
 ```sh
-gh workflow run security-weekly-summary.yml --ref staging -f target=test
-gh workflow run security-weekly-summary.yml --ref staging -f target=team -f since=2026-11-02
+gh workflow run security-weekly-summary.yml --ref staging
+gh workflow run security-weekly-summary.yml --ref staging -f since=2026-11-02
 ```
 
 If the run fails, it posts a short "could not be posted this week" card with a link to the run.
@@ -247,11 +247,11 @@ are public.
 
 | Name | Kind | What it is |
 | --- | --- | --- |
-| `TEAMS_SECURITY_SUMMARY_WEBHOOK_URL` | Repository secret | The Teams Workflows webhook for the Tech channel. Used by the Monday runs and `target=team`. |
-| `TEAMS_SECURITY_SUMMARY_TEST_WEBHOOK_URL` | Repository secret | A webhook for a test channel. Used by `target=test`. |
-| `SECURITY_DASHBOARD_URL` | Repository variable, optional | Where the card's **Open dashboard** button goes. Defaults to the Security tab filtered to open `staging` alerts. |
+| `TEAMS_SECURITY_SUMMARY_WEBHOOK_URL` | Repository secret | The Teams Workflows webhook for the Tech channel. Used by the Monday runs and manual reruns. |
 
-Each webhook is a Teams workflow made from the **Send webhook alerts to a channel** template. It
+The card's **Open dashboard** button goes to the Security tab, filtered to open `staging` alerts.
+
+The webhook is a Teams workflow made from the **Send webhook alerts to a channel** template. It
 must post to a channel or group chat; Teams rejects a workflow that posts to your own chat. Whoever
 creates the workflow should paste its URL straight into the repository secret, so the URL never
 passes through chat or email. If the workflow's owner leaves, the posts stop, so it should belong to
