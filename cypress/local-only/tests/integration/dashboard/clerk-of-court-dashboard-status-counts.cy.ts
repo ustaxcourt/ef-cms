@@ -18,6 +18,8 @@ import {
 } from 'cypress/helpers/authentication/login-as-helpers';
 import { updateCaseStatus } from 'cypress/helpers/caseDetail/caseInformation/update-case-status';
 
+// the cases written to Postgres here use docket numbers far above any real yearly volume, so they
+// do not exist in a deployed environment; the tests delete these cases before and after they run
 type CountedChange = {
   date: string;
   month: number;
@@ -199,7 +201,7 @@ describe('Clerk of Court Dashboard - case status change counts', () => {
 
   describe('open cases', () => {
     // received in 1997, long before the current calendar and fiscal years
-    const docketNumbers = ['9103-97'];
+    const docketNumbers = ['99903-97'];
     const deleteOldOpenCase = () =>
       cy.task('deleteCasesByDocketNumbers', { docketNumbers });
 
@@ -239,7 +241,7 @@ describe('Clerk of Court Dashboard - case status change counts', () => {
   describe('back-dated status history', () => {
     // a script can append back-dated changes to the end of a case's history,
     // so the history array is not always in date order
-    const docketNumbers = ['9104-97'];
+    const docketNumbers = ['99904-97'];
     const deleteBackDatedCase = () =>
       cy.task('deleteCasesByDocketNumbers', { docketNumbers });
 
@@ -297,7 +299,7 @@ describe('Clerk of Court Dashboard - case status change counts', () => {
   describe('fiscal-year boundary', () => {
     // DAWSON records each status change at the current time, so these cases are written to
     // Postgres directly to place a change on either side of October 1
-    const docketNumbers = ['9101-97', '9102-97'];
+    const docketNumbers = ['99901-97', '99902-97'];
     const RECEIVED_AT = '1997-06-16T16:00:00.000Z';
     const deleteBoundaryCases = () =>
       cy.task('deleteCasesByDocketNumbers', { docketNumbers });
