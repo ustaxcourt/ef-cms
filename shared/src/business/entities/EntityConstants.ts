@@ -311,6 +311,8 @@ export const CASE_STATUS_EXPLAINERS = {
   [CASE_STATUS_TYPES.closedDismissed]: 'Case is closed.',
 };
 
+export const CASE_STJ_THRESHOLD = 50000;
+
 export const CAV_AND_SUBMITTED_CASE_STATUS = [
   CASE_STATUS_TYPES.cav,
   CASE_STATUS_TYPES.submitted,

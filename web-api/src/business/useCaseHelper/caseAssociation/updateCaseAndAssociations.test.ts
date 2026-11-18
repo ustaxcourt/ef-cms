@@ -14,7 +14,11 @@ jest.mock(
 import { removeCasesFromHearings as removeCasesFromHearingsMock } from '@web-api/persistence/postgres/trialSessions/removeCasesFromHearings';
 import { Case } from '@shared/business/entities/cases/Case';
 import { CaseDeadline } from '@shared/business/entities/CaseDeadline';
-import { CASE_TYPES_MAP } from '@shared/business/entities/EntityConstants';
+import {
+  CASE_TYPES_MAP,
+  PENALTY_TYPES,
+  PROCEDURE_TYPES_MAP,
+} from '@shared/business/entities/EntityConstants';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { MOCK_DOCUMENTS } from '@shared/test/mockDocketEntry';
 import { MOCK_TRIAL_INPERSON } from '@shared/test/mockTrial';
@@ -604,6 +608,123 @@ describe('updateCaseAndAssociations', () => {
       expect(getCaseDeadlinesByDocketNumber).toHaveBeenCalled();
       expect(CaseDeadline.validateRawCollection).toHaveBeenCalled();
       expect(upsertCaseDeadlines).toHaveBeenCalledWith([{ some: 'deadline' }]);
+    });
+  });
+
+  describe('STJ Eligibility', () => {
+    let StjIneligibleCase;
+    beforeEach(() => {
+      StjIneligibleCase = {
+        ...validMockCase,
+        caseType: CASE_TYPES_MAP.innocentSpouse,
+        procedureType: PROCEDURE_TYPES_MAP.regular,
+        statistics: [
+          {
+            determinationDeficiencyAmount: 123,
+            determinationTotalPenalties: 456,
+            irsDeficiencyAmount: 50000.0,
+            irsTotalPenalties: 100.0,
+            penalties: [
+              {
+                name: 'Penalty 1 (IRS)',
+                penaltyAmount: 100.0,
+                penaltyType: PENALTY_TYPES.IRS_PENALTY_AMOUNT,
+              },
+            ],
+            statisticId: '7452b87f-7ba3-45c7-ae4b-bd1eab37c866',
+            year: 2012,
+            yearOrPeriod: 'Year',
+          },
+        ],
+      };
+
+      getCaseByDocketNumber.mockResolvedValue(StjIneligibleCase);
+    });
+
+    it('should evaluate STJ if caseType has been updated', async () => {
+      const stjEligibleCase = {
+        ...StjIneligibleCase,
+        caseType: CASE_TYPES_MAP.cdp,
+      };
+      await updateCaseAndAssociations({
+        authorizedUser: mockDocketClerkUser,
+        caseToUpdate: stjEligibleCase,
+      });
+      expect(getCaseByDocketNumber).toHaveBeenCalled();
+      expect(upsertCases).toHaveBeenCalled();
+      const updatedCase = upsertCases.mock.calls[0][0][0];
+
+      expect(updatedCase.isStjEligible).toBe(true);
+    });
+
+    it('should evaluate STJ if procedureType has been updated', async () => {
+      const stjEligibleCase = {
+        ...StjIneligibleCase,
+        ProcedureType: PROCEDURE_TYPES_MAP.small,
+      };
+      await updateCaseAndAssociations({
+        authorizedUser: mockDocketClerkUser,
+        caseToUpdate: stjEligibleCase,
+      });
+      expect(getCaseByDocketNumber).toHaveBeenCalled();
+      expect(upsertCases).toHaveBeenCalled();
+      const updatedCase = upsertCases.mock.calls[0][0][0];
+
+      expect(updatedCase.isStjEligible).toBe(true);
+    });
+
+    it('should evaluate STJ if statistics have been updated', async () => {
+      const stjEligibleCase = {
+        ...StjIneligibleCase,
+        caseType: CASE_TYPES_MAP.deficiency,
+        statistics: [
+          {
+            determinationDeficiencyAmount: 123,
+            determinationTotalPenalties: 456,
+            irsDeficiencyAmount: 40000.0,
+            irsTotalPenalties: 100.0,
+            penalties: [
+              {
+                name: 'Penalty 1 (IRS)',
+                penaltyAmount: 100.0,
+                penaltyType: PENALTY_TYPES.IRS_PENALTY_AMOUNT,
+              },
+            ],
+            statisticId: '7452b87f-7ba3-45c7-ae4b-bd1eab37c866',
+            year: 2012,
+            yearOrPeriod: 'Year',
+          },
+        ],
+      };
+
+      StjIneligibleCase.caseType = CASE_TYPES_MAP.deficiency;
+      getCaseByDocketNumber.mockResolvedValue(StjIneligibleCase);
+
+      await updateCaseAndAssociations({
+        authorizedUser: mockDocketClerkUser,
+        caseToUpdate: stjEligibleCase,
+      });
+      expect(getCaseByDocketNumber).toHaveBeenCalled();
+      expect(upsertCases).toHaveBeenCalled();
+      const updatedCase = upsertCases.mock.calls[0][0][0];
+
+      expect(updatedCase.isStjEligible).toBe(true);
+    });
+
+    it('should use provided stj value if no reevaluation is needed', async () => {
+      const stjEligibleCase = {
+        ...StjIneligibleCase,
+        isStjEligible: true,
+      };
+      await updateCaseAndAssociations({
+        authorizedUser: mockDocketClerkUser,
+        caseToUpdate: stjEligibleCase,
+      });
+      expect(getCaseByDocketNumber).toHaveBeenCalled();
+      expect(upsertCases).toHaveBeenCalled();
+      const updatedCase = upsertCases.mock.calls[0][0][0];
+
+      expect(updatedCase.isStjEligible).toBe(true);
     });
   });
 });

@@ -62,6 +62,7 @@ export const updateCaseDetails = async (
     'remoteTrialGranted',
     'remoteTrialGrantedDate',
     'statistics',
+    'isStjEligible',
   ];
 
   const editableFields = Object.fromEntries(
