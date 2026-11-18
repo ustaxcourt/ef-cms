@@ -8,7 +8,6 @@ import {
   listNewFindings,
 } from './code-scanning-alerts.helpers';
 import { getScheduledScanHealth } from './scheduled-scan-health.helpers';
-import { shouldPostForSchedule } from './security-weekly-summary-schedule.helpers';
 import { runCommand } from '../helpers/runCommand';
 
 export const TEAMS_TIMEOUT_MS = 30_000;
@@ -26,7 +25,6 @@ export type FetchFn = (
 
 export type SummaryEnv = {
   DASHBOARD_URL?: string;
-  EVENT_SCHEDULE?: string;
   GITHUB_ACTIONS?: string;
   GITHUB_REPOSITORY?: string;
   RUN_URL?: string;
@@ -88,11 +86,6 @@ export const runWeeklySummary = async ({
   const webhookUrl = env.TEAMS_WEBHOOK_URL;
   if (!dryRun && !webhookUrl?.startsWith('https://')) {
     throw new Error('TEAMS_WEBHOOK_URL must be set to an https URL');
-  }
-
-  if (!shouldPostForSchedule({ now, schedule: env.EVENT_SCHEDULE })) {
-    log('Not the 8am Eastern run for today; skipping.');
-    return;
   }
 
   const repo = env.GITHUB_REPOSITORY || DEFAULT_REPO;

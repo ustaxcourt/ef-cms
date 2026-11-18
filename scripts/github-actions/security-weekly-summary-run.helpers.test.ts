@@ -8,7 +8,6 @@ import {
   postToTeams,
   runWeeklySummary,
 } from './security-weekly-summary-run.helpers';
-import { EASTERN_CRONS } from './security-weekly-summary-schedule.helpers';
 import { runCommand } from '../helpers/runCommand';
 
 const WEBHOOK = 'https://example.invalid/webhook?sig=fake-signature';
@@ -49,7 +48,6 @@ const run = (
   const done = runWeeklySummary({
     commandRunner,
     env: {
-      EVENT_SCHEDULE: EASTERN_CRONS.est,
       GITHUB_REPOSITORY: 'example/repo',
       TEAMS_WEBHOOK_URL: WEBHOOK,
       ...env,
@@ -113,7 +111,7 @@ describe('postToTeams', () => {
 });
 
 describe('runWeeklySummary', () => {
-  it('posts the card on the 8am run and logs only the status', async () => {
+  it('posts the card and logs only the status', async () => {
     const { done, fetchFn, log } = run();
     await done;
 
@@ -125,18 +123,6 @@ describe('runWeeklySummary', () => {
     expect(log.mock.calls).toEqual([
       ['Posted the weekly security summary (HTTP 202).'],
     ]);
-  });
-
-  it('skips the off-season cron without calling GitHub or Teams', async () => {
-    commandRunner.mockClear();
-    const { done, fetchFn, log } = run({ EVENT_SCHEDULE: EASTERN_CRONS.edt });
-    await done;
-
-    expect(commandRunner).not.toHaveBeenCalled();
-    expect(fetchFn).not.toHaveBeenCalled();
-    expect(log).toHaveBeenCalledWith(
-      'Not the 8am Eastern run for today; skipping.',
-    );
   });
 
   it('passes DASHBOARD_URL, RUN_URL and SINCE through', async () => {
@@ -195,12 +181,17 @@ describe('runWeeklySummary', () => {
       false,
       'TEAMS_WEBHOOK_URL',
     ],
-  ])('refuses %s', async (_, env, dryRun, message) => {
-    const { done, fetchFn } = run(env, { dryRun });
+  ])(
+    'refuses %s before calling GitHub or Teams',
+    async (_, env, dryRun, message) => {
+      commandRunner.mockClear();
+      const { done, fetchFn } = run(env, { dryRun });
 
-    await expect(done).rejects.toThrow(message);
-    expect(fetchFn).not.toHaveBeenCalled();
-  });
+      await expect(done).rejects.toThrow(message);
+      expect(commandRunner).not.toHaveBeenCalled();
+      expect(fetchFn).not.toHaveBeenCalled();
+    },
+  );
 
   it('uses runCommand, fetch, and console.log by default', async () => {
     (runCommand as jest.Mock).mockResolvedValue('');

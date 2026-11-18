@@ -24,8 +24,34 @@ permissions:
   contents: read
 
 jobs:
+  check-schedule:
+    name: Check this is the 8am Eastern run
+    runs-on: ubuntu-latest
+    permissions: {}
+    timeout-minutes: 2
+    outputs:
+      post: ${{ steps.check.outputs.post }}
+    steps:
+      - name: Match the cron to Eastern daylight or standard time
+        id: check
+        env:
+          EVENT_SCHEDULE: ${{ github.event.schedule }}
+        run: |
+          case "$(TZ=America/New_York date +%Z)" in
+            EDT) on_time_cron='55 11 * * 1' ;;
+            *) on_time_cron='55 12 * * 1' ;;
+          esac
+          if [ -z "$EVENT_SCHEDULE" ] || [ "$EVENT_SCHEDULE" = "$on_time_cron" ]; then
+            echo "post=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Not the 8am Eastern run for today; skipping."
+            echo "post=false" >> "$GITHUB_OUTPUT"
+          fi
+
   post-summary:
     name: Post weekly security summary
+    needs: check-schedule
+    if: needs.check-schedule.outputs.post == 'true'
     runs-on: ubuntu-latest
     permissions:
       actions: read
@@ -45,7 +71,6 @@ jobs:
       - name: Post summary to Teams
         env:
           DASHBOARD_URL: ${{ vars.SECURITY_DASHBOARD_URL }}
-          EVENT_SCHEDULE: ${{ github.event.schedule }}
           GH_TOKEN: ${{ github.token }}
           SINCE: ${{ inputs.since }}
           TEAMS_WEBHOOK_URL: ${{ secrets[env.WEBHOOK_SECRET_NAME] }}

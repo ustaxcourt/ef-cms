@@ -203,6 +203,10 @@ At about 08:00 Eastern every Monday, `security-weekly-summary.yml` posts a card 
 channel in Teams. It is a heads-up before triage, not the triage itself: the triager still works
 through the [steps](#steps) and posts the [weekly report](#weekly-report).
 
+GitHub schedules run in UTC, so the workflow has one cron for daylight time and one for standard
+time. Its first job checks which one lands at 07:55 Eastern this week and skips the other before
+anything is installed.
+
 The card shows:
 
 - a warning if the latest scheduled container or DAST scan failed, did not run or was still
