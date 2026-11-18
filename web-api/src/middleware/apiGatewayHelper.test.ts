@@ -436,23 +436,26 @@ describe('getAuthHeader', () => {
     expect(error).toBeDefined();
   });
 
-  it('should return the user token from the Authorization header query string params', () => {
-    let error;
-    let response;
-    try {
-      response = getAuthHeader({
+  it('should return the query string token when the authorization header is absent', () => {
+    const response = getAuthHeader({
+      queryStringParameters: {
+        token: 'token',
+      },
+    });
+    expect(response).toEqual('token');
+  });
+
+  it('should reject a malformed authorization header instead of using a query token', () => {
+    expect(() =>
+      getAuthHeader({
         headers: {
           Authorization: 'bearer ',
         },
         queryStringParameters: {
           token: 'token',
         },
-      });
-    } catch (err) {
-      error = err;
-    }
-    expect(response).toEqual('token');
-    expect(error).toEqual(undefined);
+      }),
+    ).toThrow(UnauthorizedError);
   });
 
   it('should not return the user token and should throw an error if token is not present in queryStringParameters or anywhere else', () => {
@@ -472,23 +475,13 @@ describe('getAuthHeader', () => {
     expect(error).toBeDefined();
   });
 
-  it('should return the user token from the Authorization header query string params passed in as "query"', () => {
-    let error;
-    let response;
-    try {
-      response = getAuthHeader({
-        headers: {
-          Authorization: 'bearer ',
-        },
-        query: {
-          token: 'token',
-        },
-      });
-    } catch (err) {
-      error = err;
-    }
+  it('should return the query token when the authorization header is absent from the query object', () => {
+    const response = getAuthHeader({
+      query: {
+        token: 'token',
+      },
+    });
     expect(response).toEqual('token');
-    expect(error).toEqual(undefined);
   });
 
   it('should not return the user token and should throw an error if token is not present in query or anywhere else', () => {
@@ -561,6 +554,37 @@ describe('getUserFromAuthHeader', () => {
       },
     });
     expect(user?.userId).toEqual(mockUser['custom:userId']);
+  });
+
+  it('should use the authorization header identity when a query token is also present', () => {
+    const petitionerUser = {
+      'custom:role': ROLES.petitioner,
+      'custom:userId': 'petitioner-user-id',
+      name: 'Test Petitioner',
+    };
+    const petitionerToken = jwt.sign(petitionerUser, 'secret');
+    const otherUserToken = jwt.sign(
+      {
+        'custom:role': ROLES.caseServicesSupervisor,
+        'custom:userId': 'case-services-supervisor-user-id',
+        name: 'Test Case Services Supervisor',
+      },
+      'secret',
+    );
+
+    const user = getUserFromAuthHeader({
+      headers: {
+        Authorization: `Bearer ${petitionerToken}`,
+      },
+      queryStringParameters: {
+        token: otherUserToken,
+      },
+    });
+
+    expect(user).toMatchObject({
+      role: petitionerUser['custom:role'],
+      userId: petitionerUser['custom:userId'],
+    });
   });
 
   describe('redirect', () => {
