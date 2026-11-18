@@ -80,4 +80,19 @@ describe('isUserPartOfGroup', () => {
 
     expect(isPartOfCase).toBe(false);
   });
+
+  it('should return false if no user id is provided', () => {
+    const isPartOfCase = isUserPartOfGroup({
+      consolidatedCases: [
+        {
+          irsPractitioners: [],
+          petitioners: [{ contactId: '2' }],
+          privatePractitioners: [],
+        },
+      ],
+      userId: undefined,
+    });
+
+    expect(isPartOfCase).toBe(false);
+  });
 });
