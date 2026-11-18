@@ -1,15 +1,5 @@
-import { ProcessPaymentResponse } from '@ustaxcourt/payment-portal/dist';
 import { state } from '@web-client/presenter/app.cerebral';
-
-type PaymentMethod = NonNullable<
-  ProcessPaymentResponse['transactions'][number]['paymentMethod']
->;
-
-const PAYMENT_DECLINED_MESSAGES: Record<PaymentMethod, string> = {
-  ACH: 'ACH payment declined',
-  'Credit/Debit Card': 'Credit card declined',
-  PayPal: 'PayPal declined',
-};
+import { PAYMENT_DECLINED_MESSAGES } from '@shared/business/entities/EntityConstants';
 
 const DEFAULT_PAYMENT_FAILED_MESSAGE =
   'Something went wrong when paying the filing fee';

@@ -2,6 +2,7 @@ import { applicationContextForClient as applicationContext } from '@web-client/t
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { setFilingFeeAlertsAction } from '@web-client/presenter/actions/FilingFee/setFilingFeeAlertsAction';
+import { PAYMENT_DECLINED_MESSAGES } from '@shared/business/entities/EntityConstants';
 
 describe('setFilingFeeAlertsAction', () => {
   let stateMock;
@@ -125,11 +126,15 @@ describe('setFilingFeeAlertsAction', () => {
     });
   });
 
-  it.each([
-    ['failed', 'ACH', 'ACH payment declined'],
-    ['failed', 'Credit/Debit Card', 'Credit card declined'],
-    ['failed', 'PayPal', 'PayPal declined'],
-  ])(
+  it.each(
+    Object.entries(PAYMENT_DECLINED_MESSAGES).map(
+      ([paymentMethod, expectedReason]) => [
+        'failed',
+        paymentMethod,
+        expectedReason,
+      ],
+    ),
+  )(
     'should set the error alert for paymentStatus %s and paymentMethod %s',
     async (paymentStatus, paymentMethod, expectedReason) => {
       stateMock.processPaymentStatus.paymentStatus = paymentStatus;

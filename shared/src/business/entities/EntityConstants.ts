@@ -13,6 +13,7 @@ import {
 import { COURT_ISSUED_EVENTS } from '@shared/business/entities/docketEntry/courtIssuedEventCodes';
 import { EXTERNAL_FILING_EVENTS } from '@shared/business/entities/docketEntry/externalFilingEvents';
 import { INTERNAL_FILING_EVENTS } from '@shared/business/entities/docketEntry/internalFilingEvents';
+import { ProcessPaymentResponse } from 'node_modules/@ustaxcourt/payment-portal/dist';
 
 export const STATE_KEYS = {
   DOCKET_RECORD_TABLE_SORT: 'DOCKET_RECORD_TABLE_SORT',
@@ -2421,4 +2422,14 @@ export const GRAPH_COLORS = {
   RED: '#D83933',
   DARK_RED: '#B50909',
   GREEN: '#2E8540',
+};
+
+type PaymentMethod = NonNullable<
+  ProcessPaymentResponse['transactions'][number]['paymentMethod']
+>;
+
+export const PAYMENT_DECLINED_MESSAGES: Record<PaymentMethod, string> = {
+  ACH: 'ACH payment failed',
+  'Credit/Debit Card': 'Credit card payment failed',
+  PayPal: 'PayPal payment failed',
 };
