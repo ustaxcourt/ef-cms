@@ -25,6 +25,7 @@ import {
 } from 'cypress/local-only/tests/integration/fileAPetitionUpdated/petition-helper';
 import { petitionsClerkQcsAndServesElectronicCase } from 'cypress/helpers/documentQC/petitions-clerk-qcs-and-serves-electronic-case';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
+import { PAYMENT_DECLINED_MESSAGES } from '@shared/business/entities/EntityConstants';
 
 describe('Pay Filing Fee Through pay.gov', () => {
   const VALID_FILE = 'sample.pdf';
@@ -99,7 +100,7 @@ describe('Pay Filing Fee Through pay.gov', () => {
         .should('contain.text', 'Filing fee payment failed')
         .and(
           'contain.text',
-          'Something went wrong when paying the filing fee. Please try again.',
+          `${PAYMENT_DECLINED_MESSAGES['PayPal']}. Please try again.`,
         );
 
       verifyFailedPayment(docketNumber);

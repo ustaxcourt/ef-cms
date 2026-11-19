@@ -17,7 +17,10 @@ import {
   verifyPendingPayment,
   verifySuccessfulPayment,
 } from 'cypress/helpers/filingFee/dashboardFilingFeeHelpers';
-import { PAYMENT_FILING_FEE_ORIGIN } from '@shared/business/entities/EntityConstants';
+import {
+  PAYMENT_DECLINED_MESSAGES,
+  PAYMENT_FILING_FEE_ORIGIN,
+} from '@shared/business/entities/EntityConstants';
 import { petitionsClerkQcsAndServesElectronicCase } from 'cypress/helpers/documentQC/petitions-clerk-qcs-and-serves-electronic-case';
 import { logout } from '../../../helpers/authentication/logout';
 import {
@@ -132,7 +135,7 @@ const dashboardPaymentReturnScenarios: DashboardPaymentReturnScenario[] = [
     alertTestId: 'error-alert',
     expectedTexts: () => [
       'Filing fee payment failed',
-      'Something went wrong when paying the filing fee. Please try again.',
+      `${PAYMENT_DECLINED_MESSAGES['PayPal']}. Please try again.`,
     ],
     paymentMethod: 'PAYPAL',
     paymentStatus: 'Failed',
@@ -165,7 +168,7 @@ const dashboardPaymentReturnScenarios: DashboardPaymentReturnScenario[] = [
     alertTestId: 'error-alert',
     expectedTexts: () => [
       'Filing fee payment failed',
-      'Something went wrong when paying the filing fee. Please try again.',
+      `${PAYMENT_DECLINED_MESSAGES['Credit/Debit Card']}. Please try again.`,
     ],
     paymentMethod: 'PLASTIC_CARD',
     paymentStatus: 'Failed',
