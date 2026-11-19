@@ -1,0 +1,98 @@
+name: Security - Weekly Summary
+
+on:
+  schedule:
+    - cron: '55 11 * * 1'
+    - cron: '55 12 * * 1'
+  workflow_dispatch:
+    inputs:
+      since:
+        description: Optional start date (YYYY-MM-DD, Eastern) to cover more than the last week.
+        type: string
+        required: false
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  check-schedule:
+    name: Check this is the 8am Eastern run
+    runs-on: ubuntu-latest
+    permissions: {}
+    timeout-minutes: 2
+    outputs:
+      post: ${{ steps.check.outputs.post }}
+    steps:
+      - name: Match the cron to Eastern daylight or standard time
+        id: check
+        env:
+          EVENT_SCHEDULE: ${{ github.event.schedule }}
+        run: |
+          case "$(TZ=America/New_York date +%Z)" in
+            EDT) on_time_cron='55 11 * * 1' ;;
+            *) on_time_cron='55 12 * * 1' ;;
+          esac
+          if [ -z "$EVENT_SCHEDULE" ] || [ "$EVENT_SCHEDULE" = "$on_time_cron" ]; then
+            echo "post=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Not the 8am Eastern run for today; skipping."
+            echo "post=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  post-summary:
+    name: Post weekly security summary
+    needs: check-schedule
+    if: needs.check-schedule.outputs.post == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: read
+    timeout-minutes: 15
+    env:
+      RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Node bootstrap
+        uses: ./.github/actions/dawson-node-bootstrap
+
+      - name: Post summary to Teams
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SINCE: ${{ inputs.since }}
+          TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_SECURITY_SUMMARY_WEBHOOK_URL }}
+        run: npx ts-node --transpile-only scripts/github-actions/security-weekly-summary.ts
+
+      - name: Notify Teams that the summary failed
+        if: failure()
+        env:
+          TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_SECURITY_SUMMARY_WEBHOOK_URL }}
+        run: |
+          if [ -z "$TEAMS_WEBHOOK_URL" ]; then
+            echo "No webhook configured; cannot send a failure notice."
+            exit 1
+          fi
+          jq -n --arg run "$RUN_URL" '{
+            type: "message",
+            attachments: [{
+              contentType: "application/vnd.microsoft.card.adaptive",
+              content: {
+                type: "AdaptiveCard",
+                version: "1.5",
+                body: [{
+                  type: "TextBlock",
+                  wrap: true,
+                  color: "Warning",
+                  text: "⚠️ The weekly security summary could not be posted this week."
+                }],
+                actions: [{ type: "Action.OpenUrl", title: "View run", url: $run }]
+              }
+            }]
+          }' | curl --fail --silent --show-error --max-time 30 \
+            -H 'Content-Type: application/json' --data @- "$TEAMS_WEBHOOK_URL" > /dev/null

@@ -936,5 +936,9 @@ The report always covers:
 - the backlog: open alerts in the triaged categories, compared with last week
 - anything the approver or the product owner needs to decide
 
+Before triage, an automated [Monday summary card](weekly-triage.md#monday-summary-card) posts the
+week's new High and Critical alerts to the same channel. It uses the scanner's severity and adds to
+the weekly report; it does not replace it.
+
 The approver reads every report. An overdue finding, or an exception past its review date, is
 raised with the approver the same day it appears.

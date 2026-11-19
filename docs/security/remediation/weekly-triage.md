@@ -197,6 +197,73 @@ gh api --paginate \
   | sort
 ```
 
+## Monday summary card
+
+At about 08:00 Eastern every Monday, `security-weekly-summary.yml` posts a card to the team's Tech
+channel in Teams. It is a heads-up before triage, not the triage itself: the triager still works
+through the [steps](#steps) and posts the [weekly report](#weekly-report).
+
+GitHub schedules run in UTC, so the workflow has one cron for daylight time and one for standard
+time. Its first job checks which one lands at 07:55 Eastern this week and skips the other before
+anything is installed.
+
+The card shows:
+
+- a warning if the latest scheduled container or DAST scan failed, did not run or was still
+  running, because missing results look the same as a quiet week
+- how many alerts were created since 07:00 Eastern last Monday, on `staging`, in the
+  [triaged categories](#which-categories-to-triage), and are still open, by severity
+- a table of the High and Critical ones, one row per rule, with how many alerts each rule has and
+  where they were found. A rule with one alert links to it; a rule with several links to the
+  Security tab filtered to that rule. Past 25 rows the card says how many more there are.
+
+"Created" is the date GitHub first saw the alert on any branch. An alert first found on a pull
+request branch, or reopened after a fix, can reach `staging` this week without counting as new on
+the card. Alerts fixed or dismissed before Monday are not counted either.
+
+The severity on the card comes from the scanner, mapped with the playbook's
+[step 1](playbook.md#1-start-from-the-scanners-severity). The DAWSON severity is still set at
+triage. ZAP findings are not on the card until
+[#10496](https://github.com/ustaxcourt/ef-cms/issues/10496) lands. Until then, the DAST warning only
+reflects the workflow's result. The ZAP steps continue on error, so a ZAP scan that crashed can still
+show as a successful run.
+
+The links only open for people with write or security access to the repository.
+
+### Rerunning it
+
+To repost, for example after a missed Monday, run it by hand. It posts to the Tech channel.
+`since` is optional, takes a `YYYY-MM-DD` date, and widens the window to start at 07:00 Eastern on
+that date:
+
+```sh
+gh workflow run security-weekly-summary.yml --ref staging
+gh workflow run security-weekly-summary.yml --ref staging -f since=2026-11-02
+```
+
+If the run fails, it posts a short "could not be posted this week" card with a link to the run.
+Nothing about the findings is written to the run's log, because Actions logs on this repository
+are public. Setup and Teams errors are logged as they are; any other error is logged as a fixed
+message, so rerun locally with `--dry-run` to see it.
+
+### Setup
+
+| Name | Kind | What it is |
+| --- | --- | --- |
+| `TEAMS_SECURITY_SUMMARY_WEBHOOK_URL` | Repository secret | The Teams Workflows webhook for the Tech channel. Used by the Monday runs and manual reruns. |
+
+The card's **Open dashboard** button goes to the Security tab, filtered to open `staging` alerts.
+
+The webhook is a Teams workflow made from the **Send webhook alerts to a channel** template. It
+must post to a channel or group chat; Teams rejects a workflow that posts to your own chat. Whoever
+creates the workflow should paste its URL straight into the repository secret, so the URL never
+passes through chat or email. If the workflow's owner leaves, the posts stop, so it should belong to
+a shared account where possible.
+
+To preview the card locally without posting, run
+`npx ts-node --transpile-only scripts/github-actions/security-weekly-summary.ts --dry-run`. It prints
+the card's JSON, which includes real findings, so keep the output on your machine.
+
 ## Weekly report
 
 What the report must cover, and where it is posted, is in

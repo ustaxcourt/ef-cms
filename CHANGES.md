@@ -1,3 +1,22 @@
+<details><summary>DAW-30 - Monday security summary to Teams</summary>
+
+## Manual Deployment Steps
+
+### After Deployment
+
+#### Check the Teams webhook secret
+
+The repository secret `TEAMS_SECURITY_SUMMARY_WEBHOOK_URL` (the Tech channel webhook) should already
+be set under **Settings → Secrets and variables → Actions**. See
+[Monday summary card](docs/security/remediation/weekly-triage.md#monday-summary-card) for how to
+create the webhook.
+
+Then check that it posts to the Tech channel:
+
+```bash
+gh workflow run security-weekly-summary.yml --ref staging
+```
+</details>
 <details><summary>Dependency Updates - Week of 2026-11-09</summary>
 
 #### Deploy Docker container `4.3.105` from dev
