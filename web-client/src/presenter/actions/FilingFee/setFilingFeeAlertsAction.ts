@@ -1,8 +1,8 @@
 import { state } from '@web-client/presenter/app.cerebral';
-import { PAYMENT_DECLINED_MESSAGES } from '@shared/business/entities/EntityConstants';
-
-const DEFAULT_PAYMENT_FAILED_MESSAGE =
-  'Something went wrong when paying the filing fee';
+import {
+  PAYMENT_DECLINED_MESSAGES,
+  DEFAULT_PAYMENT_FAILED_MESSAGE,
+} from '@shared/business/entities/EntityConstants';
 
 export const setFilingFeeAlertsAction = ({ get, store }: ActionProps) => {
   const paymentStatus = get(state.processPaymentStatus);

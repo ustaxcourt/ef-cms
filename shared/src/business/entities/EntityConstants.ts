@@ -2453,3 +2453,6 @@ export const PAYMENT_DECLINED_MESSAGES: Record<PaymentMethod, string> = {
   'Credit/Debit Card': 'Credit card payment failed',
   PayPal: 'PayPal payment failed',
 };
+
+export const DEFAULT_PAYMENT_FAILED_MESSAGE =
+  'Something went wrong when paying the filing fee';
