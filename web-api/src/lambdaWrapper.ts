@@ -54,6 +54,7 @@ export const lambdaWrapper = (
 
     const event = {
       headers: req.headers,
+      httpMethod: req.method,
       isTerminalUser,
       path: req.path,
       pathParameters: req.params,
