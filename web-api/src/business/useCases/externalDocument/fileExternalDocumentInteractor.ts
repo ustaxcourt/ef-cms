@@ -2,6 +2,7 @@ import {
   DOCKET_SECTION,
   DOCUMENT_RELATIONSHIPS,
   PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP,
+  PUBLIC_MOTION_RESPONSE_EVENT_CODES,
   ROLES,
 } from '@shared/business/entities/EntityConstants';
 import {
@@ -111,6 +112,15 @@ export const fileExternalDocument = async (
     supportingDocuments,
     ...primaryDocumentMetadata
   } = documentMetadata;
+
+  setVerifiedMotionResponseTargetType({
+    caseEntity: currentCaseEntity,
+    metadata: primaryDocumentMetadata,
+  });
+  setVerifiedMotionResponseTargetType({
+    caseEntity: currentCaseEntity,
+    metadata: secondaryDocument,
+  });
 
   const baseMetadata = pick(primaryDocumentMetadata, [
     'filers',
@@ -369,4 +379,35 @@ const validateSupportingDocumentParents = ({
       'Secondary supporting documents require a valid secondary document docketEntryId',
     );
   }
+};
+
+// the public visibility rule for motion responses reads previousDocument.documentType
+// when the target is not on a case (a consolidated filing); only trust a type taken
+// from the target docket entry on the filing case, never the submitted one
+const setVerifiedMotionResponseTargetType = ({
+  caseEntity,
+  metadata,
+}: {
+  caseEntity: Case;
+  metadata?: {
+    eventCode?: string;
+    previousDocument?: { docketEntryId?: string; documentType?: string };
+  };
+}): void => {
+  if (
+    !metadata?.previousDocument ||
+    !PUBLIC_MOTION_RESPONSE_EVENT_CODES.includes(metadata.eventCode!)
+  ) {
+    return;
+  }
+
+  const { docketEntryId } = metadata.previousDocument;
+  const target = docketEntryId
+    ? caseEntity.docketEntries.find(de => de.docketEntryId === docketEntryId)
+    : undefined;
+
+  metadata.previousDocument = {
+    ...metadata.previousDocument,
+    documentType: target?.documentType,
+  };
 };
