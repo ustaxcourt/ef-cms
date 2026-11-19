@@ -1,9 +1,6 @@
-import { state } from '@web-client/presenter/app.cerebral';
-
 export const openMessageAttachmentDocumentAction = async ({
   applicationContext,
   props,
-  store,
 }: ActionProps) => {
   const { documentId, docketNumber, isPublic } = props;
 
@@ -14,7 +11,7 @@ export const openMessageAttachmentDocumentAction = async ({
       .getDocumentDownloadUrlInteractor(applicationContext, {
         docketNumber,
         isPublic,
-        key: docketEntryId,
+        key: documentId,
       }));
   } catch (err: any) {
     throw new Error(`Unable to open document. ${err.message}`);
