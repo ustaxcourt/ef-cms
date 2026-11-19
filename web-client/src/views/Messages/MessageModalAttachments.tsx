@@ -44,6 +44,8 @@ export const MessageModalAttachments = connect(
     updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
     validateCreateMessageInModalSequence:
       sequences.validateCreateMessageInModalSequence,
+    openMessageAttachmentDocumentSequence:
+      sequences.openMessageAttachmentDocumentSequence,
   },
   function MessageModalAttachments({
     form,
@@ -51,6 +53,7 @@ export const MessageModalAttachments = connect(
     updateMessageModalAttachmentsSequence,
     updateScreenMetadataSequence,
     validateCreateMessageInModalSequence,
+    openMessageAttachmentDocumentSequence,
   }) {
     return (
       <>
@@ -77,12 +80,24 @@ export const MessageModalAttachments = connect(
               );
             })}
             {form.draftAttachments.map(doc => {
+              console.log(doc);
               return (
                 <div className="margin-top-1" key={doc.documentId}>
                   <div className="grid-row message-modal-add-document-form">
                     <div className="grid-col-9">
-                      {doc.index != null ? `${doc.index} - ` : ''}
-                      {doc.documentTitle}
+                      <Button
+                        link
+                        icon="file-pdf"
+                        iconColor="white"
+                        onClick={() => {
+                          return openMessageAttachmentDocumentSequence({
+                            documentId: doc.documentId,
+                          });
+                        }}
+                      >
+                        {doc.index != null ? `${doc.index} - ` : ''}
+                        {doc.documentTitle}
+                      </Button>
                     </div>
                     <div className="grid-col-1"></div>
                     <div className="grid-col-2">
