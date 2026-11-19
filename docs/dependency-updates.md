@@ -172,6 +172,8 @@ Check to see if there is an updated version of the Aurora RDS postgres engine av
 
 > **As of 11/09/2026:** No change — still **17.5** (`postgres:17.5-trixie`); leave every pin unchanged this rotation.
 
+> **As of 11/19/2026:** No change — still **17.5** (`postgres:17.5-trixie`) in local Docker, GitHub Actions, and the `RDS_ENGINE_VERSION` default. Aurora now offers **17.11** (latest 17.x minor) and **18.5** (latest major) in us-east-1; neither has been scheduled for `test`/`prod`.
+
 When the team schedules an engine upgrade, we'll need to update postgres in deployed environments, locally, and in GitHub Actions together.
 
 1. Select the **dev** environment. Use the [environment switcher](./additional-resources/environment-switcher.md) to load AWS credentials for dev and retrieve a fresh access key:
