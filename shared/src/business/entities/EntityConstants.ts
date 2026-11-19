@@ -177,6 +177,9 @@ export const ALLOWLIST_FEATURE_FLAGS = {
   ENABLE_PAYMENT_PORTAL_INTEGRATION: {
     key: 'enable-payment-portal-integration',
   },
+  MOTION_VISIBILITY_POLICY_CHANGE_DATE: {
+    key: 'motion-visibility-policy-change-date',
+  },
   NEW_TRIAL_CITIES: {
     key: 'new-trial-cities',
   },
@@ -654,6 +657,10 @@ export const MOTION_EVENT_CODES = [
   }),
 ];
 
+export const MOTION_DOCUMENT_TYPES = INTERNAL_FILING_EVENTS['Motion'].map(
+  entry => entry.documentType,
+);
+
 export const NOTICE_EVENT_CODES = [
   ...INTERNAL_FILING_EVENTS['Notice'].map(entry => {
     return entry.eventCode;
@@ -694,6 +701,17 @@ export const POLICY_DATE_IMPACTED_EVENTCODES = [
   'REDC',
   'SPML',
   'SUPM',
+];
+
+export const PUBLIC_SUPPORTING_EVENT_CODES_FOR_MOTIONS = ['BRF', 'MISP'];
+
+export const PUBLIC_MOTION_RESPONSE_EVENT_CODES = [
+  'NNOB',
+  'NOB',
+  'OBJE',
+  'OBJN',
+  'OPPO',
+  'RSP',
 ];
 
 export const SCENARIOS = [
