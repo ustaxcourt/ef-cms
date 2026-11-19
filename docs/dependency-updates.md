@@ -63,6 +63,9 @@ This command informs us of known security vulnerabilities. If transitive depende
 
 > **As of 11/09/2026:** Still no patched release; latest on npm remains **3.0.3**, so an override still can't fix it.
 
+> **Why am I seeing 20 moderate severity vulnerabilities for `minimatch`, `jest`, `babel-jest`, `nodemon`, and `@ustaxcourt/payment-portal`?**
+> They all trace back to one advisory: `minimatch` >=7.0.0 <11.0.1 has a potential denial of service via globparts amplification ([GHSA-g3hv-75wg-m249](https://github.com/advisories/GHSA-g3hv-75wg-m249)). As of 11/19/2026 there is no patched 10.x release (latest is **10.2.6**), and the packages that pull it in still require `minimatch` 10: `test-exclude@8.0.0` (via `babel-plugin-istanbul` → `babel-jest`/`jest`) requires `^10.2.2`, and `nodemon@3.1.14` (via the payment-portal test server) requires `^10.2.1`. Forcing `minimatch` 11 with an override would be a major-version jump those packages haven't been tested against. Everything affected is dev and test tooling that only matches globs from our own configuration, and `npm ls minimatch --omit=dev` shows no affected versions in production dependencies. Each rotation, check whether `minimatch` 10.x gets a patch or `test-exclude`/`nodemon` move to `minimatch` 11.
+
 #### 1.3 Approve or deny scripts as needed
 
 Once we upgrade to `npm` v12, package install scripts will be opt-in instead of automatically being allowed to run. As of v11, we can approve deny scripts using `npm approve-scripts <pkg>` or `npm deny-scripts <pkg>`, so for the week of 7/13/2026 we approved the following packages and denied the rest: `cypress` and `puppeteer`. Note the approvals are version-specific, so these packages will likely have to be reapproved when they are upgraded.
@@ -103,6 +106,7 @@ When updating Node.js, keep in mind:
  - If the Node.js upgrade falls outside the published `engines.node` range (for example, moving to a new major version), then `@ustaxcourt/payment-portal` must be updated and published with a compatible `engines.node` range before `npm ci` in ef-cms will succeed without engine workarounds.
 
 - As of 11/09/2026: Node **24.22.2** is available on nodejs.org, but there is no matching `cypress/browsers` tag on Docker Hub for **24.22.2** yet. Held at **24.22.1** in `.nvmrc` and the CI `Dockerfile` until a `node-24.22.2` (or compatible) `cypress/browsers` image is published.
+- As of 11/19/2026: Node 24.22.3 is available, but there's still no matching cypress/browsers image. Held at 24.22.1.
 
 #### 2.2 Update `Dockerfile` as needed
 
