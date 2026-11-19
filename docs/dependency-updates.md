@@ -747,7 +747,7 @@ The issue is with Jest. Jest doesn't work with mjs, so in our config we need to 
 - 9/17/26 - Tracked in DevEx ticket [#10383](https://github.com/ustaxcourt/ef-cms/issues/10383) (the ticket title says `joi`, but the package is `@joi/date`). The ticket covers stricter dayjs date-format validation failing on older `test` data; a fix also needs to address the Jest ESM loading and UTC ISO string parsing issues noted above.
 
 ### recharts
-**Installed Version: 3.10.1**
+**Installed Version: 3.11.1**
 
 - Pinned because `@recharts/devtools` does not yet peer-match recharts 3.10.x. Upgrade manually in coordination with `@recharts/devtools` when a compatible devtools release is available. This package is excluded by the upgrade script's `caveats` array.
 
