@@ -224,7 +224,9 @@ the card. Alerts fixed or dismissed before Monday are not counted either.
 The severity on the card comes from the scanner, mapped with the playbook's
 [step 1](playbook.md#1-start-from-the-scanners-severity). The DAWSON severity is still set at
 triage. ZAP findings are not on the card until
-[#10496](https://github.com/ustaxcourt/ef-cms/issues/10496) lands.
+[#10496](https://github.com/ustaxcourt/ef-cms/issues/10496) lands. Until then, the DAST warning only
+reflects the workflow's result. The ZAP steps continue on error, so a ZAP scan that crashed can still
+show as a successful run.
 
 The links only open for people with write or security access to the repository.
 
@@ -241,7 +243,8 @@ gh workflow run security-weekly-summary.yml --ref staging -f since=2026-11-02
 
 If the run fails, it posts a short "could not be posted this week" card with a link to the run.
 Nothing about the findings is written to the run's log, because Actions logs on this repository
-are public.
+are public. Setup and Teams errors are logged as they are; any other error is logged as a fixed
+message, so rerun locally with `--dry-run` to see it.
 
 ### Setup
 

@@ -31,12 +31,30 @@ export type SummaryEnv = {
   TEAMS_WEBHOOK_URL?: string;
 };
 
+export class SafeToLogError extends Error {}
+
+export const GENERIC_FAILURE_MESSAGE =
+  'The weekly security summary failed. Rerun it locally with --dry-run to see why.';
+
+export const describeFailure = ({
+  error,
+  inGitHubActions,
+}: {
+  error: unknown;
+  inGitHubActions: boolean;
+}): string => {
+  if (error instanceof SafeToLogError || !inGitHubActions) {
+    return error instanceof Error ? error.message : String(error);
+  }
+  return GENERIC_FAILURE_MESSAGE;
+};
+
 export const securityDashboardUrl = (repo: string): string =>
   `https://github.com/${repo}/security/code-scanning?query=is%3Aopen+branch%3Astaging`;
 
 const requireHttpsWebhookUrl = (url: string | undefined): string => {
   if (!url?.startsWith('https://')) {
-    throw new Error('TEAMS_WEBHOOK_URL must be set to an https URL');
+    throw new SafeToLogError('TEAMS_WEBHOOK_URL must be set to an https URL');
   }
   return url;
 };
@@ -59,10 +77,10 @@ export const postToTeams = async ({
       signal: AbortSignal.timeout(TEAMS_TIMEOUT_MS),
     });
   } catch {
-    throw new Error('Teams webhook request failed before a response');
+    throw new SafeToLogError('Teams webhook request failed before a response');
   }
   if (!response.ok) {
-    throw new Error(`Teams webhook returned HTTP ${response.status}`);
+    throw new SafeToLogError(`Teams webhook returned HTTP ${response.status}`);
   }
   return response.status;
 };
@@ -85,7 +103,7 @@ export const runWeeklySummary = async ({
   print?: (output: string) => void;
 }): Promise<void> => {
   if (dryRun && env.GITHUB_ACTIONS === 'true') {
-    throw new Error(
+    throw new SafeToLogError(
       '--dry-run prints findings, so it is not allowed in GitHub Actions (logs are public)',
     );
   }

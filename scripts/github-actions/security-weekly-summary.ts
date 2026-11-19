@@ -5,7 +5,10 @@ import {
   parseArgsAndEnvVars,
 } from '../helpers/parseArgsAndEnvVars';
 import { createISODateString } from '@shared/business/utilities/DateHandler';
-import { runWeeklySummary } from './security-weekly-summary-run.helpers';
+import {
+  describeFailure,
+  runWeeklySummary,
+} from './security-weekly-summary-run.helpers';
 
 const scriptConfig: ScriptConfig = {
   description:
@@ -25,7 +28,12 @@ runWeeklySummary({
   dryRun,
   env: process.env,
   now: createISODateString(),
-}).catch((error: Error) => {
-  console.error(error.message);
+}).catch((error: unknown) => {
+  console.error(
+    describeFailure({
+      error,
+      inGitHubActions: process.env.GITHUB_ACTIONS === 'true',
+    }),
+  );
   process.exitCode = 1;
 });

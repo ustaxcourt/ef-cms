@@ -2,8 +2,11 @@ jest.mock('../helpers/runCommand', () => ({ runCommand: jest.fn() }));
 
 import {
   DEFAULT_REPO,
+  GENERIC_FAILURE_MESSAGE,
+  SafeToLogError,
   type SummaryEnv,
   TEAMS_TIMEOUT_MS,
+  describeFailure,
   postToTeams,
   runWeeklySummary,
   securityDashboardUrl,
@@ -233,5 +236,57 @@ describe('runWeeklySummary', () => {
       expect(logged).not.toContain(secret);
     }
     consoleSpies.forEach(spy => spy.mockRestore());
+  });
+});
+
+describe('describeFailure', () => {
+  const pagingLimit = new Error(
+    'Stopped after 100 pages of alerts without reaching the start of the window',
+  );
+
+  it('hides errors that may describe findings in GitHub Actions', () => {
+    expect(describeFailure({ error: pagingLimit, inGitHubActions: true })).toBe(
+      GENERIC_FAILURE_MESSAGE,
+    );
+  });
+
+  it('shows errors marked safe to log in GitHub Actions', () => {
+    expect(
+      describeFailure({
+        error: new SafeToLogError('Teams webhook returned HTTP 400'),
+        inGitHubActions: true,
+      }),
+    ).toBe('Teams webhook returned HTTP 400');
+  });
+
+  it.each([
+    [pagingLimit, pagingLimit.message],
+    ['not an Error', 'not an Error'],
+  ])('shows the full error locally (%s)', (error, expected) => {
+    expect(describeFailure({ error, inGitHubActions: false })).toBe(expected);
+  });
+
+  it('marks every error the summary throws about its own setup as safe', async () => {
+    const failures = await Promise.allSettled([
+      run({ TEAMS_WEBHOOK_URL: undefined }).done,
+      run({ GITHUB_ACTIONS: 'true' }, { dryRun: true }).done,
+      postToTeams({
+        fetchFn: jest.fn().mockResolvedValue({ ok: false, status: 400 }),
+        payload: PAYLOAD,
+        webhookUrl: WEBHOOK,
+      }),
+      postToTeams({
+        fetchFn: jest.fn().mockRejectedValue(new Error('boom')),
+        payload: PAYLOAD,
+        webhookUrl: WEBHOOK,
+      }),
+    ]);
+
+    for (const failure of failures) {
+      expect(failure).toMatchObject({
+        reason: expect.any(SafeToLogError),
+        status: 'rejected',
+      });
+    }
   });
 });
