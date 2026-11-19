@@ -23,7 +23,9 @@ describe('Payment Status Pending', () => {
 
   it('should display "Pending" after petitioner files and submits payment', () => {
     petitionerCreatesElectronicCase().then(docketNumber => {
-      cy.get('[data-testid="pay-filing-fee-button"]').click();
+      cy.get(
+        `[data-testid="${docketNumber}"] [data-testid="pay-filing-fee-button"]`,
+      ).click();
 
       cy.origin(getCypressEnv().payGovOrigin, () => {
         cy.get(
