@@ -602,7 +602,7 @@ export class DocketEntry extends JoiValidationEntity {
     );
   }
 
-  static isMotionPublic(
+  static isMotionOrMotionResponsePublic(
     entry: RawDocketEntry,
     rootDocument: RawDocketEntry | undefined,
     docketEntries: RawDocketEntry[],
@@ -659,7 +659,7 @@ export class DocketEntry extends JoiValidationEntity {
       entry.filingDate < visibilityChangeDate
     ) {
       if (
-        DocketEntry.isMotionPublic(
+        DocketEntry.isMotionOrMotionResponsePublic(
           entry,
           rootDocument,
           docketEntries,
