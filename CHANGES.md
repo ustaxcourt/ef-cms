@@ -17,6 +17,15 @@ Then check that it posts to the Tech channel:
 gh workflow run security-weekly-summary.yml --ref staging
 ```
 </details>
+<details><summary>Dependency Updates - Week of 2026-11-09</summary>
+
+#### Deploy Docker container `4.3.105` from dev
+
+```bash
+npm run deploy:ci-image:from dev
+```
+
+</details>
 <details><summary>Dependency Updates - Week of 2026-11-03</summary>
 
 ## Local
@@ -45,8 +54,6 @@ This script will prompt for an environment to pull the image from; choose `exp2`
 ```bash
 npm run ecr:check-version
 ```
-
-</details>
 
 </details>
 <details><summary>Dependency Updates - Week of 2026-10-26</summary>

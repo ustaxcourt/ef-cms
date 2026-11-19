@@ -8,6 +8,57 @@ this doc is the process that sits on top of them.
 On triage this week? Use the [weekly triage runbook](weekly-triage.md). For scanner details,
 suppression mechanisms and image rebuilds, see the [scanner reference](scanner-reference.md).
 
+## Contents
+
+- [Purpose and scope](#purpose-and-scope)
+- [Where findings are tracked](#where-findings-are-tracked)
+- [Roles](#roles)
+- [Exposure tiers](#exposure-tiers)
+  - [T1: production runtime](#t1-production-runtime)
+  - [T2: CI/CD with deploy credentials](#t2-cicd-with-deploy-credentials)
+  - [T3: development and test only](#t3-development-and-test-only)
+- [Severity rubric](#severity-rubric)
+  - [1. Start from the scanner's severity](#1-start-from-the-scanners-severity)
+  - [2. Check whether DAWSON is affected at all](#2-check-whether-dawson-is-affected-at-all)
+  - [3. Apply the modifiers](#3-apply-the-modifiers)
+  - [Worked examples](#worked-examples)
+- [Remediation SLAs](#remediation-slas)
+  - [What counts as resolved](#what-counts-as-resolved)
+  - [When the clock starts](#when-the-clock-starts)
+  - [Missing an SLA](#missing-an-sla)
+- [Intake and ownership](#intake-and-ownership)
+  - [Same-day triage](#same-day-triage)
+  - [Findings reported by people](#findings-reported-by-people)
+  - [Ownership](#ownership)
+- [Choosing an action](#choosing-an-action)
+  - [Patching npm dependencies](#patching-npm-dependencies)
+  - [Suppressing a finding](#suppressing-a-finding)
+  - [No upstream fix](#no-upstream-fix)
+- [Findings on pull requests](#findings-on-pull-requests)
+  - [Fix it in the PR that caused it](#fix-it-in-the-pr-that-caused-it)
+  - [Trivy fs findings](#trivy-fs-findings)
+  - [When a fix can be deferred](#when-a-fix-can-be-deferred)
+  - [Keeping sensitive details out of the PR](#keeping-sensitive-details-out-of-the-pr)
+- [Exceptions](#exceptions)
+  - [The exception record](#the-exception-record)
+  - [Review dates](#review-dates)
+  - [On the review date](#on-the-review-date)
+- [VEX statements](#vex-statements)
+  - [How decisions map to VEX](#how-decisions-map-to-vex)
+  - [What may be published](#what-may-be-published)
+- [Secrets](#secrets)
+  - [1. Contain](#1-contain)
+  - [2. Rotate, within 1 business day at the latest](#2-rotate-within-1-business-day-at-the-latest)
+  - [3. Verify](#3-verify)
+  - [4. Clean up](#4-clean-up)
+  - [5. Record](#5-record)
+  - [False positives](#false-positives)
+  - [Prevention](#prevention)
+- [Validation and closure](#validation-and-closure)
+  - [Validation](#validation)
+  - [Closure](#closure)
+- [Reporting](#reporting)
+
 ## Purpose and scope
 
 - **Audience:** the DAWSON team.
@@ -21,19 +72,21 @@ suppression mechanisms and image rebuilds, see the [scanner reference](scanner-r
 
 ## Where findings are tracked
 
-The repository and its GitHub Issues are public. Every finding is tracked as a GitHub issue on
+The repository and its GitHub Issues are public. Every finding (or group of related findings) is tracked as a GitHub issue on
 the [ZenHub](../../zenhub.md) board, so all security work shows up in one place with an assignee and
-a due date. What the issue is allowed to say depends on whether the finding is sensitive.
+a due date. A finding also gets a draft security advisory when it is sensitive or expected to stay
+open for several weeks. What the issue may say depends on which it is:
 
 | Finding | Tracking | What the public issue contains |
 | --- | --- | --- |
 | **Routine:** an upgrade to a published fix for a public advisory, in any tier; T3 findings; false positives; findings marked not affected | GitHub issue only | The full details |
 | **Sensitive:** any other finding that affects T1 or T2, such as one in DAWSON's own code or configuration (CodeQL, Semgrep, Checkov, ZAP) or a public CVE with no fixed version; any exposed secret; any finding reported by a person | Draft security advisory for the details, plus a GitHub issue that points to it | Only "Private security finding", the advisory's GHSA ID, the assignee and the due date. No component, severity or CVE. |
+| **Long-lived:** a routine finding expected to stay open for several weeks, such as a deferred `.trivyignore` entry that the weekly update can't fix | GitHub issue, plus a draft security advisory for the working notes | The full details, plus the GHSA ID |
 
 A dependency or base-image upgrade for a public advisory is routine even in T1 or T2: the advisory
 is already public, and the upgrade PR names the package anyway. When in doubt, treat a finding as
 sensitive. Never put details of a sensitive finding in a public issue, PR description or commit
-message.
+message. A short-lived routine finding doesn't need an advisory.
 
 **Draft security advisories** live under Security → Advisories. Only repository owners, admins and
 security managers can create one; everyone else can see and edit it only after being added to it as
@@ -134,7 +187,7 @@ severity, not on the scanner's. Work it out in three steps.
 | Checkov | Checkov does not report a severity. Checks in `--hard-fail-on` are High; every other check is Medium. |
 | Gitleaks | Critical, until the finding is confirmed to be a false positive |
 | OWASP ZAP | High, Medium and Low map directly. Informational alerts are not tracked. |
-| ShellCheck | Not tracked. It blocks the PR that introduces an error, through the required `Security Gate (SAST)` check, and the error is fixed there. |
+| ShellCheck | Not tracked. It scans every `.sh` file, so an error-level finding blocks whichever PR it first runs on, through the required `Security Gate (SAST)` check, and the error is fixed or suppressed on that PR. |
 | Lockfile lint | Not tracked, and it does not block: the step is `continue-on-error: true` and is not part of a required check. It fails when a package in `package-lock.json` is not from the npm registry, not over HTTPS, or has no integrity hash. That can mean a dependency is coming from somewhere unexpected, so the PR author fixes a failure before merging, and a reviewer who sees the failed step asks why. |
 
 Treat findings that share a CVE and a cause as one finding. For example, one CVE reported against
@@ -287,7 +340,8 @@ risk. Both are recorded as [exceptions](#exceptions). A missed SLA is never left
 it appears in the weekly report until it is resolved.
 
 The SLAs apply to findings that already exist. New code is held to a stricter standard: it must
-not add medium- or high-severity findings at all ([Code Review](../../code-review.md)).
+not add High, Critical or Unknown findings at all, and should not add Medium or Low ones
+([Code Review](../../code-review.md)).
 
 ## Intake and ownership
 
@@ -396,7 +450,7 @@ as "not encrypted because..." tells an attacker where to look. For a sensitive f
 suppression's justification is only the GHSA ID, for example `#checkov:skip=CKV_AWS_18:See
 GHSA-xxxx-xxxx-xxxx`. The reasoning goes in the advisory.
 
-Nothing enforces the approval yet: the repository has no `CODEOWNERS` file. Any reviewer who sees
+Nothing enforces the approval yet: no ruleset requires the approver's review on these files. Any reviewer who sees
 a new suppression in a PR asks for the approver's review before approving it.
 
 Suppressions that existed before this playbook, such as the inline Checkov skips, do not name a
@@ -434,6 +488,145 @@ through this list, not the end of it.
 
 For container findings, the full method for deciding whether a package is present and reachable
 in an image is in the [container findings triage guide](../container-findings-triage.md#2-evaluating-container-findings).
+
+## Findings on pull requests
+**This is whats planned, but not fully implemented as of Nov 6th, 2026.**
+
+The aim is to catch a vulnerability as early in the pipeline as possible, so the fix costs the
+least. A PR into `test` runs the same required security checks as a PR into `staging`, so the
+developer sees a finding while the code is fresh and before it can reach `staging`. How those
+checks decide what is new is in the [branching and baseline strategy](branching-and-baseline-strategy.md).
+
+### Fix it in the PR that caused it
+
+A finding that appears **because of your change** is yours to fix in that PR. Don't wait for the
+weekly triage, and don't merge on the assumption that someone else will pick it up. New code is
+held to a stricter standard than existing findings: it must not add High, Critical or Unknown
+findings. A Medium or Low finding should be fixed in the PR too, but is less critical if it
+can't be, and then falls to the weekly scan team (see [Missing an SLA](#missing-an-sla)).
+
+Findings already on `staging` are not yours and don't block your PR. They follow the
+[SLAs](#remediation-slas).
+
+A finding that appears on your PR but has nothing to do with your change, such as a newly
+published CVE in a dependency you didn't touch, goes to the weekly scan dev first, so that two
+people don't fix the same finding. If it can be fixed in your branch, you fix it there with approval from the weekly scan dev. If it can't be fixed now, it is tracked as a ticket and given a temporary ignore line. For a Trivy `fs` finding, follow
+[Trivy fs findings](#trivy-fs-findings).
+
+### Trivy fs findings
+
+**This is the target process, not yet in effect.** It depends on work that is not built: making
+`Findings vs staging` a required check on `test` and `staging`, creating `.trivyignore` and passing it to the
+branch scan in `security-compare.yml`, and creating the VEX file. See
+[the strategy](branching-and-baseline-strategy.md#required-for-test-to-catch-new-findings). Until then the check is
+not required, and a `.trivyignore` line does not unblock it.
+
+`Findings vs staging` will be a required check on `test` and `staging`. It fails when your branch has a vulnerability
+that `staging` doesn't. Your change may have added the dependency. Or another PR may have merged
+the vulnerable dependency into `test` and not yet reached `staging`, so it shows as new on yours.
+A CVE newly published against code already on `staging` shows on both sides and doesn't fail the check.
+
+**Your change didn't cause it, and the PR isn't the weekly scan work.** This happens when the
+vulnerable code is on `test` but not yet on `staging`, such as another PR's dependency, or when a CVE
+was published since the code merged. The weekly scan dev is the point person for these findings, so
+that two people don't fix the same one and every finding gets a fix.
+
+1. **Reach out to the weekly scan dev** on teams and report the finding.
+2. **If they are already on it,** leave the fix to them. **If they aren't,** work with them to get
+   the finding formally investigated, using the steps below.
+3. **If it can be fixed in your PR,** fix it there.
+4. **If it can't be fixed now,** it gets tracked and a temporary ignore line goes in, so the new
+   finding doesn't block every other PR while the fix is applied. The same applies when the weekly
+   scan dev is already applying the fix.
+   - Track it as in [Where findings are tracked](#where-findings-are-tracked), and add the alert
+     number (for example `Alert #1234`, or the CVE ID if there is no number yet) to the ticket
+     tracking the weekly scan work.
+   - Add the CVE to `.trivyignore` on your branch with an expiry of the Saturday before the next
+     weekly scan, for example `CVE-2026-1234 exp:2026-11-07`. Put the alert number or GHSA ID in a
+     comment above the line, with a note that your change didn't cause it. The ignore lapses before
+     that scan, so the finding is looked at again then, and the line is removed once it is fixed.
+   - The approver signs off on the line like any other suppression
+     ([Suppressing a finding](#suppressing-a-finding)). For a T1 or T2 component, see the decision
+     below before adding it.
+
+**Your change caused it, or your PR is for the weekly scan work.** The PR deals with it, in this order.
+
+1. **Has the maintainer published a fix?**
+   - **Yes.** Check whether this week's dependency update already covers it. If it does, there is
+     nothing to do. If it doesn't, add the fixed version to your branch, and make sure the upgrade
+     is part of the PR's manual test plan.
+   - **No.** Go to step 2.
+2. **Does the CVE apply to DAWSON?** Have the agent check. The CVE may be in a package feature we
+   don't use (see [Severity rubric](#severity-rubric), step 2).
+   - **It doesn't apply.** Record a `not_affected` statement in the VEX file, with the justification
+     ([VEX statements](#vex-statements)).
+   - **It applies.** The finding is confirmed `affected`. Open a draft security advisory and keep the
+     `affected` statement there ([What may be published](#what-may-be-published)). Don't put it in the
+     VEX file until the fix ships.
+   - **It can't be ruled out yet.** Open a draft security advisory with the alert information so it
+     can be investigated. For a T3 component, also record `under_investigation` in the VEX file.
+   - **To defer either one,** first check the component's tier. **For a T1 or T2 component, don't
+     add a `.trivyignore` line.** Ask the approver how to clear the check (see the decision below).
+     For any other component, add the CVE to `.trivyignore` with an expiry of the Saturday before the next
+     weekly scan, for example `CVE-2026-1234 exp:2026-11-07`. Put the advisory's
+     GHSA ID in a comment above the line. The ignore lapses before that scan runs, so the
+     finding is looked at again then, and the line is removed once it is fixed.
+
+Trivy applies only `not_affected` and `fixed` VEX statements, and no workflow passes `--vex` yet.
+Until it does, a not-affected finding still fails the check, so it also needs a `.trivyignore`
+line, with the exception's review date as the expiry ([Review dates](#review-dates)).
+
+**Needs a decision before a T1 or T2 finding is deferred this way.** An unfixed CVE that affects,
+or may affect, DAWSON in a T1 or T2 component is sensitive under
+[Where findings are tracked](#where-findings-are-tracked). `.trivyignore` and an
+`under_investigation` statement are both in the public repository and name the CVE, which tells an
+attacker the dependency is vulnerable. Until the approver has agreed an approach, don't add a
+`.trivyignore` line or a VEX statement for such a finding. **Keep the details in the draft advisory and ask the approver how the check should be cleared.**
+
+### When a fix can be deferred
+
+Defer only when one of these is true:
+
+- No fix exists yet, for example the package has no patched release and there is no alternative
+  package to switch to.
+- The finding needs more investigation than the PR allows, such as working out whether it applies
+  to DAWSON. **Formal Approval Required.**
+
+If so:
+
+1. Open a draft security advisory for the finding before you merge ([Where findings are tracked](#where-findings-are-tracked)).
+2. Get the approver's sign-off on the PR. Every deferral, suppression and risk acceptance needs
+   it, at every severity ([Suppressing a finding](#suppressing-a-finding)).
+3. Record the decision in the [exception record](#the-exception-record).
+4. If there is no upstream fix, work through [No upstream fix](#no-upstream-fix) first. "No patch"
+   alone isn't a reason to accept a finding.
+
+A real secret is never deferred. Rotate it the same business day and follow [Secrets](#secrets).
+
+A routine finding fixed before the PR merges never reaches `staging`, so nothing is tracked and
+there is no advisory. A secret is the exception. It is exposed once it is pushed, even if the PR
+never merges, so **it still gets a draft advisory and the record** in [Secrets](#secrets).
+
+### Keeping sensitive details out of the PR
+
+The repository is public, so a pushed branch, its PR, its commit messages and its workflow runs
+are all readable by anyone. The scans list each finding in the run's log and job summary, with
+the rule, file, line and offending code, and that output can't be hidden. These rules limit what
+else is said.
+
+A finding found on a PR is sensitive on the same terms as any other
+([Where findings are tracked](#where-findings-are-tracked)), with one addition: a secret is
+sensitive from the moment it is pushed. For a finding that is or may be sensitive:
+
+- Describe the change by what it does, not by the weakness it removes. Write "Validate the docket
+  number in the lookup", not "Fix SSRF in the lookup".
+- Leave the vulnerability class, rule name, CVE, severity and impact out of the PR title, PR
+  description, commit messages and review comments. Put them in the advisory.
+- Don't paste the scanner's output into the PR, a comment or a chat. Link to the issue instead.
+- In a suppression comment, use only the GHSA ID, as in [Suppressing a finding](#suppressing-a-finding).
+
+An upgrade to a published fix for a public advisory is routine. The PR can name the package and
+the advisory.
 
 ## Exceptions
 
