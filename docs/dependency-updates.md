@@ -547,6 +547,7 @@ If an update is available for DWT:
 - As of 10/13/2026: Puppeteer **25.12.0** requires Chrome for Testing 154 and **25.13.0** requires 155, but `@sparticuz/chromium` latest on npm is still **153.0.0**. Held at **25.11.0**.
 - As of 11/03/2026: `@sparticuz/chromium` latest on npm is still **153.0.0**. Held at **25.11.0**. `npm audit` reports `zod` (via `chromium-bidi`), and the fix needs puppeteer 25.12+.
 - As of 11/09/2026: Puppeteer **25.17.0** is available upstream, but `@sparticuz/chromium` latest on npm is still **153.0.0**. Held at **25.11.0** in `package.json` and `web-api/runtimes/puppeteer/package.json`.
+- As of 11/19/2026: Puppeteer **25.18.1** is available, but `@sparticuz/chromium` latest on npm is still **153.0.0**. Held at **25.11.0**.
 
 ### ws, 3rd party dependency of Cerebral
 
@@ -591,6 +592,7 @@ If an update is available for DWT:
 - As of 9/17/2026: `@babel/core` **8.0.5** is available. Tracked in DevEx ticket [#10428](https://github.com/ustaxcourt/ef-cms/issues/10428). The plugin is ~50 lines (`babel.loadOptions` + `babel.transform`) used solely by `esbuildHelper.mjs`, so it could be inlined into the repo rather than republished to npm.
 - As of 10/13/2026: `@babel/core` **8.0.7** is available. Still blocked; `esbuild-plugin-babel-cached@0.2.3` still peers `@babel/core@^7.0.0`.
 - As of 11/09/2026: `@babel/core` **8.0.7** is still the latest 8.x. Still blocked; `esbuild-plugin-babel-cached@0.2.3` still peers `@babel/core@^7.0.0`. Stay on **7.29.7**.
+- As of 11/19/2026: `@babel/core` **8.1.2** is available. Still blocked; `esbuild-plugin-babel-cached@0.2.3` still peers `@babel/core@^7.0.0`. Held at **7.29.7**.
 
 ### @types/node
 **Installed Version: 24.19.2**
@@ -690,6 +692,7 @@ error: too many arguments. Expected 0 arguments but got 2.
 - As of 9/22/2026: eslint **10.x** remains blocked by `eslint-plugin-jsx-a11y` and `eslint-plugin-react` peers. Latest 9.x patches remain **9.39.5** for both `eslint` and `@eslint/js`; already installed. TypeScript dual alias (`typescript@npm:@typescript/typescript6@6.0.2`, `@typescript/native@npm:typescript@7.0.2`) and batch `Dockerfile` global install unchanged — **7.0.2** / **6.0.2** are still latest on npm.
 - As of 10/13/2026: eslint **10.12.0** is available. Still blocked; `eslint-plugin-react@7.37.5` (peer `^9.7`) and `eslint-plugin-jsx-a11y@6.10.2` (peer `^9`) are still the latest releases. TypeScript **7.0.2** / **6.0.2** and `ts-node` **10.9.2** are still latest.
 - As of 11/09/2026: eslint **10.14.0** is available. Still blocked; `eslint-plugin-react@7.37.5` and `eslint-plugin-jsx-a11y@6.10.2` are still the latest releases and do not accept eslint 10. Stay on **9.39.5** for `eslint` and `@eslint/js`.
+- As of 11/19/2026: eslint **10.15.0** is available. Still blocked; `eslint-plugin-react@7.37.5` and `eslint-plugin-jsx-a11y@6.10.2` are still the latest releases and do not accept eslint 10. Held at **9.39.5**.
 
 ### cypress
 **Installed Version: 16.2.1**
@@ -770,6 +773,7 @@ The issue is with Jest. Jest doesn't work with mjs, so in our config we need to 
 - 10/2/26 - Tried to update to 3.9.0 but got tests throwing new type errors about the search request object. Upon further investigation in this version they updated type definitions of the packages to match newer versions of the opensearch API (dated 2026-09-23). The updates changed how terms are used in aggregations in search requests. I am unsure if this affects our current version of opensearch, or will be an issue in a future release, or if this is just an issue with test data. For context the current version of opensearch is 3.9.0, but AWS currently only supports up to 3.7.0. Reverting for now
 - As of 10/13/2026: added to the upgrade script's `caveats` array. Before this, the script would upgrade it to 3.9.0 on every run even though this hold was documented. 3.9.0 is still the latest, and AWS OpenSearch Service still supports up to 3.7.
 - As of 11/09/2026: still held at **3.6.0** in the upgrade script's `caveats` array. **3.9.0** is still the latest on npm; AWS OpenSearch Service still supports up to **3.7**.
+- As of 11/19/2026: **3.10.0** is now the latest on npm; AWS OpenSearch Service still supports up to **3.7**. Still held at **3.6.0**.
 
 ### he
 **Installed Version: 2.0.0**
