@@ -45,7 +45,7 @@ SET
       dw_case
       LEFT JOIN hits USING (docket_number)
     WHERE
-      "status" NOT IN ('Closed', 'Closed - Dismissed')
+      "status" NOT IN ('Closed', 'Closed - Dismissed', 'On Appeal')
       AND docket_number = update_dw_case.docket_number
   )
   `.execute(db);
