@@ -1289,6 +1289,125 @@ describe('fileExternalDocumentInteractor', () => {
       );
     };
 
+    describe('motion response target', () => {
+      const motionOnCaseId = applicationContext.getUniqueId();
+
+      const fileOpposition = async (
+        previousDocument: Record<string, unknown>,
+      ): Promise<{ rawCase: RawCase; responseEntry: RawDocketEntry }> => {
+        const leadCase = {
+          ...caseRecord,
+          docketEntries: [
+            ...caseRecord.docketEntries,
+            {
+              docketEntryId: motionOnCaseId,
+              docketNumber: caseRecord.docketNumber,
+              documentTitle: 'Motion for Continuance',
+              documentType: 'Motion for Continuance',
+              eventCode: 'M006',
+              filedBy: 'Test Practitioner',
+              filedByRole: ROLES.irsPractitioner,
+              filingDate: afterMotionFilingDate,
+              index: 3,
+              isOnDocketRecord: true,
+              servedAt: afterMotionFilingDate,
+              servedParties: [],
+              userId: mockIrsPractitionerUser.userId,
+            },
+          ],
+        };
+        mockCreateIsoDateString.mockImplementation(
+          (dateString?: string, inputFormat?: string) =>
+            dateString === undefined
+              ? laterBriefFilingDate
+              : mockDateHandler.createISODateString(dateString, inputFormat),
+        );
+        getUserById.mockResolvedValue(mockIrsPractitionerUser as DbUser);
+        getCaseByDocketNumber.mockResolvedValue(leadCase);
+        getCasesByDocketNumbers.mockResolvedValue([leadCase]);
+
+        const responseId = applicationContext.getUniqueId();
+        const callsBefore = updateCaseAndAssociations.mock.calls.length;
+
+        await fileExternalDocumentInteractor(
+          applicationContext,
+          {
+            documentMetadata: {
+              docketNumber: leadCase.docketNumber,
+              documentTitle: 'Opposition to Motion for Continuance',
+              documentType: 'Opposition',
+              eventCode: 'OPPO',
+              filedBy: 'Test Practitioner',
+              previousDocument,
+              primaryDocumentId: responseId,
+            },
+          },
+          mockIrsPractitionerUser,
+        );
+
+        const savedCase =
+          updateCaseAndAssociations.mock.calls[callsBefore][0].caseToUpdate;
+
+        return {
+          rawCase: buildRawCase(savedCase),
+          responseEntry: savedCase.docketEntries.find(
+            de => de.docketEntryId === responseId,
+          )!,
+        };
+      };
+
+      const notPublic = {
+        party: true,
+        public: false,
+        terminal: true,
+        unassociated: false,
+      };
+
+      it('should make an opposition public when it targets a motion on the case', async () => {
+        const { rawCase, responseEntry } = await fileOpposition({
+          docketEntryId: motionOnCaseId,
+          documentTitle: 'Motion for Continuance',
+          documentType: 'Motion for Continuance',
+        });
+
+        expectDownloadabilityForViewers(responseEntry, rawCase, {
+          party: true,
+          public: true,
+          terminal: true,
+          unassociated: true,
+        });
+      });
+
+      it('should not make an opposition public when its target id is missing and the submitted type claims a motion', async () => {
+        const { rawCase, responseEntry } = await fileOpposition({
+          documentTitle: 'Motion for Continuance',
+          documentType: 'Motion for Continuance',
+        });
+
+        expectDownloadabilityForViewers(responseEntry, rawCase, notPublic);
+      });
+
+      it('should not make an opposition public when its target id is not on the case and the submitted type claims a motion', async () => {
+        const { rawCase, responseEntry } = await fileOpposition({
+          docketEntryId: applicationContext.getUniqueId(),
+          documentTitle: 'Motion for Continuance',
+          documentType: 'Motion for Continuance',
+        });
+
+        expectDownloadabilityForViewers(responseEntry, rawCase, notPublic);
+      });
+
+      it('should not make an opposition public when it targets an Answer but the submitted type claims a motion', async () => {
+        const { rawCase, responseEntry } = await fileOpposition({
+          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          documentTitle: 'Motion for Continuance',
+          documentType: 'Motion for Continuance',
+        });
+
+        expectDownloadabilityForViewers(responseEntry, rawCase, notPublic);
+      });
+    });
+
     it.each([
       { consolidated: false, description: 'a single case' },
       { consolidated: true, description: 'lead and member consolidated cases' },
