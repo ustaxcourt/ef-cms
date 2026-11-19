@@ -40,6 +40,26 @@ describe('DocketEntry isPublic - motion response visibility', () => {
       eventCode =>
         !PUBLIC_SUPPORTING_EVENT_CODES_FOR_MOTIONS.includes(eventCode),
     );
+  // external filing scenarios that let the filer pick a previous document
+  const SCENARIOS_WITH_PREVIOUS_DOCUMENT = [
+    'Nonstandard A',
+    'Nonstandard C',
+    'Nonstandard D',
+    'Nonstandard F',
+  ];
+  const NON_PUBLIC_EVENT_CODES_THAT_TARGET_A_DOCUMENT = [
+    ...new Set(
+      Object.values(EXTERNAL_FILING_EVENTS)
+        .flat()
+        .filter(event =>
+          SCENARIOS_WITH_PREVIOUS_DOCUMENT.includes(event.scenario),
+        )
+        .map(event => event.eventCode)
+        .filter(
+          eventCode => !PUBLIC_MOTION_RESPONSE_EVENT_CODES.includes(eventCode),
+        ),
+    ),
+  ];
 
   const MOTION_DOCUMENT_TYPE = 'Motion for Continuance';
   const MOTION_ID = '0d8e3a5e-0d3c-4b8a-9b1e-6a0f6b3b8c01';
@@ -378,9 +398,12 @@ describe('DocketEntry isPublic - motion response visibility', () => {
     },
   );
 
-  it('should return false for a non-response event code that targets a motion', () => {
-    const reply = buildResponse('REPL');
+  it.each(NON_PUBLIC_EVENT_CODES_THAT_TARGET_A_DOCUMENT)(
+    'should return false for non-response event code %s that targets a motion',
+    eventCode => {
+      const entry = buildResponse(eventCode);
 
-    expect(isPublic(reply, [motion, reply])).toBe(false);
-  });
+      expect(isPublic(entry, [motion, entry])).toBe(false);
+    },
+  );
 });
