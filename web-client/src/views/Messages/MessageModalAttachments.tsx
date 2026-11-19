@@ -80,7 +80,6 @@ export const MessageModalAttachments = connect(
               );
             })}
             {form.draftAttachments.map(doc => {
-              console.log(doc);
               return (
                 <div className="margin-top-1" key={doc.documentId}>
                   <div className="grid-row message-modal-add-document-form">
@@ -90,7 +89,13 @@ export const MessageModalAttachments = connect(
                         icon="file-pdf"
                         iconColor="white"
                         onClick={() => {
+                          const { docketNumber } =
+                            messageModalHelper.documents.find(
+                              dox => dox.index === doc.index,
+                            );
+
                           return openMessageAttachmentDocumentSequence({
+                            docketNumber,
                             documentId: doc.documentId,
                           });
                         }}
