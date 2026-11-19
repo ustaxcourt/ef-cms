@@ -298,6 +298,8 @@ If an OpenSearch update is available, we'll need to update OpenSearch in github 
 
 > **As of 11/09/2026:** No change — AWS engine maximum still **OpenSearch_3.7**; repo pins unchanged; no §6.1 secret update, indices report, deploy, or local/GHA bump this rotation.
 
+> **As of 11/09/2026:** No change. AWS engine maximum still **OpenSearch_3.7**, and all repo pins are already on 3.7.
+
 ### 7. Wrap up
 
 - Check through the list of caveats to see if any of the documented issues have been resolved.
