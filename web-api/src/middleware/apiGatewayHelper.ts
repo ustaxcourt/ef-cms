@@ -149,7 +149,7 @@ export const sendOk = (response, statusCode = '200', headers = {}) => {
 };
 
 /**
- * Extracts and validates the authorization header from the api-gateway event's header or query string.
+ * Extracts the authorization token from the header or query parameters, rejecting multiple token sources.
  *
  * This assumes the authorization header is formatted with either:
  *  - Authorization: "Bearer SOME_TOKEN"
@@ -157,30 +157,38 @@ export const sendOk = (response, statusCode = '200', headers = {}) => {
  *  - http://example.com?token=SOME_TOKEN
  *
  * @param {object} event the API gateway request event with would contain headers, params, or query string, etc.
- * @returns {string} the token found in either the header or ?token query string
+ * @returns {string} the token found in the header or, when absent, the query string
  */
 export const getAuthHeader = event => {
-  let usernameTokenArray;
+  let authorizationHeaderToken;
+  let queryStringToken;
+  let queryToken;
   const authorizationHeader =
-    event.headers &&
-    (event.headers.Authorization || event.headers.authorization);
-  if (event.queryStringParameters && event.queryStringParameters.token) {
-    return event.queryStringParameters.token;
-  }
-  if (event.query && event.query.token) {
-    return event.query.token;
-  }
-  if (authorizationHeader) {
-    usernameTokenArray = authorizationHeader.split(' ');
+    event.headers?.Authorization ?? event.headers?.authorization;
+  if (authorizationHeader !== undefined && authorizationHeader !== null) {
+    const usernameTokenArray = authorizationHeader.split(' ');
     if (!usernameTokenArray || !usernameTokenArray[1]) {
       throw new UnauthorizedError(
         'Error: Authorization Bearer token is required',
       ); //temp until actual authorization is added
     }
-    return usernameTokenArray[1];
-  } else {
-    return null;
+    authorizationHeaderToken = usernameTokenArray[1];
   }
+  if (event.queryStringParameters && event.queryStringParameters.token) {
+    queryStringToken = event.queryStringParameters.token;
+  }
+  if (event.query && event.query.token) {
+    queryToken = event.query.token;
+  }
+  if (
+    (authorizationHeaderToken && (queryStringToken || queryToken)) ||
+    (queryStringToken && queryToken)
+  ) {
+    throw new UnauthorizedError(
+      'Error: Maximum of 1 authorization token exceeded',
+    );
+  }
+  return authorizationHeaderToken || queryStringToken || queryToken || null;
 };
 
 export const getUserFromAuthHeader = (event): UnknownAuthUser => {
