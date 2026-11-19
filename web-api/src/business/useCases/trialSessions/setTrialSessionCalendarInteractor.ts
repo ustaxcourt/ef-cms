@@ -57,6 +57,8 @@ export const setTrialSessionCalendarInteractor = async (
     }
 
     const trialSessionEntity = new TrialSession(trialSession);
+
+    // 10217 TODO: Remove this error after adding Set Reporting calendar support.
     if (trialSessionEntity.isReporting()) {
       throw new InvalidRequest('Reporting sessions cannot be calendared yet.');
     }
