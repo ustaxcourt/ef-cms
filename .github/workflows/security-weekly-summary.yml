@@ -10,8 +10,6 @@ on:
         description: Optional start date (YYYY-MM-DD, Eastern) to cover more than the last week.
         type: string
         required: false
-  push:
-    branches: [DAW-30-weekly-security-summary]
 
 concurrency:
   group: ${{ github.workflow }}
