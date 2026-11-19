@@ -62,8 +62,11 @@ export const updateCaseDetails = async (
     'remoteTrialGranted',
     'remoteTrialGrantedDate',
     'statistics',
-    'isStjEligible',
   ];
+
+  if (isAuthorized(authorizedUser, ROLE_PERMISSIONS.EDIT_STJ_ELIGIBILITY)) {
+    allowedFields.push('isStjEligible');
+  }
 
   const editableFields = Object.fromEntries(
     Object.entries(caseDetails).filter(
