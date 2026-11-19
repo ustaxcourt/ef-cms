@@ -7,7 +7,11 @@ import {
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { get } from 'lodash';
 import { getCurrentInvoke } from '@codegenie/serverless-express';
-import { getUserFromAuthHeader } from '@web-api/middleware/apiGatewayHelper';
+import { UnauthorizedError } from '@web-api/errors/errors';
+import {
+  getUserFromAuthHeader,
+  sendError,
+} from '@web-api/middleware/apiGatewayHelper';
 import { isPublicSiteRequest } from '@web-api/middleware/publicDataSanitizer';
 
 export const getHeaderOverride = (): Record<string, string> => {
@@ -50,7 +54,6 @@ export const lambdaWrapper = (
 
     const event = {
       headers: req.headers,
-      httpMethod: req.method,
       isTerminalUser,
       path: req.path,
       pathParameters: req.params,
@@ -60,9 +63,18 @@ export const lambdaWrapper = (
       },
     };
 
-    const user = isPublicSiteRequest(event)
-      ? undefined
-      : getUserFromAuthHeader(event);
+    let user: UnknownAuthUser = undefined;
+    let authErrorResponse: ReturnType<typeof sendError> | undefined;
+    try {
+      user = isPublicSiteRequest(event)
+        ? undefined
+        : getUserFromAuthHeader(event);
+    } catch (error) {
+      if (!(error instanceof UnauthorizedError)) {
+        throw error;
+      }
+      authErrorResponse = sendError(error);
+    }
 
     if (shouldMimicApiGatewayAsyncEndpoint) {
       // we return immediately before we try running the lambda because that is how
@@ -70,14 +82,16 @@ export const lambdaWrapper = (
       res.status(204).send('');
     }
 
-    const response = await lambda(
-      {
-        ...event,
-        body: JSON.stringify(req.body),
-        logger: req.locals.logger,
-      },
-      user,
-    );
+    const response =
+      authErrorResponse ??
+      (await lambda(
+        {
+          ...event,
+          body: JSON.stringify(req.body),
+          logger: req.locals.logger,
+        },
+        user,
+      ));
 
     const { asyncsyncid } = req.headers;
 

@@ -176,7 +176,7 @@ export const sendOk = (response, statusCode = '200', headers = {}) => {
 };
 
 /**
- * Extracts and validates the authorization token, preferring the authorization header over query parameters.
+ * Extracts the authorization token from the header or query parameters, rejecting multiple token sources.
  *
  * This assumes the authorization header is formatted with either:
  *  - Authorization: "Bearer SOME_TOKEN"
