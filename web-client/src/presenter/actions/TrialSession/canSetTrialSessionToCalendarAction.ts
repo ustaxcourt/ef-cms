@@ -1,4 +1,5 @@
 import { state } from '@web-client/presenter/app.cerebral';
+import { TRIAL_SESSION_PROCEEDING_TYPES } from '@shared/business/entities/EntityConstants';
 
 /**
  * validates a trial session's eligibility to be calendared or not
@@ -23,6 +24,16 @@ export const canSetTrialSessionToCalendarAction = ({
 
   if (canSetAsCalendared) {
     return path.yes();
+  }
+
+  if (
+    trialSession.proceedingType === TRIAL_SESSION_PROCEEDING_TYPES.reporting
+  ) {
+    return path.no({
+      alertWarning: {
+        message: 'Reporting sessions cannot be calendared yet.',
+      },
+    });
   }
 
   const addressProperties = ['address1', 'city', 'state', 'postalCode'];

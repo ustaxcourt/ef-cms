@@ -1,5 +1,8 @@
 import { MOCK_TRIAL_REGULAR } from '@shared/test/mockTrial';
-import { TRIAL_SESSION_SCOPE_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
+import {
+  TRIAL_SESSION_PROCEEDING_TYPES,
+  TRIAL_SESSION_SCOPE_TYPES,
+} from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import {
   docketClerkUser,
@@ -221,6 +224,30 @@ describe('trialSessionHeaderHelper', () => {
   });
 
   describe('showSwitchToWorkingCopy', () => {
+    it.each([
+      TRIAL_SESSION_PROCEEDING_TYPES.reporting,
+      TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
+    ])(
+      'should hide the session copy link after refresh for %s sessions without a judge',
+      proceedingType => {
+        const result = runCompute(trialSessionHeaderHelper, {
+          state: {
+            ...baseState,
+            currentPage: 'TrialSessionDetails',
+            judgeUser: {},
+            trialSession: {
+              ...MOCK_TRIAL_REGULAR,
+              proceedingType,
+              judge: undefined,
+            },
+            user: docketClerkUser,
+          },
+        });
+
+        expect(result.showSwitchToWorkingCopy).toBe(false);
+      },
+    );
+
     it('should be false when the user is a judge, they are on the TrialSessionDetails screen, but they are not assigned to the trial session', () => {
       const result = runCompute(trialSessionHeaderHelper, {
         state: {
