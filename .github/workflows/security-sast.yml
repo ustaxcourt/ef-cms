@@ -163,7 +163,7 @@ jobs:
           python-version: '3.12'
 
       - name: Install Checkov
-        run: pip install checkov==3.4.3
+        run: pip install checkov==3.4.5
 
       - name: Run Checkov
         run: |
