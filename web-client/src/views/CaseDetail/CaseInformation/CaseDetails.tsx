@@ -28,6 +28,7 @@ export const CaseDetails: React.FC<CaseDetailsProps> = connect(
       irsNoticeDateFormatted: string;
       filingFee: string;
       formattedPreferredTrialCity: string;
+      isStjEligible: boolean;
     };
     caseInformationHelper: {
       showSealCaseButton: boolean;
@@ -68,42 +69,48 @@ export const CaseDetails: React.FC<CaseDetailsProps> = connect(
               {caseDetail.formattedPreferredTrialCity}
             </p>
           </div>
-          {caseInformationHelper.showSealCaseButton && (
-            <div className="grid-col-6">
-              <Button
-                link
-                className="red-warning"
-                data-testid="seal-case-button"
-                icon="lock"
-                onClick={() => {
-                  openCleanModalSequence({
-                    showModal: 'SealCaseModal',
-                  });
-                }}
-              >
-                Seal Case
-              </Button>
-            </div>
-          )}
-
-          {caseInformationHelper.showUnsealCaseButton && (
-            <div className="grid-col-6">
-              <Button
-                link
-                className="red-warning"
-                data-testid="unseal-case-button"
-                icon="unlock"
-                onClick={() => {
-                  openCleanModalSequence({
-                    showModal: 'UnsealCaseModal',
-                  });
-                }}
-              >
-                Unseal Case
-              </Button>
-            </div>
-          )}
+          <div className="grid-col-6">
+            <p className="label">STJ Eligibility</p>
+            <p className="margin-bottom-0">
+              {caseDetail.isStjEligible ? 'Eligible' : 'Not Eligible'}
+            </p>
+          </div>
         </div>
+        {caseInformationHelper.showSealCaseButton && (
+          <div className="grid-col-6">
+            <Button
+              link
+              className="red-warning"
+              data-testid="seal-case-button"
+              icon="lock"
+              onClick={() => {
+                openCleanModalSequence({
+                  showModal: 'SealCaseModal',
+                });
+              }}
+            >
+              Seal Case
+            </Button>
+          </div>
+        )}
+
+        {caseInformationHelper.showUnsealCaseButton && (
+          <div className="grid-col-6">
+            <Button
+              link
+              className="red-warning"
+              data-testid="unseal-case-button"
+              icon="unlock"
+              onClick={() => {
+                openCleanModalSequence({
+                  showModal: 'UnsealCaseModal',
+                });
+              }}
+            >
+              Unseal Case
+            </Button>
+          </div>
+        )}
       </>
     );
   },

@@ -3,6 +3,7 @@ import { Get } from 'cerebral';
 import { setServiceIndicatorsForPetitionersOnCase } from '@shared/business/utilities/setServiceIndicatorsForPetitionersOnCase';
 import { state } from '@web-client/presenter/app.cerebral';
 import { type FormattedCase } from '@shared/business/utilities/getFormattedCaseDetail';
+import { Case } from '@shared/business/entities/cases/Case';
 
 type tPetitioner = TPetitioner & {
   contactId: string;
@@ -17,6 +18,7 @@ export type ComputedFormattedCaseDetail = Omit<
   petitioners: tPetitioner[];
   trialSessionNotes?: string;
   userIsAssignedToSession?: boolean;
+  isStjEligible: boolean;
 };
 
 export const formattedOpenCases = (
@@ -161,6 +163,9 @@ export const formattedCaseDetail = (
     trialSessionId: caseDetail.trialSessionId,
   });
 
+  const isStjEligible =
+    caseDetail.isStjEligible ?? Case.isStjEligible(caseDetail as Case);
+
   return {
     ...setServiceIndicatorsForPetitionersOnCase(caseDetail),
     ...formattedCase,
@@ -168,5 +173,6 @@ export const formattedCaseDetail = (
     petitioners,
     trialSessionNotes,
     userIsAssignedToSession,
+    isStjEligible,
   };
 };

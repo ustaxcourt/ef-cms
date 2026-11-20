@@ -10,6 +10,7 @@ import { upsertCases as upsertCasesMock } from '@web-api/persistence/postgres/ca
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { updateDeficiencyStatisticInteractor } from '@web-api/business/useCases/caseStatistics/updateDeficiencyStatisticInteractor';
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
+import { CASE_TYPES_MAP } from '@shared/business/entities/EntityConstants';
 
 describe('updateDeficiencyStatisticInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
@@ -47,6 +48,8 @@ describe('updateDeficiencyStatisticInteractor', () => {
 
     getCaseByDocketNumber.mockResolvedValue({
       ...MOCK_CASE,
+      caseType: CASE_TYPES_MAP.deficiency,
+      isStjEligible: true,
       statistics: [statistic],
     });
   });
@@ -144,5 +147,27 @@ describe('updateDeficiencyStatisticInteractor', () => {
         identifiers: [`case|${MOCK_CASE.docketNumber}`],
       }),
     );
+  });
+
+  it('should update isStjEligible flag when statistic is updated', async () => {
+    const statisticToUpdate = {
+      ...statistic,
+      irsDeficiencyAmount: 49999,
+      irsTotalPenalties: 1.1,
+      determinationDeficiencyAmount: 1,
+    };
+
+    await updateDeficiencyStatisticInteractor(
+      applicationContext,
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+        ...statisticToUpdate,
+      } as any,
+      authorizedUser,
+    );
+
+    expect(upsertCases).toHaveBeenCalled();
+    const callArg = upsertCases.mock.calls[0][0][0];
+    expect(callArg.isStjEligible).toBe(false);
   });
 });
