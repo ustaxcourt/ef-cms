@@ -623,16 +623,22 @@ describe('Reporting validation', () => {
       }).getFormattedValidationErrors(),
     ).toHaveProperty('swingSession');
   });
-  it.each([true, false])(
-    'should keep Reporting calendaring blocked with hasJudge=%s',
-    (hasJudge: boolean) => {
-      const entity = new TrialSession({
-        ...reportingSession,
-        judge: hasJudge ? reportingSession.judge : undefined,
-      });
-      expect(entity.getFormattedValidationErrors()).toBeNull();
-      expect(entity.getEmptyFields()).toEqual(hasJudge ? [] : ['judge']);
-      expect(entity.canSetAsCalendared()).toBe(false);
-    },
-  );
+  it('should allow a Reporting session with a judge to be set as calendared', () => {
+    const entity = new TrialSession(reportingSession);
+
+    expect(entity.getFormattedValidationErrors()).toBeNull();
+    expect(entity.getEmptyFields()).toEqual([]);
+    expect(entity.canSetAsCalendared()).toBe(true);
+  });
+
+  it('should NOT allow a Reporting session without a judge to be set as calendared', () => {
+    const entity = new TrialSession({
+      ...reportingSession,
+      judge: undefined,
+    });
+
+    expect(entity.getFormattedValidationErrors()).toBeNull();
+    expect(entity.getEmptyFields()).toEqual(['judge']);
+    expect(entity.canSetAsCalendared()).toBe(false);
+  });
 });
