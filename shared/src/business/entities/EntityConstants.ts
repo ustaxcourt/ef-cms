@@ -2461,11 +2461,12 @@ type PaymentMethod = NonNullable<
   ProcessPaymentResponse['transactions'][number]['paymentMethod']
 >;
 
-export const PAYMENT_DECLINED_MESSAGES: Record<PaymentMethod, string> = {
-  ACH: 'ACH payment failed',
-  'Credit/Debit Card': 'Credit card payment failed',
-  PayPal: 'PayPal payment failed',
-};
+export const DEFAULT_PAYMENT_DECLINED_MESSAGES: Record<PaymentMethod, string> =
+  {
+    ACH: 'ACH payment failed',
+    'Credit/Debit Card': 'Credit card payment failed',
+    PayPal: 'PayPal payment failed',
+  };
 
 export const DEFAULT_PAYMENT_FAILED_MESSAGE =
   'Something went wrong when paying the filing fee';

@@ -1,8 +1,9 @@
 import { state } from '@web-client/presenter/app.cerebral';
 import {
-  PAYMENT_DECLINED_MESSAGES,
+  DEFAULT_PAYMENT_DECLINED_MESSAGES,
   DEFAULT_PAYMENT_FAILED_MESSAGE,
 } from '@shared/business/entities/EntityConstants';
+import { ProcessPaymentResponse } from 'node_modules/@ustaxcourt/payment-portal/dist';
 
 export const setFilingFeeAlertsAction = ({ get, store }: ActionProps) => {
   const paymentStatus = get(state.processPaymentStatus);
@@ -17,12 +18,10 @@ export const setFilingFeeAlertsAction = ({ get, store }: ActionProps) => {
       });
       break;
     case 'failed': {
-      const paymentMethod = paymentStatus.transactions.at(-1)?.paymentMethod;
-      const reason =
-        (paymentMethod && PAYMENT_DECLINED_MESSAGES[paymentMethod]) ??
-        DEFAULT_PAYMENT_FAILED_MESSAGE;
+      const reason = getPaymentFailureReason(paymentStatus);
+      const reasonFormatted = appendPeriodIfNotThere(reason);
       store.set(state.alertError, {
-        message: `${reason}. Please try again.`,
+        message: `${reasonFormatted} Please try again.`,
         title: 'Filing fee payment failed',
         overwritable: true,
       });
@@ -46,4 +45,27 @@ export const setFilingFeeAlertsAction = ({ get, store }: ActionProps) => {
       });
       break;
   }
+};
+
+const getPaymentFailureReason = (paymentStatus: ProcessPaymentResponse) => {
+  if (paymentStatus.transactions.length === 0) {
+    return DEFAULT_PAYMENT_FAILED_MESSAGE;
+  }
+  const lastTransaction =
+    paymentStatus.transactions[paymentStatus.transactions.length - 1];
+  const { paymentMethod, returnDetail } = lastTransaction;
+  if (returnDetail) return returnDetail;
+
+  if (!paymentMethod) return DEFAULT_PAYMENT_FAILED_MESSAGE;
+
+  const { [paymentMethod]: failureMessage = DEFAULT_PAYMENT_FAILED_MESSAGE } =
+    DEFAULT_PAYMENT_DECLINED_MESSAGES;
+  return failureMessage;
+};
+
+const appendPeriodIfNotThere = (message: string) => {
+  if (!message.endsWith('.')) {
+    return message + '.';
+  }
+  return message;
 };

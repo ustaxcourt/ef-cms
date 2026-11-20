@@ -2,7 +2,7 @@ import { applicationContextForClient as applicationContext } from '@web-client/t
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { setFilingFeeAlertsAction } from '@web-client/presenter/actions/FilingFee/setFilingFeeAlertsAction';
-import { PAYMENT_DECLINED_MESSAGES } from '@shared/business/entities/EntityConstants';
+import { DEFAULT_PAYMENT_DECLINED_MESSAGES } from '@shared/business/entities/EntityConstants';
 
 describe('setFilingFeeAlertsAction', () => {
   let stateMock;
@@ -27,6 +27,22 @@ describe('setFilingFeeAlertsAction', () => {
         ],
       },
     };
+  });
+
+  it('should return undefined if payment status does not exist', async () => {
+    delete stateMock.processPaymentStatus;
+
+    const { state } = await runAction(setFilingFeeAlertsAction, {
+      modules: {
+        presenter,
+      },
+      props: {},
+      state: stateMock,
+    });
+
+    expect(state.alertSuccess).toBeUndefined();
+    expect(state.alertWarning).toBeUndefined();
+    expect(state.alertError).toBeUndefined();
   });
 
   it('should set the success alert when payment process is success', async () => {
@@ -86,6 +102,26 @@ describe('setFilingFeeAlertsAction', () => {
     });
   });
 
+  it('should set error alert to the last transactions returnDetail if it exists', async () => {
+    stateMock.processPaymentStatus.paymentStatus = 'failed';
+    stateMock.processPaymentStatus.transactions[0].returnDetail =
+      'Some return detail';
+
+    const { state } = await runAction(setFilingFeeAlertsAction, {
+      modules: {
+        presenter,
+      },
+      props: {},
+      state: stateMock,
+    });
+
+    expect(state.alertError).toEqual({
+      message: 'Some return detail. Please try again.',
+      title: 'Filing fee payment failed',
+      overwritable: true,
+    });
+  });
+
   it('should set the error alert as default text when payment process fails without a payment method', async () => {
     stateMock.processPaymentStatus.paymentStatus = 'failed';
     delete stateMock.processPaymentStatus.transactions[0].paymentMethod;
@@ -127,7 +163,7 @@ describe('setFilingFeeAlertsAction', () => {
   });
 
   it.each(
-    Object.entries(PAYMENT_DECLINED_MESSAGES).map(
+    Object.entries(DEFAULT_PAYMENT_DECLINED_MESSAGES).map(
       ([paymentMethod, expectedReason]) => [
         'failed',
         paymentMethod,
@@ -135,7 +171,7 @@ describe('setFilingFeeAlertsAction', () => {
       ],
     ),
   )(
-    'should set the error alert for paymentStatus %s and paymentMethod %s',
+    'should set the error alert for default paymentStatus %s and paymentMethod %s',
     async (paymentStatus, paymentMethod, expectedReason) => {
       stateMock.processPaymentStatus.paymentStatus = paymentStatus;
       stateMock.processPaymentStatus.transactions[0].paymentMethod =
@@ -156,6 +192,46 @@ describe('setFilingFeeAlertsAction', () => {
       });
     },
   );
+
+  it('should set reason in error alert to end in a period if it does not have one', async () => {
+    stateMock.processPaymentStatus.paymentStatus = 'failed';
+    stateMock.processPaymentStatus.transactions[0].returnDetail =
+      'Some return detail without period';
+
+    const { state } = await runAction(setFilingFeeAlertsAction, {
+      modules: {
+        presenter,
+      },
+      props: {},
+      state: stateMock,
+    });
+
+    expect(state.alertError).toEqual({
+      message: 'Some return detail without period. Please try again.',
+      title: 'Filing fee payment failed',
+      overwritable: true,
+    });
+  });
+
+  it('should not modify reason in error alert if already ends with a period', async () => {
+    stateMock.processPaymentStatus.paymentStatus = 'failed';
+    stateMock.processPaymentStatus.transactions[0].returnDetail =
+      'Some return detail with period.';
+
+    const { state } = await runAction(setFilingFeeAlertsAction, {
+      modules: {
+        presenter,
+      },
+      props: {},
+      state: stateMock,
+    });
+
+    expect(state.alertError).toEqual({
+      message: 'Some return detail with period. Please try again.',
+      title: 'Filing fee payment failed',
+      overwritable: true,
+    });
+  });
 
   it('should set the error alert for an unknown status if that status is returned', async () => {
     const { state } = await runAction(setFilingFeeAlertsAction, {
