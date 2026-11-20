@@ -25,7 +25,7 @@ export function SortableHeader({
   }) => void;
   screenReaderTitle?: string;
   sortField: string;
-  sortType?: 'string' | 'date';
+  sortType?: 'string' | 'date' | 'number';
   tableSort: {
     sortField: string;
     sortOrder: 'asc' | 'desc';

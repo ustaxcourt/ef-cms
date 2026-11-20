@@ -315,7 +315,9 @@ export const publicCaseDetailHelper = (
 
   const formattedDocketEntriesOnDocketRecord = docketEntries?.map(entry => {
     return formatDocketEntryOnDocketRecord(applicationContext, {
-      entry,
+      // the formatter changes a lodged entry's eventCode to MISCL; format a
+      // copy so a response to a lodged motion still finds a motion target
+      entry: { ...entry },
       isTerminalUser,
       rawCase,
       visibilityPolicyDate,

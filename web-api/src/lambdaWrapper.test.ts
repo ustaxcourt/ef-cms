@@ -8,7 +8,11 @@ import { applicationContext } from '@shared/business/test/createTestApplicationC
 jest.mock('@codegenie/serverless-express');
 jest.mock('@web-api/middleware/apiGatewayHelper');
 import { getCurrentInvoke } from '@codegenie/serverless-express';
-import { getUserFromAuthHeader } from '@web-api/middleware/apiGatewayHelper';
+import {
+  getUserFromAuthHeader,
+  sendError,
+} from '@web-api/middleware/apiGatewayHelper';
+import { UnauthorizedError } from '@web-api/errors/errors';
 
 describe('lambdaWrapper', () => {
   let req, res;
@@ -112,6 +116,36 @@ describe('lambdaWrapper', () => {
     })(req, res);
     expect(JSON.parse).toHaveBeenCalled();
     expect(res.send).toHaveBeenCalled();
+  });
+
+  it('sends unauthorized errors raised while parsing the authorization header', async () => {
+    const lambda = jest.fn();
+    const errorMessage = 'Error: Maximum of 1 authorization token exceeded';
+    const unauthorizedError = new UnauthorizedError(errorMessage);
+    (getUserFromAuthHeader as jest.Mock).mockImplementationOnce(() => {
+      throw unauthorizedError;
+    });
+    (sendError as jest.Mock).mockReturnValueOnce({
+      body: JSON.stringify(errorMessage),
+      headers: { 'Content-Type': 'application/json' },
+      statusCode: 403,
+    });
+
+    await lambdaWrapper(lambda)(req, res);
+
+    expect(sendError).toHaveBeenCalledWith(unauthorizedError);
+    expect(lambda).not.toHaveBeenCalled();
+    expect(res.status).toHaveBeenCalledWith(403);
+    expect(res.send).toHaveBeenCalledWith(errorMessage);
+  });
+
+  it('rethrows non-authorization errors raised while parsing the authorization header', async () => {
+    const error = new TypeError('Unexpected authorization header');
+    (getUserFromAuthHeader as jest.Mock).mockImplementationOnce(() => {
+      throw error;
+    });
+
+    await expect(lambdaWrapper(jest.fn())(req, res)).rejects.toBe(error);
   });
 
   it('calls res.send with when there is no res.body and when header is application/json', async () => {
