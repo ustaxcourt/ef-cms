@@ -5,7 +5,7 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
-
+Button;
 const getDocumentOption = doc => {
   const documentTitle = doc.title.substr(0, 100);
 
@@ -198,8 +198,9 @@ function MessageAttachmentDocument({
   return (
     <Button
       link
-      icon="file-pdf"
+      style={{ 'text-align': 'left', 'line-height': '28px' }}
       iconColor="white"
+      shouldWrapText={true}
       onClick={() => {
         const { docketNumber } = messageModalHelper.documents.find(
           dox => dox.index === doc.index,
