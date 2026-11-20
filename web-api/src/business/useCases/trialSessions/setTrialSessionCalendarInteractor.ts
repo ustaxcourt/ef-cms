@@ -10,7 +10,12 @@ import {
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { HIGH_PRIORITY_SUFFIXES } from '@shared/business/entities/EntityConstants';
+import {
+  ALLOWLIST_FEATURE_FLAGS,
+  HIGH_PRIORITY_SUFFIXES,
+  REPORTING_CALENDAR_DEADLINE_DESCRIPTION,
+} from '@shared/business/entities/EntityConstants';
+import { CaseDeadline } from '@shared/business/entities/CaseDeadline';
 import {
   TCaseOrder,
   TrialSession,
@@ -28,6 +33,29 @@ import { createOrUpdateTrialSessionCases } from '@web-api/persistence/postgres/t
 import { deleteCasesFromTrialSession } from '@web-api/persistence/postgres/trialSessions/deleteCasesFromTrialSession';
 import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 import { updateCaseAutomaticBlock } from '@web-api/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock';
+import { getFeatureFlagValue } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValue';
+import { upsertCaseDeadlines } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
+
+const assertReportingCalendarCanBeSet = async (
+  trialSessionEntity: TrialSession,
+): Promise<void> => {
+  const isReportingCalendarsEnabled = await getFeatureFlagValue<boolean>(
+    ALLOWLIST_FEATURE_FLAGS.REPORTING_CALENDARS.key,
+  );
+
+  if (!isReportingCalendarsEnabled) {
+    throw new InvalidRequest('Setting a Reporting calendar is not enabled.');
+  }
+
+  // The documents served when a Reporting calendar is set are built from these
+  // fields, so they are enforced here and not only in the client.
+  const emptyFields = trialSessionEntity.getEmptyFields();
+  if (emptyFields.length) {
+    throw new InvalidRequest(
+      `The following are required to set a Reporting calendar: ${emptyFields.join(', ')}.`,
+    );
+  }
+};
 
 export const setTrialSessionCalendarInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -58,7 +86,7 @@ export const setTrialSessionCalendarInteractor = async (
 
     const trialSessionEntity = new TrialSession(trialSession);
     if (trialSessionEntity.isReporting()) {
-      throw new InvalidRequest('Reporting sessions cannot be calendared yet.');
+      await assertReportingCalendarCanBeSet(trialSessionEntity);
     }
     trialSessionEntity.setAsCalendared();
     trialSessionEntity.validate();
@@ -190,6 +218,22 @@ export const setTrialSessionCalendarInteractor = async (
       ...manuallyAddedQcIncompleteCaseEntities,
     ];
 
+    // Each case on a Reporting calendar gets a deadline for its Pretrial Memorandum on the session due date
+    const pretrialMemorandumDeadlines = trialSessionEntity.isReporting()
+      ? caseEntitiesToCalendar.map(calendaredCase =>
+          new CaseDeadline({
+            associatedJudge: calendaredCase.associatedJudge,
+            associatedJudgeId: calendaredCase.associatedJudgeId,
+            deadlineDate: trialSessionEntity.startDate,
+            description: REPORTING_CALENDAR_DEADLINE_DESCRIPTION,
+            docketNumber: calendaredCase.docketNumber,
+            leadDocketNumber: calendaredCase.leadDocketNumber,
+          })
+            .validate()
+            .toRawObject(),
+        )
+      : [];
+
     await withTransaction(async () => {
       const updatesToPersist: Promise<void>[] = [
         upsertCases([...caseEntitiesToCalendar, ...caseEntitiesToNotCalendar]),
@@ -215,6 +259,14 @@ export const setTrialSessionCalendarInteractor = async (
             casesToCalendar: caseEntitiesToCalendar,
             trialSessionEntity,
           }),
+        );
+      }
+
+      if (!isEmpty(pretrialMemorandumDeadlines)) {
+        updatesToPersist.push(
+          (async (): Promise<void> => {
+            await upsertCaseDeadlines(pretrialMemorandumDeadlines);
+          })(),
         );
       }
 

@@ -1,6 +1,7 @@
 import {
   COURT_ISSUED_EVENT_CODES,
   SERVICE_INDICATOR_TYPES,
+  TRIAL_SESSION_PROCEEDING_TYPES,
 } from '@shared/business/entities/EntityConstants';
 import { Case } from '@shared/business/entities/cases/Case';
 import {
@@ -61,6 +62,14 @@ export const serveThirtyDayNotice = async (
 
   if (!trialSession) {
     throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
+  }
+
+  if (
+    trialSession.proceedingType === TRIAL_SESSION_PROCEEDING_TYPES.reporting
+  ) {
+    throw new InvalidRequest(
+      '30 day notices of trial are not issued for Reporting sessions.',
+    );
   }
 
   if (!trialSession.caseOrder?.length) {

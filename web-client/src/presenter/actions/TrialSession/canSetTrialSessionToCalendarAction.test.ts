@@ -31,28 +31,86 @@ describe('canSetTrialSessionToCalendarAction', () => {
     };
   });
 
-  it('should explain that Reporting sessions cannot be calendared yet', async () => {
-    applicationContext
-      .getUseCases()
-      .canSetTrialSessionAsCalendaredInteractor.mockReturnValue({
-        canSetAsCalendared: false,
-        emptyFields: [],
-      });
+  describe('Reporting trial sessions', () => {
+    const REPORTING_TRIAL_SESSION = {
+      ...VALID_TRIAL_SESSION,
+      proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.reporting,
+    };
 
-    await runAction(canSetTrialSessionToCalendarAction, {
-      modules: { presenter },
-      state: {
-        trialSession: {
-          ...VALID_TRIAL_SESSION,
-          proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.reporting,
-        },
-      },
+    beforeEach(() => {
+      pathNoStub.mockClear();
+      pathYesStub.mockClear();
     });
 
-    expect(pathNoStub).toHaveBeenCalledWith({
-      alertWarning: {
-        message: 'Reporting sessions cannot be calendared yet.',
-      },
+    it('should return the no path with a warning when the Reporting calendars feature flag is off, even if the session could otherwise be calendared', async () => {
+      applicationContext
+        .getUseCases()
+        .canSetTrialSessionAsCalendaredInteractor.mockReturnValue({
+          canSetAsCalendared: true,
+          emptyFields: [],
+          isRemote: false,
+        });
+
+      await runAction(canSetTrialSessionToCalendarAction, {
+        modules: { presenter },
+        state: {
+          featureFlags: { 'reporting-calendars': false },
+          trialSession: REPORTING_TRIAL_SESSION,
+        },
+      });
+
+      expect(pathYesStub).not.toHaveBeenCalled();
+      expect(pathNoStub).toHaveBeenCalledWith({
+        alertWarning: {
+          message: 'Setting a Reporting calendar is not enabled.',
+        },
+      });
+    });
+
+    it('should return the yes path when the Reporting calendars feature flag is on and the session can be calendared', async () => {
+      applicationContext
+        .getUseCases()
+        .canSetTrialSessionAsCalendaredInteractor.mockReturnValue({
+          canSetAsCalendared: true,
+          emptyFields: [],
+          isRemote: false,
+        });
+
+      await runAction(canSetTrialSessionToCalendarAction, {
+        modules: { presenter },
+        state: {
+          featureFlags: { 'reporting-calendars': true },
+          trialSession: REPORTING_TRIAL_SESSION,
+        },
+      });
+
+      expect(pathNoStub).not.toHaveBeenCalled();
+      expect(pathYesStub).toHaveBeenCalledTimes(1);
+    });
+
+    it('should return the no path asking for a judge when the Reporting calendars feature flag is on and the session does not have a judge', async () => {
+      applicationContext
+        .getUseCases()
+        .canSetTrialSessionAsCalendaredInteractor.mockReturnValue({
+          canSetAsCalendared: false,
+          emptyFields: ['judge'],
+          isRemote: false,
+        });
+
+      await runAction(canSetTrialSessionToCalendarAction, {
+        modules: { presenter },
+        state: {
+          featureFlags: { 'reporting-calendars': true },
+          trialSession: REPORTING_TRIAL_SESSION,
+        },
+      });
+
+      expect(pathYesStub).not.toHaveBeenCalled();
+      expect(pathNoStub).toHaveBeenCalledWith({
+        alertWarning: {
+          message: 'Provide a judge to set this trial session.',
+        },
+      });
     });
   });
 

@@ -472,4 +472,58 @@ describe('trialCalendar', () => {
       }),
     testDescription: 'generates a Trial Calendar document',
   });
+
+  generateAndVerifyPdfDiff({
+    fileName: 'Trial_Calendar_Reporting.pdf',
+    pageNumber: 1,
+    pdfGenerateFunction: () =>
+      trialCalendar({
+        applicationContext,
+        data: {
+          cases: [
+            {
+              caseTitle: 'Paul Simon',
+              docketNumber: '123-45S',
+              docketNumberWithSuffix: '123-45S',
+              inConsolidatedGroup: false,
+              isLeadCase: false,
+              petitionerCounsel: ['Ben Matlock', 'Atticus Finch'],
+              respondentCounsel: ['Sonny Crockett', 'Ricardo Tubbs'],
+              shouldIndent: undefined,
+            },
+            {
+              calendarNotes: 'Manually added to the Reporting calendar.',
+              caseTitle: 'Aretha Franklin',
+              docketNumber: '110-23',
+              docketNumberWithSuffix: '110-23',
+              inConsolidatedGroup: false,
+              isLeadCase: false,
+              petitionerCounsel: undefined,
+              respondentCounsel: undefined,
+              shouldIndent: undefined,
+            },
+          ],
+          sessionDetail: {
+            courtReporter: 'Not assigned',
+            formattedCityStateZip: '',
+            irsCalendarAdministrator: '',
+            irsCalendarAdministratorInfo: {
+              email: 'alexandria.ocasio.cortez@this_email_should_wrap_too.gov',
+              name: 'Alexandria Ocasio-Cortez',
+              phone: '(098) 765-4321',
+            },
+            judge: 'Joseph Dredd',
+            notes: 'Pretrial memoranda are due on the date shown above.',
+            proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.reporting,
+            sessionType: SESSION_TYPES.regular,
+            startDate: 'May 18, 2026',
+            startTime: '',
+            trialClerk: 'Not assigned',
+            trialLocation: 'Mobile, Alabama',
+          },
+        },
+      }),
+    testDescription:
+      'generates a Trial Calendar document for a Reporting session with an empty Reporting card and only the Judge and IRS Calendar Admin assignments',
+  });
 });

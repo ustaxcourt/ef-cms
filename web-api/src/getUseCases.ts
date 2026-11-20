@@ -56,6 +56,7 @@ import { generateNoticeOfChangeOfTrialJudgeInteractor } from './business/useCase
 import { generateNoticeOfChangeOfTrialLocationInteractor } from '@web-api/business/useCases/trialSessions/generateNoticeOfChangeOfTrialLocationInteractor';
 import { generateNoticeOfChangeOfTrialStartDateInteractor } from '@web-api/business/useCases/trialSessions/generateNoticeOfChangeOfTrialStartDateInteractor';
 import { generateNoticeOfChangeToRemoteProceedingInteractor } from './business/useCases/trialSessions/generateNoticeOfChangeToRemoteProceedingInteractor';
+import { generateNoticeOfAssignmentOfJudgeInteractor } from './business/useCases/trialSessions/generateNoticeOfAssignmentOfJudgeInteractor';
 import { generateNoticeOfTrialIssuedInteractor } from './business/useCases/trialSessions/generateNoticeOfTrialIssuedInteractor';
 import { generateNoticesForCaseTrialSessionCalendarInteractor } from './business/useCases/trialSessions/generateNoticesForCaseTrialSessionCalendarInteractor';
 import { generatePDFFromJPGDataInteractor } from '../../shared/src/business/useCases/generatePDFFromJPGDataInteractor';
@@ -68,6 +69,7 @@ import { generatePrintablePendingReportInteractor } from './business/useCases/pe
 import { generatePrintableTrialSessionCopyReportInteractor } from './business/useCases/trialSessions/generatePrintableTrialSessionCopyReportInteractor';
 import { generateStandingPretrialOrderForSmallCaseInteractor } from './business/useCases/trialSessions/generateStandingPretrialOrderForSmallCaseInteractor';
 import { generateStandingPretrialOrderInteractor } from './business/useCases/trialSessions/generateStandingPretrialOrderInteractor';
+import { generateStandingSchedulingOrderInteractor } from './business/useCases/trialSessions/generateStandingSchedulingOrderInteractor';
 import { generateTrialCalendarPdfInteractor } from './business/useCases/trialSessions/generateTrialCalendarPdfInteractor';
 import { generateTrialSessionPaperServicePdfInteractor } from './business/useCases/trialSessions/generateTrialSessionPaperServicePdfInteractor';
 import { getAllFeatureFlagsInteractor } from '@web-api/business/useCases/featureFlag/getAllFeatureFlagsInteractor';
@@ -254,6 +256,7 @@ const useCases = {
   generateNoticeOfChangeOfTrialLocationInteractor,
   generateNoticeOfChangeOfTrialStartDateInteractor,
   generateNoticeOfChangeToRemoteProceedingInteractor,
+  generateNoticeOfAssignmentOfJudgeInteractor,
   generateNoticeOfTrialIssuedInteractor,
   generateNoticesForCaseTrialSessionCalendarInteractor,
   generatePDFFromJPGDataInteractor,
@@ -266,6 +269,7 @@ const useCases = {
   generatePrintableTrialSessionCopyReportInteractor,
   generateStandingPretrialOrderForSmallCaseInteractor,
   generateStandingPretrialOrderInteractor,
+  generateStandingSchedulingOrderInteractor,
   generateTrialCalendarPdfInteractor,
   generateTrialSessionPaperServicePdfInteractor,
   getAllFeatureFlagsInteractor,

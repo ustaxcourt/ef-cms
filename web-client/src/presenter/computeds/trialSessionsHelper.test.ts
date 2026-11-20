@@ -760,6 +760,32 @@ describe('trialSessionsHelper', () => {
         );
         expect(trialSessionsOnly[0].showAlertForNOTTReminder).toEqual(true);
       });
+
+      it('should NOT show an alertMessage for NOTT reminders for a calendared Reporting session when the start day is within the reminder range', () => {
+        trialSession1.dismissedAlertForNott = false;
+        trialSession1.isCalendared = true;
+        trialSession1.proceedingType = TRIAL_SESSION_PROCEEDING_TYPES.reporting;
+        trialSession1.startDate = calculateISODate({
+          howMuch: 29,
+          units: 'days',
+        });
+        trialSessionsPageState.trialSessions = [trialSession1];
+        trialSessionsPageState.filters.currentTab = 'calendared';
+
+        const result = runCompute(trialSessionsHelper, {
+          state: {
+            judges: [judgeUser],
+            permissions: getUserPermissions(docketClerk1User),
+            trialSessionsPage: trialSessionsPageState,
+          },
+        });
+
+        const trialSessionsOnly =
+          result.trialSessionRows.filter(isTrialSessionRow);
+        expect(trialSessionsOnly).toHaveLength(1);
+        expect(trialSessionsOnly[0].alertMessageForNOTT).toEqual('');
+        expect(trialSessionsOnly[0].showAlertForNOTTReminder).toEqual(false);
+      });
     });
 
     describe('sorting', () => {
