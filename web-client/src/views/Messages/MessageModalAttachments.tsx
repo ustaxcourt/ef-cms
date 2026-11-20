@@ -5,7 +5,6 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
-Button;
 const getDocumentOption = doc => {
   const documentTitle = doc.title.substr(0, 100);
 
@@ -71,7 +70,7 @@ export const MessageModalAttachments = connect(
               return (
                 <div className="margin-top-1" key={doc.documentId}>
                   <div className="grid-row">
-                    <div className="grid-col-9">
+                    <div className="grid-col-10">
                       <MessageAttachmentDocument
                         doc={doc}
                         messageModalHelper={messageModalHelper}
@@ -88,7 +87,7 @@ export const MessageModalAttachments = connect(
               return (
                 <div className="margin-top-1" key={doc.documentId}>
                   <div className="grid-row message-modal-add-document-form">
-                    <div className="grid-col-9">
+                    <div className="grid-col-10">
                       <MessageAttachmentDocument
                         doc={doc}
                         messageModalHelper={messageModalHelper}
@@ -97,7 +96,6 @@ export const MessageModalAttachments = connect(
                         }
                       />
                     </div>
-                    <div className="grid-col-1"></div>
                     <div className="grid-col-2">
                       <Button
                         iconRight
@@ -198,7 +196,12 @@ function MessageAttachmentDocument({
   return (
     <Button
       link
-      style={{ 'text-align': 'left', 'line-height': '28px' }}
+      style={{
+        'text-align': 'left',
+        'line-height': '28px',
+        'padding-top': '0px',
+        'padding-bottom': '0px',
+      }}
       iconColor="white"
       shouldWrapText={true}
       onClick={() => {
