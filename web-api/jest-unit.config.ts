@@ -15,7 +15,6 @@ const transformIgnoreModules = [
   'he',
   'htmlparser2',
   'kysely',
-  'p-queue',
   'p-timeout',
   'puppeteer',
   'puppeteer-core',

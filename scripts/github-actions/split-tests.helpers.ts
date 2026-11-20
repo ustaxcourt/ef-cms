@@ -1,5 +1,5 @@
 import fs from 'fs';
-import glob from 'glob';
+import { globSync } from 'glob';
 import documentGenerators from '../../shared/src/business/utilities/documentGenerators/jest_document_generator.config';
 import hostedEnvironment from '../../web-api/hostedEnvironmentTests/jest-hosted-environment';
 import infrastructure from '../../aws/jest-infrastructure.config';
@@ -266,12 +266,10 @@ export const splitTests = (publicTests: boolean): string => {
   const files: SplittableFile[] = fs
     .readdirSync(specDir, 'utf8')
     .filter((fileName: string): boolean => fileName.endsWith('test.ts'))
-    .map(
-      (fileName: string): SplittableFile => ({
-        output: fileName,
-        path: `${specDir}${fileName}`,
-      }),
-    );
+    .map((fileName: string): SplittableFile => ({
+      output: fileName,
+      path: `${specDir}${fileName}`,
+    }));
   const output: string = getOutputsForCurrentCiNode({
     files,
   }).join(' ');
@@ -298,12 +296,10 @@ export const splitTestsCypress = (testSuite: string): string => {
           file.endsWith('cy.ts') &&
           (!cypressSuite.excludePublicTests || !file.includes('public/')),
       )
-      .map(
-        (file: string): SplittableFile => ({
-          output: `${specDir}/${file}`,
-          path: `${specDir}/${file}`,
-        }),
-      );
+      .map((file: string): SplittableFile => ({
+        output: `${specDir}/${file}`,
+        path: `${specDir}/${file}`,
+      }));
     for (const file of specFiles) {
       files.push(file);
     }
@@ -324,7 +320,7 @@ export const splitTestsGlob = (testSuite: string): string => {
   const testFiles: string[] = [];
   const testGlobs = getGlobsFromTestMatch(jestSuites[testSuite]);
   for (const testGlob of testGlobs) {
-    const files: string[] = glob.sync(testGlob);
+    const files: string[] = globSync(testGlob);
     for (const file of files) {
       if (!testFiles.includes(file)) {
         testFiles.push(file);
@@ -333,12 +329,10 @@ export const splitTestsGlob = (testSuite: string): string => {
   }
 
   const output: string = getOutputsForCurrentCiNode({
-    files: testFiles.map(
-      (filePath: string): SplittableFile => ({
-        output: filePath,
-        path: filePath,
-      }),
-    ),
+    files: testFiles.map((filePath: string): SplittableFile => ({
+      output: filePath,
+      path: filePath,
+    })),
   }).join(' ');
 
   console.log(output);

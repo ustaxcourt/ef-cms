@@ -1,12 +1,15 @@
 import { attachFile } from '../../../../helpers/file/upload-file';
 import { externalUserCreatesElectronicCase } from '../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
-import { loginAsDocketClerk1, loginAsPetitioner } from '../../../../helpers/authentication/login-as-helpers';
+import {
+  loginAsDocketClerk1,
+  loginAsPetitioner,
+} from '../../../../helpers/authentication/login-as-helpers';
 import { goToCase } from '../../../../helpers/caseDetail/go-to-case';
 import { MAX_FILE_SIZE_MB } from '@shared/business/entities/EntityConstants';
 
 describe('FileInput', () => {
   const encoding = 'binary';
-  const VALID_FILE = '../../helpers/file/sample.pdf';
+  const VALID_FILE = 'sample.pdf';
 
   beforeEach(() => {
     loginAsPetitioner();
@@ -31,7 +34,8 @@ describe('FileInput', () => {
       encoding,
       filePath: VALID_FILE,
       selector: '[data-testid="primary-document-file"]',
-      selectorToAwaitOnSuccess: '[data-testid="upload-file-success-primary-document-file"]',
+      selectorToAwaitOnSuccess:
+        '[data-testid="upload-file-success-primary-document-file"]',
     });
   });
 
@@ -40,7 +44,7 @@ describe('FileInput', () => {
 
     attachFile({
       encoding,
-      filePath: '../../helpers/file/non-pdf.txt',
+      filePath: 'non-pdf.txt',
       selector: '[data-testid="primary-document-file"]',
     });
     cy.wait('@logErrorRequest');
@@ -82,7 +86,7 @@ describe('FileInput', () => {
 
     attachFile({
       encoding,
-      filePath: '../../helpers/file/corrupt-pdf.pdf',
+      filePath: 'corrupt-pdf.pdf',
       selector: '[data-testid="primary-document-file"]',
     });
     cy.wait('@logErrorRequest');
@@ -98,7 +102,8 @@ describe('FileInput', () => {
       encoding,
       filePath: VALID_FILE,
       selector: '[data-testid="primary-document-file"]',
-      selectorToAwaitOnSuccess: '[data-testid="upload-file-success-primary-document-file"]',
+      selectorToAwaitOnSuccess:
+        '[data-testid="upload-file-success-primary-document-file"]',
     });
 
     cy.get('[data-testid="change-file-button-primary-document-file"]').click();

@@ -10,7 +10,7 @@ import {
 } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('File a petition - Step 3 IRS Notices', () => {
-  const VALID_FILE = '../../helpers/file/sample.pdf';
+  const VALID_FILE = 'sample.pdf';
 
   describe('Petitioner', () => {
     beforeEach(() => {

@@ -14,7 +14,7 @@ import { selectTypeaheadInput } from '../../../../helpers/components/typeAhead/s
 
 // incremental-catalog.pdf holds its /Catalog at two generations; upload must reject it.
 describe('uploading a PDF whose catalog is superseded by an incremental revision', () => {
-  const FIXTURE = '../../helpers/file/incremental-catalog.pdf';
+  const FIXTURE = 'incremental-catalog.pdf';
   const REJECTION_MESSAGE =
     'The file is corrupted or in an unsupported PDF format. Ensure that the file is not corrupted and/or is in a supported PDF format and try again.';
   const encoding = 'binary'; // This document's whole point is its byte layout
@@ -58,7 +58,7 @@ describe('uploading a PDF whose catalog is superseded by an incremental revision
     it('accepts an equivalent document that carries no duplicate', () => {
       attachFile({
         encoding,
-        filePath: '../../helpers/file/sample.pdf',
+        filePath: 'sample.pdf',
         selector: '[data-testid="primary-document-file"]',
       });
 
@@ -109,7 +109,7 @@ describe('uploading a PDF whose catalog is superseded by an incremental revision
     it('still accepts an edit-restricted PDF, as this input always has', () => {
       attachFile({
         encoding,
-        filePath: '../../helpers/file/readonly-pdf.pdf',
+        filePath: 'readonly-pdf.pdf',
         selector: 'input#practitioner-document-file',
       });
 

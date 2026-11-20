@@ -29,7 +29,7 @@ describe('Document title updates correctly', () => {
       selectTypeaheadInput('complete-doc-document-type-search', 'Exhibit(s)');
       cy.get('[data-testid="submit-document"]').click();
       attachFile({
-        filePath: '../../helpers/file/sample.pdf',
+        filePath: 'sample.pdf',
         selector: '[data-testid="primary-document"]',
         selectorToAwaitOnSuccess:
           '[data-testid="upload-file-success-primary-document"]',
@@ -85,7 +85,7 @@ describe('Document title updates correctly', () => {
       cy.get('[data-testid="ordinal-field-select-search"]').select('15');
       cy.get('[data-testid="submit-document"]').click();
       attachFile({
-        filePath: '../../helpers/file/sample.pdf',
+        filePath: 'sample.pdf',
         selector: '[data-testid="primary-document"]',
         selectorToAwaitOnSuccess:
           '[data-testid="upload-file-success-primary-document"]',

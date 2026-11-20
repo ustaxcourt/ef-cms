@@ -1,3 +1,68 @@
+<details><summary>10241 - Motion visibility policy date</summary>
+
+## Manual Deployment Steps
+
+### After Deployment
+
+Migration `2026-10-16T18_36_55Z-set-motion-visibility-flag` inserts the `motion-visibility-policy-change-date` feature flag with a placeholder of `2027-01-01`. The migration overwrites that flag when it runs, so set the Court-approved date only after the migration has completed.
+
+Practitioner e-filed motions, and a brief in support (`BRF`) or memorandum in support (`MISP`) filed in that same motion filing, become visible to the public when filed on or after this date. Replace the placeholder with the date from the Court's public notice:
+
+```bash
+. ./scripts/env/set-env.zsh {YOUR_ENV}
+./scripts/postgres/featureFlags/setup-motion-visibility-policy-change-date.ts YYYY-MM-DD
+```
+
+Use `yyyy-MM-dd`. Leave `2027-01-01` in place until the Court sets the date.
+
+## Local
+
+A fresh local seed sets this flag to `2026-10-15`. An existing local database receives `2027-01-01` when the migration runs. To use another date locally, source the local environment and run the same script.
+A second DOJ practitioner was added to local seed data:
+
+- email: `dojpractitioner2@example.com`
+- bar number: `DT2222`
+
+</details>
+<details><summary>Dependency Updates - Week of 2026-11-09</summary>
+
+#### Deploy Docker container `4.3.105` from dev
+
+```bash
+npm run deploy:ci-image:from dev
+```
+
+</details>
+<details><summary>Dependency Updates - Week of 2026-11-03</summary>
+
+## Local
+
+#### Upgrade Terraform to `1.17.1`
+
+Use either tfswitch or tfenv:
+
+```bash
+tfswitch 1.17.1
+```
+
+```bash
+tfenv install 1.17.1
+tfenv use 1.17.1
+```
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Deploy Docker container `4.3.104`
+
+This script will prompt for an environment to pull the image from; choose `exp2`.
+
+```bash
+npm run ecr:check-version
+```
+
+</details>
 <details><summary>Dependency Updates - Week of 2026-10-26</summary>
 
 ## Local

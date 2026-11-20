@@ -38,4 +38,8 @@ export const featureFlags: FeatureFlagTable[] = [
     name: 'enable-payment-portal-integration',
     value: { current: true },
   },
+  {
+    name: 'motion-visibility-policy-change-date',
+    value: { current: '2026-10-15' },
+  },
 ];

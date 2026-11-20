@@ -92,7 +92,7 @@ export const fillInCreateCaseFromPaperForm = (testData?: {
   // petition
   cy.get('[data-testid="upload-pdf-button"]').click();
   attachFile({
-    filePath: '../../helpers/file/sample.pdf',
+    filePath: 'sample.pdf',
     selector: 'input#petitionFile-file',
     selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
   });
@@ -102,7 +102,7 @@ export const fillInCreateCaseFromPaperForm = (testData?: {
   cy.get('[data-testid="tabButton-stinFile"]').click();
   cy.get('[data-testid="upload-pdf-button"]').click();
   attachFile({
-    filePath: '../../helpers/file/sample.pdf',
+    filePath: 'sample.pdf',
     selector: 'input#stinFile-file',
     selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
   });
@@ -112,7 +112,7 @@ export const fillInCreateCaseFromPaperForm = (testData?: {
   cy.get('[data-testid="tabButton-requestForPlaceOfTrialFile"]').click();
   cy.get('[data-testid="upload-pdf-button"]').click();
   attachFile({
-    filePath: '../../helpers/file/sample.pdf',
+    filePath: 'sample.pdf',
     selector: 'input#requestForPlaceOfTrialFile-file',
     selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
   });
@@ -125,7 +125,7 @@ export const fillInCreateCaseFromPaperForm = (testData?: {
   cy.get('[data-testid="tabButton-attachmentToPetitionFile"]').click();
   cy.get('[data-testid="upload-pdf-button"]').click();
   attachFile({
-    filePath: '../../helpers/file/sample.pdf',
+    filePath: 'sample.pdf',
     selector: 'input#attachmentToPetitionFile-file',
     selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
   });
