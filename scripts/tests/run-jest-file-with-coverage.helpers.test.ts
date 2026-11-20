@@ -175,6 +175,82 @@ describe('parseFileCoverageArgs', () => {
     });
   });
 
+  it('does not treat Jest option values as test file paths', () => {
+    const testNamePattern = 'another.test.ts';
+    const testMatchPatterns = ['**/*.test.ts', '**/*.spec.ts'];
+
+    expect(
+      parseFileCoverageArgs({
+        args: [
+          testFilePath,
+          '--testMatch',
+          ...testMatchPatterns,
+          '--testNamePattern',
+          testNamePattern,
+        ],
+        cwd: process.cwd(),
+      }),
+    ).toEqual({
+      coverageSourcePath: undefined,
+      jestArgs: [
+        '--testMatch',
+        ...testMatchPatterns,
+        '--testNamePattern',
+        testNamePattern,
+      ],
+      testFilePath,
+    });
+
+    expect(
+      parseFileCoverageArgs({
+        args: [testFilePath, '-t', testNamePattern],
+        cwd: process.cwd(),
+      }),
+    ).toEqual({
+      coverageSourcePath: undefined,
+      jestArgs: ['-t', testNamePattern],
+      testFilePath,
+    });
+
+    expect(
+      parseFileCoverageArgs({
+        args: ['--testNamePattern', testFilePath, testFilePath],
+        cwd: process.cwd(),
+      }),
+    ).toEqual({
+      coverageSourcePath: undefined,
+      jestArgs: ['--testNamePattern', testFilePath],
+      testFilePath,
+    });
+
+    expect(
+      parseFileCoverageArgs({
+        args: [
+          testFilePath,
+          '--test-name-pattern',
+          testNamePattern,
+          'coverage',
+        ],
+        cwd: process.cwd(),
+      }),
+    ).toEqual({
+      coverageSourcePath: undefined,
+      jestArgs: ['--test-name-pattern', testNamePattern, 'coverage'],
+      testFilePath,
+    });
+
+    expect(
+      parseFileCoverageArgs({
+        args: [testFilePath, '--unknown-option'],
+        cwd: process.cwd(),
+      }),
+    ).toEqual({
+      coverageSourcePath: undefined,
+      jestArgs: ['--unknown-option'],
+      testFilePath,
+    });
+  });
+
   it('rejects invalid test file and coverage source arguments', () => {
     expect(() =>
       parseFileCoverageArgs({ args: [], cwd: process.cwd() }),

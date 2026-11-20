@@ -1,3 +1,4 @@
+import { yargsOptions as jestCliOptions } from 'jest-cli';
 import { spawnSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
@@ -58,6 +59,72 @@ const FOCUSED_RUN_OPTIONS = new Set([
   '--selectProjects',
 ]);
 
+type JestCliOption = (typeof jestCliOptions)[string];
+
+type TestFileArgument = {
+  index: number;
+  path: string;
+};
+
+const jestOptionNamesByAlias = new Map<string, string>();
+for (const [optionName, option] of Object.entries(jestCliOptions)) {
+  for (const alias of [option.alias].flat()) {
+    if (alias) {
+      jestOptionNamesByAlias.set(alias, optionName);
+    }
+  }
+}
+
+const getJestOptionConfig = (argument: string): JestCliOption | undefined => {
+  const optionToken = argument.split('=')[0];
+  const optionName = optionToken.startsWith('--')
+    ? optionToken
+        .slice(2)
+        .replace(/-([a-z])/g, (_match: string, letter: string): string =>
+          letter.toUpperCase(),
+        )
+    : optionToken.slice(1);
+  const canonicalOptionName =
+    optionName in jestCliOptions
+      ? optionName
+      : jestOptionNamesByAlias.get(optionName);
+
+  return canonicalOptionName ? jestCliOptions[canonicalOptionName] : undefined;
+};
+
+const getPositionalTestFileArguments = (args: string[]): TestFileArgument[] => {
+  const testFileArguments: TestFileArgument[] = [];
+
+  for (let index = 0; index < args.length; index += 1) {
+    const argument = args[index];
+    if (argument === '--coverage-source') {
+      index += 1;
+      continue;
+    }
+    if (argument.startsWith('--coverage-source=')) {
+      continue;
+    }
+    if (!argument.startsWith('-')) {
+      if (TEST_FILE_PATTERN.test(argument)) {
+        testFileArguments.push({ index, path: argument });
+      }
+      continue;
+    }
+
+    const optionConfig = getJestOptionConfig(argument);
+    if (optionConfig?.requiresArg && !argument.includes('=')) {
+      index += 1;
+    }
+    if (optionConfig?.type === 'array') {
+      while (index + 1 < args.length && !args[index + 1].startsWith('-')) {
+        index += 1;
+      }
+    }
+  }
+
+  return testFileArguments;
+};
+
 export const runProcess: ProcessRunner = (
   command: string,
   args: string[],
@@ -111,16 +178,15 @@ export const parseFileCoverageArgs = ({
   args: string[];
   cwd: string;
 }): ParsedFileCoverageArgs => {
-  const testFileArgs = args.filter((arg: string): boolean =>
-    TEST_FILE_PATTERN.test(arg),
-  );
-  if (testFileArgs.length !== 1) {
+  const testFileArguments = getPositionalTestFileArguments(args);
+  if (testFileArguments.length !== 1) {
     throw new Error(
       'Provide exactly one Jest test file path ending in .test or .spec.',
     );
   }
 
-  const testFilePath = getTestFilePath(testFileArgs[0], cwd);
+  const testFileArgument = testFileArguments[0];
+  const testFilePath = getTestFilePath(testFileArgument.path, cwd);
   let coverageSourcePath: string | undefined;
   const jestArgs: string[] = [];
 
@@ -136,7 +202,7 @@ export const parseFileCoverageArgs = ({
 
   for (let index = 0; index < args.length; index += 1) {
     const arg = args[index];
-    if (arg === testFileArgs[0]) {
+    if (index === testFileArgument.index) {
       continue;
     }
     if (arg === '--coverage-source') {
