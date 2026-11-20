@@ -1818,6 +1818,59 @@ describe('publicCaseDetailHelper', () => {
             getShowLinkForEntry(terminalEntries, sealedMispDocketEntryId),
           ).toBe(false);
         });
+
+        it('should show the link for a response to a lodged motion and still display the motion as MISCL', () => {
+          const lodgedMotionDocketEntryId = getUniqueId();
+          const responseDocketEntryId = getUniqueId();
+          state.caseDetail.docketEntries = [
+            {
+              ...publicMotionVisibilityDocketEntry,
+              docketEntryId: lodgedMotionDocketEntryId,
+              documentTitle: 'Motion for Continuance',
+              documentType: 'Motion for Continuance',
+              eventCode: 'M006',
+              index: 1,
+              lodged: true,
+            },
+            {
+              ...publicMotionVisibilityDocketEntry,
+              docketEntryId: responseDocketEntryId,
+              documentTitle: 'No Objection to Motion for Continuance',
+              documentType: 'No Objection',
+              eventCode: 'NOB',
+              index: 2,
+              previousDocument: {
+                docketEntryId: lodgedMotionDocketEntryId,
+                documentTitle: 'Motion for Continuance',
+                documentType: 'Motion for Continuance',
+              },
+            },
+          ];
+
+          const { formattedDocketEntriesOnDocketRecord } = runCompute(
+            publicCaseDetailHelper,
+            { state: { ...state, isTerminalUser: false } },
+          );
+
+          expect(
+            getShowLinkForEntry(
+              formattedDocketEntriesOnDocketRecord,
+              responseDocketEntryId,
+            ),
+          ).toBe(true);
+          expect(
+            getShowLinkForEntry(
+              formattedDocketEntriesOnDocketRecord,
+              lodgedMotionDocketEntryId,
+            ),
+          ).toBe(false);
+          expect(
+            formattedDocketEntriesOnDocketRecord.find(
+              entry => entry.docketEntryId === lodgedMotionDocketEntryId,
+            )?.eventCode,
+          ).toBe('MISCL');
+          expect(state.caseDetail.docketEntries[0].eventCode).toBe('M006');
+        });
       });
     });
   });

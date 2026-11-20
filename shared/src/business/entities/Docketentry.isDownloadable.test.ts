@@ -125,6 +125,7 @@ describe('isDownloadable', () => {
 
       expect(isPublic).toHaveBeenLastCalledWith(entry, {
         caseIsSealed: false,
+        docketEntries: rawCase.docketEntries,
         rootDocument: DocketEntry.fetchRootDocument(
           baseDocketEntry,
           rawCase.docketEntries,
