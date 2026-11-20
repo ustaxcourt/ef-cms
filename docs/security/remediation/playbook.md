@@ -1,5 +1,7 @@
 # Security Findings Remediation Playbook
 
+> **Paused (DAW-32):** security scanning is temporarily turned off. Scans do not run on pull requests, block merges, or upload to the Security tab. See [Scanning paused](README.md#scanning-paused).
+
 This playbook is what to do when a security scanner, or a person, reports a finding against
 DAWSON: who owns it, how severe it is, how fast it gets fixed, and how a decision to suppress or
 accept it is recorded. How each scanner works is covered in its own doc under `docs/security/`;

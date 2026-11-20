@@ -1,5 +1,7 @@
 # Container Finding Triage
 
+> **Paused (DAW-32):** security scanning is temporarily turned off. Scans do not run on pull requests, block merges, or upload to the Security tab. See [Scanning paused](remediation/README.md#scanning-paused).
+
 ## Overview
 
 This document defines how DAWSON evaluates container vulnerabilities to distinguish actionable security risks from inherited, build-only, or non-exploitable findings.

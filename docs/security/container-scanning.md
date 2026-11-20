@@ -1,5 +1,7 @@
 # Container Scanning
 
+> **Paused (DAW-32):** security scanning is temporarily turned off. Scans do not run on pull requests, block merges, or upload to the Security tab. See [Scanning paused](remediation/README.md#scanning-paused).
+
 DAWSON uses [Trivy](https://trivy.dev/) to scan Dockerfiles and built container images for vulnerabilities. All scanning is in `.github/workflows/security-containers.yml`.
 
 ## Jobs
