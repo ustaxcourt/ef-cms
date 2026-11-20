@@ -13,6 +13,7 @@ import {
   PROCEDURE_TYPES_MAP,
   SESSION_TYPES,
   TRIAL_CITIES,
+  TRIAL_SESSION_PROCEEDING_TYPES,
   US_STATES,
 } from '@shared/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
@@ -224,7 +225,11 @@ const getTrialLocation = async (
           ? 'HS'
           : prevTerm.sessionType.charAt(0);
       const strippedJudgeName = prevTerm.judge!.name.replace('Judge ', '');
-      return `(${sessionTypeChar}) ${strippedJudgeName}`;
+      const reportingSuffix =
+        prevTerm.proceedingType === TRIAL_SESSION_PROCEEDING_TYPES.reporting
+          ? ' (RP)'
+          : '';
+      return `(${sessionTypeChar}) ${strippedJudgeName}${reportingSuffix}`;
     });
   });
 

@@ -21,6 +21,58 @@ describe('getPublicTrialSessionsInteractor', () => {
       true,
     );
   });
+
+  describe('Reporting sessions', () => {
+    const REPORTING_SESSION: RawTrialSession = {
+      caseOrder: [],
+      estimatedEndDate: '2099-02-10T05:00:00.000Z',
+      hasNottBeenServed: false,
+      isCalendared: true,
+      judge: { name: 'Buch', userId: 'dabbad02-18d0-43ec-bafb-654e83405416' },
+      maxCases: 10,
+      paperServicePdfs: [],
+      proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.reporting,
+      sessionScope: 'Location-based',
+      sessionStatus: SESSION_STATUS_TYPES.open,
+      sessionType: SESSION_TYPES.regular,
+      startDate: '2099-02-10T05:00:00.000Z',
+      term: 'Winter',
+      termYear: '2099',
+      trialLocation: 'Mobile, Alabama',
+      trialSessionId: '3a1e9e9b-7d0a-4f0f-9c1c-2d6b7a5f1e10',
+    };
+
+    it('should return a calendared Reporting session with its proceeding type and due date', async () => {
+      getTrialSessions.mockResolvedValue([REPORTING_SESSION]);
+
+      const result = await getPublicTrialSessionsInteractor();
+
+      expect(result).toHaveLength(1);
+      expect(result[0]).toMatchObject({
+        judge: { name: 'Buch' },
+        proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.reporting,
+        sessionStatus: SESSION_STATUS_TYPES.open,
+        sessionType: SESSION_TYPES.regular,
+        startDate: REPORTING_SESSION.startDate,
+        trialLocation: 'Mobile, Alabama',
+        trialSessionId: REPORTING_SESSION.trialSessionId,
+      });
+    });
+
+    it('should NOT return a Reporting session that has not been calendared', async () => {
+      getTrialSessions.mockResolvedValue([
+        {
+          ...REPORTING_SESSION,
+          isCalendared: false,
+          sessionStatus: SESSION_STATUS_TYPES.new,
+        },
+      ]);
+
+      const result = await getPublicTrialSessionsInteractor();
+
+      expect(result).toEqual([]);
+    });
+  });
 });
 
 const MOCK_TRIAL_SESSIONS: RawTrialSession[] = [

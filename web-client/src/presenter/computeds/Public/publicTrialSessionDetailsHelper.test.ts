@@ -142,4 +142,51 @@ describe('publicTrialSessionDetailsHelper', () => {
       /^\d{2}\/\d{2}\/\d{2} ([1-9]|1[0-2]):\d{2} (am|pm) Eastern$/,
     );
   });
+
+  describe('Reporting sessions', () => {
+    beforeEach(() => {
+      state.trialSessionDetailsPage.trialSession = {
+        calendaredCases: [MOCK_CASE_DTO],
+        estimatedEndDate: '2099-02-10T05:00:00.000Z',
+        isRemote: false,
+        isSwingSession: false,
+        proceedingType: 'Reporting',
+        sessionStatus: SESSION_STATUS_TYPES.open,
+        sessionType: SESSION_TYPES.regular,
+        startDate: '2099-02-10T05:00:00.000Z',
+        term: 'Winter',
+        termYear: '2099',
+        trialLocation: 'Mobile, Alabama',
+      };
+    });
+
+    it('should not report any courthouse information, so the details card is hidden, for a Reporting session without an address', () => {
+      const { formattedTrialSession } = runCompute(
+        publicTrialSessionDetailsHelper,
+        { state },
+      );
+
+      expect(formattedTrialSession.hasCourthouseInformation).toBe(false);
+      expect(formattedTrialSession.formattedCityStateZip).toEqual('');
+      expect(formattedTrialSession.courthouseName).toBeUndefined();
+      expect(formattedTrialSession.address1).toBeUndefined();
+    });
+
+    it('should format the due date and list the calendared cases for a Reporting session', () => {
+      const { formattedTrialSession } = runCompute(
+        publicTrialSessionDetailsHelper,
+        { state },
+      );
+
+      expect(formattedTrialSession.formattedStartDate).toEqual('02/10/99');
+      expect(formattedTrialSession.formattedStartDateFull).toEqual(
+        'February 10, 2099',
+      );
+      expect(
+        formattedTrialSession.formattedCases.map(
+          formattedCase => formattedCase.docketNumber,
+        ),
+      ).toEqual([MOCK_CASE.docketNumber]);
+    });
+  });
 });
