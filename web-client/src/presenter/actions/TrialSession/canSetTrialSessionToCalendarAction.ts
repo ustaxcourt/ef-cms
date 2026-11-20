@@ -26,7 +26,6 @@ export const canSetTrialSessionToCalendarAction = ({
     return path.yes();
   }
 
-  // 10217 TODO: Remove this warning after adding Set Reporting calendar support.
   if (
     trialSession.proceedingType === TRIAL_SESSION_PROCEEDING_TYPES.reporting
   ) {
