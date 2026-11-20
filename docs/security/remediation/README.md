@@ -33,9 +33,18 @@ These rules are removed from the `staging_reviews-gate` ruleset:
 
 ### Turning scanning back on
 
-1. A repository admin restores the `staging_reviews-gate` ruleset from the snapshot on [issue #10615](https://github.com/ustaxcourt/ef-cms/issues/10615).
-2. Re-enable each workflow above in GitHub Actions, or run `gh workflow enable <file>` for each one.
-3. Remove this section and the "Paused" notes at the top of the other security docs.
+Do these in order. If the ruleset rules come back before the workflows are running, every open
+pull request to `staging` waits on checks that never report.
+
+1. Re-enable each workflow above in GitHub Actions, or run `gh workflow enable <file>` for each one.
+2. Let the workflows run once on `staging` (a push or a manual run), so the checks and a CodeQL
+   analysis exist again.
+3. A repository admin adds back only the rules removed from `staging_reviews-gate`: the
+   `Security Gate (SAST)` and `Security Gate (Secrets)` required checks and the CodeQL code
+   scanning rule. Use the snapshot on [issue #10615](https://github.com/ustaxcourt/ef-cms/issues/10615)
+   as the reference for their settings, but do not restore the whole ruleset from it, because
+   that would undo any other ruleset changes made during the pause.
+4. Remove this section and the "Paused" notes at the top of the other security docs.
 
 ## Remediation docs
 

@@ -4,7 +4,7 @@
 
 These are GitHub settings, not deployment steps. See [docs/security/remediation/README.md](docs/security/remediation/README.md#scanning-paused) and [issue #10615](https://github.com/ustaxcourt/ef-cms/issues/10615).
 
-### Before merging the docs PR
+### Pausing scanning (done 2026-11-20, do not repeat)
 
 1. Post a snapshot of the `staging_reviews-gate` ruleset on the issue:
 
@@ -25,7 +25,12 @@ These are GitHub settings, not deployment steps. See [docs/security/remediation/
 
 ### To turn scanning back on
 
-Restore the ruleset from the snapshot, run `gh workflow enable` for each workflow above, and remove the "Scanning paused" docs notes.
+Do these in order, or open pull requests to `staging` will wait on checks that never report:
+
+1. Run `gh workflow enable` for each workflow above.
+2. Let the workflows run once on `staging` (a push or a manual run).
+3. A repository admin adds back only the two `Security Gate` required checks and the CodeQL code scanning rule to `staging_reviews-gate`, using the snapshot on the issue as the reference. Do not restore the whole snapshot, because that would undo other ruleset changes made during the pause.
+4. Remove the "Scanning paused" docs notes.
 
 </details>
 
