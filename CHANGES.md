@@ -1,3 +1,36 @@
+<details><summary>DAW-32 - Security scanning paused</summary>
+
+## Repository Settings
+
+These are GitHub settings, not deployment steps. See [docs/security/remediation/README.md](docs/security/remediation/README.md#scanning-paused) and [issue #NNNNN](https://github.com/ustaxcourt/ef-cms/issues/NNNNN).
+
+### Before merging the docs PR
+
+1. Post a snapshot of the `staging_reviews-gate` ruleset on the issue:
+
+   ```bash
+   gh api repos/ustaxcourt/ef-cms/rulesets/17247374
+   ```
+
+2. A repository admin removes the required status checks `Security Gate (SAST)` and `Security Gate (Secrets)`, and the CodeQL code scanning rule, from the `staging_reviews-gate` ruleset.
+3. Immediately after step 2, disable the security workflows and cancel any of their runs that are queued or in progress:
+
+   ```bash
+   for wf in security-sast.yml security-secrets.yml security-supply-chain.yml security-containers.yml security-dast.yml security-compare.yml; do
+     gh workflow disable "$wf" -R ustaxcourt/ef-cms
+   done
+   ```
+
+   Also disable "Security - Weekly Summary" and "Security scan" by the workflow ID shown in `gh workflow list --all`.
+
+4. A repository admin confirms CodeQL default setup is not enabled under Settings > Code security.
+
+### To turn scanning back on
+
+Restore the ruleset from the snapshot, run `gh workflow enable` for each workflow above, and remove the "Scanning paused" docs notes.
+
+</details>
+
 <details><summary>10241 - Motion visibility policy date</summary>
 
 ## Manual Deployment Steps
