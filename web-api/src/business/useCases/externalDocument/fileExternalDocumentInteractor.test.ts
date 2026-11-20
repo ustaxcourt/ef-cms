@@ -1294,7 +1294,15 @@ describe('fileExternalDocumentInteractor', () => {
 
       const fileOpposition = async (
         previousDocument: Record<string, unknown>,
-      ): Promise<{ rawCase: RawCase; responseEntry: RawDocketEntry }> => {
+        {
+          asSecondary = false,
+          consolidated = false,
+        }: { asSecondary?: boolean; consolidated?: boolean } = {},
+      ): Promise<{
+        rawCase: RawCase;
+        responseEntry: RawDocketEntry;
+        savedCases: RawCase[];
+      }> => {
         const leadCase = {
           ...caseRecord,
           docketEntries: [
@@ -1323,36 +1331,74 @@ describe('fileExternalDocumentInteractor', () => {
               : mockDateHandler.createISODateString(dateString, inputFormat),
         );
         getUserById.mockResolvedValue(mockIrsPractitionerUser as DbUser);
-        getCaseByDocketNumber.mockResolvedValue(leadCase);
-        getCasesByDocketNumbers.mockResolvedValue([leadCase]);
+
+        // the member case does not have the target motion
+        const memberCase = {
+          ...caseRecord,
+          docketNumber: memberDocketNumber,
+          leadDocketNumber: leadCase.docketNumber,
+        };
+        const consolidatedCasesToFileAcross = consolidated
+          ? [leadCase, memberCase].map(consolidatedCase =>
+              new ConsolidatedCaseSummary({
+                ...consolidatedCase,
+                leadDocketNumber: leadCase.docketNumber,
+              }).toRawObject(),
+            )
+          : undefined;
+        getCaseByDocketNumber.mockResolvedValue({
+          ...leadCase,
+          consolidatedCases: consolidatedCasesToFileAcross,
+        });
+        getCasesByDocketNumbers.mockResolvedValue(
+          consolidated ? [leadCase, memberCase] : [leadCase],
+        );
 
         const responseId = applicationContext.getUniqueId();
+        const response = {
+          documentTitle: 'Opposition to Motion for Continuance',
+          documentType: 'Opposition',
+          eventCode: 'OPPO',
+          filedBy: 'Test Practitioner',
+          previousDocument,
+        };
         const callsBefore = updateCaseAndAssociations.mock.calls.length;
 
         await fileExternalDocumentInteractor(
           applicationContext,
           {
             documentMetadata: {
+              consolidatedCasesToFileAcross,
               docketNumber: leadCase.docketNumber,
-              documentTitle: 'Opposition to Motion for Continuance',
-              documentType: 'Opposition',
-              eventCode: 'OPPO',
-              filedBy: 'Test Practitioner',
-              previousDocument,
-              primaryDocumentId: responseId,
+              ...(asSecondary
+                ? {
+                    documentTitle: 'Motion for Leave to File',
+                    documentType: 'Motion for Leave to File',
+                    eventCode: 'M115',
+                    filedBy: 'Test Practitioner',
+                    primaryDocumentId: applicationContext.getUniqueId(),
+                    secondaryDocument: {
+                      ...response,
+                      docketEntryId: responseId,
+                    },
+                  }
+                : { ...response, primaryDocumentId: responseId }),
             },
           },
           mockIrsPractitionerUser,
         );
 
-        const savedCase =
-          updateCaseAndAssociations.mock.calls[callsBefore][0].caseToUpdate;
+        const savedCases = updateCaseAndAssociations.mock.calls
+          .slice(callsBefore)
+          .map(call => call[0].caseToUpdate);
+        const savedCase = savedCases[0];
 
         return {
           rawCase: buildRawCase(savedCase),
           responseEntry: savedCase.docketEntries.find(
             de => de.docketEntryId === responseId,
           )!,
+          savedCases,
         };
       };
 
@@ -1405,6 +1451,78 @@ describe('fileExternalDocumentInteractor', () => {
         });
 
         expectDownloadabilityForViewers(responseEntry, rawCase, notPublic);
+      });
+
+      it.each([
+        {
+          description: 'targets a motion on the lead case',
+          expectedPublic: true,
+          expectedType: 'Motion for Continuance',
+          targetId: motionOnCaseId,
+        },
+        {
+          description: 'claims a motion type for a target not on the lead case',
+          expectedPublic: false,
+          expectedType: undefined,
+          targetId: applicationContext.getUniqueId(),
+        },
+      ])(
+        'should save the verified target type on the member case without the motion when the opposition $description',
+        async ({ expectedPublic, expectedType, targetId }) => {
+          const { savedCases } = await fileOpposition(
+            {
+              docketEntryId: targetId,
+              documentTitle: 'Motion for Continuance',
+              documentType: 'Motion for Continuance',
+            },
+            { consolidated: true },
+          );
+          const memberCase = savedCases.find(
+            savedCase => savedCase.docketNumber === memberDocketNumber,
+          )!;
+          const memberResponse = memberCase.docketEntries.find(
+            de => de.eventCode === 'OPPO',
+          )!;
+
+          expect(savedCases).toHaveLength(2);
+          expect(
+            memberCase.docketEntries.some(
+              de => de.docketEntryId === motionOnCaseId,
+            ),
+          ).toBe(false);
+          expect(memberResponse.previousDocument?.documentType).toBe(
+            expectedType,
+          );
+          expectDownloadabilityForViewers(
+            memberResponse,
+            buildRawCase(memberCase),
+            expectedPublic
+              ? {
+                  party: true,
+                  public: true,
+                  terminal: true,
+                  unassociated: true,
+                }
+              : notPublic,
+          );
+        },
+      );
+
+      it('should not keep a submitted motion type on a secondary opposition whose target is not on the case', async () => {
+        const { responseEntry } = await fileOpposition(
+          {
+            docketEntryId: applicationContext.getUniqueId(),
+            documentTitle: 'Motion for Continuance',
+            documentType: 'Motion for Continuance',
+          },
+          { asSecondary: true },
+        );
+
+        expect(responseEntry).toMatchObject({
+          eventCode: 'OPPO',
+          lodged: true,
+        });
+        expect(responseEntry.previousDocument?.documentType).toBeUndefined();
       });
     });
 
