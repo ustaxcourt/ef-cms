@@ -3,7 +3,7 @@
 ## Scanning paused
 
 Security scanning and the checks that block pull requests are temporarily turned off, as of
-YYYY-MM-DD. See [issue #10615](https://github.com/ustaxcourt/ef-cms/issues/10615) (Payment Portal team ticket DAW-32). The scanning process is being reworked
+2026-11-20. See [issue #10615](https://github.com/ustaxcourt/ef-cms/issues/10615) (Payment Portal team ticket DAW-32). The scanning process is being reworked
 separately, and this section will be removed when scanning is turned back on.
 
 ### What is turned off
