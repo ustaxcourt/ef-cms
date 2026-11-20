@@ -74,6 +74,8 @@ describe('Messages', () => {
 
     describe('Docket clerk creates attaches a document and sends a message on a "New" case', () => {
       it('should go to case detail and open the dialog to create a new message with an attachment', () => {
+        cy.intercept('POST', '**/messages').as('createMessage');
+
         loginAsDocketClerk();
         cy.visit('/case-detail/102-20').then(window => {
           cy.stub(window, 'open').as('windowOpen');
@@ -83,6 +85,7 @@ describe('Messages', () => {
         selectRecipient('Test ADC');
         enterSubject();
         fillOutMessageField();
+
         cy.get('[data-testid="select-document"]').select(
           'd854a954-7332-4e92-93bd-dc28c9fea0a5',
         );
@@ -91,6 +94,10 @@ describe('Messages', () => {
         ).click();
         cy.get('@windowOpen').should('have.been.called');
         sendMessage();
+        cy.wait('@createMessage').then(message => {
+          loginAsAdc();
+          cy.visit(`messages/102-20/message-detail/${message.messageId}`);
+        });
       });
     });
 
