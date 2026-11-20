@@ -8,10 +8,14 @@ export type PretrialMemorandumTrialInfo = {
 };
 
 export type PretrialMemorandumParams = {
+  showTrialCalendarLabel?: boolean;
   trialInfo: PretrialMemorandumTrialInfo;
 };
 
-export const PretrialMemorandum = ({ trialInfo }: PretrialMemorandumParams) => {
+export const PretrialMemorandum = ({
+  showTrialCalendarLabel = true,
+  trialInfo,
+}: PretrialMemorandumParams) => {
   const {
     formattedTrialLocation,
     formattedStartDate,
@@ -21,7 +25,8 @@ export const PretrialMemorandum = ({ trialInfo }: PretrialMemorandumParams) => {
   return (
     <div>
       <p style={{ marginBottom: '20px', textAlign: 'right' }}>
-        Trial Calendar: {formattedTrialLocation}
+        {showTrialCalendarLabel && 'Trial Calendar: '}
+        {formattedTrialLocation}
         <br />
         <span>Date: {formattedStartDate}</span>
       </p>
