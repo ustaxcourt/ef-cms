@@ -131,7 +131,7 @@ export function PendingReportList({
               screenReaderTitle="Index Number"
               sortField="index"
               tableSort={pendingReportTableSortData}
-              sortType="string"
+              sortType="number"
               className="no-wrap"
               title="No."
               onSort={sortTableSequence}
