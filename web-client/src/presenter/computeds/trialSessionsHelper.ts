@@ -249,6 +249,7 @@ export const formatTrialSessions = ({
         !trialSession.dismissedAlertForNott &&
         TrialSession.isStartDateWithinNOTTReminderRange({
           isCalendared: trialSession.isCalendared,
+          proceedingType: trialSession.proceedingType,
           startDate: trialSession.startDate,
         });
 

@@ -16,7 +16,10 @@ import {
   RawTrialSession,
   TCaseOrder,
 } from '@shared/business/entities/trialSessions/TrialSession';
-import { SERVICE_INDICATOR_TYPES } from '@shared/business/entities/EntityConstants';
+import {
+  SERVICE_INDICATOR_TYPES,
+  TRIAL_SESSION_PROCEEDING_TYPES,
+} from '@shared/business/entities/EntityConstants';
 import { ThirtyDayNoticeOfTrialRequiredInfo } from '@shared/business/utilities/pdfGenerator/documentTemplates/ThirtyDayNoticeOfTrial';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
@@ -99,6 +102,38 @@ describe('serveThirtyDayNoticeInteractor', () => {
         mockPetitionsClerkUser,
       ),
     ).rejects.toThrow(new InvalidRequest('No trial Session Id provided'));
+  });
+
+  it('should throw an invalid request error and not generate or serve any notices when the trial session is a Reporting session', async () => {
+    getTrialSessionById.mockResolvedValue({
+      ...trialSession,
+      proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.reporting,
+    });
+
+    await expect(
+      serveThirtyDayNoticeInteractor(
+        applicationContext,
+        {
+          clientConnectionId: TEST_CLIENT_CONNECTION_ID,
+          trialSessionId: trialSession.trialSessionId!,
+        },
+        mockPetitionsClerkUser,
+      ),
+    ).rejects.toThrow(
+      new InvalidRequest(
+        '30 day notices of trial are not issued for Reporting sessions.',
+      ),
+    );
+
+    expect(getCasesByDocketNumbers).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getDocumentGenerators().thirtyDayNoticeOfTrial,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().createAndServeNoticeDocketEntry,
+    ).not.toHaveBeenCalled();
+    expect(updateTrialSession).not.toHaveBeenCalled();
+    expect(updateCaseAndAssociations).not.toHaveBeenCalled();
   });
 
   describe('Happy Path', () => {

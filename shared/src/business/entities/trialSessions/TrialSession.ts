@@ -257,12 +257,19 @@ export class TrialSession extends JoiValidationEntity {
 
   static isStartDateWithinNOTTReminderRange({
     isCalendared,
+    proceedingType,
     startDate,
   }: {
     isCalendared?: boolean;
+    proceedingType?: string;
     startDate?: string;
   }): boolean {
     if (!isCalendared || !startDate) {
+      return false;
+    }
+
+    // Reporting sessions have a due date, not a trial, so no 30 day notice of trial is issued
+    if (proceedingType === TRIAL_SESSION_PROCEEDING_TYPES.reporting) {
       return false;
     }
 
