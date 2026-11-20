@@ -245,7 +245,7 @@
     "test:client:unit": "jest --config web-client/jest-unit.config.ts --coverage --coverageProvider=babel --testMatch '**/web-client/src/**/?(*.)+(spec|test).[jt]s?(x)'",
     "test:client:unit:ci": "jest --config web-client/jest-unit.config.ts --coverage --coverageProvider=babel --coverageDirectory=./coverage/${NODE_INDEX} ${JEST_TEST_RESULTS_ARGS} ${TESTFILES}",
     "test:client:unit:file": "jest --config web-client/jest-unit.config.ts --testMatch '**/web-client/src/**/?(*.)+(spec|test).[jt]s?(x)' --coverage=false",
-    "test:client:unit:file:coverage": "scripts/tests/run-jest-file-with-coverage.ts web-client/jest-unit.config.ts --testMatch '**/web-client/src/**/?(*.)+(spec|test).[jt]s?(x)'",
+    "test:client:unit:file:coverage": "scripts/tests/run-jest-file-with-coverage.ts web-client/jest-unit.config.ts",
     "test:document-generation": "npm run build:assets && jest --config shared/src/business/utilities/documentGenerators/jest_document_generator.config.ts",
     "test:document-generation:file": "npm run build:assets && jest --config shared/src/business/utilities/documentGenerators/jest_document_generator.config.ts --coverage=false",
     "test:file": "npm run build:assets && NODE_ENV=integration CI=false NO_SCANNER=true AWS_ACCESS_KEY_ID=S3RVER AWS_SECRET_ACCESS_KEY=S3RVER FILE_UPLOAD_MODAL_TIMEOUT=1 jest --config jest.config.ts --coverage=false -- ",
