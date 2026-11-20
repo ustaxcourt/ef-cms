@@ -83,7 +83,7 @@ const config: Config = {
     '!tests/run-jest-file-with-coverage.ts',
     '!tests/test-file-times-to-junit.ts',
     '!upload-practitioner-application-packages.ts',
-    '!user/!(rotate-environment-secrets.helpers.ts|make-new-password.ts)',
+    '!user/!(rotate-environment-secrets.helpers.ts|make-new-password.ts|recent-user-activity.helpers.ts)',
   ],
   coverageDirectory: './coverage',
   coverageThreshold: {
