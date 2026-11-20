@@ -102,6 +102,16 @@ Log in to DAWSON with your credentials. When you're done impersonating, run this
 npm run admin:become-user "$COGNITO_USER_ID"
 ```
 
+### See who has recently logged in to or used `myenv`
+
+Lists recent logins and active users from the API lambda's CloudWatch logs (the last 15 minutes by default). Pass flags after `--` so npm forwards them to the script:
+```
+source scripts/env/set-env.zsh myenv
+npm run admin:recent-user-activity
+npm run admin:recent-user-activity -- --minutes 60 --staff   # only ustaxcourt.gov users
+npm run admin:recent-user-activity -- --sample               # a few raw log lines, headers removed
+```
+
 ### Re-serve documents to the IRS superuser
 
 ```
