@@ -45,6 +45,11 @@ jest.mock('@web-api/persistence/postgres/trialSessions/getTrialSessions', () =>
 );
 
 jest.mock(
+  '@web-api/persistence/postgres/trialSessions/getTrialSessionsStartingBetween',
+  () => mockFactory('getTrialSessionsStartingBetween'),
+);
+
+jest.mock(
   '@web-api/persistence/postgres/trialSessions/getTrialSessionWorkingCopies',
   () => mockFactory('getTrialSessionWorkingCopies'),
 );
