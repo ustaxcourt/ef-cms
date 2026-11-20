@@ -1,3 +1,39 @@
+<details><summary>DAW-32 - Security scanning paused</summary>
+
+## Repository Settings
+
+These are GitHub settings, not deployment steps. See [docs/security/remediation/README.md](docs/security/remediation/README.md#scanning-paused) and [issue #10615](https://github.com/ustaxcourt/ef-cms/issues/10615).
+
+### Pausing scanning (done 2026-11-20, do not repeat)
+
+1. Post a snapshot of the `staging_reviews-gate` ruleset on the issue:
+
+   ```bash
+   gh api repos/ustaxcourt/ef-cms/rulesets/17247374
+   ```
+
+2. A repository admin removes the required status checks `Security Gate (SAST)` and `Security Gate (Secrets)`, and the CodeQL code scanning rule, from the `staging_reviews-gate` ruleset.
+3. Immediately after step 2, disable the security workflows and cancel any of their runs that are queued or in progress:
+
+   ```bash
+   for wf in security-sast.yml security-secrets.yml security-supply-chain.yml security-containers.yml security-dast.yml security-compare.yml; do
+     gh workflow disable "$wf" -R ustaxcourt/ef-cms
+   done
+   ```
+
+4. A repository admin confirms CodeQL default setup is not enabled under Settings > Code security.
+
+### To turn scanning back on
+
+Do these in order, or open pull requests to `staging` will wait on checks that never report:
+
+1. Run `gh workflow enable` for each workflow above.
+2. Let the workflows run once on `staging` (a push or a manual run).
+3. A repository admin adds back only the two `Security Gate` required checks and the CodeQL code scanning rule to `staging_reviews-gate`, using the snapshot on the issue as the reference. Do not restore the whole snapshot, because that would undo other ruleset changes made during the pause.
+4. Remove the "Scanning paused" docs notes.
+
+</details>
+
 <details><summary>10444 - Reporting Trial Sessions</summary>
 
 ## Manual Deployment Steps
