@@ -2,7 +2,7 @@
 
 ## Repository Settings
 
-These are GitHub settings, not deployment steps. See [docs/security/remediation/README.md](docs/security/remediation/README.md#scanning-paused) and [issue #NNNNN](https://github.com/ustaxcourt/ef-cms/issues/NNNNN).
+These are GitHub settings, not deployment steps. See [docs/security/remediation/README.md](docs/security/remediation/README.md#scanning-paused) and [issue #10615](https://github.com/ustaxcourt/ef-cms/issues/10615).
 
 ### Before merging the docs PR
 

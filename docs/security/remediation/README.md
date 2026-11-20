@@ -3,7 +3,7 @@
 ## Scanning paused
 
 Security scanning and the checks that block pull requests are temporarily turned off, as of
-YYYY-MM-DD. See [issue #NNNNN](https://github.com/ustaxcourt/ef-cms/issues/NNNNN) (Payment Portal team ticket DAW-32). The scanning process is being reworked
+YYYY-MM-DD. See [issue #10615](https://github.com/ustaxcourt/ef-cms/issues/10615) (Payment Portal team ticket DAW-32). The scanning process is being reworked
 separately, and this section will be removed when scanning is turned back on.
 
 ### What is turned off
@@ -39,7 +39,7 @@ These rules are removed from the `staging_reviews-gate` ruleset:
 
 ### Turning scanning back on
 
-1. A repository admin restores the `staging_reviews-gate` ruleset from the snapshot on [issue #NNNNN](https://github.com/ustaxcourt/ef-cms/issues/NNNNN).
+1. A repository admin restores the `staging_reviews-gate` ruleset from the snapshot on [issue #10615](https://github.com/ustaxcourt/ef-cms/issues/10615).
 2. Re-enable each workflow above in GitHub Actions, or run `gh workflow enable <file>` for each one.
 3. Remove this section and the "Paused" notes at the top of the other security docs.
 
