@@ -59,6 +59,7 @@ export const PrimaryDocumentForm = connect(
                   />
                   <label
                     className="usa-radio__label"
+                    data-testid={`filing-status-${option}`}
                     htmlFor={`filing-status-${option}`}
                   >
                     {option}
