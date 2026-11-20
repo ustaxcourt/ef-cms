@@ -642,12 +642,6 @@ describe('addPaperFilingInteractor', () => {
     beforeEach(() => {
       getFeatureFlagValues.mockResolvedValue([
         {
-          name: 'entity-locking-feature-flag',
-          value: {
-            current: true,
-          },
-        },
-        {
           name: 'motion-visibility-policy-change-date',
           value: {
             current: motionVisibilityChangeDate,
