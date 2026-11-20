@@ -31,7 +31,6 @@ export const generatePublicDocketRecordPdfWorkerLambda = event =>
           {
             docketNumber,
             docketRecordTableSort,
-            includePartyDetail: false,
           },
           undefined,
         );

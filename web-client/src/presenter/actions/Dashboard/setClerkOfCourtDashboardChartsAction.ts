@@ -1,19 +1,47 @@
-import { ClerkDashboardStats } from '@web-api/business/useCases/reports/getClerkDashboardStatsInteractor';
+import {
+  ClerkDashboardCasesTabStats,
+  ClerkDashboardPetitionsTabStats,
+} from '@web-api/business/useCases/reports/clerkDashboardStats';
+import { ClerkOfCourtDashboardTab } from '@web-client/presenter/clerkOfCourtDashboardState';
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const setClerkOfCourtDashboardChartsAction = async ({
-  applicationContext,
-  store,
-}: ActionProps) => {
-  try {
-    const stats: ClerkDashboardStats = await applicationContext
-      .getUseCases()
-      .getClerkDashboardStatsInteractor(applicationContext, {});
+const getTabStats = (
+  applicationContext: ActionProps['applicationContext'],
+  tab: ClerkOfCourtDashboardTab,
+): Promise<ClerkDashboardCasesTabStats | ClerkDashboardPetitionsTabStats> =>
+  tab === 'cases'
+    ? applicationContext
+        .getUseCases()
+        .getClerkDashboardCasesStatsInteractor(applicationContext)
+    : applicationContext
+        .getUseCases()
+        .getClerkDashboardPetitionsStatsInteractor(applicationContext);
 
-    store.set(state.clerkOfCourtDashboardStats, stats);
-  } catch (e) {
-    console.error('setClerkOfCourtDashboardChartsAction failed:', e);
-    store.set(state.alertError, { message: 'Error getting dashboard data' });
-    return;
-  }
+// each load of a tab gets a number, so a response from an older load cannot overwrite a newer one
+const latestRequestIds: Record<ClerkOfCourtDashboardTab, number> = {
+  cases: 0,
+  petitions: 0,
 };
+
+/**
+ * Loads one dashboard tab's stats from that tab's own endpoint, so each tab
+ * renders as soon as its own data loads.
+ */
+export const setClerkOfCourtDashboardChartsAction =
+  (tab: ClerkOfCourtDashboardTab) =>
+  async ({ applicationContext, store }: ActionProps): Promise<void> => {
+    const requestId = ++latestRequestIds[tab];
+    store.set(state.clerkOfCourtDashboardStats[tab].status, 'loading');
+
+    try {
+      const stats = await getTabStats(applicationContext, tab);
+
+      if (requestId !== latestRequestIds[tab]) return;
+      store.set(state.clerkOfCourtDashboardStats[tab].data, stats);
+      store.set(state.clerkOfCourtDashboardStats[tab].status, 'loaded');
+    } catch (e) {
+      if (requestId !== latestRequestIds[tab]) return;
+      console.error(`setClerkOfCourtDashboardChartsAction(${tab}) failed:`, e);
+      store.set(state.clerkOfCourtDashboardStats[tab].status, 'error');
+    }
+  };

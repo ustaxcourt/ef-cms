@@ -662,6 +662,7 @@ import { initMyCasesFilingFeePaymentSequence } from '@web-client/presenter/seque
 import { paymentCancelSequence } from '@web-client/presenter/sequences/paymentCancelSequence';
 import { paymentSuccessSequence } from '@web-client/presenter/sequences/paymentSuccessSequence';
 import { setClerkOfCourtDashboardOptionsSequence } from '@web-client/presenter/sequences/setClerkOfCourtDashboardOptionSequence';
+import { loadClerkOfCourtDashboardSequence } from '@web-client/presenter/sequences/loadClerkOfCourtDashboardSequence';
 import { setDashboardCaseListPageSequence } from '@web-client/presenter/sequences/setDashboardCaseListPageSequence';
 import { authCodeSequence } from '@web-client/presenter/sequences/authCodeSequence';
 import { idpLoginSequence } from '@web-client/presenter/sequences/Login/idpLoginSequence';
@@ -1042,6 +1043,8 @@ export const presenterSequences = {
     initMyCasesFilingFeePaymentSequence as unknown as Function,
   leaveCaseForLaterServiceSequence:
     leaveCaseForLaterServiceSequence as unknown as Function,
+  loadClerkOfCourtDashboardSequence:
+    loadClerkOfCourtDashboardSequence as unknown as Function,
   loadDefaultDocketViewerDocumentToDisplaySequence:
     loadDefaultDocketViewerDocumentToDisplaySequence as unknown as Function,
   loadDefaultDraftViewerDocumentToDisplaySequence:

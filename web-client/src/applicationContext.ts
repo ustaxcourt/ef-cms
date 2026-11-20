@@ -161,7 +161,9 @@ import { getCaseDocumentsIdsFilteredByDocumentType } from '@shared/business/util
 import { getCaseDocketEntriesInteractor } from '@web-client/proxies/getCaseDocketEntriesProxy';
 import { getCaseExistsInteractor } from '@web-client/proxies/getCaseExistsProxy';
 import { getCaseInteractor } from '@web-client/proxies/getCaseProxy';
-import { getClerkDashboardStatsInteractor } from '@web-client/proxies/reports/getClerkDashboardStatsProxy';
+import { getClerkDashboardCasesStatsInteractor } from '@web-client/proxies/reports/getClerkDashboardCasesStatsProxy';
+import { getClerkDashboardPetitionsStatsInteractor } from '@web-client/proxies/reports/getClerkDashboardPetitionsStatsProxy';
+import { getClerkDashboardTrialSessionsInteractor } from '@web-client/proxies/reports/getClerkDashboardTrialSessionsProxy';
 import { getClinicLetterKey } from '@web-api/business/utilities/getClinicLetterKey';
 import { getCasesForUserInteractor } from '@web-client/proxies/getCasesForUserProxy';
 import { getCompletedMessagesForSectionInteractor } from '@web-client/proxies/messages/getCompletedMessagesForSectionProxy';
@@ -450,7 +452,9 @@ const allUseCases = {
   getCaseWorksheetsByJudgeInteractor,
   getCasesClosedByJudgeInteractor,
   getCasesForUserInteractor,
-  getClerkDashboardStatsInteractor,
+  getClerkDashboardCasesStatsInteractor,
+  getClerkDashboardPetitionsStatsInteractor,
+  getClerkDashboardTrialSessionsInteractor,
   getColdCaseReportInteractor,
   getCompletedMessagesForSectionInteractor,
   getCompletedMessagesForUserInteractor,
