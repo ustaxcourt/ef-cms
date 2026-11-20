@@ -323,6 +323,8 @@ As of 10/13/2026, these were last updated in the week of 10/12/2026 rotation.
 
 As of 11/09/2026, Semgrep and Checkov were bumped in `security-sast.yml` during the week of 11/09/2026 rotation; GitHub Actions `uses:` pins unchanged.
 
+As of 11/19/2026, Checkov was bumped to **3.4.5** in `security-sast.yml`. All GitHub Actions `uses:` pins are on their latest major, except the `composite-coverage.yml` pins noted below. Gitleaks, lockfile-lint, and shellcheck are already latest.
+
 #### 8.0 GitHub Actions `uses:` pins (manual — monthly)
 
 These are the `uses: owner/action@vX.Y.Z` lines in every workflow file. Check and update each one manually.
