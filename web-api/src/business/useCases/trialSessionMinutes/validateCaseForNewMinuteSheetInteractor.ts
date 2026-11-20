@@ -68,6 +68,12 @@ export const validateCaseForNewMinuteSheetInteractor = async (
   const caseEntity = new Case(caseDetails, { authorizedUser });
   const trialSessionEntity = new TrialSession(trialSession);
 
+  if (trialSessionEntity.isReporting()) {
+    throw new InvalidRequest(
+      'Minute sheets cannot be created for Reporting sessions.',
+    );
+  }
+
   const isCaseCalendared =
     trialSessionEntity.isCaseAlreadyCalendared(caseEntity);
 
