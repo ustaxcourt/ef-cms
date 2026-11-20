@@ -182,9 +182,18 @@ import { BlockedCaseData } from '@web-api/persistence/postgres/cases/reports/get
 import { RawGenerateSuggestedTermForm } from '@shared/business/entities/trialSessions/GenerateSuggestedTermForm';
 import { RawWorkItemWithCaseAndDocketEntryInfo } from '@web-api/persistence/postgres/workitems/schema';
 import { dashboardClerkOfTheCourtHelper } from '@web-client/presenter/computeds/Dashboard/dashboardClerkOfTheCourtHelper';
+import { buildHtmlTableDocumentHelper } from '@web-client/presenter/computeds/Dashboard/buildHtmlTableDocumentHelper';
 import { confirmPaperServiceModalHelper } from './computeds/confirmPaperServiceModalHelper';
 import { ProcessPaymentResponse } from '@ustaxcourt/payment-portal/dist';
-import { ClerkDashboardStats } from '@web-api/business/useCases/reports/getClerkDashboardStatsInteractor';
+import {
+  ClerkDashboardCasesTabStats,
+  ClerkDashboardPetitionsTabStats,
+} from '@web-api/business/useCases/reports/clerkDashboardStats';
+import {
+  ClerkOfCourtDashboardStatsStatus,
+  ClerkOfCourtDashboardTabStats,
+} from '@web-client/presenter/clerkOfCourtDashboardState';
+import { ClerkDashboardTrialSessions } from '@web-api/business/useCases/reports/getClerkDashboardTrialSessionsInteractor';
 import { loginHelper } from '@web-client/presenter/computeds/Login/LoginHelper';
 
 const { ASCENDING, DOCKET_RECORD_FILTER_OPTIONS } = getConstants();
@@ -238,6 +247,10 @@ export const computeds = {
   blockedCasesReportHelper: blockedCasesReportHelper as unknown as ReturnType<
     typeof blockedCasesReportHelper
   >,
+  buildHtmlTableDocumentHelper:
+    buildHtmlTableDocumentHelper as unknown as ReturnType<
+      typeof buildHtmlTableDocumentHelper
+    >,
   caseAssociationRequestHelper:
     caseAssociationRequestHelper as unknown as ReturnType<
       typeof caseAssociationRequestHelper
@@ -816,21 +829,54 @@ export const baseState = {
   },
   customCaseReport: cloneDeep(initialCustomCaseReportState),
   clerkOfCourtDashboardStats: {
-    year: '',
-    calendarYearPetitionStats: {
-      petitionFullPaperMonths: [],
-      petitionFullElectronicMonths: [],
-      petitionsByRepresentation: [],
-      petitionsByServiceType: [],
-    },
-    fiscalYearPetitionStats: {
-      petitionFullPaperMonths: [],
-      petitionFullElectronicMonths: [],
-      petitionsByRepresentation: [],
-      petitionsByServiceType: [],
-    },
-  } as ClerkDashboardStats,
+    cases: {
+      data: {
+        year: '',
+        fiscalYear: '',
+        openCasesByCaseType: [],
+        openCasesByProcedureType: [],
+        calendarYearCaseStats: {
+          casesClosedByMonth: [],
+          casesClosedByProcedureType: [],
+          casesOnAppealByMonth: [],
+        },
+        fiscalYearCaseStats: {
+          casesClosedByMonth: [],
+          casesClosedByProcedureType: [],
+          casesOnAppealByMonth: [],
+        },
+      },
+      status: 'loading',
+    } as ClerkOfCourtDashboardTabStats<ClerkDashboardCasesTabStats>,
+    petitions: {
+      data: {
+        year: '',
+        fiscalYear: '',
+        calendarYearPetitionStats: {
+          petitionFullPaperMonths: [],
+          petitionFullElectronicMonths: [],
+          petitionsByRepresentation: [],
+          petitionsByServiceType: [],
+        },
+        fiscalYearPetitionStats: {
+          petitionFullPaperMonths: [],
+          petitionFullElectronicMonths: [],
+          petitionsByRepresentation: [],
+          petitionsByServiceType: [],
+        },
+      },
+      status: 'loading',
+    } as ClerkOfCourtDashboardTabStats<ClerkDashboardPetitionsTabStats>,
+  },
+  // the dashboard loads these sections after it renders, so each section has its own status
+  clerkOfCourtDashboardMessagesStatus:
+    'loading' as ClerkOfCourtDashboardStatsStatus,
+  clerkOfCourtDashboardTrialSessions: {
+    data: { trialSessions: [] },
+    status: 'loading',
+  } as ClerkOfCourtDashboardTabStats<ClerkDashboardTrialSessions>,
   clerkOfCourtDashboardOptions: {
+    casesByYearIsFiscal: false,
     petitionsByYearIsFiscal: false,
   },
   docketEntryId: '',

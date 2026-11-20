@@ -1,4 +1,3 @@
-import { setClerkOfCourtDashboardChartsAction } from '../actions/Dashboard/setClerkOfCourtDashboardChartsAction';
 import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { clearSelectedWorkItemsAction } from '../actions/clearSelectedWorkItemsAction';
 import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
@@ -9,7 +8,6 @@ import { getJudgeForCurrentUserAction } from '../actions/getJudgeForCurrentUserA
 import { getOpenAndClosedCasesForUserAction } from '../actions/Dashboard/getOpenAndClosedCasesForUserAction';
 import { getPendingMotionDocketEntriesForCurrentJudgeAction } from '@web-client/presenter/actions/PendingMotion/getPendingMotionDocketEntriesForCurrentJudgeAction';
 import { getSubmittedAndCavCasesForCurrentJudgeAction } from '@web-client/presenter/actions/CaseWorksheet/getSubmittedAndCavCasesForCurrentJudgeAction';
-import { getTrialSessionsAction } from '../actions/TrialSession/getTrialSessionsAction';
 import { getTrialSessionsForJudgeAction } from '../actions/TrialSession/getTrialSessionsForJudgeAction';
 import { navigateToMessagesAction } from '../actions/navigateToMessagesAction';
 import { navigateToSectionDocumentQCAction } from '../actions/navigateToSectionDocumentQCAction';
@@ -66,13 +64,9 @@ export const gotoDashboardSequence = [
           proceedToMessages,
         ),
         clerkofcourt: [
-          fetchUserNotificationsSequence,
           resetClerkOfCourtDashboardOptionsAction,
-          parallel([
-            setClerkOfCourtDashboardChartsAction,
-            getMessages,
-            [getTrialSessionsAction, setTrialSessionsAction],
-          ]),
+          // the view loads its notifications, messages, trial sessions and charts itself
+          // (loadClerkOfCourtDashboardSequence), so the page renders without waiting for them
           setupCurrentPageAction('DashboardClerkOfCourt'),
         ],
         chambers: [
