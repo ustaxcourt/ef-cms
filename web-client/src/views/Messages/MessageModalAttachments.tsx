@@ -206,10 +206,7 @@ function MessageAttachmentDocument({
       iconColor="white"
       shouldWrapText={true}
       onClick={() => {
-        const { docketNumber } = messageModalHelper.documents.find(
-          dox => dox.index === doc.index,
-        );
-
+        const { docketNumber } = messageModalHelper;
         return openMessageAttachmentDocumentSequence({
           docketNumber,
           documentId: doc.documentId,
