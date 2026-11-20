@@ -253,6 +253,14 @@ export function shouldGenerateNoticeOfChangeOfTrialJudge(
   currentTrialSession: RawTrialSession,
   updatedTrialSessionEntity: RawTrialSession,
 ): boolean {
+  // No Notice of Change of Trial Judge is issued for Reporting sessions
+  if (
+    updatedTrialSessionEntity.proceedingType ===
+    TRIAL_SESSION_PROCEEDING_TYPES.reporting
+  ) {
+    return false;
+  }
+
   return (
     currentTrialSession.isCalendared &&
     !!currentTrialSession.judge &&

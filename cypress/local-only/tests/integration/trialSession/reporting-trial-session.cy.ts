@@ -167,7 +167,7 @@ describe('Reporting trial sessions', () => {
     cy.contains('p.label', 'Due Date').should('be.visible');
     cy.contains('a', 'View Session Copy').should('not.exist');
     cy.get('[data-testid="set-calendar-button"]').should('be.visible').click();
-    cy.contains('Reporting sessions cannot be calendared yet.').should(
+    cy.contains('Provide a judge to set this trial session.').should(
       'be.visible',
     );
     cy.get('[data-testid="trial-session-date"]')

@@ -167,4 +167,33 @@ describe('printableWorkingCopySessionList', () => {
     testDescription:
       'generates a Trial Session Working Copy document without case notes page 2',
   });
+
+  generateAndVerifyPdfDiff({
+    fileName: 'Printable_Trial_Session_Working_Copy_Reporting.pdf',
+    pageNumber: 1,
+    pdfGenerateFunction: () =>
+      printableWorkingCopySessionList({
+        applicationContext,
+        data: {
+          filters: [
+            { key: 'basisReached', label: 'Basis Reached' },
+            { key: 'statusUnassigned', label: 'Unassigned' },
+          ],
+          formattedCases: FORMATTED_CASES,
+          formattedTrialSession: {
+            ...FORMATTED_TRIAL_SESSION,
+            endDateForAdditionalPageHeaders: '',
+            formattedEstimatedEndDateFull: '',
+            isReportingSession: true,
+          },
+          sessionNotes: SESSION_NOTES,
+          showCaseNotes: false,
+          sort: 'docket',
+          userHeading: 'Gustafson - Session Copy',
+          trialStatusCounts: TRIAL_STATUS_COUNTS,
+        },
+      }),
+    testDescription:
+      'generates a Trial Session Working Copy document for a Reporting session with a single date and only the Judge and IRS calendar administrator assignments',
+  });
 });

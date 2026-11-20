@@ -151,6 +151,7 @@ describe('generatePrintableTrialSessionCopyReportAction', () => {
       ]),
       endDateForAdditionalPageHeaders: 'Nov 27, 2020',
       formattedEstimatedEndDateFull: 'November 27, 2020',
+      isReportingSession: false,
       startDateForAdditionalPageHeaders: 'Nov 27, 2020',
     });
     expect(result.output.pdfUrl).toEqual(url);
@@ -256,8 +257,74 @@ describe('generatePrintableTrialSessionCopyReportAction', () => {
       ]),
       endDateForAdditionalPageHeaders: 'Nov 27, 2020',
       formattedEstimatedEndDateFull: 'November 27, 2020',
+      isReportingSession: false,
       startDateForAdditionalPageHeaders: 'Nov 27, 2020',
     });
     expect(result.output.pdfUrl).toEqual(url);
+  });
+
+  describe('end date and Reporting sessions', () => {
+    const runActionWithTrialSession = async (
+      formattedTrialSessionDetails: Record<string, unknown>,
+    ) => {
+      await runAction(generatePrintableTrialSessionCopyReportAction, {
+        modules: {
+          presenter,
+        },
+        props: {
+          formattedCases: [formattedCaseMock],
+        },
+        state: {
+          formattedTrialSessionDetails,
+          trialSessionWorkingCopy: {
+            caseMetadata: {},
+            filters: { showAll: true },
+          },
+          trialSessionWorkingCopyHelper: {
+            trialStatusFilters,
+          },
+        },
+      });
+
+      return applicationContext.getUseCases()
+        .generatePrintableTrialSessionCopyReportInteractor.mock.calls[0][1]
+        .formattedTrialSession;
+    };
+
+    beforeEach(() => {
+      applicationContext
+        .getUseCases()
+        .generatePrintableTrialSessionCopyReportInteractor.mockClear();
+    });
+
+    it('should send the formatted end dates for a session that is not a Reporting session', async () => {
+      const formattedTrialSession = await runActionWithTrialSession({
+        estimatedEndDate: '2026-05-22T04:00:00.000Z',
+        isReportingSession: false,
+        startDate: '2026-05-18T04:00:00.000Z',
+      });
+
+      expect(formattedTrialSession).toMatchObject({
+        endDateForAdditionalPageHeaders: 'May 22, 2026',
+        formattedEstimatedEndDateFull: 'May 22, 2026',
+        isReportingSession: false,
+        startDateForAdditionalPageHeaders: 'May 18, 2026',
+      });
+    });
+
+    it('should send empty end dates and flag the session as Reporting so only the due date is printed', async () => {
+      const formattedTrialSession = await runActionWithTrialSession({
+        estimatedEndDate: '2026-05-18T04:00:00.000Z',
+        isReportingSession: true,
+        startDate: '2026-05-18T04:00:00.000Z',
+      });
+
+      expect(formattedTrialSession).toMatchObject({
+        endDateForAdditionalPageHeaders: '',
+        formattedEstimatedEndDateFull: '',
+        isReportingSession: true,
+        startDateForAdditionalPageHeaders: 'May 18, 2026',
+      });
+    });
   });
 });

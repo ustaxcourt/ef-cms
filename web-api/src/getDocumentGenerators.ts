@@ -6,6 +6,7 @@ import { certificateOfService } from '@web-api/business/utilities/documentGenera
 import { docketRecord } from '../../shared/src/business/utilities/documentGenerators/docketRecord';
 import { entryOfAppearance } from '@web-api/business/utilities/documentGenerators/entryOfAppearance';
 import { minuteSheet } from '@web-api/business/utilities/documentGenerators/minuteSheet';
+import { noticeOfAssignmentOfJudge } from '@web-api/business/utilities/documentGenerators/noticeOfAssignmentOfJudge';
 import { noticeOfChangeOfTrialJudge } from '../../shared/src/business/utilities/documentGenerators/noticeOfChangeOfTrialJudge';
 import { noticeOfChangeOfTrialLocation } from '@web-api/business/utilities/documentGenerators/noticeOfChangeOfTrialLocation';
 import { noticeOfChangeOfTrialStartDate } from '@web-api/business/utilities/documentGenerators/noticeOfChangeOfTrialStartDate';
@@ -23,6 +24,7 @@ import { printableWorkingCopySessionList } from '../../shared/src/business/utili
 import { receiptOfFiling } from '../../shared/src/business/utilities/documentGenerators/receiptOfFiling';
 import { standingPretrialOrder } from '../../shared/src/business/utilities/documentGenerators/standingPretrialOrder';
 import { standingPretrialOrderForSmallCase } from '../../shared/src/business/utilities/documentGenerators/standingPretrialOrderForSmallCase';
+import { standingSchedulingOrder } from '@web-api/business/utilities/documentGenerators/standingSchedulingOrder';
 import { thirtyDayNoticeOfTrial } from '../../shared/src/business/utilities/documentGenerators/thirtyDayNoticeOfTrial';
 import { trialCalendar } from '../../shared/src/business/utilities/documentGenerators/trialCalendar';
 import { trialSessionPlanningReport } from '../../shared/src/business/utilities/documentGenerators/trialSessionPlanningReport';
@@ -37,6 +39,7 @@ export const getDocumentGenerators = () => ({
   docketRecord,
   entryOfAppearance,
   minuteSheet,
+  noticeOfAssignmentOfJudge,
   noticeOfChangeOfTrialJudge,
   noticeOfChangeOfTrialLocation,
   noticeOfChangeOfTrialStartDate,
@@ -55,6 +58,7 @@ export const getDocumentGenerators = () => ({
   receiptOfFiling,
   standingPretrialOrder,
   standingPretrialOrderForSmallCase,
+  standingSchedulingOrder,
   thirtyDayNoticeOfTrial,
   trialCalendar,
   trialSessionPlanningReport,

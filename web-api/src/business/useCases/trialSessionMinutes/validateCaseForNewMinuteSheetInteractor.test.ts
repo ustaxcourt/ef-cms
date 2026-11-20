@@ -91,9 +91,7 @@ describe('validateCaseForNewMinuteSheetInteractor', () => {
         },
         mockTrialClerkUser,
       ),
-    ).rejects.toThrow(
-      'Trial session non-existent-session-id was not found.',
-    );
+    ).rejects.toThrow('Trial session non-existent-session-id was not found.');
   });
 
   it('should throw InvalidRequest when case is already calendared on the trial session', async () => {
@@ -269,5 +267,26 @@ describe('validateCaseForNewMinuteSheetInteractor', () => {
 
     expect(getConsolidatedCases).not.toHaveBeenCalled();
     expect(result.consolidatedCases).toEqual([]);
+  });
+  it('should throw InvalidRequest when the trial session is a Reporting session', async () => {
+    getTrialSessionById.mockResolvedValue({
+      ...mockTrialSessionWithoutCase,
+      proceedingType: 'Reporting',
+    });
+
+    await expect(
+      validateCaseForNewMinuteSheetInteractor(
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+          trialSessionId: mockTrialSessionId,
+        },
+        mockTrialClerkUser,
+      ),
+    ).rejects.toThrow(
+      new InvalidRequest(
+        'Minute sheets cannot be created for Reporting sessions.',
+      ),
+    );
+    expect(getConsolidatedCases).not.toHaveBeenCalled();
   });
 });

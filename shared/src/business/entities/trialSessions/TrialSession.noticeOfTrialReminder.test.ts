@@ -1,4 +1,5 @@
 import { MOCK_TRIAL_REGULAR } from '../../../test/mockTrial';
+import { TRIAL_SESSION_PROCEEDING_TYPES } from '@shared/business/entities/EntityConstants';
 import { TrialSession } from './TrialSession';
 import { prepareDateFromString } from '../../utilities/DateHandler';
 
@@ -33,6 +34,36 @@ describe('TrialSession entity', () => {
         }),
       ).toBe(false);
     });
+
+    it('should return false for a calendared Reporting session even when the start date is within the reminder range', () => {
+      const startDate = today.plus({ ['days']: 30 }).toISO()!;
+
+      expect(
+        TrialSession.isStartDateWithinNOTTReminderRange({
+          isCalendared: true,
+          proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.reporting,
+          startDate,
+        }),
+      ).toBe(false);
+    });
+
+    it.each([
+      TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
+      TRIAL_SESSION_PROCEEDING_TYPES.remote,
+    ])(
+      'should return true for a calendared %s session when the start date is within the reminder range',
+      proceedingType => {
+        const startDate = today.plus({ ['days']: 30 }).toISO()!;
+
+        expect(
+          TrialSession.isStartDateWithinNOTTReminderRange({
+            isCalendared: true,
+            proceedingType,
+            startDate,
+          }),
+        ).toBe(true);
+      },
+    );
 
     tests.forEach(({ daysFromToday, expectedOutput }) => {
       it(`should return ${expectedOutput} when the trial session is calendared and the start date is ${daysFromToday} days from today`, () => {

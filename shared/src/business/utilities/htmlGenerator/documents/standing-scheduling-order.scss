@@ -1,0 +1,39 @@
+#standing-scheduling-order {
+  font-family: 'Century Schoolbook Std', serif;
+  font-size: 16px;
+  line-height: 120%;
+
+  p {
+    font-size: 14px;
+    line-height: 15px;
+  }
+
+  h3 {
+    font-size: 16px;
+  }
+
+  ol p {
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+
+  .standing-scheduling-card {
+    padding: 0 8px 0 8px;
+    border: 3px solid #000;
+    margin: 24px 0 12px 0;
+  }
+
+  .standing-scheduling-closing {
+    break-inside: avoid;
+  }
+
+  .standing-scheduling-signature {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .standing-scheduling-signature-judge {
+    line-height: 18px;
+    text-align: right;
+  }
+}

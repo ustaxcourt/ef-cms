@@ -22,7 +22,9 @@ export const generatePrintableTrialSessionCopyReportAction = async ({
     state.trialSessionWorkingCopy,
   );
 
-  const { trialStatusFilters, trialStatusCounts } = get(state.trialSessionWorkingCopyHelper);
+  const { trialStatusFilters, trialStatusCounts } = get(
+    state.trialSessionWorkingCopyHelper,
+  );
 
   const selectedFilters = trialStatusFilters.filter(filter => {
     return filters[filter.key];
@@ -48,19 +50,26 @@ export const generatePrintableTrialSessionCopyReportAction = async ({
     };
   });
 
-  const formattedEstimatedEndDateFull = applicationContext
-    .getUtilities()
-    .formatDateString(
-      formattedTrialSessionDetails.estimatedEndDate!,
-      'MONTH_DAY_YEAR',
-    );
+  // Reporting sessions have a single due date, so no end date is printed
+  const isReportingSession = !!formattedTrialSessionDetails.isReportingSession;
 
-  const endDateForAdditionalPageHeaders = applicationContext
-    .getUtilities()
-    .formatDateString(
-      formattedTrialSessionDetails.estimatedEndDate!,
-      'SHORT_MONTH_DAY_YEAR',
-    );
+  const formattedEstimatedEndDateFull = isReportingSession
+    ? ''
+    : applicationContext
+        .getUtilities()
+        .formatDateString(
+          formattedTrialSessionDetails.estimatedEndDate!,
+          'MONTH_DAY_YEAR',
+        );
+
+  const endDateForAdditionalPageHeaders = isReportingSession
+    ? ''
+    : applicationContext
+        .getUtilities()
+        .formatDateString(
+          formattedTrialSessionDetails.estimatedEndDate!,
+          'SHORT_MONTH_DAY_YEAR',
+        );
 
   const startDateForAdditionalPageHeaders = applicationContext
     .getUtilities()
@@ -83,6 +92,7 @@ export const generatePrintableTrialSessionCopyReportAction = async ({
     formattedStartDateFull: formattedTrialSessionDetails.formattedStartDateFull,
     formattedTerm: formattedTrialSessionDetails.formattedTerm,
     formattedTrialClerk: formattedTrialSessionDetails.formattedTrialClerk,
+    isReportingSession,
     sessionStatus: formattedTrialSessionDetails.sessionStatus,
     startDateForAdditionalPageHeaders,
     trialLocation: formattedTrialSessionDetails.trialLocation,
@@ -99,7 +109,7 @@ export const generatePrintableTrialSessionCopyReportAction = async ({
       sort,
       trialSessionId: formattedTrialSessionDetails.trialSessionId,
       userHeading,
-      trialStatusCounts
+      trialStatusCounts,
     });
 
   return { pdfUrl };

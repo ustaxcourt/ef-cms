@@ -1,5 +1,8 @@
 import { state } from '@web-client/presenter/app.cerebral';
-import { TRIAL_SESSION_PROCEEDING_TYPES } from '@shared/business/entities/EntityConstants';
+import {
+  ALLOWLIST_FEATURE_FLAGS,
+  TRIAL_SESSION_PROCEEDING_TYPES,
+} from '@shared/business/entities/EntityConstants';
 
 /**
  * validates a trial session's eligibility to be calendared or not
@@ -22,18 +25,20 @@ export const canSetTrialSessionToCalendarAction = ({
       trialSession,
     });
 
-  if (canSetAsCalendared) {
-    return path.yes();
-  }
+  const isReportingCalendarDisabled =
+    trialSession.proceedingType === TRIAL_SESSION_PROCEEDING_TYPES.reporting &&
+    !get(state.featureFlags[ALLOWLIST_FEATURE_FLAGS.REPORTING_CALENDARS.key]);
 
-  if (
-    trialSession.proceedingType === TRIAL_SESSION_PROCEEDING_TYPES.reporting
-  ) {
+  if (isReportingCalendarDisabled) {
     return path.no({
       alertWarning: {
-        message: 'Reporting sessions cannot be calendared yet.',
+        message: 'Setting a Reporting calendar is not enabled.',
       },
     });
+  }
+
+  if (canSetAsCalendared) {
+    return path.yes();
   }
 
   const addressProperties = ['address1', 'city', 'state', 'postalCode'];

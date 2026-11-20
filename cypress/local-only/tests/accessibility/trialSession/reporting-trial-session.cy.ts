@@ -10,6 +10,7 @@ import {
   loginAsTrialClerk,
 } from '../../../../helpers/authentication/login-as-helpers';
 import { checkA11y } from '../../../support/generalCommands/checkA11y';
+import { createCalendaredReportingTrialSession } from '../../../../helpers/trialSession/create-calendared-reporting-trial-session';
 
 const openReportingForm = (): void => {
   cy.get('[data-testid="trial-session-link"]').click();
@@ -160,6 +161,26 @@ describe('Reporting Trial Sessions Accessibility', () => {
         cy.get('[data-testid="edit-trial-session"]').click();
         cy.get('#due-date-picker').should('have.value', '02/10/2099');
         checkA11y();
+      });
+    });
+  });
+
+  describe('Calendared Reporting session', () => {
+    [
+      { login: loginAsPetitionsClerk, role: 'petitions clerk' },
+      { login: loginAsTrialClerk, role: 'trial clerk' },
+    ].forEach(({ login, role }) => {
+      it(`should be free of a11y issues when a ${role} views a calendared Reporting session`, () => {
+        createCalendaredReportingTrialSession(loginAsPetitionsClerk).then(
+          ({ docketNumber, trialSessionId }) => {
+            login();
+            cy.visit(`/trial-session-detail/${trialSessionId}`);
+            cy.contains('p.label', 'Due Date').should('be.visible');
+            cy.contains('a', docketNumber).should('be.visible');
+
+            checkA11y();
+          },
+        );
       });
     });
   });

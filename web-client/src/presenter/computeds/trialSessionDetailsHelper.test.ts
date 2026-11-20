@@ -241,6 +241,20 @@ describe('trialSessionDetailsHelper', () => {
 
       expect(result.showNewMinuteSheetButton).toEqual(false);
     });
+
+    it('should be false for a Reporting session even when the current user has MANAGE_MINUTE_SHEET permission', () => {
+      const result = runCompute(trialSessionDetailsHelper, {
+        state: {
+          permissions: { MANAGE_MINUTE_SHEET: true },
+          trialSession: {
+            ...MOCK_TRIAL_INPERSON,
+            proceedingType: 'Reporting',
+          },
+        },
+      });
+
+      expect(result.showNewMinuteSheetButton).toEqual(false);
+    });
   });
 
   describe('showSmallAndRegularQcComplete', () => {
