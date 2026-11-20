@@ -195,6 +195,7 @@ function MessageAttachmentDocument({
 }) {
   return (
     <Button
+      data-testid={`open-message-attachment-document-${doc.documentId}`}
       link
       style={{
         'text-align': 'left',
