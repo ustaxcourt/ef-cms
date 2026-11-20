@@ -94,9 +94,18 @@ describe('Messages', () => {
         ).click();
         cy.get('@windowOpen').should('have.been.called');
         sendMessage();
-        cy.wait('@createMessage').then(message => {
+        cy.wait('@createMessage').then(intercept => {
           loginAsAdc();
-          cy.visit(`messages/102-20/message-detail/${message.messageId}`);
+          cy.visit(
+            `messages/102-20/message-detail/${intercept.response?.body.messageId}`,
+          ).then(window => {
+            cy.stub(window, 'open').as('windowOpen');
+          });
+          cy.get('#button-reply').click();
+          cy.get(
+            '[data-testid="open-message-attachment-document-d854a954-7332-4e92-93bd-dc28c9fea0a5"]',
+          ).click();
+          cy.get('@windowOpen').should('have.been.called');
         });
       });
     });
