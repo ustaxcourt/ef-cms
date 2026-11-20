@@ -31,12 +31,6 @@ These rules are removed from the `staging_reviews-gate` ruleset:
   date above and are out of date, so do not triage them. The [weekly triage](weekly-triage.md) is paused.
 - The rest of the security docs describe how scanning works when it is turned on.
 
-### What still runs
-
-- GitHub secret scanning push protection
-- Dependabot alerts
-- The local Gitleaks pre-commit hook (see [Secrets Scanning](../secrets-scanning.md))
-
 ### Turning scanning back on
 
 1. A repository admin restores the `staging_reviews-gate` ruleset from the snapshot on [issue #10615](https://github.com/ustaxcourt/ef-cms/issues/10615).

@@ -1,7 +1,5 @@
 # Scanner Reference
 
-> **Paused (DAW-32):** security scanning is temporarily turned off. Scans do not run on pull requests, block merges, or upload to the Security tab. See [Scanning paused](README.md#scanning-paused).
-
 Facts about DAWSON's security scanners that the [remediation playbook](playbook.md) relies on:
 what each scanner reports and where, how to suppress a finding in each one, and how a fix reaches
 each image. These change whenever a `.github/workflows/security-*.yml` file or a Dockerfile

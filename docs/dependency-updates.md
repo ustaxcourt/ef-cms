@@ -300,8 +300,6 @@ If an OpenSearch update is available, we'll need to update OpenSearch in github 
 
 ### 8. Update CI security tool versions
 
-> **Paused (DAW-32):** security scanning is temporarily turned off. Scans do not run on pull requests, block merges, or upload to the Security tab. See [Scanning paused](security/remediation/README.md#scanning-paused). Skip the security workflow pins while scanning is paused.
-
 **Background:** We update all CI tool versions manually as part of the monthly dependency rotation. This covers two categories:
 
 - **GitHub Actions `uses:` pins** — action version tags in `.github/workflows/` files

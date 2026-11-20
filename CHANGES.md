@@ -21,8 +21,6 @@ These are GitHub settings, not deployment steps. See [docs/security/remediation/
    done
    ```
 
-   Also disable "Security - Weekly Summary" and "Security scan" by the workflow ID shown in `gh workflow list --all`.
-
 4. A repository admin confirms CodeQL default setup is not enabled under Settings > Code security.
 
 ### To turn scanning back on
