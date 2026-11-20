@@ -74,6 +74,7 @@ export type FormattedCaseDetailDocketEntry = RawDocketEntry & {
   qcNeeded: boolean;
   qcWorkItemsCompleted: boolean;
   qcWorkItemsUntouched: boolean;
+  receivedAtFormatted: string;
   sealedToTooltip: string;
   servedAtFormatted: string;
   showLegacySealed: boolean;
@@ -243,6 +244,10 @@ export const formatDocketEntry = (
         ? formatDateString(preformattedEntry.filingDate, FORMATS.ISO)
         : formatDateString(preformattedEntry.createdAt, FORMATS.ISO);
   const createdAtFormatted = formatDateString(createdAtISO, 'MMDDYY');
+  const receivedAtFormatted = formatDateString(
+    preformattedEntry.receivedAt,
+    'MMDDYY',
+  );
   const certificateOfServiceDateFormatted =
     preformattedEntry.certificateOfServiceDate
       ? formatDateString(preformattedEntry.certificateOfServiceDate, 'MMDDYY')
@@ -285,6 +290,7 @@ export const formatDocketEntry = (
     qcNeeded: qcWorkItemsUntouched && !isInProgress,
     qcWorkItemsCompleted: !hasWorkItemInfo || !!preformattedEntry.qcComplete,
     qcWorkItemsUntouched,
+    receivedAtFormatted,
     sealedToTooltip: preformattedEntry.isLegacySealed
       ? 'Sealed in Blackstone'
       : preformattedEntry.isSealed

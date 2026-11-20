@@ -27,6 +27,7 @@ describe('pendingReport', () => {
               consolidatedIconTooltipText: '',
               shouldIndent: false,
               receivedAt: '',
+              index: 1,
             },
             {
               associatedJudgeFormatted: CHIEF_JUDGE,
@@ -43,6 +44,7 @@ describe('pendingReport', () => {
               consolidatedIconTooltipText: '',
               shouldIndent: false,
               receivedAt: '',
+              index: 2,
             },
             {
               associatedJudgeFormatted: CHIEF_JUDGE,
@@ -59,6 +61,7 @@ describe('pendingReport', () => {
               consolidatedIconTooltipText: '',
               shouldIndent: false,
               receivedAt: '',
+              index: 3,
             },
             {
               associatedJudgeFormatted: CHIEF_JUDGE,
@@ -75,6 +78,7 @@ describe('pendingReport', () => {
               consolidatedIconTooltipText: '',
               shouldIndent: false,
               receivedAt: '',
+              index: 4,
             },
           ],
           subtitle: 'Chief Judge',

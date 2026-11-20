@@ -128,6 +128,16 @@ export function PendingReportList({
               stateKey={STATE_KEYS.PENDING_REPORT_TABLE_SORT}
             />
             <SortableHeader
+              screenReaderTitle="Index Number"
+              sortField="index"
+              tableSort={pendingReportTableSortData}
+              sortType="number"
+              className="no-wrap"
+              title="No."
+              onSort={sortTableSequence}
+              stateKey={STATE_KEYS.PENDING_REPORT_TABLE_SORT}
+            ></SortableHeader>
+            <SortableHeader
               sortField="receivedAt"
               sortType="date"
               tableSort={pendingReportTableSortData}
@@ -182,6 +192,7 @@ export function PendingReportList({
               <td>
                 <CaseLink formattedCase={item} />
               </td>
+              <td>{item.index}</td>
               <td>{item.formattedFiledDate}</td>
               <td>{item.caseTitle}</td>
               <td>
