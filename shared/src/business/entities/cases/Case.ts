@@ -1572,7 +1572,9 @@ export class Case extends JoiValidationEntity {
 
     const penaltiesBelowThreshold =
       caseDetail.caseType === CASE_TYPES_MAP.deficiency &&
-      !caseDetail.statistics?.find(
+      caseDetail.statistics &&
+      caseDetail.statistics.length > 0 &&
+      !caseDetail.statistics.find(
         stat =>
           Number(stat.irsDeficiencyAmount ?? 0) +
             Number(stat.irsTotalPenalties ?? 0) >
