@@ -1,5 +1,7 @@
 # Branching and Baseline Strategy
 
+> **Paused (DAW-32):** security scanning is temporarily turned off. Scans do not run on pull requests, block merges, or upload to the Security tab. See [Scanning paused](README.md#scanning-paused).
+
 A baseline is a recorded set of accepted pre-existing findings, so a pull request fails only on findings it introduces.
 
 **The strategy.** Three workflows are required checks on PRs into both `test` and `staging`. The first two already are on `staging`; `Findings vs staging` is the new one on both:
