@@ -72,8 +72,13 @@ export const MessageModalAttachments = connect(
                 <div className="margin-top-1" key={doc.documentId}>
                   <div className="grid-row">
                     <div className="grid-col-9">
-                      {doc.index != null ? `${doc.index} - ` : ''}
-                      {doc.documentTitle}
+                      <MessageAttachmentDocument
+                        doc={doc}
+                        messageModalHelper={messageModalHelper}
+                        openMessageAttachmentDocumentSequence={
+                          openMessageAttachmentDocumentSequence
+                        }
+                      />
                     </div>
                   </div>
                 </div>
@@ -84,25 +89,13 @@ export const MessageModalAttachments = connect(
                 <div className="margin-top-1" key={doc.documentId}>
                   <div className="grid-row message-modal-add-document-form">
                     <div className="grid-col-9">
-                      <Button
-                        link
-                        icon="file-pdf"
-                        iconColor="white"
-                        onClick={() => {
-                          const { docketNumber } =
-                            messageModalHelper.documents.find(
-                              dox => dox.index === doc.index,
-                            );
-
-                          return openMessageAttachmentDocumentSequence({
-                            docketNumber,
-                            documentId: doc.documentId,
-                          });
-                        }}
-                      >
-                        {doc.index != null ? `${doc.index} - ` : ''}
-                        {doc.documentTitle}
-                      </Button>
+                      <MessageAttachmentDocument
+                        doc={doc}
+                        messageModalHelper={messageModalHelper}
+                        openMessageAttachmentDocumentSequence={
+                          openMessageAttachmentDocumentSequence
+                        }
+                      />
                     </div>
                     <div className="grid-col-1"></div>
                     <div className="grid-col-2">
@@ -196,3 +189,30 @@ export const MessageModalAttachments = connect(
 );
 
 MessageModalAttachments.displayName = 'MessageModalAttachments';
+
+function MessageAttachmentDocument({
+  doc,
+  messageModalHelper,
+  openMessageAttachmentDocumentSequence,
+}) {
+  return (
+    <Button
+      link
+      icon="file-pdf"
+      iconColor="white"
+      onClick={() => {
+        const { docketNumber } = messageModalHelper.documents.find(
+          dox => dox.index === doc.index,
+        );
+
+        return openMessageAttachmentDocumentSequence({
+          docketNumber,
+          documentId: doc.documentId,
+        });
+      }}
+    >
+      {doc.index != null ? `${doc.index} - ` : ''}
+      {doc.documentTitle}
+    </Button>
+  );
+}
