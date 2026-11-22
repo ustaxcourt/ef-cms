@@ -28,6 +28,10 @@ import {
   toggleFeatureFlag,
 } from './cypress/helpers/cypressTasks/postgres/featureFlagsCypress';
 import { assertCorrectNetworkData } from './cypress/helpers/cypressTasks/network/assertCorrectNetworkData';
+import {
+  deleteCasesByDocketNumbers,
+  insertCasesWithStatusHistory,
+} from './cypress/helpers/cypressTasks/postgres/caseStatusHistoryCypress';
 
 export default defineConfig({
   chromeWebSecurity: true,
@@ -45,6 +49,9 @@ export default defineConfig({
         },
         deleteAllCypressTestAccounts() {
           return deleteAllCypressTestAccounts();
+        },
+        deleteCasesByDocketNumbers({ docketNumbers }) {
+          return deleteCasesByDocketNumbers({ docketNumbers });
         },
         deleteAllFilesInFolder(dir) {
           return deleteAllFilesInFolder(dir);
@@ -100,8 +107,17 @@ export default defineConfig({
         getUserByEmail(email: string) {
           return getUserByEmail(email);
         },
+        insertCasesWithStatusHistory({ cases }) {
+          return insertCasesWithStatusHistory({ cases });
+        },
         parsePdf({ filePath }) {
           return parsePdf({ filePath });
+        },
+        setAllowedTerminalIpAddresses(ipAddresses) {
+          return toggleFeatureFlag({
+            flag: 'allowed-terminal-ips',
+            flagValue: ipAddresses,
+          });
         },
         table(message) {
           console.table(message);
@@ -185,7 +201,7 @@ export default defineConfig({
     testIsolation: false,
   },
   expose: getExposedCypressEnv(),
-  fixturesFolder: 'cypress/local-only/fixtures',
+  fixturesFolder: 'cypress/helpers/file',
   reporter: 'spec',
   reporterOptions: {
     toConsole: true,

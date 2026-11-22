@@ -64,7 +64,7 @@ describe('Docket clerk adding a paper filing', () => {
       cy.get('[data-testid="filed-by-option"]').contains('Petitioner').click();
       cy.get('[data-testid="upload-pdf-button"]').click();
       attachFile({
-        filePath: '../../helpers/file/sample.pdf',
+        filePath: 'sample.pdf',
         selector: 'input#primaryDocumentFile-file',
         selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
       });

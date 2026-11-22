@@ -28,7 +28,7 @@ describe('Respondent-side practitioners file an Exhibit in Support (EXS)', () =>
       selectTypeaheadInput('complete-doc-document-type-search', 'Answer');
       cy.get('[data-testid="submit-document"]').click();
       attachFile({
-        filePath: '../../helpers/file/sample.pdf',
+        filePath: 'sample.pdf',
         selector: '[data-testid="primary-document"]',
         selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
       });
@@ -53,7 +53,7 @@ describe('Respondent-side practitioners file an Exhibit in Support (EXS)', () =>
       );
       cy.get('[data-testid="submit-document"]').click();
       attachFile({
-        filePath: '../../helpers/file/sample.pdf',
+        filePath: 'sample.pdf',
         selector: '[data-testid="primary-document"]',
         selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
       });
@@ -72,7 +72,7 @@ describe('Respondent-side practitioners file an Exhibit in Support (EXS)', () =>
       cy.get('#add-supporting-document-button').click();
       cy.get('#supporting-document-0').select('Exhibit');
       attachFile({
-        filePath: '../../helpers/file/sample.pdf',
+        filePath: 'sample.pdf',
         selector: '[data-testid="supporting-document-file-0"]',
         selectorToAwaitOnSuccess:
           '[data-testid="upload-file-success-supporting-document-file-0"]',
@@ -156,7 +156,7 @@ describe('Respondent-side practitioners file an Exhibit in Support (EXS)', () =>
         });
       cy.get('[data-testid="submit-document"]').click();
       attachFile({
-        filePath: '../../helpers/file/sample.pdf',
+        filePath: 'sample.pdf',
         selector: '[data-testid="primary-document"]',
         selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
       });
@@ -220,7 +220,7 @@ describe('Respondent-side practitioners file an Exhibit in Support (EXS)', () =>
       );
       cy.get('[data-testid="submit-document"]').click();
       attachFile({
-        filePath: '../../helpers/file/sample.pdf',
+        filePath: 'sample.pdf',
         selector: '[data-testid="primary-document"]',
         selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
       });
@@ -239,7 +239,7 @@ describe('Respondent-side practitioners file an Exhibit in Support (EXS)', () =>
       cy.get('#add-supporting-document-button').click();
       cy.get('#supporting-document-0').select('Exhibit');
       attachFile({
-        filePath: '../../helpers/file/sample.pdf',
+        filePath: 'sample.pdf',
         selector: '[data-testid="supporting-document-file-0"]',
         selectorToAwaitOnSuccess:
           '[data-testid="upload-file-success-supporting-document-file-0"]',
@@ -323,7 +323,7 @@ describe('Respondent-side practitioners file an Exhibit in Support (EXS)', () =>
         });
       cy.get('[data-testid="submit-document"]').click();
       attachFile({
-        filePath: '../../helpers/file/sample.pdf',
+        filePath: 'sample.pdf',
         selector: '[data-testid="primary-document"]',
         selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
       });

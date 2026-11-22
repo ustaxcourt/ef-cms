@@ -376,7 +376,7 @@ function addPendingItemToCase(docketNumber: string) {
   );
   cy.get('[data-testid="submit-document"]').click();
   attachFile({
-    filePath: '../../helpers/file/sample.pdf',
+    filePath: 'sample.pdf',
     selector: '[data-testid="primary-document"]',
     selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
   });

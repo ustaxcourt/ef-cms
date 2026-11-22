@@ -9,6 +9,7 @@ import {
   goToMyAccount,
 } from 'cypress/local-only/support/pages/my-account';
 import { v4 } from 'uuid';
+import { getCypressEnv } from 'cypress/helpers/env/cypressEnvironment';
 
 describe('Practioner with many cases updates phone number and address', () => {
   let oldEmail: string = '';
@@ -134,17 +135,25 @@ describe('Practioner with many cases updates phone number and address', () => {
     cy.task('getEmailVerificationToken', {
       email: oldEmail,
     }).then(verificationToken => {
-      cy.visit(`/verify-email?token=${verificationToken}`);
-    });
+      cy.clearAllCookies();
+      cy.clearAllLocalStorage();
+      cy.clearAllSessionStorage();
 
-    cy.get('[data-testid="success-alert"]')
-      .should('be.visible')
-      .and(
-        'contain.text',
-        'Your email address is verified. You can now log in to DAWSON.',
+      const { publicSiteUrl } = getCypressEnv();
+      cy.origin(
+        publicSiteUrl,
+        { args: { publicSiteUrl, verificationToken } },
+        ({ publicSiteUrl: url, verificationToken: token }) => {
+          cy.visit(`${url}/verify-email?token=${token}`);
+          cy.get('[data-testid="success-alert"]')
+            .should('be.visible')
+            .and(
+              'contain.text',
+              'Your email address is verified. You can now log in to DAWSON.',
+            );
+        },
       );
-    cy.url().should('contain', '/login');
-
+    });
     loginAsPractitionerWithManyCases(updatedEmail);
 
     cy.task('getUserByEmail', updatedEmail).then(user => {
@@ -169,16 +178,25 @@ describe('Practioner with many cases updates phone number and address', () => {
     cy.task('getEmailVerificationToken', {
       email: updatedEmail,
     }).then(verificationToken => {
-      cy.visit(`/verify-email?token=${verificationToken}`);
-    });
+      cy.clearAllCookies();
+      cy.clearAllLocalStorage();
+      cy.clearAllSessionStorage();
 
-    cy.get('[data-testid="success-alert"]')
-      .should('be.visible')
-      .and(
-        'contain.text',
-        'Your email address is verified. You can now log in to DAWSON.',
+      const { publicSiteUrl } = getCypressEnv();
+      cy.origin(
+        publicSiteUrl,
+        { args: { publicSiteUrl, verificationToken } },
+        ({ publicSiteUrl: url, verificationToken: token }) => {
+          cy.visit(`${url}/verify-email?token=${token}`);
+          cy.get('[data-testid="success-alert"]')
+            .should('be.visible')
+            .and(
+              'contain.text',
+              'Your email address is verified. You can now log in to DAWSON.',
+            );
+        },
       );
-    cy.url().should('contain', '/login');
+    });
 
     // log back in with old email to finish test
     loginAsPractitionerWithManyCases(oldEmail);
