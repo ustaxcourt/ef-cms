@@ -4,18 +4,13 @@ export const openMessageAttachmentDocumentAction = async ({
 }: ActionProps) => {
   const { documentId, docketNumber, isPublic } = props;
 
-  let url;
-  try {
-    ({ url } = await applicationContext
-      .getUseCases()
-      .getDocumentDownloadUrlInteractor(applicationContext, {
-        docketNumber,
-        isPublic,
-        key: documentId,
-      }));
-  } catch (err: any) {
-    throw new Error(`Unable to open document. ${err.message}`);
-  }
+  const { url } = await applicationContext
+    .getUseCases()
+    .getDocumentDownloadUrlInteractor(applicationContext, {
+      docketNumber,
+      isPublic,
+      key: documentId,
+    });
 
   applicationContext.getUtilities().openUrlInNewTab({ url });
 };
