@@ -26,6 +26,7 @@ import {
   loginAsReportersOffice,
   loginAsTrialClerk,
 } from '../../../../helpers/authentication/login-as-helpers';
+import { createOrder } from '../../../../helpers/caseDetail/docketRecord/courtIssuedFiling/create-order-and-decision';
 
 describe('Messages', () => {
   describe('Message filtering', () => {
@@ -106,6 +107,46 @@ describe('Messages', () => {
             '[data-testid="open-message-attachment-document-d854a954-7332-4e92-93bd-dc28c9fea0a5"]',
           ).click();
           cy.get('@windowOpen').should('have.been.called');
+        });
+      });
+
+      it('should not show link for a deleted draft document', () => {
+        cy.intercept('POST', '**/messages').as('createMessage');
+        cy.intercept('POST', '**/sign').as('signDocument');
+
+        loginAsDocketClerk();
+        cy.visit('/case-detail/103-20');
+        createOrder({
+          contents: 'This will be deleted',
+          title: 'Order to Delete',
+        });
+        cy.wait('@signDocument').then(interceptSign => {
+          const docketEntryId =
+            interceptSign.response?.body.signedDocketEntryId;
+          createMessage();
+          selectSection('ADC');
+          selectRecipient('Test ADC');
+          enterSubject();
+          fillOutMessageField();
+
+          cy.get('[data-testid="select-document"]').select(docketEntryId);
+
+          sendMessage();
+          cy.wait('@createMessage').then(interceptMessage => {
+            loginAsAdc();
+            cy.visit('/case-detail/103-20');
+            cy.get('[data-testid="tab-drafts"] span.button-text').click();
+            cy.get('[data-testid^="docket-entry-description-"]').last().click();
+            cy.get('#delete-pdf').click();
+            cy.get('[data-testid="modal-button-confirm"]').click();
+            cy.visit(
+              `messages/103-20/message-detail/${interceptMessage.response?.body.messageId}`,
+            );
+            cy.get('#button-reply').click();
+            cy.get(
+              `[data-testid="message-attachment-document-${docketEntryId}"]`,
+            ).should('not.match', 'a');
+          });
         });
       });
     });
