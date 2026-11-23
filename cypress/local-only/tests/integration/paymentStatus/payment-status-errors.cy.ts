@@ -1,21 +1,11 @@
 import { loginAsPetitioner } from '../../../../helpers/authentication/login-as-helpers';
 import { getCypressEnv } from '../../../../helpers/env/cypressEnvironment';
 import { externalUserCreatesElectronicCase } from '../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
-import { PAYMENT_DECLINED_MESSAGES } from '@shared/business/entities/EntityConstants';
+import { DEFAULT_PAYMENT_DECLINED_MESSAGES } from '@shared/business/entities/EntityConstants';
+import { skipUnlessPaymentPortalIntegrationEnabled } from '../../../../helpers/filingFee/skipUnlessPaymentPortalIntegrationEnabled';
 
 describe('Payment Status Errors', () => {
-  before(function () {
-    cy.task('getRawFeatureFlagValue', {
-      flag: 'enable-payment-portal-integration',
-    }).as('ENABLE_PAYMENT_PORTAL_INTEGRATION');
-    cy.get('@ENABLE_PAYMENT_PORTAL_INTEGRATION').then(
-      ENABLE_PAYMENT_PORTAL_INTEGRATION => {
-        if (!ENABLE_PAYMENT_PORTAL_INTEGRATION) {
-          this.skip();
-        }
-      },
-    );
-  });
+  before(skipUnlessPaymentPortalIntegrationEnabled);
 
   it('should display credit card as the type of failed payment', () => {
     loginAsPetitioner();
@@ -29,7 +19,7 @@ describe('Payment Status Errors', () => {
         ).click();
       });
       cy.get('[data-testid="error-alert"]').contains(
-        PAYMENT_DECLINED_MESSAGES['Credit/Debit Card'],
+        DEFAULT_PAYMENT_DECLINED_MESSAGES['Credit/Debit Card'],
       );
     });
   });
@@ -45,7 +35,7 @@ describe('Payment Status Errors', () => {
         ).click();
       });
       cy.get('[data-testid="error-alert"]').contains(
-        PAYMENT_DECLINED_MESSAGES['PayPal'],
+        DEFAULT_PAYMENT_DECLINED_MESSAGES['PayPal'],
       );
     });
   });
