@@ -18,7 +18,7 @@ import {
   verifySuccessfulPayment,
 } from 'cypress/helpers/filingFee/dashboardFilingFeeHelpers';
 import {
-  PAYMENT_DECLINED_MESSAGES,
+  DEFAULT_PAYMENT_DECLINED_MESSAGES,
   PAYMENT_FILING_FEE_ORIGIN,
 } from '@shared/business/entities/EntityConstants';
 import { petitionsClerkQcsAndServesElectronicCase } from 'cypress/helpers/documentQC/petitions-clerk-qcs-and-serves-electronic-case';
@@ -135,7 +135,7 @@ const dashboardPaymentReturnScenarios: DashboardPaymentReturnScenario[] = [
     alertTestId: 'error-alert',
     expectedTexts: () => [
       'Filing fee payment failed',
-      `${PAYMENT_DECLINED_MESSAGES['PayPal']}. Please try again.`,
+      `${DEFAULT_PAYMENT_DECLINED_MESSAGES['PayPal']}. Please try again.`,
     ],
     paymentMethod: 'PAYPAL',
     paymentStatus: 'Failed',
@@ -168,7 +168,7 @@ const dashboardPaymentReturnScenarios: DashboardPaymentReturnScenario[] = [
     alertTestId: 'error-alert',
     expectedTexts: () => [
       'Filing fee payment failed',
-      `${PAYMENT_DECLINED_MESSAGES['Credit/Debit Card']}. Please try again.`,
+      `${DEFAULT_PAYMENT_DECLINED_MESSAGES['Credit/Debit Card']}. Please try again.`,
     ],
     paymentMethod: 'PLASTIC_CARD',
     paymentStatus: 'Failed',
