@@ -1,3 +1,27 @@
+<details><summary>Dependency Updates - Week of 2026-11-16</summary>
+
+## Local
+
+#### Upgrade Terraform to `1.17.2`
+
+Use either tfswitch or tfenv:
+
+```bash
+tfswitch 1.17.2
+```
+
+```bash
+tfenv install 1.17.2
+tfenv use 1.17.2
+```
+
+#### Deploy Docker container `4.3.106` from dev
+
+```bash
+npm run deploy:ci-image:from dev
+```
+
+</details>
 <details><summary>10241 - Motion visibility policy date</summary>
 
 ## Manual Deployment Steps
