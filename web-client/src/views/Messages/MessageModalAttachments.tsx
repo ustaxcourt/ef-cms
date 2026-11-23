@@ -5,6 +5,7 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
+import { FormattedAttachment } from '@web-client/business/utilities/formatAttachments';
 const getDocumentOption = doc => {
   const documentTitle = doc.title.substr(0, 100);
 
@@ -192,6 +193,10 @@ function MessageAttachmentDocument({
   doc,
   messageModalHelper,
   openMessageAttachmentDocumentSequence,
+}: {
+  doc: FormattedAttachment;
+  messageModalHelper: typeof state.messageModalHelper;
+  openMessageAttachmentDocumentSequence: Function;
 }) {
   return (
     <Button
