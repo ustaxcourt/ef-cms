@@ -1,5 +1,5 @@
 name: DAWSON SARIF Upload
-description: Summarize a SARIF report, and upload it from any run that is not a pull request (staging pushes, scheduled runs and manual dispatches).
+description: Summarize a SARIF report unless told not to, and upload it from any run that is not a pull request (staging pushes, scheduled runs and manual dispatches).
 
 inputs:
   category:
@@ -8,13 +8,16 @@ inputs:
   sarif_file:
     description: Path to the SARIF report.
     required: true
+  summarize:
+    description: List the findings in the workflow log and job summary. 'false' for scans whose findings must not be public, such as deployed images.
+    required: false
+    default: 'true'
 
 runs:
   using: composite
   steps:
-    # Always summarized, uploaded only where the condition below allows.
     - name: Summarize SARIF
-      if: always()
+      if: always() && inputs.summarize == 'true'
       uses: ./.github/actions/dawson-sarif-summary
       with:
         sarif_file: ${{ inputs.sarif_file }}

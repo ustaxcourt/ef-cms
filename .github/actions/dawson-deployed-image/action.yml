@@ -1,0 +1,27 @@
+name: DAWSON Deployed Image
+description: Find the latest image an environment's ECR holds and return a digest-pinned reference to it. Needs AWS credentials and a checkout of this repository.
+
+inputs:
+  image:
+    description: ci-image (highest version tag) or batch (the live color's latest tag).
+    required: true
+  environment:
+    description: DAWSON environment name, e.g. prod or stg.
+    required: true
+
+outputs:
+  image_ref:
+    description: Digest-pinned image reference. Contains the account ID, which is masked, so use it in the same job.
+    value: ${{ steps.resolve.outputs.image_ref }}
+
+runs:
+  using: composite
+  steps:
+    - name: Resolve image digest
+      id: resolve
+      shell: bash
+      env:
+        IMAGE: ${{ inputs.image }}
+        DEPLOY_ENV: ${{ inputs.environment }}
+      # Not github.action_path: that is the host path, which containerized jobs cannot see.
+      run: '$GITHUB_WORKSPACE/.github/actions/dawson-deployed-image/resolve-deployed-image.sh'
