@@ -1,0 +1,40 @@
+name: DAWSON Deployed Image
+description: Find the image a DAWSON environment runs and return a digest-pinned reference to it. Needs AWS credentials and a checkout of this repository.
+
+inputs:
+  image:
+    description: ci-image or batch.
+    required: true
+  environment:
+    description: DAWSON environment name, e.g. prod or stg.
+    required: true
+  deploy_branch:
+    description: Branch the environment deploys from, e.g. prod or staging. Its deploy config names the CI image tag.
+    required: true
+
+outputs:
+  image_ref:
+    description: Digest-pinned image reference. Contains the account ID, which is masked, so use it in the same job.
+    value: ${{ steps.resolve.outputs.image_ref }}
+
+runs:
+  using: composite
+  steps:
+    - name: Read the deploy config ${{ inputs.deploy_branch }} uses
+      if: inputs.image == 'ci-image'
+      shell: bash
+      env:
+        DEPLOY_BRANCH: ${{ inputs.deploy_branch }}
+      run: |
+        git fetch --no-tags --depth=1 origin "refs/heads/$DEPLOY_BRANCH"
+        git show FETCH_HEAD:.circleci/config.yml > "$RUNNER_TEMP/deploy-config.yml"
+
+    - name: Resolve image digest
+      id: resolve
+      shell: bash
+      env:
+        IMAGE: ${{ inputs.image }}
+        DEPLOY_ENV: ${{ inputs.environment }}
+        CI_CONFIG: ${{ runner.temp }}/deploy-config.yml
+      # Not github.action_path: that is the host path, which containerized jobs cannot see.
+      run: '$GITHUB_WORKSPACE/.github/actions/dawson-deployed-image/resolve-deployed-image.sh'
