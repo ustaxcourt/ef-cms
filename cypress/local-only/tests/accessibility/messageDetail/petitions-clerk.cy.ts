@@ -38,6 +38,20 @@ describe('Message Detail - Petitions Clerk Accessibility', () => {
     checkA11y();
   });
 
+  it('should be free of a11y issues when replying with an attachment', () => {
+    loginAsPetitionsClerk();
+    cy.visit(
+      '/messages/103-20/message-detail/1d4c1fd9-5265-4e46-894f-b8426d3a6836',
+    );
+    cy.get('#button-reply').click();
+    cy.get('.modal-dialog').should('exist');
+    cy.get(
+      '[data-testid="open-message-attachment-document-4796a931-14fb-43e6-948f-d2b67ce4c1cb"]',
+    ).should('exist');
+
+    checkA11y();
+  });
+
   it('should be free of a11y issues when completing', () => {
     loginAsPetitionsClerk();
     cy.visit(
