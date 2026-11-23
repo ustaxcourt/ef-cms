@@ -198,16 +198,17 @@ function MessageAttachmentDocument({
   messageModalHelper: typeof state.messageModalHelper;
   openMessageAttachmentDocumentSequence: Function;
 }) {
-  return (
+  const style = {
+    TextAlign: 'left',
+    lineHeight: '28px',
+    paddingTop: '0px',
+    paddingBottom: '0px',
+  };
+  return doc.documentId && !doc.archived ? (
     <Button
       data-testid={`open-message-attachment-document-${doc.documentId}`}
       link
-      style={{
-        'text-align': 'left',
-        'line-height': '28px',
-        'padding-top': '0px',
-        'padding-bottom': '0px',
-      }}
+      style={style}
       iconColor="white"
       shouldWrapText={true}
       onClick={() => {
@@ -221,5 +222,13 @@ function MessageAttachmentDocument({
       {doc.index != null ? `${doc.index} - ` : ''}
       {doc.documentTitle}
     </Button>
+  ) : (
+    <div
+      style={style}
+      data-testid={`message-attachment-document-${doc.documentId}`}
+    >
+      {doc.index != null ? `${doc.index} - ` : ''}
+      {doc.documentTitle}
+    </div>
   );
 }
