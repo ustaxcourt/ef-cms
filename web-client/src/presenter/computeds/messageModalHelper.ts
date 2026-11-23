@@ -25,6 +25,7 @@ export const messageModalHelper = (
   const user = get(state.user);
   const currentAttachments = [...attachments, ...draftAttachments];
   const judgesChambers = get(state.judgesChambers) || [];
+  const { docketNumber } = caseDetail;
 
   const computeIsAlreadyAttached = doc =>
     currentAttachments.some(
@@ -117,6 +118,7 @@ export const messageModalHelper = (
     chambersSections,
     correspondence: corrs,
     documents,
+    docketNumber,
     draftDocuments: draftDocs,
     hasCorrespondence: corrs && corrs.length > 0,
     hasDocuments: documents.length > 0,

@@ -574,4 +574,20 @@ describe('messageModalHelper', () => {
       CASE_SERVICES_SUPERVISOR_SECTION,
     );
   });
+
+  describe('docket number', () => {
+    it('should include the case docket number', () => {
+      applicationContext.getUtilities().getFormattedCaseDetail.mockReturnValue({
+        correspondence: [],
+        draftDocuments: [],
+        formattedDocketEntries: [mockDocketEntryWithFileAttachedOnDocketRecord],
+      });
+
+      const { docketNumber } = runCompute(messageModalHelper, {
+        state: { ...baseState, caseDetail: { docketNumber: '101-26' } },
+      });
+
+      expect(docketNumber).toEqual('101-26');
+    });
+  });
 });

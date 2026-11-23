@@ -5,7 +5,7 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
-
+import { FormattedAttachment } from '@web-client/business/utilities/formatAttachments';
 const getDocumentOption = doc => {
   const documentTitle = doc.title.substr(0, 100);
 
@@ -44,6 +44,8 @@ export const MessageModalAttachments = connect(
     updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
     validateCreateMessageInModalSequence:
       sequences.validateCreateMessageInModalSequence,
+    openMessageAttachmentDocumentSequence:
+      sequences.openMessageAttachmentDocumentSequence,
   },
   function MessageModalAttachments({
     form,
@@ -51,6 +53,7 @@ export const MessageModalAttachments = connect(
     updateMessageModalAttachmentsSequence,
     updateScreenMetadataSequence,
     validateCreateMessageInModalSequence,
+    openMessageAttachmentDocumentSequence,
   }) {
     return (
       <>
@@ -68,9 +71,14 @@ export const MessageModalAttachments = connect(
               return (
                 <div className="margin-top-1" key={doc.documentId}>
                   <div className="grid-row">
-                    <div className="grid-col-9">
-                      {doc.index != null ? `${doc.index} - ` : ''}
-                      {doc.documentTitle}
+                    <div className="grid-col-10">
+                      <MessageAttachmentDocument
+                        doc={doc}
+                        messageModalHelper={messageModalHelper}
+                        openMessageAttachmentDocumentSequence={
+                          openMessageAttachmentDocumentSequence
+                        }
+                      />
                     </div>
                   </div>
                 </div>
@@ -80,11 +88,15 @@ export const MessageModalAttachments = connect(
               return (
                 <div className="margin-top-1" key={doc.documentId}>
                   <div className="grid-row message-modal-add-document-form">
-                    <div className="grid-col-9">
-                      {doc.index != null ? `${doc.index} - ` : ''}
-                      {doc.documentTitle}
+                    <div className="grid-col-10">
+                      <MessageAttachmentDocument
+                        doc={doc}
+                        messageModalHelper={messageModalHelper}
+                        openMessageAttachmentDocumentSequence={
+                          openMessageAttachmentDocumentSequence
+                        }
+                      />
                     </div>
-                    <div className="grid-col-1"></div>
                     <div className="grid-col-2">
                       <Button
                         iconRight
@@ -176,3 +188,38 @@ export const MessageModalAttachments = connect(
 );
 
 MessageModalAttachments.displayName = 'MessageModalAttachments';
+
+function MessageAttachmentDocument({
+  doc,
+  messageModalHelper,
+  openMessageAttachmentDocumentSequence,
+}: {
+  doc: FormattedAttachment;
+  messageModalHelper: typeof state.messageModalHelper;
+  openMessageAttachmentDocumentSequence: Function;
+}) {
+  return (
+    <Button
+      data-testid={`open-message-attachment-document-${doc.documentId}`}
+      link
+      style={{
+        'text-align': 'left',
+        'line-height': '28px',
+        'padding-top': '0px',
+        'padding-bottom': '0px',
+      }}
+      iconColor="white"
+      shouldWrapText={true}
+      onClick={() => {
+        const { docketNumber } = messageModalHelper;
+        return openMessageAttachmentDocumentSequence({
+          docketNumber,
+          documentId: doc.documentId,
+        });
+      }}
+    >
+      {doc.index != null ? `${doc.index} - ` : ''}
+      {doc.documentTitle}
+    </Button>
+  );
+}
