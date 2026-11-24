@@ -21,6 +21,7 @@ import {
 } from '@shared/business/utilities/DateHandler';
 
 export type PublicTrialSessionsHelperResults = {
+  showReportingOption: boolean;
   sessionTypeOptions: {
     label: string;
     value: string;
@@ -263,6 +264,9 @@ export const publicTrialSessionsHelper = (
 
   return {
     mobileFilteredGroups: groupedMobileFilteredSessions,
+    showReportingOption: !!get(
+      state.featureFlags[ALLOWLIST_FEATURE_FLAGS.REPORTING_CALENDARS.key],
+    ),
     publicTrialSessionCount,
     mobileTotalPages: Math.ceil(mobileFilteredGroups.length / PAGE_SIZE),
     filtersHaveBeenModified,

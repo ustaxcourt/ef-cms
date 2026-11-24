@@ -15,6 +15,7 @@ type PublicTrialSessionsFiltersProps = {
   locations: SelectedFilterValues;
   sessionTypes: SelectedFilterValues;
   proceedingType: string;
+  showReportingOption: boolean;
   displayProgressSpinnerSequence: (props: { timeInSeconds: number }) => void;
   updateFormValueSequence: (props: {
     index?: number;
@@ -47,6 +48,7 @@ export const PublicTrialSessionsFilters = function ({
   judges,
   locations,
   proceedingType,
+  showReportingOption,
   sessionTypeOptions,
   sessionTypes,
   trialCitiesByState,
@@ -56,7 +58,7 @@ export const PublicTrialSessionsFilters = function ({
   const PROCEEDING_TYPES = Object.entries({
     all: 'All',
     ...TRIAL_SESSION_PROCEEDING_TYPES,
-  });
+  }).filter(([key]) => key !== 'reporting' || showReportingOption);
 
   const handleUpdateFormValue = (key: string, value: FilterValue) => {
     displayProgressSpinnerSequence({ timeInSeconds: 0.25 });
@@ -74,7 +76,10 @@ export const PublicTrialSessionsFilters = function ({
 
   function proceedingTypeRadioOption(key: string, value: string) {
     return (
-      <div className="usa-radio usa-radio__inline padding-right-1" key={key}>
+      <div
+        className="usa-radio usa-radio__inline padding-right-1 tw:max-[479px]:block!"
+        key={key}
+      >
         <input
           aria-describedby="proceeding-type-legend"
           checked={proceedingType === value}
@@ -178,7 +183,11 @@ function FilterSelect({
   return (
     <>
       <div className="margin-bottom-2">
-        <label className="usa-label" htmlFor={`${name}-filter`}>
+        <label
+          className="usa-label"
+          htmlFor={`${name}-filter`}
+          id={`${name}-filter-label`}
+        >
           {label} <span className="optional-light-text">(optional)</span>
         </label>
         <NonPhone>
@@ -208,6 +217,7 @@ function FilterSelect({
               label: MULTI_SELECT_PLACEHOLDER,
               value: '',
             }}
+            id={`${name}-filter`}
             name={name}
             options={options}
             value={MULTI_SELECT_PLACEHOLDER}

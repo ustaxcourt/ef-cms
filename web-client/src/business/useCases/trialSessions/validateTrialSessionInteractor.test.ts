@@ -6,8 +6,43 @@ import {
 } from '@shared/business/entities/EntityConstants';
 import { validateTrialSessionInteractor } from '@web-client/business/useCases/trialSessions/validateTrialSessionInteractor';
 import { RawEditTrialSession } from '@shared/business/entities/trialSessions/EditTrialSession';
+import { MOCK_TRIAL_REGULAR } from '@shared/test/mockTrial';
 
 describe('validateTrialSessionInteractor', () => {
+  it('should reject a new Reporting session with a past due date', () => {
+    const errors = validateTrialSessionInteractor({
+      trialSession: {
+        ...MOCK_TRIAL_REGULAR,
+        trialSessionId: '',
+        proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.reporting,
+        startTime: undefined,
+        startDate: '2000-01-01T00:00:00.000Z',
+        estimatedEndDate: '2000-01-01T00:00:00.000Z',
+      },
+    });
+    expect(errors).toEqual({ startDate: 'Enter a valid due date' });
+  });
+
+  it.each(['', MOCK_TRIAL_REGULAR.trialSessionId])(
+    'should show one due date error for mismatched Reporting dates for session %s',
+    trialSessionId => {
+      const errors = validateTrialSessionInteractor({
+        trialSession: {
+          ...MOCK_TRIAL_REGULAR,
+          trialSessionId,
+          proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.reporting,
+          startTime: undefined,
+          startDate: '3000-12-01T00:00:00.000Z',
+          estimatedEndDate: '3000-12-02T00:00:00.000Z',
+        },
+      });
+
+      expect(errors).toEqual({
+        startDate: 'Enter a valid due date',
+      });
+    },
+  );
+
   it('returns a list of errors when the edit trial session is invalid', () => {
     const errors = validateTrialSessionInteractor({
       trialSession: { trialSessionId: '123' } as RawEditTrialSession,

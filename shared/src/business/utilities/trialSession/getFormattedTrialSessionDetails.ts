@@ -172,6 +172,7 @@ export type FormattedTrialSessionDetailsType = TrialSessionState & {
   formattedTrialClerk: string;
   inactiveCases: any;
   isRemoteSession: boolean;
+  isReportingSession: boolean;
   noLocationEntered: boolean;
   openCases: any;
   showSwingSession: boolean;
@@ -278,7 +279,7 @@ export const getFormattedTrialSessionDetails = ({
     .getUtilities()
     .formatDateString(trialSession.startDate, 'MMDDYY');
 
-  const formattedEstimatedEndDate = applicationContext
+  let formattedEstimatedEndDate = applicationContext
     .getUtilities()
     .formatDateString(trialSession.estimatedEndDate!, 'MMDDYY');
 
@@ -286,7 +287,9 @@ export const getFormattedTrialSessionDetails = ({
     .getUtilities()
     .formatDateString(trialSession.startDate, 'MONTH_DAY_YEAR');
 
-  const [hour, min] = trialSession.startTime!.split(':');
+  const isReportingSession =
+    trialSession.proceedingType === TRIAL_SESSION_PROCEEDING_TYPES.reporting;
+  const [hour, min] = (trialSession.startTime || '').split(':');
   let hourNumber = +hour;
   const startTimeExtension = hourNumber >= 12 ? 'pm' : 'am';
 
@@ -294,7 +297,11 @@ export const getFormattedTrialSessionDetails = ({
     hourNumber = hourNumber - 12;
   }
 
-  const formattedStartTime = `${hourNumber}:${min} ${startTimeExtension}`;
+  let formattedStartTime = `${hourNumber}:${min} ${startTimeExtension}`;
+  if (isReportingSession) {
+    formattedEstimatedEndDate = '';
+    formattedStartTime = '';
+  }
 
   const formattedJudge =
     (trialSession.judge && trialSession.judge.name) || 'Not assigned';
@@ -365,6 +372,7 @@ export const getFormattedTrialSessionDetails = ({
     formattedTrialClerk,
     inactiveCases: inactiveCasesFormatted,
     isRemoteSession,
+    isReportingSession,
     noLocationEntered,
     openCases: openCasesFormatted,
     showSwingSession,

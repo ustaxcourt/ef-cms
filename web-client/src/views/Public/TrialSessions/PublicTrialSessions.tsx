@@ -123,6 +123,9 @@ function NonMobilePublicTrialSessions({
               locations={publicTrialSessionsData.locations || {}}
               proceedingType={publicTrialSessionsData.proceedingType || 'All'}
               sessionTypeOptions={publicTrialSessionsHelper.sessionTypeOptions}
+              showReportingOption={
+                publicTrialSessionsHelper.showReportingOption
+              }
               sessionTypes={publicTrialSessionsData.sessionTypes || {}}
               trialCitiesByState={publicTrialSessionsHelper.trialCitiesByState}
               trialSessionJudgeOptions={
@@ -217,6 +220,9 @@ function MobilePublicTrialSessions({
               locations={publicTrialSessionsData.locations || {}}
               proceedingType={publicTrialSessionsData.proceedingType || 'All'}
               sessionTypeOptions={publicTrialSessionsHelper.sessionTypeOptions}
+              showReportingOption={
+                publicTrialSessionsHelper.showReportingOption
+              }
               sessionTypes={publicTrialSessionsData.sessionTypes || {}}
               trialCitiesByState={publicTrialSessionsHelper.trialCitiesByState}
               trialSessionJudgeOptions={

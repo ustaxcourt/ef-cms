@@ -11,6 +11,21 @@ import { publicTrialSessionsHelper } from '@web-client/presenter/computeds/Publi
 import { runCompute } from '@web-client/presenter/test.cerebral';
 
 describe('publicTrialSessionsHelper', () => {
+  it.each([true, false])(
+    'should gate the public Reporting filter with flag %s',
+    enabled => {
+      const result = runCompute(publicTrialSessionsHelper, {
+        state: {
+          featureFlags: {
+            [ALLOWLIST_FEATURE_FLAGS.REPORTING_CALENDARS.key]: enabled,
+          },
+          [PUBLIC_TRIAL_SESSIONS_DATA_KEY]: {},
+        },
+      });
+      expect(result.showReportingOption).toBe(!!enabled);
+    },
+  );
+
   it('should return the "sessionTypeOptions" value correctly', () => {
     const { sessionTypeOptions } = runCompute(publicTrialSessionsHelper, {
       state: {

@@ -30,6 +30,7 @@ export const trialSessionsHelper = (
 ): {
   isResetFiltersDisabled: boolean;
   showNewTrialSession: boolean;
+  showReportingOption: boolean;
   showNoticeIssued: boolean;
   showSessionStatus: boolean;
   trialSessionJudgeOptions: {
@@ -143,6 +144,9 @@ export const trialSessionsHelper = (
     sessionTypeOptions,
     showCreateTermButton: permissions.SET_TRIAL_SESSION_CALENDAR,
     showNewTrialSession: permissions.CREATE_TRIAL_SESSION,
+    showReportingOption: !!get(
+      state.featureFlags[ALLOWLIST_FEATURE_FLAGS.REPORTING_CALENDARS.key],
+    ),
     showNoticeIssued: filters.currentTab === 'calendared',
     showSessionStatus: filters.currentTab === 'calendared',
     startDateErrorMessage,
