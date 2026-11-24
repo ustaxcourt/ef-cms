@@ -1,0 +1,66 @@
+name: Security - Deployed Images
+
+# Scans the images an environment runs, read from its ECR. Called by security-containers.yml
+# weekly, and later by the GitHub Actions deploy after each color switch.
+on:
+  workflow_call:
+    inputs:
+      environment:
+        description: DAWSON environment, e.g. prod. Needs a GitHub Environment image-scan-<environment>.
+        type: string
+        required: true
+
+permissions:
+  contents: read
+
+env:
+  TRIVY_DB_REPOSITORY: ghcr.io/aquasecurity/trivy-db,public.ecr.aws/aquasecurity/trivy-db
+  TRIVY_JAVA_DB_REPOSITORY: ghcr.io/aquasecurity/trivy-java-db,public.ecr.aws/aquasecurity/trivy-java-db
+
+jobs:
+  scan:
+    name: Trivy Deployed (${{ inputs.environment }}) — ${{ matrix.image }}
+    runs-on: ubuntu-latest
+    # Holds the role ARN secret; its branch rule decides which refs may scan.
+    environment: image-scan-${{ inputs.environment }}
+    permissions:
+      contents: read
+      id-token: write
+      security-events: write
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        image: [ci-image, batch]
+    env:
+      TRIVY_IMAGE_SRC: remote
+    steps:
+      # TODO: Create action to assume a role and return temporary credentials, so we can use the AWS CLI to find the deployed image. Previously DAW-20
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Get read-only AWS credentials
+        uses: aws-actions/configure-aws-credentials@v6.3.0
+        with:
+          # A secret, not a variable: with: values are printed in the log, and the ARN holds the account ID.
+          role-to-assume: ${{ secrets.AWS_IMAGE_SCAN_ROLE_ARN }}
+          role-session-name: trivy-deployed-${{ inputs.environment }}-${{ matrix.image }}
+          aws-region: us-east-1
+          mask-aws-account-id: true
+
+      - name: Find the image ${{ inputs.environment }} runs
+        id: image
+        uses: ./.github/actions/dawson-deployed-image
+        with:
+          image: ${{ matrix.image }}
+          environment: ${{ inputs.environment }}
+
+      - name: Trivy scan — ${{ matrix.image }} (${{ inputs.environment }})
+        uses: ./.github/actions/dawson-trivy-image-scan
+        with:
+          image_ref: ${{ steps.image.outputs.image_ref }}
+          report_path: trivy-deployed-${{ inputs.environment }}-${{ matrix.image }}.sarif
+          category: trivy-deployed-${{ inputs.environment }}-${{ matrix.image }}
+          summarize: 'false'

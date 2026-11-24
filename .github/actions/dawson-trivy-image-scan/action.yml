@@ -11,6 +11,10 @@ inputs:
   report_path:
     description: Path for the SARIF report.
     required: true
+  summarize:
+    description: List the findings in the workflow log and job summary. 'false' for scans whose findings must not be public, such as deployed images.
+    required: false
+    default: 'true'
 
 runs:
   using: composite
@@ -35,3 +39,4 @@ runs:
       with:
         sarif_file: ${{ inputs.report_path }}
         category: ${{ inputs.category }}
+        summarize: ${{ inputs.summarize }}

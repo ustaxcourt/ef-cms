@@ -225,6 +225,30 @@ jobs:
           category: trivy-baseline-batch
 
   # ─────────────────────────────────────────────────────────────────────────────
+  # The images each environment actually runs, read from its ECR. Weekly and
+  # manual runs on staging only: each image-scan-<env> environment refuses other branches.
+  # ─────────────────────────────────────────────────────────────────────────────
+  trivy-deployed:
+    name: Trivy Deployed (${{ matrix.environment }})
+    # Skips manual runs on other branches instead of failing on the environment's branch rule.
+    if: >-
+      (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') &&
+      github.ref == 'refs/heads/staging'
+    strategy:
+      fail-fast: false
+      matrix:
+        # Add an environment only once its scan role and image-scan-<env> GitHub Environment exist.
+        # IMPORTANT/TODO: Pending environment creation, the workflow will fail with a 404 when it tries to use the environment.
+        environment: [staging]
+    uses: ./.github/workflows/security-deployed-images.yml
+    permissions:
+      contents: read
+      id-token: write
+      security-events: write
+    with:
+      environment: ${{ matrix.environment }}
+
+  # ─────────────────────────────────────────────────────────────────────────────
   # Aggregate gate. Today every scan is warn-only (exit-code 0), so this only trips
   # on infrastructure failures (build error, action crash). When a scan is flipped
   # to blocking, this is the single check to require in branch protection.
