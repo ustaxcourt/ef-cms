@@ -24,13 +24,13 @@ Data flow: React view → Cerebral sequence → action → API call → Lambda h
   - Stylelint: `npm run lint:css` via [`stylelint.config.js`](stylelint.config.js). Single file: `npm run lint:css:file -- path/to/file.scss`.
   - Swagger: `npm run lint:swagger` via Swagger CLI validation. Single file: `npm run lint:swagger:file -- path/to/file.yaml`.
   - Auto-fix: `npm run lint:fix`.
-- Unit tests (Jest, jsdom): Aggregate config via [`jest.config.ts`](jest.config.ts). Single file: `npm run test:file -- path/to/file.test.ts`. The full-suite scripts below run with `--coverage` by default and write reports to `./coverage/`; the `*:file` variants disable coverage.
-  - API: `npm run test:api`. Single file: `npm run test:api:file -- path/to/file.test.ts`.
-  - Client: `npm run test:client:unit`. Single file: `npm run test:client:unit:file -- path/to/file.test.ts`.
+- Unit tests (Jest, jsdom): Aggregate config via [`jest.config.ts`](jest.config.ts). Single file: `npm run test:file -- path/to/file.test.ts`. Focused coverage: `npm run test:file:coverage -- path/to/file.test.ts`.
+  - API: `npm run test:api`. Single file: `npm run test:api:file -- path/to/file.test.ts`. Focused coverage: `npm run test:api:file:coverage -- path/to/file.test.ts`.
+  - Client: `npm run test:client:unit`. Single file: `npm run test:client:unit:file -- path/to/file.test.ts`. Focused coverage: `npm run test:client:unit:file:coverage -- path/to/file.test.ts`.
   - Client integration (Cerebral): `npm run test:client:_integration`. Single file: `npm run test:client:integration:file -- path/to/file.test.ts`. Requires the local stack (see "Stack readiness" below).
-  - Shared: `npm run test:shared`. Single file: `npm run test:shared:file -- path/to/file.test.ts`.
-  - Scripts: `npm run test:scripts`. Single file: `npm run test:scripts:file -- path/to/file.test.ts`.
-  - Infrastructure: `npm run test:infrastructure`. Single file: `npm run test:infrastructure:file -- path/to/file.test.ts`.
+  - Shared: `npm run test:shared`. Single file: `npm run test:shared:file -- path/to/file.test.ts`. Focused coverage: `npm run test:shared:file:coverage -- path/to/file.test.ts`.
+  - Scripts: `npm run test:scripts`. Single file: `npm run test:scripts:file -- path/to/file.test.ts`. Focused coverage: `npm run test:scripts:file:coverage -- path/to/file.test.ts`.
+  - Infrastructure: `npm run test:infrastructure`. Single file: `npm run test:infrastructure:file -- path/to/file.test.ts`. Focused coverage: `npm run test:infrastructure:file:coverage -- path/to/file.test.ts`.
   - Document generation: `npm run test:document-generation`. Single file: `npm run test:document-generation:file -- path/to/file.test.ts`.
 - Test-suite ownership (use this to pick the correct suite for an edited file):
   - `shared/**` (including `shared/src/**` and `shared/admin-tools/**`) → `test:shared` (except `shared/src/business/utilities/documentGenerators/**` → `test:document-generation`).
@@ -106,7 +106,7 @@ Data flow: React view → Cerebral sequence → action → API call → Lambda h
   - CI/CD: deployments are performed in CircleCI: [`.circleci/config.yml`](.circleci/config.yml).
 - Observability
   - Server-side logger: Winston, configured in [`web-api/src/createLogger.ts`](web-api/src/createLogger.ts) and wrapped by [`web-api/src/utilities/logger/getDawsonLogger.ts`](web-api/src/utilities/logger/getDawsonLogger.ts). Use the wrapper; do not call `console.log` from Lambda code.
-  - Client-side error reporting is not yet implemented (planned via AWS RUM).
+  - Client-side error reporting utilizes AWS RUM.
   - CloudWatch alarms exist for specific failure modes (e.g. email delivery failure after retries, overall health failure) under [`web-api/terraform/modules/api/alarms.tf`](web-api/terraform/modules/api/alarms.tf) and [`web-api/terraform/modules/health-alarms/`](web-api/terraform/modules/health-alarms/). When adding a long-running or always-on background workflow, consider whether a paired alarm is warranted.
 - Test infrastructure
   - Mock `applicationContext`: [`shared/src/business/test/createTestApplicationContext.ts`](shared/src/business/test/createTestApplicationContext.ts) (server) and [`web-client/src/test/createClientTestApplicationContext.ts`](web-client/src/test/createClientTestApplicationContext.ts) (client).
@@ -115,7 +115,7 @@ Data flow: React view → Cerebral sequence → action → API call → Lambda h
 
 ### General Expectations
 
-- Test coverage: every code change must ship with unit tests in the suite that owns the file (see "Test-suite ownership" above) and must hit 100% line + branch coverage for the added/modified code (or as close as possible). Verify by running the owning full-suite script (which emits `--coverage` by default) and inspecting `./coverage/lcov-report/index.html` (or `coverage/clover.xml` / `coverage-final.json`) for the changed files. The `*:file` variants skip coverage and are only suitable for fast iteration, not for the final coverage check.
+- Test coverage: every code change must ship with unit tests in the suite that owns the file (see "Test-suite ownership" above) and must hit 100% line + branch coverage for the added/modified code (or as close as possible). Where available, use the focused `*:file:coverage` command while iterating and inspect the changed source file's report. For final verification, run the owning full-suite script (which emits `--coverage` by default) and inspect `./coverage/lcov-report/index.html` (or `coverage/clover.xml` / `coverage-final.json`) for aggregate thresholds. The regular `*:file` variants skip coverage.
   - Exempt from new unit tests: pure documentation (`docs/**`, `*.md`), Terraform-only changes (`web-api/terraform/**`, `web-client/terraform/**`), and CircleCI config (`.circleci/**`). Everything else (including shell scripts under `scripts/` and `aws/lambdas/`) needs tests in its owning suite.
 - Cypress coverage: any user-facing change requires Cypress specs under [`cypress/`](cypress/) that exercise every applicable role. Use the canonical role helpers in [`cypress/helpers/authentication/login-as-helpers.ts`](cypress/helpers/authentication/login-as-helpers.ts) (`loginAs*`).
 - Accessibility: all UI must satisfy Section 508 and WCAG 2.1 AA. Verify by adding/extending a Cypress spec that calls the shared [`checkA11y`](cypress/local-only/support/generalCommands/checkA11y.ts) helper (built on `cypress-axe` + `axe-core`); see [`cypress/local-only/tests/accessibility/`](cypress/local-only/tests/accessibility/) for exemplar specs. Prefer existing accessible primitives in [`ustc-ui/`](web-client/src/ustc-ui/) and [`dawson-ui/`](web-client/src/dawson-ui/); preserve semantic HTML, label associations, focus order, and keyboard operability.
@@ -123,6 +123,7 @@ Data flow: React view → Cerebral sequence → action → API call → Lambda h
 - Test best practices:
   - Any `it()` block should be able to run in isolation, without relying on data, state, or side effects of other tests.
   - Never wait for a fixed time interval; instead, wait for a deterministic condition to be met.
+  - Because tests run in parallel, tests should never modify shared state (e.g. seeded data).
 - Cerebral state debugging: for "list/data disappears after a sequence runs" bugs, inspect the action chain in the relevant `*Sequence.ts`, the state shape in [`web-client/src/presenter/state.ts`](web-client/src/presenter/state.ts), any relevant computed under [`web-client/src/presenter/computeds/`](web-client/src/presenter/computeds/), and the action that runs on modal close — these bugs are usually a missing re-fetch or a state path being cleared without being re-populated.
 - Pre-verification hygiene: before declaring work ready, lint all added and modified files, fixing errors as necessary, and then run `npx prettier --write <files/globs>` to format code based on the project's prettier configuration. Do not bypass these tools or hand-format around them.
 - TypeScript discipline: annotate function parameters and return types; do not rely on inference where an explicit annotation is possible. Prefer type annotations over assertions; do not use `as any` or non-null `!` assertions to silence the type checker — fix the underlying type. Confirm the change type-checks with `npx tsc --noEmit -p tsconfig.json` if Jest/ESLint do not already exercise the file.
@@ -130,8 +131,8 @@ Data flow: React view → Cerebral sequence → action → API call → Lambda h
 - Local stack required for E2E/integration: Cypress and `test:client:_integration` require the local API + clients to be reachable. Use the application startup instructions above.
 - Integration/E2E verification is mandatory: run all affected integration and Cypress tests, including any you add or modify. If the local application is not already running, start it using the instructions above and wait for it to be ready; its absence is not a valid reason to skip verification. Do not report tests as passing unless they ran. If startup or a test remains blocked after reasonable troubleshooting, report the exact command, output, and unresolved blocker.
 - HTTP contract: any addition, removal, or signature change to an HTTP endpoint must be reflected in [`web-api/swagger.json`](web-api/swagger.json); verify with `npm run lint:swagger`.
-- Campsite rule: you may notice that existing code violates some of the guidelines and expectations listed above. Wherever possible (barring large refactors or side quests), always leave the code "better than you found it" by adjusting it to fit established best practices and guidelines, including meeting test coverage objectives.
-- Verify honestly: never report a bug "fixed" or an issue "resolved" without executing the verifying command/test and capturing concrete evidence — the exact command, its exit code, and the relevant stdout lines (or, for UI changes, the URL exercised, the role used, and a screenshot or DOM excerpt).
+- Campsite rule: you may notice that existing code violates some of the guidelines and expectations listed above. Wherever possible (barring large refactors), always leave the code "better than you found it" by adjusting it to fit established best practices and guidelines, including meeting test coverage objectives.
+- Verify honestly: never report a bug "fixed" or an issue "resolved" without executing the verifying command/test and capturing concrete evidence.
 - Code Review: before reporting a bug "fixed" or an issue "resolved", you must perform a self code review enforcing the **Code Review Guidelines** below.
 - Source control:
   - Group files by functional intent — one commit per logical change; do not co-mingle unrelated edits.
@@ -140,11 +141,7 @@ Data flow: React view → Cerebral sequence → action → API call → Lambda h
 
 ### Interactive Agent
 
-- **Be mindful of pagers!** Programs like `git`, `gh`, `aws`, `less`, etc. can freeze an interactive agent by waiting for keyboard input. ALWAYS ensure you pass `PAGER=cat` as an environment variable (e.g., `PAGER=cat git diff`), or use specific flags like `--no-pager`, to stream output properly.
-- **Terminal buffer limitations!** The interactive shell has an input buffer character limit (often 1024 characters). Avoid using `cat << 'EOF' > ...`, `echo -e`, or `node -e "..."` to write large scripts or long strings directly via terminal injection. Exceeding the buffer limit will drop characters, mangle syntax, and trap the session in a broken `heredoc` sequence. Instead, ALWAYS use dedicated file system tools (e.g., `create_file` or `insert_edit_into_file`) to construct or modify files larger than ~20 lines.
 - Out-of-repo Definition-of-Done items (TestRail test runs, validation in the Court's test environment, user-guide updates, screen-reader spot-checks): the agent cannot complete these from this environment. Surface every applicable item in the PR description and in the hand-off back to the operator with the exact action requested — do not silently leave DoD checkboxes unchecked.
-- Scratch files: feel free to write throwaway scripts, fixtures, and capture debug output to local files within the working tree, so long as they are deleted before finishing or aborting a task. Never leave temporary artifacts in the working tree where they could be staged or committed by accident.
-- Running the application: Before running the application, probe the ports to see if the application is already running. Prefer to leave the operator's `start:api` / `start:client` / `start:public` sessions in place and prefer `start:api:resume` to skip re-seeding.
 - Deployed environments: operators will have local configuration enabling them to connect to and interact with deployed DAWSON environments. **NEVER connect to a deployed environment from an agent session.** If a reproduction requires interaction with a deployed environment, ask the operator to execute the necessary steps in a session that the agent can not access and share the relevant output.
 - Communication: when asking the operator questions, be concise but provide sufficient context to avoid back-and-forth. When providing instructions, be explicit and step-by-step to ensure clarity.
 - Verification: when verification is not possible from the agent's environment (e.g. browser-based, deployed, or role-gated checks), give the operator the exact command(s) to run and name the specific output you need back (e.g. "paste the final 20 lines of the Cypress run summary" or "the network response status for `POST /cases`") before continuing.
@@ -169,6 +166,7 @@ When performing code review, flag violations of the following:
 - **Logging Discipline**: Flag `console.log` / `console.error` calls in `web-api/` Lambda or interactor code; require the Winston wrapper (`getDawsonLogger`). Also flag any log statement that appears to emit raw user PII, document contents, or application secrets.
 - **Date/Time Imports**: Flag direct imports of `luxon`, `date-fns`, `moment`, or hand-rolled `new Date()` arithmetic in business logic; require `DateHandler`.
 - **Cerebral State Discipline**: Flag any new top-level state path used in actions/computeds/views that is not declared in [`web-client/src/presenter/state.ts`](web-client/src/presenter/state.ts). Also flag sequences that clear a state path without an action that re-populates it before the user sees an empty list.
+- **Payload Manipulation**: Treat all client-controlled input as untrusted; assume an attacker can modify any request payload regardless of client-side restrictions. Verify that business rules are enforced server-side and flag any code that implicitly trusts the client to enforce business rules.
 - **Naming Conventions**: Flag files whose names diverge from the documented patterns (`verbNounInteractor.ts`, `verbNounAction.ts(x)`, `verbNounSequence.ts`, `*Lambda.ts`, PascalCase entity classes) or that are missing their co-located `*.test.ts`.
 - **Error Surfacing**: Flag swallowed errors (empty `catch`, `catch` that only logs, promise chains without rejection handling) on user-initiated paths. Errors from user actions must reach the end user.
 - **Accessibility Coverage**: For any user-facing change, flag the absence of (or failure to extend) a Cypress spec that calls `checkA11y` on the affected view, and flag regressions in semantic HTML, label associations, focus order, or keyboard operability.
