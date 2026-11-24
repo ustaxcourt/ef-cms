@@ -7,12 +7,21 @@ import {
   combineISOandEasternTime,
   dateStringsCompared,
 } from '@shared/business/utilities/DateHandler';
+import { TRIAL_SESSION_PROCEEDING_TYPES } from '@shared/business/entities/EntityConstants';
+
+// Cases on Reporting sessions never have minute sheets
+const isReportingSession = (trialSession: RawTrialSession): boolean =>
+  trialSession.proceedingType === TRIAL_SESSION_PROCEEDING_TYPES.reporting;
 
 export const caseIsEligibleForMinuteSheet = (
   aCase: RawCase & TCaseOrder,
   trialSession: RawTrialSession,
 ): boolean => {
   if (!trialSession.isCalendared) {
+    return false;
+  }
+
+  if (isReportingSession(trialSession)) {
     return false;
   }
 
@@ -36,6 +45,10 @@ export const unscheduledCaseIsEligibleForMinuteSheet = (
   trialSession: RawTrialSession,
 ): boolean => {
   if (!trialSession.isCalendared) {
+    return false;
+  }
+
+  if (isReportingSession(trialSession)) {
     return false;
   }
 

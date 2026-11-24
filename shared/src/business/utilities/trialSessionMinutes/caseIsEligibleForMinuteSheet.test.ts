@@ -4,7 +4,10 @@ import {
 } from './caseIsEligibleForMinuteSheet';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { MOCK_TRIAL_REGULAR } from '@shared/test/mockTrial';
-import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
+import {
+  CASE_STATUS_TYPES,
+  TRIAL_SESSION_PROCEEDING_TYPES,
+} from '@shared/business/entities/EntityConstants';
 
 describe('caseIsEligibleForMinuteSheet', () => {
   it('should return true when case is not part of consolidated group and the trial session has a start date', () => {
@@ -288,4 +291,52 @@ describe('unscheduledCaseIsEligibleForMinuteSheet', () => {
 
     expect(result).toBe(true);
   });
+});
+
+describe('minute sheet eligibility for Reporting sessions', () => {
+  const eligibleCase = {
+    ...MOCK_CASE,
+    addedToSessionAt: '2018-03-01T21:40:46.415Z',
+    docketNumber: '123-45',
+    isHearing: false,
+    isManuallyAdded: false,
+    leadDocketNumber: undefined,
+    removedFromTrial: false,
+  };
+  const calendaredReportingSession = {
+    ...MOCK_TRIAL_REGULAR,
+    isCalendared: true,
+    proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.reporting,
+    startTime: undefined,
+  };
+
+  it('should return false for an otherwise eligible case on a calendared Reporting session', () => {
+    expect(
+      caseIsEligibleForMinuteSheet(eligibleCase, calendaredReportingSession),
+    ).toBe(false);
+  });
+
+  it('should return false for an otherwise eligible unscheduled case on a calendared Reporting session', () => {
+    expect(
+      unscheduledCaseIsEligibleForMinuteSheet(
+        eligibleCase,
+        calendaredReportingSession,
+      ),
+    ).toBe(false);
+  });
+
+  it.each([
+    TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
+    TRIAL_SESSION_PROCEEDING_TYPES.remote,
+  ])(
+    'should return true for the same case when the calendared session is %s',
+    proceedingType => {
+      const session = { ...calendaredReportingSession, proceedingType };
+
+      expect(caseIsEligibleForMinuteSheet(eligibleCase, session)).toBe(true);
+      expect(
+        unscheduledCaseIsEligibleForMinuteSheet(eligibleCase, session),
+      ).toBe(true);
+    },
+  );
 });

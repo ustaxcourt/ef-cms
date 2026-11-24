@@ -35,7 +35,9 @@ import { countPagesInDocument as countPagesInDocumentMock } from '@web-api/busin
 import {
   inTransaction as inTransactionMock,
   onTransactionCommit as onTransactionCommitMock,
+  withTransaction as withTransactionMock,
 } from '@web-api/persistence/postgres/utils/transactions';
+import { getUsersInSections as getUsersInSectionsMock } from '@web-api/persistence/postgres/users/getUsersInSections';
 
 describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
   const countPagesInDocument = jest.mocked(countPagesInDocumentMock);
@@ -53,6 +55,8 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
   );
   const inTransaction = jest.mocked(inTransactionMock);
   const onTransactionCommit = jest.mocked(onTransactionCommitMock);
+  const withTransaction = jest.mocked(withTransactionMock);
+  const getUsersInSections = jest.mocked(getUsersInSectionsMock);
 
   const trialSession = {
     ...MOCK_TRIAL_REGULAR,
@@ -113,6 +117,7 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
 
   beforeEach(() => {
     inTransaction.mockReturnValue(false);
+    withTransaction.mockImplementation(callback => callback());
   });
 
   it('should return and do nothing if the job is already processed', async () => {
@@ -457,5 +462,339 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
     ).not.toHaveBeenCalled();
     expect(onTransactionCommit).toHaveBeenCalledTimes(1);
+  });
+  it('should throw a not found error and not process the case when the notification processing job cannot be found', async () => {
+    getTrialSessionNotificationProcessing.mockResolvedValueOnce(undefined);
+
+    await expect(
+      generateNoticesForCaseTrialSessionCalendarInteractor(
+        applicationContext,
+        interactorParamObject,
+      ),
+    ).rejects.toThrow(
+      `Could not get notification processing job with id ${interactorParamObject.jobId}`,
+    );
+
+    expect(updateTrialSessionNotificationProcessing).not.toHaveBeenCalled();
+    expect(updateCaseAndAssociations).not.toHaveBeenCalled();
+  });
+
+  it('should throw a not found error when the user that initiated the job cannot be found', async () => {
+    getUserById.mockResolvedValueOnce(undefined);
+
+    await expect(
+      generateNoticesForCaseTrialSessionCalendarInteractor(
+        applicationContext,
+        interactorParamObject,
+      ),
+    ).rejects.toThrow(`User ${interactorParamObject.userId} was not found.`);
+
+    expect(getCaseByDocketNumber).not.toHaveBeenCalled();
+    expect(updateCaseAndAssociations).not.toHaveBeenCalled();
+  });
+
+  it('should set the notice of trial date on the case and docket a Notice of Trial for a non-Reporting trial session', async () => {
+    await generateNoticesForCaseTrialSessionCalendarInteractor(
+      applicationContext,
+      interactorParamObject,
+    );
+
+    const { caseToUpdate } = updateCaseAndAssociations.mock.calls[0][0];
+    expect(caseToUpdate.noticeOfTrialDate).toBeDefined();
+    expect(
+      caseToUpdate.docketEntries.find(entry => entry.eventCode === 'NTD'),
+    ).toMatchObject({
+      documentTitle: expect.stringContaining('Notice of Trial on'),
+      servedAt: expect.anything(),
+      trialLocation: trialSession.trialLocation,
+    });
+    expect(
+      applicationContext.getUseCases()
+        .generateNoticeOfAssignmentOfJudgeInteractor,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases()
+        .generateStandingSchedulingOrderInteractor,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should persist the updated case and the job statuses inside of transactions', async () => {
+    const writesInsideTransaction: string[] = [];
+    let isInsideTransaction = false;
+    withTransaction.mockImplementation(async callback => {
+      isInsideTransaction = true;
+      const result = await callback();
+      isInsideTransaction = false;
+      return result;
+    });
+    updateCaseAndAssociations.mockImplementationOnce(({ caseToUpdate }) => {
+      if (isInsideTransaction) writesInsideTransaction.push('case');
+      return Promise.resolve(caseToUpdate);
+    });
+    const recordStatusWrite: typeof updateTrialSessionNotificationProcessingMock =
+      ({ caseStatus }) => {
+        if (isInsideTransaction) {
+          writesInsideTransaction.push(
+            Object.values(caseStatus || {})[0] as string,
+          );
+        }
+        return Promise.resolve();
+      };
+    updateTrialSessionNotificationProcessing
+      .mockImplementationOnce(recordStatusWrite)
+      .mockImplementationOnce(recordStatusWrite);
+
+    await generateNoticesForCaseTrialSessionCalendarInteractor(
+      applicationContext,
+      interactorParamObject,
+    );
+
+    expect(writesInsideTransaction).toEqual([
+      'processing',
+      'case',
+      'processed',
+    ]);
+  });
+
+  describe('Reporting trial sessions', () => {
+    const reportingTrialSession = {
+      ...MOCK_TRIAL_REGULAR,
+      judge: {
+        name: 'Buch',
+        userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      },
+      proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.reporting,
+      startTime: undefined,
+    };
+    const reportingParamObject = {
+      ...interactorParamObject,
+      trialSession: reportingTrialSession,
+    };
+    const najPdf = testPdfDoc;
+
+    const getPersistedDocketEntry = (eventCode: string) =>
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
+        entry => entry.eventCode === eventCode,
+      );
+
+    beforeEach(() => {
+      getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
+      getUsersInSections.mockResolvedValue([
+        {
+          judgeFullName: 'Ronald L. Buch',
+          judgeTitle: 'Judge',
+          name: 'Buch',
+        } as DbUser,
+      ]);
+      applicationContext
+        .getUseCases()
+        .generateNoticeOfAssignmentOfJudgeInteractor.mockResolvedValue(najPdf);
+      applicationContext
+        .getUseCases()
+        .generateStandingSchedulingOrderInteractor.mockResolvedValue(
+          testPdfDoc,
+        );
+    });
+
+    it('should generate a Notice of Assignment of Judge and a Standing Scheduling Order for the case and trial session', async () => {
+      await generateNoticesForCaseTrialSessionCalendarInteractor(
+        applicationContext,
+        reportingParamObject,
+      );
+
+      const expectedParams = {
+        docketNumber: MOCK_CASE.docketNumber,
+        trialSessionId: reportingTrialSession.trialSessionId,
+      };
+      expect(
+        applicationContext.getUseCases()
+          .generateNoticeOfAssignmentOfJudgeInteractor,
+      ).toHaveBeenCalledWith(applicationContext, expectedParams);
+      expect(
+        applicationContext.getUseCases()
+          .generateStandingSchedulingOrderInteractor,
+      ).toHaveBeenCalledWith(applicationContext, expectedParams);
+    });
+
+    it('should NOT generate a Notice of Trial or a Standing Pretrial Order', async () => {
+      await generateNoticesForCaseTrialSessionCalendarInteractor(
+        applicationContext,
+        reportingParamObject,
+      );
+
+      expect(
+        applicationContext.getUseCases().generateNoticeOfTrialIssuedInteractor,
+      ).not.toHaveBeenCalled();
+      expect(
+        applicationContext.getUseCases()
+          .generateStandingPretrialOrderInteractor,
+      ).not.toHaveBeenCalled();
+      expect(
+        applicationContext.getUseCases()
+          .generateStandingPretrialOrderForSmallCaseInteractor,
+      ).not.toHaveBeenCalled();
+      expect(getPersistedDocketEntry('NTD')).toBeUndefined();
+      expect(getPersistedDocketEntry('SPTO')).toBeUndefined();
+    });
+
+    it('should generate a Standing Scheduling Order, not a small case Standing Pretrial Order, when the case procedure type is Small', async () => {
+      getCaseByDocketNumber.mockResolvedValue({
+        ...MOCK_CASE,
+        procedureType: 'Small',
+      });
+
+      await generateNoticesForCaseTrialSessionCalendarInteractor(
+        applicationContext,
+        reportingParamObject,
+      );
+
+      expect(
+        applicationContext.getUseCases()
+          .generateStandingSchedulingOrderInteractor,
+      ).toHaveBeenCalledTimes(1);
+      expect(
+        applicationContext.getUseCases()
+          .generateStandingPretrialOrderForSmallCaseInteractor,
+      ).not.toHaveBeenCalled();
+      expect(getPersistedDocketEntry('SPOS')).toBeUndefined();
+    });
+
+    it('should docket and serve a Notice of Assignment of Judge titled with the assigned judge', async () => {
+      await generateNoticesForCaseTrialSessionCalendarInteractor(
+        applicationContext,
+        reportingParamObject,
+      );
+
+      expect(getPersistedDocketEntry('NAJ')).toMatchObject({
+        documentTitle: 'Notice of Assignment of Judge to Judge Buch',
+        documentType: 'Notice of Assignment of Judge',
+        isFileAttached: true,
+        isOnDocketRecord: true,
+        judge: 'Buch',
+        servedAt: expect.anything(),
+        servedPartiesCode: expect.anything(),
+        userId: docketClerkUser.userId,
+      });
+    });
+
+    it('should docket and serve a Standing Scheduling Order with the assigned judge', async () => {
+      await generateNoticesForCaseTrialSessionCalendarInteractor(
+        applicationContext,
+        reportingParamObject,
+      );
+
+      expect(getPersistedDocketEntry('SSO')).toMatchObject({
+        documentTitle: 'Standing Scheduling Order',
+        documentType: 'Standing Scheduling Order',
+        isFileAttached: true,
+        isOnDocketRecord: true,
+        judge: 'Buch',
+        servedAt: expect.anything(),
+        servedPartiesCode: expect.anything(),
+        userId: docketClerkUser.userId,
+      });
+    });
+
+    it('should NOT set a notice of trial date on the case', async () => {
+      await generateNoticesForCaseTrialSessionCalendarInteractor(
+        applicationContext,
+        reportingParamObject,
+      );
+
+      expect(
+        updateCaseAndAssociations.mock.calls[0][0].caseToUpdate
+          .noticeOfTrialDate,
+      ).toBeUndefined();
+    });
+
+    it('should save the Notice of Assignment of Judge combined with the clinic letter for pro se petitioners', async () => {
+      await generateNoticesForCaseTrialSessionCalendarInteractor(
+        applicationContext,
+        reportingParamObject,
+      );
+
+      expect(
+        applicationContext.getUtilities().combineTwoPdfs,
+      ).toHaveBeenCalledWith({
+        firstPdf: najPdf,
+        secondPdf: fakeData,
+      });
+
+      const savedNotice =
+        applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
+          .calls[0][0];
+      const savedNoticePdf = await PDFDocument.load(savedNotice.document);
+      expect(savedNoticePdf.getPages().length).toBe(2);
+      expect(savedNotice.key).toEqual(
+        getPersistedDocketEntry('NAJ').docketEntryId,
+      );
+    });
+
+    it('should save only the Notice of Assignment of Judge when there is no clinic letter to append', async () => {
+      shouldAppendClinicLetter.mockResolvedValueOnce({
+        appendClinicLetter: false,
+        clinicLetterKey: '',
+      });
+
+      await generateNoticesForCaseTrialSessionCalendarInteractor(
+        applicationContext,
+        reportingParamObject,
+      );
+
+      expect(
+        applicationContext.getUtilities().combineTwoPdfs,
+      ).not.toHaveBeenCalled();
+      expect(
+        applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
+          .calls[0][0].document,
+      ).toBe(najPdf);
+    });
+
+    it('should send service emails for both the Notice of Assignment of Judge and the Standing Scheduling Order', async () => {
+      await generateNoticesForCaseTrialSessionCalendarInteractor(
+        applicationContext,
+        reportingParamObject,
+      );
+
+      const emailedDocketEntryIds = applicationContext
+        .getUseCaseHelpers()
+        .sendServedPartiesEmails.mock.calls.map(call => call[0].docketEntryId);
+
+      expect(emailedDocketEntryIds).toEqual([
+        getPersistedDocketEntry('NAJ').docketEntryId,
+        getPersistedDocketEntry('SSO').docketEntryId,
+      ]);
+    });
+
+    it('should save a paper service pdf containing the address page, notice with clinic letter, and standing scheduling order for a pro se petitioner receiving paper service', async () => {
+      getCaseByDocketNumber.mockResolvedValue({
+        ...MOCK_CASE,
+        petitioners: [
+          {
+            ...MOCK_CASE.petitioners[0],
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+          },
+        ],
+      });
+
+      await generateNoticesForCaseTrialSessionCalendarInteractor(
+        applicationContext,
+        reportingParamObject,
+      );
+
+      const paperServiceSave = applicationContext
+        .getPersistenceGateway()
+        .saveDocumentFromLambda.mock.calls.map(call => call[0])
+        .find(
+          saveParams =>
+            saveParams.key ===
+            `${reportingParamObject.jobId}-${reportingParamObject.docketNumber}`,
+        );
+
+      expect(paperServiceSave).toMatchObject({ useTempBucket: true });
+      const paperServicePdf = await PDFDocument.load(paperServiceSave.document);
+      // address page (1) + notice with clinic letter (2) + standing scheduling order (1)
+      expect(paperServicePdf.getPages().length).toBe(4);
+    });
   });
 });

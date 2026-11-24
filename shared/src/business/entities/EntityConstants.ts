@@ -966,6 +966,16 @@ export const SPOS_DOCUMENT = COURT_ISSUED_EVENT_CODES.find(
   doc => doc.eventCode === 'SPOS',
 )!;
 
+export const SSO_DOCUMENT = COURT_ISSUED_EVENT_CODES.find(
+  doc => doc.eventCode === 'SSO',
+)!;
+
+export const NAJ_DOCUMENT = COURT_ISSUED_EVENT_CODES.find(
+  doc => doc.eventCode === 'NAJ',
+)!;
+
+export const REPORTING_CALENDAR_DEADLINE_DESCRIPTION = 'PTMs Due';
+
 export const AUTO_GENERATED_STATUS_REPORT_ORDER_DESCRIPTIONS = {
   statusReport: 'Status Report Due',
   statusReportStipulatedDecision:
@@ -1094,6 +1104,16 @@ export const SYSTEM_GENERATED_DOCUMENT_TYPES = {
     documentTitle: SPTO_DOCUMENT.documentTitle,
     documentType: SPTO_DOCUMENT.documentType,
     eventCode: SPTO_DOCUMENT.eventCode,
+  },
+  standingSchedulingOrder: {
+    documentTitle: SSO_DOCUMENT.documentTitle,
+    documentType: SSO_DOCUMENT.documentType,
+    eventCode: SSO_DOCUMENT.eventCode,
+  },
+  noticeOfAssignmentOfJudge: {
+    documentTitle: NAJ_DOCUMENT.documentTitle,
+    documentType: NAJ_DOCUMENT.documentType,
+    eventCode: NAJ_DOCUMENT.eventCode,
   },
   noticeOfChangeOfTrialJudge: {
     documentTitle: 'Notice of Change of Trial Judge',

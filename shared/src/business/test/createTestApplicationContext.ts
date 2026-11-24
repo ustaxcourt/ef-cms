@@ -375,6 +375,7 @@ export const createTestApplicationContext = () => {
     coverSheet: jest.fn().mockImplementation(getFakeFile),
     docketRecord: jest.fn().mockImplementation(getFakeFile),
     entryOfAppearance: jest.fn().mockImplementation(getFakeFile),
+    noticeOfAssignmentOfJudge: jest.fn().mockImplementation(getFakeFile),
     noticeOfChangeOfTrialJudge: jest.fn().mockImplementation(getFakeFile),
     noticeOfChangeOfTrialLocation: jest.fn().mockImplementation(getFakeFile),
     noticeOfChangeOfTrialStartDate: jest.fn().mockImplementation(getFakeFile),
@@ -397,6 +398,7 @@ export const createTestApplicationContext = () => {
     standingPretrialOrderForSmallCase: jest
       .fn()
       .mockImplementation(getFakeFile),
+    standingSchedulingOrder: jest.fn().mockImplementation(getFakeFile),
     thirtyDayNoticeOfTrial: jest.fn().mockImplementation(getFakeFile),
     trialCalendar: jest.fn().mockImplementation(getFakeFile),
     trialSessionPlanningReport: jest.fn().mockImplementation(getFakeFile),

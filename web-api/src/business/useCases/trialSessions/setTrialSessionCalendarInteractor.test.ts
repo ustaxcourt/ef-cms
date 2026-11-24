@@ -10,6 +10,7 @@ jest.mock(
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
+jest.mock('@web-api/persistence/postgres/featureFlag/getFeatureFlagValue');
 import { MOCK_CASE } from '@shared/test/mockCase';
 import {
   HIGH_PRIORITY_SUFFIXES,
@@ -38,41 +39,10 @@ import { updateTrialSession as updateTrialSessionMock } from '@web-api/persisten
 import { createOrUpdateTrialSessionCases as createOrUpdateTrialSessionCasesMock } from '@web-api/persistence/postgres/trialSessions/createOrUpdateTrialSessionCases';
 import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { PENDING_DOCKET_ENTRY } from '@shared/test/mockDocketEntry';
+import { getFeatureFlagValue as getFeatureFlagValueMock } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValue';
+import { upsertCaseDeadlines as upsertCaseDeadlinesMock } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
 
 describe('setTrialSessionCalendarInteractor', () => {
-  it('should surface an error without writing when an ordinary calendar is requested for Reporting', async () => {
-    getTrialSessionById.mockResolvedValue({
-      ...MOCK_TRIAL,
-      proceedingType: 'Reporting',
-    });
-    await setTrialSessionCalendarInteractor(
-      applicationContext,
-      {
-        trialSessionId: TRIAL_SESSION_ID,
-        clientConnectionId: 'test-connection',
-      },
-      mockPetitionsClerkUser,
-    );
-    expect(updateTrialSession).not.toHaveBeenCalled();
-    expect(upsertCases).not.toHaveBeenCalled();
-    expect(applicationContext.logger.error).toHaveBeenCalledWith(
-      expect.objectContaining({
-        message: 'Reporting sessions cannot be calendared yet.',
-        statusCode: 400,
-      }),
-    );
-    expect(
-      applicationContext.getNotificationGateway().sendNotificationToUser,
-    ).toHaveBeenCalledWith(
-      expect.objectContaining({
-        message: expect.objectContaining({
-          action: 'set_trial_session_calendar_error',
-          message:
-            'Error setting trial session calendar: Reporting sessions cannot be calendared yet.',
-        }),
-      }),
-    );
-  });
   const TRIAL_SESSION_ID = '6805d1ab-18d0-43ec-bafb-654e83405416';
   const AUTOMATIC_BLOCK_FIELDS = {
     automaticBlocked: true,
@@ -100,6 +70,8 @@ describe('setTrialSessionCalendarInteractor', () => {
   );
   const getTrialSessionById = jest.mocked(getTrialSessionByIdMock);
   const updateTrialSession = jest.mocked(updateTrialSessionMock);
+  const getFeatureFlagValue = jest.mocked(getFeatureFlagValueMock);
+  const upsertCaseDeadlines = jest.mocked(upsertCaseDeadlinesMock);
   const MOCK_TRIAL: RawTrialSession = {
     chambersPhoneNumber: '1111111',
     joinPhoneNumber: '0987654321',
@@ -474,5 +446,257 @@ describe('setTrialSessionCalendarInteractor', () => {
         }),
       ]),
     );
+  });
+  it('should surface a not found error without writing when the trial session does not exist', async () => {
+    getTrialSessionById.mockResolvedValue(undefined);
+
+    await setTrialSessionCalendarInteractor(
+      applicationContext,
+      {
+        clientConnectionId: 'test-connection',
+        trialSessionId: TRIAL_SESSION_ID,
+      },
+      mockPetitionsClerkUser,
+    );
+
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser.mock
+        .calls[0][0].message,
+    ).toEqual({
+      action: 'set_trial_session_calendar_error',
+      message: `Error setting trial session calendar: Trial session ${TRIAL_SESSION_ID} was not found.`,
+    });
+    expect(updateTrialSession).not.toHaveBeenCalled();
+    expect(upsertCases).not.toHaveBeenCalled();
+  });
+
+  it('should not create case deadlines or check the Reporting calendars feature flag when the trial session is not a Reporting session', async () => {
+    getCalendaredCasesForTrialSession.mockResolvedValue([]);
+    getEligibleCasesForTrialSession.mockResolvedValue([
+      {
+        ...MOCK_CASE,
+        qcCompleteForTrial: { [TRIAL_SESSION_ID]: true },
+      },
+    ]);
+
+    await setTrialSessionCalendarInteractor(
+      applicationContext,
+      {
+        clientConnectionId: 'test-connection',
+        trialSessionId: TRIAL_SESSION_ID,
+      },
+      mockPetitionsClerkUser,
+    );
+
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser.mock
+        .calls[0][0].message.action,
+    ).toEqual('set_trial_session_calendar_complete');
+    expect(getFeatureFlagValue).not.toHaveBeenCalled();
+    expect(upsertCaseDeadlines).not.toHaveBeenCalled();
+  });
+
+  describe('Reporting trial sessions', () => {
+    const REPORTING_DUE_DATE = '2025-12-01T05:00:00.000Z';
+    const MOCK_REPORTING_TRIAL: RawTrialSession = {
+      caseOrder: [
+        {
+          addedToSessionAt: '',
+          docketNumber: '102-19',
+          isHearing: false,
+          isManuallyAdded: true,
+          removedFromTrial: false,
+        },
+      ],
+      chambersPhoneNumber: '1111111',
+      estimatedEndDate: REPORTING_DUE_DATE,
+      hasNottBeenServed: false,
+      isCalendared: false,
+      judge: {
+        name: 'Sarah Jane',
+        userId: '822366b7-e47c-413e-811f-d29113d09b06',
+      },
+      maxCases: 100,
+      paperServicePdfs: [],
+      proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.reporting,
+      sessionScope: 'Location-based',
+      sessionStatus: '',
+      sessionType: SESSION_TYPES.regular,
+      startDate: REPORTING_DUE_DATE,
+      term: 'Fall',
+      termYear: '2025',
+      trialLocation: 'Birmingham, Alabama',
+      trialSessionId: TRIAL_SESSION_ID,
+    };
+    const setCalendar = () =>
+      setTrialSessionCalendarInteractor(
+        applicationContext,
+        {
+          clientConnectionId: 'test-connection',
+          trialSessionId: TRIAL_SESSION_ID,
+        },
+        mockPetitionsClerkUser,
+      );
+    const getNotificationMessage = () =>
+      applicationContext.getNotificationGateway().sendNotificationToUser.mock
+        .calls[0][0].message;
+
+    beforeEach(() => {
+      getFeatureFlagValue.mockResolvedValue(true);
+      getTrialSessionById.mockResolvedValue(MOCK_REPORTING_TRIAL);
+      getCalendaredCasesForTrialSession.mockResolvedValue([
+        {
+          ...MOCK_CASE,
+          docketNumber: '102-19',
+          qcCompleteForTrial: { [TRIAL_SESSION_ID]: true },
+        },
+      ] as unknown as RawCaseAndCaseOrder[]);
+      getEligibleCasesForTrialSession.mockResolvedValue([
+        {
+          ...MOCK_CASE,
+          qcCompleteForTrial: { [TRIAL_SESSION_ID]: true },
+        },
+      ]);
+    });
+
+    it('should surface an error without writing when the Reporting calendars feature flag is off', async () => {
+      getFeatureFlagValue.mockResolvedValue(false);
+
+      await setCalendar();
+
+      expect(getFeatureFlagValue).toHaveBeenCalledWith('reporting-calendars');
+      expect(getNotificationMessage()).toEqual({
+        action: 'set_trial_session_calendar_error',
+        message:
+          'Error setting trial session calendar: Setting a Reporting calendar is not enabled.',
+      });
+      expect(updateTrialSession).not.toHaveBeenCalled();
+      expect(upsertCases).not.toHaveBeenCalled();
+      expect(upsertCaseDeadlines).not.toHaveBeenCalled();
+    });
+
+    it('should surface an error without writing when the Reporting session does not have a judge', async () => {
+      getTrialSessionById.mockResolvedValue({
+        ...MOCK_REPORTING_TRIAL,
+        judge: undefined,
+      });
+
+      await setCalendar();
+
+      expect(getNotificationMessage()).toEqual({
+        action: 'set_trial_session_calendar_error',
+        message:
+          'Error setting trial session calendar: The following are required to set a Reporting calendar: judge.',
+      });
+      expect(updateTrialSession).not.toHaveBeenCalled();
+      expect(upsertCases).not.toHaveBeenCalled();
+      expect(upsertCaseDeadlines).not.toHaveBeenCalled();
+    });
+
+    it('should set the Reporting session as calendared and calendar the QC complete cases with the session judge', async () => {
+      await setCalendar();
+
+      expect(getNotificationMessage()).toEqual({
+        action: 'set_trial_session_calendar_complete',
+        trialSessionId: TRIAL_SESSION_ID,
+      });
+      expect(
+        updateTrialSession.mock.calls[0][0].trialSessionToUpdate,
+      ).toMatchObject({
+        isCalendared: true,
+        proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.reporting,
+      });
+      const calendaredCase = {
+        associatedJudge: 'Sarah Jane',
+        associatedJudgeId: '822366b7-e47c-413e-811f-d29113d09b06',
+        status: CASE_STATUS_TYPES.calendared,
+        trialDate: REPORTING_DUE_DATE,
+        trialSessionId: TRIAL_SESSION_ID,
+      };
+      expect(upsertCases).toHaveBeenCalledWith([
+        expect.objectContaining({ ...calendaredCase, docketNumber: '102-19' }),
+        expect.objectContaining({
+          ...calendaredCase,
+          docketNumber: MOCK_CASE.docketNumber,
+        }),
+      ]);
+    });
+
+    it('should create a "PTMs Due" deadline on the session due date for each calendared case', async () => {
+      await setCalendar();
+
+      const expectedDeadline = {
+        associatedJudge: 'Sarah Jane',
+        associatedJudgeId: '822366b7-e47c-413e-811f-d29113d09b06',
+        caseDeadlineId: expect.any(String),
+        deadlineDate: REPORTING_DUE_DATE,
+        description: 'PTMs Due',
+        entityName: 'CaseDeadline',
+      };
+      expect(upsertCaseDeadlines).toHaveBeenCalledTimes(1);
+      expect(upsertCaseDeadlines.mock.calls[0][0]).toEqual([
+        expect.objectContaining({
+          ...expectedDeadline,
+          docketNumber: '102-19',
+        }),
+        expect.objectContaining({
+          ...expectedDeadline,
+          docketNumber: MOCK_CASE.docketNumber,
+        }),
+      ]);
+    });
+
+    it('should NOT create a deadline for a manually added case that is removed because it is not QC complete', async () => {
+      getCalendaredCasesForTrialSession.mockResolvedValue([
+        {
+          ...MOCK_CASE,
+          docketNumber: '102-19',
+          qcCompleteForTrial: { [TRIAL_SESSION_ID]: false },
+        },
+      ] as unknown as RawCaseAndCaseOrder[]);
+
+      await setCalendar();
+
+      expect(
+        upsertCaseDeadlines.mock.calls[0][0].map(
+          deadline => deadline.docketNumber,
+        ),
+      ).toEqual([MOCK_CASE.docketNumber]);
+    });
+
+    it('should carry the lead docket number onto the deadline of a consolidated case', async () => {
+      getCalendaredCasesForTrialSession.mockResolvedValue([]);
+      getEligibleCasesForTrialSession.mockResolvedValue([
+        {
+          ...MOCK_CASE,
+          leadDocketNumber: '101-18',
+          qcCompleteForTrial: { [TRIAL_SESSION_ID]: true },
+        },
+      ]);
+
+      await setCalendar();
+
+      expect(upsertCaseDeadlines.mock.calls[0][0]).toEqual([
+        expect.objectContaining({
+          docketNumber: MOCK_CASE.docketNumber,
+          leadDocketNumber: '101-18',
+        }),
+      ]);
+    });
+
+    it('should set the calendar without creating deadlines when no cases are QC complete', async () => {
+      getCalendaredCasesForTrialSession.mockResolvedValue([]);
+      getEligibleCasesForTrialSession.mockResolvedValue([]);
+
+      await setCalendar();
+
+      expect(getNotificationMessage().action).toEqual(
+        'set_trial_session_calendar_complete',
+      );
+      expect(
+        updateTrialSession.mock.calls[0][0].trialSessionToUpdate.isCalendared,
+      ).toEqual(true);
+      expect(upsertCaseDeadlines).not.toHaveBeenCalled();
+    });
   });
 });

@@ -7,6 +7,7 @@ import {
   PROCEDURE_TYPES_MAP,
   SESSION_TERMS_DICT,
   SESSION_TYPES,
+  TRIAL_SESSION_PROCEEDING_TYPES,
 } from '@shared/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
@@ -234,6 +235,88 @@ describe('getTrialSessionPlanningReportDataInteractor', () => {
       lastVisitedDate: '1999-03-01T00:00:00.000Z',
       specialCaseCount: 2,
       trialCityState: 'Fresno, California',
+    });
+  });
+
+  describe('Reporting sessions', () => {
+    const buildCalendaredSession = (
+      overrides: Partial<RawTrialSession>,
+    ): RawTrialSession =>
+      ({
+        isCalendared: true,
+        judge: { name: 'Judge Fried', userId: 'TEST_JUDGE_ID' },
+        sessionType: SESSION_TYPES.small,
+        startDate: '2023-10-02T04:00:00.000Z',
+        term: SESSION_TERMS_DICT.FALL,
+        termYear: '2023',
+        trialLocation: 'Mobile, Alabama',
+        ...overrides,
+      }) as RawTrialSession;
+
+    const getMobilePreviousTermsData = async (): Promise<string[][]> => {
+      const { trialLocationData } =
+        await getTrialSessionPlanningReportDataInteractor(
+          applicationContext,
+          { term: 'winter', year: '2024' },
+          mockPetitionsClerkUser,
+        );
+
+      return trialLocationData.find(
+        location => location.trialCityState === 'Mobile, Alabama',
+      )!.previousTermsData;
+    };
+
+    it('should count a calendared Reporting session as a scheduled session for the city and mark it with the "(RP)" suffix', async () => {
+      getTrialSessions.mockResolvedValue([
+        buildCalendaredSession({
+          proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.reporting,
+        }),
+      ]);
+
+      const previousTermsData = await getMobilePreviousTermsData();
+
+      expect(previousTermsData).toEqual([['(S) Fried (RP)'], [], []]);
+    });
+
+    it('should only add the "(RP)" suffix to the Reporting sessions when a city has several sessions in a term', async () => {
+      getTrialSessions.mockResolvedValue([
+        buildCalendaredSession({
+          judge: { name: 'Judge Toro', userId: 'TEST_JUDGE_ID_2' },
+          proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.reporting,
+          sessionType: SESSION_TYPES.regular,
+          startDate: '2023-10-09T04:00:00.000Z',
+        }),
+        buildCalendaredSession({
+          proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
+        }),
+        buildCalendaredSession({
+          judge: { name: 'Judge Buch', userId: 'TEST_JUDGE_ID_3' },
+          proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
+          sessionType: SESSION_TYPES.hybridSmall,
+          startDate: '2023-10-16T04:00:00.000Z',
+        }),
+      ]);
+
+      const previousTermsData = await getMobilePreviousTermsData();
+
+      expect(previousTermsData).toEqual([
+        ['(S) Fried', '(R) Toro (RP)', '(HS) Buch'],
+        [],
+        [],
+      ]);
+    });
+
+    it('should NOT include a Reporting session that has not been calendared', async () => {
+      getTrialSessions.mockResolvedValue([
+        buildCalendaredSession({
+          isCalendared: false,
+          proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.reporting,
+        }),
+      ]);
+
+      const previousTermsData = await getMobilePreviousTermsData();
+
+      expect(previousTermsData).toEqual([[], [], []]);
     });
   });
 
