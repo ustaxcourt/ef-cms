@@ -1115,8 +1115,6 @@ export const presenterSequences = {
     openCancelDraftDocumentModalSequence as unknown as Function,
   openCaseDocumentDownloadUrlSequence:
     openCaseDocumentDownloadUrlSequence as unknown as Function,
-  openMessageAttachmentDocumentSequence:
-    openMessageAttachmentDocumentSequence as unknown as Function,
   openCaseInNewTabSequence: openCaseInNewTabSequence as unknown as Function,
   openCaseInventoryReportModalSequence:
     openCaseInventoryReportModalSequence as unknown as Function,
@@ -1194,6 +1192,8 @@ export const presenterSequences = {
     openGainElectronicAccessToCaseModalSequence as unknown as Function,
   openItemizedPenaltiesModalSequence:
     openItemizedPenaltiesModalSequence as unknown as Function,
+  openMessageAttachmentDocumentSequence:
+    openMessageAttachmentDocumentSequence as unknown as Function,
   openPractitionerDocumentDownloadUrlSequence:
     openPractitionerDocumentDownloadUrlSequence as unknown as Function,
   openPrintGeneratedPaperServiceSequence:

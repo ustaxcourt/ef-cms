@@ -22,7 +22,6 @@ describe('openMessageAttachmentDocumentAction', () => {
       props: {
         documentId: '1234',
         docketNumber: '101-26',
-        isPublic: true,
       },
     });
 
@@ -32,7 +31,6 @@ describe('openMessageAttachmentDocumentAction', () => {
     ).toMatchObject({
       key: '1234',
       docketNumber: '101-26',
-      isPublic: true,
     });
 
     expect(
@@ -55,7 +53,6 @@ describe('openMessageAttachmentDocumentAction', () => {
         props: {
           documentId: '1234',
           docketNumber: '101-26',
-          isPublic: true,
         },
       }),
     ).rejects.toThrow('error retrieving url');

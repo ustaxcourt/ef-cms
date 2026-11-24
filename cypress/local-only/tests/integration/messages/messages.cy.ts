@@ -73,7 +73,7 @@ describe('Messages', () => {
       });
     });
 
-    describe('Docket clerk creates attaches a document and sends a message on a "New" case', () => {
+    describe('Docket clerk creates and attaches a document and sends a message on a "New" case', () => {
       it('should go to case detail and open the dialog to create a new message with an attachment', () => {
         cy.intercept('POST', '**/messages').as('createMessage');
 
