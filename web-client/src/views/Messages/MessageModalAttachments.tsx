@@ -1,11 +1,13 @@
 import { Button } from '../../ustc-ui/Button/Button';
+import { Button as DawsonButton } from '../../dawson-ui/ui/button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
-
+import { FormattedAttachment } from '@web-client/business/utilities/formatAttachments';
+import classNames from 'classnames';
 const getDocumentOption = doc => {
   const documentTitle = doc.title.substr(0, 100);
 
@@ -44,6 +46,8 @@ export const MessageModalAttachments = connect(
     updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
     validateCreateMessageInModalSequence:
       sequences.validateCreateMessageInModalSequence,
+    openMessageAttachmentDocumentSequence:
+      sequences.openMessageAttachmentDocumentSequence,
   },
   function MessageModalAttachments({
     form,
@@ -51,6 +55,7 @@ export const MessageModalAttachments = connect(
     updateMessageModalAttachmentsSequence,
     updateScreenMetadataSequence,
     validateCreateMessageInModalSequence,
+    openMessageAttachmentDocumentSequence,
   }) {
     return (
       <>
@@ -68,9 +73,14 @@ export const MessageModalAttachments = connect(
               return (
                 <div className="margin-top-1" key={doc.documentId}>
                   <div className="grid-row">
-                    <div className="grid-col-9">
-                      {doc.index != null ? `${doc.index} - ` : ''}
-                      {doc.documentTitle}
+                    <div className="grid-col-10">
+                      <MessageAttachmentDocument
+                        doc={doc}
+                        messageModalHelper={messageModalHelper}
+                        openMessageAttachmentDocumentSequence={
+                          openMessageAttachmentDocumentSequence
+                        }
+                      />
                     </div>
                   </div>
                 </div>
@@ -80,11 +90,15 @@ export const MessageModalAttachments = connect(
               return (
                 <div className="margin-top-1" key={doc.documentId}>
                   <div className="grid-row message-modal-add-document-form">
-                    <div className="grid-col-9">
-                      {doc.index != null ? `${doc.index} - ` : ''}
-                      {doc.documentTitle}
+                    <div className="grid-col-10">
+                      <MessageAttachmentDocument
+                        doc={doc}
+                        messageModalHelper={messageModalHelper}
+                        openMessageAttachmentDocumentSequence={
+                          openMessageAttachmentDocumentSequence
+                        }
+                      />
                     </div>
-                    <div className="grid-col-1"></div>
                     <div className="grid-col-2">
                       <Button
                         iconRight
@@ -176,3 +190,45 @@ export const MessageModalAttachments = connect(
 );
 
 MessageModalAttachments.displayName = 'MessageModalAttachments';
+
+function MessageAttachmentDocument({
+  doc,
+  messageModalHelper,
+  openMessageAttachmentDocumentSequence,
+}: {
+  doc: FormattedAttachment;
+  messageModalHelper: typeof state.messageModalHelper;
+  openMessageAttachmentDocumentSequence: Function;
+}) {
+  return doc.documentId && !doc.archived ? (
+    <DawsonButton
+      data-testid={`open-message-attachment-document-${doc.documentId}`}
+      variant={'primaryTertiary'}
+      className={classNames(
+        'tw:leading-7',
+        'tw:text-[1.06rem]!',
+        'tw:py-0',
+        'tw:whitespace-normal',
+        'tw:text-left',
+      )}
+      onClick={() => {
+        const { docketNumber } = messageModalHelper;
+        return openMessageAttachmentDocumentSequence({
+          docketNumber,
+          documentId: doc.documentId,
+        });
+      }}
+    >
+      {doc.index != null ? `${doc.index} - ` : ''}
+      {doc.documentTitle}
+    </DawsonButton>
+  ) : (
+    <div
+      className={classNames('tw:leading-7', 'tw:text-[1.06rem]')}
+      data-testid={`message-attachment-document-${doc.documentId}`}
+    >
+      {doc.index != null ? `${doc.index} - ` : ''}
+      {doc.documentTitle}
+    </div>
+  );
+}
