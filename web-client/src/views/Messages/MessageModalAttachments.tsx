@@ -1,4 +1,5 @@
 import { Button } from '../../ustc-ui/Button/Button';
+import { Button as DawsonButton } from '../../dawson-ui/ui/button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@web-client/presenter/shared.cerebral';
@@ -6,6 +7,7 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import { FormattedAttachment } from '@web-client/business/utilities/formatAttachments';
+import classNames from 'classnames';
 const getDocumentOption = doc => {
   const documentTitle = doc.title.substr(0, 100);
 
@@ -198,19 +200,17 @@ function MessageAttachmentDocument({
   messageModalHelper: typeof state.messageModalHelper;
   openMessageAttachmentDocumentSequence: Function;
 }) {
-  const style = {
-    TextAlign: 'left',
-    lineHeight: '28px',
-    paddingTop: '0px',
-    paddingBottom: '0px',
-  };
   return doc.documentId && !doc.archived ? (
-    <Button
+    <DawsonButton
       data-testid={`open-message-attachment-document-${doc.documentId}`}
-      link
-      style={style}
-      iconColor="white"
-      shouldWrapText={true}
+      variant={'primaryTertiary'}
+      className={classNames(
+        'tw:leading-7',
+        'tw:text-[1.06rem]!',
+        'tw:py-0',
+        'tw:whitespace-normal',
+        'tw:text-left',
+      )}
       onClick={() => {
         const { docketNumber } = messageModalHelper;
         return openMessageAttachmentDocumentSequence({
@@ -221,10 +221,10 @@ function MessageAttachmentDocument({
     >
       {doc.index != null ? `${doc.index} - ` : ''}
       {doc.documentTitle}
-    </Button>
+    </DawsonButton>
   ) : (
     <div
-      style={style}
+      className={classNames('tw:leading-7', 'tw:text-[1.06rem]')}
       data-testid={`message-attachment-document-${doc.documentId}`}
     >
       {doc.index != null ? `${doc.index} - ` : ''}
