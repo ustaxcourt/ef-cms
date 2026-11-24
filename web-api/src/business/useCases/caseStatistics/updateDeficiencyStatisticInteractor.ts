@@ -80,6 +80,7 @@ export const updateDeficiencyStatistic = async (
 
   const newCase = new Case(oldCase, { authorizedUser });
   newCase.updateStatistic(statisticEntity, statisticId);
+  newCase.isStjEligible = Case.isStjEligible(newCase);
   const validRawCase = newCase.validate().toRawObject();
 
   await upsertCases([validRawCase]);

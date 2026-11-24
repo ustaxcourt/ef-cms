@@ -64,6 +64,10 @@ export const updateCaseDetails = async (
     'statistics',
   ];
 
+  if (isAuthorized(authorizedUser, ROLE_PERMISSIONS.EDIT_STJ_ELIGIBILITY)) {
+    allowedFields.push('isStjEligible');
+  }
+
   const editableFields = Object.fromEntries(
     Object.entries(caseDetails).filter(
       ([key, value]) => allowedFields.includes(key) && value !== undefined,
