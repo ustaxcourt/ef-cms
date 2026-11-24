@@ -6,7 +6,7 @@ inputs:
     description: ci-image (highest version tag) or batch (the live color's latest tag).
     required: true
   environment:
-    description: DAWSON environment name, e.g. prod or stg.
+    description: DAWSON environment name, e.g. prod or stg. Used by batch only; ci-image reads whichever account the AWS credentials belong to, so they must be this environment's.
     required: true
 
 outputs:
