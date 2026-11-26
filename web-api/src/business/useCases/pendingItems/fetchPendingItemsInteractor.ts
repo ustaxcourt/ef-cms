@@ -24,6 +24,7 @@ export const pendingItemDocketEntrySource = [
   'docketEntryId',
   'documentType',
   'documentTitle',
+  'index',
   'receivedAt',
 ] as const;
 

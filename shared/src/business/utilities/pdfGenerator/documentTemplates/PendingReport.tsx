@@ -23,6 +23,7 @@ export const PendingReport = ({
           <tr>
             <th />
             <th>Docket No.</th>
+            <th>No.</th>
             <th>Date Filed</th>
             <th>Case Name</th>
             <th>Filings and Proceedings</th>
@@ -48,6 +49,7 @@ export const PendingReport = ({
                     />
                   </td>
                   <td>{pendingItem.docketNumberWithSuffix}</td>
+                  <td>{pendingItem.index}</td>
                   <td>{pendingItem.formattedFiledDate}</td>
                   <td>{pendingItem.caseTitle}</td>
                   <td>{pendingItem.formattedName}</td>
