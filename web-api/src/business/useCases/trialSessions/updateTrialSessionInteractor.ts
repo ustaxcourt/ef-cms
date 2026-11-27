@@ -49,6 +49,7 @@ import { withTransaction } from '@web-api/persistence/postgres/utils/transaction
 import { Case } from '@shared/business/entities/cases/Case';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { settlePromises } from '@web-api/utilities/settlePromises';
+import { updateReportingCalendarDeadlineDates } from '@web-api/persistence/postgres/caseDeadlines/updateReportingCalendarDeadlineDates';
 
 type UpdateTrialSessionParams = {
   trialSession: RawTrialSession;
@@ -377,6 +378,24 @@ export const updateTrialSession = async (
         });
       });
       await settlePromises(updateCases);
+    }
+
+    // The cases on a set Reporting calendar have a deadline on the due date, so it moves with the due date.
+    const isReportingDueDateChange =
+      currentTrialSession.isCalendared &&
+      updatedTrialSessionEntity.isReporting() &&
+      formatDateString(
+        updatedTrialSessionEntity.startDate,
+        FORMATS.YYYYMMDD,
+      ) !== startDateFormatted;
+    if (isReportingDueDateChange) {
+      await updateReportingCalendarDeadlineDates({
+        docketNumbers: (currentTrialSession.caseOrder ?? [])
+          .filter(caseOrder => !caseOrder.removedFromTrial)
+          .map(caseOrder => caseOrder.docketNumber),
+        newDueDate: updatedTrialSessionEntity.startDate,
+        previousDueDate: currentTrialSession.startDate,
+      });
     }
 
     await updateTrialSessionPersistence({
