@@ -47,7 +47,7 @@ describe('Set Reporting Calendar', { scrollBehavior: 'center' }, () => {
             'eq',
             `/trial-session-detail/${trialSessionId}`,
           );
-          cy.contains('p.label', 'Due Date').should('be.visible');
+          cy.contains('p.label', 'Due date').should('be.visible');
           cy.contains('h3', /^Reporting$/).should('be.visible');
           cy.contains('button', 'Print Session Information').should(
             'be.visible',

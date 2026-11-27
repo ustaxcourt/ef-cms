@@ -161,10 +161,10 @@ describe('Reporting trial sessions', () => {
       .find('p')
       .should('not.exist');
     cy.get('#case-title').should('have.text', '02/10/99');
-    cy.contains('p.label', 'Due Date').should('be.visible');
+    cy.contains('p.label', 'Due date').should('be.visible');
     cy.contains('a', 'View Session Copy').should('not.exist');
     cy.reload();
-    cy.contains('p.label', 'Due Date').should('be.visible');
+    cy.contains('p.label', 'Due date').should('be.visible');
     cy.contains('a', 'View Session Copy').should('not.exist');
     cy.get('[data-testid="set-calendar-button"]').should('be.visible').click();
     cy.contains('Provide a judge to set this trial session.').should(

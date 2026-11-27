@@ -196,7 +196,7 @@ export const TrialSessionInformation = connect(
                         <div className="grid-col-6">
                           <p className="label">
                             {formattedTrialSessionDetails.isReportingSession
-                              ? 'Due Date'
+                              ? 'Due date'
                               : 'Date'}
                           </p>
                           <p

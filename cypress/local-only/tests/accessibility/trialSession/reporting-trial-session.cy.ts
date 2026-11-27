@@ -118,7 +118,7 @@ describe('Reporting Trial Sessions Accessibility', () => {
         cy.get('[data-testid="proceedingType-Reporting"]').click();
         cy.get(`[data-testid="trial-location-link-${trialSessionId}"]`).click();
       });
-      cy.contains('p.label', 'Due Date').should('be.visible');
+      cy.contains('p.label', 'Due date').should('be.visible');
       checkA11y();
     });
 
@@ -143,7 +143,7 @@ describe('Reporting Trial Sessions Accessibility', () => {
           ).click();
         });
         cy.get('[data-testid="edit-trial-session"]').should('not.exist');
-        cy.contains('p.label', 'Due Date').should('be.visible');
+        cy.contains('p.label', 'Due date').should('be.visible');
         checkA11y();
       });
 
@@ -175,7 +175,7 @@ describe('Reporting Trial Sessions Accessibility', () => {
           ({ docketNumber, trialSessionId }) => {
             login();
             cy.visit(`/trial-session-detail/${trialSessionId}`);
-            cy.contains('p.label', 'Due Date').should('be.visible');
+            cy.contains('p.label', 'Due date').should('be.visible');
             cy.contains('a', docketNumber).should('be.visible');
 
             checkA11y();
